@@ -6,31 +6,38 @@ import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Waypoint {
+  final String id;
   final String name;
   final double lat;
   final double lng;
   final DateTime created;
 
-  const Waypoint({
+  Waypoint({
+    String? id,
     required this.name,
     required this.lat,
     required this.lng,
     required this.created,
-  });
+  }) : id = id ?? '${created.millisecondsSinceEpoch}';
 
   Map<String, dynamic> toJson() => {
+    'id': id,
     'name': name,
     'lat': lat,
     'lng': lng,
     'created': created.toIso8601String(),
   };
 
-  factory Waypoint.fromJson(Map<String, dynamic> json) => Waypoint(
-    name: json['name'] as String,
-    lat: (json['lat'] as num).toDouble(),
-    lng: (json['lng'] as num).toDouble(),
-    created: DateTime.parse(json['created'] as String),
-  );
+  factory Waypoint.fromJson(Map<String, dynamic> json) {
+    final created = DateTime.parse(json['created'] as String);
+    return Waypoint(
+      id: json['id'] as String? ?? '${created.millisecondsSinceEpoch}',
+      name: json['name'] as String,
+      lat: (json['lat'] as num).toDouble(),
+      lng: (json['lng'] as num).toDouble(),
+      created: created,
+    );
+  }
 
   double distanceTo(double otherLat, double otherLng) =>
       Geolocator.distanceBetween(lat, lng, otherLat, otherLng);
@@ -54,8 +61,9 @@ class WaypointService {
       _waypoints.clear();
       for (final s in raw) {
         try {
-          _waypoints.add(Waypoint.fromJson(
-              json.decode(s) as Map<String, dynamic>));
+          _waypoints.add(
+            Waypoint.fromJson(json.decode(s) as Map<String, dynamic>),
+          );
         } catch (_) {}
       }
       debugPrint('WaypointService: loaded ${_waypoints.length} waypoint(s)');
@@ -82,8 +90,10 @@ class WaypointService {
 
       _waypoints.add(wp);
       await _persist();
-      debugPrint('WaypointService: saved "$name" at '
-          '${pos.latitude}, ${pos.longitude}');
+      debugPrint(
+        'WaypointService: saved "$name" at '
+        '${pos.latitude}, ${pos.longitude}',
+      );
       return wp;
     } catch (e) {
       debugPrint('WaypointService: saveCurrentLocation error: $e');
@@ -91,8 +101,8 @@ class WaypointService {
     }
   }
 
-  Future<void> delete(String name) async {
-    _waypoints.removeWhere((w) => w.name == name);
+  Future<void> delete(String id) async {
+    _waypoints.removeWhere((w) => w.id == id);
     await _persist();
   }
 
@@ -125,15 +135,15 @@ class WaypointService {
       for (final wp in _waypoints) {
         final dist = wp.distanceTo(pos.latitude, pos.longitude);
 
-        if (_announced.contains(wp.name)) {
+        if (_announced.contains(wp.id)) {
           if (dist > kProximityRadius * 3) {
-            _announced.remove(wp.name);
+            _announced.remove(wp.id);
           }
           continue;
         }
 
         if (dist <= kProximityRadius) {
-          _announced.add(wp.name);
+          _announced.add(wp.id);
           onNearWaypoint?.call(wp);
         }
       }
