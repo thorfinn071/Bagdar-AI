@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 class RawDet {
   final String label;
   final double x1, y1, x2, y2;
@@ -5,6 +7,11 @@ class RawDet {
   final double conf;
   final String dist;
   final double distM;
+  
+  
+  
+  
+  final Float32List? appearance;
 
   const RawDet({
     required this.label,
@@ -17,5 +24,6 @@ class RawDet {
     required this.conf,
     required this.dist,
     required this.distM,
+    this.appearance,
   });
 }

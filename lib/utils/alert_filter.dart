@@ -1,6 +1,5 @@
 import '../models/speech_job.dart';
-
-
+import '../models/strings.dart';
 
 enum AlertCategory {
   clearPath,
@@ -11,8 +10,6 @@ enum AlertCategory {
   corridorBlocked,
   corridorNarrow,
 }
-
-
 
 class AlertCandidate {
   final String text;
@@ -33,78 +30,173 @@ class AlertCandidate {
   });
 }
 
-
-
 class AlertFilter {
   final List<AlertCandidate> _candidates = [];
 
-  DateTime _lastSpokenAt     = DateTime.fromMillisecondsSinceEpoch(0);
+  final Map<AlertCategory, DateTime> _lastByCat = {};
+
+  DateTime _lastSpokenAt = DateTime.fromMillisecondsSinceEpoch(0);
   AlertCategory? _lastCategory;
 
   DateTime _suppressUntil = DateTime.fromMillisecondsSinceEpoch(0);
 
   void add(AlertCandidate candidate) => _candidates.add(candidate);
 
-  AlertCandidate? flush(int trackCount, DateTime now) {
+  AlertCandidate? flush(
+    int trackCount,
+    DateTime now, {
+    List<String>? labels,
+    Set<int>? reliableTrackIds,
+  }) {
     if (_candidates.isEmpty) return null;
+
+    if (labels != null && labels.length >= 3) {
+      final counts = <String, int>{};
+      for (final l in labels) {
+        counts[l] = (counts[l] ?? 0) + 1;
+      }
+
+      for (final entry in counts.entries) {
+        if (entry.value >= 3) {
+          final label = entry.key;
+          final alreadyHaveGroup = _candidates.any(
+            
+            
+            (c) => c.text.contains('группа') || c.text.contains('много'),
+          );
+          if (!alreadyHaveGroup) {
+            String pluralLabel = S.label(label);
+            if (label == 'person') pluralLabel = 'людей';
+            if (label == 'car') pluralLabel = 'машин';
+
+            _candidates.add(
+              AlertCandidate(
+                text: 'Впереди группа объектов: ${entry.value} $pluralLabel',
+                priority: SpeechPriority.info,
+                pan: 0.0,
+                category: AlertCategory.obstacleFar,
+                urgency: 0.6,
+              ),
+            );
+          }
+        }
+      }
+    }
 
     _candidates.sort((a, b) {
       final p = b.priority.index.compareTo(a.priority.index);
       return p != 0 ? p : b.urgency.compareTo(a.urgency);
     });
 
-    final best = _candidates.first;
+    AlertCandidate? picked;
+    for (final cand in _candidates) {
+      if (_isAllowed(cand, trackCount, now, reliableTrackIds)) {
+        picked = cand;
+        break;
+      }
+    }
     _candidates.clear();
-
-    final minGap = _minGap(best.priority, trackCount);
-    if (now.difference(_lastSpokenAt) < minGap) return null;
-
-    if (best.priority != SpeechPriority.critical &&
-        now.isBefore(_suppressUntil)) {
-      return null;
-    }
-
-    if (trackCount >= 5 && best.priority == SpeechPriority.info) return null;
-
-    if (best.category == AlertCategory.navigationHint &&
-        (trackCount >= 3 || _lastCategory == AlertCategory.obstacleClose)) {
-      return null;
-    }
-
-    if (best.category == AlertCategory.navigationHint &&
-        (_lastCategory == AlertCategory.corridorNarrow ||
-         _lastCategory == AlertCategory.corridorBlocked)) {
-      if (now.difference(_lastSpokenAt) < const Duration(seconds: 8)) return null;
-    }
-    if (best.category == AlertCategory.corridorNarrow &&
-        _lastCategory == AlertCategory.navigationHint) {
-      if (now.difference(_lastSpokenAt) < const Duration(seconds: 8)) return null;
-    }
+    if (picked == null) return null;
 
     _lastSpokenAt = now;
-    _lastCategory = best.category;
+    _lastCategory = picked.category;
+    _lastByCat[picked.category] = now;
 
-    if (best.priority == SpeechPriority.critical) {
+    if (picked.priority == SpeechPriority.critical) {
       _suppressUntil = now.add(const Duration(milliseconds: 2000));
     }
 
-    return best;
+    return picked;
+  }
+
+  bool _isAllowed(
+    AlertCandidate cand,
+    int trackCount,
+    DateTime now,
+    Set<int>? reliableTrackIds,
+  ) {
+    if (cand.priority == SpeechPriority.critical) return true;
+
+    final lastAt =
+        _lastByCat[cand.category] ?? DateTime.fromMillisecondsSinceEpoch(0);
+    final catGap = _categoryCooldown(cand.category, trackCount);
+    if (now.difference(lastAt) < catGap) return false;
+
+    if (cand.category != AlertCategory.approachingVehicle &&
+        now.isBefore(_suppressUntil)) {
+      return false;
+    }
+
+    if (trackCount >= 5 &&
+        cand.priority == SpeechPriority.info &&
+        cand.urgency < 0.4) {
+      
+      
+      
+      
+      
+      
+      
+      final tid = cand.trackId;
+      final reliable = reliableTrackIds;
+      if (tid == null || reliable == null || !reliable.contains(tid)) {
+        return false;
+      }
+    }
+
+    if (cand.category == AlertCategory.navigationHint &&
+        (trackCount >= 3 || _lastCategory == AlertCategory.obstacleClose)) {
+      return false;
+    }
+
+    if (cand.category == AlertCategory.navigationHint &&
+        (_lastCategory == AlertCategory.corridorNarrow ||
+            _lastCategory == AlertCategory.corridorBlocked) &&
+        
+        
+        now.difference(_lastSpokenAt) < const Duration(seconds: 8)) {
+      return false;
+    }
+
+    if (cand.category == AlertCategory.corridorNarrow &&
+        _lastCategory == AlertCategory.navigationHint &&
+        now.difference(_lastSpokenAt) < const Duration(seconds: 8)) {
+      return false;
+    }
+
+    return true;
   }
 
   void reset() {
     _candidates.clear();
-    _lastSpokenAt  = DateTime.fromMillisecondsSinceEpoch(0);
-    _lastCategory  = null;
+    _lastSpokenAt = DateTime.fromMillisecondsSinceEpoch(0);
+    _lastCategory = null;
     _suppressUntil = DateTime.fromMillisecondsSinceEpoch(0);
+    _lastByCat.clear();
   }
 
-  Duration _minGap(SpeechPriority priority, int trackCount) {
-    if (priority == SpeechPriority.critical) {
-      return const Duration(milliseconds: 1200);
+  Duration _categoryCooldown(AlertCategory cat, int trackCount) {
+    final double scale = trackCount >= 5
+        ? 1.4
+        : trackCount >= 3
+        ? 1.2
+        : 1.0;
+    Duration scaled(int ms) => Duration(milliseconds: (ms * scale).round());
+    switch (cat) {
+      case AlertCategory.approachingVehicle:
+        return scaled(1200);
+      case AlertCategory.obstacleClose:
+        return scaled(2000);
+      case AlertCategory.obstacleFar:
+        return scaled(2000);
+      case AlertCategory.navigationHint:
+        return scaled(2500);
+      case AlertCategory.corridorBlocked:
+        return const Duration(milliseconds: 1500);
+      case AlertCategory.corridorNarrow:
+        return scaled(2500);
+      case AlertCategory.clearPath:
+        return const Duration(seconds: 6);
     }
-    if (trackCount >= 5) return const Duration(seconds: 5);
-    if (trackCount >= 3) return const Duration(milliseconds: 3500);
-    if (trackCount >= 2) return const Duration(milliseconds: 2500);
-    return const Duration(milliseconds: 2000);
   }
 }
