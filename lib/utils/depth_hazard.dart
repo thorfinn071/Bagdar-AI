@@ -1,18 +1,30 @@
-
-
 enum DepthHazardType {
   stepDown,
+  stepUp,
   pothole,
+  curb,
+  lowCurb,
+  deadZone,
+  stairsDown,
+  
+  
+  
+  
+  
+  escalatorRiding,
+  
+  
+  
+  
+  
+  nearFieldIntrusion,
+  overhead,
+  glassDoor,
+  slippery,
   unknown,
 }
 
-enum HazardZone {
-  left,
-  centerLeft,
-  center,
-  centerRight,
-  right,
-}
+enum HazardZone { left, centerLeft, center, centerRight, right }
 
 class DepthHazard {
   final double midasScore;
@@ -29,11 +41,16 @@ class DepthHazard {
 
   double get pan {
     switch (zone) {
-      case HazardZone.left:        return -0.9;
-      case HazardZone.centerLeft:  return -0.45;
-      case HazardZone.center:      return  0.0;
-      case HazardZone.centerRight: return  0.45;
-      case HazardZone.right:       return  0.9;
+      case HazardZone.left:
+        return -0.9;
+      case HazardZone.centerLeft:
+        return -0.45;
+      case HazardZone.center:
+        return 0.0;
+      case HazardZone.centerRight:
+        return 0.45;
+      case HazardZone.right:
+        return 0.9;
     }
   }
 
