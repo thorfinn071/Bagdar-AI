@@ -1,8 +1,11 @@
 import 'dart:collection';
 import 'dart:math' as math;
+import 'dart:typed_data';
 import '../models/constants.dart';
 import '../services/tts_service.dart';
 import '../utils/distance_utils.dart' show smoothDistM;
+import 'appearance.dart';
+import 'hungarian.dart';
 import 'raw_det.dart';
 import 'track.dart';
 
@@ -13,136 +16,106 @@ bool isPedestrian(String label) =>
     const {'person', 'dog', 'cat'}.contains(label);
 
 class Tracker {
+  
+  
+  
+  
+  
+  static const double _kIouWeight = 0.6;
+  
+  
+  
+  static const double _kAppearanceBlend = 0.3;
+
   int _nextId = 1;
   final Map<int, Track> _tracks = {};
+  int _predictTick = 0;
 
   TtsService? ttsService;
 
-  List<Track> update(
-      List<RawDet> dets, int imgW, int imgH, DateTime now) {
+  
+  
+  
+  
+  
+  
+  bool weatherDegraded = false;
+  static const double _kPedWeatherBoost = 1.3;
+
+  List<Track> update(List<RawDet> dets, int imgW, int imgH, DateTime now) {
+    _predictTick = 0;
     for (final t in _tracks.values) {
       t.age++;
       t.kalman.predict();
     }
 
-    final unmatched    = <RawDet>[];
-    final usedTrackIds = <int>{};
+    final unmatched = <RawDet>[];
+    final trackList = _tracks.values.toList(growable: false);
 
-    for (final det in dets) {
-      int    bestId  = -1;
-      double bestIou = kIoUMatchThreshold;
-
-      final detArea = (det.x2 - det.x1) * (det.y2 - det.y1);
-
-      for (final t in _tracks.values) {
-        if (t.label != det.label) continue;
-        if (usedTrackIds.contains(t.id)) continue;
-
-        final pBox = t.kalman.getPredictedBox();
-        final pArea = (pBox[2] - pBox[0]) * (pBox[3] - pBox[1]);
-
-        final ix1 = math.max(det.x1, pBox[0]);
-        final iy1 = math.max(det.y1, pBox[1]);
-        final ix2 = math.min(det.x2, pBox[2]);
-        final iy2 = math.min(det.y2, pBox[3]);
-
-        if (ix2 > ix1 && iy2 > iy1) {
-          final iArea = (ix2 - ix1) * (iy2 - iy1);
-          final iou = iArea / (detArea + pArea - iArea);
-          if (iou > bestIou) {
-            bestIou = iou;
-            bestId  = t.id;
-          }
+    if (trackList.isEmpty || dets.isEmpty) {
+      unmatched.addAll(dets);
+    } else {
+      
+      
+      
+      
+      
+      final cost = List<List<double>>.generate(
+        dets.length,
+        (_) => List<double>.filled(trackList.length, Hungarian.kForbidden),
+        growable: false,
+      );
+      for (int i = 0; i < dets.length; i++) {
+        final det = dets[i];
+        for (int j = 0; j < trackList.length; j++) {
+          final t = trackList[j];
+          if (t.label != det.label) continue;
+          final score = _combinedScore(t, det);
+          if (score <= 0.0) continue;
+          cost[i][j] = 1.0 - score;
         }
       }
 
-      if (bestId >= 0) {
-        usedTrackIds.add(bestId);
-        final t = _tracks[bestId]!;
-        t.kalman.update(det);
-        t.age       = 0;
-        t.seenCount = math.min(9999, t.seenCount + 1);
-        t.cx = det.cx; t.cy = det.cy;
-        t.x1 = det.x1; t.y1 = det.y1; t.x2 = det.x2; t.y2 = det.y2;
-        t.avgConf = t.avgConf == 0.0
-            ? det.conf
-            : t.avgConf * (1.0 - kConfEmaAlpha) + det.conf * kConfEmaAlpha;
+      final assignment = Hungarian.solveMinCost(
+        cost,
+        maxAssignableCost: 1.0 - kIoUMatchThreshold,
+      );
 
-        if (det.conf >= kMinAlertConf) {
-          t.reliableFrames = math.min(999, t.reliableFrames + 1);
-        } else {
-          t.reliableFrames = 0;
+      for (int i = 0; i < dets.length; i++) {
+        final j = assignment[i];
+        if (j < 0) {
+          unmatched.add(dets[i]);
+          continue;
         }
-
-        t.distM = smoothDistM(t.distM, det.distM);
-        t.distHist.addLast(det.dist);
-        if (t.distHist.length > 5) t.distHist.removeFirst();
-        t.dist = _majorityDist(t.distHist);
-        final rawDist = det.dist;
-        if (rawDist == 'very close' || rawDist == 'close') {
-          t.nearFrameCount = math.min(999, t.nearFrameCount + 1);
-        } else {
-          if (t.nearFrameCount > 0) {
-            ttsService?.evictTrack(t.id);
-          }
-          t.nearFrameCount = 0;
-        }
-
-        final frameArea = imgW * imgH;
-        if (frameArea > 0) {
-          final bw = det.x2 - det.x1;
-          final bh = det.y2 - det.y1;
-          final ar = (bw * bh) / frameArea;
-
-          t.areaHist.add((now, ar));
-          t.heightHist.add((now, bh / imgH));
-          if (t.areaHist.length > kApproachHistLen)   t.areaHist.removeAt(0);
-          if (t.heightHist.length > kApproachHistLen) t.heightHist.removeAt(0);
-
-          t.approaching = false;
-          if (t.areaHist.length >= 2) {
-            final dt = t.areaHist.last.$1
-                    .difference(t.areaHist.first.$1)
-                    .inMilliseconds /
-                1000.0;
-            if (dt >= kApproachMinDtSec) {
-              final ar0 = t.areaHist.first.$2;
-              final ar1 = t.areaHist.last.$2;
-              final h0  = t.heightHist.first.$2;
-              final h1  = t.heightHist.last.$2;
-              final areaRate   = (ar1 - ar0) / dt;
-              final heightRate = (h1  - h0)  / dt;
-
-              if (isVehicle(t.label)) {
-                if (areaRate   >= kVehApproachAreaRateT ||
-                    heightRate >= kVehApproachHeightRateT) {
-                  t.approaching = true;
-                }
-              } else if (isPedestrian(t.label)) {
-                if (areaRate   >= kPedApproachAreaRateT ||
-                    heightRate >= kPedApproachHeightRateT) {
-                  t.approaching = true;
-                }
-              }
-            }
-          }
-        }
-      } else {
-        unmatched.add(det);
+        _applyMatch(trackList[j], dets[i], imgW, imgH, now);
       }
     }
 
     for (final det in unmatched) {
       final t = Track(
-        id:          _nextId++,
-        label:       det.label,
-        cx: det.cx,  cy: det.cy,
-        x1: det.x1,  y1: det.y1,  x2: det.x2,  y2: det.y2,
-        dist:        det.dist,
-        distM:       det.distM,
+        id: _nextId++,
+        label: det.label,
+        cx: det.cx,
+        cy: det.cy,
+        x1: det.x1,
+        y1: det.y1,
+        x2: det.x2,
+        y2: det.y2,
+        dist: det.dist,
+        distM: det.distM,
         initialConf: det.conf,
       );
       t.distHist.addLast(det.dist);
+      
+      
+      if (det.appearance != null) {
+        t.appearance = Float32List.fromList(det.appearance!);
+      }
+      if (_shouldFastTrack(det)) {
+        t.fastTrack = true;
+        t.nearFrameCount = 1;
+        if (det.conf >= kMinAlertConf) t.reliableFrames = 1;
+      }
       _tracks[t.id] = t;
     }
 
@@ -152,19 +125,205 @@ class Tracker {
     _tracks.removeWhere((_, t) => t.age > kTrackMaxAge);
 
     return _tracks.values
-        .where((t) => t.age == 0 && t.seenCount >= kTrackConfirmFrames)
+        .where(
+          (t) =>
+              t.age == 0 && (t.seenCount >= kTrackConfirmFrames || t.fastTrack),
+        )
         .toList();
   }
 
-  void clear() => _tracks.clear();
+  
+  
+  
+  double _combinedScore(Track t, RawDet det) {
+    final iou = t.kalman.matchScore(det);
+    final tHist = t.appearance;
+    final dHist = det.appearance;
+    if (tHist == null || dHist == null) return iou;
+    final sim = Appearance.similarity(tHist, dHist);
+    return iou * _kIouWeight + sim * (1.0 - _kIouWeight);
+  }
+
+  void _applyMatch(
+    Track t,
+    RawDet det,
+    int imgW,
+    int imgH,
+    DateTime now,
+  ) {
+    t.kalman.update(det);
+    t.age = 0;
+    t.seenCount = math.min(9999, t.seenCount + 1);
+    if (t.seenCount >= kTrackConfirmFrames) t.fastTrack = false;
+    t.cx = det.cx;
+    t.cy = det.cy;
+    t.x1 = det.x1;
+    t.y1 = det.y1;
+    t.x2 = det.x2;
+    t.y2 = det.y2;
+    t.avgConf = t.avgConf == 0.0
+        ? det.conf
+        : t.avgConf * (1.0 - kConfEmaAlpha) + det.conf * kConfEmaAlpha;
+
+    
+    
+    
+    if (det.appearance != null) {
+      final existing = t.appearance;
+      if (existing == null) {
+        t.appearance = Float32List.fromList(det.appearance!);
+      } else {
+        t.appearance = Appearance.blend(
+          existing,
+          det.appearance!,
+          alpha: _kAppearanceBlend,
+        );
+      }
+    }
+
+    if (det.conf >= kMinAlertConf) {
+      t.reliableFrames = math.min(999, t.reliableFrames + 1);
+    } else {
+      t.reliableFrames = 0;
+    }
+
+    t.distM = smoothDistM(t.distM, det.distM);
+    t.distHist.addLast(det.dist);
+    if (t.distHist.length > 5) t.distHist.removeFirst();
+    t.dist = _majorityDist(t.distHist);
+    final rawDist = det.dist;
+    
+    if (rawDist == 'very close' || rawDist == 'close') {
+      if (t.nearFrameCount == 0) {
+        t.lastSpoken = DateTime.fromMillisecondsSinceEpoch(0);
+      }
+      t.nearFrameCount = math.min(999, t.nearFrameCount + 1);
+    } else {
+      if (t.nearFrameCount > 0) {
+        ttsService?.evictTrack(t.id);
+      }
+      t.nearFrameCount = 0;
+    }
+
+    final frameArea = imgW * imgH;
+    if (frameArea > 0) {
+      final bw = det.x2 - det.x1;
+      final bh = det.y2 - det.y1;
+      final ar = (bw * bh) / frameArea;
+
+      t.areaHist.addLast((now, ar));
+      t.heightHist.addLast((now, bh / imgH));
+      if (t.areaHist.length > kApproachHistLen) t.areaHist.removeFirst();
+      if (t.heightHist.length > kApproachHistLen) t.heightHist.removeFirst();
+
+      t.approaching = false;
+      t.dynamicThreat = false;
+      if (t.areaHist.length >= 2) {
+        final dt =
+            t.areaHist.last.$1.difference(t.areaHist.first.$1).inMilliseconds /
+                1000.0;
+        if (dt >= kApproachMinDtSec) {
+          final ar0 = t.areaHist.first.$2;
+          final ar1 = t.areaHist.last.$2;
+          final h0 = t.heightHist.first.$2;
+          final h1 = t.heightHist.last.$2;
+          final areaRate = (ar1 - ar0) / dt;
+          final heightRate = (h1 - h0) / dt;
+
+          if (isVehicle(t.label)) {
+            
+            
+            
+            
+            final closeRange = t.distM > 0 && t.distM <= 4.0;
+            final areaT = closeRange
+                ? kVehApproachAreaRateT * 0.6
+                : kVehApproachAreaRateT;
+            final heightT = closeRange
+                ? kVehApproachHeightRateT * 0.6
+                : kVehApproachHeightRateT;
+            if (areaRate >= areaT || heightRate >= heightT) {
+              t.approaching = true;
+            }
+          } else if (isPedestrian(t.label)) {
+            
+            
+            
+            
+            
+            final areaT = weatherDegraded
+                ? kPedApproachAreaRateT * _kPedWeatherBoost
+                : kPedApproachAreaRateT;
+            final heightT = weatherDegraded
+                ? kPedApproachHeightRateT * _kPedWeatherBoost
+                : kPedApproachHeightRateT;
+            if (areaRate >= areaT || heightRate >= heightT) {
+              t.approaching = true;
+            }
+          }
+
+          if (areaRate >= kPedApproachAreaRateT ||
+              heightRate >= kPedApproachHeightRateT) {
+            t.dynamicThreat = true;
+          }
+        }
+      }
+    }
+  }
+
+  static bool _shouldFastTrack(RawDet det) {
+    if (det.conf < 0.60) return false;
+    if (det.dist != 'very close' && det.dist != 'close') return false;
+    if (det.distM <= 0) return false;
+    
+    
+    
+    
+    
+    final isLightVehicle =
+        det.label == 'bicycle' || det.label == 'motorcycle';
+    if (det.dist == 'close' && !isLightVehicle) return false;
+    final maxDist = isLightVehicle ? 5.0 : 1.5;
+    if (det.distM > maxDist) return false;
+    return true;
+  }
+
+  List<Track> predict() {
+    _predictTick++;
+    final shouldAge = _predictTick >= 4;
+    if (shouldAge) _predictTick = 0;
+
+    for (final t in _tracks.values) {
+      if (shouldAge) t.age++;
+      t.kalman.predict();
+      final pBox = t.kalman.getPredictedBox();
+      t.cx = (pBox[0] + pBox[2]) / 2;
+      t.cy = (pBox[1] + pBox[3]) / 2;
+      t.x1 = pBox[0];
+      t.y1 = pBox[1];
+      t.x2 = pBox[2];
+      t.y2 = pBox[3];
+    }
+
+    _tracks.forEach((id, t) {
+      if (t.age > kTrackMaxAge) ttsService?.evictTrack(id);
+    });
+    _tracks.removeWhere((_, t) => t.age > kTrackMaxAge);
+
+    return _tracks.values.toList();
+  }
+
+  void clear() {
+    _tracks.clear();
+    _predictTick = 0;
+  }
 
   static String _majorityDist(ListQueue<String> q) {
+    if (q.isEmpty) return 'far';
     final counts = <String, int>{};
     for (final s in q) {
       counts[s] = (counts[s] ?? 0) + 1;
     }
-    return counts.entries
-        .reduce((a, b) => a.value >= b.value ? a : b)
-        .key;
+    return counts.entries.reduce((a, b) => a.value >= b.value ? a : b).key;
   }
 }
