@@ -1,38 +1,43 @@
-﻿import 'dart:async';
-import 'dart:math' as math;
+import 'dart:async';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_vision/flutter_vision.dart';
+import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:vibration/vibration.dart';
 
-import '../models/app_mode.dart';
-import '../models/constants.dart';
-import '../models/speech_job.dart';
-import '../models/strings.dart';
-import '../services/earcon_service.dart';
-import '../services/ocr_service.dart';
-import '../services/settings_service.dart';
-import '../services/tts_service.dart';
-import '../services/voice_command_service.dart';
-import '../services/battery_monitor.dart';
-import '../services/foreground_service.dart';
-import '../services/sos_service.dart';
-import '../services/waypoint_service.dart';
-import '../tracker/raw_det.dart';
-import '../tracker/track.dart';
-import '../tracker/tracker.dart';
-import '../camera/alert_manager.dart';
-import '../services/depth_provider.dart';
-import '../services/device_capability.dart';
-import '../utils/depth_hazard.dart';
-import '../utils/distance_utils.dart';
-import '../utils/midas_service.dart';
-import '../widgets/camera_controls_sheet.dart';
-import '../widgets/debug_hud.dart';
-import '../widgets/status_panel.dart';
-import '../widgets/track_painter.dart';
-import '../widgets/waypoint_sheet.dart';
+import 'models/app_mode.dart';
+import 'models/strings.dart';
+import 'models/speech_job.dart';
+import 'models/constants.dart';
+import 'services/settings_service.dart';
+import 'services/foreground_service.dart';
+import 'services/thermal_monitor.dart';
+import 'services/haptic_service.dart';
+import 'services/earcon_service.dart';
+import 'services/sos_service.dart';
+import 'services/voice_command_service.dart';
+import 'models/nav_models.dart';
+import 'tracker/appearance.dart';
+import 'tracker/raw_det.dart';
+import 'tracker/track.dart';
+import 'tracker/tracker.dart' show isVehicle;
+import 'widgets/status_panel.dart';
+import 'widgets/track_painter.dart';
+import 'widgets/camera_controls_sheet.dart';
+import 'viewmodels/camera_view_model.dart';
+import 'services/model_service.dart';
+import 'services/battery_monitor.dart';
+import 'services/device_capability.dart';
+import 'services/fall_detector.dart' show MotionState;
+import 'services/motion_prealert.dart'
+    show MotionIntrusionEvent, MotionIntrusionSide;
+import 'services/weather_gate.dart' show WeatherTransition;
+import 'services/orientation_service.dart' show OrientationService;
+import 'services/traffic_light_analyzer.dart' show TrafficLightKind;
+import 'utils/blur_detector.dart';
+import 'utils/depth_hazard.dart' show DepthHazardType;
+import 'utils/distance_utils.dart';
 
 class AiCameraScreen extends StatefulWidget {
   final AppMode? initialMode;
@@ -44,197 +49,829 @@ class AiCameraScreen extends StatefulWidget {
 
 class _AiCameraScreenState extends State<AiCameraScreen>
     with WidgetsBindingObserver {
-
+  late final CameraViewModel _vm;
   CameraController? _controller;
   bool _isCameraReady = false;
-  bool _isDetecting   = false;
-  late FlutterVision _vision;
-  bool _useGpu     = false;
-  int  _numThreads = 2;
+  bool _isDetecting = false;
 
-  Duration _detectInterval      = const Duration(milliseconds: 140);
-  Duration _minUiInterval = const Duration(milliseconds: 120);
+  final ModelService _models = ModelService.instance;
+
+  bool _useGpu = false;
+  int _numThreads = 2;
+
+  Duration _detectInterval = const Duration(milliseconds: 140);
   DateTime _lastDetectAt = DateTime.fromMillisecondsSinceEpoch(0);
-  DateTime _lastUiAt     = DateTime.fromMillisecondsSinceEpoch(0);
+  DateTime _lastUiAt = DateTime.fromMillisecondsSinceEpoch(0);
 
   int _imgW = 0, _imgH = 0;
-
-  final Tracker _tracker = Tracker();
-
-  final ValueNotifier<List<Track>> _tracksNotifier =
-      ValueNotifier(const []);
-
-  final TtsService    _tts    = TtsService();
-  final EarconService _earcon = EarconService();
-  late final AlertManager _alertMgr;
-
-  final OcrService _ocr = OcrService();
-  CameraImage? _lastFrame;
-  DateTime _lastOcrAt     = DateTime.fromMillisecondsSinceEpoch(0);
-  DateTime _lastAutoOcrAt = DateTime.fromMillisecondsSinceEpoch(0);
-  Duration _autoOcrInterval = const Duration(seconds: 8);
-  bool     _ocrBusy       = false;
-  String   _lastOcrText   = '';
-
-  final BatteryMonitor  _battery   = BatteryMonitor();
-  final WaypointService _waypoints = WaypointService();
-  final SosService      _sos       = SosService();
-
-  bool _isDark = false;
-  DateTime _lastLumCheckAt = DateTime.fromMillisecondsSinceEpoch(0);
-  bool _wasNightMode = false;
-
-  DepthProvider? _depthProvider;
-  final FusionEngine _fusion = FusionEngine();
-  bool _depthProviderReady = false;
-
-  Duration _midasInterval = const Duration(milliseconds: 500);
-  DateTime _lastMidasAt = DateTime.fromMillisecondsSinceEpoch(0);
-  DateTime _midasPausedUntil = DateTime.fromMillisecondsSinceEpoch(0);
-
-  DateTime _burstModeEndsAt = DateTime.fromMillisecondsSinceEpoch(0);
-  DepthHazard? _latestMidasHazard;
-
   bool _isCalibrated = false;
+  bool _useHardwareDepthMode = false;
+  bool _depthProviderReady = false;
+  final bool _exclusiveDepthTransition = false;
+  bool _wantOcr = false;
+  DateTime _ocrStartedAt = DateTime.fromMillisecondsSinceEpoch(0);
+  TrafficLightColor? _lastAnnouncedLight;
 
-  String _lastScanDescription = '';
-  int    _scanRepeatCount     = 0;
+  Timer? _heartbeatTimer;
 
-  int      _tapCount  = 0;
-  DateTime _lastTapAt = DateTime.fromMillisecondsSinceEpoch(0);
+  Timer? _twoFingerSosTimer;
+  bool _twoFingerSosArmed = false;
+  static const Duration _twoFingerSosHold = Duration(milliseconds: 1500);
 
-  DateTime _lastVibrateAt = DateTime.fromMillisecondsSinceEpoch(0);
+  Timer? _fallCountdownTimer;
+  int _fallCountdownSec = 0;
+  bool _fallCountdownActive = false;
+  bool _fallCancelListenerActive = false;
 
-  AppMode _mode = AppMode.street;
+  int _lowLuminosityFrames = 0;
+  static const int _lowLuminosityThreshold = 45;
+  static const double _luminosityMinValue = 10.0;
+  bool _cameraBlockedWarned = false;
+  int _frameCount = 0;
 
-  final VoiceCommandService _voice = VoiceCommandService();
-  bool _voiceListening = false;
-  bool _voiceAvailable = false;
+  
+  int _partialOcclusionFrames = 0;
+  bool _partialOcclusionWarned = false;
+  static const int _kPartialOcclusionStreak = 20;
 
-  String _statusLine   = 'Запуск VisionGuide...';
-  bool   _showDebugHud = false;
-  double _avgInfMs     = 0;
-  double _detectFps    = 0;
-  int    _frameCount   = 0;
-  DateTime _lastFpsTick = DateTime.now();
+  
+  
+  
+  
+  int _aeTransitionFrames = 0;
+  DateTime? _aeTransitionEndedAt;
+  static const double _kAeVarianceThreshold = 100.0;
+  static const double _kAeAvgBrightThreshold = 200.0;
+  static const double _kAeAvgDarkThreshold = 15.0;
+  static const int _kAeTransitionMinFrames = 2;
+  static const int _kAeTransitionMaxFrames = 30;
+  static const Duration _kAePostTransitionGuard = Duration(milliseconds: 3000);
 
-  static const Set<String> _streetObjects = {
-    'person', 'dog', 'cat', 'car', 'bus', 'truck', 'motorcycle', 'bicycle',
-    'traffic light', 'stop sign', 'fire hydrant', 'parking meter', 'bench',
-    'backpack', 'handbag', 'suitcase', 'umbrella',
-  };
+  bool get _aeTransitioning =>
+      _aeTransitionFrames >= _kAeTransitionMinFrames &&
+      _aeTransitionFrames <= _kAeTransitionMaxFrames;
+
+  bool _aePipelineFrozen(DateTime now) {
+    if (_aeTransitioning) return true;
+    final endedAt = _aeTransitionEndedAt;
+    if (endedAt == null) return false;
+    return now.difference(endedAt) < _kAePostTransitionGuard;
+  }
+
+  int? _lastImageHash;
+  DateTime _lastImageChangeAt = DateTime.now();
+  bool _cameraFrozenWarned = false;
+
+  DateTime _lastDepthAt = DateTime.fromMillisecondsSinceEpoch(0);
+  Duration _depthInterval = const Duration(milliseconds: 400);
+
+  bool _lifecycleBackgroundWarned = false;
+
+  Timer? _stallWatchdog;
+  DateTime _lastFrameArrivedAt = DateTime.now();
+  bool _cameraStallWarned = false;
+
+  final List<Uint8List> _planeBytesBuffer = List<Uint8List>.filled(
+    3,
+    Uint8List(0),
+    growable: true,
+  );
+
+  int _blurryStreak = 0;
+  DateTime _lastShakeWarnAt = DateTime.fromMillisecondsSinceEpoch(0);
+  static const int _kShakeWarnStreak = 15;
+  static const Duration _kShakeWarnCooldown = Duration(seconds: 6);
 
   @override
   void initState() {
     super.initState();
-    _vision   = FlutterVision();
-    _alertMgr = AlertManager(tts: _tts, earcon: _earcon);
+    _vm = CameraViewModel();
+
+    _vm.addListener(() {
+      if (mounted) setState(() {});
+    });
     WidgetsBinding.instance.addObserver(this);
     _initAll();
   }
 
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _heartbeatTimer?.cancel();
+    _twoFingerSosTimer?.cancel();
+    _fallCountdownTimer?.cancel();
+    _stallWatchdog?.cancel();
+    _controller?.dispose();
+    _controller = null;
+    VisionForegroundService.stop();
+    _vm.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused ||
+        state == AppLifecycleState.hidden) {
+      if (_controller != null && _controller!.value.isInitialized) {
+        _controller?.dispose();
+        _controller = null;
+        _isCameraReady = false;
+      }
+      _stallWatchdog?.cancel();
+      _stallWatchdog = null;
+      _cameraStallWarned = false;
+      if (!_lifecycleBackgroundWarned) {
+        _lifecycleBackgroundWarned = true;
+        _vm.tts.say(
+          S.get('lifecycle_background'),
+          SpeechPriority.critical,
+          pan: 0.0,
+        );
+        HapticService.vibrate(const [0, 200, 100, 200, 100, 200]);
+      }
+    } else if (state == AppLifecycleState.resumed) {
+      if (_lifecycleBackgroundWarned) {
+        _lifecycleBackgroundWarned = false;
+        _vm.tts.say(S.get('lifecycle_resumed'), SpeechPriority.info, pan: 0.0);
+      }
+      if (_controller == null || !(_controller?.value.isInitialized ?? false)) {
+        _initCamera();
+      }
+      _startStallWatchdog();
+    }
+  }
+
+  void _startStallWatchdog() {
+    _stallWatchdog?.cancel();
+    _lastFrameArrivedAt = DateTime.now();
+    _cameraStallWarned = false;
+    _stallWatchdog = Timer.periodic(kStallWatchdogPeriod, (_) {
+      if (!mounted) return;
+      if (_lifecycleBackgroundWarned) return;
+      if (!_isCameraReady) return;
+      final gap = DateTime.now().difference(_lastFrameArrivedAt);
+      final threshold = _vm.throttler.stallWatchdogThreshold();
+      if (gap >= threshold && !_cameraStallWarned) {
+        _cameraStallWarned = true;
+        _vm.earcon.play(Earcon.cameraBlocked);
+        HapticService.vibrate(const [0, 400, 150, 400, 150, 400, 150, 400]);
+        _vm.tts.say(S.get('camera_stalled'), SpeechPriority.critical, pan: 0.0);
+      }
+    });
+  }
+
   Future<void> _initAll() async {
     try {
-      if (mounted) setState(() => _statusLine = 'Инициализация голоса (TTS)...');
-      await _tts.init();
-      _earcon.init();
-      _tracker.ttsService = _tts;
+      _vm.tracker.ttsService = _vm.tts;
 
-      if (mounted) setState(() => _statusLine = 'Инициализация батареи...');
-      await _battery.init();
+      _isCalibrated = Settings.instance.isCalibrated;
+      _useGpu = Settings.instance.useGpu;
+      _useHardwareDepthMode = Settings.instance.useHardwareDepthMode;
+      _numThreads = Settings.instance.numThreads;
+      AppStrings.setLanguage(AppLanguage.values[Settings.instance.language]);
+      loadFocalLength();
 
-      if (mounted) setState(() => _statusLine = 'Инициализация GPS...');
-      await _waypoints.init();
-
-      if (mounted) setState(() => _statusLine = 'Инициализация SOS/Настроек...');
-      await _sos.init();
-
-      if (mounted) setState(() => _statusLine = 'Инициализация фонового режима...');
-      await VisionForegroundService.init();
-
-      _battery.onThrottleChanged = (level) {
+      _vm.battery.onThrottleChanged = (level) {
+        _recomputeCadence();
         if (mounted) setState(() {});
         if (level != ThrottleLevel.normal) {
-          final msg = level == ThrottleLevel.aggressive 
-              ? S.get('battery_low') 
-              : S.get('battery_moderate');
-          _tts.say(msg, SpeechPriority.info, pan: 0.0);
+          final msg = switch (level) {
+            ThrottleLevel.moderate => S.get('battery_moderate'),
+            ThrottleLevel.aggressive => S.get('battery_low_depth_degraded'),
+            ThrottleLevel.critical => S.get('battery_low_critical'),
+            ThrottleLevel.normal => S.get('battery_moderate'),
+          };
+          _vm.tts.say(msg, SpeechPriority.info, pan: 0.0);
         }
       };
 
-      _waypoints.onNearWaypoint = (wp) {
-        _tts.say('${S.get('waypoint_near')} ${wp.name}.', SpeechPriority.warning, pan: 0.0);
-      };
-      _waypoints.startProximityMonitor();
+      _vm.setStatus('Инициализация...');
+      await _vm.init();
 
-      DeviceCapabilityProbe.probe().then((caps) {
-        debugPrint('DeviceCaps: $caps');
-        final provider = DepthProviderFactory.create(caps);
-        provider.init(threads: Settings.instance.numThreads).then((ok) {
-          if (!mounted) return;
-          _depthProvider = provider;
-          final hasDepthAi = ok && provider.tier != DepthTier.focalLength;
-          setState(() => _depthProviderReady = hasDepthAi);
-          if (!hasDepthAi) {
-            if (mounted) {
-              _tts.say(S.get('depth_unavailable'), SpeechPriority.info, pan: 0.0);
-            }
-          }
-        });
-      });
-
-      _voice.onCommand              = _onVoiceCommand;
-      _voice.onListeningStateChanged = (listening) {
-        if (mounted) setState(() => _voiceListening = listening);
-      };
-      _voice.init(locale: AppStrings.ttsLang).then((available) {
-        if (mounted) setState(() => _voiceAvailable = available);
-      });
-
-      loadFocalLength();
-      _isCalibrated = Settings.instance.isCalibrated;
-      _useGpu       = Settings.instance.useGpu;
-      _numThreads   = Settings.instance.numThreads;
-
-      AppStrings.setLanguage(AppLanguage.values[Settings.instance.language]);
-      await _tts.setLanguage(AppStrings.ttsLang);
-
-      if (widget.initialMode != null) {
-        setState(() => _mode = widget.initialMode!);
-      } else {
-        final modeName = Settings.instance.onboardingMode;
-        final saved = AppMode.values.where((m) => m.name == modeName).firstOrNull;
-        if (saved != null) setState(() => _mode = saved);
-      }
-
-      if (mounted) setState(() => _statusLine = 'Запрос доступа к камере...');
       final granted = await _requestCameraPermission();
       if (!granted) return;
 
-      if (mounted) setState(() => _statusLine = 'Запуск камеры...');
+      _vm.thermal.onChanged = _handleThermalChanged;
+      _handleThermalChanged(_vm.thermal.current);
+
+      final ok = await _models.loadMidas(numThreads: _numThreads);
+      if (!mounted) return;
+
+      final hasDepthAi =
+          ok &&
+          _models.depthProvider != null &&
+          _models.depthProvider!.tier != DepthTier.focalLength;
+      setState(() => _depthProviderReady = hasDepthAi);
+
+      _vm.setStatus('Загрузка ИИ модели YOLO...');
+      await _models.loadYolo(useGpu: _useGpu, numThreads: _numThreads);
+
+      _vm.setStatus('Запуск камеры...');
       await _initCamera();
 
-      if (mounted) setState(() => _statusLine = 'Загрузка ИИ модели YOLO...');
-      await _loadModel();
-
-      if (mounted) setState(() => _statusLine = S.get('system_ready'));
-      
-      if (mounted) setState(() => _statusLine = 'Запуск фоновой службы...');
       await VisionForegroundService.start();
 
-      if (mounted) setState(() => _statusLine = S.get('system_ready'));
+      _vm.fallDetector.onFallDetected = _handleFallDetected;
+      await _vm.fallDetector.init();
 
-      if (!_isCalibrated) {
-        Future.delayed(const Duration(seconds: 6), () {
-          if (mounted) {
-            _tts.say(S.get('calib_recommend'), SpeechPriority.info, pan: 0.0);
-          }
-        });
+      _vm.tts.onAudioRouteInterrupted = () {
+        HapticService.vibrate([0, 200, 100, 200, 100, 200]);
+        _vm.earcon.play(Earcon.cameraBlocked);
+        _vm.tts.say(
+          S.get('audio_route_interrupted'),
+          SpeechPriority.critical,
+          pan: 0.0,
+        );
+      };
+      _vm.tts.onAudioRouteResumed = () {
+        _vm.tts.say(S.get('audio_resumed'), SpeechPriority.info, pan: 0.0);
+      };
+      _vm.tts.onTtsStall = () {
+        HapticService.vibrate([0, 400, 200, 400, 200, 400]);
+        _vm.earcon.play(Earcon.cameraBlocked);
+        try {
+          const MethodChannel('bagdar/watchdog').invokeMethod('ping');
+        } catch (_) {}
+      };
+
+      _heartbeatTimer = Timer.periodic(
+        _currentHeartbeatInterval(),
+        (_) => _heartbeatTick(),
+      );
+
+      _vm.voice.onCommand = _handleVoiceCommand;
+      _vm.voice.onNavCommand = _handleNavCommand;
+      _vm.voice.onListeningStateChanged = (listening) {
+        if (!listening) {
+          _vm.earcon.play(Earcon.success);
+        }
+      };
+
+      if (!_depthProviderReady && _vm.mode == AppMode.street) {
+        _vm.tts.say(
+          S.get('depth_unavailable_street'),
+          SpeechPriority.warning,
+          pan: 0.0,
+        );
       }
-    } catch (e, stack) {
-      debugPrint('INIT ERROR: $e\n$stack');
-      if (mounted) {
-        setState(() => _statusLine = 'Сбой: $e');
+      if (!_vm.tts.languageAvailable || _vm.tts.usingEnglishFallback) {
+        _vm.tts.say(S.get('tts_fallback_en'), SpeechPriority.warning, pan: 0.0);
+      }
+
+      _vm.setStatus(S.get('system_ready'));
+      _vm.tts.say(S.get('system_ready'), SpeechPriority.info, pan: 0.0);
+    } catch (e) {
+      _vm.setStatus('Сбой: $e');
+    }
+  }
+
+  Duration _currentHeartbeatInterval() {
+    if (_vm.battery.level == ThrottleLevel.critical) {
+      return const Duration(seconds: 60);
+    }
+    if (_vm.isPitchBlack) return kHeartbeatIntervalPitchBlack;
+    return kHeartbeatInterval;
+  }
+
+  void _handleFallDetected() {
+    if (_fallCountdownActive) return;
+    _fallCountdownActive = true;
+    _fallCountdownSec = 15;
+
+    _vm.tts.say(S.get('sos_fall_detected'), SpeechPriority.critical, pan: 0.0);
+    _vm.tts.say(
+      S.get('sos_fall_cancel_hint'),
+      SpeechPriority.warning,
+      pan: 0.0,
+    );
+    HapticService.vibrate([0, 300, 200, 300, 200, 300]);
+
+    _startFallCancelListener();
+
+    _fallCountdownTimer?.cancel();
+    _fallCountdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      _fallCountdownSec--;
+      if (_fallCountdownSec <= 0) {
+        timer.cancel();
+        _fallCountdownActive = false;
+        _stopFallCancelListener();
+        _sendFallSos();
+      } else if (_fallCountdownSec == 10 ||
+          _fallCountdownSec == 5 ||
+          _fallCountdownSec <= 3) {
+        _vm.tts.say(
+          '${S.get('sos_fall_countdown')} $_fallCountdownSec ${S.get('sos_fall_seconds')}',
+          SpeechPriority.warning,
+          pan: 0.0,
+        );
+        if (_fallCountdownSec == 10 || _fallCountdownSec == 5) {
+          _restartFallCancelListener();
+        }
+      }
+    });
+  }
+
+  void _sendFallSos() async {
+    final hasContact = (_vm.sos.contactNumber ?? '').isNotEmpty;
+    if (!hasContact) {
+      _vm.tts.say(S.get('sos_112_fallback'), SpeechPriority.critical, pan: 0.0);
+    }
+    _vm.tts.say(S.get('sos_sending'), SpeechPriority.critical, pan: 0.0);
+    final result = await _vm.sos.sendSos();
+    if (!mounted) return;
+    final msg = switch (result) {
+      SosResult.sent => S.get('sos_fall_sent'),
+      SosResult.sentFallback =>
+        '${S.get('sos_112_fallback')} ${S.get('sos_sent')}',
+      SosResult.noLocation => S.get('sos_sent_no_location'),
+      SosResult.launchFailed => S.get('sos_launch_failed'),
+      SosResult.noContact => S.get('sos_no_contact'),
+      SosResult.error => S.get('sos_error'),
+    };
+    _vm.tts.say(msg, SpeechPriority.critical, pan: 0.0);
+  }
+
+  void _startFallCancelListener() {
+    if (_fallCancelListenerActive) return;
+    _fallCancelListenerActive = true;
+    unawaited(_vm.voice.startListening());
+  }
+
+  void _restartFallCancelListener() {
+    if (!_fallCancelListenerActive) return;
+    unawaited(_vm.voice.startListening());
+  }
+
+  void _stopFallCancelListener() {
+    _fallCancelListenerActive = false;
+    unawaited(_vm.voice.stopListening());
+  }
+
+  void _cancelFallCountdown() {
+    if (!_fallCountdownActive) return;
+    _fallCountdownTimer?.cancel();
+    _fallCountdownActive = false;
+    _fallCountdownSec = 0;
+    _stopFallCancelListener();
+    _vm.tts.say(S.get('sos_fall_cancelled'), SpeechPriority.critical, pan: 0.0);
+    HapticService.vibrate([0, 100]);
+  }
+
+  void _heartbeatTick() {
+    if (!mounted) return;
+    HapticService.vibrate([0, 50]);
+    _vm.earcon.play(Earcon.heartbeat);
+    try {
+      const MethodChannel('bagdar/watchdog').invokeMethod('ping');
+    } catch (_) {}
+
+    final desired = _currentHeartbeatInterval();
+    if (_heartbeatTimer == null || _heartbeatTimer!.tick == 0) return;
+    if (desired.inMilliseconds != kHeartbeatInterval.inMilliseconds) {
+      _heartbeatTimer?.cancel();
+      _heartbeatTimer = Timer.periodic(desired, (_) => _heartbeatTick());
+    }
+  }
+
+  void _handleTap() {
+    if (_fallCountdownActive) {
+      _cancelFallCountdown();
+      return;
+    }
+  }
+
+  void _triggerSos() async {
+    HapticService.vibrate([0, 200, 100, 200, 100, 200]);
+    _vm.tts.say('SOS', SpeechPriority.critical, pan: 0.0);
+    final hasContact = (_vm.sos.contactNumber ?? '').isNotEmpty;
+    if (!hasContact) {
+      _vm.tts.say(S.get('sos_112_fallback'), SpeechPriority.critical, pan: 0.0);
+    }
+
+    final result = await _vm.sos.sendSos();
+    if (!mounted) return;
+
+    final msg = switch (result) {
+      SosResult.sent => S.get('sos_sent'),
+      SosResult.sentFallback =>
+        '${S.get('sos_112_fallback')} ${S.get('sos_sent')}',
+      SosResult.noContact => S.get('sos_no_contact'),
+      SosResult.noLocation => S.get('sos_sent_no_location'),
+      SosResult.launchFailed => S.get('sos_launch_failed'),
+      SosResult.error => S.get('sos_error'),
+    };
+    _vm.tts.say(msg, SpeechPriority.critical, pan: 0.0);
+  }
+
+  void _startVoiceCommand() async {
+    HapticService.vibrate([0, 100, 50, 100]);
+    _vm.tts.say(S.get('voice_listening'), SpeechPriority.critical, pan: 0.0);
+    await _vm.voice.startListening();
+  }
+
+  void _handleVoiceCommand(VoiceCommand cmd) {
+    if (_fallCountdownActive) {
+      if (cmd == VoiceCommand.cancelFall || cmd == VoiceCommand.sos) {
+        if (cmd == VoiceCommand.cancelFall) {
+          _cancelFallCountdown();
+          return;
+        }
+        _cancelFallCountdown();
+        _triggerSos();
+        return;
+      }
+    }
+
+    switch (cmd) {
+      case VoiceCommand.cancelFall:
+        _vm.tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
+        break;
+      case VoiceCommand.scanAll:
+      case VoiceCommand.scanLeft:
+      case VoiceCommand.scanRight:
+      case VoiceCommand.scanForward:
+        _vm.tts.say(S.get('scan_see'), SpeechPriority.info, pan: 0.0);
+        break;
+      case VoiceCommand.readText:
+        _wantOcr = true;
+        _ocrStartedAt = DateTime.now();
+        _vm.tts.say(S.get('ocr_reading'), SpeechPriority.info, pan: 0.0);
+        break;
+      case VoiceCommand.modeStreet:
+        _vm.setMode(AppMode.street);
+        _vm.tts.say(S.get('mode_street'), SpeechPriority.critical, pan: 0.0);
+        break;
+      case VoiceCommand.modeCane:
+        _vm.setMode(AppMode.cane);
+        _vm.tts.say(S.get('mode_cane'), SpeechPriority.critical, pan: 0.0);
+        break;
+      case VoiceCommand.modeScan:
+        _vm.setMode(AppMode.scan);
+        _vm.tts.say(S.get('mode_scan'), SpeechPriority.critical, pan: 0.0);
+        break;
+      case VoiceCommand.toggleMode:
+        _vm.cycleMode(1);
+        break;
+      case VoiceCommand.togglePitchBlackUi:
+        _vm.togglePitchBlack();
+        break;
+      case VoiceCommand.toggleGuideDogMode:
+        _vm.toggleGuideDogMode();
+        break;
+      case VoiceCommand.stopNavigation:
+        _vm.nav.stopNavigation();
+        _vm.tts.say(S.get('nav_stopped'), SpeechPriority.info, pan: 0.0);
+        break;
+      case VoiceCommand.whereAmI:
+        _vm.tts.say(_vm.nav.getWhereAmI(), SpeechPriority.info, pan: 0.0);
+        break;
+      case VoiceCommand.navStatus:
+        _vm.tts.say(_vm.nav.getStatusSummary(), SpeechPriority.info, pan: 0.0);
+        break;
+      case VoiceCommand.confirmBoarded:
+        _vm.nav.confirmBoarded();
+        break;
+      case VoiceCommand.saveWaypoint:
+        _saveWaypointFromVoice();
+        break;
+      case VoiceCommand.sos:
+        _triggerSos();
+        break;
+      case VoiceCommand.unknown:
+        _vm.tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
+        break;
+      case VoiceCommand.navigateTo:
+      case VoiceCommand.transitTo:
+      case VoiceCommand.nearestStop:
+      case VoiceCommand.busRoute:
+      case VoiceCommand.busSchedule:
+      case VoiceCommand.downloadMap:
+        _vm.tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
+        break;
+    }
+  }
+
+  void _handleNavCommand(VoiceCommand cmd, String destination) {
+    switch (cmd) {
+      case VoiceCommand.navigateTo:
+        _vm.tts.say(
+          '${S.get('nav_searching')} $destination',
+          SpeechPriority.info,
+          pan: 0.0,
+        );
+        unawaited(_startNavigateTo(destination));
+        break;
+      case VoiceCommand.transitTo:
+        _vm.tts.say(
+          '${S.get('nav_searching')} $destination',
+          SpeechPriority.info,
+          pan: 0.0,
+        );
+        unawaited(_startTransitTo(destination));
+        break;
+      case VoiceCommand.busRoute:
+      case VoiceCommand.busSchedule:
+      case VoiceCommand.downloadMap:
+        _vm.tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
+        break;
+      default:
+        break;
+    }
+  }
+
+  Future<void> _startNavigateTo(String destination) async {
+    try {
+      final pos = await _currentPositionForNav();
+      if (pos == null) {
+        _vm.tts.say(S.get('nav_no_gps'), SpeechPriority.warning, pan: 0.0);
+        return;
+      }
+      final places = _vm.offlineRouting.poiReady
+          ? await _vm.offlineRouting.searchPlaces(
+              destination,
+              pos.latitude,
+              pos.longitude,
+            )
+          : await _vm.twoGis.searchPlaces(
+              destination,
+              pos.latitude,
+              pos.longitude,
+            );
+      if (places.isEmpty) {
+        
+        _vm.tts.say(S.get('nav_not_found'), SpeechPriority.warning, pan: 0.0);
+        return;
+      }
+      final target = places.first;
+      _vm.tts.say(S.get('nav_building_route'), SpeechPriority.info, pan: 0.0);
+      final route = _vm.offlineRouting.isReady
+          ? await _vm.offlineRouting.getWalkRoute(
+              pos.latitude,
+              pos.longitude,
+              target.lat,
+              target.lng,
+              destinationName: target.name,
+            )
+          : await _vm.twoGis.getWalkRoute(
+              pos.latitude,
+              pos.longitude,
+              target.lat,
+              target.lng,
+              destinationName: target.name,
+            );
+      if (route == null) {
+        _vm.tts.say(
+          S.get('nav_route_failed'),
+          SpeechPriority.warning,
+          pan: 0.0,
+        );
+        return;
+      }
+      _vm.nav.startWalkNavigation(route);
+      
+    } catch (e) {
+      debugPrint('startNavigateTo error: $e');
+      _vm.tts.say(S.get('nav_route_failed'), SpeechPriority.warning, pan: 0.0);
+    }
+  }
+
+  Future<void> _startTransitTo(String destination) async {
+    try {
+      final pos = await _currentPositionForNav();
+      if (pos == null) {
+        _vm.tts.say(S.get('nav_no_gps'), SpeechPriority.warning, pan: 0.0);
+        return;
+      }
+      if (!_vm.twoGis.hasApiKey) {
+        _vm.tts.say(S.get('nav_no_api_key'), SpeechPriority.warning, pan: 0.0);
+        return;
+      }
+      final places = await _vm.twoGis.searchPlaces(
+        destination,
+        pos.latitude,
+        pos.longitude,
+      );
+      if (places.isEmpty) {
+        _vm.tts.say(S.get('nav_not_found'), SpeechPriority.warning, pan: 0.0);
+        return;
+      }
+      final target = places.first;
+      _vm.tts.say(S.get('nav_building_route'), SpeechPriority.info, pan: 0.0);
+      final route = await _vm.twoGis.getTransitRoute(
+        pos.latitude,
+        pos.longitude,
+        target.lat,
+        target.lng,
+        destinationName: target.name,
+      );
+      if (route == null) {
+        _vm.tts.say(
+          S.get('nav_route_failed'),
+          SpeechPriority.warning,
+          pan: 0.0,
+        );
+        return;
+      }
+      _vm.nav.startTransitNavigation(route);
+    } catch (e) {
+      debugPrint('startTransitTo error: $e');
+      _vm.tts.say(S.get('nav_route_failed'), SpeechPriority.warning, pan: 0.0);
+    }
+  }
+
+  Future<Position?> _currentPositionForNav() async {
+    try {
+      return await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+          timeLimit: Duration(seconds: 5),
+        ),
+      );
+    } catch (_) {
+      try {
+        return await Geolocator.getLastKnownPosition();
+      } catch (_) {
+        return null;
+      }
+    }
+  }
+
+  void _saveWaypointFromVoice() async {
+    try {
+      final name = 'WP ${DateTime.now().toIso8601String().substring(11, 16)}';
+      final wp = await _vm.waypoints.saveCurrentLocation(name);
+      if (wp == null) {
+        _vm.tts.say(S.get('nav_no_gps'), SpeechPriority.warning, pan: 0.0);
+        return;
+      }
+      _vm.tts.say(S.get('waypoint_saved'), SpeechPriority.info, pan: 0.0);
+    } catch (e) {
+      debugPrint('saveWaypointFromVoice error: $e');
+    }
+  }
+
+  void _checkLuminosity(CameraImage image) {
+    final yPlane = image.planes[0].bytes;
+    if (yPlane.isEmpty) return;
+
+    final rowStride = image.planes[0].bytesPerRow;
+    final w = image.width;
+    final h = image.height;
+    final halfW = w >> 1;
+    final halfH = h >> 1;
+
+    double sum = 0;
+    double sumSq = 0;
+    int count = 0;
+    
+    
+    
+    final quadSum = List<double>.filled(4, 0);
+    final quadCount = List<int>.filled(4, 0);
+
+    for (int i = 0; i < yPlane.length; i += 100) {
+      final v = yPlane[i].toDouble();
+      sum += v;
+      sumSq += v * v;
+      count++;
+      final y = i ~/ rowStride;
+      final x = i - y * rowStride;
+      if (y >= h || x >= w) continue;
+      final quad = (y < halfH ? 0 : 2) + (x < halfW ? 0 : 1);
+      quadSum[quad] += v;
+      quadCount[quad]++;
+    }
+    if (count == 0) return;
+
+    final avgLuminosity = sum / count;
+    
+    
+    final variance = (sumSq / count) - (avgLuminosity * avgLuminosity);
+
+    
+    
+    
+    
+    final isAeTransition = variance < _kAeVarianceThreshold &&
+        (avgLuminosity > _kAeAvgBrightThreshold ||
+            avgLuminosity < _kAeAvgDarkThreshold);
+    if (isAeTransition) {
+      _aeTransitionFrames++;
+      _aeTransitionEndedAt = null;
+    } else {
+      if (_aeTransitionFrames >= _kAeTransitionMinFrames) {
+        _aeTransitionEndedAt = DateTime.now();
+      }
+      _aeTransitionFrames = 0;
+    }
+
+    
+    
+    
+    
+    
+    
+    if (!isAeTransition) {
+      final transition = _vm.weatherGate.feed(variance, avgLuminosity);
+      switch (transition) {
+        case WeatherTransition.degraded:
+          _vm.tts.say(
+            S.alert('weather_low_vis'),
+            SpeechPriority.warning,
+            pan: 0.0,
+          );
+          HapticService.vibrate(const [0, 200, 80, 200]);
+          break;
+        case WeatherTransition.recovered:
+          _vm.tts.say(
+            S.alert('weather_restored'),
+            SpeechPriority.info,
+            pan: 0.0,
+          );
+          break;
+        case WeatherTransition.none:
+          break;
+      }
+      
+      
+      
+      _vm.tracker.weatherDegraded = _vm.weatherGate.degraded;
+    }
+
+    if (avgLuminosity < _luminosityMinValue) {
+      _lowLuminosityFrames++;
+      if (_lowLuminosityFrames >= _lowLuminosityThreshold &&
+          !_cameraBlockedWarned) {
+        _cameraBlockedWarned = true;
+        _vm.tts.say(
+          S.alert('camera_blocked'),
+          SpeechPriority.critical,
+          pan: 0.0,
+        );
+        HapticService.vibrate([0, 300, 100, 300]);
+      }
+    } else {
+      if (_cameraBlockedWarned) {
+        _cameraBlockedWarned = false;
+      }
+      _lowLuminosityFrames = 0;
+    }
+
+    
+    
+    
+    
+    int deadQuads = 0;
+    for (int q = 0; q < 4; q++) {
+      if (quadCount[q] == 0) continue;
+      final avg = quadSum[q] / quadCount[q];
+      if (avg < _luminosityMinValue) deadQuads++;
+    }
+    final isPartial = deadQuads >= 1 &&
+        deadQuads <= 2 &&
+        avgLuminosity >= _luminosityMinValue;
+    if (isPartial) {
+      _partialOcclusionFrames++;
+      if (_partialOcclusionFrames >= _kPartialOcclusionStreak &&
+          !_partialOcclusionWarned) {
+        _partialOcclusionWarned = true;
+        _vm.tts.say(
+          S.alert('camera_partial_blocked'),
+          SpeechPriority.warning,
+          pan: 0.0,
+        );
+        HapticService.vibrate(const [0, 200, 80, 200]);
+      }
+    } else {
+      _partialOcclusionFrames = 0;
+      if (_partialOcclusionWarned && deadQuads == 0) {
+        _partialOcclusionWarned = false;
+      }
+    }
+  }
+
+  void _checkFrozenFrame(CameraImage image, DateTime now) {
+    final bytes = image.planes[0].bytes;
+    if (bytes.length < 10) return;
+
+    int hash = 0;
+    for (int i = 0; i < 10; i++) {
+      hash = (hash * 31) + bytes[i];
+    }
+
+    if (hash != _lastImageHash) {
+      _lastImageHash = hash;
+      _lastImageChangeAt = now;
+      if (_cameraFrozenWarned) {
+        _cameraFrozenWarned = false;
+      }
+    } else {
+      if (now.difference(_lastImageChangeAt) > const Duration(seconds: 5) &&
+          !_cameraFrozenWarned) {
+        _cameraFrozenWarned = true;
+        _vm.tts.say(S.get('camera_frozen'), SpeechPriority.critical, pan: 0.0);
+        HapticService.vibrate([0, 500, 200, 500]);
       }
     }
   }
@@ -242,48 +879,26 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   Future<bool> _requestCameraPermission() async {
     final status = await Permission.camera.request();
     if (status.isGranted) return true;
-
-    if (status.isPermanentlyDenied && mounted) {
-      await showDialog<void>(
-        context: context,
-        builder: (_) => AlertDialog(
-          title:   const Text('Нет доступа к камере'),
-          content: const Text(
-            'Камера необходима для работы VisionGuide.\n'
-            'Откройте Настройки и разрешите доступ к камере.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(S.get('cancel')),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                openAppSettings();
-              },
-              child: Text(S.get('settings')),
-            ),
-          ],
-        ),
-      );
-    } else {
-      _setStatus('Доступ к камере отклонён');
-      _tts.say(S.get('camera_unavailable'), SpeechPriority.critical);
-    }
+    _vm.setStatus('Доступ к камере отклонён. Разрешите в настройках');
+    _vm.tts.say(
+      S.get('camera_permission_denied'),
+      SpeechPriority.critical,
+      pan: 0.0,
+    );
     return false;
   }
 
   Future<void> _initCamera() async {
     try {
       final cameras = await availableCameras();
-      if (cameras.isEmpty) { _setStatus(S.get('camera_not_found')); return; }
+      if (cameras.isEmpty) return;
 
       final back = cameras.firstWhere(
         (c) => c.lensDirection == CameraLensDirection.back,
         orElse: () => cameras.first,
       );
 
+      
       final ctrl = CameraController(
         back,
         ResolutionPreset.low,
@@ -297,1054 +912,716 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       if (mounted) {
         setState(() {
           _isCameraReady = true;
-          _statusLine    = S.get('camera_started');
+          _vm.setStatus(S.get('camera_started'));
         });
       }
+      _startStallWatchdog();
     } catch (e) {
-      _setStatus('Ошибка камеры: $e');
-      _tts.say(S.get('camera_unavailable'), SpeechPriority.critical);
+      _vm.setStatus('Ошибка камеры: $e');
     }
-  }
-
-  Future<void> _loadModel() async {
-    Future<void> tryLoad(bool gpu) async {
-      await _vision.closeYoloModel();
-      await _vision.loadYoloModel(
-        labels:       'assets/labels.txt',
-        modelPath:    'assets/yolov8n_int8.tflite',
-        modelVersion: 'yolov8',
-        numThreads:   _numThreads,
-        useGpu:       gpu,
-      );
-    }
-
-    try {
-      await tryLoad(_useGpu);
-      _setStatus('Нейросеть (${_useGpu ? "GPU" : "CPU"}, $_numThreads пот.)');
-    } catch (_) {
-      if (_useGpu) {
-        try {
-          await tryLoad(false);
-          _useGpu = false;
-          _setStatus('GPU недоступен, CPU $_numThreads пот.');
-        } catch (e2) {
-          _setStatus('Ошибка ИИ: $e2');
-        }
-      } else {
-        _setStatus('Ошибка ИИ (CPU)');
-      }
-    }
-  }
-
-  void _setStatus(String s) {
-    if (mounted) setState(() => _statusLine = s);
   }
 
   Future<void> _onFrame(CameraImage image) async {
-    _imgW = image.width;
-    _imgH = image.height;
-    _lastFrame = image;
+    if (!mounted || _exclusiveDepthTransition) return;
 
     final now = DateTime.now();
-
-    if (now.difference(_lastLumCheckAt) >= const Duration(seconds: 2)) {
-      _lastLumCheckAt = now;
-      _updateLuminosity(image);
+    _lastFrameArrivedAt = now;
+    if (_cameraStallWarned) {
+      _cameraStallWarned = false;
+      _vm.tts.say(S.get('camera_resumed'), SpeechPriority.info, pan: 0.0);
     }
 
-    if (_depthProviderReady &&
-        _depthProvider != null &&
-        _battery.midasEnabled &&
-        now.isAfter(_midasPausedUntil) &&
-        _midasInterval.inMilliseconds > 0 &&
-        now.difference(_lastMidasAt) >= _midasInterval) {
-      _lastMidasAt = now;
-      _runMidas(image, now);
+    _frameCount++;
+    _imgW = image.width;
+    _imgH = image.height;
+    final viewportAspect = MediaQuery.sizeOf(context).aspectRatio;
+
+    final frameSw = Stopwatch()..start();
+
+    _checkLuminosity(image);
+    _checkFrozenFrame(image, now);
+
+    
+    
+    
+    
+    
+    if (_aePipelineFrozen(now)) {
+      _finalizeFramePerf(now: now, frameSw: frameSw);
+      return;
     }
 
-    final inBurstMode = now.isBefore(_burstModeEndsAt);
-    final currentDetectInterval = inBurstMode
-        ? _effectiveBurstDetectInterval()
-        : _detectInterval;
+    final yPlane = image.planes[0];
+    final sharpness = BlurDetector.sharpnessScore(
+      yPlane.bytes,
+      width: image.width,
+      height: image.height,
+      rowStride: yPlane.bytesPerRow,
+      stride: 8,
+    );
+    if (BlurDetector.isBlurry(sharpness)) {
+      _blurryStreak++;
+      if (_blurryStreak >= _kShakeWarnStreak &&
+          now.difference(_lastShakeWarnAt) >= _kShakeWarnCooldown) {
+        _lastShakeWarnAt = now;
+        _vm.tts.say(S.get('shake_warning'), SpeechPriority.info, pan: 0.0);
+      }
+      final predictedTracks = _vm.tracker.predict();
+      if (predictedTracks.isNotEmpty) {
+        final uiNow = DateTime.now();
+        if (uiNow.difference(_lastUiAt) >= _vm.throttler.uiInterval()) {
+          _lastUiAt = uiNow;
+          _vm.updateTracks(predictedTracks);
+        }
+      }
+      _finalizeFramePerf(now: now, frameSw: frameSw);
+      return;
+    }
+    _blurryStreak = 0;
 
-    if (now.difference(_lastDetectAt) < currentDetectInterval) return;
-    if (_isDetecting) return;
+    
+    
+    
+    
+    
+    if ((_vm.mode == AppMode.street || _vm.mode == AppMode.cane) &&
+        !_vm.weatherGate.degraded) {
+      final event = _vm.motionPreAlert.feed(image, now);
+      if (event != null) _handleMotionIntrusion(event);
+    }
 
-    _isDetecting  = true;
+    final currentDetectInterval = _detectInterval;
+    final shouldRunDetect =
+        now.difference(_lastDetectAt) >= currentDetectInterval;
+
+    if (!shouldRunDetect || _isDetecting) {
+      final predictedTracks = _vm.tracker.predict();
+      if (predictedTracks.isNotEmpty) {
+        final uiNow = DateTime.now();
+        if (uiNow.difference(_lastUiAt) >= _vm.throttler.uiInterval()) {
+          _lastUiAt = uiNow;
+          _vm.updateTracks(predictedTracks);
+        }
+      }
+      _finalizeFramePerf(now: now, frameSw: frameSw);
+      return;
+    }
+
+    _isDetecting = true;
     _lastDetectAt = now;
-    final sw = Stopwatch()..start();
 
     try {
-      final planeBytes = image.planes.map((p) => p.bytes).toList(growable: false);
-      final raw = await _vision.yoloOnFrame(
-        bytesList:      planeBytes,
-        imageHeight:    image.height,
-        imageWidth:     image.width,
-        iouThreshold:   0.45,
-        confThreshold:  0.35,
+      if (_wantOcr) {
+        if (now.difference(_ocrStartedAt) > const Duration(seconds: 10)) {
+          _wantOcr = false;
+          _vm.tts.say(S.get('ocr_timeout'), SpeechPriority.info, pan: 0.0);
+        } else {
+          final text = await _vm.ocr.recognizeFromFrame(image, stabilize: true);
+          if (text != null && text.isNotEmpty) {
+            _vm.tts.say(text, SpeechPriority.critical, pan: 0.0);
+            _wantOcr = false;
+          }
+        }
+      }
+
+      final planeBytes = _reusePlaneBytes(image);
+      final raw = await _models.vision.yoloOnFrame(
+        bytesList: planeBytes,
+        imageHeight: image.height,
+        imageWidth: image.width,
+        iouThreshold: 0.45,
+        confThreshold: 0.35,
         classThreshold: 0.35,
       );
 
       if (!mounted) return;
 
-      final dets   = _buildRawDets(raw, _imgW, _imgH);
-      final tracks = _tracker.update(dets, _imgW, _imgH, now);
+      
+      
+      
+      
+      final yPlane = planeBytes.isNotEmpty ? planeBytes[0] : null;
+      final yStride =
+          image.planes.isNotEmpty ? image.planes[0].bytesPerRow : null;
+      final dets = _buildRawDets(
+        raw,
+        _imgW,
+        _imgH,
+        yPlane: yPlane,
+        yRowStride: yStride,
+      );
+      final tracks = _vm.tracker.update(dets, _imgW, _imgH, now);
 
       final uiNow = DateTime.now();
-      if (uiNow.difference(_lastUiAt) >= _minUiInterval) {
-        _lastUiAt             = uiNow;
-        _tracksNotifier.value = List.unmodifiable(tracks);
+      if (uiNow.difference(_lastUiAt) >= _vm.throttler.uiInterval()) {
+        _lastUiAt = uiNow;
+        _vm.updateTracks(tracks);
       }
 
-      if (_latestMidasHazard != null) {
-        final result = _fusion.evaluate(
-          hazard: _latestMidasHazard!,
-          yoloHazardConf: _getYoloHazardConf(),
-          now: now,
-        );
-        if (result != null) _handleFusionResult(result, now);
-      }
-
-      final nightNow = _isDark;
-      if (nightNow != _wasNightMode) {
-        _wasNightMode = nightNow;
-        _tts.say(nightNow ? S.get('night_mode_on') : S.get('night_mode_off'), SpeechPriority.info, pan: 0.0);
-        
-        try {
-          if (_controller != null && _controller!.value.isInitialized) {
-            final minO = await _controller!.getMinExposureOffset();
-            final maxO = await _controller!.getMaxExposureOffset();
-            final target = nightNow ? (maxO * 0.4) : 0.0;
-            final safeTarget = target.clamp(minO, maxO);
-            await _controller!.setExposureOffset(safeTarget);
-          }
-        } catch (e) {
-          debugPrint('Ошибка изменения экспозиции: $e');
-        }
-      }
-
-      final signTrack = _alertMgr.processFrame(
-        tracks:      tracks,
-        imgW:        _imgW,
-        imgH:        _imgH,
-        now:         now,
-        mode:        _mode,
+      final signTrack = _vm.alertMgr.processFrame(
+        tracks: tracks,
+        imgW: _imgW,
+        imgH: _imgH,
+        viewportAspect: viewportAspect,
+        now: now,
+        mode: _vm.mode,
         isCalibrated: _isCalibrated,
-        frameCount:  _frameCount,
+        frameCount: _frameCount,
       );
-      _maybeAutoOcr(signTrack, now);
-    } catch (e) {
-      _setStatus('Ошибка кадра: $e');
+
+      if (signTrack != null) {
+        final color = _vm.trafficLight.analyze(
+          image,
+          signTrack.x1.toInt(),
+          signTrack.y1.toInt(),
+          signTrack.x2.toInt(),
+          signTrack.y2.toInt(),
+          trackId: signTrack.id,
+        );
+        final kind = _vm.trafficLight.lastKind;
+        final alreadyAnnounced = _lastAnnouncedLight != null;
+
+        if (kind == TrafficLightKind.vehicle) {
+          if (!alreadyAnnounced) {
+            _lastAnnouncedLight = TrafficLightColor.red;
+            _vm.tts.say(S.get('tl_vehicle'), SpeechPriority.warning, pan: 0.0);
+          }
+        } else if (kind == TrafficLightKind.unknown &&
+            color != TrafficLightColor.unknown) {
+          if (!alreadyAnnounced) {
+            _lastAnnouncedLight = color;
+            _vm.tts.say(
+              S.get('tl_uncertain'),
+              SpeechPriority.warning,
+              pan: 0.0,
+            );
+          }
+        } else if (kind == TrafficLightKind.pedestrian &&
+            color != TrafficLightColor.unknown &&
+            color != _lastAnnouncedLight) {
+          _lastAnnouncedLight = color;
+
+          if (color == TrafficLightColor.green) {
+            final vehicleClose = _hasCloseOrApproachingVehicle(tracks);
+            final msg = vehicleClose
+                ? S.get('tl_green_cars_near')
+                : S.get('tl_green_wait');
+            _vm.tts.say(msg, SpeechPriority.warning, pan: 0.0);
+          } else {
+            final key = switch (color) {
+              TrafficLightColor.red => 'tl_red',
+              TrafficLightColor.yellow => 'tl_yellow',
+              _ => 'tl_unknown',
+            };
+            _vm.tts.say(S.get(key), SpeechPriority.warning, pan: 0.0);
+          }
+        }
+      } else {
+        _lastAnnouncedLight = null;
+      }
+
+      if (_depthProviderReady &&
+          now.difference(_lastDepthAt) >= _depthInterval) {
+        _lastDepthAt = now;
+        _runDepthAnalysis(image);
+      }
     } finally {
-      sw.stop();
-      _updatePerf(sw.elapsedMilliseconds.toDouble(), now);
+      _finalizeFramePerf(now: now, frameSw: frameSw);
       _isDetecting = false;
     }
   }
 
-  List<RawDet> _buildRawDets(
-      List<Map<String, dynamic>> raw, int imgW, int imgH) {
-    final frameArea = imgW * imgH;
-    final out = <RawDet>[];
+  void _runDepthAnalysis(CameraImage image) async {
+    final depthProvider = _models.depthProvider;
+    if (depthProvider == null || !depthProvider.isReady) return;
 
+    try {
+      final cropTopFrac = OrientationService.cropTopFracForPitch(
+        _vm.orientation.pitch,
+      );
+      
+      
+      
+      
+      
+      
+      final userStationary =
+          _vm.fallDetector.motionState == MotionState.stationary;
+      final hazards = await depthProvider.analyze(
+        image,
+        cropTopFrac: cropTopFrac,
+        userStationary: userStationary,
+        
+        
+        weatherDegraded: _vm.weatherGate.degraded,
+      );
+      if (!mounted || hazards.isEmpty) return;
+
+      final rollExcessive = _vm.orientation.isRollExcessive;
+      for (final hazard in hazards) {
+        
+        
+        
+        
+        if (hazard.type == DepthHazardType.escalatorRiding) {
+          HapticService.vibrate(const [0, 50, 120, 50]);
+          continue;
+        }
+        final hazardKey = switch (hazard.type.name) {
+          'stepDown' => 'hazard_step_down',
+          'stepUp' => 'hazard_step_up',
+          'pothole' => 'hazard_pothole',
+          'curb' => 'hazard_curb',
+          'lowCurb' => 'hazard_low_curb',
+          'deadZone' => 'hazard_dead_zone',
+          'stairsDown' => 'hazard_stairs_down',
+          'overhead' => 'hazard_overhead',
+          'glassDoor' => 'hazard_glass_door',
+          'slippery' => 'hazard_slippery',
+          
+          
+          
+          'nearFieldIntrusion' => 'hazard_near_field',
+          _ => 'hazard_unknown',
+        };
+        final naturallyCritical =
+            hazard.type == DepthHazardType.stairsDown ||
+            hazard.type == DepthHazardType.overhead;
+        final isCritical = naturallyCritical && !rollExcessive;
+        final priority = isCritical
+            ? SpeechPriority.critical
+            : SpeechPriority.warning;
+        _vm.tts.say(S.alert(hazardKey), priority, pan: hazard.pan);
+        HapticService.vibrate(
+          isCritical
+              ? const [0, 300, 120, 300, 120, 300]
+              : const [0, 200, 100, 200],
+        );
+      }
+    } catch (e) {
+      debugPrint('Depth analysis error: $e');
+    }
+  }
+
+  void _handleMotionIntrusion(MotionIntrusionEvent event) {
+    final pan = switch (event.side) {
+      MotionIntrusionSide.left => -1.0,
+      MotionIntrusionSide.right => 1.0,
+      MotionIntrusionSide.center => 0.0,
+    };
+    _vm.earcon.play(Earcon.approaching, pan: pan);
+    HapticService.vibrate(const [0, 80, 40, 120]);
+  }
+
+  bool _hasCloseOrApproachingVehicle(List<Track> tracks) {
+    for (final t in tracks) {
+      if (!isVehicle(t.label)) continue;
+      if (t.approaching) return true;
+      if (t.dist == 'very close' || t.dist == 'close') return true;
+      if (t.distM > 0 && t.distM < 8.0) return true;
+    }
+    return false;
+  }
+
+  List<RawDet> _buildRawDets(
+    List<dynamic> raw,
+    int imgW,
+    int imgH, {
+    Uint8List? yPlane,
+    int? yRowStride,
+  }) {
+    final out = <RawDet>[];
+    final frameArea = (imgW * imgH).toDouble();
+    final canExtractAppearance =
+        yPlane != null && yRowStride != null && yRowStride > 0;
     for (final r in raw) {
       final label = (r['tag'] ?? '').toString();
-      if (label.isEmpty) continue;
-
-      if (_mode == AppMode.street && !_streetObjects.contains(label)) continue;
-
       final box = r['box'] as List<dynamic>?;
       if (box == null || box.length < 4) continue;
-
-      final conf = _toDouble(box.length > 4 ? box[4] : null) ??
-          _toDouble(r['confidence']) ?? 0.0;
-      if (conf < kDetConfThreshold) continue;
-
-      double x1 = _toDouble(box[0]) ?? 0;
-      double y1 = _toDouble(box[1]) ?? 0;
-      double x2 = _toDouble(box[2]) ?? 0;
-      double y2 = _toDouble(box[3]) ?? 0;
-
-      if (x1 <= 1 && x2 <= 1 && y1 <= 1 && y2 <= 1) {
-        x1 *= imgW; x2 *= imgW; y1 *= imgH; y2 *= imgH;
-      }
-
-      x1 = x1.clamp(0.0, imgW.toDouble());
-      x2 = x2.clamp(0.0, imgW.toDouble());
-      y1 = y1.clamp(0.0, imgH.toDouble());
-      y2 = y2.clamp(0.0, imgH.toDouble());
-
-      if (x2 <= x1 || y2 <= y1) continue;
-
-      final bw = x2 - x1, bh = y2 - y1;
-      if (frameArea > 0 && (bw * bh) / frameArea < kMinBboxAreaRatio) continue;
-
-      final cx          = (x1 + x2) / 2;
-      final cy          = (y1 + y2) / 2;
-      final areaRatio   = frameArea > 0 ? (bw * bh) / frameArea : 0.0;
+      final x1 = (box[0] as num).toDouble();
+      final y1 = (box[1] as num).toDouble();
+      final x2 = (box[2] as num).toDouble();
+      final y2 = (box[3] as num).toDouble();
+      final bw = x2 - x1;
+      final bh = y2 - y1;
+      final areaRatio = frameArea > 0 ? (bw * bh) / frameArea : 0.0;
       final heightRatio = imgH > 0 ? bh / imgH : 0.0;
       final bottomRatio = imgH > 0 ? y2 / imgH : 0.0;
-
-      final distFallback = distByBox(areaRatio, heightRatio, bottomRatio);
-      final distM        = focalDistM(label, x1, y1, x2, y2);
-      final dist         = distMToCategory(distM, distFallback);
-
-      out.add(RawDet(
-        label: label, x1: x1, y1: y1, x2: x2, y2: y2,
-        cx: cx, cy: cy, conf: conf, dist: dist, distM: distM,
-      ));
+      final distM = focalDistM(label, x1, y1, x2, y2);
+      final boxCat = distByBox(areaRatio, heightRatio, bottomRatio);
+      final dist = distMToCategory(distM, boxCat);
+      final appearance = canExtractAppearance
+          ? Appearance.extractFromYPlane(
+              yPlane: yPlane,
+              rowStride: yRowStride,
+              imgW: imgW,
+              imgH: imgH,
+              x1: x1,
+              y1: y1,
+              x2: x2,
+              y2: y2,
+            )
+          : null;
+      out.add(
+        RawDet(
+          label: label,
+          x1: x1,
+          y1: y1,
+          x2: x2,
+          y2: y2,
+          cx: (x1 + x2) / 2,
+          cy: (y1 + y2) / 2,
+          conf: (r['confidence'] as num?)?.toDouble() ?? 0.0,
+          dist: dist,
+          distM: distM,
+          appearance: appearance,
+        ),
+      );
     }
     return out;
   }
 
-  double? _toDouble(dynamic v) {
-    if (v == null) return null;
-    if (v is double) return v;
-    if (v is int)    return v.toDouble();
-    return double.tryParse(v.toString());
+  void _handleThermalChanged(ThermalReadings readings) {
+    if (!mounted) return;
+    _vm.throttler.setThermal(readings);
+    unawaited(_models.adjustForThermal(_vm.throttler.effectiveSeverity));
   }
 
-  Future<void> _runMidas(CameraImage image, DateTime now) async {
-    final hazards = await _depthProvider!.analyze(image);
-    if (!mounted || hazards.isEmpty) {
-      _latestMidasHazard = null;
-      return;
+  void _recomputeCadence() {
+    _detectInterval = _vm.throttler.detectInterval(
+      _vm.battery.detectIntervalMs,
+    );
+    _depthInterval = _vm.throttler.midasInterval(_vm.battery.midasIntervalMs);
+  }
+
+  List<Uint8List> _reusePlaneBytes(CameraImage image) {
+    final planes = image.planes;
+    if (_planeBytesBuffer.length != planes.length) {
+      _planeBytesBuffer
+        ..clear()
+        ..addAll(planes.map((p) => p.bytes));
+      return _planeBytesBuffer;
     }
-
-    _latestMidasHazard = hazards.first;
-
-    if (_latestMidasHazard!.midasScore > 0.3) {
-      _burstModeEndsAt = now.add(const Duration(milliseconds: 500));
+    for (int i = 0; i < planes.length; i++) {
+      _planeBytesBuffer[i] = planes[i].bytes;
     }
+    return _planeBytesBuffer;
   }
 
-  double _getYoloHazardConf() {
-    return 0.0;
+  void _finalizeFramePerf({required DateTime now, required Stopwatch frameSw}) {
+    _vm.throttler.update(frameSw.elapsedMilliseconds.toDouble(), now);
   }
 
-  void _handleFusionResult(FusionResult result, DateTime now) {
-    final h   = result.hazard;
-    final pan = h.pan;
-    final lbl = _hazardLabel(h.type);
-    final dir = _zoneDir(h.zone);
-
-    if (result.level == AlertLevel.critical) {
-      if (now.difference(_alertMgr.lastCriticalAt) >= kCriticalCooldown) {
-        _alertMgr.updateLastCriticalAt(now);
-        _tts.say(
-          '${S.get('stop')}! $lbl $dir.',
-          SpeechPriority.critical,
-          pan: pan,
-        );
-        _vibrate([0, 250, 80, 450]);
-      }
-    } else {
-      _tts.say(
-        '${S.get('hazard_warning')} $lbl $dir.',
-        SpeechPriority.warning,
-        pan: pan,
-      );
-      _vibrate([0, 120]);
-    }
+  void _openSettings() {
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.grey[900],
+      isScrollControlled: true,
+      builder: (_) => SingleChildScrollView(
+        child: CameraSettingsSheet(
+          currentLanguage: AppStrings.current,
+          useGpu: _useGpu,
+          useNativeDepthBridge:
+              _models.depthProvider?.nativeBridgeEnabled ?? false,
+          useHardwareDepthMode: _useHardwareDepthMode,
+          numThreads: _numThreads,
+          showDebugHud: _vm.showDebugHud,
+          earconEnabled: _vm.earcon.isEnabled,
+          pitchBlackUiEnabled: false,
+          depthTier: _models.depthProvider?.tier,
+          midasReady: _depthProviderReady,
+          sosContactNumber: _vm.sos.contactNumber,
+          onLanguageChanged: (lang) async {
+            AppStrings.setLanguage(lang);
+            await Settings.instance.setLanguage(lang.index);
+            await _vm.tts.setLanguage(AppStrings.ttsLang);
+            if (mounted) setState(() {});
+          },
+          onUseGpuChanged: (v) {
+            _useGpu = v;
+            Settings.instance.setUseGpu(v);
+          },
+          onNativeDepthBridgeChanged: (v) {
+            _models.depthProvider?.setNativeBridgeEnabled(v);
+          },
+          onHardwareDepthModeChanged: (v) {
+            _useHardwareDepthMode = v;
+            Settings.instance.setUseHardwareDepthMode(v);
+          },
+          onNumThreadsChanged: (v) {
+            _numThreads = v;
+            Settings.instance.setNumThreads(v);
+          },
+          onDebugHudChanged: (v) => _vm.toggleDebugHud(),
+          onEarconEnabledChanged: (v) => _vm.earcon.setEnabled(v),
+          onPitchBlackUiChanged: (v) {},
+          onReadText: () {
+            _wantOcr = true;
+            _ocrStartedAt = DateTime.now();
+            _vm.tts.say(S.get('ocr_reading'), SpeechPriority.info, pan: 0.0);
+          },
+          onCalibrationTap: () {
+            _vm.tts.say(S.get('calib_aim'), SpeechPriority.info, pan: 0.0);
+          },
+          onEditSosContact: () => _showSosContactDialog(),
+          onScanLeft: () =>
+              _vm.tts.say(S.get('scan_left'), SpeechPriority.info, pan: -1.0),
+          onScanCenter: () =>
+              _vm.tts.say(S.get('scan_forward'), SpeechPriority.info, pan: 0.0),
+          onScanRight: () =>
+              _vm.tts.say(S.get('scan_right'), SpeechPriority.info, pan: 1.0),
+          onVoiceWarningTest: () => _vm.tts.say(
+            'Тест: внимание слева',
+            SpeechPriority.warning,
+            pan: -1.0,
+          ),
+          onVoiceCriticalTest: () => _vm.tts.say(
+            'Тест: критично по центру',
+            SpeechPriority.critical,
+            pan: 0.0,
+          ),
+          onPlayEarcon: (earcon) => _vm.earcon.play(earcon),
+          patternFn: (dist, pos) => [
+            0,
+            dist == 'very close' ? 200 : 120,
+            80,
+            dist == 'very close' ? 200 : 120,
+          ],
+          intensFn: (dist, len) =>
+              List.filled(len, dist == 'very close' ? 255 : 180),
+          vibrateFn: (pattern, {intensities}) =>
+              HapticService.vibrate(pattern, intensities: intensities),
+        ),
+      ),
+    );
   }
 
-  String _hazardLabel(DepthHazardType type) {
-    switch (type) {
-      case DepthHazardType.stepDown: return S.get('hazard_step_down');
-      case DepthHazardType.pothole:  return S.get('hazard_pothole');
-      case DepthHazardType.unknown:  return S.get('hazard_unknown');
-    }
-  }
-
-  String _zoneDir(HazardZone zone) {
-    switch (zone) {
-      case HazardZone.left:        return S.get('left');
-      case HazardZone.centerLeft:  return S.get('nav_slight_left');
-      case HazardZone.center:      return S.get('forward_loc');
-      case HazardZone.centerRight: return S.get('nav_slight_right');
-      case HazardZone.right:       return S.get('right');
-    }
-  }
-
-  void _maybeAutoOcr(Track? signTrack, DateTime now) {
-    if (_ocrBusy || signTrack == null) return;
-    if (_lastFrame == null) return;
-    if (now.difference(_lastAutoOcrAt) < _autoOcrInterval) return;
-
-    _lastAutoOcrAt = now;
-    final frame    = _lastFrame!;
-    _ocrBusy       = true;
-    _ocr.recognizeFromFrame(frame, stabilize: true).then((text) {
-      _ocrBusy = false;
-      if (text == null || text.isEmpty) return;
-      if (text == _lastOcrText) return;
-      _lastOcrText = text;
-      if (mounted) {
-        _tts.say('${S.get('sign')}: $text', SpeechPriority.info, pan: 0.0);
-      }
-    }).catchError((_) { _ocrBusy = false; });
-  }
-
-  Future<void> _readText() async {
-    if (_ocrBusy) return;
-
-    final now = DateTime.now();
-    if (now.difference(_lastOcrAt) < const Duration(seconds: 3)) return;
-    _lastOcrAt = now;
-
-    final frame = _lastFrame;
-    if (frame == null) {
-      _tts.say(S.get('ocr_camera_not_ready'), SpeechPriority.info, pan: 0.0);
-      return;
-    }
-
-    _ocrBusy = true;
-    _tts.say(S.get('ocr_reading'), SpeechPriority.info, pan: 0.0);
-
-    try {
-      final text = await _ocr.recognizeFromFrame(frame, stabilize: false);
-      if (!mounted) return;
-
-      if (text == null || text.isEmpty) {
-        _earcon.play(Earcon.fail);
-        _tts.say(S.get('ocr_not_found'), SpeechPriority.info, pan: 0.0);
-      } else {
-        _lastOcrText = text;
-        _earcon.play(Earcon.success);
-        _tts.say(text, SpeechPriority.warning, pan: 0.0);
-      }
-    } finally {
-      _ocrBusy = false;
-    }
-  }
-
-  Future<void> _vibrate(List<int> pattern) async {
-    final now = DateTime.now();
-    if (now.difference(_lastVibrateAt) < kVibrateCooldown) return;
-    _lastVibrateAt = now;
-    try {
-      if (!await Vibration.hasVibrator()) return;
-      final hasAmp = await Vibration.hasAmplitudeControl();
-      if (hasAmp && pattern.length >= 4) {
-        Vibration.vibrate(pattern: pattern,
-            intensities: const [0, 255, 0, 200]);
-      } else {
-        Vibration.vibrate(pattern: pattern);
-      }
-    } catch (_) {}
-  }
-
-  void _scanAround({String? sector}) {
-    final tracks = _tracksNotifier.value;
-
-    if (tracks.isEmpty) {
-      _tts.say(S.get('nothing_seen'), SpeechPriority.warning, pan: 0.0);
-      _lastScanDescription = '';
-      _scanRepeatCount     = 0;
-      return;
-    }
-
-    final filtered = sector == null
-        ? tracks
-        : tracks
-            .where((t) => posFromCx(t.cx, _imgW.toDouble()) == sector)
-            .toList();
-
-    if (filtered.isEmpty) {
-      final where = sector == 'left'
-          ? S.get('left')
-          : sector == 'right'
-              ? S.get('right')
-              : S.get('forward_loc');
-      _tts.say('${S.get('nothing_here')} $where.',
-          SpeechPriority.warning, pan: 0.0);
-      return;
-    }
-
-    String buildGroup(List<Track> list, String prefix) {
-      if (list.isEmpty) return '';
-      final counts = <String, int>{};
-      for (final t in list) {
-        counts[t.label] = (counts[t.label] ?? 0) + 1;
-      }
-      final items =
-          counts.entries.map((e) => '${e.value} ${S.label(e.key)}').join(', ');
-      return '$prefix $items. ';
-    }
-
-    String desc = '';
-    if (sector == null) {
-      final lefts =
-          filtered.where((t) => posFromCx(t.cx, _imgW.toDouble()) == 'left').toList();
-      final centers =
-          filtered.where((t) => posFromCx(t.cx, _imgW.toDouble()) == 'center').toList();
-      final rights =
-          filtered.where((t) => posFromCx(t.cx, _imgW.toDouble()) == 'right').toList();
-      desc += buildGroup(lefts,   S.get('scan_left'));
-      desc += buildGroup(centers, S.get('scan_forward'));
-      desc += buildGroup(rights,  S.get('scan_right'));
-    } else {
-      desc = buildGroup(filtered, S.get('scan_see'));
-    }
-
-    Track? closest;
-    for (final t in filtered) {
-      if (t.distM > 0 && (closest == null || t.distM < closest.distM)) {
-        closest = t;
-      }
-    }
-    if (closest != null && closest.distM > 0) {
-      desc +=
-          '${S.get('closest')} ${closest.distM.toStringAsFixed(1)} ${S.get('meters')}.';
-    }
-
-    final trimmed = desc.trim();
-
-    if (sector == null && trimmed == _lastScanDescription) {
-      _scanRepeatCount++;
-      if (_scanRepeatCount >= 2) {
-        _scanRepeatCount = 0;
-        _tts.say(S.get('no_change'), SpeechPriority.info, pan: 0.0);
-      }
-      return;
-    }
-
-    _lastScanDescription = trimmed;
-    _scanRepeatCount     = 0;
-    _tts.say(trimmed, SpeechPriority.warning, pan: 0.0);
-  }
-
-  void _updateLuminosity(CameraImage image) {
-    try {
-      final plane     = image.planes[0];
-      final yBytes    = plane.bytes;
-      final w         = image.width;
-      final h         = image.height;
-      final rowStride = plane.bytesPerRow;
-      final step      = (w / 32).floor().clamp(1, w);
-      final rowStep   = (h / 32).floor().clamp(1, h);
-      int sum = 0, count = 0;
-      for (int row = 0; row < 32 && row * rowStep < h; row++) {
-        final rowOff = row * rowStep * rowStride;
-        for (int col = 0; col < 32 && col * step < w; col++) {
-          sum += yBytes[rowOff + col * step];
-          count++;
-        }
-      }
-      if (count > 0) _isDark = (sum / count) < 60;
-    } catch (_) {
-      final hour = DateTime.now().hour;
-      _isDark = hour < 7 || hour >= 19;
-    }
-  }
-
-  void _updatePerf(double ms, DateTime now) {
-    _avgInfMs = _avgInfMs == 0 ? ms : (_avgInfMs * 0.85 + ms * 0.15);
-
-    _detectInterval  = _effectiveDetectInterval();
-    _midasInterval   = _effectiveMidasInterval();
-    _minUiInterval   = _effectiveUiInterval();
-    _autoOcrInterval = _effectiveAutoOcrInterval();
-
-    if (_avgInfMs > 240) {
-      _midasPausedUntil = now.add(const Duration(seconds: 4));
-    } else if (_avgInfMs > 180) {
-      _midasPausedUntil = now.add(const Duration(seconds: 2));
-    } else if (_avgInfMs < 110 && now.isAfter(_midasPausedUntil)) {
-      _midasPausedUntil = DateTime.fromMillisecondsSinceEpoch(0);
-    }
-
-    _frameCount++;
-    final fpsNow = DateTime.now();
-    final diffMs = fpsNow.difference(_lastFpsTick).inMilliseconds;
-    if (diffMs >= 1000) {
-      _detectFps   = _frameCount * 1000 / diffMs;
-      _frameCount  = 0;
-      _lastFpsTick = fpsNow;
-    }
-  }
-
-  Duration _effectiveDetectInterval() {
-    final perfMs = _avgInfMs > 240
-        ? 320
-        : _avgInfMs > 180
-            ? 240
-            : _avgInfMs > 130
-                ? 180
-                : _avgInfMs < 90
-                    ? 120
-                    : 140;
-    return Duration(milliseconds: math.max(_battery.detectIntervalMs, perfMs));
-  }
-
-  Duration _effectiveBurstDetectInterval() {
-    if (_battery.level == ThrottleLevel.aggressive) {
-      return Duration(milliseconds: _battery.detectIntervalMs);
-    }
-
-    final burstMs = _avgInfMs > 240
-        ? (_battery.level == ThrottleLevel.moderate ? 160 : 120)
-        : _avgInfMs > 180
-            ? (_battery.level == ThrottleLevel.moderate ? 120 : 90)
-            : (_battery.level == ThrottleLevel.moderate ? 100 : 50);
-
-    return Duration(milliseconds: math.min(_battery.detectIntervalMs, burstMs));
-  }
-
-  Duration _effectiveMidasInterval() {
-    final baseMs = _battery.midasIntervalMs;
-    if (baseMs <= 0) return Duration.zero;
-
-    final loadMultiplier = _avgInfMs > 240
-        ? 5
-        : _avgInfMs > 180
-            ? 4
-            : _avgInfMs > 130
-                ? 2
-                : 1;
-    final effectiveMs = math.max(baseMs * loadMultiplier, baseMs);
-    return Duration(milliseconds: effectiveMs);
-  }
-
-  Duration _effectiveAutoOcrInterval() {
-    if (_avgInfMs > 240) return const Duration(seconds: 15);
-    if (_avgInfMs > 180) return const Duration(seconds: 12);
-    if (_avgInfMs > 130) return const Duration(seconds: 10);
-    return const Duration(seconds: 8);
-  }
-
-  Duration _effectiveUiInterval() {
-    if (_avgInfMs > 240) return const Duration(milliseconds: 240);
-    if (_avgInfMs > 180) return const Duration(milliseconds: 200);
-    if (_avgInfMs > 130) return const Duration(milliseconds: 160);
-    return const Duration(milliseconds: 120);
-  }
-
-  String _ruLabel(String label) => S.label(label);
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    final ctrl = _controller;
-    if (ctrl == null) return;
-    if (state == AppLifecycleState.inactive ||
-        state == AppLifecycleState.paused) {
-      _safeStop(ctrl);
-    } else if (state == AppLifecycleState.resumed) {
-      _safeStart(ctrl);
-    }
-  }
-
-  Future<void> _safeStop(CameraController ctrl) async {
-    try {
-      if (ctrl.value.isStreamingImages) await ctrl.stopImageStream();
-    } catch (_) {}
-  }
-
-  Future<void> _safeStart(CameraController ctrl) async {
-    try {
-      if (!ctrl.value.isStreamingImages && ctrl.value.isInitialized) {
-        await ctrl.startImageStream(_onFrame);
-      }
-    } catch (_) {}
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    _tracksNotifier.dispose();
-    _tts.stop();
-    _earcon.dispose();
-    _ocr.dispose();
-    _depthProvider?.dispose();
-    _fusion.reset();
-    _voice.dispose();
-    _battery.dispose();
-    _waypoints.dispose();
-    VisionForegroundService.stop();
-
-    final ctrl = _controller;
-    _controller = null;
-
-    Future<void> cleanup() async {
-      try {
-        if (ctrl?.value.isStreamingImages ?? false) {
-          await ctrl!.stopImageStream();
-        }
-      } catch (_) {}
-      try { await ctrl?.dispose(); } catch (_) {}
-      try { await _vision.closeYoloModel(); } catch (_) {}
-    }
-    cleanup();
-
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final ctrl  = _controller;
-    final ready = _isCameraReady && ctrl != null && ctrl.value.isInitialized;
-
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black87,
-        title: Semantics(
-          label: 'VisionGuide AI — режим ${_mode.label}',
-          child: const Text(
-            'VisionGuide AI',
-            style: TextStyle(color: Colors.white),
+  void _showSosContactDialog() {
+    final controller = TextEditingController(text: _vm.sos.contactNumber ?? '');
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Colors.grey[900],
+        title: Text(
+          S.get('sos_settings'),
+          style: const TextStyle(color: Colors.white),
+        ),
+        content: TextField(
+          controller: controller,
+          keyboardType: TextInputType.phone,
+          style: const TextStyle(color: Colors.white),
+          decoration: const InputDecoration(
+            hintText: '+7 XXX XXX XX XX',
+            hintStyle: TextStyle(color: Colors.white30),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.white30),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.cyanAccent),
+            ),
           ),
         ),
         actions: [
-          Semantics(
-            label:  'Переключить режим (сейчас: ${_mode.label})',
-            button: true,
-            child: IconButton(
-              tooltip:   'Режим: ${_mode.label}',
-              icon:      Icon(_mode.icon, color: Colors.white),
-              onPressed: _cycleMode,
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(
+              S.get('cancel'),
+              style: const TextStyle(color: Colors.white54),
             ),
           ),
-          Semantics(
-            label:  'Прочитать текст в кадре',
-            button: true,
-            child: IconButton(
-              tooltip:   'Прочитать текст',
-              icon:      const Icon(Icons.text_fields, color: Colors.white),
-              onPressed: _readText,
-            ),
-          ),
-          Semantics(
-            label:  'Что вижу вокруг',
-            button: true,
-            child: IconButton(
-              tooltip:   'Что вокруг?',
-              icon:      const Icon(Icons.hearing, color: Colors.white),
-              onPressed: _scanAround,
-            ),
-          ),
-          Semantics(
-            label:  'Настройки',
-            button: true,
-            child: IconButton(
-              tooltip:   'Настройки',
-              icon:      const Icon(Icons.tune, color: Colors.white),
-              onPressed: _showSettings,
+          TextButton(
+            onPressed: () async {
+              final ok = await _vm.sos.setContact(controller.text);
+              if (ctx.mounted) {
+                Navigator.pop(ctx);
+                _vm.tts.say(
+                  ok ? S.get('save') : S.get('sos_invalid_number'),
+                  SpeechPriority.info,
+                  pan: 0.0,
+                );
+              }
+            },
+            child: Text(
+              S.get('save'),
+              style: const TextStyle(color: Colors.cyanAccent),
             ),
           ),
         ],
       ),
-      body: !ready
-          ? Center(
-              child: Text(
-                _statusLine,
-                style: const TextStyle(color: Colors.white),
-              ),
-            )
-          : Stack(
-              children: [
-                Positioned.fill(child: CameraPreview(ctrl)),
-                Positioned.fill(
-                  child: ValueListenableBuilder<List<Track>>(
-                    valueListenable: _tracksNotifier,
-                    builder: (_, tracks, __) => CustomPaint(
-                      painter: TrackPainter(
-                        tracks:      tracks,
-                        imgW:        _imgW,
-                        imgH:        _imgH,
-                        previewSize: ctrl.value.previewSize,
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned.fill(
-                  child: Semantics(
-                    label: S.get('voice_hint'),
-                    child: GestureDetector(
-                      behavior:         HitTestBehavior.translucent,
-                      onTapDown:        (_) => _handleScreenTap(),
-                      onLongPressStart: (_) => _startVoiceListening(),
-                      onLongPressEnd:   (_) => _stopVoiceListening(),
-                      child: const SizedBox.expand(),
-                    ),
-                  ),
-                ),
-                if (_showDebugHud)
-                  Positioned(
-                    top: 16, left: 16,
-                    child: DebugHud(
-                      fps:         _detectFps,
-                      inferenceMs: _avgInfMs,
-                      intervalMs:  _detectInterval.inMilliseconds.toDouble(),
-                      useGpu:      _useGpu,
-                      threads:     _numThreads,
-                      mode:        _mode,
-                      depthTier:   _depthProvider?.tier,
-                    ),
-                  ),
-                if (_depthProviderReady)
-                  Positioned(
-                    top: 16, right: 16,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 6, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.55),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        _depthTierLabel(),
-                        style: const TextStyle(
-                          color:     Colors.cyanAccent,
-                          fontSize:  10,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                if (_voiceListening)
-                  Positioned(
-                    bottom: 130, left: 0, right: 0,
-                    child: Center(
-                      child: Semantics(
-                        label: S.get('voice_listening'),
-                        child: Container(
-                          width: 60, height: 60,
-                          decoration: BoxDecoration(
-                            color:  Colors.red.withValues(alpha: 0.88),
-                            shape:  BoxShape.circle,
-                            border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.4),
-                              width: 2,
-                            ),
+    );
+  }
+
+  String _ruLabel(String label) => label;
+
+  @override
+  Widget build(BuildContext context) {
+    final ctrl = _controller;
+    final ready = _isCameraReady && ctrl != null && ctrl.value.isInitialized;
+
+    return Listener(
+      onPointerDown: _handlePointerDown,
+      onPointerUp: _handlePointerUp,
+      onPointerCancel: (_) => _disarmTwoFingerSos(),
+      child: GestureDetector(
+        onTap: _handleTap,
+        onDoubleTap: _openSettings,
+        onLongPress: _startVoiceCommand,
+        onHorizontalDragEnd: (details) {
+          if (details.primaryVelocity == null) return;
+          if (details.primaryVelocity! > 500) {
+            _vm.cycleMode(1);
+          } else if (details.primaryVelocity! < -500) {
+            _vm.cycleMode(-1);
+          }
+        },
+        onVerticalDragEnd: (details) {
+          if (details.primaryVelocity == null) return;
+          if (details.primaryVelocity! < -500) {
+            _vm.togglePitchBlack();
+          } else if (details.primaryVelocity! > 500) {
+            _vm.showHelp();
+          }
+        },
+        child: Scaffold(
+          backgroundColor: Colors.black,
+          body: Stack(
+            fit: StackFit.expand,
+            children: [
+              ExcludeSemantics(
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    if (ready) CameraPreview(ctrl),
+                    Positioned.fill(
+                      child: ValueListenableBuilder<List<Track>>(
+                        valueListenable: _vm.tracksNotifier,
+                        builder: (_, tracks, __) => CustomPaint(
+                          painter: TrackPainter(
+                            tracks: tracks,
+                            imgW: _imgW,
+                            imgH: _imgH,
+                            previewSize: ctrl?.value.previewSize,
                           ),
-                          child: const Icon(
-                              Icons.mic, color: Colors.white, size: 30),
                         ),
                       ),
                     ),
-                  ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: SafeArea(
-                    child: StatusPanel(
-                      statusLine:     _statusLine,
-                      tracksNotifier: _tracksNotifier,
-                      imgW:           _imgW,
-                      imgH:           _imgH,
-                      ruLabel:        _ruLabel,
-                      mode:           _mode,
+                  ],
+                ),
+              ),
+
+              if (_vm.isPitchBlack)
+                Positioned.fill(child: Container(color: Colors.black)),
+
+              if (_vm.isPitchBlack)
+                Positioned(
+                  top: 48,
+                  right: 16,
+                  child: Container(
+                    width: 4,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Colors.green.withValues(alpha: 0.3),
+                      shape: BoxShape.circle,
                     ),
                   ),
                 ),
-              ],
-            ),
-    );
-  }
 
-  void _cycleMode() {
-    setState(() {
-      _mode = _mode.next;
-      _resetModeState();
-    });
-    _tts.say('${S.get('mode_changed')}: ${_mode.label}.',
-        SpeechPriority.warning, pan: 0.0);
-  }
+              if (_fallCountdownActive)
+                Positioned.fill(
+                  child: Container(
+                    color: Colors.red.withValues(alpha: 0.3),
+                    child: Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.warning_amber,
+                            size: 60,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            '${S.get('sos_fall_countdown')} $_fallCountdownSec ${S.get('sos_fall_seconds')}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            S.get('sos_fall_cancelled'),
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 14,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
 
-  void _setMode(AppMode mode) {
-    if (_mode == mode) return;
-    setState(() {
-      _mode = mode;
-      _resetModeState();
-    });
-    _earcon.play(_earconForMode(mode));
-    _tts.say('${S.get('mode_changed')}: ${_mode.label}.',
-        SpeechPriority.warning, pan: 0.0);
-  }
-
-  void _resetModeState() {
-    _tracker.clear();
-    _fusion.reset();
-    _alertMgr.reset();
-    _lastScanDescription = '';
-    _scanRepeatCount     = 0;
-  }
-
-  String _depthTierLabel() {
-    final p = _depthProvider;
-    if (p == null) return 'DEPTH';
-    switch (p.tier) {
-      case DepthTier.hardware:   return 'DEPTH·HW';
-      case DepthTier.midasNnapi: return 'DEPTH·NPU';
-      case DepthTier.midasCpu:   return 'DEPTH·CPU';
-      case DepthTier.focalLength: return 'DEPTH';
-    }
-  }
-
-  Earcon _earconForMode(AppMode mode) {
-    switch (mode) {
-      case AppMode.street: return Earcon.modeStreet;
-      case AppMode.cane:   return Earcon.modeCane;
-      case AppMode.scan:   return Earcon.modeScan;
-    }
-  }
-
-  void _handleScreenTap() {
-    final now = DateTime.now();
-    if (now.difference(_lastTapAt) > const Duration(milliseconds: 500)) {
-      _tapCount = 0;
-    }
-    _tapCount++;
-    _lastTapAt = now;
-
-    if (_tapCount == 3) {
-      _tapCount = 0;
-      _vibrate([0, 50, 50, 50, 50, 50]);
-      _sos.sendSos().then((res) {
-        if (mounted) {
-          switch (res) {
-            case SosResult.sent:
-              _tts.say(S.get('sos_sent'), SpeechPriority.critical, pan: 0.0);
-            case SosResult.noContact:
-              _tts.say(S.get('sos_no_contact'), SpeechPriority.warning, pan: 0.0);
-            case SosResult.noLocation:
-              _tts.say(S.get('sos_no_location'), SpeechPriority.warning, pan: 0.0);
-            case SosResult.launchFailed:
-              _tts.say(S.get('sos_launch_failed'), SpeechPriority.warning, pan: 0.0);
-            case SosResult.error:
-              _tts.say(S.get('sos_no_location'), SpeechPriority.warning, pan: 0.0);
-          }
-        }
-      });
-    }
-  }
-
-  Future<void> _startVoiceListening() async {
-    if (!_voiceAvailable) {
-      _tts.say(S.get('voice_not_available'), SpeechPriority.info, pan: 0.0);
-      return;
-    }
-    await _tts.stop();
-    final started = await _voice.startListening();
-    if (!started && mounted) {
-      _tts.say(S.get('voice_no_permission'), SpeechPriority.info, pan: 0.0);
-    }
-  }
-
-  Future<void> _stopVoiceListening() async {
-    await _voice.stopListening();
-  }
-
-  void _onVoiceCommand(VoiceCommand cmd) {
-    switch (cmd) {
-      case VoiceCommand.scanAll:
-        _scanAround();
-      case VoiceCommand.scanLeft:
-        _scanAround(sector: 'left');
-      case VoiceCommand.scanRight:
-        _scanAround(sector: 'right');
-      case VoiceCommand.scanForward:
-        _scanAround(sector: 'center');
-      case VoiceCommand.readText:
-        _readText();
-      case VoiceCommand.toggleMode:
-        _cycleMode();
-      case VoiceCommand.saveWaypoint:
-        final name = '${S.get('lbl_object')} ${_waypoints.waypoints.length + 1}';
-        _waypoints.saveCurrentLocation(name).then((wp) {
-          if (wp != null) {
-            _tts.say(S.get('waypoint_saved'), SpeechPriority.info, pan: 0.0);
-            _vibrate([0, 100]);
-          }
-        });
-      case VoiceCommand.modeStreet:
-        _setMode(AppMode.street);
-      case VoiceCommand.modeCane:
-        _setMode(AppMode.cane);
-      case VoiceCommand.modeScan:
-        _setMode(AppMode.scan);
-      case VoiceCommand.unknown:
-        _earcon.play(Earcon.fail);
-        _tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
-    }
-  }
-
-  void _showCalibrationDialog() {
-    final tracks = _tracksNotifier.value;
-    final person = tracks.where((t) => t.label == 'person').toList();
-    if (person.isEmpty) {
-      _tts.say(S.get('calib_aim'), SpeechPriority.warning, pan: 0.0);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-              'Нет человека в кадре. Наведите камеру и попробуйте снова.'),
-          backgroundColor: Colors.orange,
-        ),
-      );
-      return;
-    }
-
-    final target = person.reduce((a, b) {
-      final aDist = ((a.cx / _imgW) - 0.5).abs();
-      final bDist = ((b.cx / _imgW) - 0.5).abs();
-      return aDist <= bDist ? a : b;
-    });
-
-    showDialog<String>(
-      context: context,
-      builder: (_) => const CameraCalibrationDialog(),
-    ).then((raw) async {
-      if (raw == null) return;
-
-      final dist = double.tryParse(raw.replaceAll(',', '.'));
-      if (dist == null || dist <= 0 || dist > 50) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Введите корректное расстояние (0–50 м)'),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
-        return;
-      }
-
-      await calibrateFocalLength(
-        target.label,
-        target.x1, target.y1,
-        target.x2, target.y2,
-        dist,
-      );
-      setState(() => _isCalibrated = true);
-      await Settings.instance.setIsCalibrated(true);
-      _earcon.play(Earcon.success);
-      _tts.say(S.get('calib_saved'), SpeechPriority.warning, pan: 0.0);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(S.get('calib_saved')),
-            backgroundColor: Colors.green,
-          ),
-        );
-      }
-    });
-  }
-
-  void _showWaypointSheet() {
-    showModalBottomSheet<void>(
-      context:         context,
-      isScrollControlled: true,
-      backgroundColor: Colors.grey[900],
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (_) => WaypointSheet(
-        waypointService: _waypoints,
-        onDeleted: (name) {
-          _tts.say(S.get('waypoint_deleted'), SpeechPriority.info, pan: 0.0);
-        },
-      ),
-    );
-  }
-
-  void _showSettings() {
-    showModalBottomSheet<void>(
-      context:         context,
-      showDragHandle:  true,
-      backgroundColor: Colors.grey[900],
-      builder: (ctx) => CameraSettingsSheet(
-        currentLanguage: AppStrings.current,
-        useGpu: _useGpu,
-        numThreads: _numThreads,
-        showDebugHud: _showDebugHud,
-        earconEnabled: _earcon.isEnabled,
-        midasReady: _depthProviderReady,
-        sosContactNumber: _sos.contactNumber,
-        onLanguageChanged: (lang) async {
-          AppStrings.setLanguage(lang);
-          await Settings.instance.setLanguage(lang.index);
-          await _tts.setLanguage(AppStrings.ttsLang);
-          _voice.setLocale(AppStrings.ttsLang);
-          if (mounted) {
-            setState(() {});
-            _tts.say(S.get('mode_changed'), SpeechPriority.info, pan: 0.0);
-          }
-        },
-        onUseGpuChanged: (v) async {
-          setState(() => _useGpu = v);
-          await Settings.instance.setUseGpu(v);
-          await _loadModel();
-        },
-        onNumThreadsChanged: (v) async {
-          setState(() => _numThreads = v);
-          await Settings.instance.setNumThreads(v);
-          await _loadModel();
-        },
-        onDebugHudChanged: (v) {
-          setState(() => _showDebugHud = v);
-        },
-        onEarconEnabledChanged: (v) {
-          _earcon.setEnabled(v);
-        },
-        onReadText: _readText,
-        onCalibrationTap: _showCalibrationDialog,
-        onEditSosContact: () async {
-          final ctrl = TextEditingController(text: _sos.contactNumber);
-          await showDialog<void>(
-            context: context,
-            builder: (c) => AlertDialog(
-              title: Text(S.get('sos_settings')),
-              content: TextField(
-                controller: ctrl,
-                keyboardType: TextInputType.phone,
-                decoration: const InputDecoration(
-                  hintText: '+7(123)456-78-90',
+              Positioned.fill(
+                child: Semantics(
+                  label: S.get('camera_screen_semantics'),
+                  child: const SizedBox.expand(),
                 ),
               ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(c),
-                  child: Text(S.get('cancel')),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: SafeArea(
+                  child: ExcludeSemantics(
+                    child: StatusPanel(
+                      statusLine: _vm.statusLine,
+                      tracksNotifier: _vm.tracksNotifier,
+                      imgW: _imgW,
+                      imgH: _imgH,
+                      viewportAspect: MediaQuery.sizeOf(context).aspectRatio,
+                      ruLabel: _ruLabel,
+                      mode: _vm.mode,
+                    ),
+                  ),
                 ),
-                TextButton(
-                  onPressed: () async {
-                    final nav   = Navigator.of(c);
-                    final saved = await _sos.setContact(ctrl.text);
-                    if (!mounted) return;
-                    nav.pop();
-                    if (saved) {
-                      setState(() {});
-                    } else {
-                      _tts.say(S.get('sos_invalid_number'),
-                          SpeechPriority.info, pan: 0.0);
-                    }
-                  },
-                  child: Text(S.get('save')),
-                ),
-              ],
-            ),
-          );
-        },
-        onScanLeft: () => _scanAround(sector: 'left'),
-        onScanCenter: () => _scanAround(sector: 'center'),
-        onScanRight: () => _scanAround(sector: 'right'),
-        onVoiceWarningTest: () {
-          _tts.say('${S.label('person')} ${S.get('close')}.',
-              SpeechPriority.warning,
-              pan: -1.0);
-        },
-        onVoiceCriticalTest: () {
-          _tts.say('${S.get('stop')}. ${S.get('ocr_not_found')}',
-              SpeechPriority.critical,
-              pan: 0.0);
-          _vibrate([0, 250, 80, 450]);
-        },
-        onPlayEarcon: (earcon) => _earcon.play(earcon),
-        patternFn: _alertMgr.patternFor,
-        intensFn: _alertMgr.intensitiesFor,
-        vibrateFn: _alertMgr.vibrateCane,
-        onViewWaypoints: _showWaypointSheet,
+              ),
+            ],
+          ),
+        ),
       ),
     );
+  }
+
+  final Set<int> _activePointers = {};
+
+  void _handlePointerDown(PointerDownEvent event) {
+    _activePointers.add(event.pointer);
+    if (_activePointers.length == 2 && !_twoFingerSosArmed) {
+      _twoFingerSosArmed = true;
+      _twoFingerSosTimer?.cancel();
+      _twoFingerSosTimer = Timer(_twoFingerSosHold, () {
+        if (!_twoFingerSosArmed) return;
+        _twoFingerSosArmed = false;
+        HapticService.vibrate(const [0, 300, 100, 300]);
+        _triggerSos();
+      });
+    } else if (_activePointers.length > 2) {
+      _disarmTwoFingerSos();
+    }
+  }
+
+  void _handlePointerUp(PointerUpEvent event) {
+    _activePointers.remove(event.pointer);
+    if (_activePointers.length < 2) {
+      _disarmTwoFingerSos();
+    }
+  }
+
+  void _disarmTwoFingerSos() {
+    _twoFingerSosArmed = false;
+    _twoFingerSosTimer?.cancel();
+    _twoFingerSosTimer = null;
+    _activePointers.clear();
   }
 }

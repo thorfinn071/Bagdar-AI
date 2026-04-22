@@ -1,16 +1,113 @@
 import 'dart:typed_data';
 
+import 'package:camera/camera.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:vision_guide_app/models/speech_job.dart';
-import 'package:vision_guide_app/models/strings.dart';
-import 'package:vision_guide_app/services/device_capability.dart';
-import 'package:vision_guide_app/services/depth_provider.dart';
-import 'package:vision_guide_app/utils/alert_filter.dart';
-import 'package:vision_guide_app/utils/depth_hazard.dart';
-import 'package:vision_guide_app/utils/distance_utils.dart';
-import 'package:vision_guide_app/utils/ground_plane_analyzer.dart';
-import 'package:vision_guide_app/utils/midas_service.dart';
+import 'package:bagdar/models/speech_job.dart';
+import 'package:bagdar/models/strings.dart';
+import 'package:bagdar/services/device_capability.dart';
+import 'package:bagdar/services/depth_provider.dart';
+import 'package:bagdar/services/hardware_depth_bridge.dart';
+import 'package:bagdar/models/routing_graph.dart';
+import 'package:bagdar/models/map_package.dart';
+import 'package:bagdar/models/nav_models.dart';
+import 'package:bagdar/services/map_package_manager.dart';
+import 'package:bagdar/services/gtfs_service.dart';
+import 'package:bagdar/services/battery_monitor.dart';
+import 'package:bagdar/services/voice_command_service.dart';
+import 'package:bagdar/utils/alert_filter.dart';
+import 'package:bagdar/utils/depth_hazard.dart';
+import 'package:bagdar/utils/distance_utils.dart';
+import 'package:bagdar/utils/ground_plane_analyzer.dart';
+import 'package:bagdar/utils/midas_service.dart';
+
+class _FakeHardwareDepthBridge extends HardwareDepthBridge {
+  _FakeHardwareDepthBridge({required this.supported});
+
+  final bool supported;
+  bool started = false;
+
+  @override
+  Future<bool> isSupported() async => supported;
+
+  @override
+  Future<bool> start({int mapSize = 256}) async {
+    started = supported;
+    return supported;
+  }
+
+  @override
+  Future<void> stop() async {
+    started = false;
+  }
+}
+
+class _StubDepthProvider implements DepthProvider {
+  _StubDepthProvider(this._tier);
+
+  final DepthTier _tier;
+  bool _ready = false;
+  bool _nativeBridgeEnabled = false;
+  final bool _nativeBridgeAvailable = false;
+  final double _lastPreprocessMs = 0;
+  final double _lastInferenceMs = 0;
+  final double _lastAnalyzeMs = 0;
+  final bool _lastUsedNativeBridge = false;
+
+  @override
+  DepthTier get tier => _tier;
+
+  @override
+  bool get isReady => _ready;
+
+  @override
+  Future<bool> init({int threads = 2}) async {
+    _ready = true;
+    return true;
+  }
+
+  @override
+  Future<List<DepthHazard>> analyze(
+    CameraImage image, {
+    double cropTopFrac = 0.40,
+    bool userStationary = false,
+    bool weatherDegraded = false,
+  }) async => const [];
+
+  @override
+  bool get nativeBridgeEnabled => _nativeBridgeEnabled;
+
+  @override
+  bool get nativeBridgeAvailable => _nativeBridgeAvailable;
+
+  @override
+  bool get lowConfidenceFallbackActive => false;
+
+  @override
+  double get lastConfidenceScore => 0;
+
+  @override
+  double get lastPreprocessMs => _lastPreprocessMs;
+
+  @override
+  double get lastInferenceMs => _lastInferenceMs;
+
+  @override
+  double get lastAnalyzeMs => _lastAnalyzeMs;
+
+  @override
+  bool get lastUsedNativeBridge => _lastUsedNativeBridge;
+
+  @override
+  void setNativeBridgeEnabled(bool enabled) {
+    _nativeBridgeEnabled = enabled;
+  }
+
+  @override
+  void dispose() {
+    _ready = false;
+  }
+}
 
 void main() {
   setUp(() {
@@ -172,6 +269,12 @@ void main() {
     final analyzer = GroundPlaneAnalyzer();
     const size = GroundPlaneAnalyzer.kMapSize; 
 
+    
+    
+    
+    
+    setUp(analyzer.resetTemporalFilter);
+
     Float32List makeFlat(double value) {
       return Float32List(size * size)..fillRange(0, size * size, value);
     }
@@ -201,6 +304,23 @@ void main() {
       expect(result.length, lessThanOrEqualTo(1));
     });
 
+    test('bottom-band depth noise triggers a dead-zone hazard', () {
+      final map = makePlane();
+      for (int y = GroundPlaneAnalyzer.kFootZoneStartRow; y < size; y++) {
+        for (int x = 0; x < size; x++) {
+          if ((x + y) % 2 == 0) {
+            map[y * size + x] += 0.45;
+          }
+        }
+      }
+
+      final result = analyzer.analyze(map);
+      expect(
+        result.any((h) => h.zone == HazardZone.center && h.type == DepthHazardType.deadZone),
+        isTrue,
+      );
+    });
+
     test('calling analyze twice reuses buffers (no crash)', () {
       final map = makePlane();
       analyzer.analyze(map);
@@ -212,6 +332,22 @@ void main() {
         () => analyzer.analyze(Float32List(10)),
         throwsA(isA<AssertionError>()),
       );
+    });
+  });
+
+  
+  
+  
+
+  group('BatteryMonitor', () {
+    test('battery level thresholds map to the intended throttle tiers', () {
+      expect(BatteryMonitor.levelForBatteryLevel(100), ThrottleLevel.normal);
+      expect(BatteryMonitor.levelForBatteryLevel(30), ThrottleLevel.normal);
+      expect(BatteryMonitor.levelForBatteryLevel(29), ThrottleLevel.moderate);
+      expect(BatteryMonitor.levelForBatteryLevel(15), ThrottleLevel.moderate);
+      expect(BatteryMonitor.levelForBatteryLevel(14), ThrottleLevel.aggressive);
+      expect(BatteryMonitor.levelForBatteryLevel(5), ThrottleLevel.aggressive);
+      expect(BatteryMonitor.levelForBatteryLevel(4), ThrottleLevel.critical);
     });
   });
 
@@ -268,13 +404,14 @@ void main() {
       expect(result!.text, 'high');
     });
 
-    test('global cooldown: second flush within 1.2 s returns null for critical', () {
+    test('critical alerts bypass cooldown and suppression', () {
       filter.add(makeCandidate(priority: SpeechPriority.critical));
       filter.flush(1, t0); 
       filter.add(makeCandidate(priority: SpeechPriority.critical));
       
       final result = filter.flush(1, t0.add(const Duration(milliseconds: 500)));
-      expect(result, isNull);
+      expect(result, isNotNull);
+      expect(result!.priority, SpeechPriority.critical);
     });
 
     test('after critical, warning suppressed for 2 s', () {
@@ -295,10 +432,16 @@ void main() {
       expect(result, isNotNull);
     });
 
-    test('dense scene (5+ tracks) suppresses info alerts', () {
-      filter.add(makeCandidate(priority: SpeechPriority.info));
+    test('dense scene (5+ tracks) suppresses low-urgency info alerts', () {
+      filter.add(makeCandidate(priority: SpeechPriority.info, urgency: 0.3));
       final result = filter.flush(5, t0);
       expect(result, isNull);
+    });
+
+    test('dense scene (5+ tracks) does not suppress high-urgency info', () {
+      filter.add(makeCandidate(priority: SpeechPriority.info, urgency: 0.6));
+      final result = filter.flush(5, t0);
+      expect(result, isNotNull);
     });
 
     test('dense scene (5+ tracks) does not suppress warning', () {
@@ -324,6 +467,117 @@ void main() {
       filter.add(makeCandidate(priority: SpeechPriority.warning));
       final result = filter.flush(1, t0);
       expect(result, isNotNull);
+    });
+
+    
+    
+    
+    
+    
+    test('per-category cooldown: same category blocked, different category '
+        'passes', () {
+      filter.add(makeCandidate(
+        priority: SpeechPriority.warning,
+        category: AlertCategory.obstacleClose,
+        text: 'pedestrian1',
+      ));
+      final first = filter.flush(1, t0);
+      expect(first!.text, 'pedestrian1');
+
+      
+      
+      filter.add(makeCandidate(
+        priority: SpeechPriority.warning,
+        category: AlertCategory.obstacleClose,
+        text: 'pedestrian2',
+      ));
+      filter.add(makeCandidate(
+        priority: SpeechPriority.warning,
+        category: AlertCategory.approachingVehicle,
+        text: 'cyclist',
+      ));
+      final second = filter.flush(
+        1, t0.add(const Duration(milliseconds: 1300)));
+      expect(second, isNotNull);
+      
+      
+      
+      expect(second!.category, AlertCategory.approachingVehicle);
+      expect(second.text, 'cyclist');
+    });
+
+    test('per-category cooldown: crowd scene does not silence an '
+        'approaching vehicle', () {
+      
+      var now = t0;
+      for (var i = 0; i < 5; i++) {
+        filter.add(makeCandidate(
+          priority: SpeechPriority.warning,
+          category: AlertCategory.obstacleClose,
+          text: 'pedestrian$i',
+        ));
+        filter.flush(5, now);
+        now = now.add(const Duration(milliseconds: 400));
+      }
+      
+      
+      filter.add(makeCandidate(
+        priority: SpeechPriority.warning,
+        category: AlertCategory.approachingVehicle,
+        text: 'cyclist',
+      ));
+      final result = filter.flush(5, now);
+      expect(result, isNotNull);
+      expect(result!.category, AlertCategory.approachingVehicle);
+    });
+
+    test('critical bypasses per-category cooldown', () {
+      filter.add(makeCandidate(
+        priority: SpeechPriority.warning,
+        category: AlertCategory.obstacleClose,
+      ));
+      filter.flush(1, t0);
+
+      
+      
+      filter.add(makeCandidate(
+        priority: SpeechPriority.critical,
+        category: AlertCategory.obstacleClose,
+        text: 'critical obstacle',
+      ));
+      final result = filter.flush(
+        1, t0.add(const Duration(milliseconds: 100)));
+      expect(result, isNotNull);
+      expect(result!.text, 'critical obstacle');
+    });
+
+    test('when top-priority candidate is on cooldown, lower-priority '
+        'candidate in a different category is picked', () {
+      
+      filter.add(makeCandidate(
+        priority: SpeechPriority.warning,
+        category: AlertCategory.obstacleClose,
+      ));
+      filter.flush(1, t0);
+
+      
+      
+      
+      filter.add(makeCandidate(
+        priority: SpeechPriority.warning,
+        category: AlertCategory.obstacleClose,
+        text: 'blocked',
+      ));
+      filter.add(makeCandidate(
+        priority: SpeechPriority.info,
+        category: AlertCategory.obstacleFar,
+        text: 'info',
+        urgency: 0.6,
+      ));
+      final result = filter.flush(
+        1, t0.add(const Duration(milliseconds: 500)));
+      expect(result, isNotNull);
+      expect(result!.text, 'info');
     });
   });
 
@@ -425,6 +679,16 @@ void main() {
   
 
   group('DeviceCapabilities', () {
+    test('hardware tier is preserved', () {
+      const caps = DeviceCapabilities(
+        bestDepthTier: DepthTier.hardware,
+        supportsNnApi: false,
+        androidSdkInt: 33,
+      );
+      expect(caps.bestDepthTier, DepthTier.hardware);
+      expect(caps.supportsNnApi, isFalse);
+    });
+
     test('sdk >= 28 + nnapi → midasNnapi tier', () {
       const caps = DeviceCapabilities(
         bestDepthTier: DepthTier.midasNnapi,
@@ -472,16 +736,14 @@ void main() {
   
 
   group('DepthProviderFactory', () {
-    test('midasNnapi caps → MidasDepthProvider with useNnApi=true', () {
+    test('hardware caps → HardwareDepthProvider', () {
       const caps = DeviceCapabilities(
-        bestDepthTier: DepthTier.midasNnapi,
-        supportsNnApi: true,
-        androidSdkInt: 30,
+        bestDepthTier: DepthTier.hardware,
+        supportsNnApi: false,
+        androidSdkInt: 33,
       );
       final provider = DepthProviderFactory.create(caps);
-      expect(provider, isA<MidasDepthProvider>());
-      expect((provider as MidasDepthProvider).useNnApi, isTrue);
-      expect(provider.tier, DepthTier.midasNnapi);
+      expect(provider, isA<HardwareDepthProvider>());
     });
 
     test('midasCpu caps → MidasDepthProvider with useNnApi=false', () {
@@ -507,15 +769,49 @@ void main() {
       expect(provider.tier, DepthTier.focalLength);
     });
 
-    test('hardware caps → falls back to MidasDepthProvider(nnapi=true)', () {
+    test('hardware tier createWithTier → HardwareDepthProvider', () {
+      final p = DepthProviderFactory.createWithTier(DepthTier.hardware);
+      expect(p, isA<HardwareDepthProvider>());
+    });
+
+    test('hardware provider keeps hardware tier when native bridge starts', () async {
+      final bridge = _FakeHardwareDepthBridge(supported: true);
+      final fallback = _StubDepthProvider(DepthTier.midasCpu);
+      final provider = HardwareDepthProvider(
+        useNnApiFallback: false,
+        bridge: bridge,
+        fallbackProvider: fallback,
+      );
+
+      final ok = await provider.init();
+      expect(ok, isTrue);
+      expect(provider.tier, DepthTier.hardware);
+      expect(bridge.started, isTrue);
+    });
+
+    test('hardware provider falls back to MiDaS when native bridge is unavailable', () async {
+      final bridge = _FakeHardwareDepthBridge(supported: false);
+      final fallback = _StubDepthProvider(DepthTier.midasNnapi);
+      final provider = HardwareDepthProvider(
+        useNnApiFallback: true,
+        bridge: bridge,
+        fallbackProvider: fallback,
+      );
+
+      final ok = await provider.init();
+      expect(ok, isTrue);
+      expect(provider.tier, DepthTier.midasNnapi);
+      expect(bridge.started, isFalse);
+    });
+
+    test('hardware caps no longer map directly to MidasDepthProvider', () {
       const caps = DeviceCapabilities(
         bestDepthTier: DepthTier.hardware,
-        supportsNnApi: true,
+        supportsNnApi: false,
         androidSdkInt: 33,
       );
       final provider = DepthProviderFactory.create(caps);
-      expect(provider, isA<MidasDepthProvider>());
-      expect((provider as MidasDepthProvider).useNnApi, isTrue);
+      expect(provider, isA<HardwareDepthProvider>());
     });
 
     test('FocalLengthDepthProvider.init returns true immediately', () async {
@@ -542,6 +838,302 @@ void main() {
       final p = DepthProviderFactory.createWithTier(DepthTier.midasCpu);
       expect(p, isA<MidasDepthProvider>());
       expect((p as MidasDepthProvider).useNnApi, isFalse);
+    });
+  });
+
+  group('AccessibilityInfo', () {
+    test('default weight is ~1.05 (unknown surface)', () {
+      const info = AccessibilityInfo();
+      expect(info.weightMultiplier, closeTo(1.05, 0.01));
+    });
+
+    test('footway + asphalt + tactile → low weight', () {
+      const info = AccessibilityInfo(
+        highway: HighwayType.footway,
+        surface: SurfaceType.asphalt,
+        tactilePaving: true,
+      );
+      expect(info.weightMultiplier, lessThan(0.8));
+    });
+
+    test('motorway → very high weight', () {
+      const info = AccessibilityInfo(highway: HighwayType.motorway);
+      expect(info.weightMultiplier, greaterThan(900));
+    });
+
+    test('gravel surface → higher weight', () {
+      const info = AccessibilityInfo(
+        highway: HighwayType.residential,
+        surface: SurfaceType.gravel,
+      );
+      expect(info.weightMultiplier, greaterThan(1.2));
+    });
+
+    test('sidewalk + lit reduce weight', () {
+      const base = AccessibilityInfo(
+        highway: HighwayType.residential,
+        surface: SurfaceType.asphalt,
+      );
+      const improved = AccessibilityInfo(
+        highway: HighwayType.residential,
+        surface: SurfaceType.asphalt,
+        sidewalk: true,
+        lit: true,
+      );
+      expect(improved.weightMultiplier, lessThan(base.weightMultiplier));
+    });
+
+    test('steps → weight > 1.3', () {
+      const info = AccessibilityInfo(
+        highway: HighwayType.steps,
+        surface: SurfaceType.asphalt,
+      );
+      expect(info.weightMultiplier, greaterThan(1.3));
+    });
+  });
+
+  group('MapPackage', () {
+    test('toJson/fromJson roundtrip', () {
+      final now = DateTime.now();
+      final pkg = MapPackage(
+        cityId: 'astana',
+        name: 'Астана',
+        nameKk: 'Астана',
+        sizeBytes: 15000000,
+        version: 2,
+        downloadUrl: 'https://example.com/astana.zip',
+        localPath: '/data/astana',
+        installed: true,
+        installedAt: now,
+        updatedAt: now,
+      );
+
+      final json = pkg.toJson();
+      final restored = MapPackage.fromJson(json);
+
+      expect(restored.cityId, 'astana');
+      expect(restored.name, 'Астана');
+      expect(restored.nameKk, 'Астана');
+      expect(restored.sizeBytes, 15000000);
+      expect(restored.version, 2);
+      expect(restored.installed, true);
+      expect(restored.downloadUrl, 'https://example.com/astana.zip');
+    });
+
+    test('sizeMb formats correctly', () {
+      const pkg = MapPackage(
+        cityId: 'test',
+        name: 'Test',
+        sizeBytes: 20971520,
+      );
+      expect(pkg.sizeMb, '20.0');
+    });
+
+    test('copyWith preserves unmodified fields', () {
+      const pkg = MapPackage(
+        cityId: 'almaty',
+        name: 'Алматы',
+        version: 1,
+      );
+      final updated = pkg.copyWith(version: 3, installed: true);
+      expect(updated.cityId, 'almaty');
+      expect(updated.name, 'Алматы');
+      expect(updated.version, 3);
+      expect(updated.installed, true);
+    });
+
+    test('fromJson with missing fields uses defaults', () {
+      final pkg = MapPackage.fromJson({'cityId': 'x'});
+      expect(pkg.cityId, 'x');
+      expect(pkg.name, '');
+      expect(pkg.sizeBytes, 0);
+      expect(pkg.installed, false);
+      expect(pkg.installedAt, isNull);
+    });
+
+    test('isStale becomes true after 90 days', () {
+      final now = DateTime(2025, 4, 6);
+      final pkg = MapPackage(
+        cityId: 'astana',
+        name: 'Астана',
+        installedAt: now.subtract(const Duration(days: 91)),
+      );
+
+      expect(pkg.isStale(now), isTrue);
+    });
+  });
+
+  group('GTFS freshness', () {
+    test('timestamp older than 90 days is stale', () {
+      final now = DateTime(2025, 4, 6);
+      final old = now.subtract(const Duration(days: 91));
+
+      expect(GtfsService.isTimestampStale(old, now), isTrue);
+      expect(GtfsService.isTimestampStale(now.subtract(const Duration(days: 30)), now), isFalse);
+    });
+  });
+
+  group('MapPackageManifest', () {
+    test('fromJson parses packages list', () {
+      final json = {
+        'manifestVersion': 2,
+        'baseUrl': 'https://cdn.example.com',
+        'packages': [
+          {'cityId': 'astana', 'name': 'Астана', 'version': 1},
+          {'cityId': 'almaty', 'name': 'Алматы', 'version': 1},
+        ],
+      };
+      final manifest = MapPackageManifest.fromJson(json);
+      expect(manifest.manifestVersion, 2);
+      expect(manifest.baseUrl, 'https://cdn.example.com');
+      expect(manifest.packages.length, 2);
+      expect(manifest.packages[0].cityId, 'astana');
+      expect(manifest.packages[1].cityId, 'almaty');
+    });
+
+    test('fromJson with empty packages', () {
+      final manifest = MapPackageManifest.fromJson({});
+      expect(manifest.packages, isEmpty);
+      expect(manifest.manifestVersion, 1);
+    });
+
+    test('relative downloadUrl resolves against manifest directory', () {
+      final resolved = resolveMapPackageDownloadUrl(
+        'https://cdn.example.com/maps/map_packages.json',
+        '',
+        'astana.zip',
+      );
+      expect(resolved, 'https://cdn.example.com/maps/astana.zip');
+    });
+
+    test('relative downloadUrl resolves against manifest baseUrl', () {
+      final resolved = resolveMapPackageDownloadUrl(
+        'https://cdn.example.com/maps/map_packages.json',
+        'https://files.example.com/offline/',
+        'astana.zip',
+      );
+      expect(resolved, 'https://files.example.com/offline/astana.zip');
+    });
+
+    test('absolute downloadUrl stays unchanged', () {
+      final resolved = resolveMapPackageDownloadUrl(
+        'https://cdn.example.com/maps/map_packages.json',
+        'https://files.example.com/offline/',
+        'https://download.example.com/astana.zip',
+      );
+      expect(resolved, 'https://download.example.com/astana.zip');
+    });
+  });
+
+  group('CHGraph', () {
+    test('containsPoint checks bounds', () {
+      const g = CHGraph(
+        nodes: [],
+        forwardEdges: [],
+        backwardEdges: [],
+        forwardOffsets: [0],
+        backwardOffsets: [0],
+        streetNames: [],
+        minLat: 51.0,
+        maxLat: 51.3,
+        minLng: 71.3,
+        maxLng: 71.6,
+      );
+      expect(g.containsPoint(51.15, 71.45), isTrue);
+      expect(g.containsPoint(50.0, 71.45), isFalse);
+      expect(g.containsPoint(51.15, 72.0), isFalse);
+    });
+
+    test('findNearestNode returns closest', () {
+      const g = CHGraph(
+        nodes: [
+          CHNode(id: 0, lat: 51.1, lng: 71.4),
+          CHNode(id: 1, lat: 51.2, lng: 71.5),
+          CHNode(id: 2, lat: 51.15, lng: 71.45),
+        ],
+        forwardEdges: [],
+        backwardEdges: [],
+        forwardOffsets: [0, 0, 0, 0],
+        backwardOffsets: [0, 0, 0, 0],
+        streetNames: [],
+        minLat: 51.0,
+        maxLat: 51.3,
+        minLng: 71.3,
+        maxLng: 71.6,
+      );
+      expect(g.findNearestNode(51.14, 71.44), 2);
+    });
+
+    test('streetName returns empty for invalid index', () {
+      const g = CHGraph(
+        nodes: [],
+        forwardEdges: [],
+        backwardEdges: [],
+        forwardOffsets: [0],
+        backwardOffsets: [0],
+        streetNames: ['ул. Абая', 'пр. Республики'],
+        minLat: 0,
+        maxLat: 0,
+        minLng: 0,
+        maxLng: 0,
+      );
+      expect(g.streetName(0), 'ул. Абая');
+      expect(g.streetName(1), 'пр. Республики');
+      expect(g.streetName(-1), '');
+      expect(g.streetName(99), '');
+    });
+
+    test('outEdges/inEdges return empty for isolated node', () {
+      const g = CHGraph(
+        nodes: [CHNode(id: 0, lat: 51.1, lng: 71.4)],
+        forwardEdges: [],
+        backwardEdges: [],
+        forwardOffsets: [0, 0],
+        backwardOffsets: [0, 0],
+        streetNames: [],
+        minLat: 51.0,
+        maxLat: 51.2,
+        minLng: 71.3,
+        maxLng: 71.5,
+      );
+      expect(g.outEdges(0), isEmpty);
+      expect(g.inEdges(0), isEmpty);
+    });
+  });
+
+  group('VoiceCommand enum', () {
+    test('contains GTFS commands', () {
+      expect(VoiceCommand.values.contains(VoiceCommand.busRoute), isTrue);
+      expect(VoiceCommand.values.contains(VoiceCommand.busSchedule), isTrue);
+      expect(VoiceCommand.values.contains(VoiceCommand.downloadMap), isTrue);
+    });
+  });
+
+  group('Maneuver', () {
+    test('maneuverFromAngle straight', () {
+      expect(maneuverFromAngle(0), Maneuver.straight);
+      expect(maneuverFromAngle(10), Maneuver.straight);
+      expect(maneuverFromAngle(350), Maneuver.straight);
+    });
+
+    test('maneuverFromAngle right turn', () {
+      expect(maneuverFromAngle(90), Maneuver.turnRight);
+    });
+
+    test('maneuverFromAngle left turn', () {
+      expect(maneuverFromAngle(270), Maneuver.turnLeft);
+    });
+
+    test('maneuverFromAngle u-turn', () {
+      expect(maneuverFromAngle(180), Maneuver.uTurn);
+    });
+
+    test('maneuverFromAngle slight right', () {
+      expect(maneuverFromAngle(40), Maneuver.slightRight);
+    });
+
+    test('maneuverFromAngle slight left', () {
+      expect(maneuverFromAngle(320), Maneuver.slightLeft);
     });
   });
 }

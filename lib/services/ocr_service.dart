@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'dart:collection';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
@@ -14,7 +15,7 @@ class OcrService {
   bool _busy = false;
 
   static const int _kStableFrames = 2;
-  final List<String> _stabilizeBuffer = [];
+  final ListQueue<String> _stabilizeBuffer = ListQueue<String>();
 
   Future<String?> recognizeFromFrame(
     CameraImage image, {
@@ -48,19 +49,19 @@ class OcrService {
 
       _stabilizeBuffer.add(result);
       if (_stabilizeBuffer.length > _kStableFrames) {
-        _stabilizeBuffer.removeAt(0);
+        _stabilizeBuffer.removeFirst();
       }
 
       if (_stabilizeBuffer.length < _kStableFrames) return null;
 
-      final allSame = _stabilizeBuffer
-          .every((r) => r == _stabilizeBuffer.first);
+      final allSame = _stabilizeBuffer.every(
+        (r) => r == _stabilizeBuffer.first,
+      );
 
       if (!allSame) return null;
 
       _stabilizeBuffer.clear();
       return result;
-
     } catch (e) {
       debugPrint('OcrService error: $e');
       return null;
@@ -72,7 +73,9 @@ class OcrService {
   void resetStabilizer() => _stabilizeBuffer.clear();
 
   void dispose() {
-    try { _recognizer.close(); } catch (_) {}
+    try {
+      _recognizer.close();
+    } catch (_) {}
   }
 
   InputImage? _buildInputImage(CameraImage image) {
@@ -84,9 +87,9 @@ class OcrService {
       final bytes = buffer.done().buffer.asUint8List();
 
       final metadata = InputImageMetadata(
-        size:        Size(image.width.toDouble(), image.height.toDouble()),
-        rotation:    InputImageRotation.rotation0deg,
-        format:      InputImageFormat.yuv420,
+        size: Size(image.width.toDouble(), image.height.toDouble()),
+        rotation: InputImageRotation.rotation0deg,
+        format: InputImageFormat.yuv420,
         bytesPerRow: image.planes[0].bytesPerRow,
       );
 

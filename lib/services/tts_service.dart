@@ -1,53 +1,154 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:audio_session/audio_session.dart';
+import '../../models/constants.dart' show kTtsStallTimeout;
 import '../../models/speech_job.dart';
+import '../../models/strings.dart';
+import 'haptic_service.dart';
 
 class TtsService {
-  final FlutterTts _tts = FlutterTts();
-  AudioSession? _session;
+  
+  
+  
+  
+  
+  static const Duration _kCriticalStaleAfter = Duration(seconds: 4);
 
-  bool _ready      = false;
-  bool _speaking   = false;
+  
+  
+  
+  
+  FlutterTts? _ttsImpl;
+  FlutterTts get _tts => _ttsImpl ??= FlutterTts();
+  AudioSession? _session;
+  StreamSubscription<AudioInterruptionEvent>? _interruptionSub;
+  StreamSubscription<void>? _noisySub;
+
+  bool _ready = false;
+  bool _speaking = false;
+  bool _languageAvailable = true;
+  bool _usingEnglishFallback = false;
+  bool _testMode = false;
+  String _requestedLang = 'ru-RU';
   final List<SpeechJob> _queue = [];
 
-  String   _lastText = '';
+  TtsService();
+
+  
+  
+  
+  @visibleForTesting
+  TtsService.forTesting() {
+    _ready = true;
+    _testMode = true;
+  }
+
+  @visibleForTesting
+  List<SpeechJob> get queueSnapshot => List.unmodifiable(_queue);
+
+  @visibleForTesting
+  void pruneStaleCriticalsForTesting(DateTime now, {Duration? maxAge}) =>
+      _pruneStaleCriticals(now, maxAge: maxAge);
+
+  void _pruneStaleCriticals(DateTime now, {Duration? maxAge}) {
+    final threshold = maxAge ?? _kCriticalStaleAfter;
+    _queue.removeWhere(
+      (j) =>
+          j.priority == SpeechPriority.critical &&
+          now.difference(j.enqueuedAt) > threshold,
+    );
+  }
+
+  void Function()? onAudioRouteInterrupted;
+  void Function()? onAudioRouteResumed;
+  void Function()? onTtsStall;
+
+  DateTime _lastAudioRouteAlertAt = DateTime.fromMillisecondsSinceEpoch(0);
+  Timer? _stallTimer;
+
+  bool get languageAvailable => _languageAvailable;
+  bool get usingEnglishFallback => _usingEnglishFallback;
+
+  String _lastText = '';
+  int? _lastTrackId;
   DateTime _lastTime = DateTime.fromMillisecondsSinceEpoch(0);
 
   double _currentRate = 0.50;
 
   static const double _rateCritical = 0.65;
-  static const double _rateWarning  = 0.50;
-  static const double _rateInfo     = 0.45;
+  static const double _rateWarning = 0.50;
+  static const double _rateInfo = 0.45;
 
   static double _rateFor(SpeechPriority p) {
     switch (p) {
-      case SpeechPriority.critical: return _rateCritical;
-      case SpeechPriority.warning:  return _rateWarning;
-      case SpeechPriority.info:     return _rateInfo;
+      case SpeechPriority.critical:
+        return _rateCritical;
+      case SpeechPriority.warning:
+        return _rateWarning;
+      case SpeechPriority.info:
+        return _rateInfo;
     }
   }
 
   Future<void> init() async {
     try {
       _session = await AudioSession.instance;
-      await _session?.configure(const AudioSessionConfiguration.speech());
-      
-      await _tts.setLanguage('ru-RU');
+      await _session?.configure(
+        const AudioSessionConfiguration(
+          avAudioSessionCategory: AVAudioSessionCategory.playback,
+          avAudioSessionCategoryOptions:
+              AVAudioSessionCategoryOptions.duckOthers,
+          avAudioSessionMode: AVAudioSessionMode.spokenAudio,
+          avAudioSessionRouteSharingPolicy:
+              AVAudioSessionRouteSharingPolicy.defaultPolicy,
+          avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
+          androidAudioAttributes: AndroidAudioAttributes(
+            usage: AndroidAudioUsage.assistanceAccessibility,
+            contentType: AndroidAudioContentType.speech,
+          ),
+          androidAudioFocusGainType:
+              AndroidAudioFocusGainType.gainTransientMayDuck,
+          androidWillPauseWhenDucked: true,
+        ),
+      );
+
+      await _interruptionSub?.cancel();
+      await _noisySub?.cancel();
+      _interruptionSub = _session?.interruptionEventStream.listen((event) {
+        if (event.begin) {
+          _notifyAudioRouteInterrupted();
+        } else {
+          _recoverFromInterruption();
+        }
+      });
+      _noisySub = _session?.becomingNoisyEventStream.listen((_) {
+        _notifyAudioRouteInterrupted();
+      });
+
+      _requestedLang = 'ru-RU';
+      await _applyLanguage(_requestedLang);
       await _tts.setSpeechRate(_currentRate);
       await _tts.setVolume(1.0);
       await _tts.setPitch(1.0);
 
-      _tts.setStartHandler(()  { _speaking = true; });
-      _tts.setCompletionHandler(() { 
-        _speaking = false; 
-        _pump(); 
-        if (_queue.isEmpty) _session?.setActive(false); 
+      _tts.setStartHandler(() {
+        _speaking = true;
+        _armStallTimer();
       });
-      _tts.setErrorHandler((_)   { 
-        _speaking = false; 
-        _pump(); 
-        if (_queue.isEmpty) _session?.setActive(false); 
+      _tts.setCompletionHandler(() {
+        _speaking = false;
+        _disarmStallTimer();
+        _pump();
+        if (_queue.isEmpty) _session?.setActive(false);
+      });
+      _tts.setErrorHandler((msg) {
+        debugPrint('TtsService: engine error: $msg');
+        _speaking = false;
+        _disarmStallTimer();
+        _pump();
+        if (_queue.isEmpty) _session?.setActive(false);
       });
 
       _ready = true;
@@ -58,30 +159,124 @@ class TtsService {
 
   Future<void> setLanguage(String bcp47Tag) async {
     await stop();
-    try { await _tts.setLanguage(bcp47Tag); } catch (_) {}
+    _requestedLang = bcp47Tag;
+    _usingEnglishFallback = false;
+    await _applyLanguage(bcp47Tag);
+  }
+
+  Future<void> _applyLanguage(String bcp47Tag) async {
+    try {
+      await _tts.setLanguage(bcp47Tag);
+    } catch (_) {}
+    await _checkLanguageAvailability(bcp47Tag);
+
+    if (!_languageAvailable && !_usingEnglishFallback) {
+      try {
+        await _tts.setLanguage('en-US');
+        _usingEnglishFallback = true;
+        
+        
+        
+        AppStrings.setAlertLanguage(AppLanguage.en);
+        debugPrint(
+          'TtsService: fallback to en-US (requested $bcp47Tag unavailable)',
+        );
+      } catch (_) {}
+    } else if (_languageAvailable) {
+      
+      
+      AppStrings.setAlertLanguage(null);
+    }
+  }
+
+  void _notifyAudioRouteInterrupted() {
+    final now = DateTime.now();
+    if (now.difference(_lastAudioRouteAlertAt) < const Duration(seconds: 2)) {
+      return;
+    }
+    _lastAudioRouteAlertAt = now;
+    onAudioRouteInterrupted?.call();
+  }
+
+  void _recoverFromInterruption() {
+    try {
+      _session?.setActive(true);
+    } catch (_) {}
+
+    if (!_speaking && _queue.isNotEmpty) {
+      _pump();
+    }
+    onAudioRouteResumed?.call();
+  }
+
+  void _armStallTimer() {
+    _stallTimer?.cancel();
+    _stallTimer = Timer(kTtsStallTimeout, () {
+      if (!_speaking) return;
+      debugPrint('TtsService: stall detected — resetting speaking flag');
+      _speaking = false;
+      try {
+        _tts.stop();
+      } catch (_) {}
+      onTtsStall?.call();
+      if (_queue.isNotEmpty) _pump();
+    });
+  }
+
+  void _disarmStallTimer() {
+    _stallTimer?.cancel();
+    _stallTimer = null;
+  }
+
+  Future<void> _checkLanguageAvailability(String bcp47Tag) async {
+    try {
+      final langs = await _tts.getLanguages;
+      if (langs is List) {
+        final primary = bcp47Tag.split('-').first.toLowerCase();
+        final set = langs.map((l) => l.toString().toLowerCase()).toSet();
+        _languageAvailable =
+            set.contains(bcp47Tag.toLowerCase()) ||
+            set.any((l) => l.startsWith(primary));
+      }
+    } catch (_) {
+      _languageAvailable = true;
+    }
   }
 
   void say(
     String text,
     SpeechPriority priority, {
-    double pan     = 0.0,
-    int?   trackId,
+    double pan = 0.0,
+    int? trackId,
   }) {
     if (!_ready || text.isEmpty) return;
-    final now  = DateTime.now();
+    final now = DateTime.now();
     final rate = _rateFor(priority);
 
     if (priority != SpeechPriority.critical &&
         text == _lastText &&
+        trackId == _lastTrackId &&
         now.difference(_lastTime) < const Duration(seconds: 2)) {
       return;
     }
 
     if (priority == SpeechPriority.critical) {
-      _queue.clear();
-      _queue.add(SpeechJob(text, priority,
-          pan: pan, rate: rate, trackId: trackId));
+      
+      
+      
+      
+      _queue.removeWhere((j) => j.priority != SpeechPriority.critical);
+      if (_queue.any((j) => j.text == text)) {
+        _lastText = text;
+        _lastTrackId = trackId;
+        _lastTime = now;
+        return;
+      }
+      _queue.add(
+        SpeechJob(text, priority, pan: pan, rate: rate, trackId: trackId),
+      );
       _lastText = text;
+      _lastTrackId = trackId;
       _lastTime = now;
       _interruptAndSpeak();
       return;
@@ -99,7 +294,7 @@ class TtsService {
       for (int i = 0; i < _queue.length; i++) {
         if (_queue[i].priority == SpeechPriority.info &&
             _queue[i].enqueuedAt.isBefore(oldestTime)) {
-          oldestTime    = _queue[i].enqueuedAt;
+          oldestTime = _queue[i].enqueuedAt;
           oldestInfoIdx = i;
         }
       }
@@ -110,19 +305,21 @@ class TtsService {
       }
     }
 
-    _queue.add(SpeechJob(text, priority,
-        pan: pan, rate: rate, trackId: trackId));
+    _queue.add(
+      SpeechJob(text, priority, pan: pan, rate: rate, trackId: trackId),
+    );
     _queue.sort((a, b) => b.priority.index.compareTo(a.priority.index));
     _lastText = text;
+    _lastTrackId = trackId;
     _lastTime = now;
     _pump();
   }
 
   void evictTrack(int trackId) {
     final before = _queue.length;
-    _queue.removeWhere((j) =>
-        j.trackId == trackId &&
-        j.priority != SpeechPriority.critical);
+    _queue.removeWhere(
+      (j) => j.trackId == trackId && j.priority != SpeechPriority.critical,
+    );
     final removed = before - _queue.length;
     if (removed > 0) {
       debugPrint('TtsService: evicted $removed job(s) for track $trackId');
@@ -132,9 +329,9 @@ class TtsService {
   void evictStale({Duration maxAge = const Duration(seconds: 3)}) {
     final cutoff = DateTime.now().subtract(maxAge);
     final before = _queue.length;
-    _queue.removeWhere((j) =>
-        j.priority == SpeechPriority.info &&
-        j.enqueuedAt.isBefore(cutoff));
+    _queue.removeWhere(
+      (j) => j.priority == SpeechPriority.info && j.enqueuedAt.isBefore(cutoff),
+    );
     final removed = before - _queue.length;
     if (removed > 0) {
       debugPrint('TtsService: evicted $removed stale info job(s)');
@@ -142,18 +339,28 @@ class TtsService {
   }
 
   Future<void> stop() async {
-    try { await _tts.stop(); } catch (_) {}
+    _disarmStallTimer();
+    try {
+      await _tts.stop();
+    } catch (_) {}
     _speaking = false;
     _queue.clear();
   }
 
   Future<void> _interruptAndSpeak() async {
-    try { await _tts.stop(); } catch (_) {}
+    if (_testMode) return;
+    try {
+      await _tts.stop();
+    } catch (_) {}
     _speaking = false;
     _pump();
   }
 
   Future<void> _pump() async {
+    if (_testMode) return;
+    
+    
+    _pruneStaleCriticals(DateTime.now());
     if (_speaking || _queue.isEmpty) return;
     final job = _queue.removeAt(0);
     try {
@@ -171,10 +378,39 @@ class TtsService {
         } catch (_) {}
       }
 
+      
+      
+      
+      
+      
+      if (job.priority == SpeechPriority.critical) {
+        unawaited(HapticService.vibrate(const [0, 80]));
+      }
+
       await _tts.speak(job.text);
     } catch (_) {
       _speaking = false;
       if (_queue.isEmpty) await _session?.setActive(false);
     }
+  }
+
+  void dispose() {
+    onAudioRouteInterrupted = null;
+    onAudioRouteResumed = null;
+    onTtsStall = null;
+    _disarmStallTimer();
+    _ready = false;
+    unawaited(stop());
+    unawaited(_interruptionSub?.cancel());
+    _interruptionSub = null;
+    unawaited(_noisySub?.cancel());
+    _noisySub = null;
+    try {
+      _session?.setActive(false);
+    } catch (_) {}
+    _session = null;
+    try {
+      _tts.stop();
+    } catch (_) {}
   }
 }
