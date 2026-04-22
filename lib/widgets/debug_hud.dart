@@ -40,8 +40,7 @@ class DebugHud extends StatelessWidget {
             Text('Interval: ${intervalMs.toStringAsFixed(0)} ms'),
             Text('Mode:     ${useGpu ? "GPU" : "CPU"} / $threads th'),
             Text('AppMode:  ${mode.name}'),
-            if (depthTier != null)
-              Text('Depth:    ${depthTier!.name}'),
+            if (depthTier != null) Text('Depth:    ${depthTier!.name}'),
           ],
         ),
       ),

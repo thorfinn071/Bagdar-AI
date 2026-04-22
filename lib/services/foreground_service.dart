@@ -13,8 +13,8 @@ class VisionForegroundService {
 
     FlutterForegroundTask.init(
       androidNotificationOptions: AndroidNotificationOptions(
-        channelId: 'vision_guide_fg',
-        channelName: 'VisionGuide Navigation',
+        channelId: 'bagdar_fg',
+        channelName: 'Bagdar Navigation',
         channelDescription: 'Keeps navigation running in background',
         channelImportance: NotificationChannelImportance.LOW,
         priority: NotificationPriority.LOW,

@@ -9,11 +9,11 @@ class Mapping {
   const Mapping(this.scale, this.dx, this.dy);
 
   Rect toRect(double x1, double y1, double x2, double y2) => Rect.fromLTRB(
-        x1 * scale + dx,
-        y1 * scale + dy,
-        x2 * scale + dx,
-        y2 * scale + dy,
-      );
+    x1 * scale + dx,
+    y1 * scale + dy,
+    x2 * scale + dx,
+    y2 * scale + dy,
+  );
 }
 
 Mapping mapImageToCanvas({
@@ -65,8 +65,8 @@ class TrackPainter extends CustomPainter {
       boxPaint.color = t.dist == 'very close'
           ? Colors.red
           : t.dist == 'close'
-              ? Colors.orangeAccent
-              : Colors.greenAccent;
+          ? Colors.orangeAccent
+          : Colors.greenAccent;
 
       final rect = mapping.toRect(t.x1, t.y1, t.x2, t.y2);
       canvas.drawRect(rect, boxPaint);
@@ -84,14 +84,13 @@ class TrackPainter extends CustomPainter {
       textPainter.text = TextSpan(
         text: '${t.label}$distLabel',
         style: const TextStyle(
-          color:           Colors.white,
-          fontSize:        13,
+          color: Colors.white,
+          fontSize: 13,
           backgroundColor: Colors.black54,
         ),
       );
       textPainter.layout(maxWidth: math.max(30, rect.width));
-      textPainter.paint(
-          canvas, Offset(rect.left, math.max(0, rect.top - 18)));
+      textPainter.paint(canvas, Offset(rect.left, math.max(0, rect.top - 18)));
     }
   }
 

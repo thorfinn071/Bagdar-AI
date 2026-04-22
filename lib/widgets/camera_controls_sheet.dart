@@ -2,21 +2,30 @@ import 'package:flutter/material.dart';
 
 import '../models/strings.dart';
 import '../services/earcon_service.dart';
+import '../services/device_capability.dart';
 
 class CameraSettingsSheet extends StatefulWidget {
   final AppLanguage currentLanguage;
   final bool useGpu;
+  final bool useNativeDepthBridge;
+  final bool useHardwareDepthMode;
   final int numThreads;
+  
   final bool showDebugHud;
   final bool earconEnabled;
+  final bool pitchBlackUiEnabled;
+  final DepthTier? depthTier;
   final bool midasReady;
   final String? sosContactNumber;
 
   final ValueChanged<AppLanguage> onLanguageChanged;
   final ValueChanged<bool> onUseGpuChanged;
+  final ValueChanged<bool> onNativeDepthBridgeChanged;
+  final ValueChanged<bool> onHardwareDepthModeChanged;
   final ValueChanged<int> onNumThreadsChanged;
   final ValueChanged<bool> onDebugHudChanged;
   final ValueChanged<bool> onEarconEnabledChanged;
+  final ValueChanged<bool> onPitchBlackUiChanged;
   final VoidCallback onReadText;
   final VoidCallback onCalibrationTap;
   final VoidCallback onEditSosContact;
@@ -35,16 +44,23 @@ class CameraSettingsSheet extends StatefulWidget {
     super.key,
     required this.currentLanguage,
     required this.useGpu,
+    required this.useNativeDepthBridge,
+    required this.useHardwareDepthMode,
     required this.numThreads,
     required this.showDebugHud,
     required this.earconEnabled,
+    required this.pitchBlackUiEnabled,
+    this.depthTier,
     required this.midasReady,
     required this.sosContactNumber,
     required this.onLanguageChanged,
     required this.onUseGpuChanged,
+    required this.onNativeDepthBridgeChanged,
+    required this.onHardwareDepthModeChanged,
     required this.onNumThreadsChanged,
     required this.onDebugHudChanged,
     required this.onEarconEnabledChanged,
+    required this.onPitchBlackUiChanged,
     required this.onReadText,
     required this.onCalibrationTap,
     required this.onEditSosContact,
@@ -67,18 +83,24 @@ class CameraSettingsSheet extends StatefulWidget {
 class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
   late AppLanguage _language;
   late bool _useGpu;
+  late bool _useNativeDepthBridge;
+  late bool _useHardwareDepthMode;
   late int _numThreads;
   late bool _showDebugHud;
   late bool _earconEnabled;
+  late bool _pitchBlackUiEnabled;
 
   @override
   void initState() {
     super.initState();
     _language = widget.currentLanguage;
     _useGpu = widget.useGpu;
+    _useNativeDepthBridge = widget.useNativeDepthBridge;
+    _useHardwareDepthMode = widget.useHardwareDepthMode;
     _numThreads = widget.numThreads;
     _showDebugHud = widget.showDebugHud;
     _earconEnabled = widget.earconEnabled;
+    _pitchBlackUiEnabled = widget.pitchBlackUiEnabled;
   }
 
   @override
@@ -90,6 +112,12 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
     if (oldWidget.useGpu != widget.useGpu) {
       _useGpu = widget.useGpu;
     }
+    if (oldWidget.useNativeDepthBridge != widget.useNativeDepthBridge) {
+      _useNativeDepthBridge = widget.useNativeDepthBridge;
+    }
+    if (oldWidget.useHardwareDepthMode != widget.useHardwareDepthMode) {
+      _useHardwareDepthMode = widget.useHardwareDepthMode;
+    }
     if (oldWidget.numThreads != widget.numThreads) {
       _numThreads = widget.numThreads;
     }
@@ -98,6 +126,9 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
     }
     if (oldWidget.earconEnabled != widget.earconEnabled) {
       _earconEnabled = widget.earconEnabled;
+    }
+    if (oldWidget.pitchBlackUiEnabled != widget.pitchBlackUiEnabled) {
+      _pitchBlackUiEnabled = widget.pitchBlackUiEnabled;
     }
   }
 
@@ -109,18 +140,23 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(S.get('settings'),
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600)),
+            Text(
+              S.get('settings'),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
             const SizedBox(height: 12),
             Semantics(
               label: 'Язык / Тіл',
               child: Row(
                 children: [
-                  const Text('Язык / Тіл',
-                      style: TextStyle(color: Colors.white)),
+                  const Text(
+                    'Язык / Тіл',
+                    style: TextStyle(color: Colors.white),
+                  ),
                   const Spacer(),
                   ToggleButtons(
                     borderRadius: BorderRadius.circular(8),
@@ -130,10 +166,13 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
                     fillColor: Colors.cyanAccent,
                     color: Colors.white70,
                     textStyle: const TextStyle(
-                        fontSize: 13, fontWeight: FontWeight.w500),
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                    ),
                     isSelected: [
                       _language == AppLanguage.ru,
                       _language == AppLanguage.kk,
+                      _language == AppLanguage.en,
                     ],
                     onPressed: (i) {
                       final lang = AppLanguage.values[i];
@@ -150,6 +189,10 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
                         padding: EdgeInsets.symmetric(horizontal: 14),
                         child: Text('ҚЗ'),
                       ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 14),
+                        child: Text('EN'),
+                      ),
                     ],
                   ),
                 ],
@@ -159,8 +202,7 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
             Semantics(
               label: 'Использовать GPU: ${_useGpu ? "включено" : "выключено"}',
               child: SwitchListTile(
-                title: const Text('GPU',
-                    style: TextStyle(color: Colors.white)),
+                title: const Text('GPU', style: TextStyle(color: Colors.white)),
                 value: _useGpu,
                 onChanged: (v) {
                   setState(() => _useGpu = v);
@@ -168,29 +210,83 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
                 },
               ),
             ),
-            Row(children: [
-              const Text('CPU потоки',
-                  style: TextStyle(color: Colors.white)),
-              const Spacer(),
-              DropdownButton<int>(
-                dropdownColor: Colors.grey[850],
-                value: _numThreads,
-                style: const TextStyle(color: Colors.white),
-                items: [1, 2, 3, 4]
-                    .map((n) => DropdownMenuItem(value: n, child: Text('$n')))
-                    .toList(),
+            Semantics(
+              label:
+                  'Native depth bridge: ${_useNativeDepthBridge ? "включено" : "выключено"}',
+              child: SwitchListTile(
+                title: const Text(
+                  'Native depth bridge',
+                  style: TextStyle(color: Colors.white),
+                ),
+                subtitle: const Text(
+                  'libyuv preprocessing before TFLite',
+                  style: TextStyle(color: Colors.white38, fontSize: 11),
+                ),
+                value: _useNativeDepthBridge,
                 onChanged: (v) {
-                  if (v == null) return;
-                  setState(() => _numThreads = v);
-                  widget.onNumThreadsChanged(v);
+                  setState(() => _useNativeDepthBridge = v);
+                  widget.onNativeDepthBridgeChanged(v);
                 },
               ),
-            ]),
+            ),
+            Semantics(
+              label:
+                  'Hardware depth mode: ${_useHardwareDepthMode ? "включено" : "выключено"}',
+              child: SwitchListTile(
+                title: const Text(
+                  'Hardware depth mode',
+                  style: TextStyle(color: Colors.white),
+                ),
+                subtitle: const Text(
+                  'Pauses Flutter camera and starts ARCore / ARKit depth',
+                  style: TextStyle(color: Colors.white38, fontSize: 11),
+                ),
+                value: _useHardwareDepthMode,
+                onChanged: (v) {
+                  setState(() => _useHardwareDepthMode = v);
+                  widget.onHardwareDepthModeChanged(v);
+                },
+              ),
+            ),
+            ListTile(
+              textColor: Colors.white,
+              iconColor: Colors.cyanAccent,
+              leading: const Icon(Icons.sensors, color: Colors.cyanAccent),
+              title: Text(
+                'Источник глубины: ${_depthTierText(widget.depthTier)}',
+                style: const TextStyle(color: Colors.white),
+              ),
+              subtitle: Text(
+                _depthTierSubtitle(widget.depthTier),
+                style: const TextStyle(color: Colors.white38, fontSize: 11),
+              ),
+            ),
+            Row(
+              children: [
+                const Text('CPU потоки', style: TextStyle(color: Colors.white)),
+                const Spacer(),
+                DropdownButton<int>(
+                  dropdownColor: Colors.grey[850],
+                  value: _numThreads,
+                  style: const TextStyle(color: Colors.white),
+                  items: [1, 2, 3, 4]
+                      .map((n) => DropdownMenuItem(value: n, child: Text('$n')))
+                      .toList(),
+                  onChanged: (v) {
+                    if (v == null) return;
+                    setState(() => _numThreads = v);
+                    widget.onNumThreadsChanged(v);
+                  },
+                ),
+              ],
+            ),
             Semantics(
               label: 'Показать отладку: ${_showDebugHud ? "вкл" : "выкл"}',
               child: SwitchListTile(
-                title: const Text('Debug HUD',
-                    style: TextStyle(color: Colors.white)),
+                title: const Text(
+                  'Debug HUD',
+                  style: TextStyle(color: Colors.white),
+                ),
                 value: _showDebugHud,
                 onChanged: (v) {
                   setState(() => _showDebugHud = v);
@@ -199,11 +295,12 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
               ),
             ),
             Semantics(
-              label:
-                  'Звуковые сигналы: ${_earconEnabled ? "вкл" : "выкл"}',
+              label: 'Звуковые сигналы: ${_earconEnabled ? "вкл" : "выкл"}',
               child: SwitchListTile(
-                title: const Text('Звуковые сигналы',
-                    style: TextStyle(color: Colors.white)),
+                title: const Text(
+                  'Звуковые сигналы',
+                  style: TextStyle(color: Colors.white),
+                ),
                 subtitle: const Text(
                   'Мгновенные тоны для событий',
                   style: TextStyle(color: Colors.white38, fontSize: 11),
@@ -216,36 +313,50 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
                 },
               ),
             ),
+            Semantics(
+              label:
+                  '${S.get('pitch_black_ui')}: ${_pitchBlackUiEnabled ? S.get('pitch_black_on') : S.get('pitch_black_off')}',
+              child: SwitchListTile(
+                title: Text(
+                  S.get('pitch_black_ui'),
+                  style: const TextStyle(color: Colors.white),
+                ),
+                subtitle: Text(
+                  S.get('pitch_black_ui_desc'),
+                  style: const TextStyle(color: Colors.white38, fontSize: 11),
+                ),
+                value: _pitchBlackUiEnabled,
+                onChanged: (v) {
+                  setState(() => _pitchBlackUiEnabled = v);
+                  widget.onPitchBlackUiChanged(v);
+                },
+              ),
+            ),
             ListTile(
               textColor: Colors.white,
               iconColor: widget.midasReady ? Colors.cyanAccent : Colors.white38,
               leading: Icon(
                 widget.midasReady ? Icons.layers : Icons.layers_outlined,
-                color:
-                    widget.midasReady ? Colors.cyanAccent : Colors.white38,
+                color: widget.midasReady ? Colors.cyanAccent : Colors.white38,
               ),
               title: Text(
                 widget.midasReady
-                    ? 'Анализ глубины (MiDaS): активен'
-                    : 'Анализ глубины: модель не загружена',
+                    ? 'Анализ глубины: активен'
+                    : 'Анализ глубины: не готов',
                 style: TextStyle(
                   color: widget.midasReady ? Colors.white : Colors.white38,
                 ),
               ),
               subtitle: Text(
-                widget.midasReady
-                    ? 'Детекция ям и ступенек вниз'
-                    : 'Положи midas_small.tflite в assets/',
-                style:
-                    const TextStyle(color: Colors.white38, fontSize: 11),
+                _depthTierSubtitle(widget.depthTier),
+                style: const TextStyle(color: Colors.white38, fontSize: 11),
               ),
             ),
             const Divider(color: Colors.white24, height: 20),
             ListTile(
               textColor: Colors.white,
               iconColor: Colors.cyanAccent,
-              leading: const Icon(Icons.text_fields,
-                  color: Colors.cyanAccent),
+              leading: const Icon(Icons.text_fields, color: Colors.cyanAccent),
               title: const Text('Прочитать текст'),
               subtitle: const Text(
                 'OCR — распознавание текста в кадре',
@@ -260,8 +371,10 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
             ListTile(
               textColor: Colors.white,
               iconColor: Colors.lightBlueAccent,
-              leading: const Icon(Icons.straighten,
-                  color: Colors.lightBlueAccent),
+              leading: const Icon(
+                Icons.straighten,
+                color: Colors.lightBlueAccent,
+              ),
               title: const Text('Калибровка камеры'),
               subtitle: const Text(
                 'Встаньте точно на 2 м от человека и нажмите',
@@ -280,8 +393,7 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
               title: Text(S.get('sos_settings')),
               subtitle: Text(
                 widget.sosContactNumber ?? 'Не задан',
-                style:
-                    const TextStyle(color: Colors.white38, fontSize: 11),
+                style: const TextStyle(color: Colors.white38, fontSize: 11),
               ),
               onTap: () {
                 Navigator.pop(context);
@@ -321,8 +433,7 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
             ),
             const Divider(color: Colors.white24, height: 20),
             const Padding(
-              padding: EdgeInsets.symmetric(
-                  vertical: 4, horizontal: 16),
+              padding: EdgeInsets.symmetric(vertical: 4, horizontal: 16),
               child: Text(
                 'Тест вибрации (режим Трость)',
                 style: TextStyle(color: Colors.white54, fontSize: 12),
@@ -392,8 +503,7 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
             ),
             const Divider(color: Colors.white24, height: 20),
             const Padding(
-              padding: EdgeInsets.symmetric(
-                  vertical: 4, horizontal: 16),
+              padding: EdgeInsets.symmetric(vertical: 4, horizontal: 16),
               child: Text(
                 'Тест звуковых сигналов',
                 style: TextStyle(color: Colors.white54, fontSize: 12),
@@ -456,8 +566,12 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
                 textColor: Colors.white,
                 iconColor: Colors.orangeAccent,
                 leading: const Icon(Icons.place),
+                
                 title: Text(S.get('waypoint_name_prompt')),
-                trailing: const Icon(Icons.chevron_right, color: Colors.white38),
+                trailing: const Icon(
+                  Icons.chevron_right,
+                  color: Colors.white38,
+                ),
                 onTap: () {
                   Navigator.pop(context);
                   widget.onViewWaypoints!();
@@ -488,6 +602,36 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
         ),
       ),
     );
+  }
+
+  String _depthTierText(DepthTier? tier) {
+    switch (tier) {
+      case DepthTier.hardware:
+        return 'ARCore / LiDAR';
+      case DepthTier.midasNnapi:
+        return 'MiDaS + NNAPI';
+      case DepthTier.midasCpu:
+        return 'MiDaS + CPU';
+      case DepthTier.focalLength:
+        return 'Fallback по фокусному расстоянию';
+      case null:
+        return 'не определён';
+    }
+  }
+
+  String _depthTierSubtitle(DepthTier? tier) {
+    switch (tier) {
+      case DepthTier.hardware:
+        return 'Нативная глубина с устройства';
+      case DepthTier.midasNnapi:
+        return 'MiDaS fallback выполняется через NNAPI';
+      case DepthTier.midasCpu:
+        return 'MiDaS fallback выполняется на CPU';
+      case DepthTier.focalLength:
+        return 'Нет depth API — используется оценка по калибровке';
+      case null:
+        return 'Источник глубины будет выбран автоматически';
+    }
   }
 }
 
@@ -534,8 +678,7 @@ class _CameraCalibrationDialogState extends State<CameraCalibrationDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: Colors.grey[900],
-      title: Text(widget.title,
-          style: const TextStyle(color: Colors.white)),
+      title: Text(widget.title, style: const TextStyle(color: Colors.white)),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -547,8 +690,7 @@ class _CameraCalibrationDialogState extends State<CameraCalibrationDialog> {
           const SizedBox(height: 12),
           TextField(
             controller: _controller,
-            keyboardType:
-                const TextInputType.numberWithOptions(decimal: true),
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
             style: const TextStyle(color: Colors.white),
             decoration: InputDecoration(
               labelText: widget.labelText,
@@ -556,9 +698,11 @@ class _CameraCalibrationDialogState extends State<CameraCalibrationDialog> {
               suffixText: 'м',
               suffixStyle: const TextStyle(color: Colors.white54),
               enabledBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white30)),
+                borderSide: BorderSide(color: Colors.white30),
+              ),
               focusedBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.cyanAccent)),
+                borderSide: BorderSide(color: Colors.cyanAccent),
+              ),
             ),
           ),
         ],
@@ -566,13 +710,17 @@ class _CameraCalibrationDialogState extends State<CameraCalibrationDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text(widget.cancelLabel,
-              style: const TextStyle(color: Colors.white54)),
+          child: Text(
+            widget.cancelLabel,
+            style: const TextStyle(color: Colors.white54),
+          ),
         ),
         TextButton(
           onPressed: () => Navigator.pop(context, _controller.text.trim()),
-          child: Text(widget.saveLabel,
-              style: const TextStyle(color: Colors.cyanAccent)),
+          child: Text(
+            widget.saveLabel,
+            style: const TextStyle(color: Colors.cyanAccent),
+          ),
         ),
       ],
     );
@@ -607,12 +755,12 @@ class _EarconTestButton extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.music_note,
-                  color: Colors.white54, size: 14),
+              const Icon(Icons.music_note, color: Colors.white54, size: 14),
               const SizedBox(width: 6),
-              Text(label,
-                  style: const TextStyle(
-                      color: Colors.white70, fontSize: 12)),
+              Text(
+                label,
+                style: const TextStyle(color: Colors.white70, fontSize: 12),
+              ),
             ],
           ),
         ),
@@ -655,17 +803,17 @@ class _HapticTestButton extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           decoration: BoxDecoration(
-            border: Border.all(
-                color: color.withValues(alpha: 0.4), width: 0.5),
+            border: Border.all(color: color.withValues(alpha: 0.4), width: 0.5),
             borderRadius: BorderRadius.circular(8),
             color: color.withValues(alpha: 0.06),
           ),
           child: Text(
             label,
             style: TextStyle(
-                color: color,
-                fontSize: 12,
-                fontWeight: FontWeight.w500),
+              color: color,
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       ),

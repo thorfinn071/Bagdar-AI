@@ -27,11 +27,11 @@ class _WaypointSheetState extends State<WaypointSheet> {
   }
 
   Future<void> _delete(Waypoint wp) async {
-    await widget.waypointService.delete(wp.name);
-    widget.onDeleted?.call(wp.name);
+    await widget.waypointService.delete(wp.id);
+    widget.onDeleted?.call(wp.id);
     if (mounted) {
       setState(() {
-        _waypoints.removeWhere((w) => w.name == wp.name);
+        _waypoints.removeWhere((w) => w.id == wp.id);
       });
     }
   }
@@ -71,10 +71,7 @@ class _WaypointSheetState extends State<WaypointSheet> {
                 const Spacer(),
                 Text(
                   '${_waypoints.length}',
-                  style: const TextStyle(
-                    color: Colors.white38,
-                    fontSize: 14,
-                  ),
+                  style: const TextStyle(color: Colors.white38, fontSize: 14),
                 ),
               ],
             ),
@@ -88,17 +85,17 @@ class _WaypointSheetState extends State<WaypointSheet> {
                     child: Text(
                       S.get('waypoint_none'),
                       style: const TextStyle(
-                        color:    Colors.white38,
+                        color: Colors.white38,
                         fontSize: 15,
                       ),
                     ),
                   )
                 : ListView.builder(
-                    controller:   scrollCtrl,
-                    itemCount:    _waypoints.length,
-                    itemBuilder:  (_, i) => _WaypointTile(
-                      waypoint:  _waypoints[i],
-                      onDelete:  () => _delete(_waypoints[i]),
+                    controller: scrollCtrl,
+                    itemCount: _waypoints.length,
+                    itemBuilder: (_, i) => _WaypointTile(
+                      waypoint: _waypoints[i],
+                      onDelete: () => _delete(_waypoints[i]),
                     ),
                   ),
           ),
@@ -129,12 +126,16 @@ class _WaypointTile extends StatelessWidget {
       label: '${waypoint.name}, ${_formatDate(waypoint.created)}',
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
-        leading: const Icon(Icons.location_on, color: Colors.orangeAccent, size: 22),
+        leading: const Icon(
+          Icons.location_on,
+          color: Colors.orangeAccent,
+          size: 22,
+        ),
         title: Text(
           waypoint.name,
           style: const TextStyle(
-            color:      Colors.white,
-            fontSize:   15,
+            color: Colors.white,
+            fontSize: 15,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -143,9 +144,9 @@ class _WaypointTile extends StatelessWidget {
           '${waypoint.lat.toStringAsFixed(5)}, '
           '${waypoint.lng.toStringAsFixed(5)}',
           style: const TextStyle(
-            color:    Colors.white38,
+            color: Colors.white38,
             fontSize: 12,
-            height:   1.5,
+            height: 1.5,
           ),
         ),
         isThreeLine: true,
@@ -153,7 +154,7 @@ class _WaypointTile extends StatelessWidget {
           label: '${S.get('waypoint_deleted')} ${waypoint.name}',
           button: true,
           child: IconButton(
-            icon:    const Icon(Icons.delete_outline, color: Colors.redAccent),
+            icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
             tooltip: S.get('waypoint_deleted'),
             onPressed: () => _confirmDelete(context),
           ),
@@ -167,10 +168,7 @@ class _WaypointTile extends StatelessWidget {
       context: context,
       builder: (_) => AlertDialog(
         backgroundColor: Colors.grey[900],
-        title: Text(
-          waypoint.name,
-          style: const TextStyle(color: Colors.white),
-        ),
+        title: Text(waypoint.name, style: const TextStyle(color: Colors.white)),
         content: Text(
           '${S.get('waypoint_deleted')}?',
           style: const TextStyle(color: Colors.white70),

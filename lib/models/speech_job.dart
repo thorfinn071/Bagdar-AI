@@ -14,8 +14,8 @@ class SpeechJob {
   SpeechJob(
     this.text,
     this.priority, {
-    this.pan    = 0.0,
-    this.rate   = 0.50,
+    this.pan = 0.0,
+    this.rate = 0.50,
     this.trackId,
   }) : enqueuedAt = DateTime.now();
 }

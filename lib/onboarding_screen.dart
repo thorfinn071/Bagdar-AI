@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../models/app_mode.dart';
 import '../models/speech_job.dart';
@@ -35,7 +39,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   int _current = 0;
   AppMode _chosenMode = AppMode.street;
 
-  final bool _calibrated = false;
+  bool _calibrated = false;
 
   List<String> get _stepNarrations => [
     S.get('onb_welcome_tts'),
@@ -50,7 +54,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     _tts.init().then((_) async {
       AppStrings.setLanguage(AppLanguage.values[Settings.instance.language]);
       await _tts.setLanguage(AppStrings.ttsLang);
+      if (mounted) setState(() => _calibrated = Settings.instance.isCalibrated);
       _speak(0);
+      if (!_tts.languageAvailable && mounted) {
+        _showTtsLanguageWarning();
+      }
     });
   }
 
@@ -96,6 +104,83 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
   }
 
+  Future<void> _requestCameraPermission() async {
+    final status = await Permission.camera.request();
+    if (!mounted) return;
+
+    if (status.isGranted) {
+      _next();
+      return;
+    }
+
+    if (status.isPermanentlyDenied) {
+      await showDialog<void>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          backgroundColor: Colors.grey[900],
+          title: Text(
+            S.get('camera_perm_title'),
+            style: const TextStyle(color: Colors.white),
+          ),
+          content: Text(
+            S.get('camera_perm_body'),
+            style: const TextStyle(color: Colors.white70, height: 1.5),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: Text(S.get('cancel')),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(ctx);
+                openAppSettings();
+              },
+              child: Text(S.get('settings')),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
+    if (mounted) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(S.get('camera_perm_body'))));
+    }
+  }
+
+  Future<void> _showTtsLanguageWarning() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool('tts_lang_warned') == true) return;
+    await prefs.setBool('tts_lang_warned', true);
+    if (!mounted) return;
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Colors.grey[900],
+        title: Text(
+          S.get('tts_lang_title'),
+          style: const TextStyle(color: Colors.white),
+        ),
+        content: Text(
+          S.get('tts_lang_body'),
+          style: const TextStyle(color: Colors.white70, height: 1.5),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(
+              S.get('tts_lang_open'),
+              style: const TextStyle(color: Colors.cyanAccent),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<void> _finish() async {
     await Settings.instance.setOnboardingDone(true);
     await Settings.instance.setOnboardingMode(_chosenMode.name);
@@ -134,7 +219,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     onLang: _switchLanguage,
                     onNext: _next,
                   ),
-                  _PagePermissions(onNext: _next),
+                  _PagePermissions(
+                    onAllowCamera: _requestCameraPermission,
+                    onSkip: _next,
+                  ),
                   _PageCalibration(onNext: _next),
                   _PageReady(
                     mode: _chosenMode,
@@ -206,9 +294,10 @@ class _PageMode extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text(S.get('onb_lang_title'),
-                    style: const TextStyle(
-                        color: Colors.white60, fontSize: 13)),
+                Text(
+                  S.get('onb_lang_title'),
+                  style: const TextStyle(color: Colors.white60, fontSize: 13),
+                ),
                 const Spacer(),
                 ToggleButtons(
                   borderRadius: BorderRadius.circular(8),
@@ -218,10 +307,13 @@ class _PageMode extends StatelessWidget {
                   fillColor: Colors.cyanAccent,
                   color: Colors.white70,
                   textStyle: const TextStyle(
-                      fontSize: 13, fontWeight: FontWeight.w500),
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
                   isSelected: [
                     currentLang == AppLanguage.ru,
                     currentLang == AppLanguage.kk,
+                    currentLang == AppLanguage.en,
                   ],
                   onPressed: (i) => onLang(AppLanguage.values[i]),
                   children: const [
@@ -233,6 +325,10 @@ class _PageMode extends StatelessWidget {
                       padding: EdgeInsets.symmetric(horizontal: 14),
                       child: Text('ҚЗ'),
                     ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 14),
+                      child: Text('EN'),
+                    ),
                   ],
                 ),
               ],
@@ -243,25 +339,31 @@ class _PageMode extends StatelessWidget {
             Text(
               S.get('onb_welcome_title'),
               style: const TextStyle(
-                color: Colors.white, fontSize: 26,
-                fontWeight: FontWeight.w600, height: 1.2,
+                color: Colors.white,
+                fontSize: 26,
+                fontWeight: FontWeight.w600,
+                height: 1.2,
               ),
             ),
             const SizedBox(height: 10),
             Text(
               S.get('onb_welcome_sub'),
               style: const TextStyle(
-                  color: Colors.white60, fontSize: 15, height: 1.5),
+                color: Colors.white60,
+                fontSize: 15,
+                height: 1.5,
+              ),
             ),
             const SizedBox(height: 24),
-            ...AppMode.values.map((mode) => _ModeCard(
-              mode: mode,
-              selected: chosen == mode,
-              onTap: () => onSelect(mode),
-            )),
+            ...AppMode.values.map(
+              (mode) => _ModeCard(
+                mode: mode,
+                selected: chosen == mode,
+                onTap: () => onSelect(mode),
+              ),
+            ),
             const Spacer(),
-            _PrimaryButton(
-                label: S.get('onb_btn_continue'), onPressed: onNext),
+            _PrimaryButton(label: S.get('onb_btn_continue'), onPressed: onNext),
           ],
         ),
       ),
@@ -284,7 +386,8 @@ class _ModeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      button: true, selected: selected,
+      button: true,
+      selected: selected,
       label: '${mode.label}. $_description',
       child: GestureDetector(
         onTap: onTap,
@@ -305,37 +408,50 @@ class _ModeCard extends StatelessWidget {
           child: Row(
             children: [
               Container(
-                width: 40, height: 40,
+                width: 40,
+                height: 40,
                 decoration: BoxDecoration(
                   color: selected
                       ? Colors.cyanAccent.withValues(alpha: 0.15)
                       : Colors.white.withValues(alpha: 0.06),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Icon(mode.icon,
-                    color: selected ? Colors.cyanAccent : Colors.white38,
-                    size: 20),
+                child: Icon(
+                  mode.icon,
+                  color: selected ? Colors.cyanAccent : Colors.white38,
+                  size: 20,
+                ),
               ),
               const SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(mode.label,
-                        style: TextStyle(
-                          color: selected ? Colors.cyanAccent : Colors.white,
-                          fontSize: 15, fontWeight: FontWeight.w500,
-                        )),
+                    Text(
+                      mode.label,
+                      style: TextStyle(
+                        color: selected ? Colors.cyanAccent : Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                     const SizedBox(height: 2),
-                    Text(_description,
-                        style: const TextStyle(
-                            color: Colors.white54, fontSize: 12)),
+                    Text(
+                      _description,
+                      style: const TextStyle(
+                        color: Colors.white54,
+                        fontSize: 12,
+                      ),
+                    ),
                   ],
                 ),
               ),
               if (selected)
-                const Icon(Icons.check_circle,
-                    color: Colors.cyanAccent, size: 20),
+                const Icon(
+                  Icons.check_circle,
+                  color: Colors.cyanAccent,
+                  size: 20,
+                ),
             ],
           ),
         ),
@@ -345,8 +461,9 @@ class _ModeCard extends StatelessWidget {
 }
 
 class _PagePermissions extends StatelessWidget {
-  final VoidCallback onNext;
-  const _PagePermissions({required this.onNext});
+  final Future<void> Function() onAllowCamera;
+  final VoidCallback onSkip;
+  const _PagePermissions({required this.onAllowCamera, required this.onSkip});
 
   @override
   Widget build(BuildContext context) {
@@ -359,38 +476,53 @@ class _PagePermissions extends StatelessWidget {
           children: [
             const Icon(Icons.security, color: Colors.cyanAccent, size: 36),
             const SizedBox(height: 20),
-            Text(S.get('onb_perm_title'),
-                style: const TextStyle(
-                    color: Colors.white, fontSize: 24,
-                    fontWeight: FontWeight.w600)),
+            Text(
+              S.get('onb_perm_title'),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
             const SizedBox(height: 8),
-            Text(S.get('onb_perm_sub'),
-                style: const TextStyle(
-                    color: Colors.white60, fontSize: 15, height: 1.5)),
+            Text(
+              S.get('onb_perm_sub'),
+              style: const TextStyle(
+                color: Colors.white60,
+                fontSize: 15,
+                height: 1.5,
+              ),
+            ),
             const SizedBox(height: 28),
             _PermRow(
-                icon: Icons.camera_alt,
-                label: S.get('perm_camera'),
-                reason: S.get('perm_camera_reason'),
-                required: true),
+              icon: Icons.camera_alt,
+              label: S.get('perm_camera'),
+              reason: S.get('perm_camera_reason'),
+              required: true,
+            ),
             const SizedBox(height: 10),
             _PermRow(
-                icon: Icons.mic,
-                label: S.get('perm_mic'),
-                reason: S.get('perm_mic_reason'),
-                required: false),
+              icon: Icons.mic,
+              label: S.get('perm_mic'),
+              reason: S.get('perm_mic_reason'),
+              required: false,
+            ),
             const SizedBox(height: 10),
             _PermRow(
-                icon: Icons.location_on,
-                label: S.get('perm_location'),
-                reason: S.get('perm_location_reason'),
-                required: false),
+              icon: Icons.location_on,
+              label: S.get('perm_location'),
+              reason: S.get('perm_location_reason'),
+              required: false,
+            ),
             const Spacer(),
             _PrimaryButton(
-                label: S.get('onb_btn_allow_camera'), onPressed: onNext),
+              label: S.get('onb_btn_allow_camera'),
+              onPressed: () {
+                unawaited(onAllowCamera());
+              },
+            ),
             const SizedBox(height: 10),
-            _SecondaryButton(
-                label: S.get('onb_btn_skip'), onPressed: onNext),
+            _SecondaryButton(label: S.get('onb_btn_skip'), onPressed: onSkip),
           ],
         ),
       ),
@@ -404,8 +536,10 @@ class _PermRow extends StatelessWidget {
   final String reason;
   final bool required;
   const _PermRow({
-    required this.icon, required this.label,
-    required this.reason, required this.required,
+    required this.icon,
+    required this.label,
+    required this.reason,
+    required this.required,
   });
 
   @override
@@ -421,21 +555,28 @@ class _PermRow extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(icon,
-                color: required ? Colors.cyanAccent : Colors.white38,
-                size: 22),
+            Icon(
+              icon,
+              color: required ? Colors.cyanAccent : Colors.white38,
+              size: 22,
+            ),
             const SizedBox(width: 14),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(label,
-                      style: const TextStyle(
-                          color: Colors.white, fontSize: 14,
-                          fontWeight: FontWeight.w500)),
-                  Text(reason,
-                      style: const TextStyle(
-                          color: Colors.white54, fontSize: 12)),
+                  Text(
+                    label,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Text(
+                    reason,
+                    style: const TextStyle(color: Colors.white54, fontSize: 12),
+                  ),
                 ],
               ),
             ),
@@ -448,10 +589,13 @@ class _PermRow extends StatelessWidget {
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Text(
-                required ? S.get('perm_camera_required') : S.get('perm_optional'),
+                required
+                    ? S.get('perm_camera_required')
+                    : S.get('perm_optional'),
                 style: TextStyle(
                   color: required ? Colors.cyanAccent : Colors.white38,
-                  fontSize: 11, fontWeight: FontWeight.w500,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
@@ -465,9 +609,7 @@ class _PermRow extends StatelessWidget {
 class _PageCalibration extends StatelessWidget {
   final VoidCallback onNext;
 
-  const _PageCalibration({
-    required this.onNext,
-  });
+  const _PageCalibration({required this.onNext});
 
   @override
   Widget build(BuildContext context) {
@@ -478,17 +620,25 @@ class _PageCalibration extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Icon(Icons.straighten,
-                color: Colors.cyanAccent,
-                size: 36),
+            const Icon(Icons.straighten, color: Colors.cyanAccent, size: 36),
             const SizedBox(height: 20),
-            Text(S.get('onb_calib_title'),
-                style: const TextStyle(color: Colors.white, fontSize: 24,
-                    fontWeight: FontWeight.w600)),
+            Text(
+              S.get('onb_calib_title'),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
             const SizedBox(height: 8),
-            Text(S.get('onb_calib_sub'),
-                style: const TextStyle(
-                    color: Colors.white60, fontSize: 15, height: 1.5)),
+            Text(
+              S.get('onb_calib_sub'),
+              style: const TextStyle(
+                color: Colors.white60,
+                fontSize: 15,
+                height: 1.5,
+              ),
+            ),
             const SizedBox(height: 24),
             Container(
               padding: const EdgeInsets.all(16),
@@ -504,53 +654,78 @@ class _PageCalibration extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       _PersonIcon(
-                          label: S.get('scan_see'),
-                          color: Colors.cyanAccent),
-                      Column(children: [
-                        const Row(children: [
-                          Text('◀', style: TextStyle(
-                              color: Colors.cyanAccent, fontSize: 12)),
-                          SizedBox(width: 6),
-                          Text('2 м', style: TextStyle(
-                              color: Colors.cyanAccent, fontSize: 13,
-                              fontWeight: FontWeight.w500)),
-                          SizedBox(width: 6),
-                          Text('▶', style: TextStyle(
-                              color: Colors.cyanAccent, fontSize: 12)),
-                        ]),
-                        const SizedBox(height: 4),
-                        Container(
-                          height: 1, width: 90,
-                          color: Colors.cyanAccent.withValues(alpha: 0.4),
-                        ),
-                      ]),
+                        label: S.get('scan_see'),
+                        color: Colors.cyanAccent,
+                      ),
+                      Column(
+                        children: [
+                          const Row(
+                            children: [
+                              Text(
+                                '◀',
+                                style: TextStyle(
+                                  color: Colors.cyanAccent,
+                                  fontSize: 12,
+                                ),
+                              ),
+                              SizedBox(width: 6),
+                              Text(
+                                '2 м',
+                                style: TextStyle(
+                                  color: Colors.cyanAccent,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              SizedBox(width: 6),
+                              Text(
+                                '▶',
+                                style: TextStyle(
+                                  color: Colors.cyanAccent,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 4),
+                          Container(
+                            height: 1,
+                            width: 90,
+                            color: Colors.cyanAccent.withValues(alpha: 0.4),
+                          ),
+                        ],
+                      ),
                       _PersonIcon(
-                          label: S.label('person'),
-                          color: Colors.white38),
+                        label: S.label('person'),
+                        color: Colors.white38,
+                      ),
                     ],
                   ),
                   const SizedBox(height: 14),
-                  Row(children: [
-                    const Icon(Icons.info_outline,
-                        color: Colors.cyanAccent, size: 14),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        S.get('onb_calib_app_note'),
-                        style: const TextStyle(
-                            color: Colors.cyanAccent,
-                            fontSize: 12),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.info_outline,
+                        color: Colors.cyanAccent,
+                        size: 14,
                       ),
-                    ),
-                  ]),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          S.get('onb_calib_app_note'),
+                          style: const TextStyle(
+                            color: Colors.cyanAccent,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
             const Spacer(),
-            _PrimaryButton(
-              label: S.get('onb_btn_continue'),
-              onPressed: onNext,
-            ),
+            _PrimaryButton(label: S.get('onb_btn_continue'), onPressed: onNext),
           ],
         ),
       ),
@@ -565,18 +740,21 @@ class _PersonIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Container(
-        width: 30, height: 30,
-        decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.15),
-          shape: BoxShape.circle,
+    return Column(
+      children: [
+        Container(
+          width: 30,
+          height: 30,
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.15),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(Icons.person, color: color, size: 18),
         ),
-        child: Icon(Icons.person, color: color, size: 18),
-      ),
-      const SizedBox(height: 4),
-      Text(label, style: TextStyle(color: color, fontSize: 11)),
-    ]);
+        const SizedBox(height: 4),
+        Text(label, style: TextStyle(color: color, fontSize: 11)),
+      ],
+    );
   }
 }
 
@@ -586,8 +764,10 @@ class _PageReady extends StatelessWidget {
   final VoidCallback onStart;
   final VoidCallback onBack;
   const _PageReady({
-    required this.mode, required this.calibrated,
-    required this.onStart, required this.onBack,
+    required this.mode,
+    required this.calibrated,
+    required this.onStart,
+    required this.onBack,
   });
 
   @override
@@ -599,23 +779,38 @@ class _PageReady extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Icon(Icons.check_circle,
-                color: Colors.greenAccent, size: 40),
+            const Icon(Icons.check_circle, color: Colors.greenAccent, size: 40),
             const SizedBox(height: 20),
-            Text(S.get('onb_ready_title'),
-                style: const TextStyle(color: Colors.white, fontSize: 26,
-                    fontWeight: FontWeight.w600)),
+            Text(
+              S.get('onb_ready_title'),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 26,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
             const SizedBox(height: 8),
-            Text(S.get('onb_ready_sub'),
-                style: const TextStyle(
-                    color: Colors.white60, fontSize: 15, height: 1.5)),
+            Text(
+              S.get('onb_ready_sub'),
+              style: const TextStyle(
+                color: Colors.white60,
+                fontSize: 15,
+                height: 1.5,
+              ),
+            ),
             const SizedBox(height: 24),
-            _CheckItem(icon: Icons.volume_up,
-                text: S.get('onb_check_alerts'), done: true),
+            _CheckItem(
+              icon: Icons.volume_up,
+              text: S.get('onb_check_alerts'),
+              done: true,
+            ),
             const SizedBox(height: 8),
-            _CheckItem(icon: mode.icon,
-                text: '${S.get('mode_changed')} «${mode.label}» ${S.get('onb_check_mode')}',
-                done: true),
+            _CheckItem(
+              icon: mode.icon,
+              text:
+                  '${S.get('mode_changed')} «${mode.label}» ${S.get('onb_check_mode')}',
+              done: true,
+            ),
             const SizedBox(height: 8),
             _CheckItem(
               icon: Icons.straighten,
@@ -630,23 +825,28 @@ class _PageReady extends StatelessWidget {
                 color: Colors.cyanAccent.withValues(alpha: 0.06),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                    color: Colors.cyanAccent.withValues(alpha: 0.2),
-                    width: 0.5),
+                  color: Colors.cyanAccent.withValues(alpha: 0.2),
+                  width: 0.5,
+                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(S.get('onb_feat_settings').split(' —').first,
-                      style: const TextStyle(
-                          color: Colors.cyanAccent, fontSize: 13,
-                          fontWeight: FontWeight.w500)),
+                  Text(
+                    S.get('onb_feat_settings').split(' —').first,
+                    style: const TextStyle(
+                      color: Colors.cyanAccent,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                   const SizedBox(height: 8),
-                  _TipRow(icon: Icons.hearing,
-                      text: S.get('onb_feat_scan')),
-                  _TipRow(icon: Icons.tune,
-                      text: S.get('onb_feat_mode')),
-                  _TipRow(icon: Icons.settings,
-                      text: S.get('onb_feat_settings')),
+                  _TipRow(icon: Icons.hearing, text: S.get('onb_feat_scan')),
+                  _TipRow(icon: Icons.tune, text: S.get('onb_feat_mode')),
+                  _TipRow(
+                    icon: Icons.settings,
+                    text: S.get('onb_feat_settings'),
+                  ),
                 ],
               ),
             ),
@@ -654,7 +854,9 @@ class _PageReady extends StatelessWidget {
             _PrimaryButton(label: S.get('onb_btn_start'), onPressed: onStart),
             const SizedBox(height: 10),
             _SecondaryButton(
-                label: S.get('onb_btn_back_calib'), onPressed: onBack),
+              label: S.get('onb_btn_back_calib'),
+              onPressed: onBack,
+            ),
           ],
         ),
       ),
@@ -668,8 +870,10 @@ class _CheckItem extends StatelessWidget {
   final bool done;
   final String? hint;
   const _CheckItem({
-    required this.icon, required this.text,
-    required this.done, this.hint,
+    required this.icon,
+    required this.text,
+    required this.done,
+    this.hint,
   });
 
   @override
@@ -680,7 +884,8 @@ class _CheckItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 28, height: 28,
+            width: 28,
+            height: 28,
             decoration: BoxDecoration(
               color: done
                   ? Colors.greenAccent.withValues(alpha: 0.12)
@@ -698,14 +903,18 @@ class _CheckItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(text,
-                    style: TextStyle(
-                        color: done ? Colors.white : Colors.white54,
-                        fontSize: 13)),
+                Text(
+                  text,
+                  style: TextStyle(
+                    color: done ? Colors.white : Colors.white54,
+                    fontSize: 13,
+                  ),
+                ),
                 if (hint != null && !done)
-                  Text(hint!,
-                      style: const TextStyle(
-                          color: Colors.white38, fontSize: 11)),
+                  Text(
+                    hint!,
+                    style: const TextStyle(color: Colors.white38, fontSize: 11),
+                  ),
               ],
             ),
           ),
@@ -724,12 +933,18 @@ class _TipRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 6),
-      child: Row(children: [
-        Icon(icon, color: Colors.white38, size: 14),
-        const SizedBox(width: 8),
-        Expanded(child: Text(text,
-            style: const TextStyle(color: Colors.white54, fontSize: 12))),
-      ]),
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.white38, size: 14),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              text,
+              style: const TextStyle(color: Colors.white54, fontSize: 12),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -744,7 +959,8 @@ class _PrimaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      button: true, label: label,
+      button: true,
+      label: label,
       child: SizedBox(
         width: double.infinity,
         child: ElevatedButton(
@@ -754,12 +970,14 @@ class _PrimaryButton extends StatelessWidget {
             foregroundColor: Colors.black,
             padding: const EdgeInsets.symmetric(vertical: 16),
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14)),
+              borderRadius: BorderRadius.circular(14),
+            ),
             elevation: 0,
           ),
-          child: Text(label,
-              style: const TextStyle(
-                  fontSize: 15, fontWeight: FontWeight.w600)),
+          child: Text(
+            label,
+            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+          ),
         ),
       ),
     );
@@ -774,7 +992,8 @@ class _SecondaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      button: true, label: label,
+      button: true,
+      label: label,
       child: SizedBox(
         width: double.infinity,
         child: TextButton(
@@ -787,8 +1006,7 @@ class _SecondaryButton extends StatelessWidget {
               side: const BorderSide(color: Colors.white12, width: 0.5),
             ),
           ),
-          child: Text(label,
-              style: const TextStyle(fontSize: 14)),
+          child: Text(label, style: const TextStyle(fontSize: 14)),
         ),
       ),
     );

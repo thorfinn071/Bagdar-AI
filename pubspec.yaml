@@ -1,4 +1,4 @@
-name: vision_guide_app
+name: bagdar
 
 version: 1.0.0+1
 
@@ -11,11 +11,12 @@ dependencies:
   google_mlkit_text_recognition: ^0.13.0
   speech_to_text: ^7.3.0
   audioplayers: ^6.1.0
-  tflite_flutter: ^0.10.4
+  ffi: ^2.1.4
+  tflite_flutter: ^0.12.1
   cupertino_icons: ^1.0.8
-  camera: ^0.10.5
+  camera: ^0.11.4
   permission_handler: ^11.3.0
-  flutter_vision: ^1.1.4
+  flutter_vision: ^2.0.0
   flutter_tts: ^4.2.2
   vibration: ^2.0.1
   shared_preferences: ^2.5.4
@@ -24,6 +25,15 @@ dependencies:
   audio_session: ^0.1.21
   geolocator: ^13.0.2
   url_launcher: ^6.3.1
+  flutter_compass: ^0.8.0
+  http: ^1.2.0
+  latlong2: ^0.9.1
+  sqflite: ^2.3.0
+  path_provider: ^2.1.0
+  dio: ^5.4.0
+  archive: ^3.6.1
+  connectivity_plus: ^6.0.0
+  sensors_plus: ^6.1.1
 
 dev_dependencies:
   flutter_test:
@@ -35,4 +45,4 @@ flutter:
   assets:
     - assets/yolov8n_int8.tflite
     - assets/labels.txt
-    - assets/midas_v21_small.tflite
+    - assets/midas_small_int8.tflite
