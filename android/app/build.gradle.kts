@@ -5,9 +5,15 @@ plugins {
 }
 
 android {
-    namespace = "com.example.vision_guide_app"
+    namespace = "com.example.bagdar"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
+
+    externalNativeBuild {
+        cmake {
+            path = file("src/main/cpp/CMakeLists.txt")
+        }
+    }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -19,7 +25,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.vision_guide_app"
+        applicationId = "com.example.bagdar"
         minSdk = 26
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
@@ -39,4 +45,8 @@ android {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    implementation("com.google.ar:core:1.42.0")
 }

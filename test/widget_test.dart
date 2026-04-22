@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:vision_guide_app/main.dart';
-import 'package:vision_guide_app/models/speech_job.dart';
-import 'package:vision_guide_app/models/strings.dart';
-import 'package:vision_guide_app/utils/alert_filter.dart';
-import 'package:vision_guide_app/utils/decision_engine.dart';
+import 'package:bagdar/main.dart';
+import 'package:bagdar/models/speech_job.dart';
+import 'package:bagdar/models/strings.dart';
+import 'package:bagdar/utils/alert_filter.dart';
+import 'package:bagdar/utils/decision_engine.dart';
 
 void main() {
   setUp(() {
     AppStrings.setLanguage(AppLanguage.ru);
   });
 
-  testWidgets('VisionGuideApp builds with a provided home widget',
+  testWidgets('BagdarApp builds with a provided home widget',
       (WidgetTester tester) async {
-    await tester.pumpWidget(const VisionGuideApp(home: SizedBox()));
+    await tester.pumpWidget(const BagdarApp(home: SizedBox()));
 
     expect(find.byType(MaterialApp), findsOneWidget);
     expect(find.byType(SizedBox), findsOneWidget);
@@ -78,6 +78,53 @@ void main() {
     ));
 
     final winner = filter.flush(5, DateTime.now());
+
+    expect(winner, isNull);
+  });
+
+  test(
+      'AlertFilter (OPT-01) lets info alerts from reliable tracks through in '
+      'dense scenes', () {
+    final filter = AlertFilter();
+
+    filter.add(const AlertCandidate(
+      text: 'reliable track info',
+      priority: SpeechPriority.info,
+      pan: 0.0,
+      category: AlertCategory.obstacleFar,
+      urgency: 0.1,
+      trackId: 42,
+    ));
+
+    final winner = filter.flush(
+      5,
+      DateTime.now(),
+      reliableTrackIds: <int>{42},
+    );
+
+    expect(winner, isNotNull);
+    expect(winner!.trackId, 42);
+  });
+
+  test(
+      'AlertFilter (OPT-01) still suppresses info alerts from flickering '
+      'tracks in dense scenes', () {
+    final filter = AlertFilter();
+
+    filter.add(const AlertCandidate(
+      text: 'new flickering track info',
+      priority: SpeechPriority.info,
+      pan: 0.0,
+      category: AlertCategory.obstacleFar,
+      urgency: 0.1,
+      trackId: 99,
+    ));
+
+    final winner = filter.flush(
+      5,
+      DateTime.now(),
+      reliableTrackIds: <int>{42}, 
+    );
 
     expect(winner, isNull);
   });

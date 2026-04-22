@@ -9,21 +9,21 @@ void main() async {
   await Settings.instance.init();
 
   final startScreen = await resolveStartScreen();
-  runApp(VisionGuideApp(home: startScreen));
+  runApp(BagdarApp(home: startScreen));
 }
 
-class VisionGuideApp extends StatelessWidget {
+class BagdarApp extends StatelessWidget {
   final Widget home;
-  const VisionGuideApp({super.key, required this.home});
+  const BagdarApp({super.key, required this.home});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title:     'VisionGuide AI',
+      title: 'Bagdar AI',
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark().copyWith(
         colorScheme: const ColorScheme.dark(
-          primary:   Colors.cyanAccent,
+          primary: Colors.cyanAccent,
           secondary: Colors.orangeAccent,
         ),
       ),
