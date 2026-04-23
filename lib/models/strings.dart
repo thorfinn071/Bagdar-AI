@@ -248,6 +248,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Камера частично перекрыта. Проверьте объектив.',
     'group_ahead': 'Впереди группа: ',
     'camera_reinit': 'Камера перезапускается. Подождите.',
+    'camera_droplet':
+        'Возможно, капля на объективе. Протрите.',
 
     'waypoint_saved': 'Место сохранено.',
     'waypoint_near': 'Вы рядом с',
@@ -637,6 +639,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Камера ішінара жабық. Линзаны тексеріңіз.',
     'group_ahead': 'Алда топ: ',
     'camera_reinit': 'Камера қайта қосылуда. Күтіңіз.',
+    'camera_droplet':
+        'Линзада тамшы болуы мүмкін. Сүртіңіз.',
 
     'waypoint_saved': 'Орын сақталды.',
     'waypoint_near': 'Сіз жақынсыз',
@@ -1020,6 +1024,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'camera_partial_blocked': 'Camera partially blocked. Check the lens.',
     'group_ahead': 'Group ahead: ',
     'camera_reinit': 'Camera restarting. Please wait.',
+    'camera_droplet': 'Possible droplet on lens. Wipe clean.',
 
     'waypoint_saved': 'Location saved.',
     'waypoint_near': 'You are near',
