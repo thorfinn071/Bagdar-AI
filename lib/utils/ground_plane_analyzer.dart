@@ -437,7 +437,10 @@ class GroundPlaneAnalyzer {
     }
 
     if (lumaMap != null) {
-      final glassHazard = detectGlassDoorFromLuma(lumaMap);
+      final glassHazard = detectGlassDoor(
+        lumaMap,
+        depthMap: depthMap,
+      );
       if (glassHazard != null) {
         results.add(glassHazard);
       }
@@ -1377,6 +1380,18 @@ class GroundPlaneAnalyzer {
   static const double _kGlassMinWidthFrac = 0.20;
   static const double _kGlassMaxContrast = 76.0; 
 
+  static DepthHazard? detectGlassDoor(
+    Uint8List lumaMap, {
+    Float32List? depthMap,
+  }) {
+    final sym = detectGlassDoorFromLuma(lumaMap);
+    if (sym != null) return sym;
+    if (depthMap != null) {
+      return _detectGlassDoorFromEdges(depthMap, lumaMap);
+    }
+    return null;
+  }
+
   static DepthHazard? detectGlassDoorFromLuma(Uint8List lumaMap) {
     if (lumaMap.length != kMapSize * kMapSize) return null;
 
@@ -1428,6 +1443,90 @@ class GroundPlaneAnalyzer {
       type: DepthHazardType.glassDoor,
       zone: HazardZone.center,
       coverage: widthFrac.clamp(0.0, 1.0),
+    );
+  }
+
+  static const int _kGlassEdgeThreshold = 25;
+  static const int _kGlassEdgeMinRunRows = 20;
+  static const double _kGlassEdgeMinGapFrac = 0.20;
+  static const double _kGlassEdgeMaxGapFrac = 0.60;
+  static const double _kGlassDepthRatio = 1.5;
+
+  static DepthHazard? _detectGlassDoorFromEdges(
+    Float32List depthMap,
+    Uint8List lumaMap,
+  ) {
+    if (lumaMap.length != kMapSize * kMapSize) return null;
+    if (depthMap.length != kMapSize * kMapSize) return null;
+
+    final colEdgeCount = Int32List(kMapSize);
+    for (int y = 10; y < _kGlassRowHi - 1; y += 2) {
+      final row = y * kMapSize;
+      for (int x = 1; x < kMapSize - 1; x++) {
+        final above = lumaMap[(y - 1) * kMapSize + x];
+        final below = lumaMap[(y + 1) * kMapSize + x];
+        final gy = (below - above).abs();
+        if (gy >= _kGlassEdgeThreshold) colEdgeCount[x]++;
+      }
+    }
+
+    final minRun = _kGlassEdgeMinRunRows ~/ 2;
+    int bestLeftX = -1, bestRightX = -1;
+    int bestLeftScore = 0, bestRightScore = 0;
+    final midX = kMapSize ~/ 2;
+
+    for (int x = 1; x < midX; x++) {
+      if (colEdgeCount[x] >= minRun && colEdgeCount[x] > bestLeftScore) {
+        bestLeftScore = colEdgeCount[x];
+        bestLeftX = x;
+      }
+    }
+    for (int x = midX; x < kMapSize - 1; x++) {
+      if (colEdgeCount[x] >= minRun && colEdgeCount[x] > bestRightScore) {
+        bestRightScore = colEdgeCount[x];
+        bestRightX = x;
+      }
+    }
+
+    if (bestLeftX < 0 || bestRightX < 0) return null;
+    final gapFrac = (bestRightX - bestLeftX) / kMapSize.toDouble();
+    if (gapFrac < _kGlassEdgeMinGapFrac ||
+        gapFrac > _kGlassEdgeMaxGapFrac) {
+      return null;
+    }
+
+    double innerSum = 0, outerSum = 0;
+    int innerN = 0, outerN = 0;
+    for (int y = 30; y < _kGlassRowHi; y += 4) {
+      final row = y * kMapSize;
+      for (int x = bestLeftX + 2; x < bestRightX - 2; x += 2) {
+        final z = depthMap[row + x];
+        if (z > 0.05) { innerSum += z; innerN++; }
+      }
+      for (int x = 0; x < bestLeftX - 2; x += 4) {
+        final z = depthMap[row + x];
+        if (z > 0.05) { outerSum += z; outerN++; }
+      }
+      for (int x = bestRightX + 2; x < kMapSize; x += 4) {
+        final z = depthMap[row + x];
+        if (z > 0.05) { outerSum += z; outerN++; }
+      }
+    }
+
+    if (innerN < 20 || outerN < 10) return null;
+    final innerMean = innerSum / innerN;
+    final outerMean = outerSum / outerN;
+    if (outerMean <= 0.05) return null;
+
+    final ratio = innerMean / outerMean;
+    if (ratio < _kGlassDepthRatio) return null;
+
+    final score = (0.40 + 0.30 * gapFrac.clamp(0.0, 1.0)).clamp(0.0, 0.85);
+    return DepthHazard(
+      midasScore: score,
+      type: DepthHazardType.glassDoor,
+      zone: HazardZone.center,
+      coverage: gapFrac.clamp(0.0, 1.0),
     );
   }
 
