@@ -108,6 +108,10 @@ class Tracker {
       t.distHist.addLast(det.dist);
       
       
+      
+      
+      
+      t.centerHist.addLast((now, det.cx, det.cy));
       if (det.appearance != null) {
         t.appearance = Float32List.fromList(det.appearance!);
       }
@@ -164,6 +168,19 @@ class Tracker {
     t.avgConf = t.avgConf == 0.0
         ? det.conf
         : t.avgConf * (1.0 - kConfEmaAlpha) + det.conf * kConfEmaAlpha;
+
+    
+    
+    
+    
+    
+    t.centerHist.addLast((now, det.cx, det.cy));
+    while (t.centerHist.length > kVehTurnMinCenterHist) {
+      t.centerHist.removeFirst();
+    }
+    final turnState = _computeTurnState(t.centerHist);
+    t.lastAngularVelocity = turnState.angularVelocity;
+    t.turning = turnState.turning;
 
     
     
@@ -236,12 +253,26 @@ class Tracker {
             
             
             final closeRange = t.distM > 0 && t.distM <= 4.0;
-            final areaT = closeRange
-                ? kVehApproachAreaRateT * 0.6
-                : kVehApproachAreaRateT;
-            final heightT = closeRange
-                ? kVehApproachHeightRateT * 0.6
-                : kVehApproachHeightRateT;
+            
+            
+            
+            
+            
+            
+            
+            final turningNear = t.turning &&
+                t.distM > 0 &&
+                t.distM <= kVehTurnDistThreshold;
+            double areaT = kVehApproachAreaRateT;
+            double heightT = kVehApproachHeightRateT;
+            if (turningNear) {
+              areaT = math.min(areaT, kPedApproachAreaRateT);
+              heightT = math.min(heightT, kPedApproachHeightRateT);
+            }
+            if (closeRange) {
+              areaT *= 0.6;
+              heightT *= 0.6;
+            }
             if (areaRate >= areaT || heightRate >= heightT) {
               t.approaching = true;
             }
@@ -316,6 +347,65 @@ class Tracker {
   void clear() {
     _tracks.clear();
     _predictTick = 0;
+  }
+
+  
+  
+  
+  
+  
+  static ({bool turning, double angularVelocity}) _computeTurnState(
+    ListQueue<(DateTime, double, double)> hist,
+  ) {
+    if (hist.length < kVehTurnMinCenterHist) {
+      return (turning: false, angularVelocity: 0.0);
+    }
+    final p0 = hist.elementAt(0);
+    final p1 = hist.elementAt(1);
+    final p2 = hist.elementAt(2);
+
+    final v1x = p1.$2 - p0.$2;
+    final v1y = p1.$3 - p0.$3;
+    final v2x = p2.$2 - p1.$2;
+    final v2y = p2.$3 - p1.$3;
+
+    final d1 = math.sqrt(v1x * v1x + v1y * v1y);
+    final d2 = math.sqrt(v2x * v2x + v2y * v2y);
+    if (d1 < kVehTurnMinDisplacementPx || d2 < kVehTurnMinDisplacementPx) {
+      return (turning: false, angularVelocity: 0.0);
+    }
+
+    
+    
+    
+    final dtSec = p2.$1.difference(p1.$1).inMicroseconds / 1e6;
+    if (dtSec <= 0.05 || dtSec >= 1.0) {
+      return (turning: false, angularVelocity: 0.0);
+    }
+
+    
+    
+    final a1 = math.atan2(v1y, v1x);
+    final a2 = math.atan2(v2y, v2x);
+    var dA = a2 - a1;
+    while (dA > math.pi) {
+      dA -= 2 * math.pi;
+    }
+    while (dA <= -math.pi) {
+      dA += 2 * math.pi;
+    }
+    final angVel = dA / dtSec;
+
+    
+    
+    
+    final cross = v1x * v2y - v1y * v2x;
+    final d1cubed = d1 * d1 * d1;
+    final curvature = cross.abs() / d1cubed;
+
+    final turning = angVel.abs() > kVehTurnAngVelThreshold &&
+        curvature > kVehTurnCurvatureThreshold;
+    return (turning: turning, angularVelocity: angVel);
   }
 
   static String _majorityDist(ListQueue<String> q) {

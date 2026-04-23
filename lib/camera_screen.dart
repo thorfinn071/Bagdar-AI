@@ -131,6 +131,13 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   DateTime _lastFrameArrivedAt = DateTime.now();
   bool _cameraStallWarned = false;
 
+  
+  
+  
+  
+  Timer? _indoorPollTimer;
+  static const Duration _kIndoorPollPeriod = Duration(seconds: 2);
+
   final List<Uint8List> _planeBytesBuffer = List<Uint8List>.filled(
     3,
     Uint8List(0),
@@ -161,6 +168,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _twoFingerSosTimer?.cancel();
     _fallCountdownTimer?.cancel();
     _stallWatchdog?.cancel();
+    _indoorPollTimer?.cancel();
     _controller?.dispose();
     _controller = null;
     VisionForegroundService.stop();
@@ -181,6 +189,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       _stallWatchdog?.cancel();
       _stallWatchdog = null;
       _cameraStallWarned = false;
+      _indoorPollTimer?.cancel();
+      _indoorPollTimer = null;
+      _vm.indoorGate.reset();
       if (!_lifecycleBackgroundWarned) {
         _lifecycleBackgroundWarned = true;
         _vm.tts.say(
@@ -697,6 +708,40 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     }
   }
 
+  
+  
+  
+  Future<void> _pollIndoorState() async {
+    if (!mounted) return;
+    Position? pos;
+    try {
+      pos = await Geolocator.getLastKnownPosition();
+    } catch (_) {
+      pos = null;
+    }
+    if (!mounted) return;
+    final now = DateTime.now();
+    final accuracyM = pos?.accuracy;
+    final ageSec = pos == null
+        ? null
+        : now.difference(pos.timestamp).inSeconds;
+    final transition = _vm.indoorGate.feed(
+      gpsAccuracyM: accuracyM,
+      gpsAgeSec: ageSec,
+      motion: _vm.fallDetector.motionState,
+      now: now,
+    );
+    _vm.applyIndoorTransition(transition);
+  }
+
+  void _startIndoorPoll() {
+    _indoorPollTimer?.cancel();
+    _indoorPollTimer = Timer.periodic(
+      _kIndoorPollPeriod,
+      (_) => _pollIndoorState(),
+    );
+  }
+
   void _saveWaypointFromVoice() async {
     try {
       final name = 'WP ${DateTime.now().toIso8601String().substring(11, 16)}';
@@ -855,9 +900,10 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     final bytes = image.planes[0].bytes;
     if (bytes.length < 10) return;
 
+    final stride = bytes.length ~/ 10;
     int hash = 0;
     for (int i = 0; i < 10; i++) {
-      hash = (hash * 31) + bytes[i];
+      hash = (hash * 31) + bytes[i * stride];
     }
 
     if (hash != _lastImageHash) {
@@ -916,6 +962,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         });
       }
       _startStallWatchdog();
+      _startIndoorPoll();
     } catch (e) {
       _vm.setStatus('Ошибка камеры: $e');
     }
@@ -984,8 +1031,14 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     
     
     
+    
+    
+    
+    
+    
     if ((_vm.mode == AppMode.street || _vm.mode == AppMode.cane) &&
-        !_vm.weatherGate.degraded) {
+        !_vm.weatherGate.degraded &&
+        !_vm.isIndoor) {
       final event = _vm.motionPreAlert.feed(image, now);
       if (event != null) _handleMotionIntrusion(event);
     }

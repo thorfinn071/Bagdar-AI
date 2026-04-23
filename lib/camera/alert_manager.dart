@@ -19,17 +19,25 @@ class AlertManager {
   
   final DecisionEngine _engine = DecisionEngine();
   final bool Function() _isGuideDogMode;
+  
+  
+  
+  
+  final bool Function() _isIndoorMode;
 
   AlertManager({
     required TtsService tts,
     required EarconService earcon,
     this.onProximityChanged,
     bool Function()? isGuideDogMode,
+    bool Function()? isIndoorMode,
   }) : _tts = tts,
        _earcon = earcon,
-       _isGuideDogMode = isGuideDogMode ?? _noGuideDog;
+       _isGuideDogMode = isGuideDogMode ?? _noGuideDog,
+       _isIndoorMode = isIndoorMode ?? _noIndoor;
 
   static bool _noGuideDog() => false;
+  static bool _noIndoor() => false;
 
   
   
@@ -296,9 +304,17 @@ class AlertManager {
     final emptyFor = now.difference(_emptySince);
     final gapSinceObj = now.difference(_objectLastSeen);
 
-    final confirmDuration = mode == AppMode.cane
+    final baseConfirm = mode == AppMode.cane
         ? kEmptyConfirmDurationCane
         : kEmptyConfirmDuration;
+    
+    
+    
+    
+    
+    final confirmDuration = _isIndoorMode()
+        ? baseConfirm + const Duration(milliseconds: 1500)
+        : baseConfirm;
     final recentCritical =
         now.difference(_lastCriticalAt) < kPostCriticalClearDelay;
 

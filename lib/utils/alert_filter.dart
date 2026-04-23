@@ -1,5 +1,5 @@
 import '../models/speech_job.dart';
-import '../models/strings.dart';
+import '../models/strings.dart' show S;
 
 enum AlertCategory {
   clearPath,
@@ -19,6 +19,7 @@ class AlertCandidate {
 
   final double urgency;
   final int? trackId;
+  final bool isGroupAlert;
 
   const AlertCandidate({
     required this.text,
@@ -27,6 +28,7 @@ class AlertCandidate {
     required this.category,
     required this.urgency,
     this.trackId,
+    this.isGroupAlert = false,
   });
 }
 
@@ -60,22 +62,20 @@ class AlertFilter {
         if (entry.value >= 3) {
           final label = entry.key;
           final alreadyHaveGroup = _candidates.any(
-            
-            
-            (c) => c.text.contains('группа') || c.text.contains('много'),
+            (c) => c.isGroupAlert,
           );
           if (!alreadyHaveGroup) {
-            String pluralLabel = S.label(label);
-            if (label == 'person') pluralLabel = 'людей';
-            if (label == 'car') pluralLabel = 'машин';
+            final pluralLabel = S.alertLabel(label);
 
             _candidates.add(
               AlertCandidate(
-                text: 'Впереди группа объектов: ${entry.value} $pluralLabel',
+                text:
+                    '${S.alert('group_ahead')}${entry.value} $pluralLabel',
                 priority: SpeechPriority.info,
                 pan: 0.0,
                 category: AlertCategory.obstacleFar,
                 urgency: 0.6,
+                isGroupAlert: true,
               ),
             );
           }
