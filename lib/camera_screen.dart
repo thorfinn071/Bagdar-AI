@@ -83,6 +83,11 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   bool _fallCountdownActive = false;
   bool _fallCancelListenerActive = false;
 
+  Timer? _lazyDisposeTimer;
+  static const Duration _kLazyDisposeDuration = Duration(seconds: 10);
+  bool _streamPaused = false;
+  Timer? _reinitHeartbeat;
+
   int _lowLuminosityFrames = 0;
   static const int _lowLuminosityThreshold = 45;
   static const double _luminosityMinValue = 10.0;
@@ -169,6 +174,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _fallCountdownTimer?.cancel();
     _stallWatchdog?.cancel();
     _indoorPollTimer?.cancel();
+    _lazyDisposeTimer?.cancel();
+    _reinitHeartbeat?.cancel();
     _controller?.dispose();
     _controller = null;
     VisionForegroundService.stop();
@@ -181,17 +188,29 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     if (state == AppLifecycleState.inactive ||
         state == AppLifecycleState.paused ||
         state == AppLifecycleState.hidden) {
-      if (_controller != null && _controller!.value.isInitialized) {
-        _controller?.dispose();
-        _controller = null;
-        _isCameraReady = false;
-      }
       _stallWatchdog?.cancel();
       _stallWatchdog = null;
       _cameraStallWarned = false;
       _indoorPollTimer?.cancel();
       _indoorPollTimer = null;
       _vm.indoorGate.reset();
+
+      final ctrl = _controller;
+      if (ctrl != null && ctrl.value.isInitialized && !_streamPaused) {
+        try {
+          ctrl.stopImageStream();
+        } catch (_) {}
+        _streamPaused = true;
+        _isCameraReady = false;
+
+        _lazyDisposeTimer?.cancel();
+        _lazyDisposeTimer = Timer(_kLazyDisposeDuration, () {
+          _controller?.dispose();
+          _controller = null;
+          _streamPaused = false;
+        });
+      }
+
       if (!_lifecycleBackgroundWarned) {
         _lifecycleBackgroundWarned = true;
         _vm.tts.say(
@@ -206,7 +225,34 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         _lifecycleBackgroundWarned = false;
         _vm.tts.say(S.get('lifecycle_resumed'), SpeechPriority.info, pan: 0.0);
       }
-      if (_controller == null || !(_controller?.value.isInitialized ?? false)) {
+
+      _lazyDisposeTimer?.cancel();
+      _lazyDisposeTimer = null;
+
+      final ctrl = _controller;
+      if (ctrl != null && ctrl.value.isInitialized && _streamPaused) {
+        _streamPaused = false;
+        try {
+          ctrl.startImageStream(_onFrame);
+          _isCameraReady = true;
+        } catch (_) {
+          _controller?.dispose();
+          _controller = null;
+          _initCamera();
+        }
+      } else if (_controller == null ||
+          !(_controller?.value.isInitialized ?? false)) {
+        _streamPaused = false;
+        _vm.tts.say(
+          S.alert('camera_reinit'),
+          SpeechPriority.warning,
+          pan: 0.0,
+        );
+        _reinitHeartbeat?.cancel();
+        _reinitHeartbeat = Timer.periodic(
+          const Duration(milliseconds: 500),
+          (_) => HapticService.vibrate(const [0, 100, 300, 100]),
+        );
         _initCamera();
       }
       _startStallWatchdog();
@@ -976,6 +1022,10 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     if (_cameraStallWarned) {
       _cameraStallWarned = false;
       _vm.tts.say(S.get('camera_resumed'), SpeechPriority.info, pan: 0.0);
+    }
+    if (_reinitHeartbeat != null) {
+      _reinitHeartbeat?.cancel();
+      _reinitHeartbeat = null;
     }
 
     _frameCount++;
