@@ -77,6 +77,9 @@ class TtsService {
 
   double _currentRate = 0.50;
 
+  bool _reverseVehicleSuspected = false;
+  set reverseVehicleSuspected(bool v) => _reverseVehicleSuspected = v;
+
   static const double _rateCritical = 0.65;
   static const double _rateWarning = 0.50;
   static const double _rateInfo = 0.45;
@@ -365,7 +368,14 @@ class TtsService {
     final job = _queue.removeAt(0);
     try {
       _speaking = true;
-      await _session?.setActive(true);
+      if (_reverseVehicleSuspected &&
+          job.priority != SpeechPriority.critical) {
+        try {
+          _session?.setActive(false);
+        } catch (_) {}
+      } else {
+        await _session?.setActive(true);
+      }
 
       if (job.rate != _currentRate) {
         await _tts.setSpeechRate(job.rate);
