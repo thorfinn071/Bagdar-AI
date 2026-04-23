@@ -127,6 +127,14 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   DateTime _lastImageChangeAt = DateTime.now();
   bool _cameraFrozenWarned = false;
 
+  static const int _kDropletGridSize = 3;
+  static const int _kDropletGridCount = _kDropletGridSize * _kDropletGridSize;
+  static const double _kDropletMinVariance = 50.0;
+  static const int _kDropletMinStreak = 60;
+  final List<int> _dropletLowVarStreak = List<int>.filled(_kDropletGridCount, 0);
+  bool _dropletSuspected = false;
+  bool _dropletWarned = false;
+
   DateTime _lastDepthAt = DateTime.fromMillisecondsSinceEpoch(0);
   Duration _depthInterval = const Duration(milliseconds: 400);
 
@@ -946,10 +954,73 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     final bytes = image.planes[0].bytes;
     if (bytes.length < 10) return;
 
-    final stride = bytes.length ~/ 10;
+    final w = image.width;
+    final h = image.height;
+    final rowStride = image.planes[0].bytesPerRow;
+
+    final gridCellW = w ~/ _kDropletGridSize;
+    final gridCellH = h ~/ _kDropletGridSize;
+    int dirtyRegions = 0;
+    final dirtyMask = List<bool>.filled(_kDropletGridCount, false);
+
+    for (int gy = 0; gy < _kDropletGridSize; gy++) {
+      for (int gx = 0; gx < _kDropletGridSize; gx++) {
+        final gi = gy * _kDropletGridSize + gx;
+        final yStart = gy * gridCellH;
+        final xStart = gx * gridCellW;
+        double sum = 0, sqSum = 0;
+        int n = 0;
+        for (int y = yStart; y < yStart + gridCellH && y < h; y += 8) {
+          for (int x = xStart; x < xStart + gridCellW && x < w; x += 8) {
+            final idx = y * rowStride + x;
+            if (idx >= bytes.length) continue;
+            final v = bytes[idx].toDouble();
+            sum += v;
+            sqSum += v * v;
+            n++;
+          }
+        }
+        if (n > 4) {
+          final mean = sum / n;
+          final variance = (sqSum / n) - mean * mean;
+          if (variance < _kDropletMinVariance) {
+            _dropletLowVarStreak[gi]++;
+          } else {
+            _dropletLowVarStreak[gi] = 0;
+          }
+        }
+        if (_dropletLowVarStreak[gi] >= _kDropletMinStreak) {
+          dirtyRegions++;
+          dirtyMask[gi] = true;
+        }
+      }
+    }
+
+    _dropletSuspected = dirtyRegions >= 2 && dirtyRegions < _kDropletGridCount;
+    if (_dropletSuspected && !_dropletWarned) {
+      _dropletWarned = true;
+      _vm.tts.say(
+        S.alert('camera_droplet'),
+        SpeechPriority.info,
+        pan: 0.0,
+      );
+      HapticService.vibrate(const [0, 150, 80, 150]);
+    } else if (!_dropletSuspected && _dropletWarned) {
+      _dropletWarned = false;
+    }
+
     int hash = 0;
+    final stride = bytes.length ~/ 10;
     for (int i = 0; i < 10; i++) {
-      hash = (hash * 31) + bytes[i * stride];
+      final byteIdx = i * stride;
+      if (_dropletSuspected) {
+        final px = (byteIdx % rowStride).clamp(0, w - 1);
+        final py = (byteIdx ~/ rowStride).clamp(0, h - 1);
+        final gx = (px ~/ gridCellW).clamp(0, _kDropletGridSize - 1);
+        final gy = (py ~/ gridCellH).clamp(0, _kDropletGridSize - 1);
+        if (dirtyMask[gy * _kDropletGridSize + gx]) continue;
+      }
+      hash = (hash * 31) + bytes[byteIdx];
     }
 
     if (hash != _lastImageHash) {
