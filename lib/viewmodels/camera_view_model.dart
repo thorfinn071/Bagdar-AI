@@ -30,6 +30,7 @@ import '../services/traffic_light_analyzer.dart';
 import '../services/ocr_service.dart';
 import '../services/motion_prealert.dart';
 import '../services/weather_gate.dart';
+import '../services/indoor_gate.dart';
 
 import '../services/orientation_service.dart';
 import '../services/step_service.dart';
@@ -57,6 +58,10 @@ class CameraViewModel extends ChangeNotifier {
   final OcrService ocr = OcrService();
   final MotionPreAlert motionPreAlert = MotionPreAlert();
   final WeatherGate weatherGate = WeatherGate();
+  
+  
+  
+  final IndoorGate indoorGate = IndoorGate();
 
   late final AlertManager alertMgr;
   late final ProximityBeaconService proximityBeacon;
@@ -72,6 +77,12 @@ class CameraViewModel extends ChangeNotifier {
 
   final ValueNotifier<List<Track>> tracksNotifier = ValueNotifier(const []);
 
+  
+  
+  
+  
+  bool get isIndoor => indoorGate.state == IndoorState.indoor;
+
   CameraViewModel() {
     proximityBeacon = ProximityBeaconService(earcon: earcon);
     alertMgr = AlertManager(
@@ -79,8 +90,31 @@ class CameraViewModel extends ChangeNotifier {
       earcon: earcon,
       onProximityChanged: (dist, pan) {},
       isGuideDogMode: () => guideDogMode,
+      isIndoorMode: () => isIndoor,
     );
     nav = NavigationService(compass: compass, stepService: steps);
+  }
+
+  
+  
+  
+  void applyIndoorTransition(IndoorTransition transition) {
+    if (transition == IndoorTransition.none) return;
+    throttler.setIndoorMode(isIndoor);
+    if (transition == IndoorTransition.enteredIndoor) {
+      tts.say(
+        S.alert('indoor_mode_entered'),
+        SpeechPriority.info,
+        pan: 0.0,
+      );
+    } else {
+      tts.say(
+        S.alert('indoor_mode_exited'),
+        SpeechPriority.info,
+        pan: 0.0,
+      );
+    }
+    notifyListeners();
   }
 
   void setStatus(String s) {

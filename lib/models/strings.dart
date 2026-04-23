@@ -242,8 +242,11 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'hazard_near_field': 'Объект под камерой.',
     'weather_low_vis': 'Плохая видимость. Уменьшена точность.',
     'weather_restored': 'Видимость восстановлена.',
+    'indoor_mode_entered': 'Режим помещения.',
+    'indoor_mode_exited': 'Режим улицы.',
     'camera_partial_blocked':
         'Камера частично перекрыта. Проверьте объектив.',
+    'group_ahead': 'Впереди группа: ',
 
     'waypoint_saved': 'Место сохранено.',
     'waypoint_near': 'Вы рядом с',
@@ -627,8 +630,11 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'hazard_near_field': 'Камераның астында нысан.',
     'weather_low_vis': 'Көріну нашар. Дәлдік төмендеді.',
     'weather_restored': 'Көріну қалпына келтірілді.',
+    'indoor_mode_entered': 'Бөлме режимі.',
+    'indoor_mode_exited': 'Көше режимі.',
     'camera_partial_blocked':
         'Камера ішінара жабық. Линзаны тексеріңіз.',
+    'group_ahead': 'Алда топ: ',
 
     'waypoint_saved': 'Орын сақталды.',
     'waypoint_near': 'Сіз жақынсыз',
@@ -1007,7 +1013,10 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'hazard_near_field': 'Object below camera.',
     'weather_low_vis': 'Low visibility. Accuracy reduced.',
     'weather_restored': 'Visibility restored.',
+    'indoor_mode_entered': 'Indoor mode.',
+    'indoor_mode_exited': 'Outdoor mode.',
     'camera_partial_blocked': 'Camera partially blocked. Check the lens.',
+    'group_ahead': 'Group ahead: ',
 
     'waypoint_saved': 'Location saved.',
     'waypoint_near': 'You are near',
