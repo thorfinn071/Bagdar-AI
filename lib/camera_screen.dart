@@ -1243,6 +1243,12 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         frameCount: _frameCount,
       );
 
+      _vm.tts.reverseVehicleSuspected = _detectReverseVehicle(
+        tracks,
+        _imgW,
+        _imgH,
+      );
+
       if (signTrack != null) {
         final color = _vm.trafficLight.analyze(
           image,
@@ -1393,6 +1399,41 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       if (t.approaching) return true;
       if (t.dist == 'very close' || t.dist == 'close') return true;
       if (t.distM > 0 && t.distM < 8.0) return true;
+    }
+    return false;
+  }
+
+  static const double _kReverseEdgeMargin = 0.15;
+  static const double _kReverseMaxAreaRate = 0.05;
+
+  bool _detectReverseVehicle(List<Track> tracks, int imgW, int imgH) {
+    if (imgW <= 0 || imgH <= 0) return false;
+    final edgeX = imgW * _kReverseEdgeMargin;
+    final edgeY = imgH * _kReverseEdgeMargin;
+    for (final t in tracks) {
+      if (!isVehicle(t.label)) continue;
+      if (t.approaching) continue;
+      if (t.distM > 0 && t.distM > 12.0) continue;
+
+      final atEdge = t.x1 < edgeX ||
+          t.x2 > imgW - edgeX ||
+          t.y1 < edgeY ||
+          t.y2 > imgH - edgeY;
+      if (!atEdge) continue;
+
+      if (t.areaHist.length >= 2) {
+        final dt = t.areaHist.last.$1
+                .difference(t.areaHist.first.$1)
+                .inMilliseconds /
+            1000.0;
+        if (dt > 0.1) {
+          final areaRate =
+              (t.areaHist.last.$2 - t.areaHist.first.$2) / dt;
+          if (areaRate.abs() < _kReverseMaxAreaRate) return true;
+        }
+      } else {
+        return true;
+      }
     }
     return false;
   }
