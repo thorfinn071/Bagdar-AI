@@ -14,6 +14,15 @@ class PerformanceThrottler {
   int _frameCount = 0;
   double _detectFps = 0;
   bool _isLowPowerMode = false;
+  int _thermalBurstCount = 0;
+  static const int _kThermalBurstFrames = 3;
+  static const int _kThermalIdleMs = 500;
+  
+  
+  
+  
+  
+  bool _indoorMode = false;
   MotionState _motionState = MotionState.walking;
   MemoryPressureLevel _memory = MemoryPressureLevel.normal;
 
@@ -27,6 +36,9 @@ class PerformanceThrottler {
   MemoryPressureLevel get memoryPressure => _memory;
   ThermalSeverity get effectiveSeverity => _committedSeverity;
   DateTime get lastSeverityTransitionAt => _lastSeverityTransitionAt;
+  bool get thermalBurstActive =>
+      _committedSeverity == ThermalSeverity.critical &&
+      _thermalBurstCount < _kThermalBurstFrames;
 
   void setThermal(ThermalReadings readings, {DateTime? now}) {
     final t = now ?? DateTime.now();
@@ -56,6 +68,15 @@ class PerformanceThrottler {
     _motionState = state;
   }
 
+  
+  
+  
+  void setIndoorMode(bool enabled) {
+    _indoorMode = enabled;
+  }
+
+  bool get isIndoorMode => _indoorMode;
+
   void setMemoryPressure(MemoryPressureLevel level) {
     _memory = level;
   }
@@ -75,7 +96,9 @@ class PerformanceThrottler {
         _memory == MemoryPressureLevel.critical;
 
     if (isOverheating || _avgInfMs > kInfTimeCriticalMs) {
-      _midasPausedUntil = now.add(Duration(seconds: _isLowPowerMode ? 10 : 5));
+      _midasPausedUntil = now.add(Duration(
+        seconds: _isLowPowerMode ? 10 : (severity == ThermalSeverity.critical ? 8 : 5),
+      ));
     } else if (_avgInfMs > kInfTimeSlowMs || severity == ThermalSeverity.hot) {
       _midasPausedUntil = now.add(const Duration(seconds: 3));
     } else if (_avgInfMs < kInfTimeFastMs + 20 &&
@@ -117,8 +140,12 @@ class PerformanceThrottler {
         ? 130
         : kTargetFrameBudgetMs;
 
+    
+    
+    
+    final stationaryBias = _indoorMode ? 0 : 150;
     final motionBias = switch (_motionState) {
-      MotionState.stationary => 150,
+      MotionState.stationary => stationaryBias,
       MotionState.walking => 0,
       MotionState.unstable => -30,
     };
@@ -129,11 +156,23 @@ class PerformanceThrottler {
       MemoryPressureLevel.critical => 200,
     };
 
-    final target = math.max(
+    final base = math.max(
       0,
       perfMs + thermalPenalty + motionBias + memoryBias,
     );
-    return Duration(milliseconds: math.max(batteryMs, target));
+
+    if (severity == ThermalSeverity.critical && !_isLowPowerMode) {
+      if (_thermalBurstCount < _kThermalBurstFrames) {
+        _thermalBurstCount++;
+        final burstMs = math.max(batteryMs, (perfMs + thermalPenalty ~/ 2));
+        return Duration(milliseconds: burstMs);
+      }
+      _thermalBurstCount = 0;
+      return Duration(milliseconds: math.max(batteryMs, _kThermalIdleMs + base));
+    }
+
+    _thermalBurstCount = 0;
+    return Duration(milliseconds: math.max(batteryMs, base));
   }
 
   Duration midasInterval(int batteryMs) {

@@ -64,6 +64,20 @@ const double kVehApproachHeightRateT = 0.14;
 const double kPedApproachAreaRateT = 0.08;
 const double kPedApproachHeightRateT = 0.06;
 
+
+
+
+
+
+
+
+
+const double kVehTurnAngVelThreshold = 0.3;
+const double kVehTurnDistThreshold = 5.0;
+const double kVehTurnCurvatureThreshold = 0.05;
+const int kVehTurnMinCenterHist = 3;
+const double kVehTurnMinDisplacementPx = 1.5;
+
 const double kDetConfThreshold = 0.35;
 
 const double kMinBboxAreaRatio = 0.004;
@@ -172,7 +186,7 @@ const int kThermalStatusCritical = 4;
 
 const int kThermalPenaltyWarmMs = 30;
 const int kThermalPenaltyHotMs = 80;
-const int kThermalPenaltyCriticalMs = 200;
+const int kThermalPenaltyCriticalMs = 120;
 
 const Duration kThermalCommitDwell = Duration(seconds: 60);
 const Duration kThermalTransitionSilence = Duration(seconds: 3);
