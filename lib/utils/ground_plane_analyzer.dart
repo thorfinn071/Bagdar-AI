@@ -286,7 +286,9 @@ class GroundPlaneAnalyzer {
       }
     }
 
-    final overheadHazard = _detectOverheadObstacle(depthMap, bestPlane);
+    final overheadHazard = _detectOverheadObstacle(
+      depthMap, bestPlane, lumaMap: lumaMap,
+    );
     if (overheadHazard != null) {
       results.add(overheadHazard);
     }
@@ -568,13 +570,20 @@ class GroundPlaneAnalyzer {
     );
   }
 
-  DepthHazard? _detectOverheadObstacle(Float32List depthMap, _Plane plane) {
-    return detectOverheadFromMap(
+  DepthHazard? _detectOverheadObstacle(
+    Float32List depthMap,
+    _Plane plane, {
+    Uint8List? lumaMap,
+  }) {
+    final depthResult = detectOverheadFromMap(
       depthMap,
       planeA: plane.a,
       planeB: plane.b,
       planeC: plane.c,
     );
+    if (depthResult != null) return depthResult;
+    if (lumaMap == null) return null;
+    return _detectOverheadFromEdge(depthMap, lumaMap);
   }
 
   static const int _kOverheadRowLo = 50;
@@ -583,6 +592,11 @@ class GroundPlaneAnalyzer {
   static const double _kOverheadMinCoverage = 0.05;
   static const int _kOverheadMaxVerticalSpread = 25;
   static const double _kOverheadMinHorizontalSpan = 0.30;
+
+  static const double _kEdgeMinSpanFrac = 0.40;
+  static const int _kEdgeResponseThreshold = 30;
+  static const double _kEdgeDepthDiscontThreshold = 0.15;
+  static const int _kEdgeMinRowRun = 3;
 
   static DepthHazard? detectOverheadFromMap(
     Float32List depthMap, {
@@ -634,13 +648,99 @@ class GroundPlaneAnalyzer {
     final centerX = matchSumX / matchCount;
     final zoneIdx = (centerX * 5 / kMapSize).floor().clamp(0, 4);
 
-    
     final score = (0.55 + 0.4 * coverage.clamp(0.0, 1.0)).clamp(0.0, 1.0);
     return DepthHazard(
       midasScore: score,
       type: DepthHazardType.overhead,
       zone: HazardZone.values[zoneIdx],
       coverage: coverage,
+    );
+  }
+
+  static DepthHazard? _detectOverheadFromEdge(
+    Float32List depthMap,
+    Uint8List lumaMap,
+  ) {
+    if (lumaMap.length != kMapSize * kMapSize) return null;
+    if (depthMap.length != kMapSize * kMapSize) return null;
+
+    int bestRunRows = 0;
+    int bestRowY = -1;
+    int bestRowXmin = kMapSize;
+    int bestRowXmax = -1;
+    int runRows = 0;
+
+    for (int y = _kOverheadRowLo; y < _kOverheadRowHi; y++) {
+      int edgePixels = 0;
+      int rowXmin = kMapSize;
+      int rowXmax = -1;
+      final row = y * kMapSize;
+      for (int x = 1; x < kMapSize - 1; x++) {
+        final left = lumaMap[row + x - 1];
+        final right = lumaMap[row + x + 1];
+        final resp = (right - left).abs();
+        if (resp >= _kEdgeResponseThreshold) {
+          edgePixels++;
+          if (x < rowXmin) rowXmin = x;
+          if (x > rowXmax) rowXmax = x;
+        }
+      }
+      final span = rowXmax > rowXmin
+          ? (rowXmax - rowXmin) / kMapSize
+          : 0.0;
+      if (span >= _kEdgeMinSpanFrac && edgePixels >= 6) {
+        runRows++;
+        if (runRows > bestRunRows) {
+          bestRunRows = runRows;
+          bestRowY = y;
+          if (rowXmin < bestRowXmin) bestRowXmin = rowXmin;
+          if (rowXmax > bestRowXmax) bestRowXmax = rowXmax;
+        }
+      } else {
+        runRows = 0;
+      }
+    }
+
+    if (bestRunRows < _kEdgeMinRowRun) return null;
+    if (bestRowY < 0) return null;
+
+    final aboveY = (bestRowY - bestRunRows - 3).clamp(_kOverheadRowLo, _kOverheadRowHi - 1);
+    final belowY = (bestRowY + 3).clamp(_kOverheadRowLo, _kOverheadRowHi - 1);
+    final edgeY = (bestRowY - bestRunRows ~/ 2).clamp(_kOverheadRowLo, _kOverheadRowHi - 1);
+
+    double aboveSum = 0, edgeSum = 0, belowSum = 0;
+    int aboveN = 0, edgeN = 0, belowN = 0;
+    for (int x = bestRowXmin; x <= bestRowXmax; x += 2) {
+      final za = depthMap[aboveY * kMapSize + x];
+      if (za > 0.05) { aboveSum += za; aboveN++; }
+      final ze = depthMap[edgeY * kMapSize + x];
+      if (ze > 0.05) { edgeSum += ze; edgeN++; }
+      final zb = depthMap[belowY * kMapSize + x];
+      if (zb > 0.05) { belowSum += zb; belowN++; }
+    }
+
+    if (aboveN < 3 || edgeN < 3 || belowN < 3) return null;
+    final aboveMean = aboveSum / aboveN;
+    final edgeMean = edgeSum / edgeN;
+    final belowMean = belowSum / belowN;
+
+    final bgMean = (aboveMean + belowMean) / 2.0;
+    if (bgMean <= 0.05) return null;
+    final aboveBelowSimilar =
+        (aboveMean - belowMean).abs() / bgMean < _kEdgeDepthDiscontThreshold;
+    final edgeDifferent =
+        (edgeMean - bgMean).abs() / bgMean >= _kEdgeDepthDiscontThreshold;
+    if (!aboveBelowSimilar || !edgeDifferent) return null;
+
+    final cx = (bestRowXmin + bestRowXmax) / 2.0;
+    final zoneIdx = (cx * 5 / kMapSize).floor().clamp(0, 4);
+    final spanFrac = (bestRowXmax - bestRowXmin) / kMapSize;
+    final score = (0.50 + 0.35 * spanFrac.clamp(0.0, 1.0)).clamp(0.0, 0.90);
+    return DepthHazard(
+      midasScore: score,
+      type: DepthHazardType.overhead,
+      zone: HazardZone.values[zoneIdx],
+      coverage: spanFrac.clamp(0.0, 1.0),
     );
   }
 
