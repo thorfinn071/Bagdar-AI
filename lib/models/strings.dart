@@ -297,12 +297,16 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'curtain_off': 'Экранная шторка выключена.',
     'help_summary':
         'Справка по управлению. '
-        'Проведите вправо или влево для смены режима. '
-        'Проведите вверх для включения или выключения экранной шторки. '
-        'Удерживайте двумя пальцами одновременно для экстренной помощи SOS. '
-        'Или скажите сос для SOS. '
-        'Двойное касание для настроек. '
-        'Удерживайте одним пальцем для голосовой команды.',
+        'Одно касание — быстрый статус. '
+        'Двойное касание — настройки. '
+        'Долгое нажатие одним пальцем — голосовая команда. '
+        'Свайп вправо или влево — смена режима. '
+        'Свайп вверх — экранная шторка. '
+        'Свайп вниз — эта справка. '
+        'Два пальца две секунды — экстренный вызов SOS. '
+        'Или скажите сос для SOS, справка для этого сообщения.',
+    'status_quick': 'Режим {mode}. Заряд {battery} процентов.',
+    'gesture_weak': 'Свайп слишком слабый. Проведите пальцем быстрее.',
     'camera_screen_semantics':
         'Экран камеры. Проведите вправо или влево для смены режима. '
         'Проведите вверх для экранной шторки. Проведите вниз для справки.',
@@ -681,12 +685,16 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'curtain_off': 'Экран пердесі өшірулі.',
     'help_summary':
         'Басқару бойынша анықтама. '
-        'Режимді ауыстыру үшін оңға немесе солға сырғытыңыз. '
-        'Экран пердесін қосу немесе өшіру үшін жоғары сырғытыңыз. '
-        'SOS шұғыл көмегі үшін екі саусақпен қатар басып тұрыңыз. '
-        'Немесе сос деп айтыңыз. '
-        'Баптаулар үшін екі рет түртіңіз. '
-        'Дауыстық команда үшін экранды бір саусақпен басып тұрыңыз.',
+        'Бір рет түрту — жылдам күй. '
+        'Екі рет түрту — баптаулар. '
+        'Бір саусақпен ұзақ басу — дауыстық команда. '
+        'Оңға не солға сырғыту — режимді ауыстыру. '
+        'Жоғары сырғыту — экран пердесі. '
+        'Төмен сырғыту — осы анықтама. '
+        'Екі саусақпен екі секунд басу — SOS. '
+        'Немесе SOS үшін сос деп, осы хабарлама үшін көмек деп айтыңыз.',
+    'status_quick': 'Режим {mode}. Заряд {battery} пайыз.',
+    'gesture_weak': 'Сырғыту әлсіз. Саусағыңызды жылдамырақ қозғалтыңыз.',
     'camera_screen_semantics':
         'Камера экраны. Режимді ауыстыру үшін оңға немесе солға сырғытыңыз. '
         'Экран пердесі үшін жоғары сырғытыңыз. Анықтама үшін төмен сырғытыңыз.',
@@ -1068,12 +1076,16 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'curtain_off': 'Screen curtain off.',
     'help_summary':
         'Controls help. '
-        'Swipe left or right to switch modes. '
-        'Swipe up to toggle screen curtain. '
-        'Hold with two fingers for SOS. '
-        'Or say sos. '
+        'Single tap for quick status. '
         'Double tap for settings. '
-        'Hold with one finger for voice commands.',
+        'Hold one finger for voice command. '
+        'Swipe left or right to switch mode. '
+        'Swipe up for screen curtain. '
+        'Swipe down for this help. '
+        'Hold two fingers for two seconds for SOS. '
+        'Or say sos for emergency, gestures for this help.',
+    'status_quick': 'Mode {mode}. Battery {battery} percent.',
+    'gesture_weak': 'Swipe too weak. Move finger faster.',
     'camera_screen_semantics':
         'Camera screen. Swipe left or right to switch modes. '
         'Swipe up for screen curtain. Swipe down for help.',
