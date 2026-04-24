@@ -41,6 +41,7 @@ import 'camera/depth_pipeline_controller.dart';
 import 'camera/stall_watchdog.dart';
 import 'camera/fall_countdown_controller.dart';
 import 'camera/voice_command_dispatcher.dart';
+import 'camera/camera_lifecycle_controller.dart';
 
 class AiCameraScreen extends StatefulWidget {
   final AppMode? initialMode;
@@ -51,7 +52,8 @@ class AiCameraScreen extends StatefulWidget {
 }
 
 class _AiCameraScreenState extends State<AiCameraScreen>
-    with WidgetsBindingObserver {
+    with WidgetsBindingObserver
+    implements CameraLifecycleHost {
   late final CameraViewModel _vm;
   CameraController? _controller;
   bool _isCameraReady = false;
@@ -83,18 +85,12 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
   late final FallCountdownController _fallCountdown;
   late final VoiceCommandDispatcher _voiceDispatcher;
-
-  Timer? _lazyDisposeTimer;
-  static const Duration _kLazyDisposeDuration = Duration(seconds: 10);
-  bool _streamPaused = false;
-  Timer? _reinitHeartbeat;
+  late final CameraLifecycleController _lifecycle;
 
   int _frameCount = 0;
   late final FrameQualityGuard _qualityGuard;
   late final DepthPipelineController _depthController;
   late final StallWatchdog _stallWatchdog;
-
-  bool _lifecycleBackgroundWarned = false;
 
   
   
@@ -120,10 +116,16 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _vm = CameraViewModel();
     _qualityGuard = FrameQualityGuard(weatherGate: _vm.weatherGate);
     _depthController = DepthPipelineController(vm: _vm, models: _models);
+    _lifecycle = CameraLifecycleController(
+      host: this,
+      tts: _vm.tts,
+      fieldLog: _fieldLog,
+      indoorGate: _vm.indoorGate,
+    );
     _stallWatchdog = StallWatchdog(
       thresholdProvider: () => _vm.throttler.stallWatchdogThreshold(),
       isActive: () =>
-          mounted && !_lifecycleBackgroundWarned && _isCameraReady,
+          mounted && !_lifecycle.backgroundWarned && _isCameraReady,
       onStall: () {
         _vm.earcon.play(Earcon.cameraBlocked);
         HapticService.vibrate(const [0, 400, 150, 400, 150, 400, 150, 400]);
@@ -168,8 +170,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _fallCountdown.dispose();
     _stallWatchdog.stop();
     _indoorPollTimer?.cancel();
-    _lazyDisposeTimer?.cancel();
-    _reinitHeartbeat?.cancel();
+    _lifecycle.dispose();
     _controller?.dispose();
     _controller = null;
     VisionForegroundService.stop();
@@ -180,80 +181,46 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.inactive ||
-        state == AppLifecycleState.paused ||
-        state == AppLifecycleState.hidden) {
-      _stallWatchdog.stop();
-      _indoorPollTimer?.cancel();
-      _indoorPollTimer = null;
-      _vm.indoorGate.reset();
+    _lifecycle.handleStateChange(state);
+  }
 
-      final ctrl = _controller;
-      if (ctrl != null && ctrl.value.isInitialized && !_streamPaused) {
-        try {
-          ctrl.stopImageStream();
-        } catch (_) {}
-        _streamPaused = true;
-        _isCameraReady = false;
+  @override
+  CameraController? get cameraController => _controller;
 
-        _lazyDisposeTimer?.cancel();
-        _lazyDisposeTimer = Timer(_kLazyDisposeDuration, () {
-          _controller?.dispose();
-          _controller = null;
-          _streamPaused = false;
-        });
-      }
+  @override
+  set cameraController(CameraController? value) {
+    _controller = value;
+  }
 
-      _fieldLog.logLifecycle('paused');
+  @override
+  bool get isCameraReady => _isCameraReady;
 
-      if (!_lifecycleBackgroundWarned) {
-        _lifecycleBackgroundWarned = true;
-        _vm.tts.say(
-          S.get('lifecycle_background'),
-          SpeechPriority.critical,
-          pan: 0.0,
-        );
-        HapticService.vibrate(const [0, 200, 100, 200, 100, 200]);
-      }
-    } else if (state == AppLifecycleState.resumed) {
-      if (_lifecycleBackgroundWarned) {
-        _lifecycleBackgroundWarned = false;
-        _vm.tts.say(S.get('lifecycle_resumed'), SpeechPriority.info, pan: 0.0);
-      }
-
-      _lazyDisposeTimer?.cancel();
-      _lazyDisposeTimer = null;
-
-      final ctrl = _controller;
-      if (ctrl != null && ctrl.value.isInitialized && _streamPaused) {
-        _streamPaused = false;
-        try {
-          ctrl.startImageStream(_onFrame);
-          _isCameraReady = true;
-        } catch (_) {
-          _controller?.dispose();
-          _controller = null;
-          _initCamera();
-        }
-        _fieldLog.logLifecycle('resumed', resumeType: 'warm', blindMs: 0);
-      } else if (_controller == null ||
-          !(_controller?.value.isInitialized ?? false)) {
-        _streamPaused = false;
-        _vm.tts.say(
-          S.alert('camera_reinit'),
-          SpeechPriority.warning,
-          pan: 0.0,
-        );
-        _reinitHeartbeat?.cancel();
-        _reinitHeartbeat = Timer.periodic(
-          const Duration(milliseconds: 500),
-          (_) => HapticService.vibrate(const [0, 100, 300, 100]),
-        );
-        _fieldLog.logLifecycle('resumed', resumeType: 'cold');
-        _initCamera();
-      }
-      _stallWatchdog.start();
+  @override
+  set isCameraReady(bool value) {
+    if (_isCameraReady == value) return;
+    if (mounted) {
+      setState(() => _isCameraReady = value);
+    } else {
+      _isCameraReady = value;
     }
+  }
+
+  @override
+  Future<void> initCamera() => _initCamera();
+
+  @override
+  void onFrame(CameraImage image) => _onFrame(image);
+
+  @override
+  void onBackgroundEntered() {
+    _stallWatchdog.stop();
+    _indoorPollTimer?.cancel();
+    _indoorPollTimer = null;
+  }
+
+  @override
+  void onForegroundResumed() {
+    _stallWatchdog.start();
   }
 
   Future<void> _initAll() async {
@@ -602,10 +569,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       _stallWatchdog.clearWarning();
       _vm.tts.say(S.get('camera_resumed'), SpeechPriority.info, pan: 0.0);
     }
-    if (_reinitHeartbeat != null) {
-      _reinitHeartbeat?.cancel();
-      _reinitHeartbeat = null;
-    }
+    _lifecycle.cancelReinitHeartbeat();
 
     _frameCount++;
     _imgW = image.width;
