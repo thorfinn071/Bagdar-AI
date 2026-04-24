@@ -989,6 +989,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
             AppStrings.setLanguage(lang);
             await Settings.instance.setLanguage(lang.index);
             await _vm.tts.setLanguage(AppStrings.ttsLang);
+            _vm.voice.setLocale(AppStrings.ttsLang);
             if (mounted) setState(() {});
           },
           onUseGpuChanged: (v) {
