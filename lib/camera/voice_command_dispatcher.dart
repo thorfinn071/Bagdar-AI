@@ -89,6 +89,9 @@ class VoiceCommandDispatcher {
       case VoiceCommand.sos:
         onSosRequested();
         break;
+      case VoiceCommand.showHelp:
+        vm.showHelp();
+        break;
       case VoiceCommand.unknown:
         vm.tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
         break;

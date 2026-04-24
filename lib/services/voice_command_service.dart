@@ -25,6 +25,7 @@ enum VoiceCommand {
   busRoute,
   busSchedule,
   downloadMap,
+  showHelp,
   sos,
   cancelFall,
   unknown,
@@ -88,6 +89,12 @@ class VoiceCommandService {
     'скачай карту': VoiceCommand.downloadMap,
     'скачать карту': VoiceCommand.downloadMap,
     'загрузи карту': VoiceCommand.downloadMap,
+    'справка': VoiceCommand.showHelp,
+    'помощь': VoiceCommand.showHelp,
+    'жесты': VoiceCommand.showHelp,
+    'подсказка': VoiceCommand.showHelp,
+    'что умеешь': VoiceCommand.showHelp,
+    'как пользоваться': VoiceCommand.showHelp,
   };
 
   static const Set<String> _ruSosExact = {
@@ -186,6 +193,10 @@ class VoiceCommandService {
     'мен автобустамын': VoiceCommand.confirmBoarded,
     'картаны жүкте': VoiceCommand.downloadMap,
     'карта жүктеу': VoiceCommand.downloadMap,
+    'көмек': VoiceCommand.showHelp,
+    'анықтама': VoiceCommand.showHelp,
+    'қимылдар': VoiceCommand.showHelp,
+    'нұсқау': VoiceCommand.showHelp,
   };
 
   static const Set<String> _kkSosExact = {
@@ -276,6 +287,12 @@ class VoiceCommandService {
     'on the bus': VoiceCommand.confirmBoarded,
     'download map': VoiceCommand.downloadMap,
     'load map': VoiceCommand.downloadMap,
+    'gestures': VoiceCommand.showHelp,
+    'show help': VoiceCommand.showHelp,
+    'show gestures': VoiceCommand.showHelp,
+    'commands list': VoiceCommand.showHelp,
+    'how to use': VoiceCommand.showHelp,
+    'what can you do': VoiceCommand.showHelp,
   };
 
   static const Set<String> _enSosExact = {
