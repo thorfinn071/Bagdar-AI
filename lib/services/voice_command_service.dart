@@ -46,6 +46,8 @@ class VoiceCommandService {
     ..sort((a, b) => b.length.compareTo(a.length));
   static final List<String> _kkSorted = _kkCommands.keys.toList()
     ..sort((a, b) => b.length.compareTo(a.length));
+  static final List<String> _enSorted = _enCommands.keys.toList()
+    ..sort((a, b) => b.length.compareTo(a.length));
 
   static const Map<String, VoiceCommand> _ruCommands = {
     'что вокруг': VoiceCommand.scanAll,
@@ -231,6 +233,104 @@ class VoiceCommandService {
     'автобус қашан ',
   ];
 
+  static const Map<String, VoiceCommand> _enCommands = {
+    'what is around': VoiceCommand.scanAll,
+    "what's around": VoiceCommand.scanAll,
+    'what is on the left': VoiceCommand.scanLeft,
+    "what's on the left": VoiceCommand.scanLeft,
+    'what is on the right': VoiceCommand.scanRight,
+    "what's on the right": VoiceCommand.scanRight,
+    'what is ahead': VoiceCommand.scanForward,
+    "what's ahead": VoiceCommand.scanForward,
+    'street mode': VoiceCommand.modeStreet,
+    'cane mode': VoiceCommand.modeCane,
+    'scan mode': VoiceCommand.modeScan,
+    'describe': VoiceCommand.scanAll,
+    'scan': VoiceCommand.scanAll,
+    'left': VoiceCommand.scanLeft,
+    'right': VoiceCommand.scanRight,
+    'ahead': VoiceCommand.scanForward,
+    'forward': VoiceCommand.scanForward,
+    'read text': VoiceCommand.readText,
+    'read': VoiceCommand.readText,
+    'text': VoiceCommand.readText,
+    'black screen': VoiceCommand.togglePitchBlackUi,
+    'dark screen': VoiceCommand.togglePitchBlackUi,
+    'turn off screen': VoiceCommand.togglePitchBlackUi,
+    'screen off': VoiceCommand.togglePitchBlackUi,
+    'guide dog mode': VoiceCommand.toggleGuideDogMode,
+    'guide dog': VoiceCommand.toggleGuideDogMode,
+    'mode': VoiceCommand.toggleMode,
+    'save place': VoiceCommand.saveWaypoint,
+    'save here': VoiceCommand.saveWaypoint,
+    'remember place': VoiceCommand.saveWaypoint,
+    'i am here': VoiceCommand.saveWaypoint,
+    'stop navigation': VoiceCommand.stopNavigation,
+    'cancel route': VoiceCommand.stopNavigation,
+    'where am i': VoiceCommand.whereAmI,
+    'how far': VoiceCommand.navStatus,
+    'how much left': VoiceCommand.navStatus,
+    'nearest stop': VoiceCommand.nearestStop,
+    'closest stop': VoiceCommand.nearestStop,
+    'i boarded': VoiceCommand.confirmBoarded,
+    'on the bus': VoiceCommand.confirmBoarded,
+    'download map': VoiceCommand.downloadMap,
+    'load map': VoiceCommand.downloadMap,
+  };
+
+  static const Set<String> _enSosExact = {
+    'sos',
+    'help',
+    'emergency',
+    'call for help',
+    'call help',
+    'call an ambulance',
+    'call 911',
+    'call 112',
+  };
+
+  static const Set<String> _enCancelFallExact = {
+    'stop',
+    'cancel',
+    'i am fine',
+    "i'm fine",
+    'i am okay',
+    "i'm okay",
+    'i am ok',
+    "i'm ok",
+    'false alarm',
+  };
+
+  static const List<String> _enNavPrefixes = [
+    'take me to ',
+    'navigate to ',
+    'go to ',
+    'lead me to ',
+    'directions to ',
+    'route to ',
+  ];
+
+  static const List<String> _enTransitPrefixes = [
+    'bus to ',
+    'by bus to ',
+    'take the bus to ',
+    'transit to ',
+  ];
+
+  static const List<String> _enBusRoutePrefixes = [
+    'bus routes at ',
+    'routes at ',
+    'buses at ',
+    'which buses at ',
+  ];
+
+  static const List<String> _enBusSchedulePrefixes = [
+    'schedule ',
+    'bus schedule ',
+    'when does bus ',
+    'when is bus ',
+  ];
+
   
   Future<bool> init({String locale = 'ru-RU'}) async {
     _locale = locale;
@@ -326,19 +426,54 @@ class VoiceCommandService {
     debugPrint('VoiceCommandService recognized: "$lower"');
 
     final isKk = _locale.startsWith('kk');
+    final isEn = _locale.startsWith('en');
 
-    final cancelSet = isKk ? _kkCancelFallExact : _ruCancelFallExact;
+    final Set<String> cancelSet;
+    final Set<String> sosSet;
+    final List<String> navPrefixes;
+    final List<String> transitPrefixes;
+    final List<String> busRoutePrefixes;
+    final List<String> busSchedulePrefixes;
+    final Map<String, VoiceCommand> commands;
+    final List<String> sorted;
+    if (isEn) {
+      cancelSet = _enCancelFallExact;
+      sosSet = _enSosExact;
+      navPrefixes = _enNavPrefixes;
+      transitPrefixes = _enTransitPrefixes;
+      busRoutePrefixes = _enBusRoutePrefixes;
+      busSchedulePrefixes = _enBusSchedulePrefixes;
+      commands = _enCommands;
+      sorted = _enSorted;
+    } else if (isKk) {
+      cancelSet = _kkCancelFallExact;
+      sosSet = _kkSosExact;
+      navPrefixes = _kkNavPrefixes;
+      transitPrefixes = _kkTransitPrefixes;
+      busRoutePrefixes = _kkBusRoutePrefixes;
+      busSchedulePrefixes = _kkBusSchedulePrefixes;
+      commands = _kkCommands;
+      sorted = _kkSorted;
+    } else {
+      cancelSet = _ruCancelFallExact;
+      sosSet = _ruSosExact;
+      navPrefixes = _ruNavPrefixes;
+      transitPrefixes = _ruTransitPrefixes;
+      busRoutePrefixes = _ruBusRoutePrefixes;
+      busSchedulePrefixes = _ruBusSchedulePrefixes;
+      commands = _ruCommands;
+      sorted = _ruSorted;
+    }
+
     if (cancelSet.contains(lower)) {
       onCommand?.call(VoiceCommand.cancelFall);
       return;
     }
-    final sosSet = isKk ? _kkSosExact : _ruSosExact;
     if (sosSet.contains(lower)) {
       onCommand?.call(VoiceCommand.sos);
       return;
     }
 
-    final navPrefixes = isKk ? _kkNavPrefixes : _ruNavPrefixes;
     for (final prefix in navPrefixes) {
       if (lower.startsWith(prefix)) {
         final dest = lower.substring(prefix.length).trim();
@@ -349,7 +484,6 @@ class VoiceCommandService {
       }
     }
 
-    final transitPrefixes = isKk ? _kkTransitPrefixes : _ruTransitPrefixes;
     for (final prefix in transitPrefixes) {
       if (lower.startsWith(prefix)) {
         final dest = lower.substring(prefix.length).trim();
@@ -360,7 +494,6 @@ class VoiceCommandService {
       }
     }
 
-    final busRoutePrefixes = isKk ? _kkBusRoutePrefixes : _ruBusRoutePrefixes;
     for (final prefix in busRoutePrefixes) {
       if (lower.startsWith(prefix)) {
         final arg = lower.substring(prefix.length).trim();
@@ -371,9 +504,6 @@ class VoiceCommandService {
       }
     }
 
-    final busSchedulePrefixes = isKk
-        ? _kkBusSchedulePrefixes
-        : _ruBusSchedulePrefixes;
     for (final prefix in busSchedulePrefixes) {
       if (lower.startsWith(prefix)) {
         final arg = lower.substring(prefix.length).trim();
@@ -384,9 +514,6 @@ class VoiceCommandService {
       }
     }
 
-    final commands = isKk ? _kkCommands : _ruCommands;
-    final sorted = isKk ? _kkSorted : _ruSorted;
-
     for (final key in sorted) {
       if (lower.contains(key)) {
         onCommand?.call(commands[key]!);
@@ -395,5 +522,16 @@ class VoiceCommandService {
     }
 
     onCommand?.call(VoiceCommand.unknown);
+  }
+
+  @visibleForTesting
+  void processWordsForTesting(String words, {String? localeOverride}) {
+    final saved = _locale;
+    if (localeOverride != null) _locale = localeOverride;
+    try {
+      _processResult(words);
+    } finally {
+      _locale = saved;
+    }
   }
 }
