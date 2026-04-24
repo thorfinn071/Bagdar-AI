@@ -40,6 +40,7 @@ import 'services/indoor_gate.dart' show IndoorTransition;
 import 'camera/frame_quality_guard.dart';
 import 'camera/depth_pipeline_controller.dart';
 import 'camera/stall_watchdog.dart';
+import 'camera/fall_countdown_controller.dart';
 
 class AiCameraScreen extends StatefulWidget {
   final AppMode? initialMode;
@@ -80,10 +81,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   bool _twoFingerSosArmed = false;
   static const Duration _twoFingerSosHold = Duration(milliseconds: 1500);
 
-  Timer? _fallCountdownTimer;
-  int _fallCountdownSec = 0;
-  bool _fallCountdownActive = false;
-  bool _fallCancelListenerActive = false;
+  late final FallCountdownController _fallCountdown;
 
   Timer? _lazyDisposeTimer;
   static const Duration _kLazyDisposeDuration = Duration(seconds: 10);
@@ -135,8 +133,16 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         );
       },
     );
+    _fallCountdown = FallCountdownController(
+      tts: _vm.tts,
+      sos: _vm.sos,
+      voice: _vm.voice,
+    );
 
     _vm.addListener(() {
+      if (mounted) setState(() {});
+    });
+    _fallCountdown.addListener(() {
       if (mounted) setState(() {});
     });
     WidgetsBinding.instance.addObserver(this);
@@ -148,7 +154,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     WidgetsBinding.instance.removeObserver(this);
     _heartbeatTimer?.cancel();
     _twoFingerSosTimer?.cancel();
-    _fallCountdownTimer?.cancel();
+    _fallCountdown.dispose();
     _stallWatchdog.stop();
     _indoorPollTimer?.cancel();
     _lazyDisposeTimer?.cancel();
@@ -291,7 +297,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
       await VisionForegroundService.start();
 
-      _vm.fallDetector.onFallDetected = _handleFallDetected;
+      _vm.fallDetector.onFallDetected = _fallCountdown.start;
       await _vm.fallDetector.init();
 
       _vm.tts.onAudioRouteInterrupted = () {
@@ -363,90 +369,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     return kHeartbeatInterval;
   }
 
-  void _handleFallDetected() {
-    if (_fallCountdownActive) return;
-    _fallCountdownActive = true;
-    _fallCountdownSec = 15;
-
-    _vm.tts.say(S.get('sos_fall_detected'), SpeechPriority.critical, pan: 0.0);
-    _vm.tts.say(
-      S.get('sos_fall_cancel_hint'),
-      SpeechPriority.warning,
-      pan: 0.0,
-    );
-    HapticService.vibrate([0, 300, 200, 300, 200, 300]);
-
-    _startFallCancelListener();
-
-    _fallCountdownTimer?.cancel();
-    _fallCountdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      _fallCountdownSec--;
-      if (_fallCountdownSec <= 0) {
-        timer.cancel();
-        _fallCountdownActive = false;
-        _stopFallCancelListener();
-        _sendFallSos();
-      } else if (_fallCountdownSec == 10 ||
-          _fallCountdownSec == 5 ||
-          _fallCountdownSec <= 3) {
-        _vm.tts.say(
-          '${S.get('sos_fall_countdown')} $_fallCountdownSec ${S.get('sos_fall_seconds')}',
-          SpeechPriority.warning,
-          pan: 0.0,
-        );
-        if (_fallCountdownSec == 10 || _fallCountdownSec == 5) {
-          _restartFallCancelListener();
-        }
-      }
-    });
-  }
-
-  void _sendFallSos() async {
-    final hasContact = (_vm.sos.contactNumber ?? '').isNotEmpty;
-    if (!hasContact) {
-      _vm.tts.say(S.get('sos_112_fallback'), SpeechPriority.critical, pan: 0.0);
-    }
-    _vm.tts.say(S.get('sos_sending'), SpeechPriority.critical, pan: 0.0);
-    final result = await _vm.sos.sendSos();
-    if (!mounted) return;
-    final msg = switch (result) {
-      SosResult.sent => S.get('sos_fall_sent'),
-      SosResult.sentFallback =>
-        '${S.get('sos_112_fallback')} ${S.get('sos_sent')}',
-      SosResult.noLocation => S.get('sos_sent_no_location'),
-      SosResult.launchFailed => S.get('sos_launch_failed'),
-      SosResult.noContact => S.get('sos_no_contact'),
-      SosResult.error => S.get('sos_error'),
-    };
-    _vm.tts.say(msg, SpeechPriority.critical, pan: 0.0);
-  }
-
-  void _startFallCancelListener() {
-    if (_fallCancelListenerActive) return;
-    _fallCancelListenerActive = true;
-    unawaited(_vm.voice.startListening());
-  }
-
-  void _restartFallCancelListener() {
-    if (!_fallCancelListenerActive) return;
-    unawaited(_vm.voice.startListening());
-  }
-
-  void _stopFallCancelListener() {
-    _fallCancelListenerActive = false;
-    unawaited(_vm.voice.stopListening());
-  }
-
-  void _cancelFallCountdown() {
-    if (!_fallCountdownActive) return;
-    _fallCountdownTimer?.cancel();
-    _fallCountdownActive = false;
-    _fallCountdownSec = 0;
-    _stopFallCancelListener();
-    _vm.tts.say(S.get('sos_fall_cancelled'), SpeechPriority.critical, pan: 0.0);
-    HapticService.vibrate([0, 100]);
-  }
-
   void _heartbeatTick() {
     if (!mounted) return;
     HapticService.vibrate([0, 50]);
@@ -464,8 +386,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   }
 
   void _handleTap() {
-    if (_fallCountdownActive) {
-      _cancelFallCountdown();
+    if (_fallCountdown.active) {
+      _fallCountdown.cancel();
       return;
     }
   }
@@ -500,13 +422,13 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   }
 
   void _handleVoiceCommand(VoiceCommand cmd) {
-    if (_fallCountdownActive) {
+    if (_fallCountdown.active) {
       if (cmd == VoiceCommand.cancelFall || cmd == VoiceCommand.sos) {
         if (cmd == VoiceCommand.cancelFall) {
-          _cancelFallCountdown();
+          _fallCountdown.cancel();
           return;
         }
-        _cancelFallCountdown();
+        _fallCountdown.cancel();
         _triggerSos();
         return;
       }
@@ -1524,7 +1446,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
                   ),
                 ),
 
-              if (_fallCountdownActive)
+              if (_fallCountdown.active)
                 Positioned.fill(
                   child: Container(
                     color: Colors.red.withValues(alpha: 0.3),
@@ -1539,7 +1461,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
                           ),
                           const SizedBox(height: 12),
                           Text(
-                            '${S.get('sos_fall_countdown')} $_fallCountdownSec ${S.get('sos_fall_seconds')}',
+                            '${S.get('sos_fall_countdown')} ${_fallCountdown.secondsLeft} ${S.get('sos_fall_seconds')}',
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 24,
