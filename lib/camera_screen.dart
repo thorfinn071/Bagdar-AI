@@ -32,7 +32,6 @@ import 'services/device_capability.dart';
 import 'services/fall_detector.dart' show MotionState;
 import 'services/motion_prealert.dart'
     show MotionIntrusionEvent, MotionIntrusionSide;
-import 'services/weather_gate.dart' show WeatherTransition;
 import 'services/orientation_service.dart' show OrientationService;
 import 'services/traffic_light_analyzer.dart' show TrafficLightKind;
 import 'utils/blur_detector.dart';
@@ -40,6 +39,7 @@ import 'utils/depth_hazard.dart' show DepthHazardType;
 import 'utils/distance_utils.dart';
 import 'services/field_logger.dart';
 import 'services/indoor_gate.dart' show IndoorTransition;
+import 'camera/frame_quality_guard.dart';
 
 class AiCameraScreen extends StatefulWidget {
   final AppMode? initialMode;
@@ -91,52 +91,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   bool _streamPaused = false;
   Timer? _reinitHeartbeat;
 
-  int _lowLuminosityFrames = 0;
-  static const int _lowLuminosityThreshold = 45;
-  static const double _luminosityMinValue = 10.0;
-  bool _cameraBlockedWarned = false;
   int _frameCount = 0;
-
-  
-  int _partialOcclusionFrames = 0;
-  bool _partialOcclusionWarned = false;
-  static const int _kPartialOcclusionStreak = 20;
-
-  
-  
-  
-  
-  int _aeTransitionFrames = 0;
-  DateTime? _aeTransitionEndedAt;
-  static const double _kAeVarianceThreshold = 100.0;
-  static const double _kAeAvgBrightThreshold = 200.0;
-  static const double _kAeAvgDarkThreshold = 15.0;
-  static const int _kAeTransitionMinFrames = 2;
-  static const int _kAeTransitionMaxFrames = 30;
-  static const Duration _kAePostTransitionGuard = Duration(milliseconds: 3000);
-
-  bool get _aeTransitioning =>
-      _aeTransitionFrames >= _kAeTransitionMinFrames &&
-      _aeTransitionFrames <= _kAeTransitionMaxFrames;
-
-  bool _aePipelineFrozen(DateTime now) {
-    if (_aeTransitioning) return true;
-    final endedAt = _aeTransitionEndedAt;
-    if (endedAt == null) return false;
-    return now.difference(endedAt) < _kAePostTransitionGuard;
-  }
-
-  int? _lastImageHash;
-  DateTime _lastImageChangeAt = DateTime.now();
-  bool _cameraFrozenWarned = false;
-
-  static const int _kDropletGridSize = 3;
-  static const int _kDropletGridCount = _kDropletGridSize * _kDropletGridSize;
-  static const double _kDropletMinVariance = 50.0;
-  static const int _kDropletMinStreak = 60;
-  final List<int> _dropletLowVarStreak = List<int>.filled(_kDropletGridCount, 0);
-  bool _dropletSuspected = false;
-  bool _dropletWarned = false;
+  late final FrameQualityGuard _qualityGuard;
 
   DateTime _lastDepthAt = DateTime.fromMillisecondsSinceEpoch(0);
   Duration _depthInterval = const Duration(milliseconds: 400);
@@ -169,6 +125,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   void initState() {
     super.initState();
     _vm = CameraViewModel();
+    _qualityGuard = FrameQualityGuard(weatherGate: _vm.weatherGate);
 
     _vm.addListener(() {
       if (mounted) setState(() {});
@@ -834,239 +791,77 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     }
   }
 
-  void _checkLuminosity(CameraImage image) {
-    final yPlane = image.planes[0].bytes;
-    if (yPlane.isEmpty) return;
-
-    final rowStride = image.planes[0].bytesPerRow;
-    final w = image.width;
-    final h = image.height;
-    final halfW = w >> 1;
-    final halfH = h >> 1;
-
-    double sum = 0;
-    double sumSq = 0;
-    int count = 0;
-    
-    
-    
-    final quadSum = List<double>.filled(4, 0);
-    final quadCount = List<int>.filled(4, 0);
-
-    for (int i = 0; i < yPlane.length; i += 100) {
-      final v = yPlane[i].toDouble();
-      sum += v;
-      sumSq += v * v;
-      count++;
-      final y = i ~/ rowStride;
-      final x = i - y * rowStride;
-      if (y >= h || x >= w) continue;
-      final quad = (y < halfH ? 0 : 2) + (x < halfW ? 0 : 1);
-      quadSum[quad] += v;
-      quadCount[quad]++;
-    }
-    if (count == 0) return;
-
-    final avgLuminosity = sum / count;
-    
-    
-    final variance = (sumSq / count) - (avgLuminosity * avgLuminosity);
-
-    
-    
-    
-    
-    final isAeTransition = variance < _kAeVarianceThreshold &&
-        (avgLuminosity > _kAeAvgBrightThreshold ||
-            avgLuminosity < _kAeAvgDarkThreshold);
-    if (isAeTransition) {
-      if (_aeTransitionFrames == 0) {
-        _fieldLog.logAeTransition(started: true);
-      }
-      _aeTransitionFrames++;
-      _aeTransitionEndedAt = null;
-    } else {
-      if (_aeTransitionFrames >= _kAeTransitionMinFrames) {
-        _aeTransitionEndedAt = DateTime.now();
-        _fieldLog.logAeTransition(started: false, frames: _aeTransitionFrames);
-      }
-      _aeTransitionFrames = 0;
-    }
-
-    
-    
-    
-    
-    
-    
-    if (!isAeTransition) {
-      final transition = _vm.weatherGate.feed(variance, avgLuminosity);
-      switch (transition) {
-        case WeatherTransition.degraded:
+  void _handleQualityEvents(List<FrameQualityEvent> events) {
+    for (final e in events) {
+      switch (e.type) {
+        case FrameQualityEventType.aeTransitionStarted:
+          _fieldLog.logAeTransition(started: true);
+          break;
+        case FrameQualityEventType.aeTransitionEnded:
+          _fieldLog.logAeTransition(started: false, frames: e.frames);
+          break;
+        case FrameQualityEventType.weatherDegraded:
           _vm.tts.say(
             S.alert('weather_low_vis'),
             SpeechPriority.warning,
             pan: 0.0,
           );
           HapticService.vibrate(const [0, 200, 80, 200]);
-          _fieldLog.logWeatherGate('degraded', variance: variance, avgLuma: avgLuminosity);
+          _fieldLog.logWeatherGate(
+            'degraded',
+            variance: e.variance,
+            avgLuma: e.avgLuminosity,
+          );
           break;
-        case WeatherTransition.recovered:
+        case FrameQualityEventType.weatherRecovered:
           _vm.tts.say(
             S.alert('weather_restored'),
             SpeechPriority.info,
             pan: 0.0,
           );
-          _fieldLog.logWeatherGate('recovered', variance: variance, avgLuma: avgLuminosity);
+          _fieldLog.logWeatherGate(
+            'recovered',
+            variance: e.variance,
+            avgLuma: e.avgLuminosity,
+          );
           break;
-        case WeatherTransition.none:
+        case FrameQualityEventType.cameraBlocked:
+          _vm.tts.say(
+            S.alert('camera_blocked'),
+            SpeechPriority.critical,
+            pan: 0.0,
+          );
+          HapticService.vibrate([0, 300, 100, 300]);
           break;
-      }
-      
-      
-      
-      _vm.tracker.weatherDegraded = _vm.weatherGate.degraded;
-    }
-
-    if (avgLuminosity < _luminosityMinValue) {
-      _lowLuminosityFrames++;
-      if (_lowLuminosityFrames >= _lowLuminosityThreshold &&
-          !_cameraBlockedWarned) {
-        _cameraBlockedWarned = true;
-        _vm.tts.say(
-          S.alert('camera_blocked'),
-          SpeechPriority.critical,
-          pan: 0.0,
-        );
-        HapticService.vibrate([0, 300, 100, 300]);
-      }
-    } else {
-      if (_cameraBlockedWarned) {
-        _cameraBlockedWarned = false;
-      }
-      _lowLuminosityFrames = 0;
-    }
-
-    
-    
-    
-    
-    int deadQuads = 0;
-    for (int q = 0; q < 4; q++) {
-      if (quadCount[q] == 0) continue;
-      final avg = quadSum[q] / quadCount[q];
-      if (avg < _luminosityMinValue) deadQuads++;
-    }
-    final isPartial = deadQuads >= 1 &&
-        deadQuads <= 2 &&
-        avgLuminosity >= _luminosityMinValue;
-    if (isPartial) {
-      _partialOcclusionFrames++;
-      if (_partialOcclusionFrames >= _kPartialOcclusionStreak &&
-          !_partialOcclusionWarned) {
-        _partialOcclusionWarned = true;
-        _vm.tts.say(
-          S.alert('camera_partial_blocked'),
-          SpeechPriority.warning,
-          pan: 0.0,
-        );
-        HapticService.vibrate(const [0, 200, 80, 200]);
-      }
-    } else {
-      _partialOcclusionFrames = 0;
-      if (_partialOcclusionWarned && deadQuads == 0) {
-        _partialOcclusionWarned = false;
-      }
-    }
-  }
-
-  void _checkFrozenFrame(CameraImage image, DateTime now) {
-    final bytes = image.planes[0].bytes;
-    if (bytes.length < 10) return;
-
-    final w = image.width;
-    final h = image.height;
-    final rowStride = image.planes[0].bytesPerRow;
-
-    final gridCellW = w ~/ _kDropletGridSize;
-    final gridCellH = h ~/ _kDropletGridSize;
-    int dirtyRegions = 0;
-    final dirtyMask = List<bool>.filled(_kDropletGridCount, false);
-
-    for (int gy = 0; gy < _kDropletGridSize; gy++) {
-      for (int gx = 0; gx < _kDropletGridSize; gx++) {
-        final gi = gy * _kDropletGridSize + gx;
-        final yStart = gy * gridCellH;
-        final xStart = gx * gridCellW;
-        double sum = 0, sqSum = 0;
-        int n = 0;
-        for (int y = yStart; y < yStart + gridCellH && y < h; y += 8) {
-          for (int x = xStart; x < xStart + gridCellW && x < w; x += 8) {
-            final idx = y * rowStride + x;
-            if (idx >= bytes.length) continue;
-            final v = bytes[idx].toDouble();
-            sum += v;
-            sqSum += v * v;
-            n++;
-          }
-        }
-        if (n > 4) {
-          final mean = sum / n;
-          final variance = (sqSum / n) - mean * mean;
-          if (variance < _kDropletMinVariance) {
-            _dropletLowVarStreak[gi]++;
-          } else {
-            _dropletLowVarStreak[gi] = 0;
-          }
-        }
-        if (_dropletLowVarStreak[gi] >= _kDropletMinStreak) {
-          dirtyRegions++;
-          dirtyMask[gi] = true;
-        }
-      }
-    }
-
-    _dropletSuspected = dirtyRegions >= 2 && dirtyRegions < _kDropletGridCount;
-    if (_dropletSuspected && !_dropletWarned) {
-      _dropletWarned = true;
-      _vm.tts.say(
-        S.alert('camera_droplet'),
-        SpeechPriority.info,
-        pan: 0.0,
-      );
-      HapticService.vibrate(const [0, 150, 80, 150]);
-      _fieldLog.logDroplet(dirtyRegions: dirtyRegions, warned: true);
-    } else if (!_dropletSuspected && _dropletWarned) {
-      _dropletWarned = false;
-    }
-
-    int hash = 0;
-    final stride = bytes.length ~/ 10;
-    for (int i = 0; i < 10; i++) {
-      final byteIdx = i * stride;
-      if (_dropletSuspected) {
-        final px = (byteIdx % rowStride).clamp(0, w - 1);
-        final py = (byteIdx ~/ rowStride).clamp(0, h - 1);
-        final gx = (px ~/ gridCellW).clamp(0, _kDropletGridSize - 1);
-        final gy = (py ~/ gridCellH).clamp(0, _kDropletGridSize - 1);
-        if (dirtyMask[gy * _kDropletGridSize + gx]) continue;
-      }
-      hash = (hash * 31) + bytes[byteIdx];
-    }
-
-    if (hash != _lastImageHash) {
-      _lastImageHash = hash;
-      _lastImageChangeAt = now;
-      if (_cameraFrozenWarned) {
-        _cameraFrozenWarned = false;
-      }
-    } else {
-      if (now.difference(_lastImageChangeAt) > const Duration(seconds: 5) &&
-          !_cameraFrozenWarned) {
-        _cameraFrozenWarned = true;
-        _vm.tts.say(S.get('camera_frozen'), SpeechPriority.critical, pan: 0.0);
-        HapticService.vibrate([0, 500, 200, 500]);
-        _fieldLog.logFrozenFrame();
+        case FrameQualityEventType.cameraPartiallyBlocked:
+          _vm.tts.say(
+            S.alert('camera_partial_blocked'),
+            SpeechPriority.warning,
+            pan: 0.0,
+          );
+          HapticService.vibrate(const [0, 200, 80, 200]);
+          break;
+        case FrameQualityEventType.dropletDetected:
+          _vm.tts.say(
+            S.alert('camera_droplet'),
+            SpeechPriority.info,
+            pan: 0.0,
+          );
+          HapticService.vibrate(const [0, 150, 80, 150]);
+          _fieldLog.logDroplet(
+            dirtyRegions: e.dirtyRegions ?? 0,
+            warned: true,
+          );
+          break;
+        case FrameQualityEventType.cameraFrozen:
+          _vm.tts.say(
+            S.get('camera_frozen'),
+            SpeechPriority.critical,
+            pan: 0.0,
+          );
+          HapticService.vibrate([0, 500, 200, 500]);
+          _fieldLog.logFrozenFrame();
+          break;
       }
     }
   }
@@ -1138,20 +933,22 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
     final frameSw = Stopwatch()..start();
 
-    _checkLuminosity(image);
-    _checkFrozenFrame(image, now);
+    final yPlane = image.planes[0];
+    final qualityReport = _qualityGuard.evaluate(
+      yPlane: yPlane.bytes,
+      bytesPerRow: yPlane.bytesPerRow,
+      width: image.width,
+      height: image.height,
+      now: now,
+    );
+    _handleQualityEvents(qualityReport.events);
+    _vm.tracker.weatherDegraded = qualityReport.weatherDegraded;
 
-    
-    
-    
-    
-    
-    if (_aePipelineFrozen(now)) {
+    if (qualityReport.aePipelineFrozen) {
       _finalizeFramePerf(now: now, frameSw: frameSw);
       return;
     }
 
-    final yPlane = image.planes[0];
     final sharpness = BlurDetector.sharpnessScore(
       yPlane.bytes,
       width: image.width,
@@ -1246,14 +1043,14 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       
       
       
-      final yPlane = planeBytes.isNotEmpty ? planeBytes[0] : null;
+      final yPlaneBytes = planeBytes.isNotEmpty ? planeBytes[0] : null;
       final yStride =
           image.planes.isNotEmpty ? image.planes[0].bytesPerRow : null;
       final dets = _buildRawDets(
         raw,
         _imgW,
         _imgH,
-        yPlane: yPlane,
+        yPlane: yPlaneBytes,
         yRowStride: yStride,
       );
       final inferenceMs = frameSw.elapsedMilliseconds;
