@@ -7,6 +7,7 @@ import '../../models/constants.dart' show kTtsStallTimeout;
 import '../../models/speech_job.dart';
 import '../../models/strings.dart';
 import 'haptic_service.dart';
+import 'field_logger.dart';
 
 class TtsService {
   
@@ -281,6 +282,12 @@ class TtsService {
       _lastText = text;
       _lastTrackId = trackId;
       _lastTime = now;
+      FieldLogger.instance.logTtsSay(
+        text: text,
+        priority: priority.name,
+        pan: pan,
+        trackId: trackId,
+      );
       _interruptAndSpeak();
       return;
     }
@@ -315,6 +322,12 @@ class TtsService {
     _lastText = text;
     _lastTrackId = trackId;
     _lastTime = now;
+    FieldLogger.instance.logTtsSay(
+      text: text,
+      priority: priority.name,
+      pan: pan,
+      trackId: trackId,
+    );
     _pump();
   }
 

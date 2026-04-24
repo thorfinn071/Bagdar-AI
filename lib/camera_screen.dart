@@ -38,6 +38,8 @@ import 'services/traffic_light_analyzer.dart' show TrafficLightKind;
 import 'utils/blur_detector.dart';
 import 'utils/depth_hazard.dart' show DepthHazardType;
 import 'utils/distance_utils.dart';
+import 'services/field_logger.dart';
+import 'services/indoor_gate.dart' show IndoorTransition;
 
 class AiCameraScreen extends StatefulWidget {
   final AppMode? initialMode;
@@ -55,6 +57,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   bool _isDetecting = false;
 
   final ModelService _models = ModelService.instance;
+  final FieldLogger _fieldLog = FieldLogger.instance;
 
   bool _useGpu = false;
   int _numThreads = 2;
@@ -187,6 +190,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _controller?.dispose();
     _controller = null;
     VisionForegroundService.stop();
+    unawaited(_fieldLog.stopSession());
     _vm.dispose();
     super.dispose();
   }
@@ -219,6 +223,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         });
       }
 
+      _fieldLog.logLifecycle('paused');
+
       if (!_lifecycleBackgroundWarned) {
         _lifecycleBackgroundWarned = true;
         _vm.tts.say(
@@ -248,6 +254,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           _controller = null;
           _initCamera();
         }
+        _fieldLog.logLifecycle('resumed', resumeType: 'warm', blindMs: 0);
       } else if (_controller == null ||
           !(_controller?.value.isInitialized ?? false)) {
         _streamPaused = false;
@@ -261,6 +268,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           const Duration(milliseconds: 500),
           (_) => HapticService.vibrate(const [0, 100, 300, 100]),
         );
+        _fieldLog.logLifecycle('resumed', resumeType: 'cold');
         _initCamera();
       }
       _startStallWatchdog();
@@ -386,6 +394,16 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
       _vm.setStatus(S.get('system_ready'));
       _vm.tts.say(S.get('system_ready'), SpeechPriority.info, pan: 0.0);
+
+      if (Settings.instance.fieldLogging) {
+        final caps = DeviceCapabilityProbe.cached;
+        await _fieldLog.startSession(
+          deviceModel: caps.deviceInfo.model,
+          androidSdk: caps.androidSdkInt,
+          depthTier: caps.bestDepthTier.name,
+          batteryPct: _vm.battery.batteryLevel,
+        );
+      }
     } catch (e) {
       _vm.setStatus('Сбой: $e');
     }
@@ -785,6 +803,12 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       motion: _vm.fallDetector.motionState,
       now: now,
     );
+    if (transition != IndoorTransition.none) {
+      _fieldLog.logIndoorGate(
+        transition.name,
+        gpsAccuracy: accuracyM,
+      );
+    }
     _vm.applyIndoorTransition(transition);
   }
 
@@ -856,11 +880,15 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         (avgLuminosity > _kAeAvgBrightThreshold ||
             avgLuminosity < _kAeAvgDarkThreshold);
     if (isAeTransition) {
+      if (_aeTransitionFrames == 0) {
+        _fieldLog.logAeTransition(started: true);
+      }
       _aeTransitionFrames++;
       _aeTransitionEndedAt = null;
     } else {
       if (_aeTransitionFrames >= _kAeTransitionMinFrames) {
         _aeTransitionEndedAt = DateTime.now();
+        _fieldLog.logAeTransition(started: false, frames: _aeTransitionFrames);
       }
       _aeTransitionFrames = 0;
     }
@@ -881,6 +909,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
             pan: 0.0,
           );
           HapticService.vibrate(const [0, 200, 80, 200]);
+          _fieldLog.logWeatherGate('degraded', variance: variance, avgLuma: avgLuminosity);
           break;
         case WeatherTransition.recovered:
           _vm.tts.say(
@@ -888,6 +917,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
             SpeechPriority.info,
             pan: 0.0,
           );
+          _fieldLog.logWeatherGate('recovered', variance: variance, avgLuma: avgLuminosity);
           break;
         case WeatherTransition.none:
           break;
@@ -1005,6 +1035,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         pan: 0.0,
       );
       HapticService.vibrate(const [0, 150, 80, 150]);
+      _fieldLog.logDroplet(dirtyRegions: dirtyRegions, warned: true);
     } else if (!_dropletSuspected && _dropletWarned) {
       _dropletWarned = false;
     }
@@ -1035,6 +1066,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         _cameraFrozenWarned = true;
         _vm.tts.say(S.get('camera_frozen'), SpeechPriority.critical, pan: 0.0);
         HapticService.vibrate([0, 500, 200, 500]);
+        _fieldLog.logFrozenFrame();
       }
     }
   }
@@ -1224,7 +1256,14 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         yPlane: yPlane,
         yRowStride: yStride,
       );
+      final inferenceMs = frameSw.elapsedMilliseconds;
       final tracks = _vm.tracker.update(dets, _imgW, _imgH, now);
+      _fieldLog.logDetection(
+        frameCount: _frameCount,
+        trackCount: tracks.length,
+        inferenceMs: inferenceMs,
+        maxConf: dets.isEmpty ? null : dets.map((d) => d.conf).reduce((a, b) => a > b ? a : b),
+      );
 
       final uiNow = DateTime.now();
       if (uiNow.difference(_lastUiAt) >= _vm.throttler.uiInterval()) {
@@ -1372,6 +1411,11 @@ class _AiCameraScreenState extends State<AiCameraScreen>
             ? SpeechPriority.critical
             : SpeechPriority.warning;
         _vm.tts.say(S.alert(hazardKey), priority, pan: hazard.pan);
+        _fieldLog.logDepthHazard(
+          type: hazard.type.name,
+          score: hazard.midasScore,
+          coverage: hazard.coverage,
+        );
         HapticService.vibrate(
           isCritical
               ? const [0, 300, 120, 300, 120, 300]
@@ -1500,6 +1544,10 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     if (!mounted) return;
     _vm.throttler.setThermal(readings);
     unawaited(_models.adjustForThermal(_vm.throttler.effectiveSeverity));
+    _fieldLog.logThermal(
+      _vm.throttler.effectiveSeverity.name,
+      detectIntervalMs: _detectInterval.inMilliseconds,
+    );
   }
 
   void _recomputeCadence() {
@@ -1801,6 +1849,35 @@ class _AiCameraScreenState extends State<AiCameraScreen>
                   ),
                 ),
               ),
+
+              if (_fieldLog.active)
+                Positioned(
+                  top: 48,
+                  left: 16,
+                  child: Row(
+                    children: [
+                      _FieldMarkerButton(
+                        color: Colors.redAccent,
+                        icon: Icons.cancel,
+                        label: 'FP',
+                        onTap: () {
+                          _fieldLog.logFpMarker();
+                          HapticService.vibrate(const [0, 60]);
+                        },
+                      ),
+                      const SizedBox(width: 12),
+                      _FieldMarkerButton(
+                        color: Colors.amber,
+                        icon: Icons.warning,
+                        label: 'FN',
+                        onTap: () {
+                          _fieldLog.logFnMarker();
+                          HapticService.vibrate(const [0, 60]);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
             ],
           ),
         ),
@@ -1838,5 +1915,49 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _twoFingerSosTimer?.cancel();
     _twoFingerSosTimer = null;
     _activePointers.clear();
+  }
+}
+
+class _FieldMarkerButton extends StatelessWidget {
+  final Color color;
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  const _FieldMarkerButton({
+    required this.color,
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.25),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: color, width: 1.5),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: color, size: 20),
+            const SizedBox(width: 4),
+            Text(
+              label,
+              style: TextStyle(
+                color: color,
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
