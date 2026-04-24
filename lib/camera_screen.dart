@@ -16,7 +16,6 @@ import 'services/thermal_monitor.dart';
 import 'services/haptic_service.dart';
 import 'services/earcon_service.dart';
 import 'services/sos_service.dart';
-import 'services/voice_command_service.dart';
 import 'models/nav_models.dart';
 import 'tracker/appearance.dart';
 import 'tracker/raw_det.dart';
@@ -41,6 +40,7 @@ import 'camera/frame_quality_guard.dart';
 import 'camera/depth_pipeline_controller.dart';
 import 'camera/stall_watchdog.dart';
 import 'camera/fall_countdown_controller.dart';
+import 'camera/voice_command_dispatcher.dart';
 
 class AiCameraScreen extends StatefulWidget {
   final AppMode? initialMode;
@@ -82,6 +82,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   static const Duration _twoFingerSosHold = Duration(milliseconds: 1500);
 
   late final FallCountdownController _fallCountdown;
+  late final VoiceCommandDispatcher _voiceDispatcher;
 
   Timer? _lazyDisposeTimer;
   static const Duration _kLazyDisposeDuration = Duration(seconds: 10);
@@ -137,6 +138,16 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       tts: _vm.tts,
       sos: _vm.sos,
       voice: _vm.voice,
+    );
+    _voiceDispatcher = VoiceCommandDispatcher(
+      vm: _vm,
+      fallCountdown: _fallCountdown,
+      onReadTextRequested: () {
+        _wantOcr = true;
+        _ocrStartedAt = DateTime.now();
+        _vm.tts.say(S.get('ocr_reading'), SpeechPriority.info, pan: 0.0);
+      },
+      onSosRequested: _triggerSos,
     );
 
     _vm.addListener(() {
@@ -325,8 +336,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         (_) => _heartbeatTick(),
       );
 
-      _vm.voice.onCommand = _handleVoiceCommand;
-      _vm.voice.onNavCommand = _handleNavCommand;
+      _vm.voice.onCommand = _voiceDispatcher.handleCommand;
+      _vm.voice.onNavCommand = _voiceDispatcher.handleNavCommand;
       _vm.voice.onListeningStateChanged = (listening) {
         if (!listening) {
           _vm.earcon.play(Earcon.success);
@@ -421,233 +432,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     await _vm.voice.startListening();
   }
 
-  void _handleVoiceCommand(VoiceCommand cmd) {
-    if (_fallCountdown.active) {
-      if (cmd == VoiceCommand.cancelFall || cmd == VoiceCommand.sos) {
-        if (cmd == VoiceCommand.cancelFall) {
-          _fallCountdown.cancel();
-          return;
-        }
-        _fallCountdown.cancel();
-        _triggerSos();
-        return;
-      }
-    }
-
-    switch (cmd) {
-      case VoiceCommand.cancelFall:
-        _vm.tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
-        break;
-      case VoiceCommand.scanAll:
-      case VoiceCommand.scanLeft:
-      case VoiceCommand.scanRight:
-      case VoiceCommand.scanForward:
-        _vm.tts.say(S.get('scan_see'), SpeechPriority.info, pan: 0.0);
-        break;
-      case VoiceCommand.readText:
-        _wantOcr = true;
-        _ocrStartedAt = DateTime.now();
-        _vm.tts.say(S.get('ocr_reading'), SpeechPriority.info, pan: 0.0);
-        break;
-      case VoiceCommand.modeStreet:
-        _vm.setMode(AppMode.street);
-        _vm.tts.say(S.get('mode_street'), SpeechPriority.critical, pan: 0.0);
-        break;
-      case VoiceCommand.modeCane:
-        _vm.setMode(AppMode.cane);
-        _vm.tts.say(S.get('mode_cane'), SpeechPriority.critical, pan: 0.0);
-        break;
-      case VoiceCommand.modeScan:
-        _vm.setMode(AppMode.scan);
-        _vm.tts.say(S.get('mode_scan'), SpeechPriority.critical, pan: 0.0);
-        break;
-      case VoiceCommand.toggleMode:
-        _vm.cycleMode(1);
-        break;
-      case VoiceCommand.togglePitchBlackUi:
-        _vm.togglePitchBlack();
-        break;
-      case VoiceCommand.toggleGuideDogMode:
-        _vm.toggleGuideDogMode();
-        break;
-      case VoiceCommand.stopNavigation:
-        _vm.nav.stopNavigation();
-        _vm.tts.say(S.get('nav_stopped'), SpeechPriority.info, pan: 0.0);
-        break;
-      case VoiceCommand.whereAmI:
-        _vm.tts.say(_vm.nav.getWhereAmI(), SpeechPriority.info, pan: 0.0);
-        break;
-      case VoiceCommand.navStatus:
-        _vm.tts.say(_vm.nav.getStatusSummary(), SpeechPriority.info, pan: 0.0);
-        break;
-      case VoiceCommand.confirmBoarded:
-        _vm.nav.confirmBoarded();
-        break;
-      case VoiceCommand.saveWaypoint:
-        _saveWaypointFromVoice();
-        break;
-      case VoiceCommand.sos:
-        _triggerSos();
-        break;
-      case VoiceCommand.unknown:
-        _vm.tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
-        break;
-      case VoiceCommand.navigateTo:
-      case VoiceCommand.transitTo:
-      case VoiceCommand.nearestStop:
-      case VoiceCommand.busRoute:
-      case VoiceCommand.busSchedule:
-      case VoiceCommand.downloadMap:
-        _vm.tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
-        break;
-    }
-  }
-
-  void _handleNavCommand(VoiceCommand cmd, String destination) {
-    switch (cmd) {
-      case VoiceCommand.navigateTo:
-        _vm.tts.say(
-          '${S.get('nav_searching')} $destination',
-          SpeechPriority.info,
-          pan: 0.0,
-        );
-        unawaited(_startNavigateTo(destination));
-        break;
-      case VoiceCommand.transitTo:
-        _vm.tts.say(
-          '${S.get('nav_searching')} $destination',
-          SpeechPriority.info,
-          pan: 0.0,
-        );
-        unawaited(_startTransitTo(destination));
-        break;
-      case VoiceCommand.busRoute:
-      case VoiceCommand.busSchedule:
-      case VoiceCommand.downloadMap:
-        _vm.tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
-        break;
-      default:
-        break;
-    }
-  }
-
-  Future<void> _startNavigateTo(String destination) async {
-    try {
-      final pos = await _currentPositionForNav();
-      if (pos == null) {
-        _vm.tts.say(S.get('nav_no_gps'), SpeechPriority.warning, pan: 0.0);
-        return;
-      }
-      final places = _vm.offlineRouting.poiReady
-          ? await _vm.offlineRouting.searchPlaces(
-              destination,
-              pos.latitude,
-              pos.longitude,
-            )
-          : await _vm.twoGis.searchPlaces(
-              destination,
-              pos.latitude,
-              pos.longitude,
-            );
-      if (places.isEmpty) {
-        
-        _vm.tts.say(S.get('nav_not_found'), SpeechPriority.warning, pan: 0.0);
-        return;
-      }
-      final target = places.first;
-      _vm.tts.say(S.get('nav_building_route'), SpeechPriority.info, pan: 0.0);
-      final route = _vm.offlineRouting.isReady
-          ? await _vm.offlineRouting.getWalkRoute(
-              pos.latitude,
-              pos.longitude,
-              target.lat,
-              target.lng,
-              destinationName: target.name,
-            )
-          : await _vm.twoGis.getWalkRoute(
-              pos.latitude,
-              pos.longitude,
-              target.lat,
-              target.lng,
-              destinationName: target.name,
-            );
-      if (route == null) {
-        _vm.tts.say(
-          S.get('nav_route_failed'),
-          SpeechPriority.warning,
-          pan: 0.0,
-        );
-        return;
-      }
-      _vm.nav.startWalkNavigation(route);
-      
-    } catch (e) {
-      debugPrint('startNavigateTo error: $e');
-      _vm.tts.say(S.get('nav_route_failed'), SpeechPriority.warning, pan: 0.0);
-    }
-  }
-
-  Future<void> _startTransitTo(String destination) async {
-    try {
-      final pos = await _currentPositionForNav();
-      if (pos == null) {
-        _vm.tts.say(S.get('nav_no_gps'), SpeechPriority.warning, pan: 0.0);
-        return;
-      }
-      if (!_vm.twoGis.hasApiKey) {
-        _vm.tts.say(S.get('nav_no_api_key'), SpeechPriority.warning, pan: 0.0);
-        return;
-      }
-      final places = await _vm.twoGis.searchPlaces(
-        destination,
-        pos.latitude,
-        pos.longitude,
-      );
-      if (places.isEmpty) {
-        _vm.tts.say(S.get('nav_not_found'), SpeechPriority.warning, pan: 0.0);
-        return;
-      }
-      final target = places.first;
-      _vm.tts.say(S.get('nav_building_route'), SpeechPriority.info, pan: 0.0);
-      final route = await _vm.twoGis.getTransitRoute(
-        pos.latitude,
-        pos.longitude,
-        target.lat,
-        target.lng,
-        destinationName: target.name,
-      );
-      if (route == null) {
-        _vm.tts.say(
-          S.get('nav_route_failed'),
-          SpeechPriority.warning,
-          pan: 0.0,
-        );
-        return;
-      }
-      _vm.nav.startTransitNavigation(route);
-    } catch (e) {
-      debugPrint('startTransitTo error: $e');
-      _vm.tts.say(S.get('nav_route_failed'), SpeechPriority.warning, pan: 0.0);
-    }
-  }
-
-  Future<Position?> _currentPositionForNav() async {
-    try {
-      return await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.high,
-          timeLimit: Duration(seconds: 5),
-        ),
-      );
-    } catch (_) {
-      try {
-        return await Geolocator.getLastKnownPosition();
-      } catch (_) {
-        return null;
-      }
-    }
-  }
-
   
   
   
@@ -686,20 +470,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       _kIndoorPollPeriod,
       (_) => _pollIndoorState(),
     );
-  }
-
-  void _saveWaypointFromVoice() async {
-    try {
-      final name = 'WP ${DateTime.now().toIso8601String().substring(11, 16)}';
-      final wp = await _vm.waypoints.saveCurrentLocation(name);
-      if (wp == null) {
-        _vm.tts.say(S.get('nav_no_gps'), SpeechPriority.warning, pan: 0.0);
-        return;
-      }
-      _vm.tts.say(S.get('waypoint_saved'), SpeechPriority.info, pan: 0.0);
-    } catch (e) {
-      debugPrint('saveWaypointFromVoice error: $e');
-    }
   }
 
   void _handleQualityEvents(List<FrameQualityEvent> events) {
