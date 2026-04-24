@@ -19,6 +19,7 @@ class SettingsService {
   static const _kIsCalibrated = 'is_calibrated';
   static const _kPitchBlackUi = 'pitch_black_ui';
   static const _kGuideDogMode = 'guide_dog_mode';
+  static const _kFieldLogging = 'field_logging';
 
   Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
@@ -39,6 +40,7 @@ class SettingsService {
   bool get isCalibrated => _prefs!.getBool(_kIsCalibrated) ?? false;
   bool get pitchBlackUi => _prefs!.getBool(_kPitchBlackUi) ?? false;
   bool get guideDogMode => _prefs!.getBool(_kGuideDogMode) ?? false;
+  bool get fieldLogging => _prefs!.getBool(_kFieldLogging) ?? false;
 
   Future<void> setOnboardingDone(bool v) async =>
       _prefs!.setBool(_kOnboardingDone, v);
@@ -69,6 +71,9 @@ class SettingsService {
 
   Future<void> setGuideDogMode(bool v) async =>
       _prefs!.setBool(_kGuideDogMode, v);
+
+  Future<void> setFieldLogging(bool v) async =>
+      _prefs!.setBool(_kFieldLogging, v);
 
   Future<void> resetAll() async => _prefs!.clear();
 }

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../models/strings.dart';
 import '../services/earcon_service.dart';
 import '../services/device_capability.dart';
+import '../services/settings_service.dart';
+import '../services/field_logger.dart';
 
 class CameraSettingsSheet extends StatefulWidget {
   final AppLanguage currentLanguage;
@@ -293,6 +295,35 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
                   widget.onDebugHudChanged(v);
                 },
               ),
+            ),
+            SwitchListTile(
+              title: const Text(
+                'Field Logging',
+                style: TextStyle(color: Colors.white),
+              ),
+              subtitle: Text(
+                FieldLogger.instance.active
+                    ? 'Recording... (${FieldLogger.instance.eventCount} events)'
+                    : 'Record pipeline events for analysis',
+                style: const TextStyle(color: Colors.white38, fontSize: 11),
+              ),
+              value: FieldLogger.instance.active,
+              activeColor: Colors.greenAccent,
+              onChanged: (v) async {
+                if (v) {
+                  await Settings.instance.setFieldLogging(true);
+                  final caps = DeviceCapabilityProbe.cached;
+                  await FieldLogger.instance.startSession(
+                    deviceModel: caps.deviceInfo.model,
+                    androidSdk: caps.androidSdkInt,
+                    depthTier: caps.bestDepthTier.name,
+                  );
+                } else {
+                  await Settings.instance.setFieldLogging(false);
+                  await FieldLogger.instance.stopSession();
+                }
+                if (context.mounted) setState(() {});
+              },
             ),
             Semantics(
               label: 'Звуковые сигналы: ${_earconEnabled ? "вкл" : "выкл"}',
