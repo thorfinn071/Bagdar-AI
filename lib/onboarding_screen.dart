@@ -10,6 +10,7 @@ import '../models/strings.dart';
 import '../services/settings_service.dart';
 import '../services/tts_service.dart';
 import 'camera_screen.dart';
+import 'gesture_tutorial_screen.dart';
 
 
 
@@ -181,6 +182,31 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
+  Future<void> _afterCalibration() async {
+    if (Settings.instance.tutorialSeen) {
+      _next();
+      return;
+    }
+    if (!mounted) return;
+    final navigator = Navigator.of(context);
+    await _tts.stop();
+    await navigator.push<void>(
+      MaterialPageRoute(
+        builder: (_) => GestureTutorialScreen(
+          standalone: false,
+          onFinished: () {
+            if (navigator.canPop()) {
+              navigator.pop();
+            }
+          },
+        ),
+      ),
+    );
+    if (!mounted) return;
+    await _tts.setLanguage(AppStrings.ttsLang);
+    _next();
+  }
+
   Future<void> _finish() async {
     await Settings.instance.setOnboardingDone(true);
     await Settings.instance.setOnboardingMode(_chosenMode.name);
@@ -223,7 +249,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     onAllowCamera: _requestCameraPermission,
                     onSkip: _next,
                   ),
-                  _PageCalibration(onNext: _next),
+                  _PageCalibration(onNext: () => unawaited(_afterCalibration())),
                   _PageReady(
                     mode: _chosenMode,
                     calibrated: _calibrated,

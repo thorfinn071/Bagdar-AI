@@ -16,6 +16,7 @@ class CameraSettingsSheet extends StatefulWidget {
   final bool showDebugHud;
   final bool earconEnabled;
   final bool pitchBlackUiEnabled;
+  final bool classicGestures;
   final DepthTier? depthTier;
   final bool midasReady;
   final String? sosContactNumber;
@@ -28,6 +29,8 @@ class CameraSettingsSheet extends StatefulWidget {
   final ValueChanged<bool> onDebugHudChanged;
   final ValueChanged<bool> onEarconEnabledChanged;
   final ValueChanged<bool> onPitchBlackUiChanged;
+  final ValueChanged<bool> onClassicGesturesChanged;
+  final VoidCallback onReplayTutorial;
   final VoidCallback onReadText;
   final VoidCallback onCalibrationTap;
   final VoidCallback onEditSosContact;
@@ -52,6 +55,7 @@ class CameraSettingsSheet extends StatefulWidget {
     required this.showDebugHud,
     required this.earconEnabled,
     required this.pitchBlackUiEnabled,
+    required this.classicGestures,
     this.depthTier,
     required this.midasReady,
     required this.sosContactNumber,
@@ -63,6 +67,8 @@ class CameraSettingsSheet extends StatefulWidget {
     required this.onDebugHudChanged,
     required this.onEarconEnabledChanged,
     required this.onPitchBlackUiChanged,
+    required this.onClassicGesturesChanged,
+    required this.onReplayTutorial,
     required this.onReadText,
     required this.onCalibrationTap,
     required this.onEditSosContact,
@@ -91,6 +97,7 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
   late bool _showDebugHud;
   late bool _earconEnabled;
   late bool _pitchBlackUiEnabled;
+  late bool _classicGestures;
 
   @override
   void initState() {
@@ -103,6 +110,7 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
     _showDebugHud = widget.showDebugHud;
     _earconEnabled = widget.earconEnabled;
     _pitchBlackUiEnabled = widget.pitchBlackUiEnabled;
+    _classicGestures = widget.classicGestures;
   }
 
   @override
@@ -131,6 +139,9 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
     }
     if (oldWidget.pitchBlackUiEnabled != widget.pitchBlackUiEnabled) {
       _pitchBlackUiEnabled = widget.pitchBlackUiEnabled;
+    }
+    if (oldWidget.classicGestures != widget.classicGestures) {
+      _classicGestures = widget.classicGestures;
     }
   }
 
@@ -362,6 +373,46 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
                   widget.onPitchBlackUiChanged(v);
                 },
               ),
+            ),
+            const Divider(color: Colors.white24, height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  S.get('settings_a11y_title'),
+                  style: const TextStyle(color: Colors.white54, fontSize: 12),
+                ),
+              ),
+            ),
+            Semantics(
+              label:
+                  '${S.get('settings_classic_gestures')}: ${_classicGestures ? "вкл" : "выкл"}',
+              child: SwitchListTile(
+                title: Text(
+                  S.get('settings_classic_gestures'),
+                  style: const TextStyle(color: Colors.white),
+                ),
+                subtitle: Text(
+                  S.get('settings_classic_gestures_desc'),
+                  style: const TextStyle(color: Colors.white38, fontSize: 11),
+                ),
+                value: _classicGestures,
+                onChanged: (v) {
+                  setState(() => _classicGestures = v);
+                  widget.onClassicGesturesChanged(v);
+                },
+              ),
+            ),
+            ListTile(
+              textColor: Colors.white,
+              iconColor: Colors.cyanAccent,
+              leading: const Icon(Icons.replay, color: Colors.cyanAccent),
+              title: Text(S.get('tut_replay')),
+              onTap: () {
+                Navigator.pop(context);
+                widget.onReplayTutorial();
+              },
             ),
             ListTile(
               textColor: Colors.white,

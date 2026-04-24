@@ -173,6 +173,41 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'onb_lang_title': 'Выберите язык',
     'onb_lang_sub': 'Язык можно изменить в настройках',
 
+    'tut_title': 'Обучение жестам',
+    'tut_intro':
+        'Сейчас вы научитесь управлять приложением. '
+        'Следуйте голосовым подсказкам. '
+        'В любой момент можно пропустить.',
+    'tut_tap': 'Коснитесь экрана один раз.',
+    'tut_tap_done':
+        'Отлично. Одиночное касание — быстрый статус: режим и заряд.',
+    'tut_double_tap': 'Теперь коснитесь дважды быстро.',
+    'tut_double_tap_done':
+        'Отлично. Двойное касание открывает настройки.',
+    'tut_long_press': 'Удерживайте палец на экране одну секунду.',
+    'tut_long_press_done':
+        'Отлично. Долгое нажатие — голосовая команда.',
+    'tut_swipe_horizontal': 'Проведите пальцем вправо или влево.',
+    'tut_swipe_horizontal_done':
+        'Отлично. Свайп по горизонтали переключает режим.',
+    'tut_swipe_up': 'Теперь проведите пальцем вверх.',
+    'tut_swipe_up_done':
+        'Отлично. Свайп вверх вызывает справку.',
+    'tut_swipe_down_legacy': 'Теперь проведите пальцем вниз.',
+    'tut_swipe_down_legacy_done':
+        'Отлично. Свайп вниз вызывает справку.',
+    'tut_two_finger':
+        'Приложите два пальца сразу. '
+        'Не держите дольше секунды, это обучение.',
+    'tut_two_finger_done':
+        'Отлично. Два пальца две секунды вызывают SOS.',
+    'tut_finished':
+        'Обучение завершено. Также доступны голосовые команды для SOS и справки.',
+    'tut_skip': 'Пропустить',
+    'tut_replay': 'Повторить обучение жестам',
+    'tut_finish': 'Завершить',
+    'tut_progress': 'Шаг {step} из {total}',
+
     'mode_street': 'Улица',
     'mode_cane': 'Трость',
     'mode_scan': 'Сканирование',
@@ -193,6 +228,9 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'cancel': 'Отмена',
     'save': 'Готово',
     'ok': 'ОК',
+    'settings_a11y_title': 'Специальные возможности',
+    'settings_classic_gestures': 'Классические жесты',
+    'settings_classic_gestures_desc': 'Свайп вверх — шторка, свайп вниз — справка',
 
     'voice_listening': 'Слушаю...',
     'voice_not_available': 'Голосовые команды недоступны.',
@@ -301,6 +339,16 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Двойное касание — настройки. '
         'Долгое нажатие одним пальцем — голосовая команда. '
         'Свайп вправо или влево — смена режима. '
+        'Свайп вверх — эта справка. '
+        'Свайп вниз — экранная шторка. '
+        'Два пальца две секунды — экстренный вызов SOS. '
+        'Или скажите сос для SOS, справка для этого сообщения.',
+    'help_summary_classic':
+        'Справка по управлению. '
+        'Одно касание — быстрый статус. '
+        'Двойное касание — настройки. '
+        'Долгое нажатие одним пальцем — голосовая команда. '
+        'Свайп вправо или влево — смена режима. '
         'Свайп вверх — экранная шторка. '
         'Свайп вниз — эта справка. '
         'Два пальца две секунды — экстренный вызов SOS. '
@@ -308,6 +356,9 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'status_quick': 'Режим {mode}. Заряд {battery} процентов.',
     'gesture_weak': 'Свайп слишком слабый. Проведите пальцем быстрее.',
     'camera_screen_semantics':
+        'Экран камеры. Проведите вправо или влево для смены режима. '
+        'Проведите вверх для справки. Проведите вниз для экранной шторки.',
+    'camera_screen_semantics_classic':
         'Экран камеры. Проведите вправо или влево для смены режима. '
         'Проведите вверх для экранной шторки. Проведите вниз для справки.',
     'tl_green_warning': 'Пожалуйста, убедитесь в безопасности по звуку машин.',
@@ -568,6 +619,41 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'onb_lang_title': 'Тілді таңдаңыз',
     'onb_lang_sub': 'Тілді баптауларда өзгертуге болады',
 
+    'tut_title': 'Қимылдарға үйрету',
+    'tut_intro':
+        'Қазір сіз қосымшаны басқаруды үйренесіз. '
+        'Дауыстық нұсқауларға еріңіз. '
+        'Қалаған сәтте өткізіп жіберуге болады.',
+    'tut_tap': 'Экранға бір рет түртіңіз.',
+    'tut_tap_done':
+        'Отлично. Бір рет түрту — жылдам күй: режим және заряд.',
+    'tut_double_tap': 'Енді жылдам екі рет түртіңіз.',
+    'tut_double_tap_done':
+        'Отлично. Екі рет түрту баптауларды ашады.',
+    'tut_long_press': 'Саусақты экранда бір секунд ұстаңыз.',
+    'tut_long_press_done':
+        'Отлично. Ұзақ басу — дауыстық команда.',
+    'tut_swipe_horizontal': 'Саусақпен оңға не солға сырғытыңыз.',
+    'tut_swipe_horizontal_done':
+        'Отлично. Көлденең сырғыту режимді ауыстырады.',
+    'tut_swipe_up': 'Енді саусақпен жоғары сырғытыңыз.',
+    'tut_swipe_up_done':
+        'Отлично. Жоғары сырғыту анықтаманы ашады.',
+    'tut_swipe_down_legacy': 'Енді саусақпен төмен сырғытыңыз.',
+    'tut_swipe_down_legacy_done':
+        'Отлично. Төмен сырғыту анықтаманы ашады.',
+    'tut_two_finger':
+        'Екі саусақты қатар қойыңыз. '
+        'Бір секундтан асырып ұстамаңыз, бұл нұсқау.',
+    'tut_two_finger_done':
+        'Отлично. Екі саусақпен екі секунд басу SOS шақырады.',
+    'tut_finished':
+        'Үйрету аяқталды. Сондай-ақ SOS және анықтама үшін дауыстық командалар қолжетімді.',
+    'tut_skip': 'Өткізіп жіберу',
+    'tut_replay': 'Қимылдарға үйретуді қайталау',
+    'tut_finish': 'Аяқтау',
+    'tut_progress': '{total} қадамнан {step}',
+
     'mode_street': 'Көше',
     'mode_cane': 'Таяқ',
     'mode_scan': 'Сканерлеу',
@@ -585,6 +671,9 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'perm_optional': 'Кейін',
 
     'settings': 'Баптаулар',
+    'settings_a11y_title': 'Арнайы мүмкіндіктер',
+    'settings_classic_gestures': 'Классикалық қимылдар',
+    'settings_classic_gestures_desc': 'Жоғары сырғыту — перде, төмен сырғыту — анықтама',
     'cancel': 'Болдырмау',
     'save': 'Дайын',
     'ok': 'ОК',
@@ -689,6 +778,16 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Екі рет түрту — баптаулар. '
         'Бір саусақпен ұзақ басу — дауыстық команда. '
         'Оңға не солға сырғыту — режимді ауыстыру. '
+        'Жоғары сырғыту — осы анықтама. '
+        'Төмен сырғыту — экран пердесі. '
+        'Екі саусақпен екі секунд басу — SOS. '
+        'Немесе SOS үшін сос деп, осы хабарлама үшін көмек деп айтыңыз.',
+    'help_summary_classic':
+        'Басқару бойынша анықтама. '
+        'Бір рет түрту — жылдам күй. '
+        'Екі рет түрту — баптаулар. '
+        'Бір саусақпен ұзақ басу — дауыстық команда. '
+        'Оңға не солға сырғыту — режимді ауыстыру. '
         'Жоғары сырғыту — экран пердесі. '
         'Төмен сырғыту — осы анықтама. '
         'Екі саусақпен екі секунд басу — SOS. '
@@ -696,6 +795,9 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'status_quick': 'Режим {mode}. Заряд {battery} пайыз.',
     'gesture_weak': 'Сырғыту әлсіз. Саусағыңызды жылдамырақ қозғалтыңыз.',
     'camera_screen_semantics':
+        'Камера экраны. Режимді ауыстыру үшін оңға немесе солға сырғытыңыз. '
+        'Анықтама үшін жоғары сырғытыңыз. Экран пердесі үшін төмен сырғытыңыз.',
+    'camera_screen_semantics_classic':
         'Камера экраны. Режимді ауыстыру үшін оңға немесе солға сырғытыңыз. '
         'Экран пердесі үшін жоғары сырғытыңыз. Анықтама үшін төмен сырғытыңыз.',
     'tl_green_warning':
@@ -961,6 +1063,37 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'onb_lang_title': 'Choose a language',
     'onb_lang_sub': 'Language can be changed in settings',
 
+    'tut_title': 'Gesture Tutorial',
+    'tut_intro':
+        'You will now learn how to control the app. '
+        'Follow the voice prompts. '
+        'You can skip at any time.',
+    'tut_tap': 'Tap the screen once.',
+    'tut_tap_done':
+        'Great. A single tap gives a quick status: mode and battery.',
+    'tut_double_tap': 'Now tap twice quickly.',
+    'tut_double_tap_done': 'Great. Double tap opens settings.',
+    'tut_long_press': 'Hold one finger on the screen for one second.',
+    'tut_long_press_done': 'Great. A long press starts voice command.',
+    'tut_swipe_horizontal': 'Swipe left or right across the screen.',
+    'tut_swipe_horizontal_done':
+        'Great. A horizontal swipe switches mode.',
+    'tut_swipe_up': 'Now swipe up.',
+    'tut_swipe_up_done': 'Great. Swipe up opens help.',
+    'tut_swipe_down_legacy': 'Now swipe down.',
+    'tut_swipe_down_legacy_done': 'Great. Swipe down opens help.',
+    'tut_two_finger':
+        'Place two fingers on the screen together. '
+        'Do not hold longer than a second, this is practice.',
+    'tut_two_finger_done':
+        'Great. Two fingers for two seconds triggers SOS.',
+    'tut_finished':
+        'Tutorial complete. Voice commands for SOS and help are also available.',
+    'tut_skip': 'Skip',
+    'tut_replay': 'Replay gesture tutorial',
+    'tut_finish': 'Finish',
+    'tut_progress': 'Step {step} of {total}',
+
     'mode_street': 'Street',
     'mode_cane': 'Cane',
     'mode_scan': 'Scan',
@@ -978,6 +1111,9 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'perm_optional': 'Later',
 
     'settings': 'Settings',
+    'settings_a11y_title': 'Accessibility',
+    'settings_classic_gestures': 'Classic gestures',
+    'settings_classic_gestures_desc': 'Swipe up for curtain, swipe down for help',
     'cancel': 'Cancel',
     'save': 'Done',
     'ok': 'OK',
@@ -1080,6 +1216,16 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Double tap for settings. '
         'Hold one finger for voice command. '
         'Swipe left or right to switch mode. '
+        'Swipe up for this help. '
+        'Swipe down for screen curtain. '
+        'Hold two fingers for two seconds for SOS. '
+        'Or say sos for emergency, gestures for this help.',
+    'help_summary_classic':
+        'Controls help. '
+        'Single tap for quick status. '
+        'Double tap for settings. '
+        'Hold one finger for voice command. '
+        'Swipe left or right to switch mode. '
         'Swipe up for screen curtain. '
         'Swipe down for this help. '
         'Hold two fingers for two seconds for SOS. '
@@ -1087,6 +1233,9 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'status_quick': 'Mode {mode}. Battery {battery} percent.',
     'gesture_weak': 'Swipe too weak. Move finger faster.',
     'camera_screen_semantics':
+        'Camera screen. Swipe left or right to switch modes. '
+        'Swipe up for help. Swipe down for screen curtain.',
+    'camera_screen_semantics_classic':
         'Camera screen. Swipe left or right to switch modes. '
         'Swipe up for screen curtain. Swipe down for help.',
     'tl_green_warning': 'Please rely on traffic sounds to ensure safety.',

@@ -42,6 +42,7 @@ import 'camera/stall_watchdog.dart';
 import 'camera/fall_countdown_controller.dart';
 import 'camera/voice_command_dispatcher.dart';
 import 'camera/camera_lifecycle_controller.dart';
+import 'gesture_tutorial_screen.dart';
 
 class AiCameraScreen extends StatefulWidget {
   final AppMode? initialMode;
@@ -978,6 +979,15 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _vm.throttler.update(frameSw.elapsedMilliseconds.toDouble(), now);
   }
 
+  void _openGestureTutorial() {
+    if (!mounted) return;
+    Navigator.of(context).push<void>(
+      MaterialPageRoute(
+        builder: (_) => const GestureTutorialScreen(standalone: true),
+      ),
+    );
+  }
+
   void _openSettings() {
     showModalBottomSheet<void>(
       context: context,
@@ -994,6 +1004,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           showDebugHud: _vm.showDebugHud,
           earconEnabled: _vm.earcon.isEnabled,
           pitchBlackUiEnabled: false,
+          classicGestures: Settings.instance.classicGestures,
           depthTier: _models.depthProvider?.tier,
           midasReady: _depthController.providerReady,
           sosContactNumber: _vm.sos.contactNumber,
@@ -1022,6 +1033,11 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           onDebugHudChanged: (v) => _vm.toggleDebugHud(),
           onEarconEnabledChanged: (v) => _vm.earcon.setEnabled(v),
           onPitchBlackUiChanged: (v) {},
+          onClassicGesturesChanged: (v) {
+            Settings.instance.setClassicGestures(v);
+            if (mounted) setState(() {});
+          },
+          onReplayTutorial: _openGestureTutorial,
           onReadText: () {
             _wantOcr = true;
             _ocrStartedAt = DateTime.now();
@@ -1147,10 +1163,11 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         onVerticalDragEnd: (details) {
           final v = details.primaryVelocity;
           if (v == null) return;
+          final classic = Settings.instance.classicGestures;
           if (v < -kSwipeStrongVelocity) {
-            _vm.togglePitchBlack();
+            classic ? _vm.togglePitchBlack() : _vm.showHelp();
           } else if (v > kSwipeStrongVelocity) {
-            _vm.showHelp();
+            classic ? _vm.showHelp() : _vm.togglePitchBlack();
           } else if (v.abs() > kSwipeWeakVelocity) {
             _notifyWeakGesture();
           }
@@ -1239,7 +1256,11 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
               Positioned.fill(
                 child: Semantics(
-                  label: S.get('camera_screen_semantics'),
+                  label: S.get(
+                    Settings.instance.classicGestures
+                        ? 'camera_screen_semantics_classic'
+                        : 'camera_screen_semantics',
+                  ),
                   child: const SizedBox.expand(),
                 ),
               ),

@@ -20,6 +20,8 @@ class SettingsService {
   static const _kPitchBlackUi = 'pitch_black_ui';
   static const _kGuideDogMode = 'guide_dog_mode';
   static const _kFieldLogging = 'field_logging';
+  static const _kTutorialSeen = 'tutorial_seen';
+  static const _kClassicGestures = 'classic_gestures';
 
   Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
@@ -41,6 +43,8 @@ class SettingsService {
   bool get pitchBlackUi => _prefs!.getBool(_kPitchBlackUi) ?? false;
   bool get guideDogMode => _prefs!.getBool(_kGuideDogMode) ?? false;
   bool get fieldLogging => _prefs!.getBool(_kFieldLogging) ?? false;
+  bool get tutorialSeen => _prefs!.getBool(_kTutorialSeen) ?? false;
+  bool get classicGestures => _prefs!.getBool(_kClassicGestures) ?? false;
 
   Future<void> setOnboardingDone(bool v) async =>
       _prefs!.setBool(_kOnboardingDone, v);
@@ -74,6 +78,12 @@ class SettingsService {
 
   Future<void> setFieldLogging(bool v) async =>
       _prefs!.setBool(_kFieldLogging, v);
+
+  Future<void> setTutorialSeen(bool v) async =>
+      _prefs!.setBool(_kTutorialSeen, v);
+
+  Future<void> setClassicGestures(bool v) async =>
+      _prefs!.setBool(_kClassicGestures, v);
 
   Future<void> resetAll() async => _prefs!.clear();
 }

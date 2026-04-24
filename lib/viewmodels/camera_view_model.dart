@@ -166,8 +166,10 @@ class CameraViewModel extends ChangeNotifier {
   }
 
   void showHelp() {
-    final helpText = S.get('help_summary');
-    tts.say(helpText, SpeechPriority.critical, pan: 0.0);
+    final key = Settings.instance.classicGestures
+        ? 'help_summary_classic'
+        : 'help_summary';
+    tts.say(S.get(key), SpeechPriority.critical, pan: 0.0);
   }
 
   Future<void> init() async {
