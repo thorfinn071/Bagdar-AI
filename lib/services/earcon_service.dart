@@ -26,6 +26,7 @@ class EarconService {
 
   bool _enabled = true;
   bool _ready = false;
+  double _volume = 0.85;
 
   Future<void> init() async {
     try {
@@ -45,7 +46,7 @@ class EarconService {
         final player = AudioPlayer();
         final bytes = _generate(earcon);
         await player.setSourceBytes(bytes, mimeType: 'audio/wav');
-        await player.setVolume(0.85);
+        await player.setVolume(_volume);
         _players[earcon] = player;
       }
 
@@ -57,6 +58,19 @@ class EarconService {
   }
 
   bool get isEnabled => _enabled;
+  double get volume => _volume;
+
+  Future<void> setVolume(double v) async {
+    final clamped = v.clamp(0.0, 1.0);
+    if ((clamped - _volume).abs() < 0.01) return;
+    _volume = clamped;
+    if (!_ready) return;
+    for (final p in _players.values) {
+      try {
+        await p.setVolume(clamped);
+      } catch (_) {}
+    }
+  }
 
   Future<void> play(Earcon earcon, {double pan = 0.0}) async {
     if (!_ready || !_enabled) return;

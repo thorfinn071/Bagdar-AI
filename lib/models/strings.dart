@@ -1,3 +1,5 @@
+import 'a11y_prefs.dart';
+
 enum AppLanguage { ru, kk, en }
 
 typedef S = AppStrings;
@@ -23,8 +25,18 @@ class AppStrings {
     return 'ru-RU';
   }
 
-  static String get(String key) =>
-      _ui[current]?[key] ?? _ui[AppLanguage.ru]?[key] ?? key;
+  
+  
+  
+  static String get(String key, {Verbosity? verbosity}) {
+    if (verbosity != null && verbosity != Verbosity.normal) {
+      final suffix = verbosity == Verbosity.minimal ? '_minimal' : '_detailed';
+      final variant =
+          _ui[current]?['$key$suffix'] ?? _ui[AppLanguage.ru]?['$key$suffix'];
+      if (variant != null) return variant;
+    }
+    return _ui[current]?[key] ?? _ui[AppLanguage.ru]?[key] ?? key;
+  }
 
   
   
@@ -231,6 +243,28 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'settings_a11y_title': 'Специальные возможности',
     'settings_classic_gestures': 'Классические жесты',
     'settings_classic_gestures_desc': 'Свайп вверх — шторка, свайп вниз — справка',
+    'settings_speech_rate': 'Скорость речи',
+    'settings_tts_volume': 'Громкость речи',
+    'settings_earcon_volume': 'Громкость звуков',
+    'settings_verbosity': 'Подробность',
+    'verbosity_minimal': 'Кратко',
+    'verbosity_normal': 'Обычно',
+    'verbosity_detailed': 'Подробно',
+    'settings_alert_frequency': 'Частота предупреждений',
+    'freq_rare': 'Редко',
+    'freq_normal': 'Обычно',
+    'freq_frequent': 'Часто',
+    'settings_haptic_strength': 'Интенсивность вибрации',
+    'haptic_weak': 'Слабая',
+    'haptic_normal': 'Средняя',
+    'haptic_strong': 'Сильная',
+    'settings_sos_trigger': 'Триггер SOS',
+    'sos_trigger_two_finger': 'Два пальца 2 сек',
+    'sos_trigger_triple_tap': 'Тройное касание',
+    'sos_trigger_shake': 'Встряхивание',
+    'settings_dominant_hand': 'Ведущая рука',
+    'hand_right': 'Правая',
+    'hand_left': 'Левая',
 
     'voice_listening': 'Слушаю...',
     'voice_not_available': 'Голосовые команды недоступны.',
@@ -674,6 +708,28 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'settings_a11y_title': 'Арнайы мүмкіндіктер',
     'settings_classic_gestures': 'Классикалық қимылдар',
     'settings_classic_gestures_desc': 'Жоғары сырғыту — перде, төмен сырғыту — анықтама',
+    'settings_speech_rate': 'Сөйлеу жылдамдығы',
+    'settings_tts_volume': 'Сөйлеу дауысы',
+    'settings_earcon_volume': 'Дыбыс деңгейі',
+    'settings_verbosity': 'Толықтық',
+    'verbosity_minimal': 'Қысқа',
+    'verbosity_normal': 'Қалыпты',
+    'verbosity_detailed': 'Толық',
+    'settings_alert_frequency': 'Ескерту жиілігі',
+    'freq_rare': 'Сирек',
+    'freq_normal': 'Қалыпты',
+    'freq_frequent': 'Жиі',
+    'settings_haptic_strength': 'Діріл күші',
+    'haptic_weak': 'Әлсіз',
+    'haptic_normal': 'Орта',
+    'haptic_strong': 'Күшті',
+    'settings_sos_trigger': 'SOS триггері',
+    'sos_trigger_two_finger': 'Екі саусақ 2 сек',
+    'sos_trigger_triple_tap': 'Үш рет түрту',
+    'sos_trigger_shake': 'Сілку',
+    'settings_dominant_hand': 'Негізгі қол',
+    'hand_right': 'Оң',
+    'hand_left': 'Сол',
     'cancel': 'Болдырмау',
     'save': 'Дайын',
     'ok': 'ОК',
@@ -1114,6 +1170,28 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'settings_a11y_title': 'Accessibility',
     'settings_classic_gestures': 'Classic gestures',
     'settings_classic_gestures_desc': 'Swipe up for curtain, swipe down for help',
+    'settings_speech_rate': 'Speech rate',
+    'settings_tts_volume': 'Speech volume',
+    'settings_earcon_volume': 'Earcon volume',
+    'settings_verbosity': 'Verbosity',
+    'verbosity_minimal': 'Minimal',
+    'verbosity_normal': 'Normal',
+    'verbosity_detailed': 'Detailed',
+    'settings_alert_frequency': 'Alert frequency',
+    'freq_rare': 'Rare',
+    'freq_normal': 'Normal',
+    'freq_frequent': 'Frequent',
+    'settings_haptic_strength': 'Haptic strength',
+    'haptic_weak': 'Weak',
+    'haptic_normal': 'Normal',
+    'haptic_strong': 'Strong',
+    'settings_sos_trigger': 'SOS trigger',
+    'sos_trigger_two_finger': 'Two fingers 2 sec',
+    'sos_trigger_triple_tap': 'Triple tap',
+    'sos_trigger_shake': 'Shake device',
+    'settings_dominant_hand': 'Dominant hand',
+    'hand_right': 'Right',
+    'hand_left': 'Left',
     'cancel': 'Cancel',
     'save': 'Done',
     'ok': 'OK',

@@ -77,9 +77,30 @@ class TtsService {
   DateTime _lastTime = DateTime.fromMillisecondsSinceEpoch(0);
 
   double _currentRate = 0.50;
+  double _userRateMultiplier = 1.0;
+  double _userVolume = 1.0;
 
   bool _reverseVehicleSuspected = false;
   set reverseVehicleSuspected(bool v) => _reverseVehicleSuspected = v;
+
+  Future<void> setUserRate(double multiplier) async {
+    final clamped = multiplier.clamp(0.5, 2.0);
+    if ((clamped - _userRateMultiplier).abs() < 0.01) return;
+    _userRateMultiplier = clamped;
+    
+    _currentRate = -1;
+  }
+
+  Future<void> setUserVolume(double volume) async {
+    final clamped = volume.clamp(0.0, 1.0);
+    if ((clamped - _userVolume).abs() < 0.01) return;
+    _userVolume = clamped;
+    if (_ready && !_testMode) {
+      try {
+        await _tts.setVolume(clamped);
+      } catch (_) {}
+    }
+  }
 
   static const double _rateCritical = 0.65;
   static const double _rateWarning = 0.50;
@@ -134,7 +155,7 @@ class TtsService {
       _requestedLang = 'ru-RU';
       await _applyLanguage(_requestedLang);
       await _tts.setSpeechRate(_currentRate);
-      await _tts.setVolume(1.0);
+      await _tts.setVolume(_userVolume);
       await _tts.setPitch(1.0);
 
       _tts.setStartHandler(() {
@@ -390,9 +411,10 @@ class TtsService {
         await _session?.setActive(true);
       }
 
-      if (job.rate != _currentRate) {
-        await _tts.setSpeechRate(job.rate);
-        _currentRate = job.rate;
+      final targetRate = (job.rate * _userRateMultiplier).clamp(0.2, 1.5);
+      if ((targetRate - _currentRate).abs() > 0.005) {
+        await _tts.setSpeechRate(targetRate);
+        _currentRate = targetRate;
       }
 
       if (job.pan != 0.0) {
