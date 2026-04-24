@@ -143,4 +143,47 @@ void main() {
       expect(r.dest, 'парк');
     });
   });
+
+  group('VoiceCommandService showHelp', () {
+    test('russian help variants', () {
+      final svc = VoiceCommandService();
+      for (final phrase in [
+        'справка',
+        'помощь',
+        'жесты',
+        'что умеешь',
+        'как пользоваться',
+      ]) {
+        final r = _feed(svc, phrase, locale: 'ru-RU');
+        expect(r.cmd, VoiceCommand.showHelp, reason: 'phrase="$phrase"');
+      }
+    });
+
+    test('kazakh help variants', () {
+      final svc = VoiceCommandService();
+      for (final phrase in ['көмек', 'анықтама', 'қимылдар', 'нұсқау']) {
+        final r = _feed(svc, phrase, locale: 'kk-KZ');
+        expect(r.cmd, VoiceCommand.showHelp, reason: 'phrase="$phrase"');
+      }
+    });
+
+    test('english help variants do not collide with SOS', () {
+      final svc = VoiceCommandService();
+      for (final phrase in [
+        'gestures',
+        'show help',
+        'commands list',
+        'how to use',
+        'what can you do',
+      ]) {
+        final r = _feed(svc, phrase, locale: 'en-US');
+        expect(r.cmd, VoiceCommand.showHelp, reason: 'phrase="$phrase"');
+      }
+      expect(
+        _feed(svc, 'help', locale: 'en-US').cmd,
+        VoiceCommand.sos,
+        reason: '"help" alone must remain SOS',
+      );
+    });
+  });
 }
