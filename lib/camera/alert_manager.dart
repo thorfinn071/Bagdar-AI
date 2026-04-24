@@ -1,7 +1,9 @@
+import '../models/a11y_prefs.dart';
 import '../models/app_mode.dart';
 import '../models/constants.dart';
 import '../models/speech_job.dart';
 import '../models/strings.dart';
+import '../services/settings_service.dart';
 import '../services/earcon_service.dart';
 import '../services/haptic_service.dart';
 import '../services/tts_service.dart';
@@ -38,6 +40,12 @@ class AlertManager {
 
   static bool _noGuideDog() => false;
   static bool _noIndoor() => false;
+
+  Duration _scaledCooldown(Duration base) => Duration(
+    milliseconds:
+        (base.inMilliseconds * Settings.instance.alertFrequency.multiplier)
+            .round(),
+  );
 
   
   
@@ -364,17 +372,31 @@ class AlertManager {
         top.distM > 0 ? top.distM : _distanceEstimate(top.dist),
         pan,
       );
-      if (now.difference(_lastApproachSay) >= kApproachCooldown) {
+      if (now.difference(_lastApproachSay) >= _scaledCooldown(kApproachCooldown)) {
         _lastApproachSay = now;
         _earcon.play(Earcon.approaching, pan: pan);
         final phraseKey = isVehicle(top.label)
             ? 'transport_approaching'
             : 'object_approaching';
+        final dir = clockDir(
+          top.x1,
+          top.x2,
+          imgW.toDouble(),
+          imgH: imgH.toDouble(),
+          viewportAspect: viewportAspect,
+          forAlert: true,
+        );
+        final v = Settings.instance.verbosity;
+        final text = switch (v) {
+          Verbosity.minimal => '$dir.',
+          Verbosity.normal => '${S.alert(phraseKey)}, $dir.',
+          Verbosity.detailed => '${S.alert(phraseKey)}, $dir, '
+              '${top.distM > 0 ? "~${top.distM.toStringAsFixed(1)} " : ""}'
+              '${S.alert('approx_meters')}.',
+        };
         _filter.add(
           AlertCandidate(
-            text:
-                '${S.alert(phraseKey)}, '
-                '${clockDir(top.x1, top.x2, imgW.toDouble(), imgH: imgH.toDouble(), viewportAspect: viewportAspect, forAlert: true)}.',
+            text: text,
             priority: SpeechPriority.warning,
             pan: pan,
             category: AlertCategory.approachingVehicle,
@@ -415,7 +437,7 @@ class AlertManager {
       pan,
     );
 
-    if (now.difference(_lastCriticalAt) >= kCriticalCooldown) {
+    if (now.difference(_lastCriticalAt) >= _scaledCooldown(kCriticalCooldown)) {
       top.lastSpoken = now;
       _lastCriticalAt = now;
       final dir = clockDir(
@@ -430,11 +452,13 @@ class AlertManager {
       final distPart = (isCalibrated && top.distM > 0)
           ? ' (~${top.distM.toStringAsFixed(1)} ${S.alert('approx_meters')})'
           : '';
-      _tts.say(
-        '${S.alert('stop')}. $label $dir$distPart.',
-        SpeechPriority.critical,
-        pan: pan,
-      );
+      final v = Settings.instance.verbosity;
+      final text = switch (v) {
+        Verbosity.minimal => '${S.alert('stop')}. $dir.',
+        Verbosity.normal => '${S.alert('stop')}. $label $dir$distPart.',
+        Verbosity.detailed => '${S.alert('stop')}. $label $dir$distPart.',
+      };
+      _tts.say(text, SpeechPriority.critical, pan: pan);
       _vibrate([0, 250, 80, 450], isCritical: true);
     } else {
       _vibrate([0, 150]);
@@ -465,8 +489,10 @@ class AlertManager {
           : t.dist == 'close'
           ? kWarningCooldown
           : kInfoCooldown;
+      final freqMult = Settings.instance.alertFrequency.multiplier;
       final cooldown = Duration(
-        milliseconds: (baseCooldown.inMilliseconds * confFactor).round(),
+        milliseconds:
+            (baseCooldown.inMilliseconds * confFactor * freqMult).round(),
       );
 
       if (now.difference(t.lastSpoken) < cooldown) continue;
@@ -495,11 +521,18 @@ class AlertManager {
         }
       }
 
+      final verb = Settings.instance.verbosity;
       if (t.dist == 'close') {
         _vibrate([0, 150]);
+        final text = switch (verb) {
+          Verbosity.minimal => '${S.alert('close')}, $dir.',
+          Verbosity.normal => '$label ${S.alert('close')}, $dir$distPart.',
+          Verbosity.detailed =>
+              '$label ${S.alert('close')}, $dir$distPart.',
+        };
         _filter.add(
           AlertCandidate(
-            text: '$label ${S.alert('close')}, $dir$distPart.',
+            text: text,
             priority: SpeechPriority.warning,
             pan: pan,
             category: AlertCategory.obstacleClose,
@@ -509,9 +542,14 @@ class AlertManager {
         );
       } else {
         _earcon.play(Earcon.objectAppeared, pan: pan);
+        final text = switch (verb) {
+          Verbosity.minimal => '$dir.',
+          Verbosity.normal => '$label $dir.',
+          Verbosity.detailed => '$label $dir$distPart.',
+        };
         _filter.add(
           AlertCandidate(
-            text: '$label $dir.',
+            text: text,
             priority: SpeechPriority.info,
             pan: pan,
             category: AlertCategory.obstacleFar,

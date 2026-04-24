@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../models/a11y_prefs.dart';
 import '../models/strings.dart';
 import '../services/earcon_service.dart';
 import '../services/device_capability.dart';
@@ -17,6 +18,14 @@ class CameraSettingsSheet extends StatefulWidget {
   final bool earconEnabled;
   final bool pitchBlackUiEnabled;
   final bool classicGestures;
+  final double speechRate;
+  final double ttsVolume;
+  final double earconVolume;
+  final Verbosity verbosity;
+  final AlertFrequency alertFrequency;
+  final HapticStrength hapticStrength;
+  final SosTrigger sosTrigger;
+  final DominantHand dominantHand;
   final DepthTier? depthTier;
   final bool midasReady;
   final String? sosContactNumber;
@@ -30,6 +39,14 @@ class CameraSettingsSheet extends StatefulWidget {
   final ValueChanged<bool> onEarconEnabledChanged;
   final ValueChanged<bool> onPitchBlackUiChanged;
   final ValueChanged<bool> onClassicGesturesChanged;
+  final ValueChanged<double> onSpeechRateChanged;
+  final ValueChanged<double> onTtsVolumeChanged;
+  final ValueChanged<double> onEarconVolumeChanged;
+  final ValueChanged<Verbosity> onVerbosityChanged;
+  final ValueChanged<AlertFrequency> onAlertFrequencyChanged;
+  final ValueChanged<HapticStrength> onHapticStrengthChanged;
+  final ValueChanged<SosTrigger> onSosTriggerChanged;
+  final ValueChanged<DominantHand> onDominantHandChanged;
   final VoidCallback onReplayTutorial;
   final VoidCallback onReadText;
   final VoidCallback onCalibrationTap;
@@ -56,6 +73,14 @@ class CameraSettingsSheet extends StatefulWidget {
     required this.earconEnabled,
     required this.pitchBlackUiEnabled,
     required this.classicGestures,
+    required this.speechRate,
+    required this.ttsVolume,
+    required this.earconVolume,
+    required this.verbosity,
+    required this.alertFrequency,
+    required this.hapticStrength,
+    required this.sosTrigger,
+    required this.dominantHand,
     this.depthTier,
     required this.midasReady,
     required this.sosContactNumber,
@@ -68,6 +93,14 @@ class CameraSettingsSheet extends StatefulWidget {
     required this.onEarconEnabledChanged,
     required this.onPitchBlackUiChanged,
     required this.onClassicGesturesChanged,
+    required this.onSpeechRateChanged,
+    required this.onTtsVolumeChanged,
+    required this.onEarconVolumeChanged,
+    required this.onVerbosityChanged,
+    required this.onAlertFrequencyChanged,
+    required this.onHapticStrengthChanged,
+    required this.onSosTriggerChanged,
+    required this.onDominantHandChanged,
     required this.onReplayTutorial,
     required this.onReadText,
     required this.onCalibrationTap,
@@ -98,6 +131,14 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
   late bool _earconEnabled;
   late bool _pitchBlackUiEnabled;
   late bool _classicGestures;
+  late double _speechRate;
+  late double _ttsVolume;
+  late double _earconVolume;
+  late Verbosity _verbosity;
+  late AlertFrequency _alertFrequency;
+  late HapticStrength _hapticStrength;
+  late SosTrigger _sosTrigger;
+  late DominantHand _dominantHand;
 
   @override
   void initState() {
@@ -111,6 +152,14 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
     _earconEnabled = widget.earconEnabled;
     _pitchBlackUiEnabled = widget.pitchBlackUiEnabled;
     _classicGestures = widget.classicGestures;
+    _speechRate = widget.speechRate;
+    _ttsVolume = widget.ttsVolume;
+    _earconVolume = widget.earconVolume;
+    _verbosity = widget.verbosity;
+    _alertFrequency = widget.alertFrequency;
+    _hapticStrength = widget.hapticStrength;
+    _sosTrigger = widget.sosTrigger;
+    _dominantHand = widget.dominantHand;
   }
 
   @override
@@ -412,6 +461,108 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
               onTap: () {
                 Navigator.pop(context);
                 widget.onReplayTutorial();
+              },
+            ),
+            _SliderRow(
+              label: S.get('settings_speech_rate'),
+              value: _speechRate,
+              min: kSpeechRateMin,
+              max: kSpeechRateMax,
+              divisions: 9,
+              suffix: 'x',
+              onChanged: (v) {
+                setState(() => _speechRate = v);
+                widget.onSpeechRateChanged(v);
+              },
+            ),
+            _SliderRow(
+              label: S.get('settings_tts_volume'),
+              value: _ttsVolume,
+              min: kTtsVolumeMin,
+              max: kTtsVolumeMax,
+              divisions: 10,
+              asPercent: true,
+              onChanged: (v) {
+                setState(() => _ttsVolume = v);
+                widget.onTtsVolumeChanged(v);
+              },
+            ),
+            _SliderRow(
+              label: S.get('settings_earcon_volume'),
+              value: _earconVolume,
+              min: kEarconVolumeMin,
+              max: kEarconVolumeMax,
+              divisions: 10,
+              asPercent: true,
+              onChanged: (v) {
+                setState(() => _earconVolume = v);
+                widget.onEarconVolumeChanged(v);
+              },
+            ),
+            _EnumDropdownRow<Verbosity>(
+              label: S.get('settings_verbosity'),
+              value: _verbosity,
+              values: Verbosity.values,
+              labelFor: (v) => S.get(
+                'verbosity_${v.name.toLowerCase()}',
+              ),
+              onChanged: (v) {
+                if (v == null) return;
+                setState(() => _verbosity = v);
+                widget.onVerbosityChanged(v);
+              },
+            ),
+            _EnumDropdownRow<AlertFrequency>(
+              label: S.get('settings_alert_frequency'),
+              value: _alertFrequency,
+              values: AlertFrequency.values,
+              labelFor: (v) => S.get('freq_${v.name}'),
+              onChanged: (v) {
+                if (v == null) return;
+                setState(() => _alertFrequency = v);
+                widget.onAlertFrequencyChanged(v);
+              },
+            ),
+            _EnumDropdownRow<HapticStrength>(
+              label: S.get('settings_haptic_strength'),
+              value: _hapticStrength,
+              values: HapticStrength.values,
+              labelFor: (v) => S.get('haptic_${v.name}'),
+              onChanged: (v) {
+                if (v == null) return;
+                setState(() => _hapticStrength = v);
+                widget.onHapticStrengthChanged(v);
+              },
+            ),
+            _EnumDropdownRow<SosTrigger>(
+              label: S.get('settings_sos_trigger'),
+              value: _sosTrigger,
+              values: SosTrigger.values,
+              labelFor: (v) {
+                switch (v) {
+                  case SosTrigger.twoFingerHold:
+                    return S.get('sos_trigger_two_finger');
+                  case SosTrigger.tripleTap:
+                    return S.get('sos_trigger_triple_tap');
+                  case SosTrigger.shake:
+                    return S.get('sos_trigger_shake');
+                }
+              },
+              onChanged: (v) {
+                if (v == null) return;
+                setState(() => _sosTrigger = v);
+                widget.onSosTriggerChanged(v);
+              },
+            ),
+            _EnumDropdownRow<DominantHand>(
+              label: S.get('settings_dominant_hand'),
+              value: _dominantHand,
+              values: DominantHand.values,
+              labelFor: (v) => S.get('hand_${v.name}'),
+              onChanged: (v) {
+                if (v == null) return;
+                setState(() => _dominantHand = v);
+                widget.onDominantHandChanged(v);
               },
             ),
             ListTile(
@@ -845,6 +996,126 @@ class _EarconTestButton extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SliderRow extends StatelessWidget {
+  final String label;
+  final double value;
+  final double min;
+  final double max;
+  final int divisions;
+  final String suffix;
+  final bool asPercent;
+  final ValueChanged<double> onChanged;
+
+  const _SliderRow({
+    required this.label,
+    required this.value,
+    required this.min,
+    required this.max,
+    required this.divisions,
+    this.suffix = '',
+    this.asPercent = false,
+    required this.onChanged,
+  });
+
+  String _format(double v) {
+    if (asPercent) return '${(v * 100).round()}%';
+    return '${v.toStringAsFixed(1)}$suffix';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: '$label: ${_format(value)}',
+      slider: true,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 130,
+              child: Text(
+                label,
+                style: const TextStyle(color: Colors.white, fontSize: 13),
+              ),
+            ),
+            Expanded(
+              child: Slider(
+                value: value.clamp(min, max),
+                min: min,
+                max: max,
+                divisions: divisions,
+                activeColor: Colors.cyanAccent,
+                inactiveColor: Colors.white24,
+                label: _format(value),
+                onChanged: onChanged,
+              ),
+            ),
+            SizedBox(
+              width: 48,
+              child: Text(
+                _format(value),
+                textAlign: TextAlign.end,
+                style: const TextStyle(color: Colors.white70, fontSize: 12),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _EnumDropdownRow<T> extends StatelessWidget {
+  final String label;
+  final T value;
+  final List<T> values;
+  final String Function(T) labelFor;
+  final ValueChanged<T?> onChanged;
+
+  const _EnumDropdownRow({
+    required this.label,
+    required this.value,
+    required this.values,
+    required this.labelFor,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: '$label: ${labelFor(value)}',
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                label,
+                style: const TextStyle(color: Colors.white, fontSize: 13),
+              ),
+            ),
+            DropdownButton<T>(
+              dropdownColor: Colors.grey[850],
+              value: value,
+              style: const TextStyle(color: Colors.white),
+              underline: Container(height: 1, color: Colors.white24),
+              items: values
+                  .map(
+                    (v) => DropdownMenuItem<T>(
+                      value: v,
+                      child: Text(labelFor(v)),
+                    ),
+                  )
+                  .toList(),
+              onChanged: onChanged,
+            ),
+          ],
         ),
       ),
     );

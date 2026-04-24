@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import '../models/a11y_prefs.dart';
 import '../models/app_mode.dart';
 import '../models/speech_job.dart';
 import '../services/settings_service.dart';
@@ -172,6 +173,14 @@ class CameraViewModel extends ChangeNotifier {
     tts.say(S.get(key), SpeechPriority.critical, pan: 0.0);
   }
 
+  void applyA11yPrefs() {
+    final s = Settings.instance;
+    unawaited(tts.setUserRate(s.speechRate));
+    unawaited(tts.setUserVolume(s.ttsVolume));
+    unawaited(earcon.setVolume(s.earconVolume));
+    HapticService.setStrengthMultiplier(s.hapticStrength.multiplier);
+  }
+
   Future<void> init() async {
     final List<Future<void>> services = [
       _initService('TTS', tts.init()),
@@ -189,6 +198,8 @@ class CameraViewModel extends ChangeNotifier {
     ];
 
     await Future.wait(services);
+
+    applyA11yPrefs();
 
     tracker.ttsService = tts;
 

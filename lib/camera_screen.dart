@@ -1,16 +1,20 @@
 import 'dart:async';
 
+import 'dart:math' as math;
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sensors_plus/sensors_plus.dart';
 
 import 'models/app_mode.dart';
 import 'models/strings.dart';
 import 'models/speech_job.dart';
 import 'models/constants.dart';
 import 'services/settings_service.dart';
+import 'models/a11y_prefs.dart';
 import 'services/foreground_service.dart';
 import 'services/thermal_monitor.dart';
 import 'services/haptic_service.dart';
@@ -83,6 +87,17 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   Timer? _twoFingerSosTimer;
   bool _twoFingerSosArmed = false;
   static const Duration _twoFingerSosHold = Duration(milliseconds: 1500);
+
+  
+  final List<DateTime> _recentTaps = [];
+  static const Duration _tripleTapWindow = Duration(milliseconds: 800);
+
+  
+  StreamSubscription<AccelerometerEvent>? _shakeSub;
+  final List<DateTime> _shakeSpikes = [];
+  static const double _shakeMagnitudeThreshold = 25.0;
+  static const Duration _shakeWindow = Duration(milliseconds: 1500);
+  DateTime _lastShakeSosAt = DateTime.fromMillisecondsSinceEpoch(0);
 
   late final FallCountdownController _fallCountdown;
   late final VoiceCommandDispatcher _voiceDispatcher;
@@ -161,6 +176,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     });
     WidgetsBinding.instance.addObserver(this);
     _initAll();
+    _applySosTriggerListener();
   }
 
   @override
@@ -168,6 +184,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     WidgetsBinding.instance.removeObserver(this);
     _heartbeatTimer?.cancel();
     _twoFingerSosTimer?.cancel();
+    _shakeSub?.cancel();
     _fallCountdown.dispose();
     _stallWatchdog.stop();
     _indoorPollTimer?.cancel();
@@ -369,6 +386,19 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       _fallCountdown.cancel();
       return;
     }
+    if (Settings.instance.sosTrigger == SosTrigger.tripleTap) {
+      final now = DateTime.now();
+      _recentTaps.removeWhere(
+        (t) => now.difference(t) > _tripleTapWindow,
+      );
+      _recentTaps.add(now);
+      if (_recentTaps.length >= 3) {
+        _recentTaps.clear();
+        HapticService.vibrate(const [0, 300, 100, 300]);
+        _triggerSos();
+        return;
+      }
+    }
     _announceQuickStatus();
   }
 
@@ -381,6 +411,30 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         .replaceFirst('{battery}', battery.toString());
     _vm.tts.say(msg, SpeechPriority.info, pan: 0.0);
     HapticService.vibrate(const [0, 30]);
+  }
+
+  void _applySosTriggerListener() {
+    _shakeSub?.cancel();
+    _shakeSub = null;
+    if (Settings.instance.sosTrigger != SosTrigger.shake) return;
+    _shakeSub = accelerometerEventStream(
+      samplingPeriod: const Duration(milliseconds: 80),
+    ).listen(_onShake, onError: (_) {});
+  }
+
+  void _onShake(AccelerometerEvent e) {
+    final m = math.sqrt(e.x * e.x + e.y * e.y + e.z * e.z);
+    if (m < _shakeMagnitudeThreshold) return;
+    final now = DateTime.now();
+    if (now.difference(_lastShakeSosAt) < const Duration(seconds: 10)) return;
+    _shakeSpikes.removeWhere((t) => now.difference(t) > _shakeWindow);
+    _shakeSpikes.add(now);
+    if (_shakeSpikes.length >= 3) {
+      _shakeSpikes.clear();
+      _lastShakeSosAt = now;
+      HapticService.vibrate(const [0, 300, 100, 300]);
+      _triggerSos();
+    }
   }
 
   void _triggerSos() async {
@@ -1005,6 +1059,14 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           earconEnabled: _vm.earcon.isEnabled,
           pitchBlackUiEnabled: false,
           classicGestures: Settings.instance.classicGestures,
+          speechRate: Settings.instance.speechRate,
+          ttsVolume: Settings.instance.ttsVolume,
+          earconVolume: Settings.instance.earconVolume,
+          verbosity: Settings.instance.verbosity,
+          alertFrequency: Settings.instance.alertFrequency,
+          hapticStrength: Settings.instance.hapticStrength,
+          sosTrigger: Settings.instance.sosTrigger,
+          dominantHand: Settings.instance.dominantHand,
           depthTier: _models.depthProvider?.tier,
           midasReady: _depthController.providerReady,
           sosContactNumber: _vm.sos.contactNumber,
@@ -1035,6 +1097,37 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           onPitchBlackUiChanged: (v) {},
           onClassicGesturesChanged: (v) {
             Settings.instance.setClassicGestures(v);
+            if (mounted) setState(() {});
+          },
+          onSpeechRateChanged: (v) {
+            Settings.instance.setSpeechRate(v);
+            _vm.applyA11yPrefs();
+          },
+          onTtsVolumeChanged: (v) {
+            Settings.instance.setTtsVolume(v);
+            _vm.applyA11yPrefs();
+          },
+          onEarconVolumeChanged: (v) {
+            Settings.instance.setEarconVolume(v);
+            _vm.applyA11yPrefs();
+          },
+          onVerbosityChanged: (v) {
+            Settings.instance.setVerbosity(v);
+          },
+          onAlertFrequencyChanged: (v) {
+            Settings.instance.setAlertFrequency(v);
+          },
+          onHapticStrengthChanged: (v) {
+            Settings.instance.setHapticStrength(v);
+            _vm.applyA11yPrefs();
+          },
+          onSosTriggerChanged: (v) {
+            Settings.instance.setSosTrigger(v);
+            _applySosTriggerListener();
+            if (mounted) setState(() {});
+          },
+          onDominantHandChanged: (v) {
+            Settings.instance.setDominantHand(v);
             if (mounted) setState(() {});
           },
           onReplayTutorial: _openGestureTutorial,
@@ -1152,10 +1245,13 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         onHorizontalDragEnd: (details) {
           final v = details.primaryVelocity;
           if (v == null) return;
+          final leftHanded =
+              Settings.instance.dominantHand == DominantHand.left;
+          final sign = leftHanded ? -1 : 1;
           if (v > kSwipeStrongVelocity) {
-            _vm.cycleMode(1);
+            _vm.cycleMode(1 * sign);
           } else if (v < -kSwipeStrongVelocity) {
-            _vm.cycleMode(-1);
+            _vm.cycleMode(-1 * sign);
           } else if (v.abs() > kSwipeWeakVelocity) {
             _notifyWeakGesture();
           }
@@ -1332,6 +1428,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
   void _handlePointerDown(PointerDownEvent event) {
     _activePointers.add(event.pointer);
+    if (Settings.instance.sosTrigger != SosTrigger.twoFingerHold) return;
     if (_activePointers.length == 2 && !_twoFingerSosArmed) {
       _twoFingerSosArmed = true;
       _twoFingerSosTimer?.cancel();
