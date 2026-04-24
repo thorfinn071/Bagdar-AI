@@ -29,10 +29,8 @@ import 'viewmodels/camera_view_model.dart';
 import 'services/model_service.dart';
 import 'services/battery_monitor.dart';
 import 'services/device_capability.dart';
-import 'services/fall_detector.dart' show MotionState;
 import 'services/motion_prealert.dart'
     show MotionIntrusionEvent, MotionIntrusionSide;
-import 'services/orientation_service.dart' show OrientationService;
 import 'services/traffic_light_analyzer.dart' show TrafficLightKind;
 import 'utils/blur_detector.dart';
 import 'utils/depth_hazard.dart' show DepthHazardType;
@@ -40,6 +38,7 @@ import 'utils/distance_utils.dart';
 import 'services/field_logger.dart';
 import 'services/indoor_gate.dart' show IndoorTransition;
 import 'camera/frame_quality_guard.dart';
+import 'camera/depth_pipeline_controller.dart';
 
 class AiCameraScreen extends StatefulWidget {
   final AppMode? initialMode;
@@ -69,7 +68,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   int _imgW = 0, _imgH = 0;
   bool _isCalibrated = false;
   bool _useHardwareDepthMode = false;
-  bool _depthProviderReady = false;
   final bool _exclusiveDepthTransition = false;
   bool _wantOcr = false;
   DateTime _ocrStartedAt = DateTime.fromMillisecondsSinceEpoch(0);
@@ -93,9 +91,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
   int _frameCount = 0;
   late final FrameQualityGuard _qualityGuard;
-
-  DateTime _lastDepthAt = DateTime.fromMillisecondsSinceEpoch(0);
-  Duration _depthInterval = const Duration(milliseconds: 400);
+  late final DepthPipelineController _depthController;
 
   bool _lifecycleBackgroundWarned = false;
 
@@ -126,6 +122,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     super.initState();
     _vm = CameraViewModel();
     _qualityGuard = FrameQualityGuard(weatherGate: _vm.weatherGate);
+    _depthController = DepthPipelineController(vm: _vm, models: _models);
 
     _vm.addListener(() {
       if (mounted) setState(() {});
@@ -292,7 +289,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           ok &&
           _models.depthProvider != null &&
           _models.depthProvider!.tier != DepthTier.focalLength;
-      setState(() => _depthProviderReady = hasDepthAi);
+      _depthController.setProviderReady(hasDepthAi);
+      if (mounted) setState(() {});
 
       _vm.setStatus('Загрузка ИИ модели YOLO...');
       await _models.loadYolo(useGpu: _useGpu, numThreads: _numThreads);
@@ -338,7 +336,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         }
       };
 
-      if (!_depthProviderReady && _vm.mode == AppMode.street) {
+      if (!_depthController.providerReady && _vm.mode == AppMode.street) {
         _vm.tts.say(
           S.get('depth_unavailable_street'),
           SpeechPriority.warning,
@@ -1136,10 +1134,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         _lastAnnouncedLight = null;
       }
 
-      if (_depthProviderReady &&
-          now.difference(_lastDepthAt) >= _depthInterval) {
-        _lastDepthAt = now;
-        _runDepthAnalysis(image);
+      if (_depthController.shouldRun(now)) {
+        unawaited(_processDepthAnalysis(image, now));
       }
     } finally {
       _finalizeFramePerf(now: now, frameSw: frameSw);
@@ -1147,80 +1143,30 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     }
   }
 
-  void _runDepthAnalysis(CameraImage image) async {
-    final depthProvider = _models.depthProvider;
-    if (depthProvider == null || !depthProvider.isReady) return;
-
-    try {
-      final cropTopFrac = OrientationService.cropTopFracForPitch(
-        _vm.orientation.pitch,
-      );
-      
-      
-      
-      
-      
-      
-      final userStationary =
-          _vm.fallDetector.motionState == MotionState.stationary;
-      final hazards = await depthProvider.analyze(
-        image,
-        cropTopFrac: cropTopFrac,
-        userStationary: userStationary,
-        
-        
-        weatherDegraded: _vm.weatherGate.degraded,
-      );
-      if (!mounted || hazards.isEmpty) return;
-
-      final rollExcessive = _vm.orientation.isRollExcessive;
-      for (final hazard in hazards) {
-        
-        
-        
-        
-        if (hazard.type == DepthHazardType.escalatorRiding) {
-          HapticService.vibrate(const [0, 50, 120, 50]);
-          continue;
-        }
-        final hazardKey = switch (hazard.type.name) {
-          'stepDown' => 'hazard_step_down',
-          'stepUp' => 'hazard_step_up',
-          'pothole' => 'hazard_pothole',
-          'curb' => 'hazard_curb',
-          'lowCurb' => 'hazard_low_curb',
-          'deadZone' => 'hazard_dead_zone',
-          'stairsDown' => 'hazard_stairs_down',
-          'overhead' => 'hazard_overhead',
-          'glassDoor' => 'hazard_glass_door',
-          'slippery' => 'hazard_slippery',
-          
-          
-          
-          'nearFieldIntrusion' => 'hazard_near_field',
-          _ => 'hazard_unknown',
-        };
-        final naturallyCritical =
-            hazard.type == DepthHazardType.stairsDown ||
-            hazard.type == DepthHazardType.overhead;
-        final isCritical = naturallyCritical && !rollExcessive;
-        final priority = isCritical
-            ? SpeechPriority.critical
-            : SpeechPriority.warning;
-        _vm.tts.say(S.alert(hazardKey), priority, pan: hazard.pan);
-        _fieldLog.logDepthHazard(
-          type: hazard.type.name,
-          score: hazard.midasScore,
-          coverage: hazard.coverage,
-        );
-        HapticService.vibrate(
-          isCritical
-              ? const [0, 300, 120, 300, 120, 300]
-              : const [0, 200, 100, 200],
-        );
+  Future<void> _processDepthAnalysis(CameraImage image, DateTime now) async {
+    final alerts = await _depthController.analyze(image, now);
+    if (!mounted || alerts.isEmpty) return;
+    for (final alert in alerts) {
+      final hazard = alert.hazard;
+      if (hazard.type == DepthHazardType.escalatorRiding) {
+        HapticService.vibrate(const [0, 50, 120, 50]);
+        continue;
       }
-    } catch (e) {
-      debugPrint('Depth analysis error: $e');
+      final hazardKey = DepthPipelineController.hazardKeyFor(hazard.type);
+      final priority = alert.isCritical
+          ? SpeechPriority.critical
+          : SpeechPriority.warning;
+      _vm.tts.say(S.alert(hazardKey), priority, pan: hazard.pan);
+      _fieldLog.logDepthHazard(
+        type: hazard.type.name,
+        score: hazard.midasScore,
+        coverage: hazard.coverage,
+      );
+      HapticService.vibrate(
+        alert.isCritical
+            ? const [0, 300, 120, 300, 120, 300]
+            : const [0, 200, 100, 200],
+      );
     }
   }
 
@@ -1351,7 +1297,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _detectInterval = _vm.throttler.detectInterval(
       _vm.battery.detectIntervalMs,
     );
-    _depthInterval = _vm.throttler.midasInterval(_vm.battery.midasIntervalMs);
+    _depthController.interval =
+        _vm.throttler.midasInterval(_vm.battery.midasIntervalMs);
   }
 
   List<Uint8List> _reusePlaneBytes(CameraImage image) {
@@ -1389,7 +1336,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           earconEnabled: _vm.earcon.isEnabled,
           pitchBlackUiEnabled: false,
           depthTier: _models.depthProvider?.tier,
-          midasReady: _depthProviderReady,
+          midasReady: _depthController.providerReady,
           sosContactNumber: _vm.sos.contactNumber,
           onLanguageChanged: (lang) async {
             AppStrings.setLanguage(lang);
