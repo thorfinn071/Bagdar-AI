@@ -368,6 +368,18 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       _fallCountdown.cancel();
       return;
     }
+    _announceQuickStatus();
+  }
+
+  void _announceQuickStatus() {
+    final mode = _vm.mode.label;
+    final battery = _vm.battery.batteryLevel;
+    final msg = S
+        .get('status_quick')
+        .replaceFirst('{mode}', mode)
+        .replaceFirst('{battery}', battery.toString());
+    _vm.tts.say(msg, SpeechPriority.info, pan: 0.0);
+    HapticService.vibrate(const [0, 30]);
   }
 
   void _triggerSos() async {
@@ -1122,19 +1134,25 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         onDoubleTap: _openSettings,
         onLongPress: _startVoiceCommand,
         onHorizontalDragEnd: (details) {
-          if (details.primaryVelocity == null) return;
-          if (details.primaryVelocity! > 500) {
+          final v = details.primaryVelocity;
+          if (v == null) return;
+          if (v > kSwipeStrongVelocity) {
             _vm.cycleMode(1);
-          } else if (details.primaryVelocity! < -500) {
+          } else if (v < -kSwipeStrongVelocity) {
             _vm.cycleMode(-1);
+          } else if (v.abs() > kSwipeWeakVelocity) {
+            _notifyWeakGesture();
           }
         },
         onVerticalDragEnd: (details) {
-          if (details.primaryVelocity == null) return;
-          if (details.primaryVelocity! < -500) {
+          final v = details.primaryVelocity;
+          if (v == null) return;
+          if (v < -kSwipeStrongVelocity) {
             _vm.togglePitchBlack();
-          } else if (details.primaryVelocity! > 500) {
+          } else if (v > kSwipeStrongVelocity) {
             _vm.showHelp();
+          } else if (v.abs() > kSwipeWeakVelocity) {
+            _notifyWeakGesture();
           }
         },
         child: Scaffold(
@@ -1278,6 +1296,18 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   }
 
   final Set<int> _activePointers = {};
+  DateTime? _lastWeakGestureAt;
+
+  void _notifyWeakGesture() {
+    final now = DateTime.now();
+    if (_lastWeakGestureAt != null &&
+        now.difference(_lastWeakGestureAt!) < kWeakGestureCooldown) {
+      return;
+    }
+    _lastWeakGestureAt = now;
+    _vm.earcon.play(Earcon.fail);
+    _vm.tts.say(S.get('gesture_weak'), SpeechPriority.info, pan: 0.0);
+  }
 
   void _handlePointerDown(PointerDownEvent event) {
     _activePointers.add(event.pointer);

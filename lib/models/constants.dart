@@ -206,3 +206,7 @@ const Duration kStallWatchdogThresholdNormal = Duration(milliseconds: 1200);
 const Duration kStallWatchdogThresholdWarm = Duration(milliseconds: 1500);
 const Duration kStallWatchdogThresholdHot = Duration(milliseconds: 1800);
 const Duration kStallWatchdogThresholdCritical = Duration(milliseconds: 2400);
+
+const double kSwipeStrongVelocity = 500.0;
+const double kSwipeWeakVelocity = 150.0;
+const Duration kWeakGestureCooldown = Duration(seconds: 10);
