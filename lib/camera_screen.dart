@@ -39,6 +39,7 @@ import 'services/field_logger.dart';
 import 'services/indoor_gate.dart' show IndoorTransition;
 import 'camera/frame_quality_guard.dart';
 import 'camera/depth_pipeline_controller.dart';
+import 'camera/stall_watchdog.dart';
 
 class AiCameraScreen extends StatefulWidget {
   final AppMode? initialMode;
@@ -92,12 +93,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   int _frameCount = 0;
   late final FrameQualityGuard _qualityGuard;
   late final DepthPipelineController _depthController;
+  late final StallWatchdog _stallWatchdog;
 
   bool _lifecycleBackgroundWarned = false;
-
-  Timer? _stallWatchdog;
-  DateTime _lastFrameArrivedAt = DateTime.now();
-  bool _cameraStallWarned = false;
 
   
   
@@ -123,6 +121,20 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _vm = CameraViewModel();
     _qualityGuard = FrameQualityGuard(weatherGate: _vm.weatherGate);
     _depthController = DepthPipelineController(vm: _vm, models: _models);
+    _stallWatchdog = StallWatchdog(
+      thresholdProvider: () => _vm.throttler.stallWatchdogThreshold(),
+      isActive: () =>
+          mounted && !_lifecycleBackgroundWarned && _isCameraReady,
+      onStall: () {
+        _vm.earcon.play(Earcon.cameraBlocked);
+        HapticService.vibrate(const [0, 400, 150, 400, 150, 400, 150, 400]);
+        _vm.tts.say(
+          S.get('camera_stalled'),
+          SpeechPriority.critical,
+          pan: 0.0,
+        );
+      },
+    );
 
     _vm.addListener(() {
       if (mounted) setState(() {});
@@ -137,7 +149,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _heartbeatTimer?.cancel();
     _twoFingerSosTimer?.cancel();
     _fallCountdownTimer?.cancel();
-    _stallWatchdog?.cancel();
+    _stallWatchdog.stop();
     _indoorPollTimer?.cancel();
     _lazyDisposeTimer?.cancel();
     _reinitHeartbeat?.cancel();
@@ -154,9 +166,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     if (state == AppLifecycleState.inactive ||
         state == AppLifecycleState.paused ||
         state == AppLifecycleState.hidden) {
-      _stallWatchdog?.cancel();
-      _stallWatchdog = null;
-      _cameraStallWarned = false;
+      _stallWatchdog.stop();
       _indoorPollTimer?.cancel();
       _indoorPollTimer = null;
       _vm.indoorGate.reset();
@@ -225,27 +235,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         _fieldLog.logLifecycle('resumed', resumeType: 'cold');
         _initCamera();
       }
-      _startStallWatchdog();
+      _stallWatchdog.start();
     }
-  }
-
-  void _startStallWatchdog() {
-    _stallWatchdog?.cancel();
-    _lastFrameArrivedAt = DateTime.now();
-    _cameraStallWarned = false;
-    _stallWatchdog = Timer.periodic(kStallWatchdogPeriod, (_) {
-      if (!mounted) return;
-      if (_lifecycleBackgroundWarned) return;
-      if (!_isCameraReady) return;
-      final gap = DateTime.now().difference(_lastFrameArrivedAt);
-      final threshold = _vm.throttler.stallWatchdogThreshold();
-      if (gap >= threshold && !_cameraStallWarned) {
-        _cameraStallWarned = true;
-        _vm.earcon.play(Earcon.cameraBlocked);
-        HapticService.vibrate(const [0, 400, 150, 400, 150, 400, 150, 400]);
-        _vm.tts.say(S.get('camera_stalled'), SpeechPriority.critical, pan: 0.0);
-      }
-    });
   }
 
   Future<void> _initAll() async {
@@ -903,7 +894,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           _vm.setStatus(S.get('camera_started'));
         });
       }
-      _startStallWatchdog();
+      _stallWatchdog.start();
       _startIndoorPoll();
     } catch (e) {
       _vm.setStatus('Ошибка камеры: $e');
@@ -914,9 +905,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     if (!mounted || _exclusiveDepthTransition) return;
 
     final now = DateTime.now();
-    _lastFrameArrivedAt = now;
-    if (_cameraStallWarned) {
-      _cameraStallWarned = false;
+    _stallWatchdog.notifyFrameArrived(now: now);
+    if (_stallWatchdog.isWarned) {
+      _stallWatchdog.clearWarning();
       _vm.tts.say(S.get('camera_resumed'), SpeechPriority.info, pan: 0.0);
     }
     if (_reinitHeartbeat != null) {
