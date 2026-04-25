@@ -48,6 +48,8 @@ import 'camera/fall_countdown_controller.dart';
 import 'camera/voice_command_dispatcher.dart';
 import 'camera/camera_lifecycle_controller.dart';
 import 'gesture_tutorial_screen.dart';
+import 'screens/settings_qr_export_screen.dart';
+import 'screens/settings_qr_import_screen.dart';
 
 class AiCameraScreen extends StatefulWidget {
   final AppMode? initialMode;
@@ -1181,9 +1183,73 @@ class _AiCameraScreenState extends State<AiCameraScreen>
               List.filled(len, dist == 'very close' ? 255 : 180),
           vibrateFn: (pattern, {intensities}) =>
               HapticService.vibrate(pattern, intensities: intensities),
+          onShowSettingsQr: _openSettingsQrExport,
+          onScanSettingsQr: _openSettingsQrImport,
         ),
       ),
     );
+  }
+
+  void _openSettingsQrExport() {
+    if (!mounted) return;
+    Navigator.of(context).push<void>(
+      MaterialPageRoute(
+        builder: (_) => SettingsQrExportScreen(tts: _vm.tts),
+      ),
+    );
+  }
+
+  Future<void> _openSettingsQrImport() async {
+    if (!mounted) return;
+    
+    
+    
+    await _releaseCameraForExternalScanner();
+    if (!mounted) {
+      unawaited(_initCamera());
+      return;
+    }
+    final applied = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        builder: (_) => SettingsQrImportScreen(tts: _vm.tts),
+      ),
+    );
+    if (!mounted) return;
+    
+    
+    if (applied == true) {
+      _vm.applyA11yPrefs();
+      AppStrings.setLanguage(AppLanguage.values[Settings.instance.language]);
+      await _vm.tts.setLanguage(AppStrings.ttsLang);
+      _vm.voice.setLocale(AppStrings.ttsLang);
+      if (mounted) setState(() {});
+    }
+    await _initCamera();
+  }
+
+  Future<void> _releaseCameraForExternalScanner() async {
+    final ctrl = _controller;
+    if (ctrl == null) {
+      _isCameraReady = false;
+      return;
+    }
+    try {
+      if (ctrl.value.isStreamingImages) {
+        await ctrl.stopImageStream();
+      }
+    } catch (_) {}
+    try {
+      await ctrl.dispose();
+    } catch (_) {}
+    if (!mounted) {
+      _controller = null;
+      _isCameraReady = false;
+      return;
+    }
+    setState(() {
+      _controller = null;
+      _isCameraReady = false;
+    });
   }
 
   void _showSosContactDialog() {
