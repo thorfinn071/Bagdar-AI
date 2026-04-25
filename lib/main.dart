@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 import 'onboarding_screen.dart';
+import 'services/feature_usage_tracker.dart';
 import 'services/settings_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Settings.instance.init();
+  await FeatureUsageTracker.instance.init();
 
   final startScreen = await resolveStartScreen();
   runApp(BagdarApp(home: startScreen));

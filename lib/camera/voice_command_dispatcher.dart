@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import '../models/app_mode.dart';
 import '../models/speech_job.dart';
 import '../models/strings.dart';
+import '../services/feature_usage_tracker.dart';
 import '../services/voice_command_service.dart';
 import '../viewmodels/camera_view_model.dart';
 import 'fall_countdown_controller.dart';
@@ -24,6 +25,12 @@ class VoiceCommandDispatcher {
   });
 
   void handleCommand(VoiceCommand cmd) {
+    if (cmd != VoiceCommand.unknown) {
+      FeatureUsageTracker.instance
+        ..increment(FeatureUsageKeys.voiceCommand(cmd.name))
+        ..increment(FeatureUsageKeys.voiceCommandTotal);
+    }
+
     if (fallCountdown.active) {
       if (cmd == VoiceCommand.cancelFall || cmd == VoiceCommand.sos) {
         if (cmd == VoiceCommand.cancelFall) {
@@ -107,6 +114,11 @@ class VoiceCommandDispatcher {
   }
 
   void handleNavCommand(VoiceCommand cmd, String destination) {
+    if (cmd != VoiceCommand.unknown) {
+      FeatureUsageTracker.instance
+        ..increment(FeatureUsageKeys.voiceCommand(cmd.name))
+        ..increment(FeatureUsageKeys.voiceCommandTotal);
+    }
     switch (cmd) {
       case VoiceCommand.navigateTo:
         vm.tts.say(
