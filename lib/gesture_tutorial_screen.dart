@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'models/speech_job.dart';
 import 'models/strings.dart';
 import 'services/earcon_service.dart';
+import 'services/feature_usage_tracker.dart';
 import 'services/haptic_service.dart';
 import 'services/settings_service.dart';
 import 'services/tts_service.dart';
@@ -125,6 +126,7 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
 
   Future<void> _finish() async {
     await Settings.instance.setTutorialSeen(true);
+    await FeatureUsageTracker.instance.setTutorialCompletedNow();
     if (!mounted) return;
     if (widget.onFinished != null) {
       widget.onFinished!.call();
