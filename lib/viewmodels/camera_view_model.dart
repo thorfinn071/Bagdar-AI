@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/a11y_prefs.dart';
 import '../models/app_mode.dart';
 import '../models/speech_job.dart';
+import '../services/feature_usage_tracker.dart';
 import '../services/settings_service.dart';
 import '../services/tts_service.dart';
 import '../services/earcon_service.dart';
@@ -130,6 +131,9 @@ class CameraViewModel extends ChangeNotifier {
 
   void setMode(AppMode newMode) {
     mode = newMode;
+    FeatureUsageTracker.instance.increment(
+      FeatureUsageKeys.mode(newMode.name),
+    );
     tts.say(
       '${S.get('mode_changed')} ${mode.label}',
       SpeechPriority.critical,
