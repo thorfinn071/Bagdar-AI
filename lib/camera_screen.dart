@@ -38,6 +38,7 @@ import 'services/traffic_light_analyzer.dart' show TrafficLightKind;
 import 'utils/blur_detector.dart';
 import 'utils/depth_hazard.dart' show DepthHazardType;
 import 'utils/distance_utils.dart';
+import 'services/feature_usage_tracker.dart';
 import 'services/field_logger.dart';
 import 'services/indoor_gate.dart' show IndoorTransition;
 import 'camera/frame_quality_guard.dart';
@@ -193,6 +194,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _controller = null;
     VisionForegroundService.stop();
     unawaited(_fieldLog.stopSession());
+    unawaited(FeatureUsageTracker.instance.flush());
     _vm.dispose();
     super.dispose();
   }
@@ -382,6 +384,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   }
 
   void _handleTap() {
+    FeatureUsageTracker.instance.increment(FeatureUsageKeys.gesture('tap'));
     if (_fallCountdown.active) {
       _fallCountdown.cancel();
       return;
@@ -394,6 +397,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       _recentTaps.add(now);
       if (_recentTaps.length >= 3) {
         _recentTaps.clear();
+        FeatureUsageTracker.instance.increment(
+          FeatureUsageKeys.gesture('triple_tap'),
+        );
         HapticService.vibrate(const [0, 300, 100, 300]);
         _triggerSos();
         return;
@@ -432,12 +438,16 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     if (_shakeSpikes.length >= 3) {
       _shakeSpikes.clear();
       _lastShakeSosAt = now;
+      FeatureUsageTracker.instance.increment(
+        FeatureUsageKeys.gesture('shake'),
+      );
       HapticService.vibrate(const [0, 300, 100, 300]);
       _triggerSos();
     }
   }
 
   void _triggerSos() async {
+    FeatureUsageTracker.instance.increment(FeatureUsageKeys.sosTriggered);
     HapticService.vibrate([0, 200, 100, 200, 100, 200]);
     _vm.tts.say('SOS', SpeechPriority.critical, pan: 0.0);
     final hasContact = (_vm.sos.contactNumber ?? '').isNotEmpty;
@@ -461,6 +471,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   }
 
   void _startVoiceCommand() async {
+    FeatureUsageTracker.instance.increment(
+      FeatureUsageKeys.gesture('long_press'),
+    );
     HapticService.vibrate([0, 100, 50, 100]);
     _vm.tts.say(S.get('voice_listening'), SpeechPriority.critical, pan: 0.0);
     await _vm.voice.startListening();
@@ -1043,6 +1056,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   }
 
   void _openSettings() {
+    FeatureUsageTracker.instance.increment(FeatureUsageKeys.settingsOpened);
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: Colors.grey[900],
@@ -1249,8 +1263,14 @@ class _AiCameraScreenState extends State<AiCameraScreen>
               Settings.instance.dominantHand == DominantHand.left;
           final sign = leftHanded ? -1 : 1;
           if (v > kSwipeStrongVelocity) {
+            FeatureUsageTracker.instance.increment(
+              FeatureUsageKeys.gesture('swipe_right'),
+            );
             _vm.cycleMode(1 * sign);
           } else if (v < -kSwipeStrongVelocity) {
+            FeatureUsageTracker.instance.increment(
+              FeatureUsageKeys.gesture('swipe_left'),
+            );
             _vm.cycleMode(-1 * sign);
           } else if (v.abs() > kSwipeWeakVelocity) {
             _notifyWeakGesture();
@@ -1261,8 +1281,14 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           if (v == null) return;
           final classic = Settings.instance.classicGestures;
           if (v < -kSwipeStrongVelocity) {
+            FeatureUsageTracker.instance.increment(
+              FeatureUsageKeys.gesture('swipe_up'),
+            );
             classic ? _vm.togglePitchBlack() : _vm.showHelp();
           } else if (v > kSwipeStrongVelocity) {
+            FeatureUsageTracker.instance.increment(
+              FeatureUsageKeys.gesture('swipe_down'),
+            );
             classic ? _vm.showHelp() : _vm.togglePitchBlack();
           } else if (v.abs() > kSwipeWeakVelocity) {
             _notifyWeakGesture();
@@ -1435,6 +1461,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       _twoFingerSosTimer = Timer(_twoFingerSosHold, () {
         if (!_twoFingerSosArmed) return;
         _twoFingerSosArmed = false;
+        FeatureUsageTracker.instance.increment(
+          FeatureUsageKeys.gesture('two_finger_hold'),
+        );
         HapticService.vibrate(const [0, 300, 100, 300]);
         _triggerSos();
       });
