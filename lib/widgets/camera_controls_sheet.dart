@@ -61,6 +61,8 @@ class CameraSettingsSheet extends StatefulWidget {
   final List<int> Function(String dist, int len) intensFn;
   final Future<void> Function(List<int>, {List<int>? intensities}) vibrateFn;
   final VoidCallback? onViewWaypoints;
+  final VoidCallback? onShowSettingsQr;
+  final VoidCallback? onScanSettingsQr;
 
   const CameraSettingsSheet({
     super.key,
@@ -115,6 +117,8 @@ class CameraSettingsSheet extends StatefulWidget {
     required this.intensFn,
     required this.vibrateFn,
     this.onViewWaypoints,
+    this.onShowSettingsQr,
+    this.onScanSettingsQr,
   });
 
   @override
@@ -633,6 +637,68 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
                 widget.onEditSosContact();
               },
             ),
+            if (widget.onShowSettingsQr != null ||
+                widget.onScanSettingsQr != null) ...[
+              const Divider(color: Colors.white24, height: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 4,
+                  horizontal: 16,
+                ),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    S.get('backup_section_title'),
+                    style: const TextStyle(
+                      color: Colors.white54,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+              ),
+              if (widget.onShowSettingsQr != null)
+                ListTile(
+                  textColor: Colors.white,
+                  iconColor: Colors.cyanAccent,
+                  leading: const Icon(
+                    Icons.qr_code_2,
+                    color: Colors.cyanAccent,
+                  ),
+                  title: Text(S.get('backup_show_qr')),
+                  subtitle: Text(
+                    S.get('backup_show_qr_subtitle'),
+                    style: const TextStyle(
+                      color: Colors.white38,
+                      fontSize: 11,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    widget.onShowSettingsQr!();
+                  },
+                ),
+              if (widget.onScanSettingsQr != null)
+                ListTile(
+                  textColor: Colors.white,
+                  iconColor: Colors.cyanAccent,
+                  leading: const Icon(
+                    Icons.qr_code_scanner,
+                    color: Colors.cyanAccent,
+                  ),
+                  title: Text(S.get('backup_scan_qr')),
+                  subtitle: Text(
+                    S.get('backup_scan_qr_subtitle'),
+                    style: const TextStyle(
+                      color: Colors.white38,
+                      fontSize: 11,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    widget.onScanSettingsQr!();
+                  },
+                ),
+            ],
             const Divider(color: Colors.white24, height: 20),
             ListTile(
               textColor: Colors.white,
