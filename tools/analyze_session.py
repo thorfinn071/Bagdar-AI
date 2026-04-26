@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+
 """
 Bagdar Alpha-Test Session Analyzer
 -----------------------------------
@@ -47,7 +47,7 @@ def analyze(events: list[dict], filename: str):
     print(f"  SESSION: {filename}")
     print(f"{'='*60}")
 
-    # --- session metadata ---
+    
     starts = [e for e in events if e['event'] == 'session_start']
     ends = [e for e in events if e['event'] == 'session_end']
     if starts:
@@ -64,7 +64,7 @@ def analyze(events: list[dict], filename: str):
         print(f"  Duration:   {dur // 60}m {dur % 60}s")
         print(f"  Events:     {d.get('totalEvents', len(events))}")
 
-    # --- detection stats ---
+    
     dets = [e for e in events if e['event'] == 'detection']
     if len(dets) >= 2:
         total_ms = dets[-1]['ts'] - dets[0]['ts']
@@ -81,7 +81,7 @@ def analyze(events: list[dict], filename: str):
             print(f"  Avg tracks:   {sum(track_counts)/len(track_counts):.1f}")
             print(f"  Max tracks:   {max(track_counts)}")
 
-    # --- TTS stats ---
+    
     tts = [e for e in events if e['event'] == 'tts_say']
     if tts:
         priorities = Counter(e['data']['priority'] for e in tts if 'priority' in e.get('data', {}))
@@ -91,14 +91,14 @@ def analyze(events: list[dict], filename: str):
             if p in priorities:
                 print(f"    {p:10s}: {priorities[p]}")
 
-        # top 5 most frequent texts
+        
         texts = Counter(e['data'].get('text', '?') for e in tts)
         print(f"  Top alerts:")
         for text, count in texts.most_common(5):
             short = text[:50] + ('...' if len(text) > 50 else '')
             print(f"    {count:3d}x  {short}")
 
-    # --- FP / FN markers ---
+    
     fps_list = [e for e in events if e['event'] == 'fp_marker']
     fns_list = [e for e in events if e['event'] == 'fn_marker']
     if fps_list or fns_list:
@@ -109,7 +109,7 @@ def analyze(events: list[dict], filename: str):
         if total_alerts > 0:
             print(f"  FP rate:          {len(fps_list)/total_alerts*100:.1f}%")
 
-    # --- depth hazards ---
+    
     hazards = [e for e in events if e['event'] == 'depth_hazard']
     if hazards:
         types = Counter(e['data']['type'] for e in hazards if 'type' in e.get('data', {}))
@@ -118,7 +118,7 @@ def analyze(events: list[dict], filename: str):
         for t, c in types.most_common():
             print(f"    {t:22s}: {c}")
 
-    # --- AE transitions ---
+    
     ae = [e for e in events if e['event'] == 'ae_transition']
     if ae:
         ended = [e for e in ae if not e['data'].get('started', True)]
@@ -129,7 +129,7 @@ def analyze(events: list[dict], filename: str):
             print(f"  Avg frames:   {sum(frames)/len(frames):.1f}")
             print(f"  Max frames:   {max(frames)}")
 
-    # --- weather gate ---
+    
     weather = [e for e in events if e['event'] == 'weather_gate']
     if weather:
         trans = Counter(e['data']['transition'] for e in weather)
@@ -137,7 +137,7 @@ def analyze(events: list[dict], filename: str):
         for t, c in trans.items():
             print(f"    {t}: {c}")
 
-    # --- indoor gate ---
+    
     indoor = [e for e in events if e['event'] == 'indoor_gate']
     if indoor:
         trans = Counter(e['data']['transition'] for e in indoor)
@@ -149,7 +149,7 @@ def analyze(events: list[dict], filename: str):
             print(f"    @{ts//1000}s: {e['data']['transition']}"
                   f" (gps={e['data'].get('gpsAcc', '?')}m)")
 
-    # --- thermal ---
+    
     thermal = [e for e in events if e['event'] == 'thermal']
     if thermal:
         sevs = Counter(e['data']['severity'] for e in thermal)
@@ -157,7 +157,7 @@ def analyze(events: list[dict], filename: str):
         for s, c in sevs.items():
             print(f"    {s}: {c}")
 
-    # --- lifecycle ---
+    
     lifecycle = [e for e in events if e['event'] == 'lifecycle']
     if lifecycle:
         actions = Counter(e['data']['action'] for e in lifecycle)
@@ -169,7 +169,7 @@ def analyze(events: list[dict], filename: str):
         print(f"  Warm resume: {warm}")
         print(f"  Cold reinit: {cold}")
 
-    # --- frozen / droplet ---
+    
     frozen = [e for e in events if e['event'] == 'frozen_frame']
     droplet = [e for e in events if e['event'] == 'droplet']
     if frozen or droplet:

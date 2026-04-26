@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+
 """
 OSM .pbf → SQLite POI database with FTS5 for Bagdar offline search.
 
