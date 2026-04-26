@@ -410,8 +410,14 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
   void _heartbeatTick() {
     if (!mounted) return;
+    final now = DateTime.now();
+    final lastAlertAt = _vm.alertMgr.lastCriticalAt;
+    final recentAlert = lastAlertAt.millisecondsSinceEpoch != 0 &&
+        now.difference(lastAlertAt) < const Duration(seconds: 10);
     HapticService.vibrate([0, 50]);
-    _vm.earcon.play(Earcon.heartbeat);
+    if (!recentAlert) {
+      _vm.earcon.play(Earcon.heartbeat);
+    }
     try {
       const MethodChannel('bagdar/watchdog').invokeMethod('ping');
     } catch (_) {}

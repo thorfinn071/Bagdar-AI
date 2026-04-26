@@ -27,7 +27,6 @@ class EarconService {
 
   static const Set<Earcon> _kThrottleExempt = {
     Earcon.cameraBlocked,
-    Earcon.proximity,
   };
 
   final Map<Earcon, AudioPlayer> _players = {};
