@@ -145,6 +145,14 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   static const int _kShakeWarnStreak = 15;
   static const Duration _kShakeWarnCooldown = Duration(seconds: 6);
 
+  
+  
+  
+  DateTime _lastStallWarnTtsAt = DateTime.fromMillisecondsSinceEpoch(0);
+  DateTime _stallStartedAt = DateTime.fromMillisecondsSinceEpoch(0);
+  static const Duration _kStallTtsCooldown = Duration(seconds: 15);
+  static const Duration _kStallTtsMinDuration = Duration(milliseconds: 2500);
+
   @override
   void initState() {
     super.initState();
@@ -162,11 +170,24 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       isActive: () =>
           mounted && !_lifecycle.backgroundWarned && _isCameraReady,
       onStall: () {
+        final now = DateTime.now();
+        _stallStartedAt = now;
+        
+        
+        _vm.alertMgr.markCameraStall(now);
+        
+        HapticService.vibrate(const [0, 120]);
+        
+        if (now.difference(_lastStallWarnTtsAt) < _kStallTtsCooldown) {
+          return;
+        }
+        _lastStallWarnTtsAt = now;
         _vm.earcon.play(Earcon.cameraBlocked);
-        HapticService.vibrate(const [0, 400, 150, 400, 150, 400, 150, 400]);
+        
+        
         _vm.tts.say(
           S.get('camera_stalled'),
-          SpeechPriority.critical,
+          SpeechPriority.warning,
           pan: 0.0,
         );
       },
@@ -669,7 +690,14 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _stallWatchdog.notifyFrameArrived(now: now);
     if (_stallWatchdog.isWarned) {
       _stallWatchdog.clearWarning();
-      _vm.tts.say(S.get('camera_resumed'), SpeechPriority.info, pan: 0.0);
+      
+      
+      final stallFor = now.difference(_stallStartedAt);
+      if (stallFor >= _kStallTtsMinDuration &&
+          _stallStartedAt.millisecondsSinceEpoch != 0) {
+        _vm.tts.say(S.get('camera_resumed'), SpeechPriority.info, pan: 0.0);
+      }
+      _stallStartedAt = DateTime.fromMillisecondsSinceEpoch(0);
     }
     _lifecycle.cancelReinitHeartbeat();
 

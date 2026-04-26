@@ -134,6 +134,16 @@ class AlertManager {
   DateTime _lastCriticalAt = DateTime.fromMillisecondsSinceEpoch(0);
   bool _guidanceGiven = false;
 
+  
+  
+  DateTime _lastCameraStallAt = DateTime.fromMillisecondsSinceEpoch(0);
+  
+  
+  
+  DateTime _lastClearAnnounceAt = DateTime.fromMillisecondsSinceEpoch(0);
+  static const Duration _kPostStallClearGuard = Duration(seconds: 6);
+  static const Duration _kClearAnnounceMinInterval = Duration(seconds: 12);
+
   String _pendingHint = '';
   int _pendingHintFrames = 0;
 
@@ -149,6 +159,15 @@ class AlertManager {
 
   void updateLastCriticalAt(DateTime t) => _lastCriticalAt = t;
 
+  
+  
+  
+  void markCameraStall(DateTime now) {
+    _lastCameraStallAt = now;
+    _emptySince = DateTime.fromMillisecondsSinceEpoch(0);
+    _objectLastSeen = now;
+  }
+
   void reset() {
     _filter.reset();
     _engine.reset();
@@ -160,6 +179,8 @@ class AlertManager {
     _prevCloseTrackIds.clear();
     _proximityUpdated = false;
     _proximityDistance = double.infinity;
+    _lastCameraStallAt = DateTime.fromMillisecondsSinceEpoch(0);
+    _lastClearAnnounceAt = DateTime.fromMillisecondsSinceEpoch(0);
   }
 
   Track? processFrame({
@@ -326,10 +347,24 @@ class AlertManager {
     final recentCritical =
         now.difference(_lastCriticalAt) < kPostCriticalClearDelay;
 
+    
+    
+    
+    final recentStall = _lastCameraStallAt.millisecondsSinceEpoch != 0 &&
+        now.difference(_lastCameraStallAt) < _kPostStallClearGuard;
+
+    
+    
+    
+    final clearCooldownOk = _lastClearAnnounceAt.millisecondsSinceEpoch == 0 ||
+        now.difference(_lastClearAnnounceAt) >= _kClearAnnounceMinInterval;
+
     if (!_clearAnnounced &&
         emptyFor >= confirmDuration &&
         gapSinceObj >= kClearAnnounceDuration &&
-        !recentCritical) {
+        !recentCritical &&
+        !recentStall &&
+        clearCooldownOk) {
       if (mode == AppMode.cane) {
         _earcon.play(Earcon.pathClear);
         _tts.say(S.alert('path_clear_cane'), SpeechPriority.info, pan: 0.0);
@@ -338,6 +373,7 @@ class AlertManager {
         _tts.say(S.alert('path_clear'), SpeechPriority.info, pan: 0.0);
       }
       _clearAnnounced = true;
+      _lastClearAnnounceAt = now;
     }
   }
 

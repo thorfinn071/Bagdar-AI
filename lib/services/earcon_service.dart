@@ -103,7 +103,10 @@ class EarconService {
       case Earcon.objectLeft:
         return _buildWav(_sweep(440, 220, 80, 0.25));
       case Earcon.pathClear:
-        return _buildWav(_chord([880, 1100, 1320], 40, 30, 0.45));
+        
+        
+        
+        return _buildWav(_singleTone(880, 90, 0.40));
       case Earcon.approaching:
         return _buildWav(_doubleBeep(220, 45, 35, 0.55));
       case Earcon.modeStreet:
@@ -161,23 +164,6 @@ class EarconService {
       phase += 2 * math.pi * freq / _sampleRate;
     }
     return buf;
-  }
-
-  Int16List _chord(List<double> freqs, int beepMs, int gapMs, double amp) {
-    final beepSamples = (_sampleRate * beepMs / 1000).round();
-    final gapSamples = (_sampleRate * gapMs / 1000).round();
-    final total = freqs.length * beepSamples + (freqs.length - 1) * gapSamples;
-    final result = Int16List(total);
-    int offset = 0;
-    for (int i = 0; i < freqs.length; i++) {
-      final beep = _singleTone(freqs[i], beepMs, amp);
-      result.setAll(offset, beep);
-      offset += beepSamples;
-      if (i < freqs.length - 1) {
-        offset += gapSamples;
-      }
-    }
-    return result;
   }
 
   Int16List _sine(double freq, int samples, double amp) {
