@@ -9,6 +9,7 @@ import '../utils/ground_plane_analyzer.dart';
 import '../utils/midas_service.dart';
 import 'device_capability.dart';
 import 'hardware_depth_bridge.dart';
+import 'ncnn_depth_provider.dart';
 
 abstract class DepthProvider {
   DepthTier get tier;
@@ -517,6 +518,14 @@ class DepthProviderFactory {
       case DepthTier.focalLength:
         debugPrint('DepthProviderFactory: FocalLengthDepthProvider');
         return FocalLengthDepthProvider();
+
+      case DepthTier.ncnnVulkan:
+      case DepthTier.ncnnCpu:
+        debugPrint(
+          'DepthProviderFactory: NCNN tier requested via legacy create(); '
+          'use createAndInit() instead. Falling back to MiDaS.',
+        );
+        return MidasDepthProvider(useNnApi: caps.supportsNnApi);
     }
   }
 
@@ -529,6 +538,14 @@ class DepthProviderFactory {
       case DepthTier.midasCpu:
         return MidasDepthProvider(useNnApi: false);
       case DepthTier.focalLength:
+        return FocalLengthDepthProvider();
+      case DepthTier.ncnnVulkan:
+      case DepthTier.ncnnCpu:
+        
+        
+        debugPrint(
+          'DepthProviderFactory: createWithTier called with NCNN tier — using FocalLength',
+        );
         return FocalLengthDepthProvider();
     }
   }
@@ -552,6 +569,13 @@ class DepthProviderFactory {
         return const [DepthTier.midasCpu, DepthTier.focalLength];
       case DepthTier.focalLength:
         return const [DepthTier.focalLength];
+      case DepthTier.ncnnVulkan:
+      case DepthTier.ncnnCpu:
+        return const [
+          DepthTier.midasNnapi,
+          DepthTier.midasCpu,
+          DepthTier.focalLength,
+        ];
     }
   }
 
@@ -559,6 +583,24 @@ class DepthProviderFactory {
     DeviceCapabilities caps, {
     int threads = 2,
   }) async {
+    final ncnn = await NcnnDepthProvider.tryCreate();
+    if (ncnn != null) {
+      try {
+        if (await ncnn.init(threads: threads)) {
+          debugPrint(
+            'DepthProviderFactory: activated NCNN (vulkan=${ncnn.tier == DepthTier.ncnnVulkan})',
+          );
+          return ncnn;
+        }
+        debugPrint('DepthProviderFactory: NCNN init failed, falling back');
+      } catch (e) {
+        debugPrint('DepthProviderFactory: NCNN threw $e, falling back');
+      }
+      try {
+        ncnn.dispose();
+      } catch (_) {}
+    }
+
     final chain = _fallbackChain(caps.bestDepthTier);
     for (final tier in chain) {
       final provider = createWithTier(tier);

@@ -907,6 +907,10 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
     switch (tier) {
       case DepthTier.hardware:
         return 'ARCore / LiDAR';
+      case DepthTier.ncnnVulkan:
+        return 'NCNN + Vulkan';
+      case DepthTier.ncnnCpu:
+        return 'NCNN + CPU';
       case DepthTier.midasNnapi:
         return 'MiDaS + NNAPI';
       case DepthTier.midasCpu:
@@ -922,6 +926,10 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
     switch (tier) {
       case DepthTier.hardware:
         return 'Нативная глубина с устройства';
+      case DepthTier.ncnnVulkan:
+        return 'NCNN runtime с Vulkan GPU-ускорением';
+      case DepthTier.ncnnCpu:
+        return 'NCNN runtime на CPU (NEON)';
       case DepthTier.midasNnapi:
         return 'MiDaS fallback выполняется через NNAPI';
       case DepthTier.midasCpu:

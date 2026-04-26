@@ -41,7 +41,7 @@ class DeviceInfo {
   }
 }
 
-enum DepthTier { hardware, midasNnapi, midasCpu, focalLength }
+enum DepthTier { hardware, midasNnapi, midasCpu, focalLength, ncnnVulkan, ncnnCpu }
 
 class DeviceCapabilities {
   final DepthTier bestDepthTier;
