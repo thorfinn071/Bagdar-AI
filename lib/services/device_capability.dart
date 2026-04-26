@@ -68,9 +68,12 @@ class DeviceCapabilities {
 class DeviceCapabilityProbe {
   DeviceCapabilityProbe._();
 
-  static const String _kTierKey = 'vg_depth_tier_v1';
-  static const String _kSdkKey = 'vg_android_sdk_v1';
-  static const String _kNnApiKey = 'vg_nnapi_v1';
+  
+  
+  
+  static const String _kTierKey = 'vg_depth_tier_v2';
+  static const String _kSdkKey = 'vg_android_sdk_v2';
+  static const String _kNnApiKey = 'vg_nnapi_v2';
   static const MethodChannel _channel = MethodChannel('bagdar/device_info');
 
   static DeviceCapabilities? _cached;

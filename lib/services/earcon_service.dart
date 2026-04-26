@@ -22,7 +22,14 @@ enum Earcon {
 class EarconService {
   static const int _sampleRate = 44100;
 
+  
+  
+  
+  
+  static const Duration _kPerEarconCooldown = Duration(milliseconds: 800);
+
   final Map<Earcon, AudioPlayer> _players = {};
+  final Map<Earcon, DateTime> _lastPlayedAt = {};
 
   bool _enabled = true;
   bool _ready = false;
@@ -74,6 +81,15 @@ class EarconService {
 
   Future<void> play(Earcon earcon, {double pan = 0.0}) async {
     if (!_ready || !_enabled) return;
+    
+    
+    
+    final now = DateTime.now();
+    final lastAt = _lastPlayedAt[earcon];
+    if (lastAt != null && now.difference(lastAt) < _kPerEarconCooldown) {
+      return;
+    }
+    _lastPlayedAt[earcon] = now;
     final player = _players[earcon];
     if (player == null) return;
     try {
