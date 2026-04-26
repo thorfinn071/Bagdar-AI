@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+
 """
 OSM .pbf → binary CH graph for Bagdar offline routing.
 

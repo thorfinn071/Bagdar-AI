@@ -31,3 +31,12 @@ output/
 .DS_Store
 model_export/venv/
 scratch/
+
+# NCNN tooling — build artifacts and downloaded binaries
+tools/ncnn/.venv/
+tools/ncnn/bin/
+tools/ncnn/build/
+tools/ncnn/parity_report.json
+
+# Native third-party (downloaded NCNN runtime, not committed)
+android/app/src/main/cpp/third_party/

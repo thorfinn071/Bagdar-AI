@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+
 """
 GTFS zip → SQLite database for Bagdar offline transit info.
 
