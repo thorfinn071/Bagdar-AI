@@ -20,7 +20,9 @@ class OrientationService {
   static const double _kPitchLow = 30.0;
   static const double _kPitchHigh = 60.0;
 
-  static const double kRollExcessiveThreshold = 20.0;
+  static const double kRollEnterThreshold = 35.0;
+  static const double kRollExitThreshold = 25.0;
+  static const double kRollExcessiveThreshold = kRollEnterThreshold;
 
   static double cropTopFracForPitch(double pitchDeg) {
     if (!pitchDeg.isFinite) return _kCropMid;
@@ -64,7 +66,13 @@ class OrientationService {
             onPitchChanged?.call(_state);
           }
 
-          final nowExcessive = _roll.abs() > kRollExcessiveThreshold;
+          final absRoll = _roll.abs();
+          final bool nowExcessive;
+          if (_rollExcessive) {
+            nowExcessive = absRoll >= kRollExitThreshold;
+          } else {
+            nowExcessive = absRoll >= kRollEnterThreshold;
+          }
           if (nowExcessive != _rollExcessive) {
             _rollExcessive = nowExcessive;
             onRollChanged?.call(_rollExcessive);

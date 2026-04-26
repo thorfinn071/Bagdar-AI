@@ -77,6 +77,10 @@ class CameraViewModel extends ChangeNotifier {
   bool isPitchBlack = false;
   bool guideDogMode = false;
 
+  DateTime _lastRollWarnAt = DateTime.fromMillisecondsSinceEpoch(0);
+  DateTime _rollExcessiveSince = DateTime.fromMillisecondsSinceEpoch(0);
+  DateTime _lastOrientationWarnAt = DateTime.fromMillisecondsSinceEpoch(0);
+
   final ValueNotifier<List<Track>> tracksNotifier = ValueNotifier(const []);
 
   
@@ -207,29 +211,42 @@ class CameraViewModel extends ChangeNotifier {
 
     tracker.ttsService = tts;
 
-    DateTime lastOrientationWarnAt = DateTime.fromMillisecondsSinceEpoch(0);
     orientation.onPitchChanged = (state) {
       final now = DateTime.now();
-      if (now.difference(lastOrientationWarnAt) < const Duration(seconds: 10))
+      if (now.difference(_lastOrientationWarnAt) < const Duration(seconds: 10))
         return;
 
       if (state == DevicePitch.tooHigh) {
-        lastOrientationWarnAt = now;
+        _lastOrientationWarnAt = now;
         tts.say(S.get('pitch_too_high'), SpeechPriority.info, pan: 0.0);
       } else if (state == DevicePitch.tooLow) {
-        lastOrientationWarnAt = now;
+        _lastOrientationWarnAt = now;
         tts.say(S.get('pitch_too_low'), SpeechPriority.info, pan: 0.0);
       }
     };
 
-    DateTime lastRollWarnAt = DateTime.fromMillisecondsSinceEpoch(0);
     orientation.onRollChanged = (excessive) {
-      if (!excessive) return;
       final now = DateTime.now();
-      if (now.difference(lastRollWarnAt) < const Duration(seconds: 10)) return;
-      lastRollWarnAt = now;
-      tts.say(S.get('phone_tilted_sideways'), SpeechPriority.warning, pan: 0.0);
-      HapticService.vibrate([0, 150, 100, 150]);
+      if (excessive) {
+        _rollExcessiveSince = now;
+        earcon.play(Earcon.fail);
+        HapticService.vibrate([0, 100, 80, 100]);
+        Future.delayed(const Duration(seconds: 3), () {
+          if (!orientation.isRollExcessive) return;
+          final t = DateTime.now();
+          if (t.difference(_lastRollWarnAt) < const Duration(seconds: 20)) {
+            return;
+          }
+          _lastRollWarnAt = t;
+          tts.say(
+            S.get('phone_tilted_sideways'),
+            SpeechPriority.warning,
+            pan: 0.0,
+          );
+        });
+      } else {
+        _rollExcessiveSince = DateTime.fromMillisecondsSinceEpoch(0);
+      }
     };
 
     battery.onThrottleChanged = (level) {
