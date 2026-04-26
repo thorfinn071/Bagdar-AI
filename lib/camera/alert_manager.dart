@@ -423,12 +423,14 @@ class AlertManager {
           forAlert: true,
         );
         final v = Settings.instance.verbosity;
+        final approachDist = top.distM > 0
+            ? ', ~${top.distM.toStringAsFixed(1)} ${S.alert('approx_meters')}'
+            : '';
         final text = switch (v) {
           Verbosity.minimal => '$dir.',
-          Verbosity.normal => '${S.alert(phraseKey)}, $dir.',
-          Verbosity.detailed => '${S.alert(phraseKey)}, $dir, '
-              '${top.distM > 0 ? "~${top.distM.toStringAsFixed(1)} " : ""}'
-              '${S.alert('approx_meters')}.',
+          Verbosity.normal => '${S.alert(phraseKey)}, $dir$approachDist.',
+          Verbosity.detailed =>
+              '${S.alert(phraseKey)}, $dir$approachDist.',
         };
         _filter.add(
           AlertCandidate(
@@ -585,7 +587,7 @@ class AlertManager {
         _earcon.play(Earcon.objectAppeared, pan: pan);
         final text = switch (verb) {
           Verbosity.minimal => '$dir.',
-          Verbosity.normal => '$label $dir.',
+          Verbosity.normal => '$label $dir$distPart.',
           Verbosity.detailed => '$label $dir$distPart.',
         };
         _filter.add(
