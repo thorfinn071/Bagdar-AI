@@ -176,6 +176,13 @@ const double kHardwareDepthMinMeanMeters = 0.30;
 const double kHardwareDepthMaxMeanMeters = 25.0;
 const int kHardwareDepthLowConfFrames = 5;
 
+
+
+
+
+const double kHardwareDepthHighConfThreshold = 0.7;
+const Duration kHardwareDepthHighConfStreakForDispose = Duration(seconds: 30);
+
 const int kTargetDetectFps = 7;
 const int kMinAcceptableDetectFps = 3;
 const int kTargetFrameBudgetMs = 140;
