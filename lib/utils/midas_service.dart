@@ -267,6 +267,17 @@ class MidasService {
       if (flat.length != _inputSize * _inputSize) {
         return const [];
       }
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       final result = _analyzer.analyze(
         flat,
         lumaMap: _lumaBuffer,
