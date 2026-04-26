@@ -388,7 +388,7 @@ class TtsService {
     }
   }
 
-  void evictStale({Duration maxAge = const Duration(seconds: 3)}) {
+  void evictStale({Duration maxAge = const Duration(seconds: 5)}) {
     final cutoff = DateTime.now().subtract(maxAge);
     final before = _queue.length;
     _queue.removeWhere(
