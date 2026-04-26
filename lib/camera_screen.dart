@@ -115,8 +115,19 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   
   
   
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   Timer? _indoorPollTimer;
-  static const Duration _kIndoorPollPeriod = Duration(seconds: 2);
+  static const Duration _kIndoorPollPeriod = Duration(seconds: 5);
 
   
   
