@@ -29,3 +29,5 @@ export.osm
 gtfs_data.zip
 output/
 .DS_Store
+model_export/venv/
+scratch/
