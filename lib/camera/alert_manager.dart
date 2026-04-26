@@ -168,6 +168,13 @@ class AlertManager {
     _objectLastSeen = now;
   }
 
+  void markModeSwitch(DateTime now) {
+    _lastClearAnnounceAt = now;
+    _clearAnnounced = false;
+    _emptySince = DateTime.fromMillisecondsSinceEpoch(0);
+    _objectLastSeen = now;
+  }
+
   void reset() {
     _filter.reset();
     _engine.reset();

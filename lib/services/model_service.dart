@@ -191,14 +191,13 @@ class ModelService {
     final threads = numThreads ?? Settings.instance.numThreads;
     final caps = await DeviceCapabilityProbe.probe();
 
-    final provider = DepthProviderFactory.create(caps);
-    final ok = await provider.init(threads: threads);
-
-    if (ok) {
-      _depthProvider = provider;
-      _midasLoaded = true;
-    }
-    return ok;
+    final provider = await DepthProviderFactory.createAndInit(
+      caps,
+      threads: threads,
+    );
+    _depthProvider = provider;
+    _midasLoaded = provider.isReady;
+    return provider.isReady;
   }
 
   Future<void> dispose() async {
