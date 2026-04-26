@@ -532,4 +532,55 @@ class DepthProviderFactory {
         return FocalLengthDepthProvider();
     }
   }
+
+  static List<DepthTier> _fallbackChain(DepthTier best) {
+    switch (best) {
+      case DepthTier.hardware:
+        return const [
+          DepthTier.hardware,
+          DepthTier.midasNnapi,
+          DepthTier.midasCpu,
+          DepthTier.focalLength,
+        ];
+      case DepthTier.midasNnapi:
+        return const [
+          DepthTier.midasNnapi,
+          DepthTier.midasCpu,
+          DepthTier.focalLength,
+        ];
+      case DepthTier.midasCpu:
+        return const [DepthTier.midasCpu, DepthTier.focalLength];
+      case DepthTier.focalLength:
+        return const [DepthTier.focalLength];
+    }
+  }
+
+  static Future<DepthProvider> createAndInit(
+    DeviceCapabilities caps, {
+    int threads = 2,
+  }) async {
+    final chain = _fallbackChain(caps.bestDepthTier);
+    for (final tier in chain) {
+      final provider = createWithTier(tier);
+      try {
+        final ok = await provider.init(threads: threads);
+        if (ok) {
+          debugPrint('DepthProviderFactory: activated tier=$tier');
+          return provider;
+        }
+        debugPrint('DepthProviderFactory: tier=$tier init failed, trying next');
+      } catch (e) {
+        debugPrint('DepthProviderFactory: tier=$tier threw $e, trying next');
+      }
+      try {
+        provider.dispose();
+      } catch (_) {}
+    }
+    debugPrint(
+      'DepthProviderFactory: all tiers failed; returning FocalLengthDepthProvider',
+    );
+    final last = FocalLengthDepthProvider();
+    await last.init(threads: threads);
+    return last;
+  }
 }

@@ -135,6 +135,7 @@ class CameraViewModel extends ChangeNotifier {
 
   void setMode(AppMode newMode) {
     mode = newMode;
+    alertMgr.markModeSwitch(DateTime.now());
     FeatureUsageTracker.instance.increment(
       FeatureUsageKeys.mode(newMode.name),
     );
