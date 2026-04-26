@@ -130,6 +130,25 @@ class ModelService {
     );
   }
 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   Future<void> adjustForThermal(ThermalSeverity severity) async {
     if (!_yoloLoaded || _yoloReloadBusy) return;
     final desired =
@@ -152,6 +171,20 @@ class ModelService {
     } finally {
       _yoloReloadBusy = false;
     }
+  }
+
+  @visibleForTesting
+  YoloInputTier? debugDesiredTierForThermal(
+    ThermalSeverity severity, {
+    required bool hasSmall,
+    required bool isLowEnd,
+  }) {
+    final desired =
+        severity == ThermalSeverity.hot || severity == ThermalSeverity.critical
+        ? YoloInputTier.small
+        : (isLowEnd ? YoloInputTier.small : YoloInputTier.standard);
+    if (desired == YoloInputTier.small && !hasSmall) return null;
+    return desired;
   }
 
   Future<bool> loadMidas({int? numThreads}) async {
