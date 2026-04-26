@@ -177,6 +177,20 @@ class TtsService {
       });
 
       _ready = true;
+
+      
+      
+      
+      
+      
+      try {
+        await _tts.setVolume(0.0);
+        unawaited(_tts.speak('.'));
+        await Future<void>.delayed(const Duration(milliseconds: 250));
+        await _tts.stop();
+        _speaking = false;
+        await _tts.setVolume(_userVolume);
+      } catch (_) {}
     } catch (_) {
       _ready = false;
     }
@@ -187,6 +201,17 @@ class TtsService {
     _requestedLang = bcp47Tag;
     _usingEnglishFallback = false;
     await _applyLanguage(bcp47Tag);
+  }
+
+  
+  
+  
+  
+  Future<void> preClaimAudioFocus() async {
+    if (!_ready) return;
+    try {
+      await _session?.setActive(true);
+    } catch (_) {}
   }
 
   Future<void> _applyLanguage(String bcp47Tag) async {

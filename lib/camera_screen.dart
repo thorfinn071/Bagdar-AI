@@ -629,6 +629,10 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       _controller = ctrl;
       await ctrl.startImageStream(_onFrame);
 
+      
+      
+      unawaited(_vm.tts.preClaimAudioFocus());
+
       if (mounted) {
         setState(() {
           _isCameraReady = true;
