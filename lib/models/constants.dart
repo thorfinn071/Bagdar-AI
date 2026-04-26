@@ -142,6 +142,11 @@ const double kMidasMinCoverage = 0.12;
 
 const double kMidasDropRatio = 0.30;
 
+
+
+
+const int kMidasStuckTimeoutMs = 3000;
+
 const double kFusionWarningScore = 0.35;
 
 const double kFusionCriticalScore = 0.58;

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 import 'dart:ffi';
 import 'dart:io';
@@ -70,6 +71,15 @@ class MidasService {
   bool _busy = false;
   bool _nativeBridgeEnabled = true;
 
+  
+  
+  
+  
+  int? _busyStartMs;
+  bool _recovering = false;
+  int _lastInitThreads = 2;
+  bool _lastInitUseNnApi = false;
+
   final GroundPlaneAnalyzer _analyzer = GroundPlaneAnalyzer();
   NativeDepthBridge? _nativeBridge;
 
@@ -111,6 +121,8 @@ class MidasService {
           : threads > 4
           ? 4
           : threads;
+      _lastInitThreads = clampedThreads;
+      _lastInitUseNnApi = useNnApi;
 
       Future<Interpreter?> attemptLoad({
         required bool withCoreMl,
@@ -196,8 +208,17 @@ class MidasService {
     bool userStationary = false,
     bool weatherDegraded = false,
   }) async {
-    if (!_ready || _busy || _isolateInterpreter == null) return const [];
+    if (!_ready) return const [];
+    if (_busy) {
+      
+      
+      
+      _maybeTriggerRecovery();
+      return const [];
+    }
+    if (_isolateInterpreter == null) return const [];
     _busy = true;
+    _busyStartMs = DateTime.now().millisecondsSinceEpoch;
     final totalSw = Stopwatch()..start();
     _lastPreprocessMs = 0;
     _lastInferenceMs = 0;
@@ -260,8 +281,62 @@ class MidasService {
       totalSw.stop();
       _lastAnalyzeMs = totalSw.elapsedMicroseconds / 1000.0;
       _busy = false;
+      _busyStartMs = null;
     }
   }
+
+  
+  
+  bool _maybeTriggerRecovery() {
+    if (_recovering) return false;
+    final at = _busyStartMs;
+    if (at == null) return false;
+    final ageMs = DateTime.now().millisecondsSinceEpoch - at;
+    if (ageMs <= kMidasStuckTimeoutMs) return false;
+    _recovering = true;
+    debugPrint(
+      'MidasService: isolate stuck for ${ageMs}ms — tearing down + reinit',
+    );
+    unawaited(_recoverFromStuck());
+    return true;
+  }
+
+  Future<void> _recoverFromStuck() async {
+    try {
+      _isolateInterpreter?.close().ignore();
+    } catch (_) {}
+    try {
+      _interpreter?.close();
+    } catch (_) {}
+    _interpreter = null;
+    _isolateInterpreter = null;
+    _ready = false;
+    _busy = false;
+    _busyStartMs = null;
+    try {
+      await init(threads: _lastInitThreads, useNnApi: _lastInitUseNnApi);
+    } catch (e) {
+      debugPrint('MidasService: stuck-recovery reinit failed ($e)');
+    } finally {
+      _recovering = false;
+    }
+  }
+
+  @visibleForTesting
+  bool get debugIsRecovering => _recovering;
+
+  @visibleForTesting
+  bool get debugIsBusy => _busy;
+
+  @visibleForTesting
+  void debugMarkStuck({Duration? age}) {
+    final ageMs = (age ?? const Duration(milliseconds: 3500)).inMilliseconds;
+    _busy = true;
+    _busyStartMs = DateTime.now().millisecondsSinceEpoch - ageMs;
+  }
+
+  @visibleForTesting
+  bool debugTriggerRecoveryCheck() => _maybeTriggerRecovery();
 
   static bool _warnedFlattenFallback = false;
 
