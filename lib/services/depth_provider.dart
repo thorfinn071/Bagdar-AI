@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 
@@ -110,6 +112,12 @@ class HardwareDepthProvider implements DepthProvider {
   double _lastAnalyzeMs = 0;
   bool _lastUsedNativeBridge = false;
 
+  
+  DateTime? _highConfStreakStartedAt;
+  bool _fallbackDisposedForBattery = false;
+  bool _fallbackReinitInFlight = false;
+  int _fallbackInitThreads = 2;
+
   HardwareDepthProvider({
     required this.useNnApiFallback,
     HardwareDepthBridge? bridge,
@@ -118,6 +126,19 @@ class HardwareDepthProvider implements DepthProvider {
   }) : _bridge = bridge ?? HardwareDepthBridge(),
        _analyzer = analyzer ?? GroundPlaneAnalyzer(),
        _fallback = fallbackProvider;
+
+  @visibleForTesting
+  bool get debugFallbackDisposedForBattery => _fallbackDisposedForBattery;
+
+  @visibleForTesting
+  DateTime? get debugHighConfStreakStartedAt => _highConfStreakStartedAt;
+
+  @visibleForTesting
+  DepthProvider? get debugFallback => _fallback;
+
+  @visibleForTesting
+  void debugUpdateConfidence(double score, {DateTime? now}) =>
+      _updateConfidenceState(score, now: now);
 
   @override
   DepthTier get tier => _effectiveTier;
@@ -162,6 +183,10 @@ class HardwareDepthProvider implements DepthProvider {
     _lastConfidenceScore = 1.0;
     _lowConfidenceFrameCount = 0;
     _recoveredConfidenceFrameCount = 0;
+    _highConfStreakStartedAt = null;
+    _fallbackDisposedForBattery = false;
+    _fallbackReinitInFlight = false;
+    _fallbackInitThreads = threads;
 
     final fallback = _ensureFallback();
     final fallbackInit = fallback.init(threads: threads);
@@ -324,14 +349,19 @@ class HardwareDepthProvider implements DepthProvider {
     return coverage.clamp(0.0, 1.0);
   }
 
-  void _updateConfidenceState(double score) {
+  void _updateConfidenceState(double score, {DateTime? now}) {
     _lastConfidenceScore = score;
+    final t = now ?? DateTime.now();
     if (score < kHardwareDepthMinConfidence) {
       _lowConfidenceFrameCount++;
       _recoveredConfidenceFrameCount = 0;
+      _highConfStreakStartedAt = null;
       if (_lowConfidenceFrameCount >= kHardwareDepthLowConfFrames) {
         _lowConfidenceFallbackActive = true;
       }
+      
+      
+      _maybeReinitFallback();
       return;
     }
 
@@ -345,6 +375,66 @@ class HardwareDepthProvider implements DepthProvider {
       }
     } else {
       _recoveredConfidenceFrameCount = 0;
+    }
+
+    
+    if (score >= kHardwareDepthHighConfThreshold) {
+      _highConfStreakStartedAt ??= t;
+      if (!_fallbackDisposedForBattery &&
+          t.difference(_highConfStreakStartedAt!) >=
+              kHardwareDepthHighConfStreakForDispose) {
+        _disposeFallbackForBattery();
+      }
+    } else {
+      _highConfStreakStartedAt = null;
+    }
+  }
+
+  void _disposeFallbackForBattery() {
+    if (_fallbackDisposedForBattery) return;
+    final fb = _fallback;
+    if (fb == null) {
+      _fallbackDisposedForBattery = true;
+      return;
+    }
+    debugPrint(
+      'HardwareDepthProvider: 30s high-conf streak — disposing MiDaS '
+      'fallback to save battery (B-3)',
+    );
+    try {
+      fb.dispose();
+    } catch (_) {}
+    _fallback = null;
+    _fallbackDisposedForBattery = true;
+  }
+
+  void _maybeReinitFallback() {
+    if (!_fallbackDisposedForBattery) return;
+    if (_fallbackReinitInFlight) return;
+    _fallbackReinitInFlight = true;
+    debugPrint(
+      'HardwareDepthProvider: low-conf detected — reinitializing MiDaS '
+      'fallback (B-3)',
+    );
+    unawaited(_reinitFallback());
+  }
+
+  Future<void> _reinitFallback() async {
+    try {
+      final fb = MidasDepthProvider(useNnApi: useNnApiFallback);
+      final ok = await fb.init(threads: _fallbackInitThreads);
+      if (ok) {
+        _fallback = fb;
+        _fallbackDisposedForBattery = false;
+      } else {
+        try {
+          fb.dispose();
+        } catch (_) {}
+      }
+    } catch (e) {
+      debugPrint('HardwareDepthProvider: fallback reinit failed ($e)');
+    } finally {
+      _fallbackReinitInFlight = false;
     }
   }
 }
