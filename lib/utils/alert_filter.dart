@@ -115,7 +115,22 @@ class AlertFilter {
     DateTime now,
     Set<int>? reliableTrackIds,
   ) {
-    if (cand.priority == SpeechPriority.critical) return true;
+    if (cand.priority == SpeechPriority.critical) {
+      
+      
+      
+      
+      
+      
+      
+      final lastSameAt = _lastByCat[cand.category];
+      if (lastSameAt != null &&
+          now.difference(lastSameAt) <
+              const Duration(milliseconds: 4000)) {
+        return false;
+      }
+      return true;
+    }
 
     final lastAt =
         _lastByCat[cand.category] ?? DateTime.fromMillisecondsSinceEpoch(0);
