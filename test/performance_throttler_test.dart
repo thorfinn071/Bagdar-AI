@@ -202,6 +202,116 @@ void main() {
     );
   });
 
+  group('PerformanceThrottler stationary gate — B-2', () {
+    test(
+      'stationary outdoor activates gate: detect 300ms, midas off',
+      () {
+        final t0 = DateTime(2025, 1, 1, 10, 0, 0);
+        final thr = PerformanceThrottler()
+          ..setThermal(_readings(ThermalSeverity.normal), now: t0)
+          
+          
+          
+          ..setIndoorMode(false);
+        thr.setMotionState(MotionState.stationary);
+
+        expect(thr.isStationaryGateActive(now: t0), isTrue);
+        expect(thr.detectInterval(140).inMilliseconds, kStationaryGateDetectMs);
+        expect(thr.midasInterval(500), kStationaryGateMidasOff);
+      },
+    );
+
+    test('walking does NOT activate gate', () {
+      final t0 = DateTime(2025, 1, 1, 10, 0, 0);
+      final thr = PerformanceThrottler()
+        ..setThermal(_readings(ThermalSeverity.normal), now: t0)
+        ..setIndoorMode(false);
+      thr.setMotionState(MotionState.walking);
+
+      expect(thr.isStationaryGateActive(now: t0), isFalse);
+      
+      expect(
+        thr.detectInterval(140).inMilliseconds,
+        lessThan(kStationaryGateDetectMs),
+      );
+    });
+
+    test('indoor stationary does NOT activate gate (OPT-13 priority)', () {
+      final t0 = DateTime(2025, 1, 1, 10, 0, 0);
+      final thr = PerformanceThrottler()
+        ..setThermal(_readings(ThermalSeverity.normal), now: t0)
+        ..setIndoorMode(true);
+      thr.setMotionState(MotionState.stationary);
+
+      expect(thr.isStationaryGateActive(now: t0), isFalse);
+    });
+
+    test(
+      'transition stationary→walking auto-opens 5s resume window',
+      () {
+        final t0 = DateTime(2025, 1, 1, 10, 0, 0);
+        final thr = PerformanceThrottler()
+          ..setThermal(_readings(ThermalSeverity.normal), now: t0)
+          ..setIndoorMode(false);
+        thr.setMotionState(MotionState.stationary);
+        expect(thr.isStationaryGateActive(now: t0), isTrue);
+
+        
+        
+        thr.setMotionState(MotionState.walking, now: t0);
+        thr.setMotionState(MotionState.stationary, now: t0);
+        expect(thr.isStationaryGateActive(now: t0), isFalse);
+        
+        expect(
+          thr.isStationaryGateActive(
+            now: t0.add(kStationaryGateResumeWindow + const Duration(seconds: 1)),
+          ),
+          isTrue,
+        );
+      },
+    );
+
+    test(
+      'noteCriticalAlert blocks gate for kStationaryGatePostCriticalBlock',
+      () {
+        final t0 = DateTime(2025, 1, 1, 10, 0, 0);
+        final thr = PerformanceThrottler()
+          ..setThermal(_readings(ThermalSeverity.normal), now: t0)
+          ..setIndoorMode(false);
+        thr.setMotionState(MotionState.stationary);
+        expect(thr.isStationaryGateActive(now: t0), isTrue);
+
+        thr.noteCriticalAlert(now: t0);
+        expect(thr.isStationaryGateActive(now: t0), isFalse);
+        expect(
+          thr.isStationaryGateActive(
+            now: t0.add(const Duration(seconds: 4)),
+          ),
+          isFalse,
+        );
+        expect(
+          thr.isStationaryGateActive(
+            now: t0.add(kStationaryGatePostCriticalBlock + const Duration(seconds: 1)),
+          ),
+          isTrue,
+        );
+      },
+    );
+
+    test('gated detect interval still respects safety ceiling', () {
+      final t0 = DateTime(2025, 1, 1, 10, 0, 0);
+      final thr = PerformanceThrottler()
+        ..setThermal(_readings(ThermalSeverity.critical), now: t0)
+        ..setIndoorMode(false);
+      thr.setMotionState(MotionState.stationary);
+
+      expect(
+        thr.detectInterval(140).inMilliseconds,
+        lessThanOrEqualTo(kDetectIntervalSafetyCeilingMs),
+      );
+    });
+  });
+
   group('PerformanceThrottler stallWatchdogThreshold', () {
     test('returns 1200 ms when normal and long-settled', () {
       final t0 = DateTime(2025, 1, 1, 10, 0, 0);

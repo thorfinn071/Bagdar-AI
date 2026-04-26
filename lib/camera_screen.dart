@@ -812,6 +812,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         _vm.updateTracks(tracks);
       }
 
+      final criticalAtBefore = _vm.alertMgr.lastCriticalAt;
       final signTrack = _vm.alertMgr.processFrame(
         tracks: tracks,
         imgW: _imgW,
@@ -822,6 +823,13 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         isCalibrated: _isCalibrated,
         frameCount: _frameCount,
       );
+      
+      
+      
+      final criticalAtAfter = _vm.alertMgr.lastCriticalAt;
+      if (criticalAtAfter.isAfter(criticalAtBefore)) {
+        _vm.throttler.noteCriticalAlert(now: criticalAtAfter);
+      }
 
       _vm.tts.reverseVehicleSuspected = _detectReverseVehicle(
         tracks,

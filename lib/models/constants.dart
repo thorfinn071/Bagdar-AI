@@ -190,6 +190,17 @@ const int kHardFrameBudgetMs = 280;
 
 const int kDetectIntervalSafetyCeilingMs = 550;
 
+
+
+
+
+
+
+const int kStationaryGateDetectMs = 300;
+const Duration kStationaryGateResumeWindow = Duration(seconds: 5);
+const Duration kStationaryGatePostCriticalBlock = Duration(seconds: 5);
+const Duration kStationaryGateMidasOff = Duration(hours: 1);
+
 const double kThermalWarmTempC = 37.0;
 const double kThermalHotTempC = 40.0;
 const double kThermalCriticalTempC = 43.0;
