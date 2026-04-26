@@ -10,6 +10,7 @@ import 'package:tflite_flutter/tflite_flutter.dart';
 
 import '../models/constants.dart';
 import '../services/native_depth_bridge.dart';
+import '../services/settings_service.dart';
 import 'depth_hazard.dart';
 import 'ground_plane_analyzer.dart';
 
@@ -65,20 +66,22 @@ class MidasService {
   static const String _modelPath = 'assets/midas_small_int8.tflite';
   static const int _inputSize = 256;
 
+  static const int _kMaxFailuresInWindow = 3;
+  static const Duration _kFailureWindow = Duration(minutes: 5);
+
   Interpreter? _interpreter;
   IsolateInterpreter? _isolateInterpreter;
   bool _ready = false;
   bool _busy = false;
   bool _nativeBridgeEnabled = true;
 
-  
-  
-  
-  
   int? _busyStartMs;
   bool _recovering = false;
   int _lastInitThreads = 2;
   bool _lastInitUseNnApi = false;
+
+  bool _permanentlyDisabled = false;
+  final List<DateTime> _recentFailures = [];
 
   final GroundPlaneAnalyzer _analyzer = GroundPlaneAnalyzer();
   NativeDepthBridge? _nativeBridge;
@@ -107,6 +110,12 @@ class MidasService {
   bool _lastUsedNativeBridge = false;
 
   Future<bool> init({int threads = 2, bool useNnApi = false}) async {
+    if (Settings.instance.isReady && Settings.instance.midasDisabled) {
+      _permanentlyDisabled = true;
+      debugPrint('MidasService: skipped — persistent disabled flag set');
+      return false;
+    }
+    if (_permanentlyDisabled) return false;
     try {
       try {
         _isolateInterpreter?.close().ignore();
@@ -208,6 +217,7 @@ class MidasService {
     bool userStationary = false,
     bool weatherDegraded = false,
   }) async {
+    if (_permanentlyDisabled) return const [];
     if (!_ready) return const [];
     if (_busy) {
       
@@ -267,6 +277,11 @@ class MidasService {
       if (flat.length != _inputSize * _inputSize) {
         return const [];
       }
+      if (_isOutputDegenerate(flat)) {
+        debugPrint('MidasService: degenerate output detected — recording failure');
+        _recordFailure();
+        return const [];
+      }
       
       
       
@@ -308,9 +323,60 @@ class MidasService {
     debugPrint(
       'MidasService: isolate stuck for ${ageMs}ms — tearing down + reinit',
     );
+    _recordFailure();
     unawaited(_recoverFromStuck());
     return true;
   }
+
+  bool _isOutputDegenerate(Float32List flat) {
+    if (flat.isEmpty) return true;
+    double minV = double.infinity;
+    double maxV = double.negativeInfinity;
+    int badCount = 0;
+    for (int i = 0; i < flat.length; i++) {
+      final v = flat[i];
+      if (v.isNaN || v.isInfinite) {
+        badCount++;
+        continue;
+      }
+      if (v < minV) minV = v;
+      if (v > maxV) maxV = v;
+    }
+    if (badCount > flat.length ~/ 20) return true;
+    if (!minV.isFinite || !maxV.isFinite) return true;
+    if ((maxV - minV).abs() < 1e-3) return true;
+    return false;
+  }
+
+  void _recordFailure() {
+    final now = DateTime.now();
+    _recentFailures.removeWhere((t) => now.difference(t) > _kFailureWindow);
+    _recentFailures.add(now);
+    if (_recentFailures.length >= _kMaxFailuresInWindow) {
+      _markPermanentlyDisabled();
+    }
+  }
+
+  void _markPermanentlyDisabled() {
+    if (_permanentlyDisabled) return;
+    _permanentlyDisabled = true;
+    debugPrint(
+      'MidasService: $_kMaxFailuresInWindow failures in '
+      '${_kFailureWindow.inMinutes}m — disabling for this and future sessions',
+    );
+    if (Settings.instance.isReady) {
+      Settings.instance.setMidasDisabled(true).ignore();
+    }
+  }
+
+  @visibleForTesting
+  bool get debugIsPermanentlyDisabled => _permanentlyDisabled;
+
+  @visibleForTesting
+  int get debugFailureCount => _recentFailures.length;
+
+  @visibleForTesting
+  void debugRecordFailure() => _recordFailure();
 
   Future<void> _recoverFromStuck() async {
     try {
