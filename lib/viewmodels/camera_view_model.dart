@@ -78,7 +78,6 @@ class CameraViewModel extends ChangeNotifier {
   bool guideDogMode = false;
 
   DateTime _lastRollWarnAt = DateTime.fromMillisecondsSinceEpoch(0);
-  DateTime _rollExcessiveSince = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _lastOrientationWarnAt = DateTime.fromMillisecondsSinceEpoch(0);
 
   final ValueNotifier<List<Track>> tracksNotifier = ValueNotifier(const []);
@@ -227,27 +226,22 @@ class CameraViewModel extends ChangeNotifier {
     };
 
     orientation.onRollChanged = (excessive) {
-      final now = DateTime.now();
-      if (excessive) {
-        _rollExcessiveSince = now;
-        earcon.play(Earcon.fail);
-        HapticService.vibrate([0, 100, 80, 100]);
-        Future.delayed(const Duration(seconds: 3), () {
-          if (!orientation.isRollExcessive) return;
-          final t = DateTime.now();
-          if (t.difference(_lastRollWarnAt) < const Duration(seconds: 20)) {
-            return;
-          }
-          _lastRollWarnAt = t;
-          tts.say(
-            S.get('phone_tilted_sideways'),
-            SpeechPriority.warning,
-            pan: 0.0,
-          );
-        });
-      } else {
-        _rollExcessiveSince = DateTime.fromMillisecondsSinceEpoch(0);
-      }
+      if (!excessive) return;
+      earcon.play(Earcon.fail);
+      HapticService.vibrate([0, 100, 80, 100]);
+      Future.delayed(const Duration(seconds: 3), () {
+        if (!orientation.isRollExcessive) return;
+        final t = DateTime.now();
+        if (t.difference(_lastRollWarnAt) < const Duration(seconds: 20)) {
+          return;
+        }
+        _lastRollWarnAt = t;
+        tts.say(
+          S.get('phone_tilted_sideways'),
+          SpeechPriority.warning,
+          pan: 0.0,
+        );
+      });
     };
 
     battery.onThrottleChanged = (level) {
