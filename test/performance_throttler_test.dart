@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:bagdar/models/constants.dart';
+import 'package:bagdar/services/fall_detector.dart' show MotionState;
 import 'package:bagdar/services/thermal_monitor.dart';
 import 'package:bagdar/utils/performance_throttler.dart';
 
@@ -121,6 +122,84 @@ void main() {
       expect(lowMs, greaterThan(baseMs));
       expect(critMs, greaterThan(lowMs));
     });
+  });
+
+  group('PerformanceThrottler detectInterval safety ceiling — A-3', () {
+    test(
+      'never exceeds kDetectIntervalSafetyCeilingMs across all combinations',
+      () {
+        final t0 = DateTime(2025, 1, 1, 10, 0, 0);
+        
+        
+        const batteryCases = [140, 220, 320, 450];
+        const motionCases = [
+          MotionState.stationary,
+          MotionState.walking,
+          MotionState.unstable,
+        ];
+        const memCases = MemoryPressureLevel.values;
+        const thermCases = ThermalSeverity.values;
+        const lowPowerCases = [false, true];
+        const indoorCases = [false, true];
+
+        var probedCombos = 0;
+        for (final batt in batteryCases) {
+          for (final motion in motionCases) {
+            for (final mem in memCases) {
+              for (final therm in thermCases) {
+                for (final lp in lowPowerCases) {
+                  for (final indoor in indoorCases) {
+                    final thr = PerformanceThrottler()
+                      ..setThermal(_readings(therm), now: t0)
+                      ..setMotionState(motion)
+                      ..setMemoryPressure(mem)
+                      ..setLowPowerMode(lp)
+                      ..setIndoorMode(indoor);
+                    
+                    thr.update(kInfTimeCriticalMs + 50, t0);
+                    
+                    
+                    for (int i = 0; i < 5; i++) {
+                      final ms = thr.detectInterval(batt).inMilliseconds;
+                      expect(
+                        ms,
+                        lessThanOrEqualTo(kDetectIntervalSafetyCeilingMs),
+                        reason:
+                            'A-3 breach: batt=$batt motion=$motion mem=$mem '
+                            'therm=$therm lowPower=$lp indoor=$indoor '
+                            'iter=$i → ${ms}ms',
+                      );
+                    }
+                    probedCombos++;
+                  }
+                }
+              }
+            }
+          }
+        }
+        expect(probedCombos, batteryCases.length *
+            motionCases.length *
+            memCases.length *
+            thermCases.length *
+            lowPowerCases.length *
+            indoorCases.length);
+      },
+    );
+
+    test(
+      'still honors lower-bound batteryMs when below the ceiling',
+      () {
+        final t0 = DateTime(2025, 1, 1, 10, 0, 0);
+        final thr = PerformanceThrottler()
+          ..setThermal(_readings(ThermalSeverity.normal), now: t0);
+        
+        
+        expect(
+          thr.detectInterval(320).inMilliseconds,
+          greaterThanOrEqualTo(320),
+        );
+      },
+    );
   });
 
   group('PerformanceThrottler stallWatchdogThreshold', () {

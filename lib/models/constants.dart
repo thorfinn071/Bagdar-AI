@@ -177,6 +177,14 @@ const int kTargetFrameBudgetMs = 140;
 const int kSoftFrameBudgetMs = 200;
 const int kHardFrameBudgetMs = 280;
 
+
+
+
+
+
+
+const int kDetectIntervalSafetyCeilingMs = 550;
+
 const double kThermalWarmTempC = 37.0;
 const double kThermalHotTempC = 40.0;
 const double kThermalCriticalTempC = 43.0;

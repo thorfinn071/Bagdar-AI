@@ -161,18 +161,27 @@ class PerformanceThrottler {
       perfMs + thermalPenalty + motionBias + memoryBias,
     );
 
+    final int requestedMs;
     if (severity == ThermalSeverity.critical && !_isLowPowerMode) {
       if (_thermalBurstCount < _kThermalBurstFrames) {
         _thermalBurstCount++;
-        final burstMs = math.max(batteryMs, (perfMs + thermalPenalty ~/ 2));
-        return Duration(milliseconds: burstMs);
+        requestedMs = math.max(batteryMs, (perfMs + thermalPenalty ~/ 2));
+      } else {
+        _thermalBurstCount = 0;
+        requestedMs = math.max(batteryMs, _kThermalIdleMs + base);
       }
+    } else {
       _thermalBurstCount = 0;
-      return Duration(milliseconds: math.max(batteryMs, _kThermalIdleMs + base));
+      requestedMs = math.max(batteryMs, base);
     }
 
-    _thermalBurstCount = 0;
-    return Duration(milliseconds: math.max(batteryMs, base));
+    
+    
+    
+    
+    return Duration(
+      milliseconds: math.min(requestedMs, kDetectIntervalSafetyCeilingMs),
+    );
   }
 
   Duration midasInterval(int batteryMs) {
