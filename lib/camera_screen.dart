@@ -172,19 +172,21 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       onStall: () {
         final now = DateTime.now();
         _stallStartedAt = now;
+        final threshold = _vm.throttler.stallWatchdogThreshold();
         
-        
+        debugPrint(
+          '[BAGDAR_STALL] onStall fired @ ${now.toIso8601String()} '
+          'threshold=${threshold.inMilliseconds}ms '
+          'mode=${_vm.mode} bg=${_lifecycle.backgroundWarned} '
+          'detectInterval=${_detectInterval.inMilliseconds}ms',
+        );
         _vm.alertMgr.markCameraStall(now);
-        
         HapticService.vibrate(const [0, 120]);
-        
         if (now.difference(_lastStallWarnTtsAt) < _kStallTtsCooldown) {
           return;
         }
         _lastStallWarnTtsAt = now;
         _vm.earcon.play(Earcon.cameraBlocked);
-        
-        
         _vm.tts.say(
           S.get('camera_stalled'),
           SpeechPriority.warning,
@@ -690,9 +692,11 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _stallWatchdog.notifyFrameArrived(now: now);
     if (_stallWatchdog.isWarned) {
       _stallWatchdog.clearWarning();
-      
-      
       final stallFor = now.difference(_stallStartedAt);
+      
+      debugPrint(
+        '[BAGDAR_STALL] resumed after ${stallFor.inMilliseconds}ms',
+      );
       if (stallFor >= _kStallTtsMinDuration &&
           _stallStartedAt.millisecondsSinceEpoch != 0) {
         _vm.tts.say(S.get('camera_resumed'), SpeechPriority.info, pan: 0.0);
