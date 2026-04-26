@@ -437,7 +437,12 @@ class AlertManager {
       pan,
     );
 
-    if (now.difference(_lastCriticalAt) >= _scaledCooldown(kCriticalCooldown)) {
+    
+    
+    
+    
+    
+    if (now.difference(_lastCriticalAt) >= kCriticalCooldown) {
       top.lastSpoken = now;
       _lastCriticalAt = now;
       final dir = clockDir(
