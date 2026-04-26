@@ -118,6 +118,11 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   Timer? _indoorPollTimer;
   static const Duration _kIndoorPollPeriod = Duration(seconds: 2);
 
+  
+  
+  
+  final List<RawDet> _rawDetBuffer = <RawDet>[];
+
   final List<Uint8List> _planeBytesBuffer = List<Uint8List>.filled(
     3,
     Uint8List(0),
@@ -717,6 +722,14 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
     if ((_vm.mode == AppMode.street || _vm.mode == AppMode.cane) &&
         !_vm.weatherGate.degraded &&
         !_vm.isIndoor) {
@@ -965,7 +978,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     Uint8List? yPlane,
     int? yRowStride,
   }) {
-    final out = <RawDet>[];
+    
+    
+    final out = _rawDetBuffer..clear();
     final frameArea = (imgW * imgH).toDouble();
     final canExtractAppearance =
         yPlane != null && yRowStride != null && yRowStride > 0;
