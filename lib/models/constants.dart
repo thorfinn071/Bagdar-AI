@@ -52,7 +52,7 @@ const Map<String, double> kClassWeight = {
 };
 
 const int kZoneCount = 5;
-const int kTrackMaxAge = 12;
+const int kTrackMaxAge = 6;
 const double kTrackMatchDist = 70.0;
 const double kIoUMatchThreshold = 0.2;
 const int kTrackConfirmFrames = 2;
@@ -96,7 +96,7 @@ const Duration kCriticalCooldown = Duration(milliseconds: 1400);
 const Duration kWarningCooldown = Duration(seconds: 3);
 const Duration kInfoCooldown = Duration(seconds: 5);
 const Duration kPersonCooldown = Duration(seconds: 8);
-const Duration kApproachCooldown = Duration(milliseconds: 1400);
+const Duration kApproachCooldown = Duration(milliseconds: 2500);
 
 const Duration kClearAnnounceDuration = Duration(milliseconds: 1200);
 

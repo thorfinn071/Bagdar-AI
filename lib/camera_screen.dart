@@ -820,8 +820,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         imageHeight: image.height,
         imageWidth: image.width,
         iouThreshold: 0.45,
-        confThreshold: 0.35,
-        classThreshold: 0.35,
+        confThreshold: 0.45,
+        classThreshold: 0.45,
       );
 
       if (!mounted) return;
