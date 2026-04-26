@@ -30,6 +30,10 @@ class PerformanceThrottler {
   DateTime _severityCommitUntil = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _lastSeverityTransitionAt = DateTime.fromMillisecondsSinceEpoch(0);
 
+  
+  DateTime _gateResumeUntil = DateTime.fromMillisecondsSinceEpoch(0);
+  DateTime _lastCriticalAlertAt = DateTime.fromMillisecondsSinceEpoch(0);
+
   double get avgInfMs => _avgInfMs;
   double get detectFps => _detectFps;
   MotionState get motionState => _motionState;
@@ -64,8 +68,44 @@ class PerformanceThrottler {
     _isLowPowerMode = enabled;
   }
 
-  void setMotionState(MotionState state) {
+  void setMotionState(MotionState state, {DateTime? now}) {
+    
+    
+    if (_motionState == MotionState.stationary &&
+        state != MotionState.stationary) {
+      signalActivity(now: now);
+    }
     _motionState = state;
+  }
+
+  
+  
+  
+  
+  void noteCriticalAlert({DateTime? now}) {
+    _lastCriticalAlertAt = now ?? DateTime.now();
+  }
+
+  
+  
+  void signalActivity({DateTime? now}) {
+    _gateResumeUntil = (now ?? DateTime.now()).add(
+      kStationaryGateResumeWindow,
+    );
+  }
+
+  
+  
+  bool isStationaryGateActive({DateTime? now}) {
+    if (_motionState != MotionState.stationary) return false;
+    if (_indoorMode) return false;
+    final t = now ?? DateTime.now();
+    if (t.isBefore(_gateResumeUntil)) return false;
+    if (t.difference(_lastCriticalAlertAt) <
+        kStationaryGatePostCriticalBlock) {
+      return false;
+    }
+    return true;
   }
 
   
@@ -119,6 +159,15 @@ class PerformanceThrottler {
   bool isMidasPaused(DateTime now) => now.isBefore(_midasPausedUntil);
 
   Duration detectInterval(int batteryMs) {
+    
+    
+    
+    if (isStationaryGateActive()) {
+      final gatedMs = math.max(batteryMs, kStationaryGateDetectMs);
+      return Duration(
+        milliseconds: math.min(gatedMs, kDetectIntervalSafetyCeilingMs),
+      );
+    }
     final severity = _committedSeverity;
     int thermalPenalty = 0;
     if (severity == ThermalSeverity.warm)
@@ -187,6 +236,11 @@ class PerformanceThrottler {
   Duration midasInterval(int batteryMs) {
     if (batteryMs <= 0) return Duration.zero;
     if (_memory == MemoryPressureLevel.critical) return Duration.zero;
+    
+    
+    
+    
+    if (isStationaryGateActive()) return kStationaryGateMidasOff;
     final severity = _committedSeverity;
     int thermalMultiplier = 1;
     if (severity == ThermalSeverity.warm) thermalMultiplier = 2;
