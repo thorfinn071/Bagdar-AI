@@ -22,14 +22,17 @@ enum Earcon {
 class EarconService {
   static const int _sampleRate = 44100;
 
-  
-  
-  
-  
   static const Duration _kPerEarconCooldown = Duration(milliseconds: 800);
+  static const Duration _kGlobalEarconCooldown = Duration(milliseconds: 350);
+
+  static const Set<Earcon> _kThrottleExempt = {
+    Earcon.cameraBlocked,
+    Earcon.proximity,
+  };
 
   final Map<Earcon, AudioPlayer> _players = {};
   final Map<Earcon, DateTime> _lastPlayedAt = {};
+  DateTime _lastAnyPlayedAt = DateTime.fromMillisecondsSinceEpoch(0);
 
   bool _enabled = true;
   bool _ready = false;
@@ -81,15 +84,17 @@ class EarconService {
 
   Future<void> play(Earcon earcon, {double pan = 0.0}) async {
     if (!_ready || !_enabled) return;
-    
-    
-    
     final now = DateTime.now();
     final lastAt = _lastPlayedAt[earcon];
     if (lastAt != null && now.difference(lastAt) < _kPerEarconCooldown) {
       return;
     }
+    if (!_kThrottleExempt.contains(earcon) &&
+        now.difference(_lastAnyPlayedAt) < _kGlobalEarconCooldown) {
+      return;
+    }
     _lastPlayedAt[earcon] = now;
+    _lastAnyPlayedAt = now;
     final player = _players[earcon];
     if (player == null) return;
     try {
@@ -115,32 +120,29 @@ class EarconService {
   Uint8List _generate(Earcon earcon) {
     switch (earcon) {
       case Earcon.objectAppeared:
-        return _buildWav(_singleTone(440, 55, 0.30));
+        return _buildWav(_noiseClick(22, 0.40, lpAlpha: 0.18));
       case Earcon.objectLeft:
-        return _buildWav(_sweep(440, 220, 80, 0.25));
+        return _buildWav(_noiseSweep(70, 0.35, lpStart: 0.30, lpEnd: 0.10));
       case Earcon.pathClear:
-        
-        
-        
-        return _buildWav(_singleTone(880, 90, 0.40));
+        return _buildWav(_singleTone(873, 90, 0.40));
       case Earcon.approaching:
-        return _buildWav(_doubleBeep(220, 45, 35, 0.55));
+        return _buildWav(_doubleBeep(217, 45, 35, 0.55));
       case Earcon.modeStreet:
-        return _buildWav(_singleTone(523, 70, 0.50));
+        return _buildWav(_singleTone(537, 70, 0.50));
       case Earcon.modeCane:
-        return _buildWav(_singleTone(659, 70, 0.50));
+        return _buildWav(_singleTone(671, 70, 0.50));
       case Earcon.modeScan:
-        return _buildWav(_singleTone(784, 70, 0.50));
+        return _buildWav(_singleTone(811, 70, 0.50));
       case Earcon.success:
-        return _buildWav(_sweep(660, 990, 110, 0.55));
+        return _buildWav(_sweep(673, 1013, 110, 0.55));
       case Earcon.fail:
-        return _buildWav(_sweep(440, 330, 90, 0.45));
+        return _buildWav(_sweep(437, 327, 90, 0.45));
       case Earcon.cameraBlocked:
-        return _buildWav(_doubleBeep(880, 60, 40, 0.65));
+        return _buildWav(_doubleBeep(873, 60, 40, 0.65));
       case Earcon.heartbeat:
-        return _buildWav(_singleTone(1000, 30, 0.20));
+        return _buildWav(_noiseClick(10, 0.18, lpAlpha: 0.22));
       case Earcon.proximity:
-        return _buildWav(_singleTone(600, 25, 0.55));
+        return _buildWav(_noiseClick(15, 0.55, lpAlpha: 0.30));
     }
   }
 
@@ -178,6 +180,45 @@ class EarconService {
         32767,
       );
       phase += 2 * math.pi * freq / _sampleRate;
+    }
+    return buf;
+  }
+
+  Int16List _noiseClick(
+    int durationMs,
+    double amp, {
+    double lpAlpha = 0.20,
+  }) {
+    final n = (_sampleRate * durationMs / 1000).round();
+    final buf = Int16List(n);
+    final rand = math.Random(0xC11C2);
+    double prev = 0.0;
+    for (int i = 0; i < n; i++) {
+      final white = rand.nextDouble() * 2.0 - 1.0;
+      prev = prev + lpAlpha * (white - prev);
+      final env = math.exp(-i * 4.0 / n);
+      buf[i] = (amp * env * prev * 32767).round().clamp(-32768, 32767);
+    }
+    return buf;
+  }
+
+  Int16List _noiseSweep(
+    int durationMs,
+    double amp, {
+    double lpStart = 0.30,
+    double lpEnd = 0.08,
+  }) {
+    final n = (_sampleRate * durationMs / 1000).round();
+    final buf = Int16List(n);
+    final rand = math.Random(0xCAFE9);
+    double prev = 0.0;
+    for (int i = 0; i < n; i++) {
+      final t = i / n;
+      final lp = lpStart + (lpEnd - lpStart) * t;
+      final white = rand.nextDouble() * 2.0 - 1.0;
+      prev = prev + lp * (white - prev);
+      final env = _fadeEnvelope(i, n);
+      buf[i] = (amp * env * prev * 32767).round().clamp(-32768, 32767);
     }
     return buf;
   }
