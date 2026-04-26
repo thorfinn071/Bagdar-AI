@@ -691,19 +691,26 @@ void main() {
       expect(OrientationService.computeRoll(-9.81, 0.0), closeTo(-90.0, 1e-9));
     });
 
-    test('30 degree right tilt crosses the excessive threshold', () {
-      final roll = OrientationService.computeRoll(5.0, 5.0 * math.sqrt(3));
-      expect(roll, closeTo(30.0, 1e-6));
-      expect(roll.abs() > OrientationService.kRollExcessiveThreshold, isTrue);
+    test('40 degree right tilt crosses the excessive enter threshold', () {
+      final roll = OrientationService.computeRoll(
+        9.81 * math.sin(40 * math.pi / 180),
+        9.81 * math.cos(40 * math.pi / 180),
+      );
+      expect(roll, closeTo(40.0, 1e-6));
+      expect(roll.abs() > OrientationService.kRollEnterThreshold, isTrue);
     });
 
-    test('10 degree tilt stays below the excessive threshold', () {
-      final roll = OrientationService.computeRoll(
-        9.81 * math.sin(10 * math.pi / 180),
-        9.81 * math.cos(10 * math.pi / 180),
+    test('30 degree tilt stays below the excessive enter threshold', () {
+      final roll = OrientationService.computeRoll(5.0, 5.0 * math.sqrt(3));
+      expect(roll, closeTo(30.0, 1e-6));
+      expect(roll.abs() > OrientationService.kRollEnterThreshold, isFalse);
+    });
+
+    test('exit threshold below enter threshold (hysteresis)', () {
+      expect(
+        OrientationService.kRollExitThreshold,
+        lessThan(OrientationService.kRollEnterThreshold),
       );
-      expect(roll, closeTo(10.0, 1e-6));
-      expect(roll.abs() > OrientationService.kRollExcessiveThreshold, isFalse);
     });
   });
 

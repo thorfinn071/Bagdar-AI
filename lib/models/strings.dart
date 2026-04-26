@@ -93,7 +93,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'hazard_glass_door': 'Возможно стеклянная дверь впереди. Будьте осторожны.',
     'hazard_slippery': 'Осторожно, возможно скользко.',
     'hazard_warning': 'Возможное препятствие —',
-    'phone_tilted_sideways': 'Телефон наклонён вбок. Результаты менее точны.',
+    'phone_tilted_sideways': 'Телефон наклонён.',
 
     'deviate': 'Отклонитесь',
     'passage': 'Проход',
@@ -589,7 +589,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'hazard_glass_door': 'Алда шыны есік болуы мүмкін. Сақ болыңыз.',
     'hazard_slippery': 'Абайлаңыз, тайғанақ болуы мүмкін.',
     'hazard_warning': 'Мүмкін кедергі —',
-    'phone_tilted_sideways': 'Телефон бүйірге еңкейген. Нәтижелер дәлсіз.',
+    'phone_tilted_sideways': 'Телефон еңкейген.',
 
     'deviate': 'Ауытқыңыз',
     'passage': 'Өту',
@@ -1083,8 +1083,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'hazard_glass_door': 'Possible glass door ahead. Be careful.',
     'hazard_slippery': 'Careful, might be slippery.',
     'hazard_warning': 'Possible obstacle —',
-    'phone_tilted_sideways':
-        'Phone tilted sideways. Results are less accurate.',
+    'phone_tilted_sideways': 'Phone tilted.',
 
     'deviate': 'Deviate',
     'passage': 'Passage',
