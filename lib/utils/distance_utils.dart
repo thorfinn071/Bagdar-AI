@@ -244,7 +244,7 @@ const int _kPolarBinCount = 21;
 
 const double _kPolarBinWidth = 6.0 * math.pi / 180.0;
 
-const double _kPolarClearMinM = 1.5;
+const double _kPolarClearMinM = 1.2;
 
 const double _kPolarShoulderHalfM = 0.25;
 
