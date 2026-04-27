@@ -13,14 +13,17 @@
 
 #include <algorithm>
 #include <atomic>
+#include <cctype>
 #include <cstdint>
 #include <cstring>
 #include <mutex>
+#include <string>
+#include <vector>
 
 #include <android/log.h>
 
-#include "net.h"
-#include "datareader.h"
+#include "ncnn/net.h"
+#include "ncnn/datareader.h"
 
 #define LOG_TAG "BagdarNcnn"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
@@ -41,9 +44,34 @@ struct NcnnDepthState {
 
 NcnnDepthState g_state;
 
-// Best-effort blob name discovery: parse the .param header to find
-// the first "Input" layer's output and the last layer's first output.
-// Falls back to common defaults.
+std::vector<std::string> tokenize_layer_line(const std::string& line) {
+  std::vector<std::string> tokens;
+  size_t i = 0;
+  while (i < line.size()) {
+    while (i < line.size() && std::isspace(static_cast<unsigned char>(line[i]))) ++i;
+    size_t start = i;
+    while (i < line.size() && !std::isspace(static_cast<unsigned char>(line[i]))) ++i;
+    if (start < i) tokens.emplace_back(line.substr(start, i - start));
+  }
+  return tokens;
+}
+
+std::string layer_first_output(const std::vector<std::string>& tokens) {
+  if (tokens.size() < 5) return {};
+  int in_count = 0;
+  int out_count = 0;
+  try {
+    in_count = std::stoi(tokens[2]);
+    out_count = std::stoi(tokens[3]);
+  } catch (...) {
+    return {};
+  }
+  if (in_count < 0 || out_count <= 0) return {};
+  const size_t out_start = 4 + static_cast<size_t>(in_count);
+  if (out_start >= tokens.size()) return {};
+  return tokens[out_start];
+}
+
 bool discover_blob_names(const char* param_path) {
   FILE* f = std::fopen(param_path, "rb");
   if (!f) return false;
@@ -59,29 +87,25 @@ bool discover_blob_names(const char* param_path) {
   std::fread(buf.data(), 1, sz, f);
   std::fclose(f);
 
-  std::string in_name, out_name;
+  std::string in_name, last_out_name;
   size_t pos = 0;
-  std::string last_line;
   while (pos < buf.size()) {
     size_t eol = buf.find('\n', pos);
     if (eol == std::string::npos) eol = buf.size();
     std::string line = buf.substr(pos, eol - pos);
     pos = eol + 1;
-    if (line.empty()) continue;
-    last_line = line;
-    if (in_name.empty() && line.rfind("Input", 0) == 0) {
-      // tokens: "Input <name> <inputs> <outputs> <output_blob>"
-      size_t sp = line.find_last_of(' ');
-      if (sp != std::string::npos) in_name = line.substr(sp + 1);
+    auto tokens = tokenize_layer_line(line);
+    if (tokens.size() < 5) continue;
+    auto first_out = layer_first_output(tokens);
+    if (first_out.empty()) continue;
+    if (in_name.empty() && tokens[0] == "Input") {
+      in_name = first_out;
     }
+    last_out_name = first_out;
   }
-  if (!last_line.empty()) {
-    size_t sp = last_line.find_last_of(' ');
-    if (sp != std::string::npos) out_name = last_line.substr(sp + 1);
-  }
-  if (in_name.empty() || out_name.empty()) return false;
+  if (in_name.empty() || last_out_name.empty()) return false;
   g_state.input_blob = std::move(in_name);
-  g_state.output_blob = std::move(out_name);
+  g_state.output_blob = std::move(last_out_name);
   return true;
 }
 

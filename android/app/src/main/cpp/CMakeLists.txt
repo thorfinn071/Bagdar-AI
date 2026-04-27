@@ -13,7 +13,7 @@ set(BAGDAR_SOURCES vision_guide_native.cpp)
 set(NCNN_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/third_party/ncnn")
 set(NCNN_LIB "${NCNN_ROOT}/lib/${ANDROID_ABI}/libncnn.a")
 
-if(EXISTS "${NCNN_LIB}" AND EXISTS "${NCNN_ROOT}/include/net.h")
+if(EXISTS "${NCNN_LIB}" AND EXISTS "${NCNN_ROOT}/include/ncnn/net.h")
     message(STATUS "Bagdar: NCNN runtime found for ${ANDROID_ABI}, enabling depth wrapper")
     list(APPEND BAGDAR_SOURCES bagdar_depth_ncnn.cpp)
     set(BAGDAR_HAVE_NCNN ON)
@@ -28,17 +28,24 @@ target_link_libraries(bagdar_native PRIVATE android log)
 
 if(BAGDAR_HAVE_NCNN)
     target_include_directories(bagdar_native PRIVATE "${NCNN_ROOT}/include")
-    add_library(ncnn STATIC IMPORTED)
-    set_target_properties(ncnn PROPERTIES IMPORTED_LOCATION "${NCNN_LIB}")
-    target_link_libraries(bagdar_native PRIVATE ncnn)
 
-    # OpenMP (NCNN expects it for multi-threading).
-    find_library(OMP_LIB omp)
-    if(OMP_LIB)
-        target_link_libraries(bagdar_native PRIVATE ${OMP_LIB})
-    endif()
+    set(NCNN_ABI_DIR "${NCNN_ROOT}/lib/${ANDROID_ABI}")
+    target_link_libraries(bagdar_native PRIVATE
+        -Wl,--start-group
+        "${NCNN_ABI_DIR}/libncnn.a"
+        "${NCNN_ABI_DIR}/libglslang.a"
+        "${NCNN_ABI_DIR}/libSPIRV.a"
+        "${NCNN_ABI_DIR}/libMachineIndependent.a"
+        "${NCNN_ABI_DIR}/libGenericCodeGen.a"
+        "${NCNN_ABI_DIR}/libOGLCompiler.a"
+        "${NCNN_ABI_DIR}/libOSDependent.a"
+        "${NCNN_ABI_DIR}/libglslang-default-resource-limits.a"
+        -Wl,--end-group
+    )
 
-    # Vulkan loader (optional; NCNN works without it but no GPU then).
+    target_compile_options(bagdar_native PRIVATE -fopenmp)
+    target_link_options(bagdar_native PRIVATE -fopenmp -static-openmp)
+
     find_library(VULKAN_LIB vulkan)
     if(VULKAN_LIB)
         target_link_libraries(bagdar_native PRIVATE ${VULKAN_LIB})
