@@ -12,7 +12,6 @@ dependencies:
   speech_to_text: ^7.3.0
   audioplayers: ^6.1.0
   ffi: ^2.1.4
-  tflite_flutter: ^0.12.1
   cupertino_icons: ^1.0.8
   camera: ^0.11.4
   permission_handler: ^11.3.0
@@ -47,6 +46,5 @@ flutter:
   assets:
     - assets/yolov8n_int8.tflite
     - assets/labels.txt
-    - assets/midas_small_int8.tflite
     - assets/midas_small.ncnn.param
     - assets/midas_small.ncnn.bin

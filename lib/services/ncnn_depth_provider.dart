@@ -81,9 +81,9 @@ class NcnnDepthProvider implements DepthProvider {
 
   @override
   Future<bool> init({int threads = 2}) async {
-    if (Settings.instance.isReady && Settings.instance.midasDisabled) {
+    if (Settings.instance.isReady && Settings.instance.ncnnDisabled) {
       _permanentlyDisabled = true;
-      debugPrint('NcnnDepthProvider: skipped — midasDisabled flag set');
+      debugPrint('NcnnDepthProvider: skipped — ncnnDisabled flag set');
       return false;
     }
     final paths = await _extractAssets();
@@ -265,7 +265,7 @@ class NcnnDepthProvider implements DepthProvider {
       '${_kFailureWindow.inMinutes}m — disabling for this and future sessions',
     );
     if (Settings.instance.isReady) {
-      Settings.instance.setMidasDisabled(true).ignore();
+      Settings.instance.setNcnnDisabled(true).ignore();
     }
   }
 

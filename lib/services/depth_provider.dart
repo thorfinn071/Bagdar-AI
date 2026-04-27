@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import '../models/constants.dart';
 import '../utils/depth_hazard.dart';
 import '../utils/ground_plane_analyzer.dart';
-import '../utils/midas_service.dart';
 import 'device_capability.dart';
 import 'hardware_depth_bridge.dart';
 import 'ncnn_depth_provider.dart';
@@ -33,70 +32,7 @@ abstract class DepthProvider {
   void dispose();
 }
 
-class MidasDepthProvider implements DepthProvider {
-  final bool useNnApi;
-
-  MidasDepthProvider({required this.useNnApi});
-
-  final MidasService _service = MidasService();
-
-  @override
-  DepthTier get tier => useNnApi ? DepthTier.midasNnapi : DepthTier.midasCpu;
-
-  @override
-  bool get isReady => _service.isReady;
-
-  @override
-  bool get nativeBridgeEnabled => _service.nativeBridgeEnabled;
-
-  @override
-  bool get nativeBridgeAvailable => _service.nativeBridgeAvailable;
-
-  @override
-  bool get lowConfidenceFallbackActive => false;
-
-  @override
-  double get lastConfidenceScore => 0;
-
-  @override
-  double get lastPreprocessMs => _service.lastPreprocessMs;
-
-  @override
-  double get lastInferenceMs => _service.lastInferenceMs;
-
-  @override
-  double get lastAnalyzeMs => _service.lastAnalyzeMs;
-
-  @override
-  bool get lastUsedNativeBridge => _service.lastUsedNativeBridge;
-
-  @override
-  Future<bool> init({int threads = 2}) =>
-      _service.init(threads: threads, useNnApi: useNnApi);
-
-  @override
-  Future<List<DepthHazard>> analyze(
-    CameraImage image, {
-    double cropTopFrac = 0.40,
-    bool userStationary = false,
-    bool weatherDegraded = false,
-  }) => _service.analyze(
-    image,
-    cropTopFrac: cropTopFrac,
-    userStationary: userStationary,
-    weatherDegraded: weatherDegraded,
-  );
-
-  @override
-  void setNativeBridgeEnabled(bool enabled) =>
-      _service.setNativeBridgeEnabled(enabled);
-
-  @override
-  void dispose() => _service.dispose();
-}
-
 class HardwareDepthProvider implements DepthProvider {
-  final bool useNnApiFallback;
   final HardwareDepthBridge _bridge;
   final GroundPlaneAnalyzer _analyzer;
 
@@ -120,7 +56,6 @@ class HardwareDepthProvider implements DepthProvider {
   int _fallbackInitThreads = 2;
 
   HardwareDepthProvider({
-    required this.useNnApiFallback,
     HardwareDepthBridge? bridge,
     GroundPlaneAnalyzer? analyzer,
     DepthProvider? fallbackProvider,
@@ -171,9 +106,18 @@ class HardwareDepthProvider implements DepthProvider {
   @override
   bool get lastUsedNativeBridge => _lastUsedNativeBridge;
 
-  DepthProvider _ensureFallback() {
-    _fallback ??= MidasDepthProvider(useNnApi: useNnApiFallback);
-    return _fallback!;
+  Future<DepthProvider?> _ensureFallback({int threads = 2}) async {
+    if (_fallback != null) return _fallback;
+    final ncnn = await NcnnDepthProvider.tryCreate();
+    if (ncnn == null) return null;
+    if (await ncnn.init(threads: threads)) {
+      _fallback = ncnn;
+      return ncnn;
+    }
+    try {
+      ncnn.dispose();
+    } catch (_) {}
+    return null;
   }
 
   @override
@@ -189,8 +133,7 @@ class HardwareDepthProvider implements DepthProvider {
     _fallbackReinitInFlight = false;
     _fallbackInitThreads = threads;
 
-    final fallback = _ensureFallback();
-    final fallbackInit = fallback.init(threads: threads);
+    final fallbackFuture = _ensureFallback(threads: threads);
 
     try {
       final supported = await _bridge.isSupported();
@@ -201,32 +144,36 @@ class HardwareDepthProvider implements DepthProvider {
         if (started) {
           _hardwareStarted = true;
           _effectiveTier = DepthTier.hardware;
-          final fallbackOk = await fallbackInit;
+          final fallback = await fallbackFuture;
           _ready = true;
           debugPrint(
-            'HardwareDepthProvider: hardware depth active; MiDaS fallback '
-            '${fallbackOk ? "ready" : "unavailable"}',
+            'HardwareDepthProvider: hardware depth active; NCNN fallback '
+            '${fallback != null ? "ready" : "unavailable"}',
           );
           return true;
         }
         debugPrint(
-          'HardwareDepthProvider: hardware start failed, using MiDaS fallback',
+          'HardwareDepthProvider: hardware start failed, using NCNN fallback',
         );
       } else {
         debugPrint(
-          'HardwareDepthProvider: hardware depth unavailable, using MiDaS fallback',
+          'HardwareDepthProvider: hardware depth unavailable, using NCNN fallback',
         );
       }
     } catch (e) {
       debugPrint(
-        'HardwareDepthProvider: hardware init failed ($e), using MiDaS fallback',
+        'HardwareDepthProvider: hardware init failed ($e), using NCNN fallback',
       );
     }
 
-    final fallbackOk = await fallbackInit;
+    final fallback = await fallbackFuture;
+    if (fallback == null) {
+      _ready = false;
+      return false;
+    }
     _effectiveTier = fallback.tier;
-    _ready = fallbackOk;
-    return fallbackOk;
+    _ready = fallback.isReady;
+    return _ready;
   }
 
   @override
@@ -399,7 +346,7 @@ class HardwareDepthProvider implements DepthProvider {
       return;
     }
     debugPrint(
-      'HardwareDepthProvider: 30s high-conf streak — disposing MiDaS '
+      'HardwareDepthProvider: 30s high-conf streak — disposing NCNN '
       'fallback to save battery (B-3)',
     );
     try {
@@ -414,7 +361,7 @@ class HardwareDepthProvider implements DepthProvider {
     if (_fallbackReinitInFlight) return;
     _fallbackReinitInFlight = true;
     debugPrint(
-      'HardwareDepthProvider: low-conf detected — reinitializing MiDaS '
+      'HardwareDepthProvider: low-conf detected — reinitializing NCNN '
       'fallback (B-3)',
     );
     unawaited(_reinitFallback());
@@ -422,7 +369,8 @@ class HardwareDepthProvider implements DepthProvider {
 
   Future<void> _reinitFallback() async {
     try {
-      final fb = MidasDepthProvider(useNnApi: useNnApiFallback);
+      final fb = await NcnnDepthProvider.tryCreate();
+      if (fb == null) return;
       final ok = await fb.init(threads: _fallbackInitThreads);
       if (ok) {
         _fallback = fb;
@@ -502,80 +450,37 @@ class DepthProviderFactory {
   static DepthProvider create(DeviceCapabilities caps) {
     switch (caps.bestDepthTier) {
       case DepthTier.hardware:
-        debugPrint(
-          'DepthProviderFactory: HardwareDepthProvider (fallback nnapi=${caps.supportsNnApi})',
-        );
-        return HardwareDepthProvider(useNnApiFallback: caps.supportsNnApi);
-
-      case DepthTier.midasNnapi:
-        debugPrint('DepthProviderFactory: MidasDepthProvider(nnapi=true)');
-        return MidasDepthProvider(useNnApi: true);
-
-      case DepthTier.midasCpu:
-        debugPrint('DepthProviderFactory: MidasDepthProvider(nnapi=false)');
-        return MidasDepthProvider(useNnApi: false);
-
-      case DepthTier.focalLength:
-        debugPrint('DepthProviderFactory: FocalLengthDepthProvider');
-        return FocalLengthDepthProvider();
+        debugPrint('DepthProviderFactory: HardwareDepthProvider');
+        return HardwareDepthProvider();
 
       case DepthTier.ncnnVulkan:
       case DepthTier.ncnnCpu:
         debugPrint(
           'DepthProviderFactory: NCNN tier requested via legacy create(); '
-          'use createAndInit() instead. Falling back to MiDaS.',
+          'use createAndInit() instead. Returning FocalLength placeholder.',
         );
-        return MidasDepthProvider(useNnApi: caps.supportsNnApi);
+        return FocalLengthDepthProvider();
+
+      case DepthTier.focalLength:
+        debugPrint('DepthProviderFactory: FocalLengthDepthProvider');
+        return FocalLengthDepthProvider();
     }
   }
 
   static DepthProvider createWithTier(DepthTier tier) {
     switch (tier) {
       case DepthTier.hardware:
-        return HardwareDepthProvider(useNnApiFallback: true);
-      case DepthTier.midasNnapi:
-        return MidasDepthProvider(useNnApi: true);
-      case DepthTier.midasCpu:
-        return MidasDepthProvider(useNnApi: false);
+        return HardwareDepthProvider();
       case DepthTier.focalLength:
         return FocalLengthDepthProvider();
       case DepthTier.ncnnVulkan:
       case DepthTier.ncnnCpu:
-        
-        
         debugPrint(
-          'DepthProviderFactory: createWithTier called with NCNN tier — using FocalLength',
+          'DepthProviderFactory: createWithTier called with NCNN tier; '
+          'NCNN must be created via NcnnDepthProvider.tryCreate(). '
+          'Returning FocalLength placeholder.',
         );
         return FocalLengthDepthProvider();
-    }
-  }
-
-  static List<DepthTier> _fallbackChain(DepthTier best) {
-    switch (best) {
-      case DepthTier.hardware:
-        return const [
-          DepthTier.hardware,
-          DepthTier.midasNnapi,
-          DepthTier.midasCpu,
-          DepthTier.focalLength,
-        ];
-      case DepthTier.midasNnapi:
-        return const [
-          DepthTier.midasNnapi,
-          DepthTier.midasCpu,
-          DepthTier.focalLength,
-        ];
-      case DepthTier.midasCpu:
-        return const [DepthTier.midasCpu, DepthTier.focalLength];
-      case DepthTier.focalLength:
-        return const [DepthTier.focalLength];
-      case DepthTier.ncnnVulkan:
-      case DepthTier.ncnnCpu:
-        return const [
-          DepthTier.midasNnapi,
-          DepthTier.midasCpu,
-          DepthTier.focalLength,
-        ];
     }
   }
 
@@ -583,6 +488,22 @@ class DepthProviderFactory {
     DeviceCapabilities caps, {
     int threads = 2,
   }) async {
+    if (caps.bestDepthTier == DepthTier.hardware) {
+      final hw = HardwareDepthProvider();
+      try {
+        if (await hw.init(threads: threads)) {
+          debugPrint('DepthProviderFactory: activated Hardware (NCNN fallback inside)');
+          return hw;
+        }
+        debugPrint('DepthProviderFactory: Hardware init failed, trying NCNN');
+      } catch (e) {
+        debugPrint('DepthProviderFactory: Hardware threw $e, trying NCNN');
+      }
+      try {
+        hw.dispose();
+      } catch (_) {}
+    }
+
     final ncnn = await NcnnDepthProvider.tryCreate();
     if (ncnn != null) {
       try {
@@ -592,37 +513,18 @@ class DepthProviderFactory {
           );
           return ncnn;
         }
-        debugPrint('DepthProviderFactory: NCNN init failed, falling back');
+        debugPrint('DepthProviderFactory: NCNN init failed, falling back to focal');
       } catch (e) {
-        debugPrint('DepthProviderFactory: NCNN threw $e, falling back');
+        debugPrint('DepthProviderFactory: NCNN threw $e, falling back to focal');
       }
       try {
         ncnn.dispose();
       } catch (_) {}
     }
 
-    final chain = _fallbackChain(caps.bestDepthTier);
-    for (final tier in chain) {
-      final provider = createWithTier(tier);
-      try {
-        final ok = await provider.init(threads: threads);
-        if (ok) {
-          debugPrint('DepthProviderFactory: activated tier=$tier');
-          return provider;
-        }
-        debugPrint('DepthProviderFactory: tier=$tier init failed, trying next');
-      } catch (e) {
-        debugPrint('DepthProviderFactory: tier=$tier threw $e, trying next');
-      }
-      try {
-        provider.dispose();
-      } catch (_) {}
-    }
-    debugPrint(
-      'DepthProviderFactory: all tiers failed; returning FocalLengthDepthProvider',
-    );
-    final last = FocalLengthDepthProvider();
-    await last.init(threads: threads);
-    return last;
+    debugPrint('DepthProviderFactory: using FocalLengthDepthProvider');
+    final focal = FocalLengthDepthProvider();
+    await focal.init(threads: threads);
+    return focal;
   }
 }

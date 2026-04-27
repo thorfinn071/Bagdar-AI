@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tflite_flutter/tflite_flutter.dart';
 
 import 'arcore_depth_whitelist.dart';
 import 'hardware_depth_bridge.dart';
+import 'ncnn_depth_bridge.dart';
 
 class DeviceInfo {
   final String manufacturer;
@@ -41,17 +41,15 @@ class DeviceInfo {
   }
 }
 
-enum DepthTier { hardware, midasNnapi, midasCpu, focalLength, ncnnVulkan, ncnnCpu }
+enum DepthTier { hardware, ncnnVulkan, ncnnCpu, focalLength }
 
 class DeviceCapabilities {
   final DepthTier bestDepthTier;
-  final bool supportsNnApi;
   final int androidSdkInt;
   final DeviceInfo deviceInfo;
 
   const DeviceCapabilities({
     required this.bestDepthTier,
-    required this.supportsNnApi,
     required this.androidSdkInt,
     this.deviceInfo = const DeviceInfo.unknown(),
   });
@@ -61,7 +59,7 @@ class DeviceCapabilities {
 
   @override
   String toString() =>
-      'DeviceCapabilities(tier=$bestDepthTier, nnapi=$supportsNnApi, '
+      'DeviceCapabilities(tier=$bestDepthTier, '
       'sdk=$androidSdkInt, model=${deviceInfo.model})';
 }
 
@@ -71,9 +69,8 @@ class DeviceCapabilityProbe {
   
   
   
-  static const String _kTierKey = 'vg_depth_tier_v2';
-  static const String _kSdkKey = 'vg_android_sdk_v2';
-  static const String _kNnApiKey = 'vg_nnapi_v2';
+  static const String _kTierKey = 'vg_depth_tier_v3';
+  static const String _kSdkKey = 'vg_android_sdk_v3';
   static const MethodChannel _channel = MethodChannel('bagdar/device_info');
 
   static DeviceCapabilities? _cached;
@@ -89,13 +86,13 @@ class DeviceCapabilityProbe {
     final prefs = await SharedPreferences.getInstance();
     final savedIdx = prefs.getInt(_kTierKey);
     final savedSdk = prefs.getInt(_kSdkKey) ?? 0;
-    final savedNnApi = prefs.getBool(_kNnApiKey);
 
-    if (savedIdx != null && savedIdx < DepthTier.values.length) {
+    if (savedIdx != null &&
+        savedIdx >= 0 &&
+        savedIdx < DepthTier.values.length) {
       final tier = DepthTier.values[savedIdx];
       _cached = DeviceCapabilities(
         bestDepthTier: tier,
-        supportsNnApi: savedNnApi ?? tier == DepthTier.midasNnapi,
         androidSdkInt: savedSdk,
       );
       debugPrint('DeviceCapabilityProbe: кеш восстановлен — $_cached');
@@ -110,7 +107,6 @@ class DeviceCapabilityProbe {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_kTierKey);
     await prefs.remove(_kSdkKey);
-    await prefs.remove(_kNnApiKey);
     return probe();
   }
 
@@ -120,33 +116,38 @@ class DeviceCapabilityProbe {
     final info = await _readDeviceInfo();
     final sdk = info.sdkInt > 0 ? info.sdkInt : await _androidSdkInt();
     final hardwareDepth = await _probeHardwareDepthWithWhitelist(info);
-    final nnapi = (Platform.isAndroid && sdk >= 28)
-        ? await _probeNnApi()
-        : false;
+    final ncnnAvailable = _probeNcnn();
 
     final DepthTier tier;
     if (hardwareDepth) {
       tier = DepthTier.hardware;
-    } else if (nnapi) {
-      tier = DepthTier.midasNnapi;
-    } else if (sdk >= 26 || !Platform.isAndroid) {
-      tier = DepthTier.midasCpu;
+    } else if (ncnnAvailable) {
+      tier = DepthTier.ncnnVulkan;
     } else {
       tier = DepthTier.focalLength;
     }
 
     await prefs.setInt(_kTierKey, tier.index);
     await prefs.setInt(_kSdkKey, sdk);
-    await prefs.setBool(_kNnApiKey, nnapi);
 
     _cached = DeviceCapabilities(
       bestDepthTier: tier,
-      supportsNnApi: nnapi,
       androidSdkInt: sdk,
       deviceInfo: info,
     );
     debugPrint('DeviceCapabilityProbe: зондирование завершено — $_cached');
     return _cached!;
+  }
+
+  static bool _probeNcnn() {
+    if (!Platform.isAndroid) return false;
+    final bridge = NcnnDepthBridge.tryCreate();
+    if (bridge == null) {
+      debugPrint('DeviceCapabilityProbe: NCNN bridge unavailable');
+      return false;
+    }
+    debugPrint('DeviceCapabilityProbe: NCNN bridge available');
+    return true;
   }
 
   static Future<DeviceInfo> _readDeviceInfo() async {
@@ -206,22 +207,6 @@ class DeviceCapabilityProbe {
     } catch (e) {
       debugPrint('DeviceCapabilityProbe: getSdkInt ошибка ($e), fallback=26');
       return 26;
-    }
-  }
-
-  static Future<bool> _probeNnApi() async {
-    try {
-      final opts = InterpreterOptions()..useNnApiForAndroid = true;
-      final interp = await Interpreter.fromAsset(
-        'assets/yolov8n_int8.tflite',
-        options: opts,
-      );
-      interp.close();
-      debugPrint('DeviceCapabilityProbe: NNAPI доступен');
-      return true;
-    } catch (e) {
-      debugPrint('DeviceCapabilityProbe: NNAPI недоступен — $e');
-      return false;
     }
   }
 

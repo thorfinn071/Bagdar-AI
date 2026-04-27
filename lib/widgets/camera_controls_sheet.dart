@@ -911,10 +911,6 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
         return 'NCNN + Vulkan';
       case DepthTier.ncnnCpu:
         return 'NCNN + CPU';
-      case DepthTier.midasNnapi:
-        return 'MiDaS + NNAPI';
-      case DepthTier.midasCpu:
-        return 'MiDaS + CPU';
       case DepthTier.focalLength:
         return 'Fallback по фокусному расстоянию';
       case null:
@@ -930,10 +926,6 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
         return 'NCNN runtime с Vulkan GPU-ускорением';
       case DepthTier.ncnnCpu:
         return 'NCNN runtime на CPU (NEON)';
-      case DepthTier.midasNnapi:
-        return 'MiDaS fallback выполняется через NNAPI';
-      case DepthTier.midasCpu:
-        return 'MiDaS fallback выполняется на CPU';
       case DepthTier.focalLength:
         return 'Нет depth API — используется оценка по калибровке';
       case null:

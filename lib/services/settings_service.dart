@@ -32,7 +32,7 @@ class SettingsService {
   static const _kHapticStrength = 'a11y_haptic_strength';
   static const _kSosTrigger = 'a11y_sos_trigger';
   static const _kDominantHand = 'a11y_dominant_hand';
-  static const _kMidasDisabled = 'midas_disabled';
+  static const _kNcnnDisabled = 'ncnn_disabled';
 
   Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
@@ -56,7 +56,7 @@ class SettingsService {
   bool get fieldLogging => _prefs!.getBool(_kFieldLogging) ?? false;
   bool get tutorialSeen => _prefs!.getBool(_kTutorialSeen) ?? false;
   bool get classicGestures => _prefs!.getBool(_kClassicGestures) ?? false;
-  bool get midasDisabled => _prefs?.getBool(_kMidasDisabled) ?? false;
+  bool get ncnnDisabled => _prefs?.getBool(_kNcnnDisabled) ?? false;
 
   double get speechRate =>
       (_prefs!.getDouble(_kSpeechRate) ?? kSpeechRateDefault)
@@ -158,8 +158,8 @@ class SettingsService {
   Future<void> setDominantHand(DominantHand v) async =>
       _prefs!.setInt(_kDominantHand, v.index);
 
-  Future<void> setMidasDisabled(bool v) async =>
-      _prefs?.setBool(_kMidasDisabled, v) ?? Future<void>.value();
+  Future<void> setNcnnDisabled(bool v) async =>
+      _prefs?.setBool(_kNcnnDisabled, v) ?? Future<void>.value();
 
   Future<void> resetAll() async => _prefs!.clear();
 }
