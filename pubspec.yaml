@@ -48,3 +48,5 @@ flutter:
     - assets/yolov8n_int8.tflite
     - assets/labels.txt
     - assets/midas_small_int8.tflite
+    - assets/midas_small.ncnn.param
+    - assets/midas_small.ncnn.bin
