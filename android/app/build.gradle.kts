@@ -36,12 +36,26 @@ android {
     }
 
     androidResources {
-        noCompress += "tflite"
+        noCompress += listOf("tflite", "bin", "param")
+    }
+
+    packaging {
+        jniLibs {
+            excludes += listOf(
+                "**/x86_64/**",
+                "**/x86/**",
+                "**/armeabi-v7a/**",
+            )
+        }
     }
 
     buildTypes {
         release {
             signingConfig = signingConfigs.getByName("debug")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
         }
     }
 }
