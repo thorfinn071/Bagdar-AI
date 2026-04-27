@@ -203,10 +203,8 @@ class TtsService {
     await _applyLanguage(bcp47Tag);
   }
 
-  
-  
-  
-  
+  void Function()? onKazakhVoiceMissing;
+
   Future<void> preClaimAudioFocus() async {
     if (!_ready) return;
     try {
@@ -215,6 +213,21 @@ class TtsService {
   }
 
   Future<void> _applyLanguage(String bcp47Tag) async {
+    if (bcp47Tag == 'kk-KZ') {
+      final hasKk = await _trySetLanguage('kk-KZ') ||
+          await _trySetLanguage('kk');
+      if (!hasKk) {
+        debugPrint('TtsService: no kk voice — falling back to ru-RU for Kazakh text');
+        await _trySetLanguage('ru-RU');
+        AppStrings.setAlertLanguage(null);
+        onKazakhVoiceMissing?.call();
+        return;
+      }
+      await _checkLanguageAvailability(bcp47Tag);
+      AppStrings.setAlertLanguage(null);
+      return;
+    }
+
     try {
       await _tts.setLanguage(bcp47Tag);
     } catch (_) {}
@@ -224,19 +237,31 @@ class TtsService {
       try {
         await _tts.setLanguage('en-US');
         _usingEnglishFallback = true;
-        
-        
-        
         AppStrings.setAlertLanguage(AppLanguage.en);
         debugPrint(
           'TtsService: fallback to en-US (requested $bcp47Tag unavailable)',
         );
       } catch (_) {}
     } else if (_languageAvailable) {
-      
-      
       AppStrings.setAlertLanguage(null);
     }
+  }
+
+  Future<bool> _trySetLanguage(String tag) async {
+    try {
+      final langs = await _tts.getLanguages;
+      if (langs is List) {
+        final lower = tag.toLowerCase();
+        final primary = lower.split('-').first;
+        final set = langs.map((l) => l.toString().toLowerCase()).toSet();
+        if (set.contains(lower) || set.any((l) => l.startsWith(primary))) {
+          await _tts.setLanguage(tag);
+          _languageAvailable = true;
+          return true;
+        }
+      }
+    } catch (_) {}
+    return false;
   }
 
   void _notifyAudioRouteInterrupted() {

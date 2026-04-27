@@ -557,10 +557,80 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Откройте Настройки → Специальные возможности → '
         'Синтез речи и установите голос для нужного языка.',
     'tts_lang_open': 'Понятно',
+
+    'sem_step_of': 'Шаг {step} из {total}',
+    'sem_required': 'Обязательно',
+    'sem_optional_perm': 'Необязательно',
+    'sem_done': 'Выполнено',
+    'sem_not_done': 'Не выполнено',
+    'sem_on': 'включено',
+    'sem_off': 'выключено',
+
+    'tts_kk_guide_title': 'Установите казахский голос',
+    'tts_kk_guide_body':
+        'Для качественного казахского произношения установите голосовой пакет. '
+        'Откройте Настройки → Специальные возможности → '
+        'Синтез речи → Установить голосовые данные → Казахский.',
+    'tts_kk_open_settings': 'Открыть настройки TTS',
+    'tts_kk_not_available':
+        'Казахский голос не найден. Голосовой помощник работает с русским акцентом.',
+
+    'lang_switched': 'Язык изменён.',
+
+    'pref_clear_path_announce': 'Озвучка «Путь свободен»',
+    'pref_battery_announce': 'Озвучка заряда батареи',
+    'pref_mode_announce': 'Озвучка смены режима',
+
+    'vc_speed_up': 'Речь ускорена.',
+    'vc_speed_down': 'Речь замедлена.',
+    'vc_volume_up': 'Громкость увеличена.',
+    'vc_volume_down': 'Громкость уменьшена.',
+    'vc_battery_status': 'Заряд {battery} процентов.',
+
+    'audio_tour':
+        'Вы на главном экране. '
+        'Камера уже работает и сканирует окружение. '
+        'Проведите влево или вправо для смены режима. '
+        'Удерживайте палец для голосовой команды. '
+        'Проведите вверх для справки.',
+    'audio_tour_done': 'Удачного пользования!',
+
+    'onb_sos_title': 'Экстренный контакт',
+    'onb_sos_sub':
+        'Укажите номер близкого человека.\\nBagdar отправит SMS с вашим местоположением при экстренном вызове.',
+    'onb_sos_tts':
+        'Укажите номер для экстренных ситуаций. '
+        'Bagdar отправит SMS с вашей локацией. '
+        'Можно пропустить и настроить позже.',
+    'onb_sos_placeholder': '+7 (___) ___-__-__',
+    'onb_sos_save': 'Сохранить контакт',
+    'onb_sos_skip': 'Настрою позже',
+
+    'settings_calibration': 'Калибровка камеры',
+    'settings_calibration_desc': 'Встаньте точно на 2 м от человека и нажмите',
+    'settings_read_text': 'Прочитать текст',
+    'settings_read_text_desc': 'OCR — распознавание текста в кадре',
+    'settings_cpu_threads': 'CPU потоки',
+    'settings_lang_label': 'Язык / Тіл',
+    'settings_earcon_title': 'Звуковые сигналы',
+    'settings_earcon_desc': 'Мгновенные тоны для событий',
+    'settings_depth_active': 'Анализ глубины: активен',
+    'settings_depth_not_ready': 'Анализ глубины: не готов',
+    'settings_scan_left': 'Что слева?',
+    'settings_scan_forward': 'Что впереди?',
+    'settings_scan_right': 'Что справа?',
+    'settings_haptic_test': 'Тест вибрации (режим Трость)',
+    'settings_earcon_test': 'Тест звуковых сигналов',
+    'settings_sos_not_set': 'Не задан',
+
+    'path_clear_minimal': 'Свободно.',
+    'hazard_stairs_down_minimal': 'Лестница. Стоп.',
+    'hazard_overhead_minimal': 'Препятствие. Стоп.',
+    'camera_blocked_minimal': 'Камера закрыта.',
   },
 
   AppLanguage.kk: {
-    'stop': 'Стоп',
+    'stop': 'Тоқта',
     'close': 'жақын',
     'approaching': 'жақындап келеді',
     'transport_approaching': 'Көлік жақындап келеді',
@@ -584,7 +654,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'hazard_pothole': 'Шұңқыр',
     'hazard_curb': 'Бордюр',
     'hazard_stairs_down': 'Төмен баспалдақ. Тоқтаңыз.',
-    'hazard_overhead': 'Кеуде деңгейінде кедергі. Тоқтаңыз.',
+    'hazard_overhead': 'Кеуде деңгейінде кедергі бар. Тоқтаңыз.',
     'hazard_unknown': 'Кедергі',
     'hazard_glass_door': 'Алда шыны есік болуы мүмкін. Сақ болыңыз.',
     'hazard_slippery': 'Абайлаңыз, тайғанақ болуы мүмкін.',
@@ -634,10 +704,10 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Дәл қашықтықты анықтау үшін баптауларда калибрлеуді ұсынамыз.',
 
     'onb_welcome_tts':
-        'Bagdar-қа қош келдіңіз. Әдепкі режимді таңдаңыз. '
+        'Bagdar қосымшасына қош келдіңіз. Әдепкі режимді таңдаңыз. '
         'Көше — нысандар туралы ескертулер. '
-        'Таяқ — жиі дірілдік сигналдар. '
-        'Сканерлеу — қоршаған ортаның сипаттамасы.',
+        'Таяқ — жиі діріл сигналдары. '
+        'Сканерлеу — қоршаған ортаны сипаттау.',
     'onb_perm_tts':
         'Қосымшаға камераға рұқсат қажет. '
         'Рұқсат беру үшін түймені басыңыз.',
@@ -650,17 +720,17 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Тамаша! Калибрлеу сақталды. Жалғастыру түймесін басыңыз.',
     'onb_calib_skip_tts':
         'Калибрлеу өткізілді. Оны кейін баптауларда орындай аласыз.',
-    'onb_welcome_title': 'Bagdar-қа\nқош келдіңіз',
+    'onb_welcome_title': 'Bagdar\nқосымшасына қош келдіңіз',
     'onb_welcome_sub':
         'Әдепкі режимді таңдаңыз.\nОны кез келген уақытта өзгертуге болады.',
     'onb_perm_title': 'Рұқсат қажет',
     'onb_perm_sub': 'Тек камера міндетті.\nҚалғандары — қалауыңыз бойынша.',
     'onb_calib_title': 'Қашықтық дәлдігі',
-    'onb_calib_sub': 'Калибрлеусіз қате ~40%.\nКейін — ~10%. 10 секунд кетеді.',
+    'onb_calib_sub': 'Калибрлеусіз қателік ~40%.\nКалибрлеуден кейін — ~10%. 10 секунд кетеді.',
     'onb_calib_app_note':
         'Калибрлеуді іске қосқаннан кейін Баптауларда орындауға болады.',
     'onb_ready_title': 'Бәрі дайын!',
-    'onb_ready_sub': 'Bagdar баптанды. Қосымша мүмкіндіктері:',
+    'onb_ready_sub': 'Bagdar дайын. Қосымшаның мүмкіндіктері:',
     'onb_btn_continue': 'Жалғастыру',
     'onb_btn_allow_camera': 'Камераға рұқсат беру',
     'onb_btn_skip': 'Қалғанын өткізу',
@@ -675,7 +745,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'onb_check_mode': 'әдепкі ретінде таңдалды',
     'onb_check_calib': 'Камераны калибрлеу',
     'onb_check_calib_skip': 'Баптаулар → Камераны калибрлеу',
-    'onb_feat_scan': '«Айналада не бар?» түймесі — сахнаның сипаттамасы',
+    'onb_feat_scan': '«Айналада не бар?» түймесі — көріністі сипаттау',
     'onb_feat_mode': 'Режим белгішесі — ауыстыру Көше / Таяқ / Скан',
     'onb_feat_settings': 'Баптаулар — калибрлеу, GPU, Debug HUD',
     'onb_lang_title': 'Тілді таңдаңыз',
@@ -688,27 +758,27 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Қалаған сәтте өткізіп жіберуге болады.',
     'tut_tap': 'Экранға бір рет түртіңіз.',
     'tut_tap_done':
-        'Отлично. Бір рет түрту — жылдам күй: режим және заряд.',
+        'Тамаша! Бір рет түрту — жылдам күй: режим және заряд.',
     'tut_double_tap': 'Енді жылдам екі рет түртіңіз.',
     'tut_double_tap_done':
-        'Отлично. Екі рет түрту баптауларды ашады.',
+        'Жарайсыз! Екі рет түрту баптауларды ашады.',
     'tut_long_press': 'Саусақты экранда бір секунд ұстаңыз.',
     'tut_long_press_done':
-        'Отлично. Ұзақ басу — дауыстық команда.',
+        'Керемет! Ұзақ басу — дауыстық команда.',
     'tut_swipe_horizontal': 'Саусақпен оңға не солға сырғытыңыз.',
     'tut_swipe_horizontal_done':
-        'Отлично. Көлденең сырғыту режимді ауыстырады.',
+        'Дұрыс! Көлденең сырғыту режимді ауыстырады.',
     'tut_swipe_up': 'Енді саусақпен жоғары сырғытыңыз.',
     'tut_swipe_up_done':
-        'Отлично. Жоғары сырғыту анықтаманы ашады.',
+        'Дұрыс! Жоғары сырғыту анықтаманы ашады.',
     'tut_swipe_down_legacy': 'Енді саусақпен төмен сырғытыңыз.',
     'tut_swipe_down_legacy_done':
-        'Отлично. Төмен сырғыту анықтаманы ашады.',
+        'Дұрыс! Төмен сырғыту анықтаманы ашады.',
     'tut_two_finger':
         'Екі саусақты қатар қойыңыз. '
         'Бір секундтан асырып ұстамаңыз, бұл нұсқау.',
     'tut_two_finger_done':
-        'Отлично. Екі саусақпен екі секунд басу SOS шақырады.',
+        'Жарайсыз! Екі саусақпен екі секунд ұстау SOS шақырады.',
     'tut_finished':
         'Үйрету аяқталды. Сондай-ақ SOS және анықтама үшін дауыстық командалар қолжетімді.',
     'tut_skip': 'Өткізіп жіберу',
@@ -719,9 +789,9 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'mode_street': 'Көше',
     'mode_cane': 'Таяқ',
     'mode_scan': 'Сканерлеу',
-    'mode_street_desc': 'Көліктер, адамдар, кедергілер — толық ескерту стегі',
-    'mode_cane_desc': 'Максималды жиі діріл, ең аз сөз',
-    'mode_scan_desc': 'Әр 4 секунд сайын қоршаған ортаның сипаттамасы',
+    'mode_street_desc': 'Көліктер, адамдар, кедергілер — толық ескерту',
+    'mode_cane_desc': 'Жиі діріл, сөз ең аз',
+    'mode_scan_desc': 'Әр 4 секунд сайын қоршаған ортаны сипаттау',
 
     'perm_camera': 'Камера',
     'perm_camera_reason': 'Қосымшаның негізгі функциясы',
@@ -874,7 +944,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sos_delivered': 'SOS жеткізілді.',
     'camera_blocked': 'Камера бұғатталған. Объективті тексеріңіз.',
     'camera_frozen':
-        'Назар аударыңыз, камера кескіні өзгермейді. Қолданбаны қайта іске қосыңыз.',
+        'Назар аударыңыз, камера кескіні тұрып қалды. Қосымшаны қайта іске қосыңыз.',
     'camera_stalled': 'Камера тоқтады. Тоқтаңыз, қолданбаны тексеріңіз.',
     'camera_resumed': 'Камера қайта жұмыс істеп тұр.',
     'shake_warning':
@@ -1052,6 +1122,76 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Баптаулар → Арнайы мүмкіндіктер → '
         'Сөйлеу синтезі бөліміне өтіп, тілдің дауысын орнатыңыз.',
     'tts_lang_open': 'Түсінікті',
+
+    'sem_step_of': '{total} қадамнан {step}',
+    'sem_required': 'Міндетті',
+    'sem_optional_perm': 'Міндетті емес',
+    'sem_done': 'Орындалды',
+    'sem_not_done': 'Орындалмады',
+    'sem_on': 'қосулы',
+    'sem_off': 'өшірулі',
+
+    'tts_kk_guide_title': 'Қазақ дауысын орнатыңыз',
+    'tts_kk_guide_body':
+        'Сапалы қазақ тілінде сөйлеу үшін дауыстық пакетті орнатыңыз. '
+        'Баптаулар → Арнайы мүмкіндіктер → '
+        'Сөйлеу синтезі → Дауыстық деректер → Қазақ тілі.',
+    'tts_kk_open_settings': 'TTS баптауларын ашу',
+    'tts_kk_not_available':
+        'Қазақ дауысы табылмады. Дауыстық көмекші орыс акцентімен жұмыс істейді.',
+
+    'lang_switched': 'Тіл өзгертілді.',
+
+    'pref_clear_path_announce': '«Жол бос» хабарламасы',
+    'pref_battery_announce': 'Заряд деңгейі хабарламасы',
+    'pref_mode_announce': 'Режим ауыстыру хабарламасы',
+
+    'vc_speed_up': 'Сөйлеу жылдамдатылды.',
+    'vc_speed_down': 'Сөйлеу баяулатылды.',
+    'vc_volume_up': 'Дауыс көтерілді.',
+    'vc_volume_down': 'Дауыс азайтылды.',
+    'vc_battery_status': 'Заряд {battery} пайыз.',
+
+    'audio_tour':
+        'Сіз негізгі экрандасыз. '
+        'Камера жұмыс істеп, айналаны сканерлеп тұр. '
+        'Режимді ауыстыру үшін солға не оңға сырғытыңыз. '
+        'Дауыстық команда үшін саусақты ұстап тұрыңыз. '
+        'Анықтама үшін жоғары сырғытыңыз.',
+    'audio_tour_done': 'Сәтті пайдаланыңыз!',
+
+    'onb_sos_title': 'Шұғыл байланыс',
+    'onb_sos_sub':
+        'Жақын адамыңыздың нөмірін енгізіңіз.\\nBagdar шұғыл жағдайда орныңызды SMS арқылы жібереді.',
+    'onb_sos_tts':
+        'Шұғыл жағдай үшін нөмір енгізіңіз. '
+        'Bagdar сіздің орныңызды SMS-пен жібереді. '
+        'Өткізіп жіберіп, кейін баптауға болады.',
+    'onb_sos_placeholder': '+7 (___) ___-__-__',
+    'onb_sos_save': 'Контактіні сақтау',
+    'onb_sos_skip': 'Кейін баптаймын',
+
+    'settings_calibration': 'Камераны калибрлеу',
+    'settings_calibration_desc': 'Адамнан дәл 2 м қашықтықта тұрып басыңыз',
+    'settings_read_text': 'Мәтінді оқу',
+    'settings_read_text_desc': 'OCR — кадрдағы мәтінді тану',
+    'settings_cpu_threads': 'CPU ағындары',
+    'settings_lang_label': 'Тіл / Язык',
+    'settings_earcon_title': 'Дыбыстық сигналдар',
+    'settings_earcon_desc': 'Оқиғалар үшін тез дыбыстар',
+    'settings_depth_active': 'Тереңдік талдауы: белсенді',
+    'settings_depth_not_ready': 'Тереңдік талдауы: дайын емес',
+    'settings_scan_left': 'Солда не бар?',
+    'settings_scan_forward': 'Алда не бар?',
+    'settings_scan_right': 'Оңда не бар?',
+    'settings_haptic_test': 'Діріл тесті (Таяқ режимі)',
+    'settings_earcon_test': 'Дыбыстық сигналдар тесті',
+    'settings_sos_not_set': 'Белгіленбеген',
+
+    'path_clear_minimal': 'Бос.',
+    'hazard_stairs_down_minimal': 'Баспалдақ. Тоқта.',
+    'hazard_overhead_minimal': 'Кедергі. Тоқта.',
+    'camera_blocked_minimal': 'Камера жабық.',
   },
   AppLanguage.en: {
     'stop': 'Stop',
@@ -1529,6 +1669,76 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Go to Settings → Accessibility → '
         'Text-to-speech output and install voice data.',
     'tts_lang_open': 'OK',
+
+    'sem_step_of': 'Step {step} of {total}',
+    'sem_required': 'Required',
+    'sem_optional_perm': 'Optional',
+    'sem_done': 'Done',
+    'sem_not_done': 'Not done',
+    'sem_on': 'on',
+    'sem_off': 'off',
+
+    'tts_kk_guide_title': 'Install Kazakh voice',
+    'tts_kk_guide_body':
+        'For proper Kazakh pronunciation, install a voice pack. '
+        'Go to Settings → Accessibility → '
+        'Text-to-speech → Install voice data → Kazakh.',
+    'tts_kk_open_settings': 'Open TTS settings',
+    'tts_kk_not_available':
+        'Kazakh voice not found. Voice assistant uses Russian accent.',
+
+    'lang_switched': 'Language changed.',
+
+    'pref_clear_path_announce': 'Announce "Path clear"',
+    'pref_battery_announce': 'Battery level announcements',
+    'pref_mode_announce': 'Mode change announcements',
+
+    'vc_speed_up': 'Speech faster.',
+    'vc_speed_down': 'Speech slower.',
+    'vc_volume_up': 'Volume up.',
+    'vc_volume_down': 'Volume down.',
+    'vc_battery_status': 'Battery {battery} percent.',
+
+    'audio_tour':
+        'You are on the main screen. '
+        'Camera is active and scanning your surroundings. '
+        'Swipe left or right to switch modes. '
+        'Hold your finger for voice command. '
+        'Swipe up for help.',
+    'audio_tour_done': 'Enjoy using the app!',
+
+    'onb_sos_title': 'Emergency contact',
+    'onb_sos_sub':
+        'Enter the number of a trusted person.\\nBagdar will send an SMS with your location in an emergency.',
+    'onb_sos_tts':
+        'Enter a number for emergencies. '
+        'Bagdar will send an SMS with your location. '
+        'You can skip this and set it up later.',
+    'onb_sos_placeholder': '+1 (___) ___-____',
+    'onb_sos_save': 'Save contact',
+    'onb_sos_skip': 'Set up later',
+
+    'settings_calibration': 'Camera calibration',
+    'settings_calibration_desc': 'Stand exactly 2m from a person and tap',
+    'settings_read_text': 'Read text',
+    'settings_read_text_desc': 'OCR — recognize text in frame',
+    'settings_cpu_threads': 'CPU threads',
+    'settings_lang_label': 'Language',
+    'settings_earcon_title': 'Earcon sounds',
+    'settings_earcon_desc': 'Instant tones for events',
+    'settings_depth_active': 'Depth analysis: active',
+    'settings_depth_not_ready': 'Depth analysis: not ready',
+    'settings_scan_left': 'What is left?',
+    'settings_scan_forward': 'What is ahead?',
+    'settings_scan_right': 'What is right?',
+    'settings_haptic_test': 'Vibration test (Cane mode)',
+    'settings_earcon_test': 'Earcon sound test',
+    'settings_sos_not_set': 'Not set',
+
+    'path_clear_minimal': 'Clear.',
+    'hazard_stairs_down_minimal': 'Stairs. Stop.',
+    'hazard_overhead_minimal': 'Obstacle. Stop.',
+    'camera_blocked_minimal': 'Camera blocked.',
   },
 };
 
@@ -1560,7 +1770,7 @@ const Map<AppLanguage, Map<String, String>> _labels = {
     'bus': 'автобус',
     'truck': 'жүк көлігі',
     'stop sign': 'стоп белгісі',
-    'traffic light': 'жарық шам',
+    'traffic light': 'бағдаршам',
     'dog': 'ит',
     'cat': 'мысық',
     'bench': 'орындық',

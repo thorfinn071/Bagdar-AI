@@ -29,9 +29,9 @@ class StatusPanel extends StatelessWidget {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.all(12),
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.60),
+        color: Colors.black.withValues(alpha: 0.70),
         borderRadius: BorderRadius.circular(14),
       ),
       child: ValueListenableBuilder<List<Track>>(
@@ -81,7 +81,15 @@ class StatusPanel extends StatelessWidget {
           final approaching = tracks.any((t) => t.approaching);
           final modeStr = mode.label;
 
-          return ExcludeSemantics(
+          final distColor = _distColor(top?.dist);
+
+          final semanticsLabel =
+              '${S.get('lbl_object')}: $label$distM. '
+              '${S.get('lbl_status')}: $distText, $dirText'
+              '${approaching ? ", ${S.get('approaching')}" : ""}';
+
+          return Semantics(
+            label: semanticsLabel,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,26 +99,37 @@ class StatusPanel extends StatelessWidget {
                     Text(
                       statusLine,
                       style: const TextStyle(
-                        color: Colors.white70,
-                        fontSize: 12,
+                        color: Colors.white,
+                        fontSize: 14,
                       ),
                     ),
                     const Spacer(),
-                    Text(
-                      '[$modeStr]',
-                      style: const TextStyle(
-                        color: Colors.cyanAccent,
-                        fontSize: 12,
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 3,
+                      ),
+                      decoration: BoxDecoration(
+                        color: distColor.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        '[$modeStr]',
+                        style: TextStyle(
+                          color: distColor,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 8),
                 Text(
                   '${S.get('lbl_object')}: $label$distM',
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 16,
+                    fontSize: 20,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -119,8 +138,8 @@ class StatusPanel extends StatelessWidget {
                   '${S.get('lbl_status')}: $distText • $dirText'
                   '${approaching ? " ⚠ ${S.get('approaching')}" : ""}',
                   style: TextStyle(
-                    color: approaching ? Colors.orangeAccent : Colors.white70,
-                    fontSize: 13,
+                    color: approaching ? Colors.orangeAccent : Colors.white,
+                    fontSize: 16,
                   ),
                 ),
                 if (tracks.length > 1)
@@ -129,8 +148,8 @@ class StatusPanel extends StatelessWidget {
                     child: Text(
                       '${S.get('lbl_total_objects')}: ${tracks.length}',
                       style: const TextStyle(
-                        color: Colors.white54,
-                        fontSize: 12,
+                        color: Colors.white70,
+                        fontSize: 14,
                       ),
                     ),
                   ),
@@ -152,5 +171,11 @@ class StatusPanel extends StatelessWidget {
     if (d == 'very close') return S.get('dist_stop');
     if (d == 'close') return S.get('dist_attention');
     return S.get('dist_safe');
+  }
+
+  static Color _distColor(String? d) {
+    if (d == 'very close') return Colors.redAccent;
+    if (d == 'close') return Colors.amberAccent;
+    return Colors.greenAccent;
   }
 }

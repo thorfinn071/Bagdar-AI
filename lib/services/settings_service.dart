@@ -33,6 +33,10 @@ class SettingsService {
   static const _kSosTrigger = 'a11y_sos_trigger';
   static const _kDominantHand = 'a11y_dominant_hand';
   static const _kNcnnDisabled = 'ncnn_disabled';
+  static const _kClearPathAnnounce = 'pref_clear_path_announce';
+  static const _kBatteryAnnounce = 'pref_battery_announce';
+  static const _kModeAnnounce = 'pref_mode_announce';
+  static const _kAudioTourSeen = 'audio_tour_seen';
 
   Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
@@ -160,6 +164,26 @@ class SettingsService {
 
   Future<void> setNcnnDisabled(bool v) async =>
       _prefs?.setBool(_kNcnnDisabled, v) ?? Future<void>.value();
+
+  bool get clearPathAnnounce =>
+      _prefs?.getBool(_kClearPathAnnounce) ?? true;
+  Future<void> setClearPathAnnounce(bool v) async =>
+      _prefs!.setBool(_kClearPathAnnounce, v);
+
+  bool get batteryAnnounce =>
+      _prefs?.getBool(_kBatteryAnnounce) ?? true;
+  Future<void> setBatteryAnnounce(bool v) async =>
+      _prefs!.setBool(_kBatteryAnnounce, v);
+
+  bool get modeAnnounce =>
+      _prefs?.getBool(_kModeAnnounce) ?? true;
+  Future<void> setModeAnnounce(bool v) async =>
+      _prefs!.setBool(_kModeAnnounce, v);
+
+  bool get audioTourSeen =>
+      _prefs?.getBool(_kAudioTourSeen) ?? false;
+  Future<void> setAudioTourSeen(bool v) async =>
+      _prefs!.setBool(_kAudioTourSeen, v);
 
   Future<void> resetAll() async => _prefs!.clear();
 }

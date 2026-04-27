@@ -28,6 +28,14 @@ enum VoiceCommand {
   showHelp,
   sos,
   cancelFall,
+  speechRateFaster,
+  speechRateSlower,
+  volumeUp,
+  volumeDown,
+  langRussian,
+  langKazakh,
+  langEnglish,
+  batteryStatus,
   unknown,
 }
 
@@ -95,6 +103,20 @@ class VoiceCommandService {
     'подсказка': VoiceCommand.showHelp,
     'что умеешь': VoiceCommand.showHelp,
     'как пользоваться': VoiceCommand.showHelp,
+    'быстрее говори': VoiceCommand.speechRateFaster,
+    'быстрее': VoiceCommand.speechRateFaster,
+    'медленнее говори': VoiceCommand.speechRateSlower,
+    'медленнее': VoiceCommand.speechRateSlower,
+    'громче': VoiceCommand.volumeUp,
+    'тише': VoiceCommand.volumeDown,
+    'русский язык': VoiceCommand.langRussian,
+    'язык русский': VoiceCommand.langRussian,
+    'казахский язык': VoiceCommand.langKazakh,
+    'язык казахский': VoiceCommand.langKazakh,
+    'английский язык': VoiceCommand.langEnglish,
+    'язык английский': VoiceCommand.langEnglish,
+    'батарея': VoiceCommand.batteryStatus,
+    'заряд': VoiceCommand.batteryStatus,
   };
 
   static const Set<String> _ruSosExact = {
@@ -197,6 +219,17 @@ class VoiceCommandService {
     'анықтама': VoiceCommand.showHelp,
     'қимылдар': VoiceCommand.showHelp,
     'нұсқау': VoiceCommand.showHelp,
+    'жылдамырақ сөйле': VoiceCommand.speechRateFaster,
+    'жылдамырақ': VoiceCommand.speechRateFaster,
+    'баяуырақ сөйле': VoiceCommand.speechRateSlower,
+    'баяуырақ': VoiceCommand.speechRateSlower,
+    'қаттырақ': VoiceCommand.volumeUp,
+    'ақырынырақ': VoiceCommand.volumeDown,
+    'орыс тілі': VoiceCommand.langRussian,
+    'қазақ тілі': VoiceCommand.langKazakh,
+    'ағылшын тілі': VoiceCommand.langEnglish,
+    'батарея': VoiceCommand.batteryStatus,
+    'заряд': VoiceCommand.batteryStatus,
   };
 
   static const Set<String> _kkSosExact = {
@@ -293,6 +326,19 @@ class VoiceCommandService {
     'commands list': VoiceCommand.showHelp,
     'how to use': VoiceCommand.showHelp,
     'what can you do': VoiceCommand.showHelp,
+    'speak faster': VoiceCommand.speechRateFaster,
+    'faster': VoiceCommand.speechRateFaster,
+    'speak slower': VoiceCommand.speechRateSlower,
+    'slower': VoiceCommand.speechRateSlower,
+    'louder': VoiceCommand.volumeUp,
+    'volume up': VoiceCommand.volumeUp,
+    'quieter': VoiceCommand.volumeDown,
+    'volume down': VoiceCommand.volumeDown,
+    'russian language': VoiceCommand.langRussian,
+    'kazakh language': VoiceCommand.langKazakh,
+    'english language': VoiceCommand.langEnglish,
+    'battery': VoiceCommand.batteryStatus,
+    'battery level': VoiceCommand.batteryStatus,
   };
 
   static const Set<String> _enSosExact = {

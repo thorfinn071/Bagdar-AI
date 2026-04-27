@@ -41,7 +41,7 @@ class NavHud extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.black.withValues(alpha: 0.75),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: _accentColor, width: 1.5),
+            border: Border.all(color: _accentColor, width: 2.5),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -114,15 +114,15 @@ class NavHud extends StatelessWidget {
     }
 
     return Container(
-      width: 48,
-      height: 48,
+      width: 64,
+      height: 64,
       decoration: BoxDecoration(
         color: _accentColor.withValues(alpha: 0.2),
         shape: BoxShape.circle,
       ),
       child: Transform.rotate(
         angle: rotation,
-        child: Icon(icon, color: _accentColor, size: 28),
+        child: Icon(icon, color: _accentColor, size: 36),
       ),
     );
   }
@@ -153,7 +153,7 @@ class NavHud extends StatelessWidget {
           mainText,
           style: TextStyle(
             color: Colors.white,
-            fontSize: 18,
+            fontSize: 24,
             fontWeight: FontWeight.w700,
             shadows: [
               Shadow(color: Colors.black.withValues(alpha: 0.8), blurRadius: 4),
@@ -165,7 +165,7 @@ class NavHud extends StatelessWidget {
             subText,
             style: TextStyle(
               color: _accentColor,
-              fontSize: 14,
+              fontSize: 18,
               fontWeight: FontWeight.w600,
             ),
           ),

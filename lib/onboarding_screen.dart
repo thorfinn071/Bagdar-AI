@@ -274,7 +274,7 @@ class _ProgressDots extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      label: 'Шаг ${current + 1} из $total',
+      label: S.get('sem_step_of').replaceFirst('{step}', '${current + 1}').replaceFirst('{total}', '$total'),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: List.generate(total, (i) {
@@ -571,7 +571,7 @@ class _PermRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      label: '$label. $reason. ${required ? "Обязательно" : "Необязательно"}',
+      label: '$label. $reason. ${required ? S.get('sem_required') : S.get('sem_optional_perm')}',
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
@@ -905,7 +905,7 @@ class _CheckItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      label: '$text. ${done ? "Выполнено" : "Не выполнено. ${hint ?? ""}"}',
+      label: '$text. ${done ? S.get('sem_done') : "${S.get('sem_not_done')}. ${hint ?? ""}"}',
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

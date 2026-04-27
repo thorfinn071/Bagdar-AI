@@ -216,12 +216,12 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
             ),
             const SizedBox(height: 12),
             Semantics(
-              label: 'Язык / Тіл',
+              label: S.get('settings_lang_label'),
               child: Row(
                 children: [
-                  const Text(
-                    'Язык / Тіл',
-                    style: TextStyle(color: Colors.white),
+                    Text(
+                    S.get('settings_lang_label'),
+                    style: const TextStyle(color: Colors.white),
                   ),
                   const Spacer(),
                   ToggleButtons(
@@ -266,7 +266,8 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
             ),
             const SizedBox(height: 8),
             Semantics(
-              label: 'Использовать GPU: ${_useGpu ? "включено" : "выключено"}',
+              label:
+                  'GPU: ${_useGpu ? S.get('sem_on') : S.get('sem_off')}',
               child: SwitchListTile(
                 title: const Text('GPU', style: TextStyle(color: Colors.white)),
                 value: _useGpu,
@@ -278,7 +279,7 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
             ),
             Semantics(
               label:
-                  'Native depth bridge: ${_useNativeDepthBridge ? "включено" : "выключено"}',
+                  'Native depth bridge: ${_useNativeDepthBridge ? S.get('sem_on') : S.get('sem_off')}',
               child: SwitchListTile(
                 title: const Text(
                   'Native depth bridge',
@@ -297,7 +298,7 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
             ),
             Semantics(
               label:
-                  'Hardware depth mode: ${_useHardwareDepthMode ? "включено" : "выключено"}',
+                  'Hardware depth mode: ${_useHardwareDepthMode ? S.get('sem_on') : S.get('sem_off')}',
               child: SwitchListTile(
                 title: const Text(
                   'Hardware depth mode',
@@ -329,7 +330,7 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
             ),
             Row(
               children: [
-                const Text('CPU потоки', style: TextStyle(color: Colors.white)),
+                Text(S.get('settings_cpu_threads'), style: const TextStyle(color: Colors.white)),
                 const Spacer(),
                 DropdownButton<int>(
                   dropdownColor: Colors.grey[850],
@@ -347,7 +348,7 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
               ],
             ),
             Semantics(
-              label: 'Показать отладку: ${_showDebugHud ? "вкл" : "выкл"}',
+              label: 'Debug HUD: ${_showDebugHud ? S.get('sem_on') : S.get('sem_off')}',
               child: SwitchListTile(
                 title: const Text(
                   'Debug HUD',
@@ -390,15 +391,15 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
               },
             ),
             Semantics(
-              label: 'Звуковые сигналы: ${_earconEnabled ? "вкл" : "выкл"}',
+              label: '${S.get('settings_earcon_title')}: ${_earconEnabled ? S.get('sem_on') : S.get('sem_off')}',
               child: SwitchListTile(
-                title: const Text(
-                  'Звуковые сигналы',
-                  style: TextStyle(color: Colors.white),
+                title: Text(
+                  S.get('settings_earcon_title'),
+                  style: const TextStyle(color: Colors.white),
                 ),
-                subtitle: const Text(
-                  'Мгновенные тоны для событий',
-                  style: TextStyle(color: Colors.white38, fontSize: 11),
+                subtitle: Text(
+                  S.get('settings_earcon_desc'),
+                  style: const TextStyle(color: Colors.white38, fontSize: 11),
                 ),
                 value: _earconEnabled,
                 onChanged: (v) {
@@ -440,7 +441,7 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
             ),
             Semantics(
               label:
-                  '${S.get('settings_classic_gestures')}: ${_classicGestures ? "вкл" : "выкл"}',
+                  '${S.get('settings_classic_gestures')}: ${_classicGestures ? S.get('sem_on') : S.get('sem_off')}',
               child: SwitchListTile(
                 title: Text(
                   S.get('settings_classic_gestures'),
@@ -578,8 +579,8 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
               ),
               title: Text(
                 widget.midasReady
-                    ? 'Анализ глубины: активен'
-                    : 'Анализ глубины: не готов',
+                    ? S.get('settings_depth_active')
+                    : S.get('settings_depth_not_ready'),
                 style: TextStyle(
                   color: widget.midasReady ? Colors.white : Colors.white38,
                 ),
@@ -594,10 +595,10 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
               textColor: Colors.white,
               iconColor: Colors.cyanAccent,
               leading: const Icon(Icons.text_fields, color: Colors.cyanAccent),
-              title: const Text('Прочитать текст'),
-              subtitle: const Text(
-                'OCR — распознавание текста в кадре',
-                style: TextStyle(color: Colors.white38, fontSize: 11),
+              title: Text(S.get('settings_read_text')),
+              subtitle: Text(
+                S.get('settings_read_text_desc'),
+                style: const TextStyle(color: Colors.white38, fontSize: 11),
               ),
               onTap: () {
                 Navigator.pop(context);
@@ -612,10 +613,10 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
                 Icons.straighten,
                 color: Colors.lightBlueAccent,
               ),
-              title: const Text('Калибровка камеры'),
-              subtitle: const Text(
-                'Встаньте точно на 2 м от человека и нажмите',
-                style: TextStyle(color: Colors.white38, fontSize: 11),
+              title: Text(S.get('settings_calibration')),
+              subtitle: Text(
+                S.get('settings_calibration_desc'),
+                style: const TextStyle(color: Colors.white38, fontSize: 11),
               ),
               onTap: () {
                 Navigator.pop(context);
@@ -629,7 +630,7 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
               leading: const Icon(Icons.sos, color: Colors.redAccent),
               title: Text(S.get('sos_settings')),
               subtitle: Text(
-                widget.sosContactNumber ?? 'Не задан',
+                widget.sosContactNumber ?? S.get('settings_sos_not_set'),
                 style: const TextStyle(color: Colors.white38, fontSize: 11),
               ),
               onTap: () {
@@ -703,7 +704,7 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
             ListTile(
               textColor: Colors.white,
               iconColor: Colors.white70,
-              title: const Text('Что слева?'),
+              title: Text(S.get('settings_scan_left')),
               trailing: const Icon(Icons.arrow_back),
               onTap: () {
                 Navigator.pop(context);
@@ -713,7 +714,7 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
             ListTile(
               textColor: Colors.white,
               iconColor: Colors.white70,
-              title: const Text('Что впереди?'),
+              title: Text(S.get('settings_scan_forward')),
               trailing: const Icon(Icons.arrow_upward),
               onTap: () {
                 Navigator.pop(context);
@@ -723,7 +724,7 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
             ListTile(
               textColor: Colors.white,
               iconColor: Colors.white70,
-              title: const Text('Что справа?'),
+              title: Text(S.get('settings_scan_right')),
               trailing: const Icon(Icons.arrow_forward),
               onTap: () {
                 Navigator.pop(context);
@@ -731,18 +732,18 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
               },
             ),
             const Divider(color: Colors.white24, height: 20),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
               child: Text(
-                'Тест вибрации (режим Трость)',
-                style: TextStyle(color: Colors.white54, fontSize: 12),
+                S.get('settings_haptic_test'),
+                style: const TextStyle(color: Colors.white54, fontSize: 12),
               ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _HapticTestButton(
-                  label: '← Влево',
+                  label: '← ${S.get('nav_left')}',
                   dist: 'close',
                   pos: 'left',
                   patternFn: widget.patternFn,
@@ -750,7 +751,7 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
                   vibrateFn: widget.vibrateFn,
                 ),
                 _HapticTestButton(
-                  label: '↑ Центр',
+                  label: '↑ ${S.get('straight')}',
                   dist: 'close',
                   pos: 'center',
                   patternFn: widget.patternFn,
@@ -758,7 +759,7 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
                   vibrateFn: widget.vibrateFn,
                 ),
                 _HapticTestButton(
-                  label: 'Вправо →',
+                  label: '${S.get('nav_right')} →',
                   dist: 'close',
                   pos: 'right',
                   patternFn: widget.patternFn,
@@ -772,7 +773,7 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _HapticTestButton(
-                  label: '! Влево',
+                  label: '! ${S.get('nav_left')}',
                   dist: 'very close',
                   pos: 'left',
                   patternFn: widget.patternFn,
@@ -781,7 +782,7 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
                   danger: true,
                 ),
                 _HapticTestButton(
-                  label: '! Центр',
+                  label: '! ${S.get('straight')}',
                   dist: 'very close',
                   pos: 'center',
                   patternFn: widget.patternFn,
@@ -790,7 +791,7 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
                   danger: true,
                 ),
                 _HapticTestButton(
-                  label: 'Вправо !',
+                  label: '${S.get('nav_right')} !',
                   dist: 'very close',
                   pos: 'right',
                   patternFn: widget.patternFn,
@@ -801,11 +802,11 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
               ],
             ),
             const Divider(color: Colors.white24, height: 20),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
               child: Text(
-                'Тест звуковых сигналов',
-                style: TextStyle(color: Colors.white54, fontSize: 12),
+                S.get('settings_earcon_test'),
+                style: const TextStyle(color: Colors.white54, fontSize: 12),
               ),
             ),
             Wrap(
@@ -912,24 +913,24 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
       case DepthTier.ncnnCpu:
         return 'NCNN + CPU';
       case DepthTier.focalLength:
-        return 'Fallback по фокусному расстоянию';
+        return 'Focal length fallback';
       case null:
-        return 'не определён';
+        return '—';
     }
   }
 
   String _depthTierSubtitle(DepthTier? tier) {
     switch (tier) {
       case DepthTier.hardware:
-        return 'Нативная глубина с устройства';
+        return 'Native device depth';
       case DepthTier.ncnnVulkan:
-        return 'NCNN runtime с Vulkan GPU-ускорением';
+        return 'NCNN runtime + Vulkan GPU';
       case DepthTier.ncnnCpu:
-        return 'NCNN runtime на CPU (NEON)';
+        return 'NCNN runtime CPU (NEON)';
       case DepthTier.focalLength:
-        return 'Нет depth API — используется оценка по калибровке';
+        return 'No depth API — focal length estimate';
       case null:
-        return 'Источник глубины будет выбран автоматически';
+        return 'Auto-detect';
     }
   }
 }

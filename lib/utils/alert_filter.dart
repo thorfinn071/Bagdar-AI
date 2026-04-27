@@ -1,3 +1,4 @@
+import '../models/a11y_prefs.dart';
 import '../models/speech_job.dart';
 import '../models/strings.dart' show S;
 
@@ -49,6 +50,8 @@ class AlertFilter {
     DateTime now, {
     List<String>? labels,
     Set<int>? reliableTrackIds,
+    Verbosity verbosity = Verbosity.normal,
+    AlertFrequency alertFrequency = AlertFrequency.normal,
   }) {
     if (_candidates.isEmpty) return null;
 
@@ -90,7 +93,8 @@ class AlertFilter {
 
     AlertCandidate? picked;
     for (final cand in _candidates) {
-      if (_isAllowed(cand, trackCount, now, reliableTrackIds)) {
+      if (_isAllowed(cand, trackCount, now, reliableTrackIds,
+          verbosity: verbosity, alertFrequency: alertFrequency)) {
         picked = cand;
         break;
       }
@@ -113,16 +117,17 @@ class AlertFilter {
     AlertCandidate cand,
     int trackCount,
     DateTime now,
-    Set<int>? reliableTrackIds,
-  ) {
+    Set<int>? reliableTrackIds, {
+    Verbosity verbosity = Verbosity.normal,
+    AlertFrequency alertFrequency = AlertFrequency.normal,
+  }) {
+    if (verbosity == Verbosity.minimal &&
+        cand.priority == SpeechPriority.info &&
+        cand.urgency < 0.7) {
+      return false;
+    }
+
     if (cand.priority == SpeechPriority.critical) {
-      
-      
-      
-      
-      
-      
-      
       final lastSameAt = _lastByCat[cand.category];
       if (lastSameAt != null &&
           now.difference(lastSameAt) <
@@ -134,7 +139,7 @@ class AlertFilter {
 
     final lastAt =
         _lastByCat[cand.category] ?? DateTime.fromMillisecondsSinceEpoch(0);
-    final catGap = _categoryCooldown(cand.category, trackCount);
+    final catGap = _categoryCooldown(cand.category, trackCount, alertFrequency);
     if (now.difference(lastAt) < catGap) return false;
 
     if (cand.category != AlertCategory.approachingVehicle &&
@@ -145,13 +150,6 @@ class AlertFilter {
     if (trackCount >= 5 &&
         cand.priority == SpeechPriority.info &&
         cand.urgency < 0.4) {
-      
-      
-      
-      
-      
-      
-      
       final tid = cand.trackId;
       final reliable = reliableTrackIds;
       if (tid == null || reliable == null || !reliable.contains(tid)) {
@@ -167,8 +165,6 @@ class AlertFilter {
     if (cand.category == AlertCategory.navigationHint &&
         (_lastCategory == AlertCategory.corridorNarrow ||
             _lastCategory == AlertCategory.corridorBlocked) &&
-        
-        
         now.difference(_lastSpokenAt) < const Duration(seconds: 8)) {
       return false;
     }
@@ -190,12 +186,22 @@ class AlertFilter {
     _lastByCat.clear();
   }
 
-  Duration _categoryCooldown(AlertCategory cat, int trackCount) {
-    final double scale = trackCount >= 5
+  Duration _categoryCooldown(
+    AlertCategory cat,
+    int trackCount,
+    AlertFrequency freq,
+  ) {
+    final double trackScale = trackCount >= 5
         ? 1.4
         : trackCount >= 3
         ? 1.2
         : 1.0;
+    final double freqScale = switch (freq) {
+      AlertFrequency.rare => 1.6,
+      AlertFrequency.normal => 1.0,
+      AlertFrequency.frequent => 0.7,
+    };
+    final double scale = trackScale * freqScale;
     Duration scaled(int ms) => Duration(milliseconds: (ms * scale).round());
     switch (cat) {
       case AlertCategory.approachingVehicle:
@@ -207,11 +213,11 @@ class AlertFilter {
       case AlertCategory.navigationHint:
         return scaled(2500);
       case AlertCategory.corridorBlocked:
-        return const Duration(milliseconds: 1500);
+        return Duration(milliseconds: (1500 * freqScale).round());
       case AlertCategory.corridorNarrow:
         return scaled(2500);
       case AlertCategory.clearPath:
-        return const Duration(seconds: 6);
+        return Duration(seconds: (15 * freqScale).round());
     }
   }
 }
