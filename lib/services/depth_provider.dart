@@ -107,7 +107,12 @@ class HardwareDepthProvider implements DepthProvider {
   bool get lastUsedNativeBridge => _lastUsedNativeBridge;
 
   Future<DepthProvider?> _ensureFallback({int threads = 2}) async {
-    if (_fallback != null) return _fallback;
+    final existing = _fallback;
+    if (existing != null) {
+      if (existing.isReady) return existing;
+      if (await existing.init(threads: threads)) return existing;
+      return null;
+    }
     final ncnn = await NcnnDepthProvider.tryCreate();
     if (ncnn == null) return null;
     if (await ncnn.init(threads: threads)) {

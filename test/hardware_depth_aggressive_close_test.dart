@@ -1,8 +1,6 @@
 import 'package:camera/camera.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:bagdar/models/constants.dart';
 import 'package:bagdar/services/depth_provider.dart';
 import 'package:bagdar/services/device_capability.dart';
 import 'package:bagdar/services/hardware_depth_bridge.dart';
@@ -13,7 +11,7 @@ class _StubFallback implements DepthProvider {
   bool _ready = true;
 
   @override
-  DepthTier get tier => DepthTier.midasCpu;
+  DepthTier get tier => DepthTier.ncnnCpu;
   @override
   bool get isReady => _ready;
   @override
@@ -60,11 +58,10 @@ void main() {
 
   group('HardwareDepthProvider B-3 — aggressive fallback close', () {
     test(
-      'high-confidence streak >= 30s disposes the MiDaS fallback',
+      'high-confidence streak >= 30s disposes the NCNN fallback',
       () {
         final stub = _StubFallback();
         final hp = HardwareDepthProvider(
-          useNnApiFallback: false,
           bridge: _StubBridge(),
           fallbackProvider: stub,
         );
@@ -98,7 +95,6 @@ void main() {
     test('confidence drop resets the streak', () {
       final stub = _StubFallback();
       final hp = HardwareDepthProvider(
-        useNnApiFallback: false,
         bridge: _StubBridge(),
         fallbackProvider: stub,
       );
@@ -122,7 +118,6 @@ void main() {
       () async {
         final stub = _StubFallback();
         final hp = HardwareDepthProvider(
-          useNnApiFallback: false,
           bridge: _StubBridge(),
           fallbackProvider: stub,
         );
@@ -161,7 +156,6 @@ void main() {
     test('high confidence below threshold (0.7) does NOT start streak', () {
       final stub = _StubFallback();
       final hp = HardwareDepthProvider(
-        useNnApiFallback: false,
         bridge: _StubBridge(),
         fallbackProvider: stub,
       );

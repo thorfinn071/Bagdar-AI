@@ -16,7 +16,6 @@ void main() {
     test('true for focal-length tier', () {
       const caps = DeviceCapabilities(
         bestDepthTier: DepthTier.focalLength,
-        supportsNnApi: false,
         androidSdkInt: 26,
       );
       expect(caps.isLowEnd, isTrue);
@@ -24,8 +23,7 @@ void main() {
 
     test('true when OEM brand is on budget blacklist', () {
       const caps = DeviceCapabilities(
-        bestDepthTier: DepthTier.midasCpu,
-        supportsNnApi: false,
+        bestDepthTier: DepthTier.ncnnCpu,
         androidSdkInt: 30,
         deviceInfo: DeviceInfo(
           manufacturer: 'ITEL',
@@ -39,10 +37,9 @@ void main() {
       expect(caps.isLowEnd, isTrue);
     });
 
-    test('false for mid-range midasCpu on a normal brand', () {
+    test('false for mid-range ncnnCpu on a normal brand', () {
       const caps = DeviceCapabilities(
-        bestDepthTier: DepthTier.midasCpu,
-        supportsNnApi: false,
+        bestDepthTier: DepthTier.ncnnCpu,
         androidSdkInt: 30,
         deviceInfo: DeviceInfo(
           manufacturer: 'Xiaomi',

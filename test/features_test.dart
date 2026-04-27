@@ -11,7 +11,7 @@ import 'package:bagdar/services/hardware_depth_bridge.dart';
 import 'package:bagdar/services/proximity_beacon_service.dart';
 import 'package:bagdar/utils/depth_hazard.dart';
 import 'package:bagdar/utils/ground_plane_analyzer.dart';
-import 'package:bagdar/utils/midas_service.dart';
+import 'package:bagdar/utils/fusion_engine.dart';
 
 class _FakeCameraImage implements CameraImage {
   @override
@@ -165,13 +165,12 @@ void main() {
     expect(earcon.pans.last, closeTo(0.25, 0.001));
   });
 
-  test('HardwareDepthProvider falls back to MiDaS on repeated low-confidence depth', () async {
+  test('HardwareDepthProvider falls back to NCNN on repeated low-confidence depth', () async {
     final depthMap = Float32List(GroundPlaneAnalyzer.kMapSize * GroundPlaneAnalyzer.kMapSize)
       ..fillRange(0, GroundPlaneAnalyzer.kMapSize * GroundPlaneAnalyzer.kMapSize, 0.0);
     final bridge = _FakeHardwareDepthBridge(supported: true, depthMap: depthMap);
-    final fallback = _RecordingFallbackProvider(DepthTier.midasCpu);
+    final fallback = _RecordingFallbackProvider(DepthTier.ncnnCpu);
     final provider = HardwareDepthProvider(
-      useNnApiFallback: false,
       bridge: bridge,
       fallbackProvider: fallback,
     );
@@ -188,7 +187,7 @@ void main() {
     expect(provider.lowConfidenceFallbackActive, isTrue);
     expect(provider.lastConfidenceScore, lessThan(kHardwareDepthMinConfidence));
     expect(fallback.analyzeCalls, greaterThan(0));
-    expect(provider.tier, DepthTier.midasCpu);
+    expect(provider.tier, DepthTier.ncnnCpu);
 
   });
 }

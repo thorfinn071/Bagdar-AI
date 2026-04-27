@@ -19,7 +19,7 @@ import 'package:bagdar/utils/alert_filter.dart';
 import 'package:bagdar/utils/depth_hazard.dart';
 import 'package:bagdar/utils/distance_utils.dart';
 import 'package:bagdar/utils/ground_plane_analyzer.dart';
-import 'package:bagdar/utils/midas_service.dart';
+import 'package:bagdar/utils/fusion_engine.dart';
 
 class _FakeHardwareDepthBridge extends HardwareDepthBridge {
   _FakeHardwareDepthBridge({required this.supported});
@@ -682,51 +682,42 @@ void main() {
     test('hardware tier is preserved', () {
       const caps = DeviceCapabilities(
         bestDepthTier: DepthTier.hardware,
-        supportsNnApi: false,
         androidSdkInt: 33,
       );
       expect(caps.bestDepthTier, DepthTier.hardware);
-      expect(caps.supportsNnApi, isFalse);
     });
 
-    test('sdk >= 28 + nnapi → midasNnapi tier', () {
+    test('ncnnVulkan tier preserved', () {
       const caps = DeviceCapabilities(
-        bestDepthTier: DepthTier.midasNnapi,
-        supportsNnApi: true,
+        bestDepthTier: DepthTier.ncnnVulkan,
         androidSdkInt: 30,
       );
-      expect(caps.bestDepthTier, DepthTier.midasNnapi);
-      expect(caps.supportsNnApi, isTrue);
+      expect(caps.bestDepthTier, DepthTier.ncnnVulkan);
     });
 
-    test('sdk 26-27 → midasCpu tier', () {
+    test('ncnnCpu tier preserved', () {
       const caps = DeviceCapabilities(
-        bestDepthTier: DepthTier.midasCpu,
-        supportsNnApi: false,
+        bestDepthTier: DepthTier.ncnnCpu,
         androidSdkInt: 27,
       );
-      expect(caps.bestDepthTier, DepthTier.midasCpu);
-      expect(caps.supportsNnApi, isFalse);
+      expect(caps.bestDepthTier, DepthTier.ncnnCpu);
     });
 
-    test('focalLength tier → no nnapi', () {
+    test('focalLength tier preserved', () {
       const caps = DeviceCapabilities(
         bestDepthTier: DepthTier.focalLength,
-        supportsNnApi: false,
         androidSdkInt: 26,
       );
-      expect(caps.supportsNnApi, isFalse);
       expect(caps.bestDepthTier, DepthTier.focalLength);
     });
 
     test('toString includes all key fields', () {
       const caps = DeviceCapabilities(
-        bestDepthTier: DepthTier.midasNnapi,
-        supportsNnApi: true,
+        bestDepthTier: DepthTier.ncnnVulkan,
         androidSdkInt: 31,
       );
       final s = caps.toString();
-      expect(s, contains('midasNnapi'));
+      expect(s, contains('ncnnVulkan'));
       expect(s, contains('31'));
     });
   });
@@ -739,29 +730,24 @@ void main() {
     test('hardware caps → HardwareDepthProvider', () {
       const caps = DeviceCapabilities(
         bestDepthTier: DepthTier.hardware,
-        supportsNnApi: false,
         androidSdkInt: 33,
       );
       final provider = DepthProviderFactory.create(caps);
       expect(provider, isA<HardwareDepthProvider>());
     });
 
-    test('midasCpu caps → MidasDepthProvider with useNnApi=false', () {
+    test('ncnn caps → FocalLength placeholder via legacy create()', () {
       const caps = DeviceCapabilities(
-        bestDepthTier: DepthTier.midasCpu,
-        supportsNnApi: false,
+        bestDepthTier: DepthTier.ncnnVulkan,
         androidSdkInt: 26,
       );
       final provider = DepthProviderFactory.create(caps);
-      expect(provider, isA<MidasDepthProvider>());
-      expect((provider as MidasDepthProvider).useNnApi, isFalse);
-      expect(provider.tier, DepthTier.midasCpu);
+      expect(provider, isA<FocalLengthDepthProvider>());
     });
 
     test('focalLength caps → FocalLengthDepthProvider', () {
       const caps = DeviceCapabilities(
         bestDepthTier: DepthTier.focalLength,
-        supportsNnApi: false,
         androidSdkInt: 26,
       );
       final provider = DepthProviderFactory.create(caps);
@@ -776,9 +762,8 @@ void main() {
 
     test('hardware provider keeps hardware tier when native bridge starts', () async {
       final bridge = _FakeHardwareDepthBridge(supported: true);
-      final fallback = _StubDepthProvider(DepthTier.midasCpu);
+      final fallback = _StubDepthProvider(DepthTier.ncnnCpu);
       final provider = HardwareDepthProvider(
-        useNnApiFallback: false,
         bridge: bridge,
         fallbackProvider: fallback,
       );
@@ -789,29 +774,18 @@ void main() {
       expect(bridge.started, isTrue);
     });
 
-    test('hardware provider falls back to MiDaS when native bridge is unavailable', () async {
+    test('hardware provider falls back to NCNN when native bridge is unavailable', () async {
       final bridge = _FakeHardwareDepthBridge(supported: false);
-      final fallback = _StubDepthProvider(DepthTier.midasNnapi);
+      final fallback = _StubDepthProvider(DepthTier.ncnnVulkan);
       final provider = HardwareDepthProvider(
-        useNnApiFallback: true,
         bridge: bridge,
         fallbackProvider: fallback,
       );
 
       final ok = await provider.init();
       expect(ok, isTrue);
-      expect(provider.tier, DepthTier.midasNnapi);
+      expect(provider.tier, DepthTier.ncnnVulkan);
       expect(bridge.started, isFalse);
-    });
-
-    test('hardware caps no longer map directly to MidasDepthProvider', () {
-      const caps = DeviceCapabilities(
-        bestDepthTier: DepthTier.hardware,
-        supportsNnApi: false,
-        androidSdkInt: 33,
-      );
-      final provider = DepthProviderFactory.create(caps);
-      expect(provider, isA<HardwareDepthProvider>());
     });
 
     test('FocalLengthDepthProvider.init returns true immediately', () async {
@@ -834,10 +808,9 @@ void main() {
       expect(p, isA<FocalLengthDepthProvider>());
     });
 
-    test('createWithTier(midasCpu) → MidasDepthProvider nnapi=false', () {
-      final p = DepthProviderFactory.createWithTier(DepthTier.midasCpu);
-      expect(p, isA<MidasDepthProvider>());
-      expect((p as MidasDepthProvider).useNnApi, isFalse);
+    test('createWithTier(ncnn) → FocalLength placeholder', () {
+      final p = DepthProviderFactory.createWithTier(DepthTier.ncnnVulkan);
+      expect(p, isA<FocalLengthDepthProvider>());
     });
   });
 
