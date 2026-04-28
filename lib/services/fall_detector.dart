@@ -13,9 +13,16 @@ class FallDetector {
 
   void Function()? onFallDetected;
   void Function(MotionState state)? onMotionStateChanged;
+  void Function(
+    String stage, {
+    double? accel,
+    double? gyro,
+    int? stillFrames,
+  })? onStageChange;
 
   DateTime _lastImpactAt = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _lastFreeFallAt = DateTime.fromMillisecondsSinceEpoch(0);
+  DateTime _lastFreeFallLogAt = DateTime.fromMillisecondsSinceEpoch(0);
   bool _impactDetected = false;
   int _stillFrames = 0;
   MotionState _motionState = MotionState.stationary;
@@ -95,6 +102,15 @@ class FallDetector {
 
     if (magnitude < _freeFallThreshold) {
       _lastFreeFallAt = now;
+      if (now.difference(_lastFreeFallLogAt) >
+          const Duration(seconds: 1)) {
+        _lastFreeFallLogAt = now;
+        onStageChange?.call(
+          'freefall',
+          accel: magnitude,
+          gyro: _lastGyroMagnitude,
+        );
+      }
     }
 
     if (!_impactDetected) {
@@ -110,6 +126,11 @@ class FallDetector {
         debugPrint(
           'FallDetector: impact detected (${magnitude.toStringAsFixed(1)} m/s², FF=$wasRecentFreeFall, gyro=${_lastGyroMagnitude.toStringAsFixed(2)})',
         );
+        onStageChange?.call(
+          'impact',
+          accel: accelWithoutGravity,
+          gyro: _lastGyroMagnitude,
+        );
       }
       return;
     }
@@ -117,6 +138,12 @@ class FallDetector {
     if (now.difference(_lastImpactAt) > _impactWindow) {
       _impactDetected = false;
       _stillFrames = 0;
+      onStageChange?.call(
+        'aborted_timeout',
+        accel: accelWithoutGravity,
+        gyro: _postImpactGyroPeak,
+        stillFrames: _stillFrames,
+      );
       _postImpactGyroPeak = 0;
       return;
     }
@@ -134,18 +161,35 @@ class FallDetector {
     if (_stillFrames >= _stillFramesRequired) {
       final hadRotationalImpact =
           _postImpactGyroPeak >= _fallGyroImpactRadPerSec;
+      final peak = _postImpactGyroPeak;
+      onStageChange?.call(
+        'stillness_reached',
+        accel: accelWithoutGravity,
+        gyro: peak,
+        stillFrames: _stillFrames,
+      );
       _impactDetected = false;
       _stillFrames = 0;
       _postImpactGyroPeak = 0;
       if (!hadRotationalImpact) {
         debugPrint(
           'FallDetector: stillness reached but no rotational impact '
-          '(peak=${_postImpactGyroPeak.toStringAsFixed(2)}) — ignoring.',
+          '(peak=${peak.toStringAsFixed(2)}) — ignoring.',
+        );
+        onStageChange?.call(
+          'aborted_no_rotation',
+          accel: accelWithoutGravity,
+          gyro: peak,
         );
         return;
       }
       _lastDetectionAt = now;
       debugPrint('FallDetector: FALL CONFIRMED — triggering callback');
+      onStageChange?.call(
+        'confirmed',
+        accel: accelWithoutGravity,
+        gyro: peak,
+      );
       onFallDetected?.call();
     }
   }
