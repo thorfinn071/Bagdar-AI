@@ -172,10 +172,131 @@ def analyze(events: list[dict], filename: str):
     
     frozen = [e for e in events if e['event'] == 'frozen_frame']
     droplet = [e for e in events if e['event'] == 'droplet']
-    if frozen or droplet:
+    quality = [e for e in events if e['event'] == 'camera_quality']
+    stalls = [e for e in events if e['event'] == 'camera_stall']
+    if frozen or droplet or quality or stalls:
         print(f"\n  --- Camera Health ---")
         print(f"  Frozen frame triggers: {len(frozen)}")
         print(f"  Droplet warnings:      {len(droplet)}")
+        if quality:
+            qtypes = Counter(e['data'].get('type', '?') for e in quality)
+            for t, c in qtypes.items():
+                print(f"  {t:21s}: {c}")
+        if stalls:
+            stall_starts = [e for e in stalls if e['data'].get('stalled')]
+            stall_ends = [e for e in stalls if not e['data'].get('stalled')]
+            durations = [e['data']['durationMs'] for e in stall_ends if 'durationMs' in e.get('data', {})]
+            print(f"  Camera stalls:         {len(stall_starts)}")
+            if durations:
+                print(f"    P50/P95/Max ms:      {percentile(durations, 50):.0f} / {percentile(durations, 95):.0f} / {max(durations)}")
+
+    
+    model_loads = [e for e in events if e['event'] == 'model_load']
+    if model_loads:
+        print(f"\n  --- Model Load Times ---")
+        for e in model_loads:
+            d = e.get('data', {})
+            status = 'OK' if d.get('success') else 'FAIL'
+            extra = []
+            if 'tier' in d: extra.append(f"tier={d['tier']}")
+            if 'gpu' in d: extra.append(f"gpu={d['gpu']}")
+            if 'threads' in d: extra.append(f"th={d['threads']}")
+            if 'error' in d: extra.append(f"err={d['error'][:40]}")
+            print(f"  {d.get('model','?'):8s} {d.get('loadMs',0):5d} ms  {status}  {' '.join(extra)}")
+
+    
+    cam_inits = [e for e in events if e['event'] == 'camera_init']
+    if cam_inits:
+        print(f"\n  --- Camera Init ---")
+        for e in cam_inits:
+            d = e.get('data', {})
+            status = 'OK' if d.get('success') else 'FAIL'
+            res = d.get('resolution', '?')
+            err = d.get('error', '')
+            print(f"  {d.get('initMs',0):5d} ms  {status}  {res}  {err}")
+
+    
+    bat = [e for e in events if e['event'] == 'battery_throttle']
+    if bat:
+        print(f"\n  --- Battery Throttle Transitions ---")
+        for e in bat:
+            d = e.get('data', {})
+            ts = e.get('elapsed', 0) // 1000
+            print(f"  @{ts:5d}s  -> {d.get('level','?'):10s}  bat={d.get('batteryPct','?')}%")
+
+    
+    mem = [e for e in events if e['event'] == 'memory_pressure']
+    if mem:
+        print(f"\n  --- Memory Pressure Transitions ---")
+        for e in mem:
+            d = e.get('data', {})
+            ts = e.get('elapsed', 0) // 1000
+            avail = d.get('availMb', '?')
+            total = d.get('totalMb', '?')
+            print(f"  @{ts:5d}s  -> {d.get('level','?'):10s}  avail={avail}/{total} MB")
+
+    
+    modes = [e for e in events if e['event'] == 'mode_switch']
+    if modes:
+        print(f"\n  --- Mode Switches ---")
+        for e in modes:
+            d = e.get('data', {})
+            ts = e.get('elapsed', 0) // 1000
+            print(f"  @{ts:5d}s  {d.get('from','?')} -> {d.get('mode','?')}")
+
+    
+    tts_evt = [e for e in events if e['event'] == 'tts_event']
+    if tts_evt:
+        types = Counter(e['data'].get('event', '?') for e in tts_evt)
+        print(f"\n  --- TTS Events ---")
+        for t, c in types.items():
+            print(f"    {t:20s}: {c}")
+
+    
+    sos = [e for e in events if e['event'] == 'sos_trigger']
+    if sos:
+        print(f"\n  --- SOS Triggers ---")
+        for e in sos:
+            d = e.get('data', {})
+            ts = e.get('elapsed', 0) // 1000
+            res = d.get('result', 'started')
+            print(f"  @{ts:5d}s  {d.get('source','?'):10s}  result={res}")
+
+    
+    midas = [e for e in events if e['event'] == 'midas_inference']
+    if midas:
+        ms = [e['data']['ms'] for e in midas if 'ms' in e.get('data', {})]
+        pre = [e['data'].get('preprocessMs', 0) for e in midas]
+        ana = [e['data'].get('analyzeMs', 0) for e in midas]
+        print(f"\n  --- MiDaS Inference ---")
+        print(f"  Frames:        {len(midas)}")
+        if ms:
+            print(f"  Inference P50/P95/Max: {percentile(ms, 50):.0f} / {percentile(ms, 95):.0f} / {max(ms)} ms")
+        if pre:
+            print(f"  Preprocess avg:        {sum(pre)/len(pre):.0f} ms")
+        if ana:
+            print(f"  Analyze avg:           {sum(ana)/len(ana):.0f} ms")
+
+    
+    errs = [e for e in events if e['event'] == 'error']
+    if errs:
+        print(f"\n  --- Errors ---")
+        for e in errs:
+            d = e.get('data', {})
+            ts = e.get('elapsed', 0) // 1000
+            print(f"  @{ts:5d}s  [{d.get('location','?')}]  {d.get('error','')[:80]}")
+
+    
+    throttler = [e for e in events if e['event'] == 'throttler']
+    if throttler:
+        det_ms = [e['data'].get('detectMs', 0) for e in throttler]
+        midas_ms = [e['data'].get('midasMs', 0) for e in throttler]
+        print(f"\n  --- Throttler ---")
+        print(f"  Adjustments:   {len(throttler)}")
+        if det_ms:
+            print(f"  Detect interval P50/P95: {percentile(det_ms, 50):.0f} / {percentile(det_ms, 95):.0f} ms")
+        if midas_ms:
+            print(f"  MiDaS interval P50/P95:  {percentile(midas_ms, 50):.0f} / {percentile(midas_ms, 95):.0f} ms")
 
     print()
 
