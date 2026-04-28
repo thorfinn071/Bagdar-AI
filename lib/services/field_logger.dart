@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'device_capability.dart';
 import '../models/strings.dart';
 import 'settings_service.dart';
 
@@ -166,6 +165,160 @@ class FieldLogger {
 
   void logFnMarker([String? note]) {
     log('fn_marker', {if (note != null && note.isNotEmpty) 'note': note});
+  }
+
+  void logMidasInference({
+    required int ms,
+    String? tier,
+    int? preprocessMs,
+    int? analyzeMs,
+  }) {
+    log('midas_inference', {
+      'ms': ms,
+      if (tier != null) 'tier': tier,
+      if (preprocessMs != null) 'preMs': preprocessMs,
+      if (analyzeMs != null) 'totalMs': analyzeMs,
+    });
+  }
+
+  void logFallStage(
+    String stage, {
+    double? accel,
+    double? gyro,
+    int? stillFrames,
+  }) {
+    log('fall_stage', {
+      'stage': stage,
+      if (accel != null) 'accel': (accel * 100).round() / 100,
+      if (gyro != null) 'gyro': (gyro * 100).round() / 100,
+      if (stillFrames != null) 'stillFrames': stillFrames,
+    });
+  }
+
+  void logThrottler({
+    required int detectMs,
+    required int midasMs,
+    String? reason,
+    double? avgInfMs,
+    String? motion,
+    String? memory,
+  }) {
+    log('throttler', {
+      'detectMs': detectMs,
+      'midasMs': midasMs,
+      if (reason != null) 'reason': reason,
+      if (avgInfMs != null) 'avgInfMs': avgInfMs.round(),
+      if (motion != null) 'motion': motion,
+      if (memory != null) 'memory': memory,
+    });
+  }
+
+  void logResources({
+    required int batteryPct,
+    int? memAvailMb,
+    int? memTotalMb,
+    String? memPressure,
+    String? batteryThrottle,
+  }) {
+    log('resources', {
+      'batteryPct': batteryPct,
+      if (memAvailMb != null) 'memAvailMb': memAvailMb,
+      if (memTotalMb != null) 'memTotalMb': memTotalMb,
+      if (memPressure != null) 'memPressure': memPressure,
+      if (batteryThrottle != null) 'batThrottle': batteryThrottle,
+    });
+  }
+
+  void logModelLoad({
+    required String model,
+    required int loadMs,
+    required bool success,
+    String? tier,
+    bool? gpu,
+    int? threads,
+    String? error,
+  }) {
+    log('model_load', {
+      'model': model,
+      'loadMs': loadMs,
+      'success': success,
+      if (tier != null) 'tier': tier,
+      if (gpu != null) 'gpu': gpu,
+      if (threads != null) 'threads': threads,
+      if (error != null) 'error': error,
+    });
+  }
+
+  void logCameraInit({
+    required int initMs,
+    required bool success,
+    String? error,
+    String? resolution,
+  }) {
+    log('camera_init', {
+      'initMs': initMs,
+      'success': success,
+      if (resolution != null) 'resolution': resolution,
+      if (error != null) 'error': error,
+    });
+  }
+
+  void logBatteryThrottle(String level, int batteryPct) {
+    log('battery_throttle', {
+      'level': level,
+      'batteryPct': batteryPct,
+    });
+  }
+
+  void logMemoryPressure(String level, {int? availMb, int? totalMb}) {
+    log('memory_pressure', {
+      'level': level,
+      if (availMb != null) 'availMb': availMb,
+      if (totalMb != null) 'totalMb': totalMb,
+    });
+  }
+
+  void logCameraStall({required bool stalled, int? durationMs, int? thresholdMs}) {
+    log('camera_stall', {
+      'stalled': stalled,
+      if (durationMs != null) 'durationMs': durationMs,
+      if (thresholdMs != null) 'thresholdMs': thresholdMs,
+    });
+  }
+
+  void logModeSwitch(String mode, {String? from}) {
+    log('mode_switch', {
+      'mode': mode,
+      if (from != null) 'from': from,
+    });
+  }
+
+  void logTtsEvent(String event, {String? detail}) {
+    log('tts_event', {
+      'event': event,
+      if (detail != null) 'detail': detail,
+    });
+  }
+
+  void logCameraQuality(String type, {int? streak}) {
+    log('camera_quality', {
+      'type': type,
+      if (streak != null) 'streak': streak,
+    });
+  }
+
+  void logError(String location, String error) {
+    log('error', {
+      'location': location,
+      'error': error.length > 200 ? error.substring(0, 200) : error,
+    });
+  }
+
+  void logSosTrigger(String source, {String? result}) {
+    log('sos_trigger', {
+      'source': source,
+      if (result != null) 'result': result,
+    });
   }
 
   Future<void> stopSession() async {

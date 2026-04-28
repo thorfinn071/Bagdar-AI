@@ -4,6 +4,7 @@ import '../models/a11y_prefs.dart';
 import '../models/app_mode.dart';
 import '../models/speech_job.dart';
 import '../services/feature_usage_tracker.dart';
+import '../services/field_logger.dart';
 import '../services/settings_service.dart';
 import '../services/tts_service.dart';
 import '../services/earcon_service.dart';
@@ -133,11 +134,13 @@ class CameraViewModel extends ChangeNotifier {
   }
 
   void setMode(AppMode newMode) {
+    final oldMode = mode;
     mode = newMode;
     alertMgr.markModeSwitch(DateTime.now());
     FeatureUsageTracker.instance.increment(
       FeatureUsageKeys.mode(newMode.name),
     );
+    FieldLogger.instance.logModeSwitch(newMode.name, from: oldMode.name);
     tts.say(
       '${S.get('mode_changed')} ${mode.label}',
       SpeechPriority.critical,
@@ -286,6 +289,11 @@ class CameraViewModel extends ChangeNotifier {
     throttler.setMemoryPressure(memory.level);
     memory.onChanged = (readings) {
       throttler.setMemoryPressure(readings.level);
+      FieldLogger.instance.logMemoryPressure(
+        readings.level.name,
+        availMb: readings.isAvailable ? readings.availMB : null,
+        totalMb: readings.isAvailable ? readings.totalMB : null,
+      );
       notifyListeners();
     };
 

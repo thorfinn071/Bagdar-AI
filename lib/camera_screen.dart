@@ -86,6 +86,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   TrafficLightColor? _lastAnnouncedLight;
 
   Timer? _heartbeatTimer;
+  Timer? _resourceLogTimer;
 
   Timer? _twoFingerSosTimer;
   bool _twoFingerSosArmed = false;
@@ -180,6 +181,10 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           'mode=${_vm.mode} bg=${_lifecycle.backgroundWarned} '
           'detectInterval=${_detectInterval.inMilliseconds}ms',
         );
+        _fieldLog.logCameraStall(
+          stalled: true,
+          thresholdMs: threshold.inMilliseconds,
+        );
         _vm.alertMgr.markCameraStall(now);
         HapticService.vibrate(const [0, 120]);
         if (now.difference(_lastStallWarnTtsAt) < _kStallTtsCooldown) {
@@ -225,6 +230,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _heartbeatTimer?.cancel();
+    _resourceLogTimer?.cancel();
     _twoFingerSosTimer?.cancel();
     _shakeSub?.cancel();
     _fallCountdown.dispose();
@@ -297,6 +303,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
       _vm.battery.onThrottleChanged = (level) {
         _recomputeCadence();
+        _fieldLog.logBatteryThrottle(level.name, _vm.battery.batteryLevel);
         if (mounted) setState(() {});
         if (level != ThrottleLevel.normal) {
           final msg = switch (level) {
@@ -318,7 +325,45 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       _vm.thermal.onChanged = _handleThermalChanged;
       _handleThermalChanged(_vm.thermal.current);
 
-      final ok = await _models.loadMidas(numThreads: _numThreads);
+      if (Settings.instance.fieldLogging) {
+        await DeviceCapabilityProbe.probe();
+        final caps = DeviceCapabilityProbe.cached;
+        await _fieldLog.startSession(
+          deviceModel: caps.deviceInfo.model,
+          androidSdk: caps.androidSdkInt,
+          depthTier: caps.bestDepthTier.name,
+          batteryPct: _vm.battery.batteryLevel,
+        );
+        _resourceLogTimer?.cancel();
+        _resourceLogTimer = Timer.periodic(
+          const Duration(seconds: 30),
+          (_) => _logResources(),
+        );
+      }
+
+      final midasSw = Stopwatch()..start();
+      bool ok = false;
+      try {
+        ok = await _models.loadMidas(numThreads: _numThreads);
+        midasSw.stop();
+        _fieldLog.logModelLoad(
+          model: 'midas',
+          loadMs: midasSw.elapsedMilliseconds,
+          success: ok,
+          tier: _models.depthProvider?.tier.name,
+          threads: _numThreads,
+        );
+      } catch (e) {
+        midasSw.stop();
+        _fieldLog.logModelLoad(
+          model: 'midas',
+          loadMs: midasSw.elapsedMilliseconds,
+          success: false,
+          threads: _numThreads,
+          error: e.toString(),
+        );
+        rethrow;
+      }
       if (!mounted) return;
 
       final hasDepthAi =
@@ -329,7 +374,30 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       if (mounted) setState(() {});
 
       _vm.setStatus('Загрузка ИИ модели YOLO...');
-      await _models.loadYolo(useGpu: _useGpu, numThreads: _numThreads);
+      final yoloSw = Stopwatch()..start();
+      try {
+        await _models.loadYolo(useGpu: _useGpu, numThreads: _numThreads);
+        yoloSw.stop();
+        _fieldLog.logModelLoad(
+          model: 'yolo',
+          loadMs: yoloSw.elapsedMilliseconds,
+          success: true,
+          tier: _models.currentYoloTier.name,
+          gpu: _useGpu,
+          threads: _numThreads,
+        );
+      } catch (e) {
+        yoloSw.stop();
+        _fieldLog.logModelLoad(
+          model: 'yolo',
+          loadMs: yoloSw.elapsedMilliseconds,
+          success: false,
+          gpu: _useGpu,
+          threads: _numThreads,
+          error: e.toString(),
+        );
+        rethrow;
+      }
 
       _vm.setStatus('Запуск камеры...');
       await _initCamera();
@@ -337,11 +405,20 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       await VisionForegroundService.start();
 
       _vm.fallDetector.onFallDetected = _fallCountdown.start;
+      _vm.fallDetector.onStageChange = (stage, {accel, gyro, stillFrames}) {
+        _fieldLog.logFallStage(
+          stage,
+          accel: accel,
+          gyro: gyro,
+          stillFrames: stillFrames,
+        );
+      };
       await _vm.fallDetector.init();
 
       _vm.tts.onAudioRouteInterrupted = () {
         HapticService.vibrate([0, 200, 100, 200, 100, 200]);
         _vm.earcon.play(Earcon.cameraBlocked);
+        _fieldLog.logTtsEvent('audio_interrupted');
         _vm.tts.say(
           S.get('audio_route_interrupted'),
           SpeechPriority.critical,
@@ -349,11 +426,13 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         );
       };
       _vm.tts.onAudioRouteResumed = () {
+        _fieldLog.logTtsEvent('audio_resumed');
         _vm.tts.say(S.get('audio_resumed'), SpeechPriority.info, pan: 0.0);
       };
       _vm.tts.onTtsStall = () {
         HapticService.vibrate([0, 400, 200, 400, 200, 400]);
         _vm.earcon.play(Earcon.cameraBlocked);
+        _fieldLog.logTtsEvent('tts_stall');
         try {
           const MethodChannel('bagdar/watchdog').invokeMethod('ping');
         } catch (_) {}
@@ -385,17 +464,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
       _vm.setStatus(S.get('system_ready'));
       _vm.tts.say(S.get('system_ready'), SpeechPriority.info, pan: 0.0);
-
-      if (Settings.instance.fieldLogging) {
-        final caps = DeviceCapabilityProbe.cached;
-        await _fieldLog.startSession(
-          deviceModel: caps.deviceInfo.model,
-          androidSdk: caps.androidSdkInt,
-          depthTier: caps.bestDepthTier.name,
-          batteryPct: _vm.battery.batteryLevel,
-        );
-      }
     } catch (e) {
+      _fieldLog.logError('initAll', e.toString());
       _vm.setStatus('Сбой: $e');
     }
   }
@@ -493,8 +563,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     }
   }
 
-  void _triggerSos() async {
+  void _triggerSos({String source = 'manual'}) async {
     FeatureUsageTracker.instance.increment(FeatureUsageKeys.sosTriggered);
+    _fieldLog.logSosTrigger(source);
     HapticService.vibrate([0, 200, 100, 200, 100, 200]);
     _vm.tts.say('SOS', SpeechPriority.critical, pan: 0.0);
     final hasContact = (_vm.sos.contactNumber ?? '').isNotEmpty;
@@ -514,6 +585,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       SosResult.launchFailed => S.get('sos_launch_failed'),
       SosResult.error => S.get('sos_error'),
     };
+    _fieldLog.logSosTrigger(source, result: result.name);
     _vm.tts.say(msg, SpeechPriority.critical, pan: 0.0);
   }
 
@@ -607,6 +679,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
             pan: 0.0,
           );
           HapticService.vibrate([0, 300, 100, 300]);
+          _fieldLog.logCameraQuality('blocked');
           break;
         case FrameQualityEventType.cameraPartiallyBlocked:
           _vm.tts.say(
@@ -615,6 +688,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
             pan: 0.0,
           );
           HapticService.vibrate(const [0, 200, 80, 200]);
+          _fieldLog.logCameraQuality('partial_block');
           break;
         case FrameQualityEventType.dropletDetected:
           _vm.tts.say(
@@ -654,9 +728,18 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   }
 
   Future<void> _initCamera() async {
+    final initSw = Stopwatch()..start();
     try {
       final cameras = await availableCameras();
-      if (cameras.isEmpty) return;
+      if (cameras.isEmpty) {
+        initSw.stop();
+        _fieldLog.logCameraInit(
+          initMs: initSw.elapsedMilliseconds,
+          success: false,
+          error: 'no_cameras',
+        );
+        return;
+      }
 
       final back = cameras.firstWhere(
         (c) => c.lensDirection == CameraLensDirection.back,
@@ -686,7 +769,22 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       }
       _stallWatchdog.start();
       _startIndoorPoll();
+      initSw.stop();
+      final preview = ctrl.value.previewSize;
+      _fieldLog.logCameraInit(
+        initMs: initSw.elapsedMilliseconds,
+        success: true,
+        resolution: preview != null
+            ? '${preview.width.toInt()}x${preview.height.toInt()}'
+            : null,
+      );
     } catch (e) {
+      initSw.stop();
+      _fieldLog.logCameraInit(
+        initMs: initSw.elapsedMilliseconds,
+        success: false,
+        error: e.toString(),
+      );
       _vm.setStatus('Ошибка камеры: $e');
     }
   }
@@ -702,6 +800,10 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       
       debugPrint(
         '[BAGDAR_STALL] resumed after ${stallFor.inMilliseconds}ms',
+      );
+      _fieldLog.logCameraStall(
+        stalled: false,
+        durationMs: stallFor.inMilliseconds,
       );
       if (stallFor >= _kStallTtsMinDuration &&
           _stallStartedAt.millisecondsSinceEpoch != 0) {
@@ -948,6 +1050,15 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
   Future<void> _processDepthAnalysis(CameraImage image, DateTime now) async {
     final alerts = await _depthController.analyze(image, now);
+    final provider = _models.depthProvider;
+    if (provider != null && provider.lastInferenceMs > 0) {
+      _fieldLog.logMidasInference(
+        ms: provider.lastInferenceMs.round(),
+        tier: provider.tier.name,
+        preprocessMs: provider.lastPreprocessMs.round(),
+        analyzeMs: provider.lastAnalyzeMs.round(),
+      );
+    }
     if (!mounted || alerts.isEmpty) return;
     for (final alert in alerts) {
       final hazard = alert.hazard;
@@ -1104,6 +1215,26 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     );
     _depthController.interval =
         _vm.throttler.midasInterval(_vm.battery.midasIntervalMs);
+    _fieldLog.logThrottler(
+      detectMs: _detectInterval.inMilliseconds,
+      midasMs: _depthController.interval.inMilliseconds,
+      reason: 'recompute',
+      avgInfMs: _vm.throttler.avgInfMs,
+      motion: _vm.throttler.motionState.name,
+      memory: _vm.throttler.memoryPressure.name,
+    );
+  }
+
+  void _logResources() {
+    if (!mounted || !_fieldLog.active) return;
+    final mem = _vm.memory.current;
+    _fieldLog.logResources(
+      batteryPct: _vm.battery.batteryLevel,
+      memAvailMb: mem.isAvailable ? mem.availMB : null,
+      memTotalMb: mem.isAvailable ? mem.totalMB : null,
+      memPressure: mem.level.name,
+      batteryThrottle: _vm.battery.level.name,
+    );
   }
 
   List<Uint8List> _reusePlaneBytes(CameraImage image) {
