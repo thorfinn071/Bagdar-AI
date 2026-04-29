@@ -152,8 +152,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   
   DateTime _lastStallWarnTtsAt = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _stallStartedAt = DateTime.fromMillisecondsSinceEpoch(0);
-  static const Duration _kStallTtsCooldown = Duration(seconds: 15);
-  static const Duration _kStallTtsMinDuration = Duration(milliseconds: 2500);
+  static const Duration _kStallTtsCooldown = Duration(seconds: 30);
+  static const Duration _kStallTtsMinDuration = Duration(seconds: 4);
 
   @override
   void initState() {
@@ -808,7 +808,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       );
       if (stallFor >= _kStallTtsMinDuration &&
           _stallStartedAt.millisecondsSinceEpoch != 0) {
-        _vm.tts.say(S.get('camera_resumed'), SpeechPriority.info, pan: 0.0);
+        HapticService.vibrate(const [0, 50]);
       }
       _stallStartedAt = DateTime.fromMillisecondsSinceEpoch(0);
     }

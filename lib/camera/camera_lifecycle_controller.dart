@@ -26,7 +26,7 @@ abstract class CameraLifecycleHost {
 
 class CameraLifecycleController {
   static const Duration kLazyDisposeDuration = Duration(seconds: 10);
-  static const Duration kReinitHeartbeatPeriod = Duration(milliseconds: 500);
+  static const Duration kReinitHeartbeatPeriod = Duration(seconds: 2);
 
   final CameraLifecycleHost host;
   final TtsService tts;
@@ -120,7 +120,7 @@ class CameraLifecycleController {
       _reinitHeartbeat?.cancel();
       _reinitHeartbeat = Timer.periodic(
         kReinitHeartbeatPeriod,
-        (_) => HapticService.vibrate(const [0, 100, 300, 100]),
+        (_) => HapticService.vibrate(const [0, 60]),
       );
       fieldLog.logLifecycle('resumed', resumeType: 'cold');
       unawaited(host.initCamera());
