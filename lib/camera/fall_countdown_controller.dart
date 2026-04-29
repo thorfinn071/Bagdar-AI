@@ -36,7 +36,12 @@ class FallCountdownController extends ChangeNotifier {
     _active = true;
     _secondsLeft = kInitialDuration.inSeconds;
 
-    tts.say(S.get('sos_fall_detected'), SpeechPriority.critical, pan: 0.0);
+    tts.say(
+      S.get('sos_fall_detected'),
+      SpeechPriority.critical,
+      pan: 0.0,
+      barge: true,
+    );
     tts.say(
       S.get('sos_fall_cancel_hint'),
       SpeechPriority.warning,

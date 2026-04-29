@@ -508,7 +508,7 @@ class AlertManager {
         Verbosity.normal => '${S.alert('stop')}. $label $dir$distPart.',
         Verbosity.detailed => '${S.alert('stop')}. $label $dir$distPart.',
       };
-      _tts.say(text, SpeechPriority.critical, pan: pan);
+      _tts.say(text, SpeechPriority.critical, pan: pan, barge: true);
       _vibrate([0, 250, 80, 450], isCritical: true);
     } else {
       _vibrate([0, 150]);
