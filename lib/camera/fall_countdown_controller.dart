@@ -13,6 +13,7 @@ class FallCountdownController extends ChangeNotifier {
   final TtsService tts;
   final SosService sos;
   final VoiceCommandService voice;
+  final VoidCallback? onCancelled;
 
   static const Duration kInitialDuration = Duration(seconds: 15);
 
@@ -26,6 +27,7 @@ class FallCountdownController extends ChangeNotifier {
     required this.tts,
     required this.sos,
     required this.voice,
+    this.onCancelled,
   });
 
   int get secondsLeft => _secondsLeft;
@@ -64,6 +66,7 @@ class FallCountdownController extends ChangeNotifier {
     _stopFallCancelListener();
     tts.say(S.get('sos_fall_cancelled'), SpeechPriority.critical, pan: 0.0);
     HapticService.vibrate([0, 100]);
+    onCancelled?.call();
     notifyListeners();
   }
 
@@ -115,12 +118,25 @@ class FallCountdownController extends ChangeNotifier {
   void _startFallCancelListener() {
     if (_cancelListenerActive) return;
     _cancelListenerActive = true;
-    unawaited(voice.startListening());
+    unawaited(
+      voice.startContinuousListening(
+        sessionDuration: kInitialDuration,
+        listenFor: const Duration(seconds: 30),
+        pauseFor: const Duration(seconds: 5),
+      ),
+    );
   }
 
   void _restartFallCancelListener() {
     if (!_cancelListenerActive) return;
-    unawaited(voice.startListening());
+    if (voice.isListening) return;
+    unawaited(
+      voice.startContinuousListening(
+        sessionDuration: Duration(seconds: _secondsLeft + 1),
+        listenFor: const Duration(seconds: 30),
+        pauseFor: const Duration(seconds: 5),
+      ),
+    );
   }
 
   void _stopFallCancelListener() {

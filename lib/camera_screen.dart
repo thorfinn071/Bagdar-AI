@@ -206,6 +206,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       tts: _vm.tts,
       sos: _vm.sos,
       voice: _vm.voice,
+      onCancelled: () => _vm.fallDetector.notifyCancelled(),
     );
     _voiceDispatcher = VoiceCommandDispatcher(
       vm: _vm,

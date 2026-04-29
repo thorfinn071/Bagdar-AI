@@ -39,7 +39,8 @@ class FallDetector {
   static const int _stillFramesRequired = 40;
   static const Duration _freeFallWindow = Duration(milliseconds: 500);
   static const Duration _impactWindow = Duration(seconds: 5);
-  static const Duration _cooldownAfterDetection = Duration(seconds: 60);
+  static const Duration _cooldownAfterDetection = Duration(seconds: 20);
+  static const Duration _cooldownAfterCancel = Duration(seconds: 5);
 
   static const double _stillGyroMaxRadPerSec = 0.50;
 
@@ -231,6 +232,17 @@ class FallDetector {
   }
 
   void reset() {
+    _impactDetected = false;
+    _stillFrames = 0;
+    _postImpactGyroPeak = 0;
+  }
+
+  
+  
+  
+  void notifyCancelled() {
+    _lastDetectionAt =
+        DateTime.now().subtract(_cooldownAfterDetection - _cooldownAfterCancel);
     _impactDetected = false;
     _stillFrames = 0;
     _postImpactGyroPeak = 0;

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -145,11 +147,21 @@ class VoiceCommandService {
     'отмена',
     'отменить',
     'отмени',
+    'отбой',
+    'прекрати',
     'я в порядке',
     'всё хорошо',
     'все хорошо',
     'я в норме',
     'ложная тревога',
+    'это ошибка',
+    'нет проблемы',
+    'нет проблем',
+    'не случилось',
+    'это не падение',
+    'ничего не случилось',
+    'я не падал',
+    'я не упал',
   };
 
   static const List<String> _ruNavPrefixes = [
@@ -263,6 +275,11 @@ class VoiceCommandService {
     'мен жақсымын',
     'мен дұрыспын',
     'жалған дабыл',
+    'қате',
+    'мәселе жоқ',
+    'еш нәрсе болмады',
+    'мен құламадым',
+    'құлаған жоқпын',
   };
 
   static const List<String> _kkNavPrefixes = [
@@ -374,6 +391,7 @@ class VoiceCommandService {
   static const Set<String> _enCancelFallExact = {
     'stop',
     'cancel',
+    'abort',
     'i am fine',
     "i'm fine",
     'i am okay',
@@ -381,6 +399,13 @@ class VoiceCommandService {
     'i am ok',
     "i'm ok",
     'false alarm',
+    'no problem',
+    'no problems',
+    'nothing happened',
+    "it's a mistake",
+    'mistake',
+    "i didn't fall",
+    'i did not fall',
   };
 
   static const List<String> _enNavPrefixes = [
@@ -414,16 +439,21 @@ class VoiceCommandService {
   ];
 
   
+  bool _continuous = false;
+  DateTime _continuousDeadline = DateTime.fromMillisecondsSinceEpoch(0);
+
   Future<bool> init({String locale = 'ru-RU'}) async {
     _locale = locale;
     try {
       _available = await _stt.initialize(
         onError: (e) {
           _setListening(false);
+          _maybeRelistenContinuous();
         },
         onStatus: (status) {
           if (status == 'done' || status == 'notListening') {
             _setListening(false);
+            _maybeRelistenContinuous();
           }
         },
       );
@@ -431,6 +461,19 @@ class VoiceCommandService {
       _available = false;
     }
     return _available;
+  }
+
+  void _maybeRelistenContinuous() {
+    if (!_continuous) return;
+    if (DateTime.now().isAfter(_continuousDeadline)) {
+      _continuous = false;
+      return;
+    }
+    Future<void>.delayed(const Duration(milliseconds: 200), () {
+      if (!_continuous) return;
+      if (_listening) return;
+      unawaited(_listenInternal());
+    });
   }
 
   void setLocale(String bcp47) {
@@ -445,7 +488,10 @@ class VoiceCommandService {
     return status.isGranted;
   }
 
-  Future<bool> startListening() async {
+  Future<bool> startListening({
+    Duration listenFor = const Duration(seconds: 6),
+    Duration pauseFor = const Duration(seconds: 2),
+  }) async {
     if (!_available) return false;
     if (_listening) return true;
 
@@ -455,11 +501,18 @@ class VoiceCommandService {
       if (!granted) return false;
     }
 
+    return _listenInternal(listenFor: listenFor, pauseFor: pauseFor);
+  }
+
+  Future<bool> _listenInternal({
+    Duration listenFor = const Duration(seconds: 6),
+    Duration pauseFor = const Duration(seconds: 2),
+  }) async {
     try {
       await _stt.listen(
         localeId: _locale,
-        pauseFor: const Duration(seconds: 2),
-        listenFor: const Duration(seconds: 6),
+        pauseFor: pauseFor,
+        listenFor: listenFor,
         listenOptions: SpeechListenOptions(
           partialResults: false,
           cancelOnError: true,
@@ -478,7 +531,18 @@ class VoiceCommandService {
     }
   }
 
+  Future<bool> startContinuousListening({
+    required Duration sessionDuration,
+    Duration listenFor = const Duration(seconds: 30),
+    Duration pauseFor = const Duration(seconds: 5),
+  }) async {
+    _continuous = true;
+    _continuousDeadline = DateTime.now().add(sessionDuration);
+    return startListening(listenFor: listenFor, pauseFor: pauseFor);
+  }
+
   Future<void> stopListening() async {
+    _continuous = false;
     if (!_listening) return;
     try {
       await _stt.stop();
