@@ -35,7 +35,7 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _page = PageController();
-  final TtsService _tts = TtsService();
+  final TtsService _tts = TtsService.instance;
 
   int _current = 0;
   AppMode _chosenMode = AppMode.street;

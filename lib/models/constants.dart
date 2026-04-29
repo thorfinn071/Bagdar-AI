@@ -164,7 +164,7 @@ const double kFusionEmaAlpha = 0.20;
 const Duration kHeartbeatInterval = Duration(seconds: 30);
 const Duration kHeartbeatIntervalPitchBlack = Duration(seconds: 30);
 
-const Duration kTtsStallTimeout = Duration(seconds: 6);
+const Duration kTtsStallTimeout = Duration(seconds: 10);
 
 const double kBeaconFarDistM = 3.0;
 const double kBeaconNearDistM = 0.4;

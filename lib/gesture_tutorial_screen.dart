@@ -36,7 +36,7 @@ class GestureTutorialScreen extends StatefulWidget {
 }
 
 class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
-  final TtsService _tts = TtsService();
+  final TtsService _tts = TtsService.instance;
   final EarconService _earcon = EarconService();
 
   _TutStep _step = _TutStep.tap;

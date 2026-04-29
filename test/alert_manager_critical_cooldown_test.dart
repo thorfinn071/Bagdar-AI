@@ -21,6 +21,7 @@ class _RecordingTts extends TtsService {
     SpeechPriority priority, {
     double pan = 0.0,
     int? trackId,
+    bool barge = false,
   }) {
     calls.add((text: text, priority: priority));
   }

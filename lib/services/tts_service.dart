@@ -35,11 +35,21 @@ class TtsService {
   String _requestedLang = 'ru-RU';
   final List<SpeechJob> _queue = [];
 
-  TtsService();
+  bool _initStarted = false;
+  Completer<void>? _initCompleter;
 
-  
-  
-  
+  bool _currentIsCritical = false;
+  DateTime _currentSpeakStartedAt = DateTime.fromMillisecondsSinceEpoch(0);
+  Completer<void>? _currentSpeechCompleter;
+
+  static final TtsService _instance = TtsService._();
+  static TtsService get instance => _instance;
+
+  TtsService._();
+
+  @Deprecated('Use TtsService.instance')
+  factory TtsService() => _instance;
+
   @visibleForTesting
   TtsService.forTesting() {
     _ready = true;
@@ -120,6 +130,12 @@ class TtsService {
   }
 
   Future<void> init() async {
+    if (_ready) return;
+    if (_initStarted && _initCompleter != null) {
+      return _initCompleter!.future;
+    }
+    _initStarted = true;
+    _initCompleter = Completer<void>();
     try {
       _session = await AudioSession.instance;
       await _session?.configure(
@@ -162,18 +178,23 @@ class TtsService {
 
       _tts.setStartHandler(() {
         _speaking = true;
+        _currentSpeakStartedAt = DateTime.now();
         _armStallTimer();
       });
       _tts.setCompletionHandler(() {
         _speaking = false;
+        _currentIsCritical = false;
         _disarmStallTimer();
+        _completeCurrentSpeech();
         _pump();
         if (_queue.isEmpty) _session?.setActive(false);
       });
       _tts.setErrorHandler((msg) {
         debugPrint('TtsService: engine error: $msg');
         _speaking = false;
+        _currentIsCritical = false;
         _disarmStallTimer();
+        _completeCurrentSpeech();
         _pump();
         if (_queue.isEmpty) _session?.setActive(false);
       });
@@ -193,9 +214,28 @@ class TtsService {
         _speaking = false;
         await _tts.setVolume(_userVolume);
       } catch (_) {}
+      if (!(_initCompleter?.isCompleted ?? true)) {
+        _initCompleter!.complete();
+      }
     } catch (_) {
       _ready = false;
+      if (!(_initCompleter?.isCompleted ?? true)) {
+        _initCompleter!.complete();
+      }
     }
+  }
+
+  void _completeCurrentSpeech() {
+    final c = _currentSpeechCompleter;
+    _currentSpeechCompleter = null;
+    if (c != null && !c.isCompleted) c.complete();
+  }
+
+  Future<void> awaitCurrentSpeech() async {
+    if (_testMode) return;
+    if (!_speaking && _queue.isEmpty) return;
+    _currentSpeechCompleter ??= Completer<void>();
+    await _currentSpeechCompleter!.future;
   }
 
   Future<void> setLanguage(String bcp47Tag) async {
@@ -331,6 +371,7 @@ class TtsService {
     SpeechPriority priority, {
     double pan = 0.0,
     int? trackId,
+    bool barge = false,
   }) {
     if (!_ready || text.isEmpty) return;
     final now = DateTime.now();
@@ -380,7 +421,7 @@ class TtsService {
         pan: pan,
         trackId: trackId,
       );
-      _interruptAndSpeak();
+      _interruptAndSpeak(barge: barge);
       return;
     }
 
@@ -460,16 +501,26 @@ class TtsService {
       await _tts.stop();
     } catch (_) {}
     _speaking = false;
+    _currentIsCritical = false;
+    _completeCurrentSpeech();
     _queue.clear();
     _lastSpokenByText.clear();
   }
 
-  Future<void> _interruptAndSpeak() async {
+  Future<void> _interruptAndSpeak({bool barge = false}) async {
     if (_testMode) return;
+    if (!barge && _speaking && _currentIsCritical) {
+      final age = DateTime.now().difference(_currentSpeakStartedAt);
+      if (age < _kCriticalStaleAfter) {
+        return;
+      }
+    }
     try {
       await _tts.stop();
     } catch (_) {}
     _speaking = false;
+    _currentIsCritical = false;
+    _completeCurrentSpeech();
     _pump();
   }
 
@@ -482,6 +533,8 @@ class TtsService {
     final job = _queue.removeAt(0);
     try {
       _speaking = true;
+      _currentIsCritical = job.priority == SpeechPriority.critical;
+      _currentSpeakStartedAt = DateTime.now();
       if (_reverseVehicleSuspected &&
           job.priority != SpeechPriority.critical) {
         try {
@@ -515,6 +568,8 @@ class TtsService {
       await _tts.speak(job.text);
     } catch (_) {
       _speaking = false;
+      _currentIsCritical = false;
+      _completeCurrentSpeech();
       if (_queue.isEmpty) await _session?.setActive(false);
     }
   }
@@ -525,6 +580,8 @@ class TtsService {
     onTtsStall = null;
     _disarmStallTimer();
     _ready = false;
+    _initStarted = false;
+    _initCompleter = null;
     unawaited(stop());
     unawaited(_interruptionSub?.cancel());
     _interruptionSub = null;

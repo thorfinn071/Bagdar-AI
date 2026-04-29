@@ -40,7 +40,7 @@ import '../services/step_service.dart';
 
 class CameraViewModel extends ChangeNotifier {
   final Tracker tracker = Tracker();
-  final TtsService tts = TtsService();
+  final TtsService tts = TtsService.instance;
   final EarconService earcon = EarconService();
   final BatteryMonitor battery = BatteryMonitor();
   final ThermalMonitor thermal = ThermalMonitor();
