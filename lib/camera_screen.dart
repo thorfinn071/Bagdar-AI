@@ -155,6 +155,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   static const Duration _kStallTtsCooldown = Duration(seconds: 30);
   static const Duration _kStallTtsMinDuration = Duration(seconds: 4);
 
+  final Map<FrameQualityEventType, DateTime> _lastQualityTtsAt = {};
+  static const Duration _kQualityEventCooldown = Duration(seconds: 30);
+
   @override
   void initState() {
     super.initState();
@@ -639,7 +642,17 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     );
   }
 
+  bool _qualityCooldownOk(FrameQualityEventType type, DateTime now) {
+    final last = _lastQualityTtsAt[type];
+    if (last != null && now.difference(last) < _kQualityEventCooldown) {
+      return false;
+    }
+    _lastQualityTtsAt[type] = now;
+    return true;
+  }
+
   void _handleQualityEvents(List<FrameQualityEvent> events) {
+    final now = DateTime.now();
     for (final e in events) {
       switch (e.type) {
         case FrameQualityEventType.aeTransitionStarted:
@@ -649,68 +662,77 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           _fieldLog.logAeTransition(started: false, frames: e.frames);
           break;
         case FrameQualityEventType.weatherDegraded:
-          _vm.tts.say(
-            S.alert('weather_low_vis'),
-            SpeechPriority.warning,
-            pan: 0.0,
-          );
-          HapticService.vibrate(const [0, 200, 80, 200]);
           _fieldLog.logWeatherGate(
             'degraded',
             variance: e.variance,
             avgLuma: e.avgLuminosity,
           );
+          if (_qualityCooldownOk(e.type, now)) {
+            _vm.tts.say(
+              S.alert('weather_low_vis'),
+              SpeechPriority.warning,
+              pan: 0.0,
+            );
+          }
           break;
         case FrameQualityEventType.weatherRecovered:
-          _vm.tts.say(
-            S.alert('weather_restored'),
-            SpeechPriority.info,
-            pan: 0.0,
-          );
           _fieldLog.logWeatherGate(
             'recovered',
             variance: e.variance,
             avgLuma: e.avgLuminosity,
           );
+          if (_qualityCooldownOk(e.type, now)) {
+            _vm.tts.say(
+              S.alert('weather_restored'),
+              SpeechPriority.info,
+              pan: 0.0,
+            );
+          }
           break;
         case FrameQualityEventType.cameraBlocked:
-          _vm.tts.say(
-            S.alert('camera_blocked'),
-            SpeechPriority.critical,
-            pan: 0.0,
-          );
-          HapticService.vibrate([0, 300, 100, 300]);
           _fieldLog.logCameraQuality('blocked');
+          if (_qualityCooldownOk(e.type, now)) {
+            _vm.tts.say(
+              S.alert('camera_blocked'),
+              SpeechPriority.critical,
+              pan: 0.0,
+            );
+            HapticService.vibrate([0, 300, 100, 300]);
+          }
           break;
         case FrameQualityEventType.cameraPartiallyBlocked:
-          _vm.tts.say(
-            S.alert('camera_partial_blocked'),
-            SpeechPriority.warning,
-            pan: 0.0,
-          );
-          HapticService.vibrate(const [0, 200, 80, 200]);
           _fieldLog.logCameraQuality('partial_block');
+          if (_qualityCooldownOk(e.type, now)) {
+            _vm.tts.say(
+              S.alert('camera_partial_blocked'),
+              SpeechPriority.warning,
+              pan: 0.0,
+            );
+          }
           break;
         case FrameQualityEventType.dropletDetected:
-          _vm.tts.say(
-            S.alert('camera_droplet'),
-            SpeechPriority.info,
-            pan: 0.0,
-          );
-          HapticService.vibrate(const [0, 150, 80, 150]);
           _fieldLog.logDroplet(
             dirtyRegions: e.dirtyRegions ?? 0,
             warned: true,
           );
+          if (_qualityCooldownOk(e.type, now)) {
+            _vm.tts.say(
+              S.alert('camera_droplet'),
+              SpeechPriority.info,
+              pan: 0.0,
+            );
+          }
           break;
         case FrameQualityEventType.cameraFrozen:
-          _vm.tts.say(
-            S.get('camera_frozen'),
-            SpeechPriority.critical,
-            pan: 0.0,
-          );
-          HapticService.vibrate([0, 500, 200, 500]);
           _fieldLog.logFrozenFrame();
+          if (_qualityCooldownOk(e.type, now)) {
+            _vm.tts.say(
+              S.get('camera_frozen'),
+              SpeechPriority.critical,
+              pan: 0.0,
+            );
+            HapticService.vibrate([0, 500, 200, 500]);
+          }
           break;
       }
     }
@@ -1079,11 +1101,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         score: hazard.midasScore,
         coverage: hazard.coverage,
       );
-      HapticService.vibrate(
-        alert.isCritical
-            ? const [0, 300, 120, 300, 120, 300]
-            : const [0, 200, 100, 200],
-      );
+      if (alert.isCritical) {
+        HapticService.vibrate(const [0, 300, 120, 300, 120, 300]);
+      }
     }
   }
 
