@@ -132,7 +132,7 @@ void main() {
   });
 
   group('FrameQualityGuard camera blocked', () {
-    test('emits cameraBlocked after 45 consecutive dark frames', () {
+    test('emits cameraBlocked after kLowLuminosityStreak consecutive dark frames', () {
       final guard = FrameQualityGuard(
         weatherGate: WeatherGate(),
         initialTime: DateTime(2024),
@@ -140,7 +140,8 @@ void main() {
       final dark = _makeUniform(64, 64, 5);
 
       FrameQualityReport? rep;
-      for (int i = 0; i < 45; i++) {
+      bool emitted = false;
+      for (int i = 0; i < FrameQualityGuard.kLowLuminosityStreak; i++) {
         rep = guard.evaluate(
           yPlane: dark,
           bytesPerRow: 64,
@@ -148,17 +149,20 @@ void main() {
           height: 64,
           now: DateTime(2024).add(Duration(milliseconds: i)),
         );
+        if (rep.events
+            .any((e) => e.type == FrameQualityEventType.cameraBlocked)) {
+          emitted = true;
+        }
       }
-      expect(
-        rep!.events.any((e) =>
-            e.type == FrameQualityEventType.cameraBlocked),
-        isTrue,
-      );
+      expect(emitted, isTrue);
       expect(guard.cameraBlockedWarned, isTrue);
-      expect(guard.lowLuminosityFrames, 45);
+      expect(
+        guard.lowLuminosityFrames,
+        FrameQualityGuard.kLowLuminosityStreak,
+      );
     });
 
-    test('recovers (reset flag) after first bright frame', () {
+    test('leaky integrator: single bright frame does not clear warning', () {
       final guard = FrameQualityGuard(
         weatherGate: WeatherGate(),
         initialTime: DateTime(2024),
@@ -166,7 +170,7 @@ void main() {
       final dark = _makeUniform(64, 64, 5);
       final bright = _makeVaried(64, 64, 7);
 
-      for (int i = 0; i < 45; i++) {
+      for (int i = 0; i < FrameQualityGuard.kLowLuminosityStreak; i++) {
         guard.evaluate(
           yPlane: dark,
           bytesPerRow: 64,
@@ -184,6 +188,49 @@ void main() {
         height: 64,
         now: DateTime(2024).add(const Duration(milliseconds: 60)),
       );
+      expect(
+        guard.cameraBlockedWarned,
+        isTrue,
+        reason: 'one bright frame should only decay counter, not reset',
+      );
+      expect(
+        guard.lowLuminosityFrames,
+        FrameQualityGuard.kLowLuminosityStreak -
+            FrameQualityGuard.kLowLuminosityLeakyDecay,
+      );
+    });
+
+    test('leaky integrator: sustained bright frames clear warning', () {
+      final guard = FrameQualityGuard(
+        weatherGate: WeatherGate(),
+        initialTime: DateTime(2024),
+      );
+      final dark = _makeUniform(64, 64, 5);
+      final bright = _makeVaried(64, 64, 7);
+
+      for (int i = 0; i < FrameQualityGuard.kLowLuminosityStreak; i++) {
+        guard.evaluate(
+          yPlane: dark,
+          bytesPerRow: 64,
+          width: 64,
+          height: 64,
+          now: DateTime(2024).add(Duration(milliseconds: i)),
+        );
+      }
+      expect(guard.cameraBlockedWarned, isTrue);
+
+      final framesToDrain = (FrameQualityGuard.kLowLuminosityStreak /
+              FrameQualityGuard.kLowLuminosityLeakyDecay)
+          .ceil();
+      for (int i = 0; i < framesToDrain; i++) {
+        guard.evaluate(
+          yPlane: bright,
+          bytesPerRow: 64,
+          width: 64,
+          height: 64,
+          now: DateTime(2024).add(Duration(milliseconds: 60 + i)),
+        );
+      }
       expect(guard.cameraBlockedWarned, isFalse);
       expect(guard.lowLuminosityFrames, 0);
     });

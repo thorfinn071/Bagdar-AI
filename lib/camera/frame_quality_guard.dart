@@ -81,8 +81,10 @@ class FrameQualityReport {
 }
 
 class FrameQualityGuard {
-  static const int kLowLuminosityStreak = 45;
-  static const double kLuminosityMinValue = 10.0;
+  static const int kLowLuminosityStreak = 30;
+  static const int kLowLuminosityLeakyDecay = 2;
+  static const double kLuminosityMinValue = 30.0;
+  static const double kPartialOcclusionLuminosity = 10.0;
 
   static const int kPartialOcclusionStreak = 20;
 
@@ -256,17 +258,19 @@ class FrameQualityGuard {
         events.add(const FrameQualityEvent.cameraBlocked());
       }
     } else {
-      if (_cameraBlockedWarned) {
+      _lowLuminosityFrames =
+          (_lowLuminosityFrames - kLowLuminosityLeakyDecay)
+              .clamp(0, 1 << 30);
+      if (_cameraBlockedWarned && _lowLuminosityFrames == 0) {
         _cameraBlockedWarned = false;
       }
-      _lowLuminosityFrames = 0;
     }
 
     int deadQuads = 0;
     for (int q = 0; q < 4; q++) {
       if (quadCount[q] == 0) continue;
       final avg = quadSum[q] / quadCount[q];
-      if (avg < kLuminosityMinValue) deadQuads++;
+      if (avg < kPartialOcclusionLuminosity) deadQuads++;
     }
     final isPartial = deadQuads >= 1 &&
         deadQuads <= 2 &&
