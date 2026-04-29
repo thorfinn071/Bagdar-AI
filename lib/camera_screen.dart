@@ -91,7 +91,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
   Timer? _twoFingerSosTimer;
   bool _twoFingerSosArmed = false;
-  static const Duration _twoFingerSosHold = Duration(milliseconds: 1500);
 
   
   final List<DateTime> _recentTaps = [];
@@ -1759,7 +1758,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     if (_activePointers.length == 2 && !_twoFingerSosArmed) {
       _twoFingerSosArmed = true;
       _twoFingerSosTimer?.cancel();
-      _twoFingerSosTimer = Timer(_twoFingerSosHold, () {
+      _twoFingerSosTimer = Timer(kSosTwoFingerHold, () {
         if (!_twoFingerSosArmed) return;
         _twoFingerSosArmed = false;
         FeatureUsageTracker.instance.increment(

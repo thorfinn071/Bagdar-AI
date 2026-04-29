@@ -221,16 +221,35 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'tut_swipe_down_legacy_done':
         'Отлично. Свайп вниз вызывает справку.',
     'tut_two_finger':
-        'Приложите два пальца сразу. '
-        'Не держите дольше секунды, это обучение.',
+        'Приложите два пальца сразу и удерживайте полторы секунды.',
     'tut_two_finger_done':
-        'Отлично. Два пальца две секунды вызывают SOS.',
+        'Отлично. Два пальца полторы секунды вызывают SOS.',
     'tut_finished':
         'Обучение завершено. Также доступны голосовые команды для SOS и справки.',
     'tut_skip': 'Пропустить',
     'tut_replay': 'Повторить обучение жестам',
     'tut_finish': 'Завершить',
     'tut_progress': 'Шаг {step} из {total}',
+    'tut_fail_hint':
+        'Не получается? Скажите "пропустить" чтобы перейти дальше. '
+        'Или скажите "повтори" чтобы услышать инструкцию снова.',
+    'tut_detail_tap':
+        'Один раз быстро коснитесь экрана пальцем и сразу уберите. '
+        'Это короткое касание, без удержания.',
+    'tut_detail_doubleTap':
+        'Дважды быстро коснитесь экрана. '
+        'Между касаниями менее половины секунды.',
+    'tut_detail_longPress':
+        'Прижмите палец к экрану и удерживайте около одной секунды, '
+        'пока не услышите подтверждение.',
+    'tut_detail_swipeHorizontal':
+        'Положите палец на экран и проведите слева направо или справа налево. '
+        'Движение должно быть быстрым и непрерывным.',
+    'tut_detail_swipeVertical':
+        'Положите палец и проведите вверх или вниз быстрым движением.',
+    'tut_detail_twoFinger':
+        'Положите два пальца рядом на экран одновременно '
+        'и удерживайте полторы секунды.',
 
     'mode_street': 'Улица',
     'mode_cane': 'Трость',
@@ -799,16 +818,35 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'tut_swipe_down_legacy_done':
         'Дұрыс! Төмен сырғыту анықтаманы ашады.',
     'tut_two_finger':
-        'Екі саусақты қатар қойыңыз. '
-        'Бір секундтан асырып ұстамаңыз, бұл нұсқау.',
+        'Екі саусақты қатар қойып, бір жарым секунд ұстаңыз.',
     'tut_two_finger_done':
-        'Жарайсыз! Екі саусақпен екі секунд ұстау SOS шақырады.',
+        'Жарайсыз! Екі саусақпен бір жарым секунд ұстау SOS шақырады.',
     'tut_finished':
         'Үйрету аяқталды. Сондай-ақ SOS және анықтама үшін дауыстық командалар қолжетімді.',
     'tut_skip': 'Өткізіп жіберу',
     'tut_replay': 'Қимылдарға үйретуді қайталау',
     'tut_finish': 'Аяқтау',
     'tut_progress': '{total} қадамнан {step}',
+    'tut_fail_hint':
+        'Қиын ба? "Өткіз" десеңіз келесіге өтесіз. '
+        'Немесе "қайтала" деңіз — нұсқау тағы айтылады.',
+    'tut_detail_tap':
+        'Саусақпен экранды бір рет жылдам түртіп, бірден алыңыз. '
+        'Бұл қысқа тию, ұстамаңыз.',
+    'tut_detail_doubleTap':
+        'Экранды жылдам екі рет түртіңіз. '
+        'Тиюлер арасы жарты секундтан аз болсын.',
+    'tut_detail_longPress':
+        'Саусақты экранға басып, бір секундтай ұстаңыз, '
+        'растау дыбысын естігенше.',
+    'tut_detail_swipeHorizontal':
+        'Саусақты экранға қойып, оңға не солға тез сырғытыңыз. '
+        'Қозғалыс үздіксіз болуы керек.',
+    'tut_detail_swipeVertical':
+        'Саусақты қойып, жоғары не төмен жылдам сырғытыңыз.',
+    'tut_detail_twoFinger':
+        'Екі саусақты қатар экранға қойып, '
+        'бір жарым секунд ұстаңыз.',
 
     'mode_street': 'Көше',
     'mode_cane': 'Таяқ',
@@ -1370,16 +1408,35 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'tut_swipe_down_legacy': 'Now swipe down.',
     'tut_swipe_down_legacy_done': 'Great. Swipe down opens help.',
     'tut_two_finger':
-        'Place two fingers on the screen together. '
-        'Do not hold longer than a second, this is practice.',
+        'Place two fingers on the screen together and hold for one and a half seconds.',
     'tut_two_finger_done':
-        'Great. Two fingers for two seconds triggers SOS.',
+        'Great. Two fingers for one and a half seconds triggers SOS.',
     'tut_finished':
         'Tutorial complete. Voice commands for SOS and help are also available.',
     'tut_skip': 'Skip',
     'tut_replay': 'Replay gesture tutorial',
     'tut_finish': 'Finish',
     'tut_progress': 'Step {step} of {total}',
+    'tut_fail_hint':
+        'Trouble? Say "skip" to move on. '
+        'Or say "repeat" to hear the prompt again.',
+    'tut_detail_tap':
+        'Quickly touch the screen with one finger and lift it. '
+        'A short tap, no hold.',
+    'tut_detail_doubleTap':
+        'Tap the screen twice quickly. '
+        'Less than half a second between taps.',
+    'tut_detail_longPress':
+        'Press your finger on the screen and hold for about one second '
+        'until you hear confirmation.',
+    'tut_detail_swipeHorizontal':
+        'Place your finger on the screen and slide left or right. '
+        'A continuous, fast motion.',
+    'tut_detail_swipeVertical':
+        'Place your finger and swipe up or down with a quick motion.',
+    'tut_detail_twoFinger':
+        'Place two fingers on the screen at the same time '
+        'and hold for one and a half seconds.',
 
     'mode_street': 'Street',
     'mode_cane': 'Cane',

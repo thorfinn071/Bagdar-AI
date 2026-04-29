@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'models/constants.dart';
 import 'models/speech_job.dart';
 import 'models/strings.dart';
 import 'services/earcon_service.dart';
@@ -10,6 +11,7 @@ import 'services/feature_usage_tracker.dart';
 import 'services/haptic_service.dart';
 import 'services/settings_service.dart';
 import 'services/tts_service.dart';
+import 'services/voice_command_service.dart';
 
 enum _TutStep {
   tap,
@@ -38,11 +40,19 @@ class GestureTutorialScreen extends StatefulWidget {
 class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
   final TtsService _tts = TtsService.instance;
   final EarconService _earcon = EarconService();
+  final VoiceCommandService _voice = VoiceCommandService();
 
   _TutStep _step = _TutStep.tap;
   Timer? _twoFingerTimer;
+  Timer? _voiceListenTimer;
   final Set<int> _activePointers = {};
+  int _maxPointersThisTouch = 0;
   DateTime? _lastPromptAt;
+  int _failCount = 0;
+  bool _voiceReady = false;
+
+  Offset? _twoFingerSwipeStart;
+  static const double _kTwoFingerSkipMinDy = 80.0;
 
   bool get _classic => Settings.instance.classicGestures;
 
@@ -79,11 +89,19 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
       await _speakIntro();
       await _speakPrompt(initial: true);
     });
+    _initVoice();
+  }
+
+  Future<void> _initVoice() async {
+    _voice.onCommand = _onVoiceCommand;
+    _voiceReady = await _voice.init(locale: AppStrings.ttsLang);
   }
 
   @override
   void dispose() {
     _twoFingerTimer?.cancel();
+    _voiceListenTimer?.cancel();
+    _voice.dispose();
     _tts.stop();
     _earcon.dispose();
     super.dispose();
@@ -91,7 +109,8 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
 
   Future<void> _speakIntro() async {
     _tts.say(S.get('tut_intro'), SpeechPriority.critical, pan: 0.0);
-    await Future<void>.delayed(const Duration(milliseconds: 2500));
+    await _tts.awaitCurrentSpeech();
+    await Future<void>.delayed(const Duration(milliseconds: 300));
   }
 
   Future<void> _speakPrompt({bool initial = false}) async {
@@ -104,24 +123,58 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
     if (!initial) {
       HapticService.vibrate(const [0, 40]);
     }
+    _scheduleVoiceListen();
   }
 
-  void _advance() {
+  void _scheduleVoiceListen() {
+    if (!_voiceReady) return;
+    _voiceListenTimer?.cancel();
+    _voiceListenTimer = Timer(const Duration(seconds: 5), () {
+      if (!mounted || _step == _TutStep.done) return;
+      unawaited(_voice.startListening());
+    });
+  }
+
+  void _onVoiceCommand(VoiceCommand cmd) {
+    switch (cmd) {
+      case VoiceCommand.tutorialSkip:
+        unawaited(_skip());
+        break;
+      case VoiceCommand.tutorialRepeat:
+        unawaited(_speakPrompt());
+        break;
+      case VoiceCommand.showHelp:
+        _speakDetailedHelp();
+        break;
+      default:
+        break;
+    }
+  }
+
+  void _speakDetailedHelp() {
+    final detailKey = 'tut_detail_${_step.name}';
+    _tts.say(S.get(detailKey), SpeechPriority.critical, pan: 0.0);
+  }
+
+  Future<void> _advance() async {
     if (_step == _TutStep.done) return;
+    _failCount = 0;
+    _voiceListenTimer?.cancel();
+    unawaited(_voice.stopListening());
     _earcon.play(Earcon.success);
     _tts.say(S.get(_doneKey), SpeechPriority.critical, pan: 0.0);
     HapticService.vibrate(const [0, 60, 40, 60]);
 
     final next = _TutStep.values[_step.index + 1];
-    Future<void>.delayed(const Duration(milliseconds: 1800), () {
-      if (!mounted) return;
-      setState(() => _step = next);
-      if (next == _TutStep.done) {
-        _finish();
-      } else {
-        _speakPrompt();
-      }
-    });
+    await _tts.awaitCurrentSpeech();
+    await Future<void>.delayed(const Duration(milliseconds: 300));
+    if (!mounted) return;
+    setState(() => _step = next);
+    if (next == _TutStep.done) {
+      await _finish();
+    } else {
+      await _speakPrompt();
+    }
   }
 
   Future<void> _finish() async {
@@ -136,6 +189,8 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
   }
 
   Future<void> _skip() async {
+    _voiceListenTimer?.cancel();
+    unawaited(_voice.stopListening());
     await Settings.instance.setTutorialSeen(true);
     _tts.say(S.get('tut_finished'), SpeechPriority.critical, pan: 0.0);
     if (!mounted) return;
@@ -147,8 +202,9 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
   }
 
   void _handleTap() {
+    if (_maxPointersThisTouch > 1) return;
     if (_step == _TutStep.tap) {
-      _advance();
+      unawaited(_advance());
     } else {
       _throttledReprompt();
     }
@@ -156,15 +212,16 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
 
   void _handleDoubleTap() {
     if (_step == _TutStep.doubleTap) {
-      _advance();
+      unawaited(_advance());
     } else {
       _throttledReprompt();
     }
   }
 
   void _handleLongPress() {
+    if (_maxPointersThisTouch > 1) return;
     if (_step == _TutStep.longPress) {
-      _advance();
+      unawaited(_advance());
     } else {
       _throttledReprompt();
     }
@@ -174,7 +231,7 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
     if (v == null) return;
     if (v.abs() < 300) return;
     if (_step == _TutStep.swipeHorizontal) {
-      _advance();
+      unawaited(_advance());
     } else {
       _throttledReprompt();
     }
@@ -190,21 +247,43 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
     final wantUp = !_classic;
     final gotUp = v < 0;
     if (gotUp == wantUp) {
-      _advance();
+      unawaited(_advance());
     } else {
       _throttledReprompt();
     }
   }
 
   void _handlePointerDown(PointerDownEvent e) {
+    if (_activePointers.isEmpty) {
+      _maxPointersThisTouch = 0;
+      _twoFingerSwipeStart = null;
+    }
     _activePointers.add(e.pointer);
-    if (_step == _TutStep.twoFinger && _activePointers.length == 2) {
+    if (_activePointers.length > _maxPointersThisTouch) {
+      _maxPointersThisTouch = _activePointers.length;
+    }
+    if (_activePointers.length == 2) {
+      _twoFingerSwipeStart = e.position;
+      if (_step == _TutStep.twoFinger) {
+        _twoFingerTimer?.cancel();
+        _twoFingerTimer = Timer(kSosTwoFingerHold, () {
+          if (_activePointers.length >= 2 && _step == _TutStep.twoFinger) {
+            unawaited(_advance());
+          }
+        });
+      }
+    }
+  }
+
+  void _handlePointerMove(PointerMoveEvent e) {
+    if (_activePointers.length < 2) return;
+    final start = _twoFingerSwipeStart;
+    if (start == null) return;
+    final dy = e.position.dy - start.dy;
+    if (dy >= _kTwoFingerSkipMinDy) {
+      _twoFingerSwipeStart = null;
       _twoFingerTimer?.cancel();
-      _twoFingerTimer = Timer(const Duration(milliseconds: 400), () {
-        if (_activePointers.length >= 2 && _step == _TutStep.twoFinger) {
-          _advance();
-        }
-      });
+      unawaited(_skip());
     }
   }
 
@@ -212,17 +291,25 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
     _activePointers.remove(e.pointer);
     if (_activePointers.length < 2) {
       _twoFingerTimer?.cancel();
+      _twoFingerSwipeStart = null;
     }
   }
 
   void _throttledReprompt() {
+    HapticService.vibrate(const [0, 50]);
+    _earcon.play(Earcon.fail);
+    _failCount++;
     final now = DateTime.now();
     if (_lastPromptAt != null &&
         now.difference(_lastPromptAt!) < const Duration(seconds: 3)) {
+      if (_failCount >= 2) {
+        _lastPromptAt = now;
+        _tts.say(S.get('tut_fail_hint'), SpeechPriority.critical, pan: 0.0);
+        _failCount = 0;
+      }
       return;
     }
     _lastPromptAt = now;
-    _earcon.play(Earcon.fail);
     _speakPrompt();
   }
 
@@ -233,8 +320,13 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
       body: SafeArea(
         child: Listener(
           onPointerDown: _handlePointerDown,
+          onPointerMove: _handlePointerMove,
           onPointerUp: _handlePointerUp,
-          onPointerCancel: (_) => _activePointers.clear(),
+          onPointerCancel: (_) {
+            _activePointers.clear();
+            _twoFingerTimer?.cancel();
+            _twoFingerSwipeStart = null;
+          },
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: _handleTap,

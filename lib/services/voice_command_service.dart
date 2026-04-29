@@ -36,6 +36,8 @@ enum VoiceCommand {
   langKazakh,
   langEnglish,
   batteryStatus,
+  tutorialSkip,
+  tutorialRepeat,
   unknown,
 }
 
@@ -117,6 +119,13 @@ class VoiceCommandService {
     'язык английский': VoiceCommand.langEnglish,
     'батарея': VoiceCommand.batteryStatus,
     'заряд': VoiceCommand.batteryStatus,
+    'пропусти': VoiceCommand.tutorialSkip,
+    'пропустить': VoiceCommand.tutorialSkip,
+    'пропустим': VoiceCommand.tutorialSkip,
+    'повтори': VoiceCommand.tutorialRepeat,
+    'повторить': VoiceCommand.tutorialRepeat,
+    'еще раз': VoiceCommand.tutorialRepeat,
+    'ещё раз': VoiceCommand.tutorialRepeat,
   };
 
   static const Set<String> _ruSosExact = {
@@ -230,6 +239,11 @@ class VoiceCommandService {
     'ағылшын тілі': VoiceCommand.langEnglish,
     'батарея': VoiceCommand.batteryStatus,
     'заряд': VoiceCommand.batteryStatus,
+    'өткіз': VoiceCommand.tutorialSkip,
+    'өткізіп жібер': VoiceCommand.tutorialSkip,
+    'қайтала': VoiceCommand.tutorialRepeat,
+    'тағы': VoiceCommand.tutorialRepeat,
+    'тағы бір рет': VoiceCommand.tutorialRepeat,
   };
 
   static const Set<String> _kkSosExact = {
@@ -339,6 +353,11 @@ class VoiceCommandService {
     'english language': VoiceCommand.langEnglish,
     'battery': VoiceCommand.batteryStatus,
     'battery level': VoiceCommand.batteryStatus,
+    'skip': VoiceCommand.tutorialSkip,
+    'skip it': VoiceCommand.tutorialSkip,
+    'repeat': VoiceCommand.tutorialRepeat,
+    'again': VoiceCommand.tutorialRepeat,
+    'one more time': VoiceCommand.tutorialRepeat,
   };
 
   static const Set<String> _enSosExact = {

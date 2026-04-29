@@ -166,6 +166,8 @@ const Duration kHeartbeatIntervalPitchBlack = Duration(seconds: 30);
 
 const Duration kTtsStallTimeout = Duration(seconds: 10);
 
+const Duration kSosTwoFingerHold = Duration(milliseconds: 1500);
+
 const double kBeaconFarDistM = 3.0;
 const double kBeaconNearDistM = 0.4;
 const double kBeaconMaxHz = 8.0;

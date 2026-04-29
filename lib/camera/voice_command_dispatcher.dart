@@ -118,6 +118,8 @@ class VoiceCommandDispatcher {
       case VoiceCommand.langKazakh:
       case VoiceCommand.langEnglish:
       case VoiceCommand.batteryStatus:
+      case VoiceCommand.tutorialSkip:
+      case VoiceCommand.tutorialRepeat:
         vm.tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
         break;
     }
