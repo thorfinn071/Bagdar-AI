@@ -41,6 +41,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   AppMode _chosenMode = AppMode.street;
 
   bool _calibrated = false;
+  bool _pendingSkip = false;
+  Timer? _skipConfirmTimer;
+
+  final Set<int> _activePointers = {};
+  Timer? _emergencyTimer;
+  static const Duration _kEmergencyHold = Duration(seconds: 2);
 
   List<String> get _stepNarrations => [
     S.get('onb_welcome_tts'),
@@ -56,6 +62,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       AppStrings.setLanguage(AppLanguage.values[Settings.instance.language]);
       await _tts.setLanguage(AppStrings.ttsLang);
       if (mounted) setState(() => _calibrated = Settings.instance.isCalibrated);
+      _tts.say(
+        S.get('onb_blind_intro'),
+        SpeechPriority.critical,
+        pan: 0.0,
+      );
+      await _tts.awaitCurrentSpeech();
+      if (!mounted) return;
       _speak(0);
       if (!_tts.languageAvailable && mounted) {
         _showTtsLanguageWarning();
@@ -65,6 +78,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   void dispose() {
+    _skipConfirmTimer?.cancel();
+    _emergencyTimer?.cancel();
     _tts.stop();
     _page.dispose();
     super.dispose();
@@ -89,11 +104,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   void _onPageChanged(int index) {
     setState(() => _current = index);
-    _speak(index);
+    _speak(index, barge: true);
   }
 
-  void _speak(int index) =>
-      _tts.say(_stepNarrations[index], SpeechPriority.info);
+  void _speak(int index, {bool barge = false}) {
+    _tts.say(
+      _stepNarrations[index],
+      barge ? SpeechPriority.critical : SpeechPriority.info,
+      barge: barge,
+    );
+  }
 
   Future<void> _switchLanguage(AppLanguage lang) async {
     AppStrings.setLanguage(lang);
@@ -101,8 +121,137 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     await _tts.setLanguage(AppStrings.ttsLang);
     if (mounted) {
       setState(() {});
-      _speak(_current);
+      _tts.say(
+        S.get('onb_lang_switched'),
+        SpeechPriority.critical,
+        barge: true,
+      );
+      await _tts.awaitCurrentSpeech();
+      if (!mounted) return;
+      _speak(_current, barge: true);
     }
+  }
+
+  void _cycleLanguage() {
+    final next = AppLanguage.values[
+        (AppStrings.current.index + 1) % AppLanguage.values.length];
+    unawaited(_switchLanguage(next));
+  }
+
+  void _cycleMode(int dir) {
+    const modes = AppMode.values;
+    final cur = modes.indexOf(_chosenMode);
+    final next = modes[(cur + dir + modes.length) % modes.length];
+    setState(() => _chosenMode = next);
+    final text = S
+        .get('onb_mode_select_announce')
+        .replaceFirst('{mode}', next.label);
+    _tts.say(text, SpeechPriority.critical, barge: true);
+  }
+
+  void _requestSkipConfirm() {
+    _pendingSkip = true;
+    _tts.say(
+      S.get('onb_skip_confirm'),
+      SpeechPriority.critical,
+      barge: true,
+    );
+    _skipConfirmTimer?.cancel();
+    _skipConfirmTimer = Timer(const Duration(seconds: 5), () {
+      _pendingSkip = false;
+    });
+  }
+
+  void _handleTap() {
+    if (_pendingSkip) {
+      _pendingSkip = false;
+      _skipConfirmTimer?.cancel();
+      _tts.say(
+        S.get('onb_skip_cancelled'),
+        SpeechPriority.critical,
+        barge: true,
+      );
+      return;
+    }
+    _speak(_current, barge: true);
+  }
+
+  void _handleDoubleTap() {
+    if (_pendingSkip) {
+      _pendingSkip = false;
+      _skipConfirmTimer?.cancel();
+      unawaited(_emergencyExit());
+      return;
+    }
+    _primaryAction();
+  }
+
+  void _primaryAction() {
+    switch (_current) {
+      case 0:
+        _next();
+        break;
+      case 1:
+        unawaited(_requestCameraPermission());
+        break;
+      case 2:
+        unawaited(_afterCalibration());
+        break;
+      case 3:
+        unawaited(_finish());
+        break;
+    }
+  }
+
+  void _handleVerticalSwipe(DragEndDetails d) {
+    final v = d.primaryVelocity;
+    if (v == null || v.abs() < 300) return;
+    final isUp = v < 0;
+    if (_current == 0) {
+      _cycleMode(isUp ? 1 : -1);
+      return;
+    }
+    if (!isUp) {
+      _requestSkipConfirm();
+    } else {
+      _speak(_current, barge: true);
+    }
+  }
+
+  void _handlePointerDown(PointerDownEvent e) {
+    _activePointers.add(e.pointer);
+    if (_activePointers.length == 2) {
+      _emergencyTimer?.cancel();
+      _emergencyTimer = Timer(_kEmergencyHold, () {
+        if (_activePointers.length >= 2) {
+          unawaited(_emergencyExit());
+        }
+      });
+    }
+  }
+
+  void _handlePointerUp(PointerUpEvent e) {
+    _activePointers.remove(e.pointer);
+    if (_activePointers.length < 2) {
+      _emergencyTimer?.cancel();
+      _emergencyTimer = null;
+    }
+  }
+
+  Future<void> _emergencyExit() async {
+    _emergencyTimer?.cancel();
+    await Settings.instance.setOnboardingDone(true);
+    await Settings.instance.setOnboardingMode(_chosenMode.name);
+    await Settings.instance.setTutorialSeen(true);
+    if (!mounted) return;
+    await Navigator.of(context).pushReplacement(
+      PageRouteBuilder(
+        pageBuilder: (_, __, ___) => const AiCameraScreen(),
+        transitionsBuilder: (_, anim, __, child) =>
+            FadeTransition(opacity: anim, child: child),
+        transitionDuration: const Duration(milliseconds: 500),
+      ),
+    );
   }
 
   Future<void> _requestCameraPermission() async {
@@ -189,7 +338,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
     if (!mounted) return;
     final navigator = Navigator.of(context);
-    await _tts.stop();
     await navigator.push<void>(
       MaterialPageRoute(
         builder: (_) => GestureTutorialScreen(
@@ -207,7 +355,29 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     _next();
   }
 
+  Future<void> _ensureTutorialSeen() async {
+    if (Settings.instance.tutorialSeen) return;
+    if (!mounted) return;
+    final navigator = Navigator.of(context);
+    await navigator.push<void>(
+      MaterialPageRoute(
+        builder: (_) => GestureTutorialScreen(
+          standalone: false,
+          onFinished: () {
+            if (navigator.canPop()) {
+              navigator.pop();
+            }
+          },
+        ),
+      ),
+    );
+    if (!mounted) return;
+    await _tts.setLanguage(AppStrings.ttsLang);
+  }
+
   Future<void> _finish() async {
+    await _ensureTutorialSeen();
+    if (!mounted) return;
     await Settings.instance.setOnboardingDone(true);
     await Settings.instance.setOnboardingMode(_chosenMode.name);
     if (!mounted) return;
@@ -226,40 +396,58 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
-              child: _ProgressDots(current: _current, total: 4),
+        child: Listener(
+          onPointerDown: _handlePointerDown,
+          onPointerUp: _handlePointerUp,
+          onPointerCancel: (_) {
+            _activePointers.clear();
+            _emergencyTimer?.cancel();
+            _emergencyTimer = null;
+          },
+          child: GestureDetector(
+            behavior: HitTestBehavior.deferToChild,
+            onTap: _handleTap,
+            onDoubleTap: _handleDoubleTap,
+            onLongPress: _cycleLanguage,
+            onVerticalDragEnd: _handleVerticalSwipe,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+                  child: _ProgressDots(current: _current, total: 4),
+                ),
+                Expanded(
+                  child: PageView(
+                    controller: _page,
+                    onPageChanged: _onPageChanged,
+                    physics: const ClampingScrollPhysics(),
+                    children: [
+                      _PageMode(
+                        chosen: _chosenMode,
+                        currentLang: AppStrings.current,
+                        onSelect: (m) => setState(() => _chosenMode = m),
+                        onLang: _switchLanguage,
+                        onNext: _next,
+                      ),
+                      _PagePermissions(
+                        onAllowCamera: _requestCameraPermission,
+                        onSkip: _next,
+                      ),
+                      _PageCalibration(
+                        onNext: () => unawaited(_afterCalibration()),
+                      ),
+                      _PageReady(
+                        mode: _chosenMode,
+                        calibrated: _calibrated,
+                        onStart: _finish,
+                        onBack: () => _goTo(2),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            Expanded(
-              child: PageView(
-                controller: _page,
-                onPageChanged: _onPageChanged,
-                physics: const ClampingScrollPhysics(),
-                children: [
-                  _PageMode(
-                    chosen: _chosenMode,
-                    currentLang: AppStrings.current,
-                    onSelect: (m) => setState(() => _chosenMode = m),
-                    onLang: _switchLanguage,
-                    onNext: _next,
-                  ),
-                  _PagePermissions(
-                    onAllowCamera: _requestCameraPermission,
-                    onSkip: _next,
-                  ),
-                  _PageCalibration(onNext: () => unawaited(_afterCalibration())),
-                  _PageReady(
-                    mode: _chosenMode,
-                    calibrated: _calibrated,
-                    onStart: _finish,
-                    onBack: () => _goTo(2),
-                  ),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

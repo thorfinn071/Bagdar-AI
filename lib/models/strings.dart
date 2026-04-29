@@ -138,18 +138,30 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Для точного определения расстояния рекомендуем калибровку в настройках.',
 
     'onb_welcome_tts':
-        'Добро пожаловать в Bagdar. Выберите режим работы по умолчанию. '
-        'Улица — предупреждения об объектах. '
-        'Трость — частые тактильные сигналы. '
-        'Сканирование — словесное описание окружения.',
+        'Добро пожаловать в Bagdar. Выберите режим. '
+        'Свайп вверх или вниз — режим, двойной тап — выбрать.',
     'onb_perm_tts':
-        'Приложению нужен доступ к камере. '
-        'Нажмите кнопку чтобы разрешить.',
+        'Разрешение камеры. Двойной тап — открыть запрос системы. '
+        'Найдите кнопку Разрешить.',
     'onb_calib_tts':
-        'Шаг калибровки камеры. '
-        'Реальную калибровку можно выполнить позже в настройках приложения. '
-        'Это улучшит точность определения расстояния примерно с сорока до десяти процентов.',
-    'onb_ready_tts': 'Всё готово! Нажмите Начать.',
+        'Калибровка. Можно пропустить. '
+        'Двойной тап — продолжить без калибровки.',
+    'onb_ready_tts': 'Всё готово. Двойной тап — начать.',
+    'onb_blind_intro':
+        'Bagdar для незрячих. Управление жестами. '
+        'Один тап — повторить. Двойной тап — продолжить. '
+        'Свайп вправо — следующий шаг, влево — назад. '
+        'Долгое нажатие — смена языка.',
+    'onb_gesture_help':
+        'Жесты онбординга. Один тап — повторить инструкцию. '
+        'Двойной тап — основное действие. Свайп вправо или влево — навигация. '
+        'Долгое нажатие — смена языка. Свайп вниз — пропустить онбординг. '
+        'Два пальца на две секунды — экстренный выход.',
+    'onb_mode_select_announce': 'Режим: {mode}. Двойной тап — выбрать.',
+    'onb_skip_confirm':
+        'Пропустить онбординг? Двойной тап подтвердит. Один тап отменит.',
+    'onb_skip_cancelled': 'Отменено.',
+    'onb_lang_switched': 'Язык: русский.',
     'onb_calib_saved_tts': 'Отлично! Калибровка сохранена. Нажмите Продолжить.',
     'onb_calib_skip_tts':
         'Калибровка пропущена. Вы сможете выполнить её позже в настройках.',
@@ -704,18 +716,30 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Дәл қашықтықты анықтау үшін баптауларда калибрлеуді ұсынамыз.',
 
     'onb_welcome_tts':
-        'Bagdar қосымшасына қош келдіңіз. Әдепкі режимді таңдаңыз. '
-        'Көше — нысандар туралы ескертулер. '
-        'Таяқ — жиі діріл сигналдары. '
-        'Сканерлеу — қоршаған ортаны сипаттау.',
+        'Bagdar-ға қош келдіңіз. Режимді таңдаңыз. '
+        'Жоғары немесе төмен сипау — режим, қос тию — таңдау.',
     'onb_perm_tts':
-        'Қосымшаға камераға рұқсат қажет. '
-        'Рұқсат беру үшін түймені басыңыз.',
+        'Камераға рұқсат. Қос тию — жүйелік сұрауды ашу. '
+        'Рұқсат беру түймесін табыңыз.',
     'onb_calib_tts':
-        'Калибрлеу қадамы. '
-        'Нақты калибрлеуді кейін баптауларда орындауға болады. '
-        'Бұл қашықтық дәлдігін қырық пайыздан он пайызға дейін жақсартады.',
-    'onb_ready_tts': 'Бәрі дайын! Бастау түймесін басыңыз.',
+        'Калибрлеу. Өткізуге болады. '
+        'Қос тию — калибрлеусіз жалғастыру.',
+    'onb_ready_tts': 'Бәрі дайын. Қос тию — бастау.',
+    'onb_blind_intro':
+        'Bagdar — көрмейтіндерге арналған. Қимылдармен басқару. '
+        'Бір тию — қайталау. Қос тию — жалғастыру. '
+        'Оңға сипау — келесі қадам, солға — артқа. '
+        'Ұзақ басу — тілді ауыстыру.',
+    'onb_gesture_help':
+        'Онбординг қимылдары. Бір тию — нұсқауды қайталау. '
+        'Қос тию — негізгі әрекет. Оңға немесе солға сипау — навигация. '
+        'Ұзақ басу — тілді ауыстыру. Төмен сипау — онбордингті өткізу. '
+        'Екі саусақпен екі секунд — шұғыл шығу.',
+    'onb_mode_select_announce': 'Режим: {mode}. Қос тию — таңдау.',
+    'onb_skip_confirm':
+        'Онбордингті өткізу керек пе? Қос тию растайды. Бір тию болдырмайды.',
+    'onb_skip_cancelled': 'Болдырылмады.',
+    'onb_lang_switched': 'Тіл: қазақша.',
     'onb_calib_saved_tts':
         'Тамаша! Калибрлеу сақталды. Жалғастыру түймесін басыңыз.',
     'onb_calib_skip_tts':
@@ -1268,18 +1292,30 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'For accurate distance detection, we recommend calibration in Settings.',
 
     'onb_welcome_tts':
-        'Welcome to Bagdar. Choose your default mode. '
-        'Street — object warnings. '
-        'Cane — frequent haptic feedback. '
-        'Scan — verbal description of surroundings.',
+        'Welcome to Bagdar. Choose your mode. '
+        'Swipe up or down to change mode, double tap to select.',
     'onb_perm_tts':
-        'The app needs camera access. '
-        'Tap the button to allow.',
+        'Camera permission. Double tap to open the system request. '
+        'Find the Allow button.',
     'onb_calib_tts':
-        'Camera calibration step. '
-        'You can perform the actual calibration later in settings. '
-        'This improves distance accuracy from forty to ten percent.',
-    'onb_ready_tts': 'All set! Tap Start.',
+        'Calibration. Optional. '
+        'Double tap to continue without calibration.',
+    'onb_ready_tts': 'All set. Double tap to start.',
+    'onb_blind_intro':
+        'Bagdar for blind users. Gesture-based control. '
+        'Single tap to repeat. Double tap to continue. '
+        'Swipe right for next step, left to go back. '
+        'Long press to change language.',
+    'onb_gesture_help':
+        'Onboarding gestures. Single tap repeats the prompt. '
+        'Double tap is the main action. Swipe right or left to navigate. '
+        'Long press changes language. Swipe down to skip onboarding. '
+        'Two fingers for two seconds for emergency exit.',
+    'onb_mode_select_announce': 'Mode: {mode}. Double tap to select.',
+    'onb_skip_confirm':
+        'Skip onboarding? Double tap confirms. Single tap cancels.',
+    'onb_skip_cancelled': 'Cancelled.',
+    'onb_lang_switched': 'Language: English.',
     'onb_calib_saved_tts': 'Great! Calibration saved. Tap Continue.',
     'onb_calib_skip_tts':
         'Calibration skipped. You can do it later in settings.',
