@@ -20,6 +20,7 @@ import 'package:bagdar/utils/depth_hazard.dart';
 import 'package:bagdar/utils/distance_utils.dart';
 import 'package:bagdar/utils/ground_plane_analyzer.dart';
 import 'package:bagdar/utils/fusion_engine.dart';
+import 'package:bagdar/models/constants.dart' show kFusionTemporalFrames;
 
 class _FakeHardwareDepthBridge extends HardwareDepthBridge {
   _FakeHardwareDepthBridge({required this.supported});
@@ -605,7 +606,10 @@ void main() {
     });
 
     test('score at warning threshold → warning result', () {
-      final result = engine.evaluate(hazard: makeHazard(0.35), now: t0);
+      final result = engine.evaluate(
+        hazard: makeHazard(FusionEngine.kWarningThreshold),
+        now: t0,
+      );
       expect(result, isNotNull);
       expect(result!.level, AlertLevel.warning);
     });
@@ -621,16 +625,17 @@ void main() {
 
     test('score at critical for kTemporalFrames consecutive frames → critical', () {
       
-      engine.evaluate(
-        hazard: makeHazard(FusionEngine.kCriticalThreshold),
-        now: t0,
-      );
-      final t1 = t0.add(const Duration(seconds: 4)); 
-      final result = engine.evaluate(
-        hazard: makeHazard(FusionEngine.kCriticalThreshold),
-        now: t1,
-      );
-      expect(result!.level, AlertLevel.critical);
+      var t = t0;
+      AlertLevel? lastLevel;
+      for (int i = 0; i < kFusionTemporalFrames; i++) {
+        final r = engine.evaluate(
+          hazard: makeHazard(FusionEngine.kCriticalThreshold),
+          now: t,
+        );
+        lastLevel = r?.level;
+        t = t.add(const Duration(seconds: 4));
+      }
+      expect(lastLevel, AlertLevel.critical);
     });
 
     test('cooldown: second call within 3 s returns null', () {
