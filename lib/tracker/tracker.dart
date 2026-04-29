@@ -42,6 +42,12 @@ class Tracker {
   bool weatherDegraded = false;
   static const double _kPedWeatherBoost = 1.3;
 
+  
+  
+  
+  bool userWalking = false;
+  static const double _kEgoMotionApproachBoost = 1.8;
+
   List<Track> update(List<RawDet> dets, int imgW, int imgH, DateTime now) {
     _predictTick = 0;
     for (final t in _tracks.values) {
@@ -273,6 +279,10 @@ class Tracker {
               areaT *= 0.6;
               heightT *= 0.6;
             }
+            if (userWalking) {
+              areaT *= _kEgoMotionApproachBoost;
+              heightT *= _kEgoMotionApproachBoost;
+            }
             if (areaRate >= areaT || heightRate >= heightT) {
               t.approaching = true;
             }
@@ -282,19 +292,28 @@ class Tracker {
             
             
             
-            final areaT = weatherDegraded
+            double areaT = weatherDegraded
                 ? kPedApproachAreaRateT * _kPedWeatherBoost
                 : kPedApproachAreaRateT;
-            final heightT = weatherDegraded
+            double heightT = weatherDegraded
                 ? kPedApproachHeightRateT * _kPedWeatherBoost
                 : kPedApproachHeightRateT;
+            if (userWalking) {
+              areaT *= _kEgoMotionApproachBoost;
+              heightT *= _kEgoMotionApproachBoost;
+            }
             if (areaRate >= areaT || heightRate >= heightT) {
               t.approaching = true;
             }
           }
 
-          if (areaRate >= kPedApproachAreaRateT ||
-              heightRate >= kPedApproachHeightRateT) {
+          final dynAreaT = userWalking
+              ? kPedApproachAreaRateT * _kEgoMotionApproachBoost
+              : kPedApproachAreaRateT;
+          final dynHeightT = userWalking
+              ? kPedApproachHeightRateT * _kEgoMotionApproachBoost
+              : kPedApproachHeightRateT;
+          if (areaRate >= dynAreaT || heightRate >= dynHeightT) {
             t.dynamicThreat = true;
           }
         }

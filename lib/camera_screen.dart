@@ -38,6 +38,7 @@ import 'services/traffic_light_analyzer.dart' show TrafficLightKind;
 import 'utils/blur_detector.dart';
 import 'utils/depth_hazard.dart' show DepthHazardType;
 import 'utils/distance_utils.dart';
+import 'services/fall_detector.dart' show MotionState;
 import 'services/feature_usage_tracker.dart';
 import 'services/field_logger.dart';
 import 'services/indoor_gate.dart' show IndoorTransition;
@@ -949,6 +950,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         yRowStride: yStride,
       );
       final inferenceMs = frameSw.elapsedMilliseconds;
+      _vm.tracker.userWalking =
+          _vm.fallDetector.motionState != MotionState.stationary;
       final tracks = _vm.tracker.update(dets, _imgW, _imgH, now);
       _fieldLog.logDetection(
         frameCount: _frameCount,
