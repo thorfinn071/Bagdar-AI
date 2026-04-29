@@ -468,10 +468,20 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
       _vm.setStatus(S.get('system_ready'));
       _vm.tts.say(S.get('system_ready'), SpeechPriority.info, pan: 0.0);
+      _maybePlayFirstRunAudioTour();
     } catch (e) {
       _fieldLog.logError('initAll', e.toString());
       _vm.setStatus('Сбой: $e');
     }
+  }
+
+  void _maybePlayFirstRunAudioTour() {
+    if (Settings.instance.audioTourSeen) return;
+    Future<void>.delayed(const Duration(seconds: 3), () async {
+      if (!mounted) return;
+      _vm.showHelp();
+      await Settings.instance.setAudioTourSeen(true);
+    });
   }
 
   Duration _currentHeartbeatInterval() {

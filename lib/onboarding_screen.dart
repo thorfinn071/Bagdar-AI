@@ -255,8 +255,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Future<void> _requestCameraPermission() async {
-    final status = await Permission.camera.request();
+    final results = await [
+      Permission.camera,
+      Permission.microphone,
+      Permission.location,
+    ].request();
     if (!mounted) return;
+
+    final status = results[Permission.camera] ?? PermissionStatus.denied;
 
     if (status.isGranted) {
       _next();

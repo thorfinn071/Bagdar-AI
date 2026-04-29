@@ -449,11 +449,21 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'status_quick': 'Режим {mode}. Заряд {battery} процентов.',
     'gesture_weak': 'Свайп слишком слабый. Проведите пальцем быстрее.',
     'camera_screen_semantics':
-        'Экран камеры. Проведите вправо или влево для смены режима. '
-        'Проведите вверх для справки. Проведите вниз для экранной шторки.',
+        'Экран камеры Bagdar. '
+        'Один тап — режим и заряд. '
+        'Двойной тап — настройки. '
+        'Удержание пальца — голосовая команда. '
+        'Свайп вправо или влево — смена режима. '
+        'Свайп вверх — справка. Свайп вниз — экранная шторка. '
+        'Два пальца на полторы секунды — экстренный вызов SOS.',
     'camera_screen_semantics_classic':
-        'Экран камеры. Проведите вправо или влево для смены режима. '
-        'Проведите вверх для экранной шторки. Проведите вниз для справки.',
+        'Экран камеры Bagdar. '
+        'Один тап — режим и заряд. '
+        'Двойной тап — настройки. '
+        'Удержание пальца — голосовая команда. '
+        'Свайп вправо или влево — смена режима. '
+        'Свайп вверх — экранная шторка. Свайп вниз — справка. '
+        'Два пальца на полторы секунды — экстренный вызов SOS.',
     'tl_green_warning': 'Пожалуйста, убедитесь в безопасности по звуку машин.',
     'tl_green_wait':
         'Светофор зелёный. Не начинайте движение без подтверждения, что транспорт остановился.',
@@ -1039,11 +1049,21 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'status_quick': 'Режим {mode}. Заряд {battery} пайыз.',
     'gesture_weak': 'Сырғыту әлсіз. Саусағыңызды жылдамырақ қозғалтыңыз.',
     'camera_screen_semantics':
-        'Камера экраны. Режимді ауыстыру үшін оңға немесе солға сырғытыңыз. '
-        'Анықтама үшін жоғары сырғытыңыз. Экран пердесі үшін төмен сырғытыңыз.',
+        'Bagdar камера экраны. '
+        'Бір тию — режим және заряд. '
+        'Қос тию — баптаулар. '
+        'Саусақты ұстау — дауыстық команда. '
+        'Оңға немесе солға сырғыту — режимді ауыстыру. '
+        'Жоғары сырғыту — анықтама. Төмен сырғыту — экран пердесі. '
+        'Екі саусақпен бір жарым секунд — шұғыл SOS.',
     'camera_screen_semantics_classic':
-        'Камера экраны. Режимді ауыстыру үшін оңға немесе солға сырғытыңыз. '
-        'Экран пердесі үшін жоғары сырғытыңыз. Анықтама үшін төмен сырғытыңыз.',
+        'Bagdar камера экраны. '
+        'Бір тию — режим және заряд. '
+        'Қос тию — баптаулар. '
+        'Саусақты ұстау — дауыстық команда. '
+        'Оңға немесе солға сырғыту — режимді ауыстыру. '
+        'Жоғары сырғыту — экран пердесі. Төмен сырғыту — анықтама. '
+        'Екі саусақпен бір жарым секунд — шұғыл SOS.',
     'tl_green_warning':
         'Көлік дыбыстарына құлақ салып, қауіпсіздікке көз жеткізіңіз.',
     'tl_green_wait':
@@ -1627,11 +1647,21 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'status_quick': 'Mode {mode}. Battery {battery} percent.',
     'gesture_weak': 'Swipe too weak. Move finger faster.',
     'camera_screen_semantics':
-        'Camera screen. Swipe left or right to switch modes. '
-        'Swipe up for help. Swipe down for screen curtain.',
+        'Bagdar camera screen. '
+        'Single tap — mode and battery. '
+        'Double tap — settings. '
+        'Long press — voice command. '
+        'Swipe left or right — switch mode. '
+        'Swipe up — help. Swipe down — screen curtain. '
+        'Two fingers for one and a half seconds — emergency SOS.',
     'camera_screen_semantics_classic':
-        'Camera screen. Swipe left or right to switch modes. '
-        'Swipe up for screen curtain. Swipe down for help.',
+        'Bagdar camera screen. '
+        'Single tap — mode and battery. '
+        'Double tap — settings. '
+        'Long press — voice command. '
+        'Swipe left or right — switch mode. '
+        'Swipe up — screen curtain. Swipe down — help. '
+        'Two fingers for one and a half seconds — emergency SOS.',
     'tl_green_warning': 'Please rely on traffic sounds to ensure safety.',
     'tl_green_wait':
         'Light is green. Do not cross until traffic stops completely.',
