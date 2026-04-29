@@ -14,7 +14,8 @@ class GroundPlaneAnalyzer {
 
   static const double kDropRatio = 0.30;
   static const double kRiseRatio = 0.25;
-  static const double kMinCoverage = 0.10;
+  static const double kMinCoverage = 0.20;
+  static const double kWalkingMinCoverage = 0.30;
   static const double kFootZoneDeltaThreshold = 0.22;
   static const double kFootZoneCoverage = 0.18;
 
@@ -77,6 +78,12 @@ class GroundPlaneAnalyzer {
   
   
   bool _weatherDegradedHint = false;
+
+  bool _passesWarningGate(double coverage) {
+    if (_weatherDegradedHint) return false;
+    if (_userStationaryHint) return true;
+    return coverage >= kWalkingMinCoverage;
+  }
 
   List<DepthHazard> analyze(
     Float32List depthMap, {
@@ -242,7 +249,8 @@ class GroundPlaneAnalyzer {
       final dropCoverage = dropCount / validPixels;
       final riseCoverage = riseCount / validPixels;
 
-      if (dropCoverage >= kMinCoverage) {
+      if (dropCoverage >= kMinCoverage &&
+          _passesWarningGate(dropCoverage)) {
         final suppress = _isLikelyShadowArtifact(
           dropCount: dropCount,
           dropSum: dropSum,
@@ -270,7 +278,8 @@ class GroundPlaneAnalyzer {
         }
       }
 
-      if (riseCoverage >= kMinCoverage) {
+      if (riseCoverage >= kMinCoverage &&
+          _passesWarningGate(riseCoverage)) {
         final score = (riseCoverage * 0.5 + maxRise.clamp(0.0, 1.0) * 0.5)
             .clamp(0.0, 1.0);
         final zone = HazardZone.values[zi];
