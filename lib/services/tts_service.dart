@@ -318,6 +318,12 @@ class TtsService {
     }
   }
 
+  static const Duration _kCriticalDedupWindow = Duration(seconds: 8);
+  static const Duration _kWarningDedupWindow = Duration(seconds: 5);
+  static const Duration _kInfoDedupWindow = Duration(seconds: 2);
+
+  final Map<String, DateTime> _lastSpokenByText = {};
+
   void say(
     String text,
     SpeechPriority priority, {
@@ -327,6 +333,17 @@ class TtsService {
     if (!_ready || text.isEmpty) return;
     final now = DateTime.now();
     final rate = _rateFor(priority);
+
+    final dedupWindow = switch (priority) {
+      SpeechPriority.critical => _kCriticalDedupWindow,
+      SpeechPriority.warning => _kWarningDedupWindow,
+      SpeechPriority.info => _kInfoDedupWindow,
+    };
+    final lastSameTextAt = _lastSpokenByText[text];
+    if (lastSameTextAt != null &&
+        now.difference(lastSameTextAt) < dedupWindow) {
+      return;
+    }
 
     if (priority != SpeechPriority.critical &&
         text == _lastText &&
@@ -353,6 +370,8 @@ class TtsService {
       _lastText = text;
       _lastTrackId = trackId;
       _lastTime = now;
+      _lastSpokenByText[text] = now;
+      _gcSpokenTextMap(now);
       FieldLogger.instance.logTtsSay(
         text: text,
         priority: priority.name,
@@ -393,6 +412,8 @@ class TtsService {
     _lastText = text;
     _lastTrackId = trackId;
     _lastTime = now;
+    _lastSpokenByText[text] = now;
+    _gcSpokenTextMap(now);
     FieldLogger.instance.logTtsSay(
       text: text,
       priority: priority.name,
@@ -400,6 +421,12 @@ class TtsService {
       trackId: trackId,
     );
     _pump();
+  }
+
+  void _gcSpokenTextMap(DateTime now) {
+    if (_lastSpokenByText.length < 32) return;
+    final cutoff = now.subtract(_kCriticalDedupWindow);
+    _lastSpokenByText.removeWhere((_, ts) => ts.isBefore(cutoff));
   }
 
   void evictTrack(int trackId) {
@@ -432,6 +459,7 @@ class TtsService {
     } catch (_) {}
     _speaking = false;
     _queue.clear();
+    _lastSpokenByText.clear();
   }
 
   Future<void> _interruptAndSpeak() async {

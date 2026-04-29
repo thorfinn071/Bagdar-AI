@@ -147,19 +147,19 @@ const double kMidasDropRatio = 0.30;
 
 const int kMidasStuckTimeoutMs = 3000;
 
-const double kFusionWarningScore = 0.35;
+const double kFusionWarningScore = 0.50;
 
 const double kFusionCriticalScore = 0.58;
 
-const int kFusionTemporalFrames = 2;
+const int kFusionTemporalFrames = 4;
 
 const Duration kHazardCriticalCooldown = Duration(milliseconds: 500);
-const Duration kHazardWarningCooldown = Duration(seconds: 2);
+const Duration kHazardWarningCooldown = Duration(seconds: 4);
 const Duration kHazardDeadZoneCooldown = Duration.zero;
 
 const Duration kHazardCooldown = kHazardWarningCooldown;
 
-const double kFusionEmaAlpha = 0.35;
+const double kFusionEmaAlpha = 0.20;
 
 const Duration kHeartbeatInterval = Duration(seconds: 15);
 const Duration kHeartbeatIntervalPitchBlack = Duration(seconds: 30);
