@@ -485,11 +485,16 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   void _heartbeatTick() {
     if (!mounted) return;
     final now = DateTime.now();
-    final lastAlertAt = _vm.alertMgr.lastCriticalAt;
-    final recentAlert = lastAlertAt.millisecondsSinceEpoch != 0 &&
-        now.difference(lastAlertAt) < const Duration(seconds: 10);
-    HapticService.vibrate([0, 50]);
-    if (!recentAlert) {
+    final lastCriticalAt = _vm.alertMgr.lastCriticalAt;
+    final lastSpokenAt = _vm.tts.lastSpokenAt;
+    final recentCritical = lastCriticalAt.millisecondsSinceEpoch != 0 &&
+        now.difference(lastCriticalAt) < const Duration(seconds: 10);
+    final recentAnyAlert = lastSpokenAt.millisecondsSinceEpoch != 0 &&
+        now.difference(lastSpokenAt) < const Duration(seconds: 15);
+    if (!recentAnyAlert) {
+      HapticService.vibrate([0, 50]);
+    }
+    if (!recentCritical) {
       _vm.earcon.play(Earcon.heartbeat);
     }
     try {

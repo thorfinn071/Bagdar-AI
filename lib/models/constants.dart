@@ -105,7 +105,7 @@ const Duration kEmptyConfirmDurationCane = Duration(seconds: 4);
 
 const Duration kPostCriticalClearDelay = Duration(seconds: 5);
 
-const Duration kVibrateCooldown = Duration(milliseconds: 600);
+const Duration kVibrateCooldown = Duration(milliseconds: 1500);
 
 const Duration kCaneVibrateCooldown = Duration(milliseconds: 150);
 
@@ -161,7 +161,7 @@ const Duration kHazardCooldown = kHazardWarningCooldown;
 
 const double kFusionEmaAlpha = 0.20;
 
-const Duration kHeartbeatInterval = Duration(seconds: 15);
+const Duration kHeartbeatInterval = Duration(seconds: 30);
 const Duration kHeartbeatIntervalPitchBlack = Duration(seconds: 30);
 
 const Duration kTtsStallTimeout = Duration(seconds: 6);

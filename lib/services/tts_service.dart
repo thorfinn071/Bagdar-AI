@@ -76,6 +76,8 @@ class TtsService {
   int? _lastTrackId;
   DateTime _lastTime = DateTime.fromMillisecondsSinceEpoch(0);
 
+  DateTime get lastSpokenAt => _lastTime;
+
   double _currentRate = 0.50;
   double _userRateMultiplier = 1.0;
   double _userVolume = 1.0;
