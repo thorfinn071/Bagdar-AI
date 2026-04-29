@@ -110,6 +110,16 @@ class VoiceCommandDispatcher {
       case VoiceCommand.downloadMap:
         vm.tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
         break;
+      case VoiceCommand.speechRateFaster:
+      case VoiceCommand.speechRateSlower:
+      case VoiceCommand.volumeUp:
+      case VoiceCommand.volumeDown:
+      case VoiceCommand.langRussian:
+      case VoiceCommand.langKazakh:
+      case VoiceCommand.langEnglish:
+      case VoiceCommand.batteryStatus:
+        vm.tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
+        break;
     }
   }
 

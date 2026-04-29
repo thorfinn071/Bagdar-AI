@@ -352,3 +352,4 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
     }
   }
 }
+ 
