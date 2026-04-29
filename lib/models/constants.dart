@@ -92,7 +92,7 @@ const double kFarHeightMax = 0.22;
 const double kAbsFarArea = 0.018;
 const double kAbsFarHeight = 0.16;
 
-const Duration kCriticalCooldown = Duration(milliseconds: 1400);
+const Duration kCriticalCooldown = Duration(milliseconds: 800);
 const Duration kWarningCooldown = Duration(seconds: 3);
 const Duration kInfoCooldown = Duration(seconds: 5);
 const Duration kPersonCooldown = Duration(seconds: 8);

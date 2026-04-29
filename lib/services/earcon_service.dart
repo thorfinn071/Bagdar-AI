@@ -17,6 +17,8 @@ enum Earcon {
   cameraBlocked,
   heartbeat,
   proximity,
+  indoorEntered,
+  indoorExited,
 }
 
 class EarconService {
@@ -142,6 +144,10 @@ class EarconService {
         return _buildWav(_noiseClick(10, 0.18, lpAlpha: 0.22));
       case Earcon.proximity:
         return _buildWav(_noiseClick(15, 0.55, lpAlpha: 0.30));
+      case Earcon.indoorEntered:
+        return _buildWav(_sweep(811, 537, 140, 0.45));
+      case Earcon.indoorExited:
+        return _buildWav(_sweep(537, 873, 140, 0.45));
     }
   }
 

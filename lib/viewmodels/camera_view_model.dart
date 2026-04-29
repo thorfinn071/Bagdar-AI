@@ -108,12 +108,14 @@ class CameraViewModel extends ChangeNotifier {
     if (transition == IndoorTransition.none) return;
     throttler.setIndoorMode(isIndoor);
     if (transition == IndoorTransition.enteredIndoor) {
+      earcon.play(Earcon.indoorEntered);
       tts.say(
         S.alert('indoor_mode_entered'),
         SpeechPriority.info,
         pan: 0.0,
       );
     } else {
+      earcon.play(Earcon.indoorExited);
       tts.say(
         S.alert('indoor_mode_exited'),
         SpeechPriority.info,

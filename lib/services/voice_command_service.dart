@@ -54,6 +54,7 @@ class VoiceCommandService {
   void Function(VoiceCommand)? onCommand;
   void Function(VoiceCommand cmd, String destination)? onNavCommand;
   void Function(bool listening)? onListeningStateChanged;
+  void Function(String error)? onError;
 
   static final List<String> _ruSorted = _ruCommands.keys.toList()
     ..sort((a, b) => b.length.compareTo(a.length));
@@ -448,6 +449,7 @@ class VoiceCommandService {
       _available = await _stt.initialize(
         onError: (e) {
           _setListening(false);
+          onError?.call(e.errorMsg);
           _maybeRelistenContinuous();
         },
         onStatus: (status) {

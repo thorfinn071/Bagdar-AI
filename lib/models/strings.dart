@@ -329,6 +329,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'voice_not_available': 'Голосовые команды недоступны.',
     'voice_no_permission': 'Нет доступа к микрофону.',
     'voice_unknown': 'Команда не распознана.',
+    'voice_listen_error': 'Не услышал. Повторите.',
     'voice_hint': 'Удерживайте экран для голосовой команды.',
     'voice_commands_list':
         'Доступные команды: что вокруг, что слева, что справа, '
@@ -483,6 +484,10 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'camera_perm_body':
         'Камера необходима для работы Bagdar.\n'
         'Откройте Настройки и разрешите доступ к камере.',
+    'camera_perm_blind_intro':
+        'Камера запрещена системой. '
+        'Двойной тап — открыть настройки телефона. '
+        'Один тап — отменить.',
     'calib_no_person':
         'Нет человека в кадре. Наведите камеру и попробуйте снова.',
     'calib_invalid_dist': 'Введите корректное расстояние (0–50 м)',
@@ -936,6 +941,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'voice_not_available': 'Дауыстық командалар қолжетімсіз.',
     'voice_no_permission': 'Микрофонға рұқсат жоқ.',
     'voice_unknown': 'Команда танылмады.',
+    'voice_listen_error': 'Естімедім. Қайталаңыз.',
     'voice_hint': 'Дауыстық команда үшін экранды ұстап тұрыңыз.',
     'voice_commands_list':
         'Қол жетімді командалар: айналада не бар, солда, оңда, '
@@ -1089,6 +1095,10 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'camera_perm_body':
         'Bagdar жұмысы үшін камера қажет.\n'
         'Баптауларды ашып, камераға рұқсат беріңіз.',
+    'camera_perm_blind_intro':
+        'Камера жүйеде тыйылған. '
+        'Қос тию — телефон баптауларын ашу. '
+        'Бір тию — болдырмау.',
     'calib_no_person': 'Кадрда адам жоқ. Камераны бағыттап, қайта көріңіз.',
     'calib_invalid_dist': 'Дұрыс қашықтықты енгізіңіз (0–50 м)',
 
@@ -1536,6 +1546,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'voice_not_available': 'Voice commands not available.',
     'voice_no_permission': 'No microphone access.',
     'voice_unknown': 'Command not recognized.',
+    'voice_listen_error': "Didn't hear you. Please repeat.",
     'voice_hint': 'Hold screen for voice command.',
     'voice_commands_list':
         'Available commands: what is around, what is left, what is right, '
@@ -1680,6 +1691,10 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'camera_perm_body':
         'Camera is required for Bagdar to work.\n'
         'Please go to Settings and allow camera.',
+    'camera_perm_blind_intro':
+        'Camera is blocked by the system. '
+        'Double tap to open phone settings. '
+        'Single tap to cancel.',
     'calib_no_person': 'No person in frame. Aim the camera and try again.',
     'calib_invalid_dist': 'Enter a valid distance (0–50 m)',
 

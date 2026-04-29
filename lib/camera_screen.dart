@@ -236,6 +236,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _heartbeatTimer?.cancel();
     _resourceLogTimer?.cancel();
     _twoFingerSosTimer?.cancel();
+    _tripleTapStatusTimer?.cancel();
     _shakeSub?.cancel();
     _fallCountdown.dispose();
     _stallWatchdog.stop();
@@ -454,6 +455,15 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           _vm.earcon.play(Earcon.success);
         }
       };
+      _vm.voice.onError = (_) {
+        if (_fallCountdown.active) return;
+        _vm.earcon.play(Earcon.fail);
+        _vm.tts.say(
+          S.get('voice_listen_error'),
+          SpeechPriority.warning,
+          pan: 0.0,
+        );
+      };
 
       if (!_depthController.providerReady && _vm.mode == AppMode.street) {
         _vm.tts.say(
@@ -519,6 +529,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     }
   }
 
+  Timer? _tripleTapStatusTimer;
+
   void _handleTap() {
     FeatureUsageTracker.instance.increment(FeatureUsageKeys.gesture('tap'));
     if (_fallCountdown.active) {
@@ -533,6 +545,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       _recentTaps.add(now);
       if (_recentTaps.length >= 3) {
         _recentTaps.clear();
+        _tripleTapStatusTimer?.cancel();
+        _tripleTapStatusTimer = null;
         FeatureUsageTracker.instance.increment(
           FeatureUsageKeys.gesture('triple_tap'),
         );
@@ -540,6 +554,14 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         _triggerSos();
         return;
       }
+      
+      
+      _tripleTapStatusTimer?.cancel();
+      _tripleTapStatusTimer = Timer(_tripleTapWindow, () {
+        if (!mounted) return;
+        _announceQuickStatus();
+      });
+      return;
     }
     _announceQuickStatus();
   }

@@ -143,6 +143,7 @@ class AlertManager {
   DateTime _lastClearAnnounceAt = DateTime.fromMillisecondsSinceEpoch(0);
   static const Duration _kPostStallClearGuard = Duration(seconds: 6);
   static const Duration _kClearAnnounceMinInterval = Duration(seconds: 12);
+  static const Duration _kClearAnnounceRepeatInterval = Duration(seconds: 90);
 
   String _pendingHint = '';
   int _pendingHintFrames = 0;
@@ -380,6 +381,18 @@ class AlertManager {
         _tts.say(S.alert('path_clear'), SpeechPriority.info, pan: 0.0);
       }
       _clearAnnounced = true;
+      _lastClearAnnounceAt = now;
+      return;
+    }
+
+    
+    
+    
+    if (_clearAnnounced &&
+        !recentCritical &&
+        !recentStall &&
+        now.difference(_lastClearAnnounceAt) >= _kClearAnnounceRepeatInterval) {
+      _earcon.play(Earcon.pathClear);
       _lastClearAnnounceAt = now;
     }
   }

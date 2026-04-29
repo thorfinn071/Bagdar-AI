@@ -270,31 +270,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
 
     if (status.isPermanentlyDenied) {
+      _tts.say(
+        S.get('camera_perm_blind_intro'),
+        SpeechPriority.critical,
+        barge: true,
+      );
       await showDialog<void>(
         context: context,
-        builder: (ctx) => AlertDialog(
-          backgroundColor: Colors.grey[900],
-          title: Text(
-            S.get('camera_perm_title'),
-            style: const TextStyle(color: Colors.white),
-          ),
-          content: Text(
-            S.get('camera_perm_body'),
-            style: const TextStyle(color: Colors.white70, height: 1.5),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: Text(S.get('cancel')),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(ctx);
-                openAppSettings();
-              },
-              child: Text(S.get('settings')),
-            ),
-          ],
+        barrierDismissible: false,
+        builder: (ctx) => _PermDeniedDialog(
+          onSettings: () {
+            Navigator.pop(ctx);
+            openAppSettings();
+          },
+          onCancel: () => Navigator.pop(ctx),
         ),
       );
       return;
@@ -1227,6 +1216,76 @@ class _SecondaryButton extends StatelessWidget {
             ),
           ),
           child: Text(label, style: const TextStyle(fontSize: 14)),
+        ),
+      ),
+    );
+  }
+}
+
+class _PermDeniedDialog extends StatelessWidget {
+  final VoidCallback onSettings;
+  final VoidCallback onCancel;
+  const _PermDeniedDialog({
+    required this.onSettings,
+    required this.onCancel,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog.fullscreen(
+      backgroundColor: Colors.black,
+      child: Semantics(
+        liveRegion: true,
+        label: S.get('camera_perm_blind_intro'),
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: onCancel,
+          onDoubleTap: onSettings,
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(32),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Icon(
+                    Icons.no_photography,
+                    color: Colors.redAccent,
+                    size: 56,
+                  ),
+                  const SizedBox(height: 24),
+                  Text(
+                    S.get('camera_perm_title'),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 28,
+                      fontWeight: FontWeight.w600,
+                      height: 1.2,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    S.get('camera_perm_blind_intro'),
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 16,
+                      height: 1.5,
+                    ),
+                  ),
+                  const Spacer(),
+                  _PrimaryButton(
+                    label: S.get('settings'),
+                    onPressed: onSettings,
+                  ),
+                  const SizedBox(height: 10),
+                  _SecondaryButton(
+                    label: S.get('cancel'),
+                    onPressed: onCancel,
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );
