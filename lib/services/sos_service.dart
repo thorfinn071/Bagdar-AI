@@ -5,6 +5,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../models/constants.dart';
 import '../../models/strings.dart';
 
 enum SosResult {
@@ -24,6 +25,7 @@ class SosService {
 
   String? _contactNumber;
   Position? _cachedPosition;
+  DateTime? _cachedPositionAt;
 
   String? get contactNumber => _contactNumber;
 
@@ -42,6 +44,7 @@ class SosService {
 
   void updateCachedPosition(Position pos) {
     _cachedPosition = pos;
+    _cachedPositionAt = DateTime.now();
   }
 
   Future<bool> setContact(String phoneNumber) async {
@@ -58,7 +61,7 @@ class SosService {
     return true;
   }
 
-  Future<SosResult> sendSos({int retries = 1}) async {
+  Future<SosResult> sendSos({int retries = kSosRetries}) async {
     final attemptTargets = <String>[];
     final contact = _contactNumber;
     final hasUserContact = contact != null && contact.isNotEmpty;
@@ -87,9 +90,19 @@ class SosService {
         }
       }
       if (attempt < retries) {
-        await Future.delayed(const Duration(seconds: 2));
+        await Future.delayed(kSosRetryDelay);
       }
     }
+    final callTarget = hasUserContact ? contact : emergencyFallbackNumber;
+    try {
+      final launched = await launchUrl(
+        buildTelUri(callTarget),
+        mode: LaunchMode.externalApplication,
+      );
+      if (launched) {
+        return hasUserContact ? SosResult.sent : SosResult.sentFallback;
+      }
+    } catch (_) {}
     return last;
   }
 
@@ -161,6 +174,10 @@ class SosService {
     );
   }
 
+  static Uri buildTelUri(String contactNumber) {
+    return Uri(scheme: 'tel', path: _normalizePhoneNumber(contactNumber));
+  }
+
   static String _normalizePhoneNumber(String phoneNumber) {
     final trimmed = phoneNumber.trim();
     if (trimmed.isEmpty) {
@@ -218,7 +235,15 @@ class SosService {
           return lastKnown;
         }
       } catch (_) {}
-      return _cachedPosition; 
+      final cached = _cachedPosition;
+      final cachedAt = _cachedPositionAt;
+      if (cached == null || cachedAt == null) {
+        return null;
+      }
+      if (DateTime.now().difference(cachedAt) > kSosCachedPositionMaxAge) {
+        return null;
+      }
+      return cached;
     }
   }
 }
