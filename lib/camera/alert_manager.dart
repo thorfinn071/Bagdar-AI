@@ -313,6 +313,8 @@ class AlertManager {
       now,
       labels: labels,
       reliableTrackIds: reliableTrackIds,
+      verbosity: Settings.instance.verbosity,
+      alertFrequency: Settings.instance.alertFrequency,
     );
     if (winner != null) {
       _tts.say(
@@ -368,6 +370,7 @@ class AlertManager {
         now.difference(_lastClearAnnounceAt) >= _kClearAnnounceMinInterval;
 
     if (!_clearAnnounced &&
+        Settings.instance.clearPathAnnounce &&
         emptyFor >= confirmDuration &&
         gapSinceObj >= kClearAnnounceDuration &&
         !recentCritical &&
@@ -389,6 +392,7 @@ class AlertManager {
     
     
     if (_clearAnnounced &&
+        Settings.instance.clearPathAnnounce &&
         !recentCritical &&
         !recentStall &&
         now.difference(_lastClearAnnounceAt) >= _kClearAnnounceRepeatInterval) {
@@ -407,7 +411,9 @@ class AlertManager {
   ) {
     Track? top;
     for (final t in tracks) {
-      final bool labelThreat = t.approaching;
+      final bool labelThreat =
+          t.approaching &&
+          (t.distM <= 0 || t.distM <= kApproachingLabelThreatMaxDistM);
       final bool kinematicThreat =
           !t.approaching &&
           t.dynamicThreat &&
@@ -524,7 +530,11 @@ class AlertManager {
       _tts.say(text, SpeechPriority.critical, pan: pan, barge: true);
       _vibrate([0, 250, 80, 450], isCritical: true);
     } else {
-      _vibrate([0, 150]);
+      _vibrate(
+        kHapticCriticalCooldownPattern,
+        isCritical: true,
+        intensities: kHapticCriticalCooldownIntensities,
+      );
     }
   }
 
@@ -537,10 +547,23 @@ class AlertManager {
     DateTime now,
     bool isCalibrated,
   ) {
+    final indoor = _isIndoorMode();
+    var personCount = 0;
+    if (indoor) {
+      for (final t in tracks) {
+        if (t.label == 'person') personCount++;
+      }
+    }
+
     Track? topProximity;
     double topProximityScore = -1;
     double topProximityPan = 0.0;
     for (final t in tracks) {
+      if (indoor &&
+          personCount >= kIndoorCrowdPersonThreshold &&
+          t.label == 'person') {
+        continue;
+      }
       if (t.dist == 'very close') continue;
       if (t.nearFrameCount < 2 && t.dist != 'far') continue;
       if (t.avgConf < kMinAlertConf) continue;
@@ -548,7 +571,7 @@ class AlertManager {
 
       final confFactor = t.avgConf >= kHighConfLevel ? 1.0 : 1.5;
       final baseCooldown = t.label == 'person'
-          ? kPersonCooldown
+          ? (indoor ? kIndoorPersonCooldown : kPersonCooldown)
           : t.dist == 'close'
           ? kWarningCooldown
           : kInfoCooldown;
@@ -867,12 +890,17 @@ class AlertManager {
     return null;
   }
 
-  Future<void> _vibrate(List<int> pattern, {bool isCritical = false}) async {
+  Future<void> _vibrate(
+    List<int> pattern, {
+    bool isCritical = false,
+    List<int>? intensities,
+  }) async {
     final now = DateTime.now();
     if (isCritical) {
       if (now.difference(_lastCriticalVibrateAt) <
-          const Duration(milliseconds: 150))
+          const Duration(milliseconds: 150)) {
         return;
+      }
       _lastCriticalVibrateAt = now;
       _lastVibrateAt = now;
     } else {
@@ -882,7 +910,9 @@ class AlertManager {
 
     await HapticService.vibrate(
       pattern,
-      intensities: pattern.length >= 4 ? const [0, 255, 0, 200] : null,
+      intensities:
+          intensities ??
+          (pattern.length >= 4 ? const [0, 255, 0, 200] : null),
     );
   }
 

@@ -1,9 +1,9 @@
 import '../models/a11y_prefs.dart';
+import '../models/constants.dart';
 import '../models/speech_job.dart';
 import '../models/strings.dart' show S;
 
 enum AlertCategory {
-  clearPath,
   approachingVehicle,
   obstacleClose,
   obstacleFar,
@@ -129,9 +129,13 @@ class AlertFilter {
 
     if (cand.priority == SpeechPriority.critical) {
       final lastSameAt = _lastByCat[cand.category];
+      final repeatCooldown =
+          cand.category == AlertCategory.obstacleClose ||
+              cand.category == AlertCategory.corridorBlocked
+          ? kCriticalRepeatCooldownSafety
+          : kCriticalRepeatCooldownDefault;
       if (lastSameAt != null &&
-          now.difference(lastSameAt) <
-              const Duration(milliseconds: 4000)) {
+          now.difference(lastSameAt) < repeatCooldown) {
         return false;
       }
       return true;
@@ -216,8 +220,6 @@ class AlertFilter {
         return Duration(milliseconds: (1500 * freqScale).round());
       case AlertCategory.corridorNarrow:
         return scaled(2500);
-      case AlertCategory.clearPath:
-        return Duration(seconds: (15 * freqScale).round());
     }
   }
 }

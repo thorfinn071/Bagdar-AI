@@ -310,7 +310,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         _recomputeCadence();
         _fieldLog.logBatteryThrottle(level.name, _vm.battery.batteryLevel);
         if (mounted) setState(() {});
-        if (level != ThrottleLevel.normal) {
+        if (Settings.instance.batteryAnnounce && level != ThrottleLevel.normal) {
           final msg = switch (level) {
             ThrottleLevel.moderate => S.get('battery_moderate'),
             ThrottleLevel.aggressive => S.get('battery_low_depth_degraded'),
@@ -569,10 +569,12 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   void _announceQuickStatus() {
     final mode = _vm.mode.label;
     final battery = _vm.battery.batteryLevel;
-    final msg = S
-        .get('status_quick')
-        .replaceFirst('{mode}', mode)
-        .replaceFirst('{battery}', battery.toString());
+    final msg = Settings.instance.batteryAnnounce
+        ? S
+              .get('status_quick')
+              .replaceFirst('{mode}', mode)
+              .replaceFirst('{battery}', battery.toString())
+        : S.get('status_quick_mode_only').replaceFirst('{mode}', mode);
     _vm.tts.say(msg, SpeechPriority.info, pan: 0.0);
     HapticService.vibrate(const [0, 30]);
   }
@@ -612,6 +614,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     final hasContact = (_vm.sos.contactNumber ?? '').isNotEmpty;
     if (!hasContact) {
       _vm.tts.say(S.get('sos_112_fallback'), SpeechPriority.critical, pan: 0.0);
+    }
+    if (_vm.isIndoor) {
+      _vm.tts.say(S.get('sos_indoor_warning'), SpeechPriority.warning, pan: 0.0);
     }
 
     final result = await _vm.sos.sendSos();
@@ -1340,7 +1345,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           numThreads: _numThreads,
           showDebugHud: _vm.showDebugHud,
           earconEnabled: _vm.earcon.isEnabled,
-          pitchBlackUiEnabled: false,
+          pitchBlackUiEnabled: _vm.isPitchBlack,
           classicGestures: Settings.instance.classicGestures,
           speechRate: Settings.instance.speechRate,
           ttsVolume: Settings.instance.ttsVolume,
@@ -1377,7 +1382,13 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           },
           onDebugHudChanged: (v) => _vm.toggleDebugHud(),
           onEarconEnabledChanged: (v) => _vm.earcon.setEnabled(v),
-          onPitchBlackUiChanged: (v) {},
+          onPitchBlackUiChanged: (v) {
+            Settings.instance.setPitchBlackUi(v);
+            if (_vm.isPitchBlack != v) {
+              _vm.togglePitchBlack();
+            }
+            if (mounted) setState(() {});
+          },
           onClassicGesturesChanged: (v) {
             Settings.instance.setClassicGestures(v);
             if (mounted) setState(() {});

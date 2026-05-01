@@ -94,7 +94,13 @@ class CameraViewModel extends ChangeNotifier {
     alertMgr = AlertManager(
       tts: tts,
       earcon: earcon,
-      onProximityChanged: (dist, pan) {},
+      onProximityChanged: (dist, pan) {
+        if (dist == null) {
+          proximityBeacon.pause();
+        } else {
+          proximityBeacon.update(dist, pan);
+        }
+      },
       isGuideDogMode: () => guideDogMode,
       isIndoorMode: () => isIndoor,
     );
@@ -143,11 +149,13 @@ class CameraViewModel extends ChangeNotifier {
       FeatureUsageKeys.mode(newMode.name),
     );
     FieldLogger.instance.logModeSwitch(newMode.name, from: oldMode.name);
-    tts.say(
-      '${S.get('mode_changed')} ${mode.label}',
-      SpeechPriority.critical,
-      pan: 0.0,
-    );
+    if (Settings.instance.modeAnnounce) {
+      tts.say(
+        '${S.get('mode_changed')} ${mode.label}',
+        SpeechPriority.critical,
+        pan: 0.0,
+      );
+    }
     notifyListeners();
   }
 
@@ -161,6 +169,7 @@ class CameraViewModel extends ChangeNotifier {
 
   void togglePitchBlack() {
     isPitchBlack = !isPitchBlack;
+    unawaited(Settings.instance.setPitchBlackUi(isPitchBlack));
     final msg = isPitchBlack ? S.get('curtain_on') : S.get('curtain_off');
     tts.say(msg, SpeechPriority.critical, pan: 0.0);
     HapticService.vibrate([0, 150]);
@@ -214,12 +223,23 @@ class CameraViewModel extends ChangeNotifier {
 
     applyA11yPrefs();
 
+    waypoints.onNearWaypoint = (wp) {
+      tts.say(
+        '${S.get('waypoint_near')} ${wp.name}',
+        SpeechPriority.warning,
+        pan: 0.0,
+      );
+      earcon.play(Earcon.success);
+    };
+    waypoints.startProximityMonitor(intervalSec: 30);
+
     tracker.ttsService = tts;
 
     orientation.onPitchChanged = (state) {
       final now = DateTime.now();
-      if (now.difference(_lastOrientationWarnAt) < const Duration(seconds: 10))
+      if (now.difference(_lastOrientationWarnAt) < const Duration(seconds: 10)) {
         return;
+      }
 
       if (state == DevicePitch.tooHigh) {
         _lastOrientationWarnAt = now;
@@ -305,6 +325,7 @@ class CameraViewModel extends ChangeNotifier {
 
     if (Settings.instance.isReady) {
       guideDogMode = Settings.instance.guideDogMode;
+      isPitchBlack = Settings.instance.pitchBlackUi;
     }
 
     notifyListeners();

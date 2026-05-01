@@ -93,10 +93,15 @@ const double kAbsFarArea = 0.018;
 const double kAbsFarHeight = 0.16;
 
 const Duration kCriticalCooldown = Duration(milliseconds: 800);
+const Duration kCriticalRepeatCooldownDefault = Duration(milliseconds: 4000);
+const Duration kCriticalRepeatCooldownSafety = Duration(milliseconds: 2000);
 const Duration kWarningCooldown = Duration(seconds: 3);
 const Duration kInfoCooldown = Duration(seconds: 5);
 const Duration kPersonCooldown = Duration(seconds: 8);
+const Duration kIndoorPersonCooldown = Duration(seconds: 15);
+const int kIndoorCrowdPersonThreshold = 3;
 const Duration kApproachCooldown = Duration(milliseconds: 2500);
+const double kApproachingLabelThreatMaxDistM = 15.0;
 
 const Duration kClearAnnounceDuration = Duration(milliseconds: 1200);
 
@@ -120,6 +125,8 @@ const List<int> kHapticFarRight = [0, 80, 30, 40];
 const List<int> kHapticCloseLeft = [0, 60, 30, 140];
 const List<int> kHapticCloseCenter = [0, 100, 30, 100];
 const List<int> kHapticCloseRight = [0, 140, 30, 60];
+const List<int> kHapticCriticalCooldownPattern = [0, 80, 30, 80, 30, 80];
+const List<int> kHapticCriticalCooldownIntensities = [0, 255, 0, 255, 0, 255];
 
 const List<int> kHapticVcLeft = [0, 80, 40, 200, 60, 200];
 const List<int> kHapticVcCenter = [0, 200, 40, 80, 40, 200];
@@ -167,6 +174,12 @@ const Duration kHeartbeatIntervalPitchBlack = Duration(seconds: 30);
 const Duration kTtsStallTimeout = Duration(seconds: 10);
 
 const Duration kSosTwoFingerHold = Duration(milliseconds: 1500);
+const int kSosRetries = 3;
+const Duration kSosRetryDelay = Duration(seconds: 2);
+const Duration kSosCachedPositionMaxAge = Duration(minutes: 5);
+
+const double kVoiceSpeechRateStep = 0.15;
+const double kVoiceVolumeStep = 0.1;
 
 const double kBeaconFarDistM = 3.0;
 const double kBeaconNearDistM = 0.4;
