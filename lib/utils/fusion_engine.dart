@@ -61,8 +61,9 @@ class FusionEngine {
     if (emaScore >= kFusionCriticalScore &&
         hist.length >= kFusionTemporalFrames &&
         hist.every((s) => s >= kFusionCriticalScore)) {
-      if (now.difference(_lastCriticalAt) < kHazardCriticalCooldown)
+      if (now.difference(_lastCriticalAt) < kHazardCriticalCooldown) {
         return null;
+      }
       _lastCriticalAt = now;
       _lastWarningAt = now;
       return FusionResult(

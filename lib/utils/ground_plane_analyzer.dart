@@ -1416,7 +1416,7 @@ class GroundPlaneAnalyzer {
         final right = lumaMap[y * kMapSize + (kMapSize - 1 - x)];
         diff += (left - right).abs();
       }
-      final samples = (rowCount + 1) ~/ 2;
+      const samples = (rowCount + 1) ~/ 2;
       symmetry[x] = 1.0 - diff / (255.0 * samples);
     }
 
@@ -1470,7 +1470,7 @@ class GroundPlaneAnalyzer {
 
     final colEdgeCount = Int32List(kMapSize);
     for (int y = 10; y < _kGlassRowHi - 1; y += 2) {
-      final row = y * kMapSize;
+
       for (int x = 1; x < kMapSize - 1; x++) {
         final above = lumaMap[(y - 1) * kMapSize + x];
         final below = lumaMap[(y + 1) * kMapSize + x];
@@ -1479,10 +1479,10 @@ class GroundPlaneAnalyzer {
       }
     }
 
-    final minRun = _kGlassEdgeMinRunRows ~/ 2;
+    const minRun = _kGlassEdgeMinRunRows ~/ 2;
     int bestLeftX = -1, bestRightX = -1;
     int bestLeftScore = 0, bestRightScore = 0;
-    final midX = kMapSize ~/ 2;
+    const midX = kMapSize ~/ 2;
 
     for (int x = 1; x < midX; x++) {
       if (colEdgeCount[x] >= minRun && colEdgeCount[x] > bestLeftScore) {

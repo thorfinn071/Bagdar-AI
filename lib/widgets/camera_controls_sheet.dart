@@ -143,6 +143,9 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
   late HapticStrength _hapticStrength;
   late SosTrigger _sosTrigger;
   late DominantHand _dominantHand;
+  late bool _clearPathAnnounce;
+  late bool _batteryAnnounce;
+  late bool _modeAnnounce;
 
   @override
   void initState() {
@@ -164,6 +167,9 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
     _hapticStrength = widget.hapticStrength;
     _sosTrigger = widget.sosTrigger;
     _dominantHand = widget.dominantHand;
+    _clearPathAnnounce = Settings.instance.clearPathAnnounce;
+    _batteryAnnounce = Settings.instance.batteryAnnounce;
+    _modeAnnounce = Settings.instance.modeAnnounce;
   }
 
   @override
@@ -315,17 +321,21 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
                 },
               ),
             ),
-            ListTile(
-              textColor: Colors.white,
-              iconColor: Colors.cyanAccent,
-              leading: const Icon(Icons.sensors, color: Colors.cyanAccent),
-              title: Text(
-                'Источник глубины: ${_depthTierText(widget.depthTier)}',
-                style: const TextStyle(color: Colors.white),
-              ),
-              subtitle: Text(
-                _depthTierSubtitle(widget.depthTier),
-                style: const TextStyle(color: Colors.white38, fontSize: 11),
+            Semantics(
+              label:
+                  '${_depthTierText(widget.depthTier)}. ${_depthTierSubtitle(widget.depthTier)}',
+              child: ListTile(
+                textColor: Colors.white,
+                iconColor: Colors.cyanAccent,
+                leading: const Icon(Icons.sensors, color: Colors.cyanAccent),
+                title: Text(
+                  'Источник глубины: ${_depthTierText(widget.depthTier)}',
+                  style: const TextStyle(color: Colors.white),
+                ),
+                subtitle: Text(
+                  _depthTierSubtitle(widget.depthTier),
+                  style: const TextStyle(color: Colors.white38, fontSize: 11),
+                ),
               ),
             ),
             Row(
@@ -373,7 +383,7 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
                 style: const TextStyle(color: Colors.white38, fontSize: 11),
               ),
               value: FieldLogger.instance.active,
-              activeColor: Colors.greenAccent,
+              activeThumbColor: Colors.greenAccent,
               onChanged: (v) async {
                 if (v) {
                   await Settings.instance.setFieldLogging(true);
@@ -458,15 +468,61 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
                 },
               ),
             ),
-            ListTile(
-              textColor: Colors.white,
-              iconColor: Colors.cyanAccent,
-              leading: const Icon(Icons.replay, color: Colors.cyanAccent),
-              title: Text(S.get('tut_replay')),
-              onTap: () {
-                Navigator.pop(context);
-                widget.onReplayTutorial();
-              },
+            Semantics(
+              label: S.get('pref_clear_path_announce'),
+              child: SwitchListTile(
+                title: Text(
+                  S.get('pref_clear_path_announce'),
+                  style: const TextStyle(color: Colors.white),
+                ),
+                value: _clearPathAnnounce,
+                onChanged: (v) {
+                  setState(() => _clearPathAnnounce = v);
+                  Settings.instance.setClearPathAnnounce(v);
+                },
+              ),
+            ),
+            Semantics(
+              label: S.get('pref_battery_announce'),
+              child: SwitchListTile(
+                title: Text(
+                  S.get('pref_battery_announce'),
+                  style: const TextStyle(color: Colors.white),
+                ),
+                value: _batteryAnnounce,
+                onChanged: (v) {
+                  setState(() => _batteryAnnounce = v);
+                  Settings.instance.setBatteryAnnounce(v);
+                },
+              ),
+            ),
+            Semantics(
+              label: S.get('pref_mode_announce'),
+              child: SwitchListTile(
+                title: Text(
+                  S.get('pref_mode_announce'),
+                  style: const TextStyle(color: Colors.white),
+                ),
+                value: _modeAnnounce,
+                onChanged: (v) {
+                  setState(() => _modeAnnounce = v);
+                  Settings.instance.setModeAnnounce(v);
+                },
+              ),
+            ),
+            Semantics(
+              label: S.get('tut_replay'),
+              button: true,
+              child: ListTile(
+                textColor: Colors.white,
+                iconColor: Colors.cyanAccent,
+                leading: const Icon(Icons.replay, color: Colors.cyanAccent),
+                title: Text(S.get('tut_replay')),
+                onTap: () {
+                  Navigator.pop(context);
+                  widget.onReplayTutorial();
+                },
+              ),
             ),
             _SliderRow(
               label: S.get('settings_speech_rate'),
@@ -570,73 +626,91 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
                 widget.onDominantHandChanged(v);
               },
             ),
-            ListTile(
-              textColor: Colors.white,
-              iconColor: widget.midasReady ? Colors.cyanAccent : Colors.white38,
-              leading: Icon(
-                widget.midasReady ? Icons.layers : Icons.layers_outlined,
-                color: widget.midasReady ? Colors.cyanAccent : Colors.white38,
-              ),
-              title: Text(
-                widget.midasReady
-                    ? S.get('settings_depth_active')
-                    : S.get('settings_depth_not_ready'),
-                style: TextStyle(
-                  color: widget.midasReady ? Colors.white : Colors.white38,
+            Semantics(
+              label: widget.midasReady
+                  ? S.get('settings_depth_active')
+                  : S.get('settings_depth_not_ready'),
+              child: ListTile(
+                textColor: Colors.white,
+                iconColor:
+                    widget.midasReady ? Colors.cyanAccent : Colors.white38,
+                leading: Icon(
+                  widget.midasReady ? Icons.layers : Icons.layers_outlined,
+                  color: widget.midasReady ? Colors.cyanAccent : Colors.white38,
+                ),
+                title: Text(
+                  widget.midasReady
+                      ? S.get('settings_depth_active')
+                      : S.get('settings_depth_not_ready'),
+                  style: TextStyle(
+                    color: widget.midasReady ? Colors.white : Colors.white38,
+                  ),
+                ),
+                subtitle: Text(
+                  _depthTierSubtitle(widget.depthTier),
+                  style: const TextStyle(color: Colors.white38, fontSize: 11),
                 ),
               ),
-              subtitle: Text(
-                _depthTierSubtitle(widget.depthTier),
-                style: const TextStyle(color: Colors.white38, fontSize: 11),
+            ),
+            const Divider(color: Colors.white24, height: 20),
+            Semantics(
+              label: S.get('settings_read_text'),
+              button: true,
+              child: ListTile(
+                textColor: Colors.white,
+                iconColor: Colors.cyanAccent,
+                leading: const Icon(Icons.text_fields, color: Colors.cyanAccent),
+                title: Text(S.get('settings_read_text')),
+                subtitle: Text(
+                  S.get('settings_read_text_desc'),
+                  style: const TextStyle(color: Colors.white38, fontSize: 11),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  widget.onReadText();
+                },
               ),
             ),
             const Divider(color: Colors.white24, height: 20),
-            ListTile(
-              textColor: Colors.white,
-              iconColor: Colors.cyanAccent,
-              leading: const Icon(Icons.text_fields, color: Colors.cyanAccent),
-              title: Text(S.get('settings_read_text')),
-              subtitle: Text(
-                S.get('settings_read_text_desc'),
-                style: const TextStyle(color: Colors.white38, fontSize: 11),
+            Semantics(
+              label: S.get('settings_calibration'),
+              button: true,
+              child: ListTile(
+                textColor: Colors.white,
+                iconColor: Colors.lightBlueAccent,
+                leading: const Icon(
+                  Icons.straighten,
+                  color: Colors.lightBlueAccent,
+                ),
+                title: Text(S.get('settings_calibration')),
+                subtitle: Text(
+                  S.get('settings_calibration_desc'),
+                  style: const TextStyle(color: Colors.white38, fontSize: 11),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  widget.onCalibrationTap();
+                },
               ),
-              onTap: () {
-                Navigator.pop(context);
-                widget.onReadText();
-              },
             ),
             const Divider(color: Colors.white24, height: 20),
-            ListTile(
-              textColor: Colors.white,
-              iconColor: Colors.lightBlueAccent,
-              leading: const Icon(
-                Icons.straighten,
-                color: Colors.lightBlueAccent,
+            Semantics(
+              label: S.get('sos_settings'),
+              button: true,
+              child: ListTile(
+                textColor: Colors.white,
+                iconColor: Colors.redAccent,
+                leading: const Icon(Icons.sos, color: Colors.redAccent),
+                title: Text(S.get('sos_settings')),
+                subtitle: Text(
+                  widget.sosContactNumber ?? S.get('settings_sos_not_set'),
+                  style: const TextStyle(color: Colors.white38, fontSize: 11),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  widget.onEditSosContact();
+                },
               ),
-              title: Text(S.get('settings_calibration')),
-              subtitle: Text(
-                S.get('settings_calibration_desc'),
-                style: const TextStyle(color: Colors.white38, fontSize: 11),
-              ),
-              onTap: () {
-                Navigator.pop(context);
-                widget.onCalibrationTap();
-              },
-            ),
-            const Divider(color: Colors.white24, height: 20),
-            ListTile(
-              textColor: Colors.white,
-              iconColor: Colors.redAccent,
-              leading: const Icon(Icons.sos, color: Colors.redAccent),
-              title: Text(S.get('sos_settings')),
-              subtitle: Text(
-                widget.sosContactNumber ?? S.get('settings_sos_not_set'),
-                style: const TextStyle(color: Colors.white38, fontSize: 11),
-              ),
-              onTap: () {
-                Navigator.pop(context);
-                widget.onEditSosContact();
-              },
             ),
             if (widget.onShowSettingsQr != null ||
                 widget.onScanSettingsQr != null) ...[
@@ -658,7 +732,10 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
                 ),
               ),
               if (widget.onShowSettingsQr != null)
-                ListTile(
+                Semantics(
+                  label: S.get('backup_show_qr'),
+                  button: true,
+                  child: ListTile(
                   textColor: Colors.white,
                   iconColor: Colors.cyanAccent,
                   leading: const Icon(
@@ -678,8 +755,12 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
                     widget.onShowSettingsQr!();
                   },
                 ),
+                ),
               if (widget.onScanSettingsQr != null)
-                ListTile(
+                Semantics(
+                  label: S.get('backup_scan_qr'),
+                  button: true,
+                  child: ListTile(
                   textColor: Colors.white,
                   iconColor: Colors.cyanAccent,
                   leading: const Icon(
@@ -699,37 +780,50 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
                     widget.onScanSettingsQr!();
                   },
                 ),
+                ),
             ],
             const Divider(color: Colors.white24, height: 20),
-            ListTile(
-              textColor: Colors.white,
-              iconColor: Colors.white70,
-              title: Text(S.get('settings_scan_left')),
-              trailing: const Icon(Icons.arrow_back),
-              onTap: () {
-                Navigator.pop(context);
-                widget.onScanLeft();
-              },
+            Semantics(
+              label: S.get('settings_scan_left'),
+              button: true,
+              child: ListTile(
+                textColor: Colors.white,
+                iconColor: Colors.white70,
+                title: Text(S.get('settings_scan_left')),
+                trailing: const Icon(Icons.arrow_back),
+                onTap: () {
+                  Navigator.pop(context);
+                  widget.onScanLeft();
+                },
+              ),
             ),
-            ListTile(
-              textColor: Colors.white,
-              iconColor: Colors.white70,
-              title: Text(S.get('settings_scan_forward')),
-              trailing: const Icon(Icons.arrow_upward),
-              onTap: () {
-                Navigator.pop(context);
-                widget.onScanCenter();
-              },
+            Semantics(
+              label: S.get('settings_scan_forward'),
+              button: true,
+              child: ListTile(
+                textColor: Colors.white,
+                iconColor: Colors.white70,
+                title: Text(S.get('settings_scan_forward')),
+                trailing: const Icon(Icons.arrow_upward),
+                onTap: () {
+                  Navigator.pop(context);
+                  widget.onScanCenter();
+                },
+              ),
             ),
-            ListTile(
-              textColor: Colors.white,
-              iconColor: Colors.white70,
-              title: Text(S.get('settings_scan_right')),
-              trailing: const Icon(Icons.arrow_forward),
-              onTap: () {
-                Navigator.pop(context);
-                widget.onScanRight();
-              },
+            Semantics(
+              label: S.get('settings_scan_right'),
+              button: true,
+              child: ListTile(
+                textColor: Colors.white,
+                iconColor: Colors.white70,
+                title: Text(S.get('settings_scan_right')),
+                trailing: const Icon(Icons.arrow_forward),
+                onTap: () {
+                  Navigator.pop(context);
+                  widget.onScanRight();
+                },
+              ),
             ),
             const Divider(color: Colors.white24, height: 20),
             Padding(
@@ -862,41 +956,52 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
             ),
             const Divider(color: Colors.white24, height: 20),
             if (widget.onViewWaypoints != null)
-              ListTile(
-                textColor: Colors.white,
-                iconColor: Colors.orangeAccent,
-                leading: const Icon(Icons.place),
-                
-                title: Text(S.get('waypoint_name_prompt')),
-                trailing: const Icon(
-                  Icons.chevron_right,
-                  color: Colors.white38,
+              Semantics(
+                label: S.get('waypoint_name_prompt'),
+                button: true,
+                child: ListTile(
+                  textColor: Colors.white,
+                  iconColor: Colors.orangeAccent,
+                  leading: const Icon(Icons.place),
+                  title: Text(S.get('waypoint_name_prompt')),
+                  trailing: const Icon(
+                    Icons.chevron_right,
+                    color: Colors.white38,
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    widget.onViewWaypoints!();
+                  },
                 ),
-                onTap: () {
-                  Navigator.pop(context);
-                  widget.onViewWaypoints!();
-                },
               ),
             const Divider(color: Colors.white24, height: 20),
-            ListTile(
-              textColor: Colors.white,
-              iconColor: Colors.white54,
-              title: const Text('Тест: Внимание (Слева)'),
-              trailing: const Icon(Icons.volume_up),
-              onTap: () {
-                Navigator.pop(context);
-                widget.onVoiceWarningTest();
-              },
+            Semantics(
+              label: 'Тест: Внимание (Слева)',
+              button: true,
+              child: ListTile(
+                textColor: Colors.white,
+                iconColor: Colors.white54,
+                title: const Text('Тест: Внимание (Слева)'),
+                trailing: const Icon(Icons.volume_up),
+                onTap: () {
+                  Navigator.pop(context);
+                  widget.onVoiceWarningTest();
+                },
+              ),
             ),
-            ListTile(
-              textColor: Colors.white,
-              iconColor: Colors.orange,
-              title: const Text('Тест: Критично (По центру)'),
-              trailing: const Icon(Icons.warning_amber),
-              onTap: () {
-                Navigator.pop(context);
-                widget.onVoiceCriticalTest();
-              },
+            Semantics(
+              label: 'Тест: Критично (По центру)',
+              button: true,
+              child: ListTile(
+                textColor: Colors.white,
+                iconColor: Colors.orange,
+                title: const Text('Тест: Критично (По центру)'),
+                trailing: const Icon(Icons.warning_amber),
+                onTap: () {
+                  Navigator.pop(context);
+                  widget.onVoiceCriticalTest();
+                },
+              ),
             ),
           ],
         ),

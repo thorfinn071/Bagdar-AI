@@ -156,7 +156,7 @@ void main() {
   });
       
   group('OPT-13 IndoorGate — exit indoor', () {
-    IndoorGate _enterIndoor() {
+    IndoorGate enterIndoor() {
       final gate = IndoorGate();
       _feedStream(
         gate,
@@ -170,7 +170,7 @@ void main() {
     }
 
     test('8 consecutive good-GPS samples exit indoor', () {
-      final gate = _enterIndoor();
+      final gate = enterIndoor();
       expect(gate.state, IndoorState.indoor);
 
       final last = _feedStream(
@@ -186,7 +186,7 @@ void main() {
     });
 
     test('5 consecutive walking frames exit indoor even under poor GPS', () {
-      final gate = _enterIndoor();
+      final gate = enterIndoor();
       expect(gate.state, IndoorState.indoor);
 
       final last = _feedStream(
@@ -203,7 +203,7 @@ void main() {
 
     test('exit confirmation resets if motion stops before reaching 5 frames',
         () {
-      final gate = _enterIndoor();
+      final gate = enterIndoor();
       final base = DateTime(2026, 1, 1, 13);
 
       _feedStream(

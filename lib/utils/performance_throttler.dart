@@ -170,8 +170,9 @@ class PerformanceThrottler {
     }
     final severity = _committedSeverity;
     int thermalPenalty = 0;
-    if (severity == ThermalSeverity.warm)
+    if (severity == ThermalSeverity.warm) {
       thermalPenalty = kThermalPenaltyWarmMs;
+    }
     if (severity == ThermalSeverity.hot) thermalPenalty = kThermalPenaltyHotMs;
     if (severity == ThermalSeverity.critical) {
       thermalPenalty = kThermalPenaltyCriticalMs;
@@ -259,8 +260,9 @@ class PerformanceThrottler {
   }
 
   Duration uiInterval() {
-    if (_avgInfMs > kInfTimeCriticalMs)
+    if (_avgInfMs > kInfTimeCriticalMs) {
       return const Duration(milliseconds: 240);
+    }
     if (_avgInfMs > kInfTimeSlowMs) return const Duration(milliseconds: 200);
     if (_avgInfMs > kInfTimeNormalMs) return const Duration(milliseconds: 160);
     return const Duration(milliseconds: 120);
