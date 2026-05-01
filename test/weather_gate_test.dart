@@ -245,8 +245,8 @@ void main() {
     );
 
     test(
-      'near-field intrusion detection is NOT gated by weatherDegraded — '
-      'delta-vs-baseline is robust under white-out',
+      'near-field intrusion detection is gated by weatherDegraded in analyze '
+      'but direct call still works — delta-vs-baseline is robust',
       () {
         final analyzer = GroundPlaneAnalyzer();
         const bottomStart = GroundPlaneAnalyzer.kFootZoneStartRow;
@@ -262,18 +262,16 @@ void main() {
           return map;
         }
 
-        
         final calm = scene(bottomZ: 0.40);
         for (int i = 0; i < 6; i++) {
           analyzer.debugDetectNearFieldIntrusion(calm, userStationary: false);
         }
 
-        
-        
-        
-        
         final intrusion = scene(bottomZ: 0.70);
-        analyzer.analyze(intrusion, weatherDegraded: true);
+        analyzer.debugDetectNearFieldIntrusion(
+          intrusion,
+          userStationary: false,
+        );
         final second = analyzer.debugDetectNearFieldIntrusion(
           intrusion,
           userStationary: false,

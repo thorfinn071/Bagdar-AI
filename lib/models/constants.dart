@@ -96,12 +96,13 @@ const Duration kCriticalCooldown = Duration(milliseconds: 800);
 const Duration kCriticalRepeatCooldownDefault = Duration(milliseconds: 4000);
 const Duration kCriticalRepeatCooldownSafety = Duration(milliseconds: 2000);
 const Duration kWarningCooldown = Duration(seconds: 3);
-const Duration kInfoCooldown = Duration(seconds: 5);
-const Duration kPersonCooldown = Duration(seconds: 8);
+const Duration kInfoCooldown = Duration(seconds: 10);
+const Duration kPersonCooldown = Duration(seconds: 15);
 const Duration kIndoorPersonCooldown = Duration(seconds: 15);
 const int kIndoorCrowdPersonThreshold = 3;
 const Duration kApproachCooldown = Duration(milliseconds: 2500);
 const double kApproachingLabelThreatMaxDistM = 15.0;
+const Duration kStaticObjectCooldown = Duration(seconds: 20);
 
 const Duration kClearAnnounceDuration = Duration(milliseconds: 1200);
 
@@ -133,7 +134,7 @@ const List<int> kHapticVcCenter = [0, 200, 40, 80, 40, 200];
 const List<int> kHapticVcRight = [0, 200, 40, 200, 60, 80];
 const List<int> kHapticPathClear = [0, 60, 60, 60, 60, 60];
 
-const double kGuideMinCenterThreat = 1.8;
+const double kGuideMinCenterThreat = 2.5;
 
 const double kGuideImprovementRatio = 1.3;
 
@@ -143,7 +144,7 @@ const int kHintStableFrames = 3;
 
 const Duration kGuideCooldown = Duration(seconds: 5);
 
-const Duration kMidasInterval = Duration(milliseconds: 500);
+const Duration kMidasInterval = Duration(milliseconds: 800);
 
 const double kMidasMinCoverage = 0.12;
 
@@ -158,7 +159,7 @@ const double kFusionWarningScore = 0.50;
 
 const double kFusionCriticalScore = 0.58;
 
-const int kFusionTemporalFrames = 4;
+const int kFusionTemporalFrames = 5;
 
 const Duration kHazardCriticalCooldown = Duration(milliseconds: 500);
 const Duration kHazardWarningCooldown = Duration(seconds: 4);
@@ -166,7 +167,7 @@ const Duration kHazardDeadZoneCooldown = Duration.zero;
 
 const Duration kHazardCooldown = kHazardWarningCooldown;
 
-const double kFusionEmaAlpha = 0.20;
+const double kFusionEmaAlpha = 0.12;
 
 const Duration kHeartbeatInterval = Duration(seconds: 30);
 const Duration kHeartbeatIntervalPitchBlack = Duration(seconds: 30);
@@ -247,11 +248,11 @@ const int kMemoryPressureCriticalMB = 250;
 const Duration kMemoryPressurePollInterval = Duration(seconds: 15);
 const Duration kMemoryPressureRecoveryWindow = Duration(seconds: 10);
 
-const Duration kStallWatchdogPeriod = Duration(milliseconds: 250);
-const Duration kStallWatchdogThresholdNormal = Duration(milliseconds: 1200);
-const Duration kStallWatchdogThresholdWarm = Duration(milliseconds: 1500);
-const Duration kStallWatchdogThresholdHot = Duration(milliseconds: 1800);
-const Duration kStallWatchdogThresholdCritical = Duration(milliseconds: 2400);
+const Duration kStallWatchdogPeriod = Duration(milliseconds: 500);
+const Duration kStallWatchdogThresholdNormal = Duration(milliseconds: 2000);
+const Duration kStallWatchdogThresholdWarm = Duration(milliseconds: 2500);
+const Duration kStallWatchdogThresholdHot = Duration(milliseconds: 3000);
+const Duration kStallWatchdogThresholdCritical = Duration(milliseconds: 4000);
 
 const double kSwipeStrongVelocity = 500.0;
 const double kSwipeWeakVelocity = 150.0;

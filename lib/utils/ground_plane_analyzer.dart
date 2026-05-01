@@ -14,8 +14,8 @@ class GroundPlaneAnalyzer {
 
   static const double kDropRatio = 0.30;
   static const double kRiseRatio = 0.25;
-  static const double kMinCoverage = 0.20;
-  static const double kWalkingMinCoverage = 0.30;
+  static const double kMinCoverage = 0.28;
+  static const double kWalkingMinCoverage = 0.38;
   static const double kFootZoneDeltaThreshold = 0.22;
   static const double kFootZoneCoverage = 0.18;
 
@@ -403,28 +403,16 @@ class GroundPlaneAnalyzer {
         results.add(stairsHazard);
       }
     } else {
-      
-      
-      
-      
       _lastStairSignal = null;
       _lastStairSignalAt = _kStairSignalEpoch;
       _escalatorStreak = 0;
     }
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    final nearFieldHazard = _detectNearFieldIntrusion(depthMap);
-    if (nearFieldHazard != null) {
-      results.add(nearFieldHazard);
+    if (!_weatherDegradedHint) {
+      final nearFieldHazard = _detectNearFieldIntrusion(depthMap);
+      if (nearFieldHazard != null) {
+        results.add(nearFieldHazard);
+      }
     }
 
     final hasCenterDrop = results.any(
@@ -490,8 +478,8 @@ class GroundPlaneAnalyzer {
   
   
   
-  static const int _kTemporalWindow = 3;
-  static const int _kTemporalMinMatches = 2;
+  static const int _kTemporalWindow = 5;
+  static const int _kTemporalMinMatches = 4;
   final ListQueue<List<DepthHazard>> _recentHazardFrames =
       ListQueue<List<DepthHazard>>(_kTemporalWindow);
 

@@ -230,11 +230,13 @@ void main() {
     }
 
     test(
-        'single-frame hazard after warm-up is filtered out (2-of-3 '
+        'single-frame hazard after warm-up is filtered out (4-of-5 '
         'confirmation required)', () {
       final analyzer = GroundPlaneAnalyzer();
       final flat = makeFlat(0.5);
       
+      analyzer.analyze(flat);
+      analyzer.analyze(flat);
       analyzer.analyze(flat);
       analyzer.analyze(flat);
       analyzer.analyze(flat);
@@ -245,16 +247,20 @@ void main() {
     });
 
     test(
-        'a hazard that persists for two consecutive frames survives the '
-        '2-of-3 filter', () {
+        'a hazard that persists for four consecutive frames survives the '
+        '4-of-5 filter', () {
       final analyzer = GroundPlaneAnalyzer();
       final flat = makeFlat(0.5);
+      analyzer.analyze(flat);
+      analyzer.analyze(flat);
       analyzer.analyze(flat);
       analyzer.analyze(flat);
       analyzer.analyze(flat);
       
       
       final map = makeStableHazardMap();
+      analyzer.analyze(map); 
+      analyzer.analyze(map); 
       analyzer.analyze(map); 
       final out = analyzer.analyze(map); 
       expect(

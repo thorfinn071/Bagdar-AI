@@ -24,10 +24,10 @@ class MotionPreAlert {
   static const double _stripBotFrac = 0.60;
 
   static const double _emaAlpha = 0.05;
-  static const double _triggerMultiplier = 4.0;
-  static const double _absMin = 2.5;
+  static const double _triggerMultiplier = 6.0;
+  static const double _absMin = 3.5;
 
-  static const Duration _cooldown = Duration(milliseconds: 1200);
+  static const Duration _cooldown = Duration(milliseconds: 2500);
 
   final List<int> _prevGrid = List<int>.filled(_gridW * _gridH, 0);
   final List<int> _curGrid = List<int>.filled(_gridW * _gridH, 0);

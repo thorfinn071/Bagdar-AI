@@ -19,8 +19,9 @@ class DepthPipelineController {
   final ModelService models;
 
   DateTime _lastRunAt = DateTime.fromMillisecondsSinceEpoch(0);
-  Duration interval = const Duration(milliseconds: 400);
+  Duration interval = const Duration(milliseconds: 800);
   bool _providerReady = false;
+  bool _inFlight = false;
 
   DepthPipelineController({required this.vm, required this.models});
 
@@ -31,15 +32,25 @@ class DepthPipelineController {
   }
 
   bool shouldRun(DateTime now) =>
-      _providerReady && now.difference(_lastRunAt) >= interval;
+      _providerReady &&
+      !_inFlight &&
+      now.difference(_lastRunAt) >= interval;
 
   Future<List<DepthHazardAlert>> analyze(
     CameraImage image,
     DateTime now,
   ) async {
+    if (_inFlight) return const <DepthHazardAlert>[];
+    _inFlight = true;
     _lastRunAt = now;
     final provider = models.depthProvider;
     if (provider == null || !provider.isReady) {
+      _inFlight = false;
+      return const <DepthHazardAlert>[];
+    }
+    if (provider.lastConfidenceScore > 0 &&
+        provider.lastConfidenceScore < 0.4) {
+      _inFlight = false;
       return const <DepthHazardAlert>[];
     }
     try {
@@ -54,6 +65,7 @@ class DepthPipelineController {
         userStationary: userStationary,
         weatherDegraded: vm.weatherGate.degraded,
       );
+      _inFlight = false;
       if (hazards.isEmpty) return const <DepthHazardAlert>[];
       final rollExcessive = vm.orientation.isRollExcessive;
       return [
@@ -66,6 +78,7 @@ class DepthPipelineController {
           ),
       ];
     } catch (e) {
+      _inFlight = false;
       debugPrint('Depth analysis error: $e');
       return const <DepthHazardAlert>[];
     }

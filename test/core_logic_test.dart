@@ -406,9 +406,9 @@ void main() {
     });
 
     test('critical alerts bypass cooldown and suppression', () {
-      filter.add(makeCandidate(priority: SpeechPriority.critical));
+      filter.add(makeCandidate(priority: SpeechPriority.critical, category: AlertCategory.obstacleFar));
       filter.flush(1, t0); 
-      filter.add(makeCandidate(priority: SpeechPriority.critical));
+      filter.add(makeCandidate(priority: SpeechPriority.critical, category: AlertCategory.obstacleClose));
       
       final result = filter.flush(1, t0.add(const Duration(milliseconds: 500)));
       expect(result, isNotNull);
@@ -428,7 +428,7 @@ void main() {
       filter.add(makeCandidate(priority: SpeechPriority.critical));
       filter.flush(1, t0);
       
-      filter.add(makeCandidate(priority: SpeechPriority.warning));
+      filter.add(makeCandidate(priority: SpeechPriority.warning, category: AlertCategory.navigationHint));
       final result = filter.flush(1, t0.add(const Duration(seconds: 3)));
       expect(result, isNotNull);
     });
@@ -498,7 +498,7 @@ void main() {
         text: 'cyclist',
       ));
       final second = filter.flush(
-        1, t0.add(const Duration(milliseconds: 1300)));
+        1, t0.add(const Duration(milliseconds: 1600)));
       expect(second, isNotNull);
       
       
@@ -576,7 +576,7 @@ void main() {
         urgency: 0.6,
       ));
       final result = filter.flush(
-        1, t0.add(const Duration(milliseconds: 500)));
+        1, t0.add(const Duration(milliseconds: 1600)));
       expect(result, isNotNull);
       expect(result!.text, 'info');
     });

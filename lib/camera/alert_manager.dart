@@ -569,6 +569,24 @@ class AlertManager {
       if (t.avgConf < kMinAlertConf) continue;
       if (t.reliableFrames < 3 && t.dist == 'far') continue;
 
+      if (t.dist == 'far' && !t.approaching) {
+        const suppressedFar = {
+          'bench', 'fire hydrant', 'parking meter',
+          'backpack', 'handbag', 'suitcase', 'umbrella',
+        };
+        if (suppressedFar.contains(t.label)) continue;
+        if (t.label == 'person') continue;
+        if (isVehicle(t.label)) {
+          final pos = posFromCx(
+            t.cx,
+            imgW.toDouble(),
+            imgH: imgH.toDouble(),
+            viewportAspect: viewportAspect,
+          );
+          if (pos != 'center') continue;
+        }
+      }
+
       final confFactor = t.avgConf >= kHighConfLevel ? 1.0 : 1.5;
       final baseCooldown = t.label == 'person'
           ? (indoor ? kIndoorPersonCooldown : kPersonCooldown)

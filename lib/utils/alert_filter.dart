@@ -37,6 +37,7 @@ class AlertFilter {
   final List<AlertCandidate> _candidates = [];
 
   final Map<AlertCategory, DateTime> _lastByCat = {};
+  final Map<AlertCategory, DateTime> _lastCriticalByCat = {};
 
   DateTime _lastSpokenAt = DateTime.fromMillisecondsSinceEpoch(0);
   AlertCategory? _lastCategory;
@@ -107,6 +108,7 @@ class AlertFilter {
     _lastByCat[picked.category] = now;
 
     if (picked.priority == SpeechPriority.critical) {
+      _lastCriticalByCat[picked.category] = now;
       _suppressUntil = now.add(const Duration(milliseconds: 2000));
     }
 
@@ -127,8 +129,13 @@ class AlertFilter {
       return false;
     }
 
+    if (verbosity == Verbosity.minimal &&
+        cand.category == AlertCategory.obstacleFar) {
+      return false;
+    }
+
     if (cand.priority == SpeechPriority.critical) {
-      final lastSameAt = _lastByCat[cand.category];
+      final lastSameAt = _lastCriticalByCat[cand.category];
       final repeatCooldown =
           cand.category == AlertCategory.obstacleClose ||
               cand.category == AlertCategory.corridorBlocked
@@ -148,6 +155,11 @@ class AlertFilter {
 
     if (cand.category != AlertCategory.approachingVehicle &&
         now.isBefore(_suppressUntil)) {
+      return false;
+    }
+
+    if (cand.priority != SpeechPriority.critical &&
+        now.difference(_lastSpokenAt) < const Duration(milliseconds: 1500)) {
       return false;
     }
 
@@ -188,6 +200,7 @@ class AlertFilter {
     _lastCategory = null;
     _suppressUntil = DateTime.fromMillisecondsSinceEpoch(0);
     _lastByCat.clear();
+    _lastCriticalByCat.clear();
   }
 
   Duration _categoryCooldown(
@@ -211,9 +224,9 @@ class AlertFilter {
       case AlertCategory.approachingVehicle:
         return scaled(1200);
       case AlertCategory.obstacleClose:
-        return scaled(2000);
+        return scaled(3000);
       case AlertCategory.obstacleFar:
-        return scaled(2000);
+        return scaled(4000);
       case AlertCategory.navigationHint:
         return scaled(2500);
       case AlertCategory.corridorBlocked:

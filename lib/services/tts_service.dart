@@ -308,7 +308,7 @@ class TtsService {
 
   void _notifyAudioRouteInterrupted() {
     final now = DateTime.now();
-    if (now.difference(_lastAudioRouteAlertAt) < const Duration(seconds: 2)) {
+    if (now.difference(_lastAudioRouteAlertAt) < const Duration(seconds: 15)) {
       return;
     }
     _lastAudioRouteAlertAt = now;

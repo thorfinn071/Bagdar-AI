@@ -151,8 +151,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   
   DateTime _lastStallWarnTtsAt = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _stallStartedAt = DateTime.fromMillisecondsSinceEpoch(0);
-  static const Duration _kStallTtsCooldown = Duration(seconds: 30);
+  static const Duration _kStallTtsCooldown = Duration(seconds: 60);
   static const Duration _kStallTtsMinDuration = Duration(seconds: 4);
+  DateTime _initCompletedAt = DateTime.fromMillisecondsSinceEpoch(0);
 
   final Map<FrameQualityEventType, DateTime> _lastQualityTtsAt = {};
   static const Duration _kQualityEventCooldown = Duration(seconds: 30);
@@ -189,7 +190,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           thresholdMs: threshold.inMilliseconds,
         );
         _vm.alertMgr.markCameraStall(now);
-        HapticService.vibrate(const [0, 120]);
         if (now.difference(_lastStallWarnTtsAt) < _kStallTtsCooldown) {
           return;
         }
@@ -421,21 +421,16 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       await _vm.fallDetector.init();
 
       _vm.tts.onAudioRouteInterrupted = () {
-        HapticService.vibrate([0, 200, 100, 200, 100, 200]);
-        _vm.earcon.play(Earcon.cameraBlocked);
+        final elapsed = DateTime.now().difference(_initCompletedAt);
+        if (elapsed < const Duration(seconds: 15)) return;
         _fieldLog.logTtsEvent('audio_interrupted');
-        _vm.tts.say(
-          S.get('audio_route_interrupted'),
-          SpeechPriority.critical,
-          pan: 0.0,
-        );
+        _vm.earcon.play(Earcon.cameraBlocked);
       };
       _vm.tts.onAudioRouteResumed = () {
         _fieldLog.logTtsEvent('audio_resumed');
         _vm.tts.say(S.get('audio_resumed'), SpeechPriority.info, pan: 0.0);
       };
       _vm.tts.onTtsStall = () {
-        HapticService.vibrate([0, 400, 200, 400, 200, 400]);
         _vm.earcon.play(Earcon.cameraBlocked);
         _fieldLog.logTtsEvent('tts_stall');
         try {
@@ -478,6 +473,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
       _vm.setStatus(S.get('system_ready'));
       _vm.tts.say(S.get('system_ready'), SpeechPriority.info, pan: 0.0);
+      _initCompletedAt = DateTime.now();
       _maybePlayFirstRunAudioTour();
     } catch (e) {
       _fieldLog.logError('initAll', e.toString());
@@ -512,7 +508,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     final recentAnyAlert = lastSpokenAt.millisecondsSinceEpoch != 0 &&
         now.difference(lastSpokenAt) < const Duration(seconds: 15);
     if (!recentAnyAlert) {
-      HapticService.vibrate([0, 50]);
     }
     if (!recentCritical) {
       _vm.earcon.play(Earcon.heartbeat);
@@ -872,7 +867,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       );
       if (stallFor >= _kStallTtsMinDuration &&
           _stallStartedAt.millisecondsSinceEpoch != 0) {
-        HapticService.vibrate(const [0, 50]);
       }
       _stallStartedAt = DateTime.fromMillisecondsSinceEpoch(0);
     }
@@ -1106,7 +1100,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         _lastAnnouncedLight = null;
       }
 
-      if (_depthController.shouldRun(now)) {
+      if (_depthController.shouldRun(now) && !_stallWatchdog.isWarned) {
         unawaited(_processDepthAnalysis(image, now));
       }
     } finally {
