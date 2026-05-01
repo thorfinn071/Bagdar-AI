@@ -334,6 +334,12 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'voice_commands_list':
         'Доступные команды: что вокруг, что слева, что справа, '
         'что впереди, читай, режим, черный экран.',
+    'voice_settings_commands':
+        'Команды настроек: быстрее, медленнее, громче, тише, '
+        'минимальная подробность, обычная подробность, детальная подробность, '
+        'редкие алерты, обычные алерты, частые алерты, '
+        'изменить sos на тройной тап, изменить sos на встряхивание, '
+        'сильная вибрация, слабая вибрация.',
 
     'fg_notification_title': 'Bagdar активен',
     'fg_notification_body': 'Навигация работает в фоне.',
@@ -392,6 +398,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sos_sent': 'SOS отправлен.',
     'sos_sent_no_location':
         'SOS отправлен, но местоположение не удалось определить.',
+    'sos_indoor_warning':
+        'Вы в помещении. Координаты могут быть неточными.',
     'sos_no_contact': 'Контакт для SOS не задан. Настройте в настройках.',
     'sos_no_location': 'Не удалось определить местоположение.',
     'sos_no_gps': 'местоположение недоступно',
@@ -448,6 +456,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Два пальца две секунды — экстренный вызов SOS. '
         'Или скажите сос для SOS, справка для этого сообщения.',
     'status_quick': 'Режим {mode}. Заряд {battery} процентов.',
+    'status_quick_mode_only': 'Режим {mode}.',
     'gesture_weak': 'Свайп слишком слабый. Проведите пальцем быстрее.',
     'camera_screen_semantics':
         'Экран камеры Bagdar. '
@@ -946,6 +955,11 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'voice_commands_list':
         'Қол жетімді командалар: айналада не бар, солда, оңда, '
         'алда, оқы, режим, қара экран.',
+    'voice_settings_commands':
+        'Баптау командалары: жылдамырақ, баяуырақ, қаттырақ, ақырынырақ, '
+        'қысқа толықтық, қалыпты толықтық, толық толықтық, '
+        'сирек ескертулер, қалыпты ескертулер, жиі ескертулер, '
+        'sos үш рет түрту, sos сілку, күшті діріл, әлсіз діріл.',
 
     'fg_notification_title': 'Bagdar белсенді',
     'fg_notification_body': 'Навигация фонда жұмыс істеуде.',
@@ -1004,6 +1018,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sos_sent': 'SOS жіберілді.',
     'sos_sent_no_location':
         'SOS жіберілді, бірақ орналасуды анықтау мүмкін болмады.',
+    'sos_indoor_warning':
+        'Сіз ғимарат ішіндесіз. Координаттар дәл болмауы мүмкін.',
     'sos_launch_failed': 'SMS қолданбасын ашу мүмкін болмады.',
     'sos_error': 'SOS жіберу мүмкін болмады.',
     'sos_fall_detected':
@@ -1053,6 +1069,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Екі саусақпен екі секунд басу — SOS. '
         'Немесе SOS үшін сос деп, осы хабарлама үшін көмек деп айтыңыз.',
     'status_quick': 'Режим {mode}. Заряд {battery} пайыз.',
+    'status_quick_mode_only': 'Режим {mode}.',
     'gesture_weak': 'Сырғыту әлсіз. Саусағыңызды жылдамырақ қозғалтыңыз.',
     'camera_screen_semantics':
         'Bagdar камера экраны. '
@@ -1551,6 +1568,11 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'voice_commands_list':
         'Available commands: what is around, what is left, what is right, '
         'what is ahead, read, mode, pitch black.',
+    'voice_settings_commands':
+        'Settings commands: faster, slower, volume up, volume down, '
+        'minimal verbosity, normal verbosity, detailed verbosity, '
+        'rare alerts, normal alerts, frequent alerts, '
+        'set sos to triple tap, set sos to shake, strong vibration, weak vibration.',
 
     'fg_notification_title': 'Bagdar is active',
     'fg_notification_body': 'Navigation is running in background.',
@@ -1603,6 +1625,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
 
     'sos_sent': 'SOS sent.',
     'sos_sent_no_location': 'SOS sent, but location could not be determined.',
+    'sos_indoor_warning':
+        'You are indoors. Coordinates may be inaccurate.',
     'sos_no_contact': 'No SOS contact specified. Set it up in settings.',
     'sos_no_location': 'Could not determine location.',
     'sos_no_gps': 'location unavailable',
@@ -1656,6 +1680,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Hold two fingers for two seconds for SOS. '
         'Or say sos for emergency, gestures for this help.',
     'status_quick': 'Mode {mode}. Battery {battery} percent.',
+    'status_quick_mode_only': 'Mode {mode}.',
     'gesture_weak': 'Swipe too weak. Move finger faster.',
     'camera_screen_semantics':
         'Bagdar camera screen. '

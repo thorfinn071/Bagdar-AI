@@ -4,9 +4,12 @@ import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 
 import '../models/app_mode.dart';
+import '../models/a11y_prefs.dart';
+import '../models/constants.dart';
 import '../models/speech_job.dart';
 import '../models/strings.dart';
 import '../services/feature_usage_tracker.dart';
+import '../services/settings_service.dart';
 import '../services/voice_command_service.dart';
 import '../viewmodels/camera_view_model.dart';
 import 'fall_countdown_controller.dart';
@@ -111,13 +114,66 @@ class VoiceCommandDispatcher {
         vm.tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
         break;
       case VoiceCommand.speechRateFaster:
+        _increaseSpeechRate();
+        break;
       case VoiceCommand.speechRateSlower:
+        _decreaseSpeechRate();
+        break;
       case VoiceCommand.volumeUp:
+        _increaseVolume();
+        break;
       case VoiceCommand.volumeDown:
+        _decreaseVolume();
+        break;
       case VoiceCommand.langRussian:
+        unawaited(_setLanguage(AppLanguage.ru));
+        break;
       case VoiceCommand.langKazakh:
+        unawaited(_setLanguage(AppLanguage.kk));
+        break;
       case VoiceCommand.langEnglish:
+        unawaited(_setLanguage(AppLanguage.en));
+        break;
       case VoiceCommand.batteryStatus:
+        _announceBatteryStatus();
+        break;
+      case VoiceCommand.verbosityMinimal:
+        _setVerbosity(Verbosity.minimal);
+        break;
+      case VoiceCommand.verbosityNormal:
+        _setVerbosity(Verbosity.normal);
+        break;
+      case VoiceCommand.verbosityDetailed:
+        _setVerbosity(Verbosity.detailed);
+        break;
+      case VoiceCommand.alertsRare:
+        _setAlertFrequency(AlertFrequency.rare);
+        break;
+      case VoiceCommand.alertsNormal:
+        _setAlertFrequency(AlertFrequency.normal);
+        break;
+      case VoiceCommand.alertsFrequent:
+        _setAlertFrequency(AlertFrequency.frequent);
+        break;
+      case VoiceCommand.sosTriggerTripleTap:
+        _setSosTrigger(SosTrigger.tripleTap);
+        break;
+      case VoiceCommand.sosTriggerShake:
+        _setSosTrigger(SosTrigger.shake);
+        break;
+      case VoiceCommand.hapticStrong:
+        _setHapticStrength(HapticStrength.strong);
+        break;
+      case VoiceCommand.hapticWeak:
+        _setHapticStrength(HapticStrength.weak);
+        break;
+      case VoiceCommand.settingsHelp:
+        vm.tts.say(
+          S.get('voice_settings_commands'),
+          SpeechPriority.info,
+          pan: 0.0,
+        );
+        break;
       case VoiceCommand.tutorialSkip:
       case VoiceCommand.tutorialRepeat:
         vm.tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
@@ -285,5 +341,92 @@ class VoiceCommandDispatcher {
     } catch (e) {
       debugPrint('saveWaypointFromVoice error: $e');
     }
+  }
+
+  void _increaseSpeechRate() {
+    final cur = Settings.instance.speechRate;
+    final next = (cur + kVoiceSpeechRateStep).clamp(kSpeechRateMin, kSpeechRateMax);
+    unawaited(Settings.instance.setSpeechRate(next));
+    unawaited(vm.tts.setUserRate(next));
+    vm.tts.say(S.get('vc_speed_up'), SpeechPriority.info, pan: 0.0);
+  }
+
+  void _decreaseSpeechRate() {
+    final cur = Settings.instance.speechRate;
+    final next = (cur - kVoiceSpeechRateStep).clamp(kSpeechRateMin, kSpeechRateMax);
+    unawaited(Settings.instance.setSpeechRate(next));
+    unawaited(vm.tts.setUserRate(next));
+    vm.tts.say(S.get('vc_speed_down'), SpeechPriority.info, pan: 0.0);
+  }
+
+  void _increaseVolume() {
+    final cur = Settings.instance.ttsVolume;
+    final next = (cur + kVoiceVolumeStep).clamp(kTtsVolumeMin, kTtsVolumeMax);
+    unawaited(Settings.instance.setTtsVolume(next));
+    unawaited(vm.tts.setUserVolume(next));
+    vm.tts.say(S.get('vc_volume_up'), SpeechPriority.info, pan: 0.0);
+  }
+
+  void _decreaseVolume() {
+    final cur = Settings.instance.ttsVolume;
+    final next = (cur - kVoiceVolumeStep).clamp(kTtsVolumeMin, kTtsVolumeMax);
+    unawaited(Settings.instance.setTtsVolume(next));
+    unawaited(vm.tts.setUserVolume(next));
+    vm.tts.say(S.get('vc_volume_down'), SpeechPriority.info, pan: 0.0);
+  }
+
+  Future<void> _setLanguage(AppLanguage lang) async {
+    AppStrings.setLanguage(lang);
+    await Settings.instance.setLanguage(lang.index);
+    await vm.tts.setLanguage(AppStrings.ttsLang);
+    vm.voice.setLocale(AppStrings.ttsLang);
+    vm.tts.say(S.get('lang_switched'), SpeechPriority.critical, pan: 0.0);
+  }
+
+  void _announceBatteryStatus() {
+    final battery = vm.battery.batteryLevel;
+    vm.tts.say(
+      S.get('vc_battery_status').replaceFirst('{battery}', battery.toString()),
+      SpeechPriority.info,
+      pan: 0.0,
+    );
+  }
+
+  void _setVerbosity(Verbosity v) {
+    unawaited(Settings.instance.setVerbosity(v));
+    vm.tts.say(
+      '${S.get('settings_verbosity')}: ${S.get('verbosity_${v.name}')}',
+      SpeechPriority.info,
+      pan: 0.0,
+    );
+  }
+
+  void _setAlertFrequency(AlertFrequency v) {
+    unawaited(Settings.instance.setAlertFrequency(v));
+    vm.tts.say(
+      '${S.get('settings_alert_frequency')}: ${S.get('freq_${v.name}')}',
+      SpeechPriority.info,
+      pan: 0.0,
+    );
+  }
+
+  void _setSosTrigger(SosTrigger v) {
+    unawaited(Settings.instance.setSosTrigger(v));
+    final label = switch (v) {
+      SosTrigger.twoFingerHold => S.get('sos_trigger_two_finger'),
+      SosTrigger.tripleTap => S.get('sos_trigger_triple_tap'),
+      SosTrigger.shake => S.get('sos_trigger_shake'),
+    };
+    vm.tts.say('${S.get('settings_sos_trigger')}: $label', SpeechPriority.info, pan: 0.0);
+  }
+
+  void _setHapticStrength(HapticStrength v) {
+    unawaited(Settings.instance.setHapticStrength(v));
+    vm.applyA11yPrefs();
+    vm.tts.say(
+      '${S.get('settings_haptic_strength')}: ${S.get('haptic_${v.name}')}',
+      SpeechPriority.info,
+      pan: 0.0,
+    );
   }
 }

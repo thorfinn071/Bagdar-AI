@@ -1,6 +1,10 @@
+import 'dart:ui';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/a11y_prefs.dart';
+import '../models/strings.dart';
+import 'device_capability.dart';
 
 typedef Settings = SettingsService;
 
@@ -40,6 +44,35 @@ class SettingsService {
 
   Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
+    if (!_prefs!.containsKey(_kLanguage)) {
+      final code = PlatformDispatcher.instance.locale.languageCode.toLowerCase();
+      final detected = switch (code) {
+        'kk' => AppLanguage.kk.index,
+        'en' => AppLanguage.en.index,
+        _ => AppLanguage.ru.index,
+      };
+      await _prefs!.setInt(_kLanguage, detected);
+    }
+    if (!_prefs!.containsKey(_kNumThreads)) {
+      await _prefs!.setInt(_kNumThreads, await _autoDetectNumThreads());
+    }
+  }
+
+  Future<int> _autoDetectNumThreads() async {
+    try {
+      final caps = await DeviceCapabilityProbe.probe();
+      if (caps.isLowEnd) return 2;
+      switch (caps.bestDepthTier) {
+        case DepthTier.hardware:
+        case DepthTier.ncnnVulkan:
+          return 4;
+        case DepthTier.ncnnCpu:
+        case DepthTier.focalLength:
+          return 3;
+      }
+    } catch (_) {
+      return 3;
+    }
   }
 
   bool get isReady => _prefs != null;
@@ -52,10 +85,10 @@ class SettingsService {
       _prefs!.getBool(_kUseNativeDepthBridge) ?? true;
   bool get useHardwareDepthMode =>
       _prefs!.getBool(_kUseHardwareDepthMode) ?? false;
-  int get numThreads => _prefs!.getInt(_kNumThreads) ?? 2;
+  int get numThreads => _prefs!.getInt(_kNumThreads) ?? 3;
   double get focalLength => _prefs!.getDouble(_kFocalLength) ?? 1006.0;
   bool get isCalibrated => _prefs!.getBool(_kIsCalibrated) ?? false;
-  bool get pitchBlackUi => _prefs!.getBool(_kPitchBlackUi) ?? false;
+  bool get pitchBlackUi => _prefs!.getBool(_kPitchBlackUi) ?? true;
   bool get guideDogMode => _prefs!.getBool(_kGuideDogMode) ?? false;
   bool get fieldLogging => _prefs!.getBool(_kFieldLogging) ?? false;
   bool get tutorialSeen => _prefs!.getBool(_kTutorialSeen) ?? false;
