@@ -45,7 +45,7 @@ class Waypoint {
 
 class WaypointService {
   static const String _prefsKey = 'vg_waypoints';
-  static const double kProximityRadius = 50.0;
+  static const double kProximityRadius = 30.0;
 
   final List<Waypoint> _waypoints = [];
   Timer? _proximityTimer;

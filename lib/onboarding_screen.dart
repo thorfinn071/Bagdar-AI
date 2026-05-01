@@ -347,6 +347,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
     if (!mounted) return;
     await _tts.setLanguage(AppStrings.ttsLang);
+    setState(() => _calibrated = Settings.instance.isCalibrated);
     _next();
   }
 

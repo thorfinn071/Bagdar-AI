@@ -5,12 +5,15 @@ import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
+import '../models/strings.dart';
+
 
 
 class OcrService {
-  final TextRecognizer _recognizer = TextRecognizer(
+  final TextRecognizer _latinRecognizer = TextRecognizer(
     script: TextRecognitionScript.latin,
   );
+  final TextRecognizer _defaultRecognizer = TextRecognizer();
 
   bool _busy = false;
 
@@ -28,12 +31,25 @@ class OcrService {
       final inputImage = _buildInputImage(image);
       if (inputImage == null) return null;
 
-      final recognized = await _recognizer.processImage(inputImage);
+      final recognizers = switch (AppStrings.current) {
+        AppLanguage.en => <TextRecognizer>[_latinRecognizer],
+        AppLanguage.ru || AppLanguage.kk => <TextRecognizer>[
+          _defaultRecognizer,
+          _latinRecognizer,
+        ],
+      };
 
-      final lines = recognized.blocks
-          .map((b) => b.text.trim())
-          .where((t) => t.length >= 2)
-          .toList();
+      final lines = <String>[];
+      final seen = <String>{};
+      for (final recognizer in recognizers) {
+        final recognized = await recognizer.processImage(inputImage);
+        for (final block in recognized.blocks) {
+          final text = block.text.trim();
+          if (text.length < 2) continue;
+          if (!seen.add(text)) continue;
+          lines.add(text);
+        }
+      }
 
       if (lines.isEmpty) {
         _stabilizeBuffer.clear();
@@ -74,7 +90,8 @@ class OcrService {
 
   void dispose() {
     try {
-      _recognizer.close();
+      _latinRecognizer.close();
+      _defaultRecognizer.close();
     } catch (_) {}
   }
 
