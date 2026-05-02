@@ -14,6 +14,12 @@ void loadFocalLength() {
   if (saved > 0) _currentFocalLength = saved;
 }
 
+void loadFocalLengthFromCamera(double focalLengthMm, double sensorWidthMm, int imageWidthPx) {
+  if (focalLengthMm > 0 && sensorWidthMm > 0 && imageWidthPx > 0) {
+    _currentFocalLength = (focalLengthMm * imageWidthPx) / sensorWidthMm;
+  }
+}
+
 Future<void> calibrateFocalLength(
   String label,
   double x1,

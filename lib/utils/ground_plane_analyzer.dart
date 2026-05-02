@@ -16,8 +16,8 @@ class GroundPlaneAnalyzer {
   static const double kRiseRatio = 0.25;
   static const double kMinCoverage = 0.28;
   static const double kWalkingMinCoverage = 0.38;
-  static const double kFootZoneDeltaThreshold = 0.22;
-  static const double kFootZoneCoverage = 0.18;
+  static const double kFootZoneDeltaThreshold = 0.32;
+  static const double kFootZoneCoverage = 0.25;
 
   static const double kReflectiveInlierRatioMin = 0.88;
   static const double kReflectiveLumaVarianceMax = 120.0;
@@ -302,6 +302,13 @@ class GroundPlaneAnalyzer {
       results.add(overheadHazard);
     }
 
+    if (planeOk && lumaMap != null) {
+      final slipperyHazard = detectSlipperyFromLuma(lumaMap);
+      if (slipperyHazard != null) {
+        results.add(slipperyHazard);
+      }
+    }
+
     
     
     
@@ -345,6 +352,7 @@ class GroundPlaneAnalyzer {
   void resetTemporalFilter() {
     _recentHazardFrames.clear();
     _lowCurbStreak = 0;
+    _deadZoneStreak = 0;
     
     
     
@@ -441,11 +449,6 @@ class GroundPlaneAnalyzer {
       if (glassHazard != null) {
         results.add(glassHazard);
       }
-
-      final slipperyHazard = detectSlipperyFromLuma(lumaMap);
-      if (slipperyHazard != null) {
-        results.add(slipperyHazard);
-      }
     }
   }
 
@@ -482,6 +485,9 @@ class GroundPlaneAnalyzer {
   static const int _kTemporalMinMatches = 4;
   final ListQueue<List<DepthHazard>> _recentHazardFrames =
       ListQueue<List<DepthHazard>>(_kTemporalWindow);
+
+  static const int _kDeadZoneConfirmFrames = 3;
+  int _deadZoneStreak = 0;
 
   DepthHazard? _detectFootZoneHazard(Float32List depthMap) {
     int pairCount = 0;
@@ -531,10 +537,11 @@ class GroundPlaneAnalyzer {
 
     final coverage = strongPairs / pairCount;
     final avgDelta = totalDelta / pairCount;
-    if (coverage >= kFootZoneCoverage && maxDelta >= 0.30 && avgDelta >= 0.12) {
-      
-      
+    if (coverage >= kFootZoneCoverage && maxDelta >= 0.40 && avgDelta >= 0.18) {
       _lowCurbStreak = 0;
+      _deadZoneStreak++;
+      if (_deadZoneStreak < _kDeadZoneConfirmFrames) return null;
+
       final score = (coverage * 0.65 + maxDelta.clamp(0.0, 1.0) * 0.35).clamp(
         0.0,
         1.0,
@@ -545,6 +552,8 @@ class GroundPlaneAnalyzer {
         zone: HazardZone.center,
         coverage: coverage,
       );
+    } else {
+      _deadZoneStreak = 0;
     }
 
     final lowCurbCoverage = lowCurbPairs / pairCount;
@@ -1531,8 +1540,8 @@ class GroundPlaneAnalyzer {
 
   
 
-  static const double _kSlipperyAnisotropyThreshold = 3.0;
-  static const double _kSlipperyMinLumaVariance = 500.0;
+  static const double _kSlipperyAnisotropyThreshold = 5.0;
+  static const double _kSlipperyMinLumaVariance = 800.0;
 
   static DepthHazard? detectSlipperyFromLuma(Uint8List lumaMap) {
     if (lumaMap.length != kMapSize * kMapSize) return null;

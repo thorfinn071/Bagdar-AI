@@ -68,8 +68,13 @@ class DepthPipelineController {
       _inFlight = false;
       if (hazards.isEmpty) return const <DepthHazardAlert>[];
       final rollExcessive = vm.orientation.isRollExcessive;
+      final filteredHazards = hazards.where((h) {
+        if (h.type == DepthHazardType.deadZone && h.midasScore < 0.65) return false;
+        if (h.type == DepthHazardType.slippery && h.midasScore < 0.55) return false;
+        return true;
+      });
       return [
-        for (final h in hazards)
+        for (final h in filteredHazards)
           DepthHazardAlert(
             hazard: h,
             isCritical: (h.type == DepthHazardType.stairsDown ||

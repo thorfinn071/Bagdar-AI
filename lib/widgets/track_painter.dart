@@ -23,7 +23,7 @@ Mapping mapImageToCanvas({
 }) {
   final scaleX = canvasSize.width / imgW;
   final scaleY = canvasSize.height / imgH;
-  final scale = math.max(scaleX, scaleY);
+  final scale = math.min(scaleX, scaleY);
   final dx = (canvasSize.width - imgW * scale) / 2.0;
   final dy = (canvasSize.height - imgH * scale) / 2.0;
   return Mapping(scale, dx, dy);

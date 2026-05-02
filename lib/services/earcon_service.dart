@@ -99,6 +99,12 @@ class EarconService {
     final player = _players[earcon];
     if (player == null) return;
     try {
+      if (player.state == PlayerState.disposed ||
+          player.state == PlayerState.completed) {
+        final bytes = _generate(earcon);
+        await player.setSourceBytes(bytes, mimeType: 'audio/wav');
+        await player.setVolume(_volume);
+      }
       await player.setBalance(pan.clamp(-1.0, 1.0));
       await player.seek(Duration.zero);
       await player.resume();
