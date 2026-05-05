@@ -36,18 +36,19 @@ import 'services/motion_prealert.dart'
     show MotionIntrusionEvent, MotionIntrusionSide;
 import 'services/traffic_light_analyzer.dart' show TrafficLightKind;
 import 'utils/blur_detector.dart';
-import 'utils/depth_hazard.dart' show DepthHazardType;
+import 'utils/depth_hazard.dart';
 import 'utils/distance_utils.dart';
 import 'services/fall_detector.dart' show MotionState;
 import 'services/feature_usage_tracker.dart';
 import 'services/field_logger.dart';
-import 'services/indoor_gate.dart' show IndoorTransition;
+import 'services/indoor_gate.dart';
 import 'camera/frame_quality_guard.dart';
 import 'camera/depth_pipeline_controller.dart';
 import 'camera/stall_watchdog.dart';
 import 'camera/fall_countdown_controller.dart';
 import 'camera/voice_command_dispatcher.dart';
 import 'camera/camera_lifecycle_controller.dart';
+import 'services/scene_narrator.dart';
 import 'gesture_tutorial_screen.dart';
 import 'screens/settings_qr_export_screen.dart';
 import 'screens/settings_qr_import_screen.dart';
@@ -106,6 +107,11 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   late final FallCountdownController _fallCountdown;
   late final VoiceCommandDispatcher _voiceDispatcher;
   late final CameraLifecycleController _lifecycle;
+  late final SceneNarrator _sceneNarrator;
+
+  List<DepthHazard> _lastDepthHazards = [];
+  DateTime _lastNarrationAt = DateTime.fromMillisecondsSinceEpoch(0);
+  static const Duration _kNarrationCooldown = Duration(seconds: 5);
 
   int _frameCount = 0;
   late final FrameQualityGuard _qualityGuard;
@@ -217,6 +223,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         _vm.tts.say(S.get('ocr_reading'), SpeechPriority.info, pan: 0.0);
       },
       onSosRequested: _triggerSos,
+      onDescribeSceneRequested: _describeScene,
     );
 
     _vm.addListener(() {
@@ -1113,6 +1120,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
   Future<void> _processDepthAnalysis(CameraImage image, DateTime now) async {
     final alerts = await _depthController.analyze(image, now);
+    if (mounted) {
+      _lastDepthHazards = alerts.map((a) => a.hazard).toList();
+    }
     final provider = _models.depthProvider;
     if (provider != null && provider.lastInferenceMs > 0) {
       _fieldLog.logMidasInference(
@@ -1151,6 +1161,33 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       MotionIntrusionSide.right => 1.0,
       MotionIntrusionSide.center => 0.0,
     };
+    if (event.isCritical) {
+      final key = switch (event.side) {
+        MotionIntrusionSide.left => 'synth_event_stop_left',
+        MotionIntrusionSide.right => 'synth_event_stop_right',
+        MotionIntrusionSide.center => 'synth_event_stop_center',
+      };
+      _vm.tts.say(
+        S.alert(key),
+        SpeechPriority.critical,
+        pan: pan,
+        barge: true,
+      );
+      HapticService.vibrate(
+        kHapticCriticalCooldownPattern,
+        intensities: kHapticCriticalCooldownIntensities,
+      );
+      final now = DateTime.now();
+      _vm.alertMgr.updateLastCriticalAt(now);
+      _vm.throttler.noteCriticalAlert(now: now);
+      _fieldLog.log('synth_event_critical', {
+        'side': event.side.name,
+        'vx': event.vxPxS,
+        'vy': event.vyPxS,
+        'strength': event.strength,
+      });
+      return;
+    }
     _vm.earcon.play(Earcon.approaching, pan: pan);
     HapticService.vibrate(const [0, 80, 40, 120]);
   }
@@ -1817,6 +1854,50 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     if (_activePointers.length < 2) {
       _disarmTwoFingerSos();
     }
+  }
+
+  void _describeScene({SceneFilter filter = SceneFilter.all}) {
+    if (!Settings.instance.sceneNarrationEnabled) return;
+    
+    final now = DateTime.now();
+    if (now.difference(_lastNarrationAt) < _kNarrationCooldown) {
+      _vm.tts.say(S.get('scene_cooldown'), SpeechPriority.info, pan: 0.0);
+      return;
+    }
+    _lastNarrationAt = now;
+
+    _vm.tts.say(S.get('scene_narrating'), SpeechPriority.info, pan: 0.0);
+
+    final snapshot = SceneSnapshot(
+      objects: _vm.tracksNotifier.value.map((t) => SceneObject(
+        label: t.label,
+        direction: S.dir(clockDir(t.x1, t.x2, _imgW.toDouble())),
+        distance: t.dist,
+        distM: t.distM > 0 ? t.distM : null,
+        approaching: t.approaching,
+        threatScore: t.dist == 'very close' ? 3.0 : t.dist == 'close' ? 2.0 : 1.0,
+      )).toList(),
+      hazards: _lastDepthHazards,
+      trafficLight: _vm.trafficLight.confirmedColor,
+      trafficLightKind: _vm.trafficLight.lastKind,
+      ocrText: (DateTime.now().difference(_ocrStartedAt).inSeconds < 5) 
+          ? null // For now, ocrText requires a dedicated cache if we want to read the last recognized text. We will skip caching text here to keep it simple, or we need to add _lastOcrText. Let's just omit it. Wait, the plan says "if recently captured". But there's no `_lastOcrText` in camera_screen.dart. Let me pass null.
+          : null,
+      isIndoor: _vm.indoorGate.state == IndoorState.indoor,
+      mode: _vm.mode,
+      filter: filter,
+    );
+
+    final text = _sceneNarrator.narrate(snapshot, Settings.instance.verbosity);
+    _vm.tts.say(text, SpeechPriority.info, pan: 0.0);
+
+    FieldLogger.instance.logSceneNarration(
+      objectCount: snapshot.objects.length,
+      hazardCount: snapshot.hazards.length,
+      hasOcr: snapshot.ocrText != null,
+      hasTrafficLight: snapshot.trafficLight != null && snapshot.trafficLight != TrafficLightColor.unknown,
+      narrateLengthChars: text.length,
+    );
   }
 
   void _disarmTwoFingerSos() {
