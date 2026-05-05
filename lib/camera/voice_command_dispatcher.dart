@@ -51,7 +51,24 @@ class VoiceCommandDispatcher {
 
     switch (cmd) {
       case VoiceCommand.cancelFall:
-        vm.tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
+        if (vm.objectFinder.active) {
+          vm.objectFinder.stop();
+        } else if (vm.objectMemory.rememberActive) {
+          vm.objectMemory.cancelRemember();
+          vm.tts.say(S.get('obj_find_stopped'), SpeechPriority.info, pan: 0.0);
+        } else {
+          vm.tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
+        }
+        break;
+      case VoiceCommand.cancelFind:
+        if (vm.objectFinder.active) {
+          vm.objectFinder.stop();
+        } else if (vm.objectMemory.rememberActive) {
+          vm.objectMemory.cancelRemember();
+          vm.tts.say(S.get('obj_find_stopped'), SpeechPriority.info, pan: 0.0);
+        } else {
+          vm.tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
+        }
         break;
       case VoiceCommand.scanAll:
         onDescribeSceneRequested(filter: SceneFilter.all);
@@ -123,6 +140,9 @@ class VoiceCommandDispatcher {
       case VoiceCommand.busRoute:
       case VoiceCommand.busSchedule:
       case VoiceCommand.downloadMap:
+      case VoiceCommand.rememberObject:
+      case VoiceCommand.findObject:
+      case VoiceCommand.forgetObject:
         vm.tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
         break;
       case VoiceCommand.speechRateFaster:
@@ -220,6 +240,15 @@ class VoiceCommandDispatcher {
       case VoiceCommand.busSchedule:
       case VoiceCommand.downloadMap:
         vm.tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
+        break;
+      case VoiceCommand.rememberObject:
+        unawaited(vm.objectMemory.startRemember(destination));
+        break;
+      case VoiceCommand.findObject:
+        vm.objectFinder.start(destination);
+        break;
+      case VoiceCommand.forgetObject:
+        unawaited(vm.objectMemory.forget(destination));
         break;
       default:
         break;
