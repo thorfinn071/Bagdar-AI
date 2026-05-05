@@ -41,6 +41,7 @@ import '../camera/object_finder_session.dart';
 
 import '../services/orientation_service.dart';
 import '../services/step_service.dart';
+import '../services/acoustic_world_model.dart';
 
 class CameraViewModel extends ChangeNotifier {
   final Tracker tracker = Tracker();
@@ -69,6 +70,7 @@ class CameraViewModel extends ChangeNotifier {
   
   
   final IndoorGate indoorGate = IndoorGate();
+  final AcousticWorldModel awm = AcousticWorldModel();
 
   late final AlertManager alertMgr;
   late final ProximityBeaconService proximityBeacon;
@@ -243,6 +245,16 @@ class CameraViewModel extends ChangeNotifier {
     ];
 
     await Future.wait(services);
+
+    if (Settings.instance.acousticWorldModel) {
+      awm.onAcousticEvent = (event) {
+        alertMgr.handleAcousticEvent(event);
+      };
+      awm.onReverbEstimate = (estimate) {
+        indoorGate.feedAcousticPrior(estimate);
+      };
+      await _initService('AWM', awm.init());
+    }
 
     applyA11yPrefs();
 
@@ -460,6 +472,7 @@ class CameraViewModel extends ChangeNotifier {
     paymentSms.dispose();
     objectMemory.dispose();
     objectFinder.dispose();
+    awm.dispose();
     tracksNotifier.dispose();
     super.dispose();
   }

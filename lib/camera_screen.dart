@@ -453,8 +453,11 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       _vm.voice.onCommand = _voiceDispatcher.handleCommand;
       _vm.voice.onNavCommand = _voiceDispatcher.handleNavCommand;
       _vm.voice.onListeningStateChanged = (listening) {
-        if (!listening) {
+        if (listening) {
+          _vm.awm.pause();
+        } else {
           _vm.earcon.play(Earcon.success);
+          _vm.awm.resume();
         }
       };
       _vm.voice.onError = (_) {

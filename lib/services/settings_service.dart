@@ -230,5 +230,11 @@ class SettingsService {
   Future<void> setPaymentSmsEnabled(bool v) async =>
       _prefs!.setBool(_kPaymentSmsEnabled, v);
 
+  static const _kAcousticWorldModel = 'acoustic_world_model';
+  bool get acousticWorldModel =>
+      _prefs?.getBool(_kAcousticWorldModel) ?? true;
+  Future<void> setAcousticWorldModel(bool v) async =>
+      _prefs!.setBool(_kAcousticWorldModel, v);
+
   Future<void> resetAll() async => _prefs!.clear();
 }

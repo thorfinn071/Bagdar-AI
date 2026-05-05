@@ -7,6 +7,8 @@ import '../services/settings_service.dart';
 import '../services/earcon_service.dart';
 import '../services/haptic_service.dart';
 import '../services/tts_service.dart';
+import '../services/acoustic_world_model.dart';
+import '../services/stereo_bearing_estimator.dart' show BearingSide;
 import '../tracker/track.dart';
 import '../tracker/tracker.dart' show isVehicle;
 import '../utils/alert_filter.dart';
@@ -189,6 +191,108 @@ class AlertManager {
     _proximityDistance = double.infinity;
     _lastCameraStallAt = DateTime.fromMillisecondsSinceEpoch(0);
     _lastClearAnnounceAt = DateTime.fromMillisecondsSinceEpoch(0);
+  }
+
+  void handleAcousticEvent(AcousticEvent event) {
+    final bearing = event.bearing;
+    final pan = bearing == BearingSide.left
+        ? -0.8
+        : bearing == BearingSide.right
+        ? 0.8
+        : 0.0;
+    final dirKey = bearing == BearingSide.left
+        ? 'left'
+        : bearing == BearingSide.right
+        ? 'right'
+        : null;
+
+    String text;
+    Earcon earcon;
+    AlertCategory category;
+    double urgency;
+
+    switch (event.type) {
+      case AcousticEventType.vehicleApproaching:
+        earcon = Earcon.vehicleAcoustic;
+        category = AlertCategory.approachingVehicle;
+        urgency = 0.75;
+        if (dirKey != null) {
+          text = S.alert('acoustic_vehicle_$dirKey');
+        } else {
+          text = S.alert('acoustic_vehicle_behind');
+        }
+        break;
+      case AcousticEventType.hornBlast:
+        earcon = Earcon.hornDetected;
+        category = AlertCategory.approachingVehicle;
+        urgency = 0.95;
+        text = S.alert('acoustic_horn');
+        break;
+      case AcousticEventType.sirenNearby:
+        earcon = Earcon.sirenDetected;
+        category = AlertCategory.acousticEvent;
+        urgency = 0.80;
+        text = S.alert('acoustic_siren');
+        break;
+      case AcousticEventType.dogNearby:
+        earcon = Earcon.dogDetected;
+        category = AlertCategory.acousticEvent;
+        urgency = 0.50;
+        if (dirKey != null) {
+          text = S.alert('acoustic_dog_$dirKey');
+        } else {
+          text = S.alert('acoustic_dog');
+        }
+        break;
+      case AcousticEventType.crowdDense:
+        earcon = Earcon.objectAppeared;
+        category = AlertCategory.acousticEvent;
+        urgency = 0.35;
+        text = S.alert('acoustic_crowd_dense');
+        break;
+      case AcousticEventType.constructionNearby:
+        earcon = Earcon.objectAppeared;
+        category = AlertCategory.acousticEvent;
+        urgency = 0.40;
+        text = S.alert('acoustic_construction');
+        break;
+      case AcousticEventType.tramNearby:
+        earcon = Earcon.vehicleAcoustic;
+        category = AlertCategory.approachingVehicle;
+        urgency = 0.70;
+        text = S.alert('acoustic_vehicle_behind');
+        break;
+      case AcousticEventType.bicycleNearby:
+        earcon = Earcon.objectAppeared;
+        category = AlertCategory.acousticEvent;
+        urgency = 0.45;
+        if (dirKey != null) {
+          text = S.alert('acoustic_vehicle_$dirKey');
+        } else {
+          text = S.alert('acoustic_vehicle_behind');
+        }
+        break;
+    }
+
+    _earcon.play(earcon, pan: pan);
+
+    _filter.add(AlertCandidate(
+      text: text,
+      priority: event.suggestedPriority,
+      pan: pan,
+      category: category,
+      urgency: urgency,
+    ));
+
+    final winner = _filter.flush(
+      0,
+      event.at,
+      verbosity: Settings.instance.verbosity,
+      alertFrequency: Settings.instance.alertFrequency,
+    );
+    if (winner != null) {
+      _tts.say(winner.text, winner.priority, pan: winner.pan);
+    }
   }
 
   Track? processFrame({

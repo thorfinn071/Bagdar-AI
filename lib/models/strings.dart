@@ -731,6 +731,18 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sms_notifications_disabled': 'Уведомления о платежах выключены.',
     'sms_permission_denied':
         'Нет разрешения на чтение входящих СМС. Откройте настройки и разрешите доступ.',
+    'acoustic_vehicle_left': 'Машина слева.',
+    'acoustic_vehicle_right': 'Машина справа.',
+    'acoustic_vehicle_behind': 'Звук машины.',
+    'acoustic_horn': 'Сигнал!',
+    'acoustic_siren': 'Сирена рядом.',
+    'acoustic_dog': 'Собака рядом.',
+    'acoustic_dog_left': 'Собака слева.',
+    'acoustic_dog_right': 'Собака справа.',
+    'acoustic_crowd_dense': 'Людное место.',
+    'acoustic_construction': 'Стройка рядом.',
+    'awm_enabled': 'Акустика включена.',
+    'awm_disabled': 'Акустика выключена.',
   },
 
   AppLanguage.kk: {
@@ -1399,6 +1411,18 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sms_notifications_disabled': 'Төлем хабарламалары өшірілді.',
     'sms_permission_denied':
         'Кіріс СМС оқу рұқсаты жоқ. Баптауларды ашып рұқсат беріңіз.',
+    'acoustic_vehicle_left': 'Сол жақтан көлік.',
+    'acoustic_vehicle_right': 'Оң жақтан көлік.',
+    'acoustic_vehicle_behind': 'Көлік дыбысы.',
+    'acoustic_horn': 'Сигнал!',
+    'acoustic_siren': 'Жақында сирена.',
+    'acoustic_dog': 'Жақында ит.',
+    'acoustic_dog_left': 'Сол жақта ит.',
+    'acoustic_dog_right': 'Оң жақта ит.',
+    'acoustic_crowd_dense': 'Адам көп жер.',
+    'acoustic_construction': 'Жақында құрылыс.',
+    'awm_enabled': 'Акустика қосылды.',
+    'awm_disabled': 'Акустика өшірілді.',
   },
   AppLanguage.en: {
     'stop': 'Stop',
@@ -2049,6 +2073,18 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sms_notifications_disabled': 'Payment notifications disabled.',
     'sms_permission_denied':
         'No permission to read incoming SMS. Open settings and grant access.',
+    'acoustic_vehicle_left': 'Vehicle on the left.',
+    'acoustic_vehicle_right': 'Vehicle on the right.',
+    'acoustic_vehicle_behind': 'Vehicle sound.',
+    'acoustic_horn': 'Horn!',
+    'acoustic_siren': 'Siren nearby.',
+    'acoustic_dog': 'Dog nearby.',
+    'acoustic_dog_left': 'Dog on the left.',
+    'acoustic_dog_right': 'Dog on the right.',
+    'acoustic_crowd_dense': 'Crowded area.',
+    'acoustic_construction': 'Construction nearby.',
+    'awm_enabled': 'Acoustic sensing enabled.',
+    'awm_disabled': 'Acoustic sensing disabled.',
   },
 };
 

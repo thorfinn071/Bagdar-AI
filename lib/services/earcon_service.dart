@@ -20,6 +20,10 @@ enum Earcon {
   indoorEntered,
   indoorExited,
   paymentReceived,
+  vehicleAcoustic,
+  hornDetected,
+  sirenDetected,
+  dogDetected,
 }
 
 class EarconService {
@@ -157,6 +161,14 @@ class EarconService {
         return _buildWav(_sweep(537, 873, 140, 0.45));
       case Earcon.paymentReceived:
         return _buildWav(_paymentChime());
+      case Earcon.vehicleAcoustic:
+        return _buildWav(_sweep(327, 537, 100, 0.50));
+      case Earcon.hornDetected:
+        return _buildWav(_doubleBeep(1047, 35, 25, 0.60));
+      case Earcon.sirenDetected:
+        return _buildWav(_sweep(673, 873, 80, 0.50));
+      case Earcon.dogDetected:
+        return _buildWav(_noiseClick(30, 0.45, lpAlpha: 0.25));
     }
   }
 

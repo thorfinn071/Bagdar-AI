@@ -10,6 +10,7 @@ enum AlertCategory {
   navigationHint,
   corridorBlocked,
   corridorNarrow,
+  acousticEvent,
 }
 
 class AlertCandidate {
@@ -233,6 +234,8 @@ class AlertFilter {
         return Duration(milliseconds: (1500 * freqScale).round());
       case AlertCategory.corridorNarrow:
         return scaled(2500);
+      case AlertCategory.acousticEvent:
+        return scaled(3000);
     }
   }
 }
