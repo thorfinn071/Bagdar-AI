@@ -259,7 +259,6 @@ const double kSwipeWeakVelocity = 150.0;
 const Duration kWeakGestureCooldown = Duration(seconds: 10);
 
 const Duration kPaymentSmsDedupWindow = Duration(seconds: 30);
-const Duration kPaymentSmsQueueCooldown = Duration(milliseconds: 350);
 const int kPaymentSmsMaxSenderNameLen = 48;
 const int kPaymentSmsMaxBodyLen = 800;
 
