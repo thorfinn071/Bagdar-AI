@@ -914,7 +914,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         final uiNow = DateTime.now();
         if (uiNow.difference(_lastUiAt) >= _vm.throttler.uiInterval()) {
           _lastUiAt = uiNow;
-          _vm.updateTracks(predictedTracks);
+          _vm.updateTracks(predictedTracks, imgW: _imgW, imgH: _imgH);
         }
       }
       _finalizeFramePerf(now: now, frameSw: frameSw);
@@ -947,6 +947,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       if (event != null) _handleMotionIntrusion(event);
     }
 
+    _vm.objectMemoryFeed(image, now);
+
     final currentDetectInterval = _detectInterval;
     final shouldRunDetect =
         now.difference(_lastDetectAt) >= currentDetectInterval;
@@ -957,7 +959,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         final uiNow = DateTime.now();
         if (uiNow.difference(_lastUiAt) >= _vm.throttler.uiInterval()) {
           _lastUiAt = uiNow;
-          _vm.updateTracks(predictedTracks);
+          _vm.updateTracks(predictedTracks, imgW: _imgW, imgH: _imgH);
         }
       }
       _finalizeFramePerf(now: now, frameSw: frameSw);
@@ -1021,7 +1023,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       final uiNow = DateTime.now();
       if (uiNow.difference(_lastUiAt) >= _vm.throttler.uiInterval()) {
         _lastUiAt = uiNow;
-        _vm.updateTracks(tracks);
+        _vm.updateTracks(tracks, imgW: _imgW, imgH: _imgH);
       }
 
       final criticalAtBefore = _vm.alertMgr.lastCriticalAt;
