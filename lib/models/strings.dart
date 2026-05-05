@@ -341,6 +341,21 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'изменить sos на тройной тап, изменить sos на встряхивание, '
         'сильная вибрация, слабая вибрация.',
 
+    'obj_remember_listening': 'Запоминаю {name}. Поднесите ближе.',
+    'obj_remember_saved': '{name} запомнено.',
+    'obj_remember_failed': 'Не вижу объекта. Попробуйте ещё раз.',
+    'obj_remember_capacity': 'Память заполнена. Сначала забудьте что-нибудь.',
+    'obj_find_started': 'Ищу {name}.',
+    'obj_find_position': '{name}, {dist} метра, {dir}.',
+    'obj_find_position_no_dist': '{name}, {dir}.',
+    'obj_find_lost': '{name} не вижу.',
+    'obj_find_found': '{name} перед вами.',
+    'obj_find_stopped': 'Поиск остановлен.',
+    'obj_forget_done': '{name} забыто.',
+    'obj_forget_unknown': 'Не помню {name}.',
+    'obj_unknown_target': 'Не помню такой предмет. Скажите запомни {name}.',
+    'obj_busy_remembering': 'Сейчас запоминаю, подождите.',
+
     'fg_notification_title': 'Bagdar активен',
     'fg_notification_body': 'Навигация работает в фоне.',
 
@@ -992,6 +1007,21 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'сирек ескертулер, қалыпты ескертулер, жиі ескертулер, '
         'sos үш рет түрту, sos сілку, күшті діріл, әлсіз діріл.',
 
+    'obj_remember_listening': '{name} есте сақтап жатырмын. Жақынырақ ұстаңыз.',
+    'obj_remember_saved': '{name} есте сақталды.',
+    'obj_remember_failed': 'Затты көрмеймін. Қайталап көріңіз.',
+    'obj_remember_capacity': 'Жад толды. Алдымен бірдеңе ұмытыңыз.',
+    'obj_find_started': '{name} іздеп жатырмын.',
+    'obj_find_position': '{name}, {dist} метр, {dir}.',
+    'obj_find_position_no_dist': '{name}, {dir}.',
+    'obj_find_lost': '{name} көрінбейді.',
+    'obj_find_found': '{name} алдыңызда.',
+    'obj_find_stopped': 'Іздеу тоқтатылды.',
+    'obj_forget_done': '{name} ұмытылды.',
+    'obj_forget_unknown': '{name} есімде жоқ.',
+    'obj_unknown_target': 'Мұндай зат есімде жоқ. {name} есте сақта деп айтыңыз.',
+    'obj_busy_remembering': 'Қазір есте сақтап жатырмын, күтіңіз.',
+
     'fg_notification_title': 'Bagdar белсенді',
     'fg_notification_body': 'Навигация фонда жұмыс істеуде.',
 
@@ -1635,6 +1665,21 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'minimal verbosity, normal verbosity, detailed verbosity, '
         'rare alerts, normal alerts, frequent alerts, '
         'set sos to triple tap, set sos to shake, strong vibration, weak vibration.',
+
+    'obj_remember_listening': 'Remembering {name}. Hold closer.',
+    'obj_remember_saved': '{name} remembered.',
+    'obj_remember_failed': "I can't see the object. Try again.",
+    'obj_remember_capacity': 'Memory is full. Forget something first.',
+    'obj_find_started': 'Searching for {name}.',
+    'obj_find_position': '{name}, {dist} meters, {dir}.',
+    'obj_find_position_no_dist': '{name}, {dir}.',
+    'obj_find_lost': "I don't see {name}.",
+    'obj_find_found': '{name} in front of you.',
+    'obj_find_stopped': 'Search stopped.',
+    'obj_forget_done': '{name} forgotten.',
+    'obj_forget_unknown': "I don't remember {name}.",
+    'obj_unknown_target': "I don't remember such object. Say remember {name}.",
+    'obj_busy_remembering': 'Currently remembering, please wait.',
 
     'fg_notification_title': 'Bagdar is active',
     'fg_notification_body': 'Navigation is running in background.',
