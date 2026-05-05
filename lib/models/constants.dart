@@ -257,3 +257,8 @@ const Duration kStallWatchdogThresholdCritical = Duration(milliseconds: 4000);
 const double kSwipeStrongVelocity = 500.0;
 const double kSwipeWeakVelocity = 150.0;
 const Duration kWeakGestureCooldown = Duration(seconds: 10);
+
+const Duration kPaymentSmsDedupWindow = Duration(seconds: 30);
+const Duration kPaymentSmsQueueCooldown = Duration(milliseconds: 350);
+const int kPaymentSmsMaxSenderNameLen = 48;
+const int kPaymentSmsMaxBodyLen = 800;

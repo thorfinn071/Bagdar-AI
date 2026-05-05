@@ -12,6 +12,7 @@ import '../services/feature_usage_tracker.dart';
 import '../services/settings_service.dart';
 import '../services/voice_command_service.dart';
 import '../viewmodels/camera_view_model.dart';
+import '../services/scene_narrator.dart';
 import 'fall_countdown_controller.dart';
 
 class VoiceCommandDispatcher {
@@ -19,12 +20,14 @@ class VoiceCommandDispatcher {
   final FallCountdownController fallCountdown;
   final VoidCallback onReadTextRequested;
   final VoidCallback onSosRequested;
+  final void Function({SceneFilter filter}) onDescribeSceneRequested;
 
   VoiceCommandDispatcher({
     required this.vm,
     required this.fallCountdown,
     required this.onReadTextRequested,
     required this.onSosRequested,
+    required this.onDescribeSceneRequested,
   });
 
   void handleCommand(VoiceCommand cmd) {
@@ -51,10 +54,16 @@ class VoiceCommandDispatcher {
         vm.tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
         break;
       case VoiceCommand.scanAll:
+        onDescribeSceneRequested(filter: SceneFilter.all);
+        break;
       case VoiceCommand.scanLeft:
+        onDescribeSceneRequested(filter: SceneFilter.left);
+        break;
       case VoiceCommand.scanRight:
+        onDescribeSceneRequested(filter: SceneFilter.right);
+        break;
       case VoiceCommand.scanForward:
-        vm.tts.say(S.get('scan_see'), SpeechPriority.info, pan: 0.0);
+        onDescribeSceneRequested(filter: SceneFilter.forward);
         break;
       case VoiceCommand.readText:
         onReadTextRequested();
@@ -79,6 +88,9 @@ class VoiceCommandDispatcher {
         break;
       case VoiceCommand.toggleGuideDogMode:
         vm.toggleGuideDogMode();
+        break;
+      case VoiceCommand.togglePaymentSms:
+        unawaited(vm.togglePaymentSms());
         break;
       case VoiceCommand.stopNavigation:
         vm.nav.stopNavigation();

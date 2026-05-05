@@ -41,6 +41,8 @@ class SettingsService {
   static const _kBatteryAnnounce = 'pref_battery_announce';
   static const _kModeAnnounce = 'pref_mode_announce';
   static const _kAudioTourSeen = 'audio_tour_seen';
+  static const _kSceneNarrationEnabled = 'scene_narration_enabled';
+  static const _kPaymentSmsEnabled = 'payment_sms_enabled';
 
   Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
@@ -217,6 +219,16 @@ class SettingsService {
       _prefs?.getBool(_kAudioTourSeen) ?? false;
   Future<void> setAudioTourSeen(bool v) async =>
       _prefs!.setBool(_kAudioTourSeen, v);
+
+  bool get sceneNarrationEnabled =>
+      _prefs?.getBool(_kSceneNarrationEnabled) ?? true;
+  Future<void> setSceneNarrationEnabled(bool v) async =>
+      _prefs!.setBool(_kSceneNarrationEnabled, v);
+
+  bool get paymentSmsEnabled =>
+      _prefs?.getBool(_kPaymentSmsEnabled) ?? false;
+  Future<void> setPaymentSmsEnabled(bool v) async =>
+      _prefs!.setBool(_kPaymentSmsEnabled, v);
 
   Future<void> resetAll() async => _prefs!.clear();
 }

@@ -19,6 +19,7 @@ enum Earcon {
   proximity,
   indoorEntered,
   indoorExited,
+  paymentReceived,
 }
 
 class EarconService {
@@ -154,6 +155,8 @@ class EarconService {
         return _buildWav(_sweep(811, 537, 140, 0.45));
       case Earcon.indoorExited:
         return _buildWav(_sweep(537, 873, 140, 0.45));
+      case Earcon.paymentReceived:
+        return _buildWav(_paymentChime());
     }
   }
 
@@ -232,6 +235,17 @@ class EarconService {
       buf[i] = (amp * env * prev * 32767).round().clamp(-32768, 32767);
     }
     return buf;
+  }
+
+  Int16List _paymentChime() {
+    final tone1 = _singleTone(988, 110, 0.50);
+    final gap = Int16List((_sampleRate * 30 / 1000).round());
+    final tone2 = _singleTone(1319, 160, 0.55);
+    final result = Int16List(tone1.length + gap.length + tone2.length);
+    result.setAll(0, tone1);
+    result.setAll(tone1.length, gap);
+    result.setAll(tone1.length + gap.length, tone2);
+    return result;
   }
 
   Int16List _sine(double freq, int samples, double amp) {

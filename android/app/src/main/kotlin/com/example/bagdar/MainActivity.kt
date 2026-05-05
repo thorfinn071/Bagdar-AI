@@ -1,6 +1,7 @@
 package com.example.bagdar
 
 import android.app.ActivityManager
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -13,7 +14,9 @@ import android.os.PowerManager
 import android.os.StatFs
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.provider.Telephony
 import android.telephony.SmsManager
+import android.telephony.SmsMessage
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.EventChannel
@@ -22,6 +25,10 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity : FlutterActivity() {
     private var hardwareDepthSession: HardwareDepthSession? = null
     private var hardwareDepthEventSink: EventChannel.EventSink? = null
+
+    private var incomingSmsSink: EventChannel.EventSink? = null
+    private var incomingSmsReceiver: BroadcastReceiver? = null
+    private val mainHandler = Handler(Looper.getMainLooper())
 
     private var lastPingTime: Long = 0
     private val watchdogHandler = Handler(Looper.getMainLooper())
@@ -56,6 +63,7 @@ class MainActivity : FlutterActivity() {
     override fun onDestroy() {
         super.onDestroy()
         watchdogHandler.removeCallbacks(watchdogRunnable)
+        unregisterIncomingSmsReceiver()
     }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
@@ -206,6 +214,82 @@ class MainActivity : FlutterActivity() {
                 hardwareDepthSession?.setEventSink(null)
             }
         })
+
+        EventChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            "bagdar/incoming_sms",
+        ).setStreamHandler(object : EventChannel.StreamHandler {
+            override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
+                incomingSmsSink = events
+                registerIncomingSmsReceiver()
+            }
+
+            override fun onCancel(arguments: Any?) {
+                unregisterIncomingSmsReceiver()
+                incomingSmsSink = null
+            }
+        })
+    }
+
+    private fun registerIncomingSmsReceiver() {
+        if (incomingSmsReceiver != null) return
+        val receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                if (intent.action != Telephony.Sms.Intents.SMS_RECEIVED_ACTION) return
+                try {
+                    val messages = Telephony.Sms.Intents.getMessagesFromIntent(intent)
+                    if (messages.isNullOrEmpty()) return
+                    val grouped = LinkedHashMap<String, StringBuilder>()
+                    var latestTs = 0L
+                    for (msg in messages) {
+                        val addr = msg.originatingAddress ?: continue
+                        val body = msg.messageBody ?: ""
+                        val buf = grouped.getOrPut(addr) { StringBuilder() }
+                        buf.append(body)
+                        if (msg.timestampMillis > latestTs) latestTs = msg.timestampMillis
+                    }
+                    if (grouped.isEmpty()) return
+                    val tsMillis = if (latestTs > 0) latestTs else System.currentTimeMillis()
+                    for ((addr, buf) in grouped) {
+                        val payload = mapOf(
+                            "sender" to addr,
+                            "body" to buf.toString(),
+                            "timestamp" to tsMillis,
+                        )
+                        mainHandler.post {
+                            try {
+                                incomingSmsSink?.success(payload)
+                            } catch (_: Exception) {
+                            }
+                        }
+                    }
+                } catch (_: Exception) {
+                }
+            }
+        }
+        val filter = IntentFilter(Telephony.Sms.Intents.SMS_RECEIVED_ACTION).apply {
+            priority = 999
+        }
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED)
+            } else {
+                @Suppress("UnspecifiedRegisterReceiverFlag")
+                registerReceiver(receiver, filter)
+            }
+            incomingSmsReceiver = receiver
+        } catch (_: Exception) {
+            incomingSmsReceiver = null
+        }
+    }
+
+    private fun unregisterIncomingSmsReceiver() {
+        val r = incomingSmsReceiver ?: return
+        try {
+            unregisterReceiver(r)
+        } catch (_: Exception) {
+        }
+        incomingSmsReceiver = null
     }
 
     private fun readBatteryTemperatureC(): Double? {

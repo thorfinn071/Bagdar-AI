@@ -13,6 +13,7 @@ import '../services/memory_monitor.dart';
 import '../services/thermal_monitor.dart';
 import '../services/proximity_beacon_service.dart';
 import '../services/haptic_service.dart';
+import '../services/payment_sms_service.dart';
 import '../services/sos_service.dart';
 import '../services/waypoint_service.dart';
 import '../services/fall_detector.dart';
@@ -69,6 +70,7 @@ class CameraViewModel extends ChangeNotifier {
   late final AlertManager alertMgr;
   late final ProximityBeaconService proximityBeacon;
   late final NavigationService nav;
+  late final PaymentSmsService paymentSms;
 
   AppMode mode = AppMode.street;
   String statusLine = 'Запуск Bagdar...';
@@ -105,6 +107,12 @@ class CameraViewModel extends ChangeNotifier {
       isIndoorMode: () => isIndoor,
     );
     nav = NavigationService(compass: compass, stepService: steps);
+    paymentSms = PaymentSmsService(tts: tts, earcon: earcon);
+  }
+
+  Future<void> togglePaymentSms() async {
+    await paymentSms.toggle();
+    notifyListeners();
   }
 
   
@@ -217,6 +225,7 @@ class CameraViewModel extends ChangeNotifier {
       _initService('SOS', sos.init()),
       _initService('2GIS', twoGis.init()),
       _initService('Voice', voice.init(locale: AppStrings.ttsLang)),
+      _initService('PaymentSMS', paymentSms.init()),
     ];
 
     await Future.wait(services);
@@ -421,6 +430,7 @@ class CameraViewModel extends ChangeNotifier {
     fallDetector.dispose();
     nav.dispose();
     ocr.dispose();
+    paymentSms.dispose();
     tracksNotifier.dispose();
     super.dispose();
   }
