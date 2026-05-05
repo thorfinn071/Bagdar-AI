@@ -52,6 +52,10 @@ enum VoiceCommand {
   settingsHelp,
   tutorialSkip,
   tutorialRepeat,
+  rememberObject,
+  findObject,
+  cancelFind,
+  forgetObject,
   unknown,
 }
 
@@ -230,6 +234,58 @@ class VoiceCommandService {
     'когда автобус ',
   ];
 
+  static const List<String> _ruRememberPrefixes = [
+    'запомни этот ',
+    'запомни эту ',
+    'запомни эта ',
+    'запомни эти ',
+    'запомни мои ',
+    'запомни мой ',
+    'запомни моя ',
+    'запомни мою ',
+    'запомни моё ',
+    'запомни мое ',
+    'запомни ',
+  ];
+
+  static const List<String> _ruFindPrefixes = [
+    'найди мои ',
+    'найди мой ',
+    'найди моя ',
+    'найди мою ',
+    'найди моё ',
+    'найди мое ',
+    'найди ',
+    'ищи ',
+    'где мои ',
+    'где мой ',
+    'где моя ',
+    'где мою ',
+    'где моё ',
+    'где мое ',
+  ];
+
+  static const List<String> _ruForgetPrefixes = [
+    'забудь мои ',
+    'забудь мой ',
+    'забудь моя ',
+    'забудь мою ',
+    'забудь моё ',
+    'забудь мое ',
+    'забудь ',
+    'удали ',
+  ];
+
+  static const Set<String> _ruCancelFindExact = {
+    'прекрати поиск',
+    'стоп поиск',
+    'стоп поиска',
+    'отмена поиска',
+    'отмени поиск',
+    'хватит искать',
+    'прекрати искать',
+  };
+
   static const Map<String, VoiceCommand> _kkCommands = {
     'айналада не бар': VoiceCommand.scanAll,
     'солда не бар': VoiceCommand.scanLeft,
@@ -353,6 +409,33 @@ class VoiceCommandService {
     'автобус кестесі ',
     'автобус қашан ',
   ];
+
+  static const List<String> _kkRememberPrefixes = [
+    'есте сақтап қой ',
+    'есте сақта ',
+    'есте сақтап ',
+  ];
+
+  static const List<String> _kkFindPrefixes = [
+    'қайда менің ',
+    'қайда мені ',
+    'ізде ',
+    'тап ',
+  ];
+
+  static const List<String> _kkForgetPrefixes = [
+    'ұмыт ',
+    'жой ',
+    'өшір ',
+  ];
+
+  static const Set<String> _kkCancelFindExact = {
+    'іздеуді тоқтат',
+    'іздеу тоқта',
+    'іздеуді тоқтатыңыз',
+    'іздеуді доғар',
+    'іздеу бас тарт',
+  };
 
   static const Map<String, VoiceCommand> _enCommands = {
     'what is around': VoiceCommand.scanAll,
@@ -501,6 +584,47 @@ class VoiceCommandService {
     'when is bus ',
   ];
 
+  static const List<String> _enRememberPrefixes = [
+    'remember my ',
+    'remember the ',
+    'remember this ',
+    'remember these ',
+    'remember ',
+  ];
+
+  static const List<String> _enFindPrefixes = [
+    'find my ',
+    'find the ',
+    'find ',
+    'where is my ',
+    'where is the ',
+    'where are my ',
+    'where are the ',
+    'locate my ',
+    'locate the ',
+    'locate ',
+  ];
+
+  static const List<String> _enForgetPrefixes = [
+    'forget my ',
+    'forget the ',
+    'forget ',
+    'delete my ',
+    'delete the ',
+    'delete ',
+  ];
+
+  static const Set<String> _enCancelFindExact = {
+    'stop find',
+    'stop finding',
+    'stop searching',
+    'stop search',
+    'cancel find',
+    'cancel search',
+    'cancel searching',
+    'end search',
+  };
+
   
   bool _continuous = false;
   DateTime _continuousDeadline = DateTime.fromMillisecondsSinceEpoch(0);
@@ -640,43 +764,63 @@ class VoiceCommandService {
 
     final Set<String> cancelSet;
     final Set<String> sosSet;
+    final Set<String> cancelFindSet;
     final List<String> navPrefixes;
     final List<String> transitPrefixes;
     final List<String> busRoutePrefixes;
     final List<String> busSchedulePrefixes;
+    final List<String> rememberPrefixes;
+    final List<String> findPrefixes;
+    final List<String> forgetPrefixes;
     final Map<String, VoiceCommand> commands;
     final List<String> sorted;
     if (isEn) {
       cancelSet = _enCancelFallExact;
       sosSet = _enSosExact;
+      cancelFindSet = _enCancelFindExact;
       navPrefixes = _enNavPrefixes;
       transitPrefixes = _enTransitPrefixes;
       busRoutePrefixes = _enBusRoutePrefixes;
       busSchedulePrefixes = _enBusSchedulePrefixes;
+      rememberPrefixes = _enRememberPrefixes;
+      findPrefixes = _enFindPrefixes;
+      forgetPrefixes = _enForgetPrefixes;
       commands = _enCommands;
       sorted = _enSorted;
     } else if (isKk) {
       cancelSet = _kkCancelFallExact;
       sosSet = _kkSosExact;
+      cancelFindSet = _kkCancelFindExact;
       navPrefixes = _kkNavPrefixes;
       transitPrefixes = _kkTransitPrefixes;
       busRoutePrefixes = _kkBusRoutePrefixes;
       busSchedulePrefixes = _kkBusSchedulePrefixes;
+      rememberPrefixes = _kkRememberPrefixes;
+      findPrefixes = _kkFindPrefixes;
+      forgetPrefixes = _kkForgetPrefixes;
       commands = _kkCommands;
       sorted = _kkSorted;
     } else {
       cancelSet = _ruCancelFallExact;
       sosSet = _ruSosExact;
+      cancelFindSet = _ruCancelFindExact;
       navPrefixes = _ruNavPrefixes;
       transitPrefixes = _ruTransitPrefixes;
       busRoutePrefixes = _ruBusRoutePrefixes;
       busSchedulePrefixes = _ruBusSchedulePrefixes;
+      rememberPrefixes = _ruRememberPrefixes;
+      findPrefixes = _ruFindPrefixes;
+      forgetPrefixes = _ruForgetPrefixes;
       commands = _ruCommands;
       sorted = _ruSorted;
     }
 
     if (cancelSet.contains(lower)) {
       onCommand?.call(VoiceCommand.cancelFall);
+      return;
+    }
+    if (cancelFindSet.contains(lower)) {
+      onCommand?.call(VoiceCommand.cancelFind);
       return;
     }
     if (sosSet.contains(lower)) {
@@ -728,6 +872,36 @@ class VoiceCommandService {
       if (lower.contains(key)) {
         onCommand?.call(commands[key]!);
         return;
+      }
+    }
+
+    for (final prefix in rememberPrefixes) {
+      if (lower.startsWith(prefix)) {
+        final name = lower.substring(prefix.length).trim();
+        if (name.isNotEmpty) {
+          onNavCommand?.call(VoiceCommand.rememberObject, name);
+          return;
+        }
+      }
+    }
+
+    for (final prefix in findPrefixes) {
+      if (lower.startsWith(prefix)) {
+        final name = lower.substring(prefix.length).trim();
+        if (name.isNotEmpty) {
+          onNavCommand?.call(VoiceCommand.findObject, name);
+          return;
+        }
+      }
+    }
+
+    for (final prefix in forgetPrefixes) {
+      if (lower.startsWith(prefix)) {
+        final name = lower.substring(prefix.length).trim();
+        if (name.isNotEmpty) {
+          onNavCommand?.call(VoiceCommand.forgetObject, name);
+          return;
+        }
       }
     }
 
