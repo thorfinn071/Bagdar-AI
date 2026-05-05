@@ -109,16 +109,14 @@ class PaymentSmsParser {
         : body;
 
     final bankTag = _detectBankTag(sender, trimmed);
-    final hasFinancialKeyword = _incomingKw.hasMatch(trimmed) ||
-        _outgoingKw.hasMatch(trimmed) ||
-        _balanceKw.hasMatch(trimmed);
-
-    if (bankTag == null && !hasFinancialKeyword) return null;
+    final inMatch = _incomingKw.firstMatch(trimmed);
+    final outMatch = _outgoingKw.firstMatch(trimmed);
+    if (inMatch == null && outMatch == null) return null;
 
     final amountMatch = _firstValidAmount(trimmed);
     if (amountMatch == null) return null;
 
-    final direction = _detectDirection(trimmed);
+    final direction = _directionFromMatches(inMatch, outMatch);
     final counterparty = _extractCounterparty(trimmed);
     final balance = _extractBalance(trimmed, amountMatch);
 
@@ -144,16 +142,18 @@ class PaymentSmsParser {
     return null;
   }
 
-  static PaymentDirection _detectDirection(String body) {
-    final inMatch = _incomingKw.firstMatch(body);
-    final outMatch = _outgoingKw.firstMatch(body);
+  static PaymentDirection _directionFromMatches(
+    RegExpMatch? inMatch,
+    RegExpMatch? outMatch,
+  ) {
     if (inMatch != null && outMatch != null) {
       return inMatch.start <= outMatch.start
           ? PaymentDirection.incoming
           : PaymentDirection.outgoing;
     }
-    if (outMatch != null) return PaymentDirection.outgoing;
-    return PaymentDirection.incoming;
+    return outMatch != null
+        ? PaymentDirection.outgoing
+        : PaymentDirection.incoming;
   }
 
   static _AmountHit? _firstValidAmount(String body) {
