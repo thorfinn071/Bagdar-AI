@@ -38,19 +38,31 @@ The app currently supports **Russian**, **Kazakh**, and **English** – covering
 | **Ground plane analysis** | RANSAC-based plane fitting on the depth map. Detects potholes, steps, curbs, slopes, and overhead obstacles by measuring deviations from the estimated ground surface |
 | **Multi-object tracking** | Kalman filter with Hungarian assignment and appearance embedding. Tracks identity across frames, detects approaching vehicles via bounding-box area rate, classifies turning trajectories via 3-point curvature |
 | **Traffic light recognition** | Direct YUV colorimetry on the camera stream using three-zone brightness analysis with temporal confirmation. No separate model required |
-| **Peripheral motion alert** | Luma-grid differencing across left/center/right sectors detects fast-moving objects entering the field of view before the detector picks them up |
+| **Synthetic event camera** | Heuristic pipeline using Luma-grid differencing across left/center/right sectors. Detects fast-moving objects entering the periphery before the YOLO detector picks them up. Acts as a motion pre-alert |
 | **Glass door detection** | Luma variance analysis identifies transparent surfaces that depth models misinterpret as open space |
 | **Slippery surface warning** | Luma pattern analysis for high-reflectance wet or polished floors |
 | **Frame quality guard** | Laplacian-variance blur detection + exposure analysis. Rejects frames that would produce unreliable detections |
 | **Sensor fusion engine** | Combines depth hazard scores with YOLO confidence via EMA-smoothed temporal filtering. Reduces false positives by requiring multi-frame confirmation before alerting |
+
+### 🎧 Acoustic Pipeline
+
+| Feature | Details |
+|---|---|
+| **Acoustic World Model** | Processes the microphone array stream to understand the user's acoustic environment |
+| **Ambient classification** | Classifies background noise (street, indoor, transit, quiet) to dynamically adjust alert volumes, TTS speech rates, and pipeline processing cadence |
+| **Stereo bearing estimation** | Analyzes phase differences between microphones to estimate the direction of incoming sound sources |
+| **Reverb classification** | Measures acoustic reverberation to assist the Indoor Gate in differentiating between open outdoor spaces and enclosed indoor environments |
 
 ### 🗣️ Accessible Interface
 
 | Feature | Details |
 |---|---|
 | **Priority TTS queue** | Three-tier system (critical → warning → info) with interrupt semantics: critical alerts preempt all queued speech. Stale message pruning, per-track deduplication, stall watchdog with automatic recovery |
+| **Scene Narrator** | On-demand comprehensive scene description. Synthesizes detected objects, depth hazards, traffic lights, and OCR text into a natural language snapshot with directional filtering |
+| **Object Memory** | Voice-activated object finding. Users can command the system to "remember" an object, and later "find" it using a Y-histogram visual backend and a continuous audio beacon for spatial guidance |
 | **Audio session management** | Proper ducking of background audio, interruption handling (phone calls, other apps), automatic route recovery when audio output changes |
 | **Voice commands** | 35+ commands across 3 languages. Natural-language prefixes for navigation ("веди в аптеку", "take me to pharmacy", "дәріханаға жол көрсет"). Fall cancellation, SOS, mode switching, speech rate / volume / language control via voice |
+| **Payment SMS reader** | Intercepts, parses, and reads aloud payment and balance SMS messages. Automatically extracts payment amounts, currency, and direction (incoming/outgoing) |
 | **Haptic feedback** | Configurable vibration strength (weak / normal / strong). Patterns encode spatial direction (left/right/center) and urgency level |
 | **Earcon audio cues** | Non-speech audio signals for events that don't warrant spoken alerts. Independently adjustable volume |
 | **Pitch-black screen** | Full-black UI mode for zero display power draw while the vision pipeline continues running |
@@ -91,16 +103,21 @@ graph TB
         CAM[Camera Stream]
         IMU[Accelerometer + Gyroscope]
         GPS[GPS + Compass]
-        MIC[Microphone]
+        MIC[Microphone Array]
+        SMS_IN[SMS Receiver]
     end
 
     subgraph Vision["Vision Pipeline (on-device)"]
         YOLO[YOLOv8n INT8]
         MIDAS[MiDaS v2.1 NCNN]
         OCR[ML Kit OCR]
-        MOTION[Motion Pre-Alert]
+        MOTION[Synthetic Event Camera]
         TL[Traffic Light Analyzer]
         FQG[Frame Quality Guard]
+    end
+
+    subgraph Audio["Acoustic Pipeline"]
+        AWM[Acoustic World Model]
     end
 
     subgraph Processing
@@ -108,7 +125,10 @@ graph TB
         GPA["Ground Plane Analyzer\n(RANSAC)"]
         FUSION["Fusion Engine\n(EMA + Temporal)"]
         ALERT[Alert Filter + Decision Engine]
+        NARRATOR[Scene Narrator]
+        OBJ_MEM[Object Memory]
         THROTTLE[Performance Throttler]
+        SMS_PARSER[Payment SMS Parser]
     end
 
     subgraph Safety
@@ -141,6 +161,18 @@ graph TB
     GPS --> INDOOR
     GPS --> SOS
     MIC --> VOICE[Voice Commands] --> NAV
+    MIC --> AWM
+    AWM --> INDOOR
+    AWM --> THROTTLE
+    AWM --> ALERT
+    FUSION --> NARRATOR
+    YOLO --> NARRATOR
+    YOLO --> OBJ_MEM
+    OBJ_MEM --> EARCON
+    OCR --> NARRATOR
+    TL --> NARRATOR
+    NARRATOR --> TTS
+    SMS_IN --> SMS_PARSER --> TTS
     ALERT --> TTS
     ALERT --> HAPTIC
     ALERT --> EARCON
