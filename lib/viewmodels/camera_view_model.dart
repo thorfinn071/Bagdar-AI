@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import '../models/a11y_prefs.dart';
 import '../models/app_mode.dart';
@@ -35,6 +36,8 @@ import '../services/ocr_service.dart';
 import '../services/motion_prealert.dart';
 import '../services/weather_gate.dart';
 import '../services/indoor_gate.dart';
+import '../services/object_memory_service.dart';
+import '../camera/object_finder_session.dart';
 
 import '../services/orientation_service.dart';
 import '../services/step_service.dart';
@@ -71,6 +74,8 @@ class CameraViewModel extends ChangeNotifier {
   late final ProximityBeaconService proximityBeacon;
   late final NavigationService nav;
   late final PaymentSmsService paymentSms;
+  final ObjectMemoryService objectMemory = ObjectMemoryService();
+  late final ObjectFinderSession objectFinder;
 
   AppMode mode = AppMode.street;
   String statusLine = 'Запуск Bagdar...';
@@ -108,6 +113,11 @@ class CameraViewModel extends ChangeNotifier {
     );
     nav = NavigationService(compass: compass, stepService: steps);
     paymentSms = PaymentSmsService(tts: tts, earcon: earcon);
+    objectFinder = ObjectFinderSession(
+      tts: tts,
+      earcon: earcon,
+      memory: objectMemory,
+    );
   }
 
   Future<void> togglePaymentSms() async {
@@ -226,6 +236,10 @@ class CameraViewModel extends ChangeNotifier {
       _initService('2GIS', twoGis.init()),
       _initService('Voice', voice.init(locale: AppStrings.ttsLang)),
       _initService('PaymentSMS', paymentSms.init()),
+      _initService(
+        'ObjectMemory',
+        objectMemory.init(tts: tts, earcon: earcon),
+      ),
     ];
 
     await Future.wait(services);
@@ -410,9 +424,22 @@ class CameraViewModel extends ChangeNotifier {
     }
   }
 
-  void updateTracks(List<Track> tracks) {
+  void updateTracks(
+    List<Track> tracks, {
+    int imgW = 0,
+    int imgH = 0,
+  }) {
     tracksNotifier.value = tracks;
+    if (imgW > 0 && imgH > 0) {
+      objectMemory.onTracks(tracks, imgW, imgH);
+      objectFinder.onTracks(tracks, imgW, imgH);
+    }
     notifyListeners();
+  }
+
+  void objectMemoryFeed(CameraImage image, DateTime now) {
+    if (objectMemory.rememberActive) objectMemory.feed(image, now);
+    if (objectFinder.active) objectFinder.feed(image, now);
   }
 
   @override
@@ -431,6 +458,8 @@ class CameraViewModel extends ChangeNotifier {
     nav.dispose();
     ocr.dispose();
     paymentSms.dispose();
+    objectMemory.dispose();
+    objectFinder.dispose();
     tracksNotifier.dispose();
     super.dispose();
   }
