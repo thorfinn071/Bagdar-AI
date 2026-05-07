@@ -170,6 +170,15 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _vm = CameraViewModel();
     _qualityGuard = FrameQualityGuard(weatherGate: _vm.weatherGate);
     _depthController = DepthPipelineController(vm: _vm, models: _models);
+    
+    
+    
+    
+    
+    
+    
+    
+    _depthController.onStatusChanged = _onDepthStatusChanged;
     _lifecycle = CameraLifecycleController(
       host: this,
       tts: _vm.tts,
@@ -438,7 +447,17 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         _vm.tts.say(S.get('audio_resumed'), SpeechPriority.info, pan: 0.0);
       };
       _vm.tts.onTtsStall = () {
+        
+        
+        
+        
+        
+        
         _vm.earcon.play(Earcon.cameraBlocked);
+        HapticService.vibrate(
+          kHapticTtsStallPattern,
+          intensities: kHapticTtsStallIntensities,
+        );
         _fieldLog.logTtsEvent('tts_stall');
         try {
           const MethodChannel('bagdar/watchdog').invokeMethod('ping');
@@ -950,10 +969,20 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     
     
     
+    
+    
+    
+    
+    
+    
+    
     if ((_vm.mode == AppMode.street || _vm.mode == AppMode.cane) &&
-        !_vm.weatherGate.degraded &&
         !_vm.isIndoor) {
-      final event = _vm.motionPreAlert.feed(image, now);
+      final event = _vm.motionPreAlert.feed(
+        image,
+        now,
+        weatherDegraded: _vm.weatherGate.degraded,
+      );
       if (event != null) _handleMotionIntrusion(event);
     }
 
@@ -994,13 +1023,18 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       }
 
       final planeBytes = _reusePlaneBytes(image);
+      
+      
+      
+      
+      
       final raw = await _models.vision.yoloOnFrame(
         bytesList: planeBytes,
         imageHeight: image.height,
         imageWidth: image.width,
         iouThreshold: 0.45,
-        confThreshold: 0.45,
-        classThreshold: 0.45,
+        confThreshold: kDetConfThreshold,
+        classThreshold: kDetConfThreshold,
       );
 
       if (!mounted) return;
@@ -1112,6 +1146,11 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         _lastAnnouncedLight = null;
       }
 
+      
+      
+      
+      _depthController.updateYoloTracks(tracks, imgW: _imgW);
+
       if (_depthController.shouldRun(now) && !_stallWatchdog.isWarned) {
         unawaited(_processDepthAnalysis(image, now));
       }
@@ -1146,7 +1185,16 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       final priority = alert.isCritical
           ? SpeechPriority.critical
           : SpeechPriority.warning;
-      _vm.tts.say(S.alert(hazardKey), priority, pan: hazard.pan);
+      
+      
+      
+      
+      _vm.tts.say(
+        S.alert(hazardKey),
+        priority,
+        pan: hazard.pan,
+        barge: alert.isCritical,
+      );
       _fieldLog.logDepthHazard(
         type: hazard.type.name,
         score: hazard.midasScore,
@@ -1155,6 +1203,54 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       if (alert.isCritical) {
         HapticService.vibrate(const [0, 300, 120, 300, 120, 300]);
       }
+    }
+  }
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  void _onDepthStatusChanged(
+    DepthPipelineStatus from,
+    DepthPipelineStatus to,
+  ) {
+    
+    if (!mounted) return;
+
+    
+    
+    
+    
+    String? key;
+    SpeechPriority priority = SpeechPriority.warning;
+    switch (to) {
+      case DepthPipelineStatus.lowConfidence:
+      case DepthPipelineStatus.planeFitFailed:
+        key = 'depth_degraded';
+        priority = SpeechPriority.warning;
+        break;
+      case DepthPipelineStatus.ok:
+        if (from != DepthPipelineStatus.ok) {
+          key = 'depth_recovered';
+          priority = SpeechPriority.info;
+        }
+        break;
+    }
+
+    _fieldLog.log('depth_pipeline_status', {
+      'from': from.name,
+      'to': to.name,
+    });
+
+    if (key != null) {
+      _vm.tts.say(S.alert(key), priority, pan: 0.0);
     }
   }
 
@@ -1170,37 +1266,82 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         MotionIntrusionSide.right => 'synth_event_stop_right',
         MotionIntrusionSide.center => 'synth_event_stop_center',
       };
-      _vm.tts.say(
-        S.alert(key),
-        SpeechPriority.critical,
-        pan: pan,
-        barge: true,
+      
+      
+      
+      
+      
+      
+      final winner = _vm.alertMgr.handleMotionIntrusion(
+        event,
+        text: S.alert(key),
       );
-      HapticService.vibrate(
-        kHapticCriticalCooldownPattern,
-        intensities: kHapticCriticalCooldownIntensities,
-      );
-      final now = DateTime.now();
-      _vm.alertMgr.updateLastCriticalAt(now);
-      _vm.throttler.noteCriticalAlert(now: now);
-      _fieldLog.log('synth_event_critical', {
-        'side': event.side.name,
-        'vx': event.vxPxS,
-        'vy': event.vyPxS,
-        'strength': event.strength,
-      });
+      if (winner != null) {
+        _vm.tts.say(
+          winner.text,
+          winner.priority,
+          pan: winner.pan,
+          barge: true,
+        );
+        HapticService.vibrate(
+          kHapticCriticalCooldownPattern,
+          intensities: kHapticCriticalCooldownIntensities,
+        );
+        final now = DateTime.now();
+        _vm.alertMgr.updateLastCriticalAt(now);
+        _vm.throttler.noteCriticalAlert(now: now);
+        _fieldLog.log('synth_event_critical', {
+          'side': event.side.name,
+          'vx': event.vxPxS,
+          'vy': event.vyPxS,
+          'strength': event.strength,
+        });
+      } else {
+        
+        
+        
+        _fieldLog.log('synth_event_suppressed', {
+          'side': event.side.name,
+          'reason': 'cross_system_dedup',
+        });
+      }
       return;
     }
     _vm.earcon.play(Earcon.approaching, pan: pan);
     HapticService.vibrate(const [0, 80, 40, 120]);
   }
 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   bool _hasCloseOrApproachingVehicle(List<Track> tracks) {
     for (final t in tracks) {
       if (!isVehicle(t.label)) continue;
+      
       if (t.approaching) return true;
-      if (t.dist == 'very close' || t.dist == 'close') return true;
-      if (t.distM > 0 && t.distM < 8.0) return true;
+      
+      
+      if (t.dist == 'very close') return true;
+      
+      
+      
     }
     return false;
   }
@@ -1255,6 +1396,16 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         yPlane != null && yRowStride != null && yRowStride > 0;
     for (final r in raw) {
       final label = (r['tag'] ?? '').toString();
+      
+      
+      
+      
+      
+      if (!kAlertClassWhitelist.contains(label)) continue;
+      final conf = (r['confidence'] as num?)?.toDouble() ?? 0.0;
+      
+      
+      if (conf < minConfFor(label)) continue;
       final box = r['box'] as List<dynamic>?;
       if (box == null || box.length < 4) continue;
       final x1 = (box[0] as num).toDouble();
@@ -1290,7 +1441,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           y2: y2,
           cx: (x1 + x2) / 2,
           cy: (y1 + y2) / 2,
-          conf: (r['confidence'] as num?)?.toDouble() ?? 0.0,
+          conf: conf,
           dist: dist,
           distM: distM,
           appearance: appearance,
