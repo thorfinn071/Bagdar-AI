@@ -79,6 +79,26 @@ class GroundPlaneAnalyzer {
   
   bool _weatherDegradedHint = false;
 
+  
+  
+  
+  
+  
+  
+  
+  bool _lastPlaneFitOk = true;
+
+  
+  
+  
+  
+  bool get debugLastPlaneFitOk => _lastPlaneFitOk;
+
+  
+  
+  
+  bool get lastPlaneFitOk => _lastPlaneFitOk;
+
   bool _passesWarningGate(double coverage) {
     if (_weatherDegradedHint) return false;
     if (_userStationaryHint) return true;
@@ -157,6 +177,8 @@ class GroundPlaneAnalyzer {
 
     final results = <DepthHazard>[];
     final planeOk = bestPlane != null && maxInliers >= _pointCount * 0.2;
+    
+    _lastPlaneFitOk = planeOk;
 
     const zoneCount = 5;
     const zoneWidth = kMapSize ~/ zoneCount;
@@ -416,9 +438,20 @@ class GroundPlaneAnalyzer {
       _escalatorStreak = 0;
     }
 
-    if (!_weatherDegradedHint) {
-      final nearFieldHazard = _detectNearFieldIntrusion(depthMap);
-      if (nearFieldHazard != null) {
+    
+    
+    
+    
+    
+    
+    
+    final nearFieldHazard = _detectNearFieldIntrusion(depthMap);
+    if (nearFieldHazard != null) {
+      
+      
+      const double weatherDegradedScoreFloor = 0.55;
+      if (!_weatherDegradedHint ||
+          nearFieldHazard.midasScore >= weatherDegradedScoreFloor) {
         results.add(nearFieldHazard);
       }
     }
