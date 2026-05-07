@@ -32,6 +32,20 @@ class MotionPreAlert {
   static const double _triggerMultiplier = 6.0;
   static const double _absMin = 3.5;
 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  static const int _weatherDegradedMinPersistFrames = 5;
+  static const int _weatherDegradedPersonMinPersistFrames = 6;
+
+  bool _weatherDegradedHint = false;
+
   Uint8List _grid = Uint8List(kEventGridW * kEventGridH);
   Uint8List _prev = Uint8List(kEventGridW * kEventGridH);
   late final Float32List _base = Float32List(kEventGridW * kEventGridH);
@@ -63,15 +77,25 @@ class MotionPreAlert {
   double get baselineCenter => 0.0;
   double get baselineRight => 0.0;
 
-  MotionIntrusionEvent? feed(CameraImage image, DateTime now) {
+  MotionIntrusionEvent? feed(
+    CameraImage image,
+    DateTime now, {
+    bool weatherDegraded = false,
+  }) {
     if (image.planes.isEmpty) return null;
+    _weatherDegradedHint = weatherDegraded;
     _downsampleImage(image);
     return _processFrame(now);
   }
 
   @visibleForTesting
-  MotionIntrusionEvent? feedDownsampledGrid(Uint8List grid, DateTime now) {
+  MotionIntrusionEvent? feedDownsampledGrid(
+    Uint8List grid,
+    DateTime now, {
+    bool weatherDegraded = false,
+  }) {
     if (grid.length != kEventGridW * kEventGridH) return null;
+    _weatherDegradedHint = weatherDegraded;
     _grid.setAll(0, grid);
     return _processFrame(now);
   }
@@ -100,6 +124,17 @@ class MotionPreAlert {
       return null;
     }
 
+    
+    
+    
+    
+    
+    final diffThreshold = _weatherDegradedHint
+        ? kEventDiffThreshold * 1.6
+        : kEventDiffThreshold.toDouble();
+    final baselineMult = _weatherDegradedHint
+        ? kEventBaselineMultiplier * 1.5
+        : kEventBaselineMultiplier;
     const n = kEventGridW * kEventGridH;
     int eventTotal = 0;
     for (int i = 0; i < n; i++) {
@@ -109,9 +144,7 @@ class MotionPreAlert {
           d * kEventBaselineEmaAlpha;
       _base[i] = newBase;
       final fired =
-          (d > kEventDiffThreshold && d > newBase * kEventBaselineMultiplier)
-              ? 1
-              : 0;
+          (d > diffThreshold && d > newBase * baselineMult) ? 1 : 0;
       _events[i] = fired;
       eventTotal += fired;
     }
@@ -344,14 +377,24 @@ class MotionPreAlert {
     final cyFrac = b.cy / kEventGridH;
     final cxFrac = b.cx / kEventGridW;
 
+    
+    
+    
+    final vehiclePersistThreshold = _weatherDegradedHint
+        ? _weatherDegradedMinPersistFrames
+        : kEventMinPersistFrames;
+    final personPersistThreshold = _weatherDegradedHint
+        ? _weatherDegradedPersonMinPersistFrames
+        : kEventPersonMinPersistFrames;
+
     MotionEventClass cls = MotionEventClass.noise;
-    if (b.persistFrames >= kEventMinPersistFrames &&
+    if (b.persistFrames >= vehiclePersistThreshold &&
         v >= kEventVehicleVxPxS &&
         aspect >= kEventVehicleAspectMin &&
         cyFrac >= kEventVehicleCyFracLo &&
         cyFrac <= kEventVehicleCyFracHi) {
       cls = MotionEventClass.vehicleLike;
-    } else if (b.persistFrames >= kEventPersonMinPersistFrames &&
+    } else if (b.persistFrames >= personPersistThreshold &&
         aspect < kEventPersonAspectMax &&
         cyFrac >= kEventPersonCyFracLo &&
         cyFrac <= kEventPersonCyFracHi) {
