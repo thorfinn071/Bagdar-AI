@@ -40,6 +40,7 @@ const Map<String, double> kClassWeight = {
   'motorcycle': 1.5,
   'bicycle': 1.2,
   'dog': 1.2,
+  'cat': 0.6,
   'traffic light': 0.6,
   'stop sign': 0.6,
   'bench': 0.8,
@@ -49,7 +50,96 @@ const Map<String, double> kClassWeight = {
   'handbag': 0.7,
   'suitcase': 0.8,
   'umbrella': 0.7,
+  'chair': 0.8,
+  'potted plant': 0.7,
+  'bottle': 0.5,
 };
+
+/// Hard whitelist of COCO classes that produce alerts.
+///
+/// Without this filter the YOLO output would feed all 80 COCO labels into
+/// `Tracker` -> `AlertManager`, causing the user to hear absurd alerts about
+/// `frisbee`, `toothbrush`, `airplane`, `donut`, etc.  The constant alert
+/// spam erodes trust in the system and trains users to ignore warnings —
+/// the failure mode that ultimately causes injury.
+///
+/// The whitelist is restricted to navigation-relevant categories: people,
+/// vehicles, common street furniture, traffic signs, animals at human scale,
+/// carry items (which usually indicate a person), and a small set of indoor
+/// hazards (chair, potted plant, bottle).
+const Set<String> kAlertClassWhitelist = {
+  // pedestrians / animals
+  'person',
+  'dog',
+  'cat',
+  // wheeled traffic
+  'bicycle',
+  'car',
+  'motorcycle',
+  'bus',
+  'truck',
+  // signage / street furniture
+  'traffic light',
+  'fire hydrant',
+  'stop sign',
+  'parking meter',
+  'bench',
+  // carry items (proxy for a person nearby)
+  'backpack',
+  'handbag',
+  'suitcase',
+  'umbrella',
+  // indoor hazards a blind user can collide with
+  'chair',
+  'potted plant',
+  'bottle',
+};
+
+/// Per-class minimum YOLO confidence required for an alert to fire.
+///
+/// YOLOv8n INT8 has wildly unequal per-class precision. A single uniform
+/// 0.45 threshold over-detects weak classes (false positives) and
+/// under-detects strong/danger-critical classes (missed pedestrians at
+/// dusk).  These thresholds are tuned around the published per-class mAP
+/// of YOLOv8 on COCO and the safety asymmetry: a missed pedestrian or
+/// vehicle is far worse than a missed bench.
+const Map<String, double> kClassMinConf = {
+  // Danger-critical, high precision in YOLOv8n: keep the bar low so we
+  // catch them at distance / in clutter.
+  'person': 0.40,
+  'car': 0.40,
+  'bus': 0.40,
+  'truck': 0.40,
+  'motorcycle': 0.40,
+  'bicycle': 0.42,
+  // Animals — medium precision.
+  'dog': 0.45,
+  'cat': 0.50,
+  // Signs and traffic infrastructure — must be confident before we say
+  // "stop sign" or "traffic light".
+  'traffic light': 0.50,
+  'stop sign': 0.55,
+  'fire hydrant': 0.55,
+  'parking meter': 0.55,
+  'bench': 0.50,
+  // Carry items / indoor hazards — narrow false-positive budget.
+  'backpack': 0.55,
+  'handbag': 0.60,
+  'suitcase': 0.55,
+  'umbrella': 0.55,
+  'chair': 0.55,
+  'potted plant': 0.60,
+  'bottle': 0.65,
+};
+
+/// Default minimum confidence applied to a whitelisted class that has no
+/// explicit entry in [kClassMinConf]. Intentionally conservative.
+const double kDefaultClassMinConf = 0.50;
+
+/// Returns the per-class confidence floor below which a YOLO detection
+/// must be discarded before it ever reaches the tracker.
+double minConfFor(String label) =>
+    kClassMinConf[label] ?? kDefaultClassMinConf;
 
 const int kZoneCount = 5;
 const int kTrackMaxAge = 6;
@@ -163,7 +253,15 @@ const int kFusionTemporalFrames = 5;
 
 const Duration kHazardCriticalCooldown = Duration(milliseconds: 500);
 const Duration kHazardWarningCooldown = Duration(seconds: 4);
-const Duration kHazardDeadZoneCooldown = Duration.zero;
+
+/// Cooldown between successive dead-zone hazard alerts.
+///
+/// Safety audit 3.6: previously `Duration.zero`, which let dead-zone
+/// hazards fire on every analyzer frame.  The detector already has a
+/// `_kDeadZoneConfirmFrames=3` warm-up before the *first* fire; this
+/// cooldown enforces a minimum gap between *repeats* so the user is not
+/// hammered with the same caution multiple times per second.
+const Duration kHazardDeadZoneCooldown = Duration(seconds: 1);
 
 const Duration kHazardCooldown = kHazardWarningCooldown;
 
@@ -172,7 +270,28 @@ const double kFusionEmaAlpha = 0.12;
 const Duration kHeartbeatInterval = Duration(seconds: 30);
 const Duration kHeartbeatIntervalPitchBlack = Duration(seconds: 30);
 
-const Duration kTtsStallTimeout = Duration(seconds: 10);
+/// Maximum time a single TTS utterance is allowed to take before the
+/// stall watchdog fires.
+///
+/// Safety audit 7.2: previously 10 s, which is a lifetime in traffic if
+/// the TTS engine has hung mid-sentence.  Most safety-critical alerts
+/// ("Stop!", "Cars approaching") render in under 2 s; longer utterances
+/// (info-priority scene narration) are not safety-critical and can be
+/// truncated without harm.
+///
+/// 4 s is the longest a critical alert utterance has any business taking
+/// on a working TTS engine.  When this fires, the watchdog stops the
+/// engine, plays an earcon, and emits a distinctive haptic pattern so
+/// the user is alerted to the failure even if no speech is heard.
+const Duration kTtsStallTimeout = Duration(seconds: 4);
+
+/// Distinctive haptic pattern fired when the TTS stall watchdog trips.
+///
+/// Three strong, slightly spaced pulses — deliberately unlike any other
+/// haptic pattern in the app so the user can recognize "TTS just died,
+/// the world I cannot see has not gone silent in a good way".
+const List<int> kHapticTtsStallPattern = [0, 220, 100, 220, 100, 220];
+const List<int> kHapticTtsStallIntensities = [0, 255, 0, 255, 0, 255];
 
 const Duration kSosTwoFingerHold = Duration(milliseconds: 1500);
 const int kSosRetries = 3;
@@ -211,7 +330,7 @@ const int kHardFrameBudgetMs = 280;
 
 
 
-const int kDetectIntervalSafetyCeilingMs = 550;
+const int kDetectIntervalSafetyCeilingMs = 500;
 
 
 
