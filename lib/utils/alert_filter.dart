@@ -23,6 +23,16 @@ class AlertCandidate {
   final int? trackId;
   final bool isGroupAlert;
 
+  
+  
+  
+  
+  
+  
+  
+  
+  final double? distanceM;
+
   const AlertCandidate({
     required this.text,
     required this.priority,
@@ -31,6 +41,7 @@ class AlertCandidate {
     required this.urgency,
     this.trackId,
     this.isGroupAlert = false,
+    this.distanceM,
   });
 }
 
@@ -40,10 +51,33 @@ class AlertFilter {
   final Map<AlertCategory, DateTime> _lastByCat = {};
   final Map<AlertCategory, DateTime> _lastCriticalByCat = {};
 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  final Map<AlertCategory, double> _lastCriticalDistMByCat = {};
+
   DateTime _lastSpokenAt = DateTime.fromMillisecondsSinceEpoch(0);
   AlertCategory? _lastCategory;
 
-  DateTime _suppressUntil = DateTime.fromMillisecondsSinceEpoch(0);
+  
+  
+  
+  
+  
+  
+  
+  final Map<AlertCategory, DateTime> _suppressUntilByCategory = {};
+
+  
+  static const double kEscalationDistanceFraction = 0.70;
 
   void add(AlertCandidate candidate) => _candidates.add(candidate);
 
@@ -110,7 +144,20 @@ class AlertFilter {
 
     if (picked.priority == SpeechPriority.critical) {
       _lastCriticalByCat[picked.category] = now;
-      _suppressUntil = now.add(const Duration(milliseconds: 2000));
+      
+      
+      
+      if (picked.distanceM != null && picked.distanceM! > 0) {
+        _lastCriticalDistMByCat[picked.category] = picked.distanceM!;
+      }
+      
+      
+      
+      
+      
+      
+      _suppressUntilByCategory[picked.category] =
+          now.add(const Duration(milliseconds: 2000));
     }
 
     return picked;
@@ -142,11 +189,32 @@ class AlertFilter {
               cand.category == AlertCategory.corridorBlocked
           ? kCriticalRepeatCooldownSafety
           : kCriticalRepeatCooldownDefault;
-      if (lastSameAt != null &&
-          now.difference(lastSameAt) < repeatCooldown) {
-        return false;
+      if (lastSameAt == null ||
+          now.difference(lastSameAt) >= repeatCooldown) {
+        return true;
       }
-      return true;
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      final lastDistM = _lastCriticalDistMByCat[cand.category];
+      final candDistM = cand.distanceM;
+      if (lastDistM != null &&
+          lastDistM > 0 &&
+          candDistM != null &&
+          candDistM > 0 &&
+          candDistM <= lastDistM * kEscalationDistanceFraction) {
+        return true;
+      }
+      return false;
     }
 
     final lastAt =
@@ -154,9 +222,17 @@ class AlertFilter {
     final catGap = _categoryCooldown(cand.category, trackCount, alertFrequency);
     if (now.difference(lastAt) < catGap) return false;
 
-    if (cand.category != AlertCategory.approachingVehicle &&
-        now.isBefore(_suppressUntil)) {
-      return false;
+    
+    
+    
+    
+    
+    
+    if (cand.category != AlertCategory.approachingVehicle) {
+      final suppressedUntil = _suppressUntilByCategory[cand.category];
+      if (suppressedUntil != null && now.isBefore(suppressedUntil)) {
+        return false;
+      }
     }
 
     if (cand.priority != SpeechPriority.critical &&
@@ -199,9 +275,10 @@ class AlertFilter {
     _candidates.clear();
     _lastSpokenAt = DateTime.fromMillisecondsSinceEpoch(0);
     _lastCategory = null;
-    _suppressUntil = DateTime.fromMillisecondsSinceEpoch(0);
+    _suppressUntilByCategory.clear();
     _lastByCat.clear();
     _lastCriticalByCat.clear();
+    _lastCriticalDistMByCat.clear();
   }
 
   Duration _categoryCooldown(
