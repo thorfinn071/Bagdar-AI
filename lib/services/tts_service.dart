@@ -15,6 +15,15 @@ class TtsService {
   
   
   
+  
+  
+  
+  
+  
+  
+  
+  
+  
   static const Duration _kCriticalStaleAfter = Duration(seconds: 4);
 
   
@@ -64,11 +73,19 @@ class TtsService {
       _pruneStaleCriticals(now, maxAge: maxAge);
 
   void _pruneStaleCriticals(DateTime now, {Duration? maxAge}) {
-    final threshold = maxAge ?? _kCriticalStaleAfter;
+    
+    
+    
+    
+    
+    
+    
+    
+    if (maxAge == null) return;
     _queue.removeWhere(
       (j) =>
           j.priority == SpeechPriority.critical &&
-          now.difference(j.enqueuedAt) > threshold,
+          now.difference(j.enqueuedAt) > maxAge,
     );
   }
 
@@ -432,18 +449,66 @@ class TtsService {
     if (_queue.any((j) => j.text == text)) return;
 
     if (_queue.length >= 4) {
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       int oldestInfoIdx = -1;
-      DateTime oldestTime = DateTime.now();
+      DateTime oldestInfoTime = DateTime.now();
+      int oldestWarnIdx = -1;
+      DateTime oldestWarnTime = DateTime.now();
       for (int i = 0; i < _queue.length; i++) {
-        if (_queue[i].priority == SpeechPriority.info &&
-            _queue[i].enqueuedAt.isBefore(oldestTime)) {
-          oldestTime = _queue[i].enqueuedAt;
+        final job = _queue[i];
+        if (job.priority == SpeechPriority.info &&
+            job.enqueuedAt.isBefore(oldestInfoTime)) {
+          oldestInfoTime = job.enqueuedAt;
           oldestInfoIdx = i;
+        } else if (job.priority == SpeechPriority.warning &&
+            job.enqueuedAt.isBefore(oldestWarnTime)) {
+          oldestWarnTime = job.enqueuedAt;
+          oldestWarnIdx = i;
         }
       }
+
+      int? evictIdx;
+      String? evictReason;
       if (oldestInfoIdx >= 0) {
-        _queue.removeAt(oldestInfoIdx);
+        evictIdx = oldestInfoIdx;
+        evictReason = 'queue_full_evict_oldest_info';
+      } else if (priority == SpeechPriority.warning && oldestWarnIdx >= 0) {
+        
+        
+        
+        evictIdx = oldestWarnIdx;
+        evictReason = 'queue_full_evict_oldest_warning';
+      }
+
+      if (evictIdx != null) {
+        final evicted = _queue.removeAt(evictIdx);
+        FieldLogger.instance.log('tts_queue_drop', {
+          'reason': evictReason,
+          'evicted_text': evicted.text,
+          'evicted_priority': evicted.priority.name,
+          'queued_at': evicted.enqueuedAt.toIso8601String(),
+          'incoming_text': text,
+          'incoming_priority': priority.name,
+        });
       } else {
+        
+        
+        
+        FieldLogger.instance.log('tts_queue_drop', {
+          'reason': 'queue_full_drop_incoming',
+          'evicted_text': text,
+          'evicted_priority': priority.name,
+        });
         return;
       }
     }
