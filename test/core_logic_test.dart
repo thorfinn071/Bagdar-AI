@@ -100,6 +100,9 @@ class _StubDepthProvider implements DepthProvider {
   bool get lastUsedNativeBridge => _lastUsedNativeBridge;
 
   @override
+  bool get lastPlaneFitOk => true;
+
+  @override
   void setNativeBridgeEnabled(bool enabled) {
     _nativeBridgeEnabled = enabled;
   }
@@ -315,6 +318,8 @@ void main() {
         }
       }
 
+      analyzer.analyze(map);
+      analyzer.analyze(map);
       final result = analyzer.analyze(map);
       expect(
         result.any((h) => h.zone == HazardZone.center && h.type == DepthHazardType.deadZone),

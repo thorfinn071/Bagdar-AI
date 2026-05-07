@@ -158,6 +158,42 @@ void main() {
         isTrue,
       );
     });
+
+    test(
+      'Safety audit 1.2: pruneStaleCriticals without an explicit maxAge is a '
+      'no-op — life-threatening alerts are never silently dropped',
+      () {
+        
+        
+        
+        
+        
+        
+        final svc = TtsService.forTesting();
+        svc.say('Stop! car approaching', SpeechPriority.critical);
+        svc.say('Stop! pothole ahead', SpeechPriority.critical);
+        expect(svc.queueSnapshot, hasLength(2));
+
+        
+        svc.pruneStaleCriticalsForTesting(
+          DateTime.now().add(const Duration(hours: 1)),
+        );
+
+        expect(
+          svc.queueSnapshot,
+          hasLength(2),
+          reason:
+              'Safety audit 1.2: critical alerts must never be dropped by a '
+              'default-aged prune pass. The old 4 s default would silently '
+              'discard a queued "Stop!" while a long info utterance was '
+              'mid-speech.',
+        );
+        expect(
+          svc.queueSnapshot.map((j) => j.text).toSet(),
+          {'Stop! car approaching', 'Stop! pothole ahead'},
+        );
+      },
+    );
   });
 
   group('TtsService queue — trackId eviction', () {

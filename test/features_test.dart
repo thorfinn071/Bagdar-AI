@@ -97,6 +97,9 @@ class _RecordingFallbackProvider implements DepthProvider {
   bool get lastUsedNativeBridge => false;
 
   @override
+  bool get lastPlaneFitOk => true;
+
+  @override
   Future<bool> init({int threads = 2}) async {
     _ready = true;
     return true;

@@ -31,6 +31,8 @@ class _StubFallback implements DepthProvider {
   @override
   bool get lastUsedNativeBridge => false;
   @override
+  bool get lastPlaneFitOk => true;
+  @override
   Future<bool> init({int threads = 2}) async => true;
   @override
   Future<List<DepthHazard>> analyze(

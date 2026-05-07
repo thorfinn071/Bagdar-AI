@@ -56,13 +56,46 @@ void main() {
       expect(thr.midasInterval(500).inMilliseconds, greaterThanOrEqualTo(1500));
     });
 
-    test('returns zero under critical memory pressure', () {
-      final t0 = DateTime(2025, 1, 1, 10, 0, 0);
-      final thr = PerformanceThrottler();
-      thr.setThermal(_readings(ThermalSeverity.normal), now: t0);
-      thr.setMemoryPressure(MemoryPressureLevel.critical);
-      expect(thr.midasInterval(500), Duration.zero);
-    });
+    test(
+      'Safety audit 9.2: critical memory pressure returns a long sentinel '
+      'interval that effectively DISABLES MiDaS, not Duration.zero (which '
+      'made shouldRun(now) trivially true and ran MiDaS every frame)',
+      () {
+        final t0 = DateTime(2025, 1, 1, 10, 0, 0);
+        final thr = PerformanceThrottler();
+        thr.setThermal(_readings(ThermalSeverity.normal), now: t0);
+        thr.setMemoryPressure(MemoryPressureLevel.critical);
+
+        final interval = thr.midasInterval(500);
+        expect(
+          interval,
+          kStationaryGateMidasOff,
+          reason:
+              'Safety audit 9.2: a "disabled" semantic must be a large '
+              'sentinel duration so DepthPipelineController.shouldRun() '
+              'returns false. Returning Duration.zero made shouldRun fire '
+              'every frame, the inversion of the intended throttle.',
+        );
+        expect(
+          interval.inSeconds,
+          greaterThan(60),
+          reason: 'sentinel must be far larger than any frame interval',
+        );
+      },
+    );
+
+    test(
+      'Safety audit 9.2: a non-positive battery hint also returns the '
+      '"disabled" sentinel rather than Duration.zero',
+      () {
+        final t0 = DateTime(2025, 1, 1, 10, 0, 0);
+        final thr = PerformanceThrottler();
+        thr.setThermal(_readings(ThermalSeverity.normal), now: t0);
+
+        expect(thr.midasInterval(0), kStationaryGateMidasOff);
+        expect(thr.midasInterval(-100), kStationaryGateMidasOff);
+      },
+    );
   });
 
   group('PerformanceThrottler thermal commit hysteresis', () {

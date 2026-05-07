@@ -109,4 +109,5 @@ class FeatureUsageKeys {
   static const String voiceCommandTotal = 'voice_command_used_total';
   static const String settingsOpened = 'settings_opened';
   static const String sosTriggered = 'sos_triggered';
+  static const String sceneNarration = 'scene_narration_triggered';
 }

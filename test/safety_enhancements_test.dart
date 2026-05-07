@@ -259,10 +259,14 @@ void main() {
       
       
       final map = makeStableHazardMap();
-      analyzer.analyze(map); 
-      analyzer.analyze(map); 
-      analyzer.analyze(map); 
-      final out = analyzer.analyze(map); 
+      // Warm up deadZoneStreak (requires 3 frames)
+      analyzer.analyze(map); // streak = 1
+      analyzer.analyze(map); // streak = 2
+      // Now fill temporal buffer (requires 4 matches)
+      analyzer.analyze(map); // streak = 3, match = 1
+      analyzer.analyze(map); // streak = 4, match = 2
+      analyzer.analyze(map); // streak = 5, match = 3
+      final out = analyzer.analyze(map); // streak = 6, match = 4
       expect(
         out.any((h) =>
             h.zone == HazardZone.center &&
@@ -273,8 +277,10 @@ void main() {
 
     test('cold-start emits unfiltered results until buffer is full', () {
       final analyzer = GroundPlaneAnalyzer();
-      
-      final first = analyzer.analyze(makeStableHazardMap());
+      final map = makeStableHazardMap();
+      analyzer.analyze(map);
+      analyzer.analyze(map);
+      final first = analyzer.analyze(map);
       expect(
         first.any((h) =>
             h.zone == HazardZone.center &&
@@ -291,7 +297,10 @@ void main() {
       analyzer.analyze(flat);
       
       analyzer.resetTemporalFilter();
-      final out = analyzer.analyze(makeStableHazardMap());
+      final map = makeStableHazardMap();
+      analyzer.analyze(map);
+      analyzer.analyze(map);
+      final out = analyzer.analyze(map);
       expect(
         out.any((h) =>
             h.zone == HazardZone.center &&
