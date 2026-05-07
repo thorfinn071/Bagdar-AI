@@ -74,6 +74,11 @@ class NcnnDepthProvider implements DepthProvider {
   @override
   bool get lastUsedNativeBridge => true;
 
+  
+  
+  @override
+  bool get lastPlaneFitOk => _analyzer.lastPlaneFitOk;
+
   @override
   void setNativeBridgeEnabled(bool enabled) {
     

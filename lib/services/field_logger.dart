@@ -101,6 +101,22 @@ class FieldLogger {
     });
   }
 
+  void logSceneNarration({
+    required int objectCount,
+    required int hazardCount,
+    required bool hasOcr,
+    required bool hasTrafficLight,
+    required int narrateLengthChars,
+  }) {
+    log('scene_narration', {
+      'objects': objectCount,
+      'hazards': hazardCount,
+      'ocr': hasOcr,
+      'tl': hasTrafficLight,
+      'len': narrateLengthChars,
+    });
+  }
+
   void logDepthHazard({
     required String type,
     required double score,

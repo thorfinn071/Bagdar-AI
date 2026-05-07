@@ -28,6 +28,16 @@ abstract class DepthProvider {
   double get lastInferenceMs;
   double get lastAnalyzeMs;
   bool get lastUsedNativeBridge;
+
+  
+  
+  
+  
+  
+  
+  
+  bool get lastPlaneFitOk;
+
   void setNativeBridgeEnabled(bool enabled);
   void dispose();
 }
@@ -105,6 +115,14 @@ class HardwareDepthProvider implements DepthProvider {
 
   @override
   bool get lastUsedNativeBridge => _lastUsedNativeBridge;
+
+  
+  
+  
+  
+  @override
+  bool get lastPlaneFitOk =>
+      _fallback?.lastPlaneFitOk ?? _analyzer.lastPlaneFitOk;
 
   Future<DepthProvider?> _ensureFallback({int threads = 2}) async {
     final existing = _fallback;
@@ -425,6 +443,11 @@ class FocalLengthDepthProvider implements DepthProvider {
 
   @override
   bool get lastUsedNativeBridge => false;
+
+  
+  
+  @override
+  bool get lastPlaneFitOk => true;
 
   @override
   Future<bool> init({int threads = 2}) async {
