@@ -12,6 +12,15 @@ class TrafficLightAnalyzer {
   static const int _mediumStableFramesRequired = 3;
   static const int _fastStableFramesRequired = 2;
   static const int _uncertainFramesRequired = 2;
+
+  
+  
+  
+  
+  
+  
+  
+  static const int _greenFastStableFramesFloor = 3;
   static const double _wideAspectPenaltyStart = 1.2;
   static const double _wideAspectPenaltyScale = 0.08;
   static const double _wideAspectPenaltyMax = 0.12;
@@ -82,6 +91,12 @@ class TrafficLightAnalyzer {
     required int bboxWidth,
     required int bboxHeight,
     double? confidence,
+    
+    
+    
+    
+    
+    TrafficLightColor candidateColor = TrafficLightColor.unknown,
   }) {
     if (bboxWidth <= 0 || bboxHeight <= 0) {
       return _stableFramesRequired;
@@ -105,6 +120,18 @@ class TrafficLightAnalyzer {
       } else if (confidence <= 0.25) {
         frames = min(_stableFramesRequired + 1, frames + 1);
       }
+    }
+
+    
+    
+    
+    
+    
+    
+    
+    if (candidateColor == TrafficLightColor.green ||
+        candidateColor == TrafficLightColor.yellow) {
+      frames = max(frames, _greenFastStableFramesFloor);
     }
 
     return frames;
@@ -133,12 +160,18 @@ class TrafficLightAnalyzer {
     final observation = _analyzeRegion(image, bboxX1, bboxY1, bboxX2, bboxY2);
     _lastConfidence = observation.confidence;
     _lastLowVisibility = observation.lowVisibility;
+    final raw = observation.color;
+    
+    
+    
+    
+    
     final requiredFrames = stableFramesRequiredForBox(
       bboxWidth: bboxW,
       bboxHeight: bboxH,
       confidence: observation.confidence,
+      candidateColor: raw,
     );
-    final raw = observation.color;
 
     if (raw == TrafficLightColor.unknown) {
       _unknownCount++;
@@ -301,7 +334,7 @@ class TrafficLightAnalyzer {
       vRowStride,
     );
 
-    final color = pickDominantColor(
+    var color = pickDominantColor(
       redScore: topBrightRed,
       yellowScore: midBrightYellow,
       greenScore: botBrightGreen,
@@ -325,6 +358,43 @@ class TrafficLightAnalyzer {
           : midBrightYellow;
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    if (color == TrafficLightColor.green ||
+        color == TrafficLightColor.yellow) {
+      final pickedScore = color == TrafficLightColor.green
+          ? botBrightGreen
+          : midBrightYellow;
+      if (pickedScore < _kGoColorMatchFloor) {
+        color = TrafficLightColor.unknown;
+      }
+    }
+
+    
+    
+    
+    
+    if (color != TrafficLightColor.unknown) {
+      final hasLuminousLed = _hasBrightLedZone(
+        yPlane,
+        yRowStride,
+        ix1,
+        iy1,
+        ix2,
+        iy2,
+      );
+      if (!hasLuminousLed) {
+        color = TrafficLightColor.unknown;
+      }
+    }
+
     final confidence = color == TrafficLightColor.unknown
         ? bestScore
         : (bestScore * 0.65 + (bestScore - secondScore).clamp(0.0, 1.0) * 0.35)
@@ -332,6 +402,40 @@ class TrafficLightAnalyzer {
     final lowVisibility = bestScore < (minScore + 0.03) || confidence < 0.25;
 
     return _TrafficLightObservation(color, confidence, lowVisibility);
+  }
+
+  
+  
+  static const double _kGoColorMatchFloor = 0.30;
+
+  
+  
+  
+  
+  
+  
+  static const double _kMinBrightLedFraction = 0.04;
+
+  bool _hasBrightLedZone(
+    Uint8List yPlane,
+    int yRowStride,
+    int x1,
+    int y1,
+    int x2,
+    int y2,
+  ) {
+    int brightCount = 0;
+    int total = 0;
+    final step = max(1, ((x2 - x1) * (y2 - y1)) > 400 ? 2 : 1);
+    for (int py = y1; py < y2; py += step) {
+      for (int px = x1; px < x2; px += step) {
+        final idx = py * yRowStride + px;
+        if (idx >= yPlane.length) continue;
+        total++;
+        if (yPlane[idx] >= 200) brightCount++;
+      }
+    }
+    return total > 0 && brightCount / total >= _kMinBrightLedFraction;
   }
 
   double _zoneBrightness(

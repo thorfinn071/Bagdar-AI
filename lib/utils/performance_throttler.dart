@@ -235,8 +235,19 @@ class PerformanceThrottler {
   }
 
   Duration midasInterval(int batteryMs) {
-    if (batteryMs <= 0) return Duration.zero;
-    if (_memory == MemoryPressureLevel.critical) return Duration.zero;
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    if (batteryMs <= 0) return kStationaryGateMidasOff;
+    if (_memory == MemoryPressureLevel.critical) {
+      return kStationaryGateMidasOff;
+    }
     
     
     
