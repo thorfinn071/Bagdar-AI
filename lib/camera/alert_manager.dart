@@ -8,6 +8,8 @@ import '../services/earcon_service.dart';
 import '../services/haptic_service.dart';
 import '../services/tts_service.dart';
 import '../services/acoustic_world_model.dart';
+import '../services/motion_prealert.dart'
+    show MotionEventClass, MotionIntrusionEvent, MotionIntrusionSide;
 import '../services/stereo_bearing_estimator.dart' show BearingSide;
 import '../tracker/track.dart';
 import '../tracker/tracker.dart' show isVehicle;
@@ -295,6 +297,76 @@ class AlertManager {
     }
   }
 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  AlertCandidate? handleMotionIntrusion(
+    MotionIntrusionEvent event, {
+    required String text,
+  }) {
+    final pan = switch (event.side) {
+      MotionIntrusionSide.left => -1.0,
+      MotionIntrusionSide.right => 1.0,
+      MotionIntrusionSide.center => 0.0,
+    };
+
+    
+    
+    
+    final isVehicleLike = event.classGuess == MotionEventClass.vehicleLike;
+    final category = isVehicleLike
+        ? AlertCategory.approachingVehicle
+        : AlertCategory.obstacleClose;
+
+    final priority = event.isCritical
+        ? SpeechPriority.critical
+        : SpeechPriority.warning;
+
+    
+    
+    final urgency = event.isCritical
+        ? 0.95
+        : (0.55 + 0.35 * event.strength).clamp(0.0, 0.90);
+
+    _filter.add(
+      AlertCandidate(
+        text: text,
+        priority: priority,
+        pan: pan,
+        category: category,
+        urgency: urgency,
+      ),
+    );
+
+    return _filter.flush(
+      0,
+      event.at,
+      verbosity: Settings.instance.verbosity,
+      alertFrequency: Settings.instance.alertFrequency,
+    );
+  }
+
   Track? processFrame({
     required List<Track> tracks,
     required int imgW,
@@ -515,8 +587,13 @@ class AlertManager {
   ) {
     Track? top;
     for (final t in tracks) {
+      
+      
+      
+      
       final bool labelThreat =
           t.approaching &&
+          t.avgConf >= kMinAlertConf &&
           (t.distM <= 0 || t.distM <= kApproachingLabelThreatMaxDistM);
       final bool kinematicThreat =
           !t.approaching &&
@@ -569,6 +646,10 @@ class AlertManager {
             pan: pan,
             category: AlertCategory.approachingVehicle,
             urgency: 0.85,
+            
+            
+            
+            distanceM: top.distM > 0 ? top.distM : null,
           ),
         );
       }
@@ -746,6 +827,8 @@ class AlertManager {
             category: AlertCategory.obstacleClose,
             urgency: score * t.avgConf,
             trackId: t.id,
+            
+            distanceM: t.distM > 0 ? t.distM : null,
           ),
         );
       } else {
@@ -763,6 +846,7 @@ class AlertManager {
             category: AlertCategory.obstacleFar,
             urgency: score * t.avgConf,
             trackId: t.id,
+            distanceM: t.distM > 0 ? t.distM : null,
           ),
         );
       }
