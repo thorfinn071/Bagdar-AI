@@ -462,6 +462,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'nav_maybe_off_route': 'Возможно, вы отклоняетесь от маршрута.',
     'pitch_too_high': 'Наклоните телефон ниже для сканирования земли.',
     'pitch_too_low': 'Поднимите телефон чуть выше.',
+    'pitch_misaligned_blind':
+        'Поднимите телефон — я не вижу дорогу.',
     'curtain_on': 'Экранная шторка включена. Экран скрыт.',
     'curtain_off': 'Экранная шторка выключена.',
     'help_summary':
@@ -1152,6 +1154,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'nav_maybe_off_route': 'Маршруттан ауытқып жатқан шығарсыз.',
     'pitch_too_high': 'Жерді сканерлеу үшін телефонды төмен еңкейтіңіз.',
     'pitch_too_low': 'Телефонды сәл жоғары көтеріңіз.',
+    'pitch_misaligned_blind':
+        'Телефонды көтеріңіз — мен жолды көрмеймін.',
     'curtain_on': 'Экран пердесі қосулы. Экран жасырын.',
     'curtain_off': 'Экран пердесі өшірулі.',
     'help_summary':
@@ -1841,6 +1845,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'nav_maybe_off_route': 'You might be off route.',
     'pitch_too_high': 'Tilt phone downwards to scan the floor.',
     'pitch_too_low': 'Tilt phone slightly up.',
+    'pitch_misaligned_blind':
+        "Raise the phone — I can't see the road.",
     'curtain_on': 'Screen curtain on. Screen hidden.',
     'curtain_off': 'Screen curtain off.',
     'help_summary':

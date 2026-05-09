@@ -42,6 +42,7 @@ import 'services/fall_detector.dart' show MotionState;
 import 'services/feature_usage_tracker.dart';
 import 'services/field_logger.dart';
 import 'services/indoor_gate.dart';
+import 'services/misalignment_watchdog.dart';
 import 'camera/frame_quality_guard.dart';
 import 'camera/depth_pipeline_controller.dart';
 import 'camera/stall_watchdog.dart';
@@ -173,6 +174,10 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   DateTime _lastMidasModeAnnounceAt = DateTime.fromMillisecondsSinceEpoch(0);
   static const Duration _kMidasModeAnnounceCooldown = Duration(seconds: 30);
 
+  final MisalignmentWatchdog _misalignmentWatchdog = MisalignmentWatchdog();
+  Timer? _misalignmentTickTimer;
+  static const Duration _kMisalignmentTickInterval = Duration(seconds: 1);
+
   @override
   void initState() {
     super.initState();
@@ -251,9 +256,42 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _fallCountdown.addListener(() {
       if (mounted) setState(() {});
     });
+    _vm.tracksNotifier.addListener(_onTracksUpdatedForWatchdog);
+    _misalignmentTickTimer = Timer.periodic(
+      _kMisalignmentTickInterval,
+      (_) => _misalignmentTick(),
+    );
     WidgetsBinding.instance.addObserver(this);
     _initAll();
     _applySosTriggerListener();
+  }
+
+  void _onTracksUpdatedForWatchdog() {
+    if (_vm.tracksNotifier.value.isNotEmpty) {
+      _misalignmentWatchdog.noteDetection();
+    }
+  }
+
+  void _misalignmentTick() {
+    if (!mounted) return;
+    _misalignmentWatchdog.notePitchState(_vm.orientation.state);
+    _misalignmentWatchdog.noteMotionState(_vm.fallDetector.motionState);
+    final result = _misalignmentWatchdog.tick();
+    if (result.fireHaptic) {
+      HapticService.vibrate(const [0, 60, 60, 60]);
+    }
+    if (result.shouldAnnounce) {
+      _vm.tts.say(
+        S.get(result.announceKey!),
+        result.announcePriority!,
+        pan: 0.0,
+      );
+      _fieldLog.log('misalignment_announced', {
+        'priority': result.announcePriority!.name,
+        'sustained_since': _misalignmentWatchdog.sustainedSinceAt
+            ?.toIso8601String(),
+      });
+    }
   }
 
   @override
@@ -267,6 +305,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _fallCountdown.dispose();
     _stallWatchdog.stop();
     _indoorPollTimer?.cancel();
+    _misalignmentTickTimer?.cancel();
+    _vm.tracksNotifier.removeListener(_onTracksUpdatedForWatchdog);
     _lifecycle.dispose();
     _controller?.dispose();
     _controller = null;
@@ -1272,6 +1312,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   ) {
     
     if (!mounted) return;
+    _misalignmentWatchdog.noteDepthStatus(to);
 
     
     
