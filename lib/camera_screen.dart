@@ -88,6 +88,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   TrafficLightColor? _lastAnnouncedLight;
 
   Timer? _heartbeatTimer;
+  int _detectionCompletions = 0;
+  int _lowFpsStreak = 0;
+  DateTime _fpsWindowStart = DateTime.now();
   Timer? _resourceLogTimer;
 
   Timer? _twoFingerSosTimer;
@@ -164,6 +167,12 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   final Map<FrameQualityEventType, DateTime> _lastQualityTtsAt = {};
   static const Duration _kQualityEventCooldown = Duration(seconds: 30);
 
+  
+  
+  
+  DateTime _lastMidasModeAnnounceAt = DateTime.fromMillisecondsSinceEpoch(0);
+  static const Duration _kMidasModeAnnounceCooldown = Duration(seconds: 30);
+
   @override
   void initState() {
     super.initState();
@@ -179,6 +188,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     
     
     _depthController.onStatusChanged = _onDepthStatusChanged;
+    _vm.throttler.onMidasPauseChanged = _onMidasPauseChanged;
     _lifecycle = CameraLifecycleController(
       host: this,
       tts: _vm.tts,
@@ -544,6 +554,34 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     try {
       const MethodChannel('bagdar/watchdog').invokeMethod('ping');
     } catch (_) {}
+
+    final windowSec = now.difference(_fpsWindowStart).inMilliseconds / 1000.0;
+    final effFps = windowSec > 0 ? _detectionCompletions / windowSec : 0.0;
+    _fieldLog.log('effective_fps', {
+      'fps': (effFps * 10).round() / 10.0,
+      'mode': _vm.mode.name,
+      'thermal': _vm.thermal.severity.name,
+      'completions': _detectionCompletions,
+    });
+
+    final isSafetyMode =
+        _vm.mode == AppMode.street || _vm.mode == AppMode.cane;
+    final notThermalCritical = _vm.thermal.severity != ThermalSeverity.critical;
+    if (effFps < 3.0 && isSafetyMode && notThermalCritical) {
+      _lowFpsStreak++;
+      if (_lowFpsStreak >= 2) {
+        _vm.tts.say(
+          S.get('camera_stalled'),
+          SpeechPriority.warning,
+          pan: 0.0,
+        );
+        _lowFpsStreak = 0;
+      }
+    } else {
+      _lowFpsStreak = 0;
+    }
+    _detectionCompletions = 0;
+    _fpsWindowStart = now;
 
     final desired = _currentHeartbeatInterval();
     if (_heartbeatTimer == null || _heartbeatTimer!.tick == 0) return;
@@ -976,14 +1014,24 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     
     
     
-    if ((_vm.mode == AppMode.street || _vm.mode == AppMode.cane) &&
-        !_vm.isIndoor) {
+    if (_vm.mode == AppMode.street || _vm.mode == AppMode.cane) {
       final event = _vm.motionPreAlert.feed(
         image,
         now,
         weatherDegraded: _vm.weatherGate.degraded,
+        aeTransitioning: qualityReport.aePipelineFrozen,
+        indoor: _vm.isIndoor,
       );
-      if (event != null) _handleMotionIntrusion(event);
+      if (event != null) {
+        _handleMotionIntrusion(event);
+        if (_vm.isIndoor) {
+          _fieldLog.log('motion_prealert_indoor', {
+            'side': event.side.name,
+            'critical': event.isCritical,
+            'strength': (event.strength * 100).round(),
+          });
+        }
+      }
     }
 
     _vm.objectMemoryFeed(image, now);
@@ -1254,6 +1302,32 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     }
   }
 
+  
+  
+  
+  
+  
+  
+  
+  void _onMidasPauseChanged(bool paused) {
+    if (!mounted) return;
+    final now = DateTime.now();
+    if (now.difference(_lastMidasModeAnnounceAt) <
+        _kMidasModeAnnounceCooldown) {
+      _fieldLog.log('midas_pause_changed_suppressed', {
+        'paused': paused,
+        'reason': 'cooldown',
+      });
+      return;
+    }
+    _lastMidasModeAnnounceAt = now;
+    final key = paused ? 'reduced_mode_depth' : 'reduced_mode_restored';
+    final priority =
+        paused ? SpeechPriority.warning : SpeechPriority.info;
+    _fieldLog.log('midas_pause_changed', {'paused': paused});
+    _vm.tts.say(S.alert(key), priority, pan: 0.0);
+  }
+
   void _handleMotionIntrusion(MotionIntrusionEvent event) {
     final pan = switch (event.side) {
       MotionIntrusionSide.left => -1.0,
@@ -1505,6 +1579,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
   void _finalizeFramePerf({required DateTime now, required Stopwatch frameSw}) {
     _vm.throttler.update(frameSw.elapsedMilliseconds.toDouble(), now);
+    _detectionCompletions++;
   }
 
   void _openGestureTutorial() {

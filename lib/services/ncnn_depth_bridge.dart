@@ -20,10 +20,10 @@ typedef _InferDart = int Function(
 typedef _DisposeNative = Void Function();
 typedef _DisposeDart = void Function();
 
-
-
-
-
+/// Thin FFI wrapper around the NCNN-based MiDaS inference functions exported
+/// by `libbagdar_native.so`. The native side is optional — when the library
+/// was built without NCNN (third_party libs absent), [tryCreate] returns null
+/// and callers should fall back to TFLite or focal-length depth.
 class NcnnDepthBridge {
   static const int inputSize = 256;
   static const int outputLength = inputSize * inputSize;
@@ -93,9 +93,9 @@ class NcnnDepthBridge {
     }
   }
 
-  
-  
-  
+  /// Runs MiDaS depth on the camera Y-plane. Returns the 256x256 inverse-depth
+  /// map as a Float32List (view into native memory; valid until next call).
+  /// Returns null on error.
   Float32List? inferYuv({
     required Uint8List yBytes,
     required int srcWidth,

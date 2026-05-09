@@ -26,12 +26,12 @@ class ArCoreDepthWhitelist {
     'Pixel Fold',
   };
 
-  
-  
-  
-  
+  // Устройства, на которых ARCore depth API заявляет поддержку
+  // (`isSupported() == true`), но native libarcore_c.so крашится через
+  // 25–60 секунд работы (SIGSEGV в MTC_vio thread).
+  // Field-проверено через adb logcat tombstone.
   static const Set<String> _knownUnsupportedModels = {
-    'BRP-NX1', 
+    'BRP-NX1', // Honor X8b/X9b — ARCore VIO native crash @ ~25s
     'BRP_NX1',
   };
 

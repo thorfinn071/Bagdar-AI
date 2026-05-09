@@ -10,6 +10,7 @@ enum MemoryPressureLevel { normal, low, critical }
 class PerformanceThrottler {
   double _avgInfMs = 0;
   DateTime _midasPausedUntil = DateTime.fromMillisecondsSinceEpoch(0);
+  bool _midasPaused = false;
   DateTime _lastFpsTick = DateTime.now();
   int _frameCount = 0;
   double _detectFps = 0;
@@ -17,6 +18,12 @@ class PerformanceThrottler {
   int _thermalBurstCount = 0;
   static const int _kThermalBurstFrames = 3;
   static const int _kThermalIdleMs = 500;
+
+  /// Fires once on each transition between MiDaS-running and MiDaS-paused
+  /// (driven by thermal/memory/inference pressure inside [update]). Used by
+  /// camera_screen.dart to announce "reduced mode" / "depth restored" via
+  /// TTS — same one-shot pattern as DepthPipelineController.onStatusChanged.
+  void Function(bool midasPaused)? onMidasPauseChanged;
   
   
   
@@ -146,6 +153,14 @@ class PerformanceThrottler {
       _midasPausedUntil = DateTime.fromMillisecondsSinceEpoch(0);
     }
 
+    // Detect pause-state transition exactly once per flip so the host can
+    // speak a single "reduced mode" / "depth restored" announcement.
+    final pausedNow = now.isBefore(_midasPausedUntil);
+    if (pausedNow != _midasPaused) {
+      _midasPaused = pausedNow;
+      onMidasPauseChanged?.call(pausedNow);
+    }
+
     _frameCount++;
     final fpsNow = DateTime.now();
     final diffMs = fpsNow.difference(_lastFpsTick).inMilliseconds;
@@ -218,7 +233,12 @@ class PerformanceThrottler {
         requestedMs = math.max(batteryMs, (perfMs + thermalPenalty ~/ 2));
       } else {
         _thermalBurstCount = 0;
-        requestedMs = math.max(batteryMs, _kThermalIdleMs + base);
+        // 2 FPS floor: idle gap must never exceed 500 ms even when
+        // base is large due to memory pressure or slow inference.
+        requestedMs = math.min(
+          math.max(batteryMs, _kThermalIdleMs + base),
+          kDetectIntervalSafetyCeilingMs,
+        );
       }
     } else {
       _thermalBurstCount = 0;

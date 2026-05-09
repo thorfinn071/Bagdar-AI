@@ -6,17 +6,17 @@ enum DepthHazardType {
   lowCurb,
   deadZone,
   stairsDown,
-  
-  
-  
-  
-  
+  // OPT-14: detected when a periodic "stairs" depth signal drifts across
+  // consecutive analyse() calls while the user is confidently stationary —
+  // a signature of a moving escalator. Emitted at info level (haptic only)
+  // so we avoid the critical spam that the plain stairs detector used to
+  // generate every few seconds when the user was simply riding.
   escalatorRiding,
-  
-  
-  
-  
-  
+  // OPT-21: detected when the bottom-15% depth-band jumps closer than the
+  // rolling baseline by ≥ _kNearFieldJumpThreshold while the user is
+  // walking — a signature of a low obstacle (stroller, bollard, luggage)
+  // moving into the blind zone below the camera FOV. Info/warning level
+  // because the detection is geometric rather than semantic.
   nearFieldIntrusion,
   overhead,
   glassDoor,

@@ -101,22 +101,6 @@ class FieldLogger {
     });
   }
 
-  void logSceneNarration({
-    required int objectCount,
-    required int hazardCount,
-    required bool hasOcr,
-    required bool hasTrafficLight,
-    required int narrateLengthChars,
-  }) {
-    log('scene_narration', {
-      'objects': objectCount,
-      'hazards': hazardCount,
-      'ocr': hasOcr,
-      'tl': hasTrafficLight,
-      'len': narrateLengthChars,
-    });
-  }
-
   void logDepthHazard({
     required String type,
     required double score,
@@ -334,6 +318,22 @@ class FieldLogger {
     log('sos_trigger', {
       'source': source,
       if (result != null) 'result': result,
+    });
+  }
+
+  void logSceneNarration({
+    required int objectCount,
+    required int hazardCount,
+    bool hasOcr = false,
+    bool hasTrafficLight = false,
+    required int narrateLengthChars,
+  }) {
+    log('scene_narration', {
+      'objectCount': objectCount,
+      'hazardCount': hazardCount,
+      'hasOcr': hasOcr,
+      'hasTrafficLight': hasTrafficLight,
+      'lengthChars': narrateLengthChars,
     });
   }
 

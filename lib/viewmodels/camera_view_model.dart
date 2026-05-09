@@ -37,11 +37,11 @@ import '../services/motion_prealert.dart';
 import '../services/weather_gate.dart';
 import '../services/indoor_gate.dart';
 import '../services/object_memory_service.dart';
+import '../services/acoustic_world_model.dart';
 import '../camera/object_finder_session.dart';
 
 import '../services/orientation_service.dart';
 import '../services/step_service.dart';
-import '../services/acoustic_world_model.dart';
 
 class CameraViewModel extends ChangeNotifier {
   final Tracker tracker = Tracker();
@@ -70,13 +70,13 @@ class CameraViewModel extends ChangeNotifier {
   
   
   final IndoorGate indoorGate = IndoorGate();
-  final AcousticWorldModel awm = AcousticWorldModel();
 
   late final AlertManager alertMgr;
   late final ProximityBeaconService proximityBeacon;
   late final NavigationService nav;
   late final PaymentSmsService paymentSms;
   final ObjectMemoryService objectMemory = ObjectMemoryService();
+  final AcousticWorldModel awm = AcousticWorldModel();
   late final ObjectFinderSession objectFinder;
 
   AppMode mode = AppMode.street;
@@ -242,19 +242,17 @@ class CameraViewModel extends ChangeNotifier {
         'ObjectMemory',
         objectMemory.init(tts: tts, earcon: earcon),
       ),
+      _initService('AWM', awm.init()),
     ];
 
     await Future.wait(services);
 
-    if (Settings.instance.acousticWorldModel) {
-      awm.onAcousticEvent = (event) {
-        alertMgr.handleAcousticEvent(event);
-      };
-      awm.onReverbEstimate = (estimate) {
-        indoorGate.feedAcousticPrior(estimate);
-      };
-      await _initService('AWM', awm.init());
-    }
+    awm.onAcousticEvent = (event) {
+      alertMgr.handleAcousticEvent(event);
+    };
+    awm.onReverbEstimate = (estimate) {
+      indoorGate.feedAcousticPrior(estimate);
+    };
 
     applyA11yPrefs();
 

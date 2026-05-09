@@ -14,12 +14,6 @@ void loadFocalLength() {
   if (saved > 0) _currentFocalLength = saved;
 }
 
-void loadFocalLengthFromCamera(double focalLengthMm, double sensorWidthMm, int imageWidthPx) {
-  if (focalLengthMm > 0 && sensorWidthMm > 0 && imageWidthPx > 0) {
-    _currentFocalLength = (focalLengthMm * imageWidthPx) / sensorWidthMm;
-  }
-}
-
 Future<void> calibrateFocalLength(
   String label,
   double x1,
@@ -66,6 +60,39 @@ double smoothDistM(double prev, double raw, {double alpha = 0.25}) {
   if (raw <= 0) return prev;
   if (prev <= 0) return raw;
   return prev * (1.0 - alpha) + raw * alpha;
+}
+
+class DistanceCrossCheck {
+  final double adjustedM;
+  final bool disagreement;
+  const DistanceCrossCheck(this.adjustedM, this.disagreement);
+}
+
+DistanceCrossCheck crossCheckDistance({
+  required double bboxM,
+  required double midasRelative,
+  required bool isCalibrated,
+  double trustWeight = 0.5,
+}) {
+  if (bboxM <= 0) return DistanceCrossCheck(bboxM, false);
+
+  if (midasRelative <= 0) {
+    return DistanceCrossCheck(bboxM, false);
+  }
+
+  if (!isCalibrated) {
+    return DistanceCrossCheck(bboxM, false);
+  }
+
+  final midasMetric = midasRelative * _currentFocalLength / 500.0;
+  if (midasMetric <= 0) return DistanceCrossCheck(bboxM, false);
+
+  final relDiff = (bboxM - midasMetric).abs() / bboxM;
+  if (relDiff > 0.5) {
+    final blended = bboxM * (1.0 - trustWeight) + midasMetric * trustWeight;
+    return DistanceCrossCheck(blended, true);
+  }
+  return DistanceCrossCheck(bboxM, false);
 }
 
 String distByBox(double areaRatio, double heightRatio, double bottomRatio) {

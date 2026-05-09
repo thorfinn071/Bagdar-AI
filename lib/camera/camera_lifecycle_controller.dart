@@ -25,6 +25,7 @@ abstract class CameraLifecycleHost {
 }
 
 class CameraLifecycleController {
+  static const Duration kLazyDisposeDuration = Duration(seconds: 10);
   static const Duration kReinitHeartbeatPeriod = Duration(seconds: 2);
 
   final CameraLifecycleHost host;
@@ -33,6 +34,7 @@ class CameraLifecycleController {
   final IndoorGate indoorGate;
   final VoidCallback? onBackgroundVibrate;
 
+  Timer? _lazyDisposeTimer;
   bool _streamPaused = false;
   Timer? _reinitHeartbeat;
   bool _backgroundWarned = false;
@@ -68,6 +70,13 @@ class CameraLifecycleController {
       } catch (_) {}
       _streamPaused = true;
       host.isCameraReady = false;
+
+      _lazyDisposeTimer?.cancel();
+      _lazyDisposeTimer = Timer(kLazyDisposeDuration, () {
+        host.cameraController?.dispose();
+        host.cameraController = null;
+        _streamPaused = false;
+      });
     }
 
     fieldLog.logLifecycle('paused');
@@ -79,7 +88,7 @@ class CameraLifecycleController {
         SpeechPriority.critical,
         pan: 0.0,
       );
-      HapticService.vibrate(const [0, 200, 100, 200], critical: true);
+      HapticService.vibrate(const [0, 200, 100, 200, 100, 200]);
       onBackgroundVibrate?.call();
     }
   }
@@ -89,6 +98,9 @@ class CameraLifecycleController {
       _backgroundWarned = false;
       tts.say(S.get('lifecycle_resumed'), SpeechPriority.info, pan: 0.0);
     }
+
+    _lazyDisposeTimer?.cancel();
+    _lazyDisposeTimer = null;
 
     final ctrl = host.cameraController;
     if (ctrl != null && ctrl.value.isInitialized && _streamPaused) {
@@ -108,7 +120,7 @@ class CameraLifecycleController {
       _reinitHeartbeat?.cancel();
       _reinitHeartbeat = Timer.periodic(
         kReinitHeartbeatPeriod,
-        (_) {},
+        (_) => HapticService.vibrate(const [0, 60]),
       );
       fieldLog.logLifecycle('resumed', resumeType: 'cold');
       unawaited(host.initCamera());
@@ -123,6 +135,8 @@ class CameraLifecycleController {
   }
 
   void dispose() {
+    _lazyDisposeTimer?.cancel();
+    _lazyDisposeTimer = null;
     _reinitHeartbeat?.cancel();
     _reinitHeartbeat = null;
   }

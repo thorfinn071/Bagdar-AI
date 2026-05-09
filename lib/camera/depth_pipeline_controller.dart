@@ -84,6 +84,8 @@ class DepthPipelineController {
   void Function(DepthPipelineStatus from, DepthPipelineStatus to)?
       onStatusChanged;
 
+  void Function(String reason, double confidence)? onFrameRejected;
+
   DepthPipelineStatus get status => _status;
 
   DepthPipelineController({required this.vm, required this.models});
@@ -163,6 +165,10 @@ class DepthPipelineController {
       _inFlight = false;
       _consecutiveLowConfidenceFrames++;
       _consecutivePlaneFitFailures = 0;
+      onFrameRejected?.call(
+        'low_confidence',
+        provider.lastConfidenceScore,
+      );
       if (_consecutiveLowConfidenceFrames >= _kDegradedFramesToAnnounce) {
         _setStatus(DepthPipelineStatus.lowConfidence);
       }
