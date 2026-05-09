@@ -454,14 +454,13 @@ void main() {
       );
 
       test(
-        'curb / lowCurb / stepUp / slippery / deadZone never become '
-        'critical via this path (they remain warnings)',
+        'curb / lowCurb / stepUp / deadZone never become critical via this '
+        'path (they remain warnings)',
         () {
           for (final type in const [
             DepthHazardType.curb,
             DepthHazardType.lowCurb,
             DepthHazardType.stepUp,
-            DepthHazardType.slippery,
             DepthHazardType.deadZone,
           ]) {
             expect(
@@ -476,6 +475,71 @@ void main() {
                   'hazards under cooldown.',
             );
           }
+        },
+      );
+
+      test(
+        'slippery in the centre walking corridor while moving is critical',
+        () {
+          expect(
+            DepthPipelineController.isHazardCriticalForTesting(
+              make(DepthHazardType.slippery, score: 0.55),
+              rollExcessive: false,
+              userStationary: false,
+            ),
+            isTrue,
+            reason: 'black ice ahead while the user is walking is the leading '
+                'cause of pedestrian injury in northern climates and must '
+                'barge-in, not queue behind info chatter.',
+          );
+        },
+      );
+
+      test(
+        'slippery off-corridor stays warning even at high score',
+        () {
+          for (final zone in const [HazardZone.left, HazardZone.right]) {
+            expect(
+              DepthPipelineController.isHazardCriticalForTesting(
+                make(DepthHazardType.slippery, score: 0.90, zone: zone),
+                rollExcessive: false,
+                userStationary: false,
+              ),
+              isFalse,
+              reason: 'slippery away from the walking corridor is not a '
+                  'stop-now hazard',
+            );
+          }
+        },
+      );
+
+      test(
+        'slippery while user is stationary stays warning regardless of score',
+        () {
+          expect(
+            DepthPipelineController.isHazardCriticalForTesting(
+              make(DepthHazardType.slippery, score: 0.95),
+              rollExcessive: false,
+              userStationary: true,
+            ),
+            isFalse,
+            reason: 'a stationary user is not about to slip on the patch '
+                'they can already see in front of them',
+          );
+        },
+      );
+
+      test(
+        'slippery below the score floor stays warning',
+        () {
+          expect(
+            DepthPipelineController.isHazardCriticalForTesting(
+              make(DepthHazardType.slippery, score: 0.49),
+              rollExcessive: false,
+              userStationary: false,
+            ),
+            isFalse,
+          );
         },
       );
     },

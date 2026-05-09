@@ -217,7 +217,11 @@ class DepthPipelineController {
       });
       final out = <DepthHazardAlert>[];
       for (final h in filteredHazards) {
-        bool isCritical = _isHazardCritical(h, rollExcessive: rollExcessive);
+        bool isCritical = _isHazardCritical(
+          h,
+          rollExcessive: rollExcessive,
+          userStationary: userStationary,
+        );
 
         
         
@@ -315,53 +319,49 @@ class DepthPipelineController {
   
   static const double _kCriticalCenterScore = 0.65;
   static const double _kCriticalNearFieldScore = 0.55;
+  static const double _kCriticalSlipperyScore = 0.50;
 
   static bool isHazardCriticalForTesting(
     DepthHazard hazard, {
     required bool rollExcessive,
+    bool userStationary = false,
   }) =>
-      _isHazardCritical(hazard, rollExcessive: rollExcessive);
+      _isHazardCritical(
+        hazard,
+        rollExcessive: rollExcessive,
+        userStationary: userStationary,
+      );
 
   static bool _isHazardCritical(
     DepthHazard hazard, {
     required bool rollExcessive,
+    bool userStationary = false,
   }) {
-    
-    
     if (rollExcessive) return false;
 
     switch (hazard.type) {
-      
       case DepthHazardType.stairsDown:
       case DepthHazardType.overhead:
         return true;
 
-      
-      
-      
       case DepthHazardType.pothole:
       case DepthHazardType.stepDown:
       case DepthHazardType.glassDoor:
         return _isCenterZone(hazard.zone) &&
             hazard.midasScore >= _kCriticalCenterScore;
 
-      
-      
-      
       case DepthHazardType.nearFieldIntrusion:
         return hazard.midasScore >= _kCriticalNearFieldScore;
 
-      
-      
-      
-      
-      
-      
+      case DepthHazardType.slippery:
+        return !userStationary &&
+            _isCenterZone(hazard.zone) &&
+            hazard.midasScore >= _kCriticalSlipperyScore;
+
       case DepthHazardType.stepUp:
       case DepthHazardType.curb:
       case DepthHazardType.lowCurb:
       case DepthHazardType.deadZone:
-      case DepthHazardType.slippery:
       case DepthHazardType.escalatorRiding:
       case DepthHazardType.unknown:
         return false;
