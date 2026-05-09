@@ -1,8 +1,13 @@
+import 'dart:typed_data';
+
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:bagdar/camera/depth_pipeline_controller.dart';
 import 'package:bagdar/models/constants.dart';
 import 'package:bagdar/models/speech_job.dart';
+import 'package:bagdar/services/motion_prealert.dart';
+import 'package:bagdar/tracker/raw_det.dart';
+import 'package:bagdar/tracker/tracker.dart';
 import 'package:bagdar/utils/alert_filter.dart';
 import 'package:bagdar/utils/depth_hazard.dart';
 
@@ -471,6 +476,285 @@ void main() {
                   'hazards under cooldown.',
             );
           }
+        },
+      );
+    },
+  );
+
+  group(
+    'Safety audit 2.5: preserve approaching across short predict-only '
+    'gaps (lib/tracker/tracker.dart)',
+    () {
+      RawDet det({
+        required String label,
+        required double x1,
+        required double y1,
+        required double x2,
+        required double y2,
+        double conf = 0.75,
+      }) {
+        return RawDet(
+          label: label,
+          x1: x1,
+          y1: y1,
+          x2: x2,
+          y2: y2,
+          cx: (x1 + x2) / 2.0,
+          cy: (y1 + y2) / 2.0,
+          conf: conf,
+          dist: 'far',
+          distM: 0.0,
+        );
+      }
+
+      
+      
+      
+      
+      
+      void confirmApproaching(Tracker tr, DateTime base) {
+        tr.update(
+          [det(label: 'car', x1: 200, y1: 200, x2: 260, y2: 260)],
+          640,
+          480,
+          base,
+        );
+        tr.update(
+          [det(label: 'car', x1: 195, y1: 193, x2: 280, y2: 285)],
+          640,
+          480,
+          base.add(const Duration(milliseconds: 200)),
+        );
+        final out = tr.update(
+          [det(label: 'car', x1: 190, y1: 185, x2: 330, y2: 330)],
+          640,
+          480,
+          base.add(const Duration(milliseconds: 700)),
+        );
+        expect(out, hasLength(1));
+        expect(
+          out.single.approaching,
+          isTrue,
+          reason: 'pre-condition: vehicle approach must fire to set up '
+              'the test',
+        );
+      }
+
+      test(
+        'a 2-frame predict-only burst (e.g. brief blur) does NOT erase the '
+        'approaching flag on re-match — was the dominant false-negative '
+        'in audit 2.5',
+        () {
+          final tr = Tracker();
+          final base = DateTime(2025, 1, 1, 12);
+          confirmApproaching(tr, base);
+
+          
+          
+          tr.predict();
+          tr.predict();
+
+          
+          
+          final after = tr.update(
+            [det(label: 'car', x1: 188, y1: 183, x2: 332, y2: 332)],
+            640,
+            480,
+            base.add(const Duration(milliseconds: 900)),
+          );
+          expect(after, hasLength(1));
+          expect(
+            after.single.approaching,
+            isTrue,
+            reason: 'audit 2.5: short predict-only gaps must preserve '
+                'approaching so the alert manager keeps treating the car '
+                'as a threat after blur clears.',
+          );
+        },
+      );
+
+      test(
+        'beyond the 3-frame preservation window predict-only clears '
+        'approaching to avoid stale alerts on a drifted predicted box',
+        () {
+          final tr = Tracker();
+          final base = DateTime(2025, 1, 1, 12);
+          confirmApproaching(tr, base);
+
+          
+          
+          List predicted = const [];
+          for (int i = 0; i < 5; i++) {
+            predicted = tr.predict();
+          }
+
+          expect(predicted, hasLength(1));
+          expect(
+            (predicted.single as dynamic).approaching,
+            isFalse,
+            reason: 'audit 2.5: after 4+ predict-only frames the kalman '
+                'box has drifted enough that the prior approaching flag '
+                'is untrustworthy; clear it to avoid stale alerts.',
+          );
+        },
+      );
+    },
+  );
+
+  group(
+    'Safety audit 2.6: fast-track requires 2 frames OR audio '
+    'corroboration (lib/tracker/tracker.dart)',
+    () {
+      RawDet vehicleAhead({double conf = 0.75}) => RawDet(
+            label: 'person',
+            x1: 100,
+            y1: 100,
+            x2: 200,
+            y2: 380,
+            cx: 150,
+            cy: 240,
+            conf: conf,
+            dist: 'very close',
+            distM: 0.9,
+          );
+
+      test(
+        'a single-frame near very-close detection at 0.75 conf is '
+        'suppressed without an audio corroboration — was firing a '
+        'critical on 1 frame before audit 2.6',
+        () {
+          final tr = Tracker();
+          final out = tr.update(
+            [vehicleAhead()],
+            640,
+            480,
+            DateTime(2025, 1, 1, 12),
+          );
+          expect(
+            out,
+            isEmpty,
+            reason: 'audit 2.6: vision-only single-frame critical is too '
+                'unreliable; require 2 confirmed frames or audio.',
+          );
+        },
+      );
+
+      test(
+        'a single-frame detection at conf 0.75 fires when the acoustic '
+        'model has emitted vehicleApproaching within the last 1 s',
+        () {
+          final now = DateTime(2025, 1, 1, 12);
+          final tr = Tracker()
+            ..lastVehicleApproachingAcousticAt =
+                now.subtract(const Duration(milliseconds: 800));
+          final out = tr.update([vehicleAhead()], 640, 480, now);
+          expect(out, hasLength(1));
+          expect(out.single.fastTrack, isTrue);
+        },
+      );
+
+      test(
+        'an acoustic event older than 1 s does NOT corroborate (window '
+        'is short on purpose — stale audio is not a valid signal)',
+        () {
+          final now = DateTime(2025, 1, 1, 12);
+          final tr = Tracker()
+            ..lastVehicleApproachingAcousticAt =
+                now.subtract(const Duration(milliseconds: 1500));
+          final out = tr.update([vehicleAhead()], 640, 480, now);
+          expect(out, isEmpty);
+        },
+      );
+
+      test(
+        'corroboration alone does not bypass the conf 0.75 floor — a '
+        'lower-conf vision detection still needs 2-frame confirmation',
+        () {
+          final now = DateTime(2025, 1, 1, 12);
+          final tr = Tracker()
+            ..lastVehicleApproachingAcousticAt =
+                now.subtract(const Duration(milliseconds: 200));
+          final out = tr.update(
+            [vehicleAhead(conf: 0.65)],
+            640,
+            480,
+            now,
+          );
+          expect(
+            out,
+            isEmpty,
+            reason: 'audit 2.6: the audio corroboration path requires '
+                'conf >= 0.75 — at 0.65 we still wait for a 2nd frame.',
+          );
+        },
+      );
+    },
+  );
+
+  group(
+    'Safety audit 5.3: motion pre-alert skips frames during AE '
+    'transitions (lib/services/motion_prealert.dart)',
+    () {
+      Uint8List uniform(int v) {
+        const n = kEventGridW * kEventGridH;
+        return Uint8List(n)..fillRange(0, n, v);
+      }
+
+      test(
+        'aeTransitioning=true returns null without processing — '
+        'sun→shade auto-exposure flips no longer leak as motion events',
+        () {
+          final pa = MotionPreAlert();
+          final t0 = DateTime(2025, 1, 1, 12);
+
+          
+          pa.feedDownsampledGrid(uniform(50), t0);
+
+          
+          
+          final ev = pa.feedDownsampledGrid(
+            uniform(200),
+            t0.add(const Duration(milliseconds: 20)),
+            aeTransitioning: true,
+          );
+          expect(
+            ev,
+            isNull,
+            reason: 'audit 5.3: AE-transition frames must be skipped — '
+                'a luma jump from sun→shade is the camera adjusting '
+                'exposure, not a real motion event.',
+          );
+        },
+      );
+
+      test(
+        'after an AE-transition skip, the next non-AE frame compares '
+        'against the pre-AE baseline so no spurious event leaks out',
+        () {
+          final pa = MotionPreAlert();
+          final t0 = DateTime(2025, 1, 1, 12);
+
+          
+          pa.feedDownsampledGrid(uniform(50), t0);
+
+          
+          pa.feedDownsampledGrid(
+            uniform(200),
+            t0.add(const Duration(milliseconds: 20)),
+            aeTransitioning: true,
+          );
+
+          
+          final ev = pa.feedDownsampledGrid(
+            uniform(50),
+            t0.add(const Duration(milliseconds: 40)),
+          );
+          expect(
+            ev,
+            isNull,
+            reason: 'a stable post-AE frame relative to the pre-AE '
+                'baseline must not emit a phantom motion event.',
+          );
         },
       );
     },

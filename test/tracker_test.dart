@@ -110,33 +110,70 @@ void main() {
   });
 
   group('Tracker fast-track', () {
-    test('returns a single-frame very-close high-conf detection immediately',
-        () {
-      final tracker = Tracker();
-      final now = DateTime(2025, 1, 1, 12);
+    test(
+      'safety audit 2.6: a single-frame very-close high-conf detection is '
+      'released only when the acoustic model corroborates with a recent '
+      'vehicleApproaching event — vision-only single-frame critical is '
+      'too dangerous',
+      () {
+        final now = DateTime(2025, 1, 1, 12);
 
-      final first = tracker.update(
-        [
-          makeDet(
-            x1: 100,
-            y1: 100,
-            x2: 200,
-            y2: 380,
-            label: 'person',
-            conf: 0.75,
-            dist: 'very close',
-            distM: 0.9,
-          ),
-        ],
-        640,
-        480,
-        now,
-      );
+        
+        
+        
+        final solo = Tracker();
+        final soloOut = solo.update(
+          [
+            makeDet(
+              x1: 100,
+              y1: 100,
+              x2: 200,
+              y2: 380,
+              label: 'person',
+              conf: 0.75,
+              dist: 'very close',
+              distM: 0.9,
+            ),
+          ],
+          640,
+          480,
+          now,
+        );
+        expect(
+          soloOut,
+          isEmpty,
+          reason:
+              'audit 2.6: without audio corroboration, a single-frame '
+              'critical (conf 0.75, very close, 0.9 m) is suppressed — '
+              'we wait for a 2nd-frame confirmation instead.',
+        );
 
-      expect(first, hasLength(1));
-      expect(first.single.fastTrack, isTrue);
-      expect(first.single.nearFrameCount, greaterThanOrEqualTo(1));
-    });
+        
+        final corroborated = Tracker()
+          ..lastVehicleApproachingAcousticAt =
+              now.subtract(const Duration(milliseconds: 500));
+        final corroboratedOut = corroborated.update(
+          [
+            makeDet(
+              x1: 100,
+              y1: 100,
+              x2: 200,
+              y2: 380,
+              label: 'person',
+              conf: 0.75,
+              dist: 'very close',
+              distM: 0.9,
+            ),
+          ],
+          640,
+          480,
+          now,
+        );
+        expect(corroboratedOut, hasLength(1));
+        expect(corroboratedOut.single.fastTrack, isTrue);
+        expect(corroboratedOut.single.nearFrameCount, greaterThanOrEqualTo(1));
+      },
+    );
 
     test('ignores fast-track when confidence is below the 0.60 gate', () {
       final tracker = Tracker();

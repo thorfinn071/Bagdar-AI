@@ -234,39 +234,30 @@ void main() {
         'confirmation required)', () {
       final analyzer = GroundPlaneAnalyzer();
       final flat = makeFlat(0.5);
-      
-      analyzer.analyze(flat);
-      analyzer.analyze(flat);
-      analyzer.analyze(flat);
-      analyzer.analyze(flat);
-      analyzer.analyze(flat);
-      
+
+      for (int i = 0; i < 5; i++) {
+        analyzer.analyze(flat);
+      }
+
       final flicker = analyzer.analyze(makeStableHazardMap());
-      
+
       expect(flicker, isEmpty);
     });
 
     test(
-        'a hazard that persists for four consecutive frames survives the '
-        '4-of-5 filter', () {
+        'a hazard that persists long enough survives the '
+        '4-of-5 temporal filter', () {
       final analyzer = GroundPlaneAnalyzer();
       final flat = makeFlat(0.5);
-      analyzer.analyze(flat);
-      analyzer.analyze(flat);
-      analyzer.analyze(flat);
-      analyzer.analyze(flat);
-      analyzer.analyze(flat);
-      
-      
+      for (int i = 0; i < 5; i++) {
+        analyzer.analyze(flat);
+      }
+
       final map = makeStableHazardMap();
-      // Warm up deadZoneStreak (requires 3 frames)
-      analyzer.analyze(map); // streak = 1
-      analyzer.analyze(map); // streak = 2
-      // Now fill temporal buffer (requires 4 matches)
-      analyzer.analyze(map); // streak = 3, match = 1
-      analyzer.analyze(map); // streak = 4, match = 2
-      analyzer.analyze(map); // streak = 5, match = 3
-      final out = analyzer.analyze(map); // streak = 6, match = 4
+      for (int i = 0; i < 6; i++) {
+        analyzer.analyze(map);
+      }
+      final out = analyzer.analyze(map);
       expect(
         out.any((h) =>
             h.zone == HazardZone.center &&
@@ -278,11 +269,13 @@ void main() {
     test('cold-start emits unfiltered results until buffer is full', () {
       final analyzer = GroundPlaneAnalyzer();
       final map = makeStableHazardMap();
+
       analyzer.analyze(map);
       analyzer.analyze(map);
-      final first = analyzer.analyze(map);
+      final out = analyzer.analyze(map);
+
       expect(
-        first.any((h) =>
+        out.any((h) =>
             h.zone == HazardZone.center &&
             h.type == DepthHazardType.deadZone),
         isTrue,
@@ -292,10 +285,10 @@ void main() {
     test('resetTemporalFilter restores cold-start behaviour', () {
       final analyzer = GroundPlaneAnalyzer();
       final flat = makeFlat(0.5);
-      analyzer.analyze(flat);
-      analyzer.analyze(flat);
-      analyzer.analyze(flat);
-      
+      for (int i = 0; i < 5; i++) {
+        analyzer.analyze(flat);
+      }
+
       analyzer.resetTemporalFilter();
       final map = makeStableHazardMap();
       analyzer.analyze(map);

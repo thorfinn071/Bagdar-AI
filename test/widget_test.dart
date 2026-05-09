@@ -123,7 +123,7 @@ void main() {
     final winner = filter.flush(
       5,
       DateTime.now(),
-      reliableTrackIds: <int>{42}, 
+      reliableTrackIds: <int>{42}, // 99 is not listed as reliable
     );
 
     expect(winner, isNull);

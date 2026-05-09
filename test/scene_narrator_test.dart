@@ -20,7 +20,7 @@ void main() {
     });
 
     test('narrates empty scene', () {
-      final snapshot = SceneSnapshot(
+      const snapshot = SceneSnapshot(
         objects: [],
         hazards: [],
         isIndoor: false,
@@ -32,7 +32,7 @@ void main() {
     });
 
     test('narrates single object', () {
-      final snapshot = SceneSnapshot(
+      const snapshot = SceneSnapshot(
         objects: [
           SceneObject(
             label: 'person',
@@ -54,7 +54,7 @@ void main() {
     });
 
     test('narrates multiple objects sorted by threat', () {
-      final snapshot = SceneSnapshot(
+      const snapshot = SceneSnapshot(
         objects: [
           SceneObject(
             label: 'dog',
@@ -90,7 +90,7 @@ void main() {
     test('respects max objects cap', () {
       final objects = List.generate(
         10,
-        (i) => SceneObject(
+        (i) => const SceneObject(
           label: 'person',
           direction: 'ahead',
           distance: 'far',
@@ -114,7 +114,7 @@ void main() {
     });
 
     test('narrates hazards', () {
-      final snapshot = SceneSnapshot(
+      const snapshot = SceneSnapshot(
         objects: [],
         hazards: [
           DepthHazard(
@@ -134,7 +134,7 @@ void main() {
     });
 
     test('narrates traffic light', () {
-      final snapshot = SceneSnapshot(
+      const snapshot = SceneSnapshot(
         objects: [],
         hazards: [],
         trafficLight: TrafficLightColor.red,
@@ -148,7 +148,7 @@ void main() {
     });
 
     test('narrates OCR text', () {
-      final snapshot = SceneSnapshot(
+      const snapshot = SceneSnapshot(
         objects: [],
         hazards: [],
         ocrText: 'Pharmacy',
@@ -161,7 +161,7 @@ void main() {
     });
 
     test('respects verbosity settings', () {
-      final snapshot = SceneSnapshot(
+      const snapshot = SceneSnapshot(
         objects: [
           SceneObject(
             label: 'person',
@@ -186,7 +186,7 @@ void main() {
     });
 
     test('filters left objects correctly', () {
-      final snapshot = SceneSnapshot(
+      const snapshot = SceneSnapshot(
         objects: [
           SceneObject(
             label: 'person',
