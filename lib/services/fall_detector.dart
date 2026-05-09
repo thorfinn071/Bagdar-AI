@@ -32,6 +32,7 @@ class FallDetector {
   double _lastGyroMagnitude = 0;
 
   double _postImpactGyroPeak = 0;
+  bool _wasStationaryAtImpact = false;
 
   static const double _freeFallThreshold = 3.5;
   static const double _impactThreshold = 30.0;
@@ -45,6 +46,8 @@ class FallDetector {
   static const double _stillGyroMaxRadPerSec = 0.50;
 
   static const double _fallGyroImpactRadPerSec = 2.50;
+
+  static const double _phoneDropGyroMaxRadPerSec = 1.00;
 
   DateTime _lastDetectionAt = DateTime.fromMillisecondsSinceEpoch(0);
 
@@ -122,6 +125,7 @@ class FallDetector {
         _impactDetected = true;
         _lastImpactAt = now;
         _stillFrames = 0;
+        _wasStationaryAtImpact = _motionState == MotionState.stationary;
 
         _postImpactGyroPeak = _lastGyroMagnitude;
         debugPrint(
@@ -163,6 +167,12 @@ class FallDetector {
       final hadRotationalImpact =
           _postImpactGyroPeak >= _fallGyroImpactRadPerSec;
       final peak = _postImpactGyroPeak;
+      final hadRecentFreeFall =
+          _lastImpactAt.difference(_lastFreeFallAt).abs() < _freeFallWindow;
+
+      final isPhoneDrop = peak < _phoneDropGyroMaxRadPerSec &&
+          !hadRecentFreeFall;
+
       onStageChange?.call(
         'stillness_reached',
         accel: accelWithoutGravity,
@@ -172,6 +182,19 @@ class FallDetector {
       _impactDetected = false;
       _stillFrames = 0;
       _postImpactGyroPeak = 0;
+
+      if (isPhoneDrop) {
+        debugPrint(
+          'FallDetector: stillness reached but classified as phone drop '
+          '(peak=${peak.toStringAsFixed(2)}, freeFall=$hadRecentFreeFall) — ignoring.',
+        );
+        onStageChange?.call(
+          'aborted_phone_drop',
+          accel: accelWithoutGravity,
+          gyro: peak,
+        );
+        return;
+      }
       if (!hadRotationalImpact) {
         debugPrint(
           'FallDetector: stillness reached but no rotational impact '
@@ -179,6 +202,18 @@ class FallDetector {
         );
         onStageChange?.call(
           'aborted_no_rotation',
+          accel: accelWithoutGravity,
+          gyro: peak,
+        );
+        return;
+      }
+      if (_wasStationaryAtImpact && !hadRecentFreeFall) {
+        debugPrint(
+          'FallDetector: user was stationary and no freefall — '
+          'likely placed down, ignoring.',
+        );
+        onStageChange?.call(
+          'aborted_stationary_no_freefall',
           accel: accelWithoutGravity,
           gyro: peak,
         );
@@ -235,6 +270,7 @@ class FallDetector {
     _impactDetected = false;
     _stillFrames = 0;
     _postImpactGyroPeak = 0;
+    _wasStationaryAtImpact = false;
   }
 
   
@@ -246,6 +282,7 @@ class FallDetector {
     _impactDetected = false;
     _stillFrames = 0;
     _postImpactGyroPeak = 0;
+    _wasStationaryAtImpact = false;
   }
 
   void dispose() {

@@ -129,8 +129,7 @@ class TrafficLightAnalyzer {
     
     
     
-    if (candidateColor == TrafficLightColor.green ||
-        candidateColor == TrafficLightColor.yellow) {
+    if (candidateColor == TrafficLightColor.green) {
       frames = max(frames, _greenFastStableFramesFloor);
     }
 
@@ -367,6 +366,17 @@ class TrafficLightAnalyzer {
     
     
     
+    // Per-color minimum pixel-fraction sanity check
+    if (color == TrafficLightColor.red && topBrightRed < _kMinRedFraction) {
+      color = TrafficLightColor.unknown;
+    } else if (color == TrafficLightColor.green &&
+        botBrightGreen < _kMinGreenFraction) {
+      color = TrafficLightColor.unknown;
+    } else if (color == TrafficLightColor.yellow &&
+        midBrightYellow < _kMinYellowFraction) {
+      color = TrafficLightColor.unknown;
+    }
+
     if (color == TrafficLightColor.green ||
         color == TrafficLightColor.yellow) {
       final pickedScore = color == TrafficLightColor.green
@@ -381,6 +391,21 @@ class TrafficLightAnalyzer {
     
     
     
+    // Total bright-pixel sanity check
+    if (color != TrafficLightColor.unknown) {
+      final brightFraction = _brightPixelFraction(
+        yPlane,
+        yRowStride,
+        ix1,
+        iy1,
+        ix2,
+        iy2,
+      );
+      if (brightFraction < _kMinBrightPixelFraction) {
+        color = TrafficLightColor.unknown;
+      }
+    }
+
     if (color != TrafficLightColor.unknown) {
       final hasLuminousLed = _hasBrightLedZone(
         yPlane,
@@ -407,6 +432,11 @@ class TrafficLightAnalyzer {
   
   
   static const double _kGoColorMatchFloor = 0.30;
+  static const double _kMinRedFraction = 0.40;
+  static const double _kMinGreenFraction = 0.40;
+  static const double _kMinYellowFraction = 0.30;
+  static const double _kMinBrightPixelFraction = 0.20;
+  static const int _kBrightPixelThreshold = 80;
 
   
   
@@ -436,6 +466,28 @@ class TrafficLightAnalyzer {
       }
     }
     return total > 0 && brightCount / total >= _kMinBrightLedFraction;
+  }
+
+  double _brightPixelFraction(
+    Uint8List yPlane,
+    int yRowStride,
+    int x1,
+    int y1,
+    int x2,
+    int y2,
+  ) {
+    int brightCount = 0;
+    int total = 0;
+    final step = max(1, ((x2 - x1) * (y2 - y1)) > 400 ? 2 : 1);
+    for (int py = y1; py < y2; py += step) {
+      for (int px = x1; px < x2; px += step) {
+        final idx = py * yRowStride + px;
+        if (idx >= yPlane.length) continue;
+        total++;
+        if (yPlane[idx] > _kBrightPixelThreshold) brightCount++;
+      }
+    }
+    return total > 0 ? brightCount / total : 0.0;
   }
 
   double _zoneBrightness(

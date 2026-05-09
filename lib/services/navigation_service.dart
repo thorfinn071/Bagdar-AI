@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 
+import '../models/constants.dart';
 import '../models/nav_models.dart';
 import '../models/strings.dart';
 import 'compass_service.dart';
@@ -83,6 +84,13 @@ class NavigationService {
   int _lastProgressMeters = -1;
   static const Duration _progressInterval = Duration(seconds: 20);
 
+  DateTime _lastFixAt = DateTime.fromMillisecondsSinceEpoch(0);
+  bool _navMuted = false;
+  DateTime _lastNavMuteChangeAt = DateTime.fromMillisecondsSinceEpoch(0);
+  static const Duration _navMuteFlapGuard = Duration(seconds: 10);
+
+  void Function(String message)? onNavMuteChanged;
+
   NavigationService({required this.compass, this.stepService});
 
   void startWalkNavigation(NavRoute route) {
@@ -160,6 +168,9 @@ class NavigationService {
     _lastSoftOffRouteAt = DateTime.fromMillisecondsSinceEpoch(0);
     _lastRerouteAt = DateTime.fromMillisecondsSinceEpoch(0);
     _rerouteInFlight = false;
+    _lastFixAt = DateTime.fromMillisecondsSinceEpoch(0);
+    _navMuted = false;
+    _lastNavMuteChangeAt = DateTime.fromMillisecondsSinceEpoch(0);
   }
 
   void pauseNavigation() {
@@ -220,6 +231,28 @@ class NavigationService {
   }
 
   void _onPositionUpdate(Position pos) {
+    final now = DateTime.now();
+
+    _lastFixAt = now;
+
+    final gpsBad = pos.accuracy > kNavGpsAccuracyMaxM ||
+        (_lastFixAt.millisecondsSinceEpoch != 0 &&
+            now.difference(_lastFixAt) > const Duration(seconds: kNavGpsMaxAgeSec));
+
+    if (gpsBad && !_navMuted) {
+      if (now.difference(_lastNavMuteChangeAt) >= _navMuteFlapGuard) {
+        _navMuted = true;
+        _lastNavMuteChangeAt = now;
+        onNavMuteChanged?.call(S.get('nav_gps_unreliable'));
+      }
+    } else if (!gpsBad && _navMuted) {
+      if (now.difference(_lastNavMuteChangeAt) >= _navMuteFlapGuard) {
+        _navMuted = false;
+        _lastNavMuteChangeAt = now;
+        onNavMuteChanged?.call(S.get('nav_gps_restored'));
+      }
+    }
+
     if (_lastPosition != null && _transitRoute == null) {
       final distanceMoved = Geolocator.distanceBetween(
         _lastPosition!.latitude,
@@ -233,7 +266,6 @@ class NavigationService {
         final stepsTaken = currentSteps - _lastPositionStepCount;
 
         if (stepsTaken < _driftMinStepsRequired) {
-          
           debugPrint(
             'NavigationService: GPS Drift detected (moved ${distanceMoved.toStringAsFixed(1)}m, steps=$stepsTaken). Skipping update.',
           );
@@ -247,6 +279,8 @@ class NavigationService {
 
     onPositionUpdated?.call(pos);
     if (_state != NavState.navigating) return;
+
+    if (_navMuted) return;
 
     if (_transitRoute != null) {
       _handleTransitPosition(pos);

@@ -91,6 +91,9 @@ class FallCountdownController extends ChangeNotifier {
       if (_secondsLeft == 10 || _secondsLeft == 5) {
         _restartFallCancelListener();
       }
+      if (_secondsLeft == 5) {
+        HapticService.vibrate([0, 400, 100, 400, 100, 400]);
+      }
     }
     notifyListeners();
   }

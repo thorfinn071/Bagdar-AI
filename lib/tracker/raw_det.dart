@@ -7,10 +7,10 @@ class RawDet {
   final double conf;
   final String dist;
   final double distM;
-  
-  
-  
-  
+  // OPT-01: optional appearance histogram for anti-ID-switch matching in
+  // the tracker. `null` means the caller didn't compute one (e.g. unit
+  // tests or a pipeline without Y-plane access), in which case the tracker
+  // falls back to pure IoU matching.
   final Float32List? appearance;
 
   const RawDet({

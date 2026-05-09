@@ -31,6 +31,21 @@ class Tracker {
   final Map<int, Track> _tracks = {};
   int _predictTick = 0;
 
+  
+  
+  
+  
+  final Map<int, int> _predictOnlyFrames = {};
+
+  
+  
+  
+  
+  
+  
+  
+  DateTime? lastVehicleApproachingAcousticAt;
+
   TtsService? ttsService;
 
   
@@ -130,16 +145,39 @@ class Tracker {
     }
 
     _tracks.forEach((id, t) {
-      if (t.age > kTrackMaxAge) ttsService?.evictTrack(id);
+      if (t.age > kTrackMaxAge) {
+        ttsService?.evictTrack(id);
+        _predictOnlyFrames.remove(id);
+      }
     });
     _tracks.removeWhere((_, t) => t.age > kTrackMaxAge);
 
+    
+    
+    
+    
+    
     return _tracks.values
-        .where(
-          (t) =>
-              t.age == 0 && (t.seenCount >= kTrackConfirmFrames || t.fastTrack),
-        )
+        .where((t) =>
+            t.age == 0 &&
+            (t.seenCount >= kTrackConfirmFrames ||
+                (t.fastTrack && _fastTrackAllowed(t, now))))
         .toList();
+  }
+
+  
+  
+  
+  
+  
+  
+  
+  bool _fastTrackAllowed(Track t, DateTime now) {
+    if (t.reliableFrames >= 2) return true;
+    if (t.avgConf < 0.75) return false;
+    final ac = lastVehicleApproachingAcousticAt;
+    if (ac == null) return false;
+    return now.difference(ac) <= const Duration(seconds: 1);
   }
 
   
@@ -165,6 +203,16 @@ class Tracker {
     t.age = 0;
     t.seenCount = math.min(9999, t.seenCount + 1);
     if (t.seenCount >= kTrackConfirmFrames) t.fastTrack = false;
+
+    
+    
+    
+    
+    
+    
+    
+    final gap = _predictOnlyFrames.remove(t.id) ?? 0;
+    final preserveApproaching = t.approaching && gap >= 1 && gap <= 3;
     t.cx = det.cx;
     t.cy = det.cy;
     t.x1 = det.x1;
@@ -239,7 +287,9 @@ class Tracker {
       if (t.areaHist.length > kApproachHistLen) t.areaHist.removeFirst();
       if (t.heightHist.length > kApproachHistLen) t.heightHist.removeFirst();
 
-      t.approaching = false;
+      
+      
+      t.approaching = preserveApproaching;
       t.dynamicThreat = false;
       if (t.areaHist.length >= 2) {
         final dt =
@@ -321,20 +371,24 @@ class Tracker {
     }
   }
 
-  static bool _shouldFastTrack(RawDet det) {
+  bool _shouldFastTrack(RawDet det) {
     if (det.conf < 0.60) return false;
     if (det.dist != 'very close' && det.dist != 'close') return false;
     if (det.distM <= 0) return false;
-    
-    
-    
-    
-    
     final isLightVehicle =
         det.label == 'bicycle' || det.label == 'motorcycle';
     if (det.dist == 'close' && !isLightVehicle) return false;
     final maxDist = isLightVehicle ? 5.0 : 1.5;
     if (det.distM > maxDist) return false;
+
+    if (userWalking) {
+      final hasAcousticCorroboration = lastVehicleApproachingAcousticAt != null &&
+          DateTime.now().difference(lastVehicleApproachingAcousticAt!) <=
+              const Duration(seconds: 1);
+      if (!hasAcousticCorroboration) {
+        return false;
+      }
+    }
     return true;
   }
 
@@ -353,10 +407,33 @@ class Tracker {
       t.y1 = pBox[1];
       t.x2 = pBox[2];
       t.y2 = pBox[3];
+
+      
+      
+      
+      
+      
+      
+      
+      final next = (_predictOnlyFrames[t.id] ?? 0) + 1;
+      _predictOnlyFrames[t.id] = next;
+
+      final isCloseVehicle = isVehicle(t.label) &&
+          t.distM > 0 &&
+          t.distM <= 12.0;
+      final predictLimit = isCloseVehicle ? 6 : 3;
+      final exemptFastTrack = t.fastTrack && next <= predictLimit;
+      if (next > predictLimit && !exemptFastTrack) {
+        t.approaching = false;
+        t.dynamicThreat = false;
+      }
     }
 
     _tracks.forEach((id, t) {
-      if (t.age > kTrackMaxAge) ttsService?.evictTrack(id);
+      if (t.age > kTrackMaxAge) {
+        ttsService?.evictTrack(id);
+        _predictOnlyFrames.remove(id);
+      }
     });
     _tracks.removeWhere((_, t) => t.age > kTrackMaxAge);
 
@@ -366,6 +443,8 @@ class Tracker {
   void clear() {
     _tracks.clear();
     _predictTick = 0;
+    _predictOnlyFrames.clear();
+    lastVehicleApproachingAcousticAt = null;
   }
 
   

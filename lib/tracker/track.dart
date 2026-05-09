@@ -30,22 +30,22 @@ class Track {
 
   bool fastTrack = false;
 
-  
-  
-  
-  
+  // OPT-17 Turn prediction: rolling window of the last 3 center positions
+  // (with timestamps) used to detect curved trajectories. Populated in
+  // `Tracker._applyMatch` after the track center is updated. Capacity
+  // enforced downstream — we keep the queue length at `kVehTurnMinCenterHist`.
   final ListQueue<(DateTime, double, double)> centerHist =
       ListQueue<(DateTime, double, double)>();
 
-  
-  
-  
+  // OPT-17: latest computed angular velocity in rad/s (signed — positive =
+  // turning counter-clockwise in image coordinates). Default 0 means
+  // "not enough samples yet" or "moving in a straight line".
   double lastAngularVelocity = 0.0;
 
-  
-  
-  
-  
+  // OPT-17: true when curvature AND |angular velocity| both exceed their
+  // thresholds, indicating a turning vehicle. Consumed by the approach
+  // gate so that bbox-growth thresholds drop to pedestrian levels for
+  // sideways-projecting vehicles.
   bool turning = false;
 
   double avgConf = 0.0;

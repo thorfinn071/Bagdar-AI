@@ -151,7 +151,7 @@ class StereoBearingEstimator {
   }
 
   void _highPass(Float32List samples, int sampleRate) {
-    final rc = 1.0 / (2.0 * math.pi * _highPassCutoff);
+    const rc = 1.0 / (2.0 * math.pi * _highPassCutoff);
     final dt = 1.0 / sampleRate;
     final alpha = rc / (rc + dt);
     double prev = samples[0];
@@ -196,7 +196,9 @@ class StereoBearingEstimator {
   }
 
   void _ifft(Float32List real, Float32List imag, int n) {
-    for (int i = 0; i < n; i++) imag[i] = -imag[i];
+    for (int i = 0; i < n; i++) {
+      imag[i] = -imag[i];
+    }
     _fft(real, imag, n);
     for (int i = 0; i < n; i++) {
       real[i] /= n;

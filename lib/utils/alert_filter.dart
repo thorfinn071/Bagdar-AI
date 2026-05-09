@@ -79,6 +79,10 @@ class AlertFilter {
   
   static const double kEscalationDistanceFraction = 0.70;
 
+  List<AlertCandidate> _lastRejected = const [];
+
+  List<AlertCandidate> get lastRejected => _lastRejected;
+
   void add(AlertCandidate candidate) => _candidates.add(candidate);
 
   AlertCandidate? flush(
@@ -128,13 +132,17 @@ class AlertFilter {
     });
 
     AlertCandidate? picked;
+    final rejected = <AlertCandidate>[];
     for (final cand in _candidates) {
       if (_isAllowed(cand, trackCount, now, reliableTrackIds,
           verbosity: verbosity, alertFrequency: alertFrequency)) {
         picked = cand;
         break;
+      } else {
+        rejected.add(cand);
       }
     }
+    _lastRejected = rejected;
     _candidates.clear();
     if (picked == null) return null;
 
@@ -279,6 +287,7 @@ class AlertFilter {
     _lastByCat.clear();
     _lastCriticalByCat.clear();
     _lastCriticalDistMByCat.clear();
+    _lastRejected = const [];
   }
 
   Duration _categoryCooldown(

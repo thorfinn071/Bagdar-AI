@@ -154,6 +154,21 @@ class AlertManager {
 
   final Set<int> _prevCloseTrackIds = {};
 
+  
+  
+  DateTime _lastCrowdAlertAt = DateTime.fromMillisecondsSinceEpoch(0);
+
+  
+  
+  
+  
+  bool _crowdActive = false;
+
+  
+  
+  
+  final Map<int, double> _lastAnnouncedDistM = {};
+
   DateTime _lastVibrateAt = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _lastCriticalVibrateAt = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _lastCaneVibrateAt = DateTime.fromMillisecondsSinceEpoch(0);
@@ -193,6 +208,9 @@ class AlertManager {
     _proximityDistance = double.infinity;
     _lastCameraStallAt = DateTime.fromMillisecondsSinceEpoch(0);
     _lastClearAnnounceAt = DateTime.fromMillisecondsSinceEpoch(0);
+    _lastCrowdAlertAt = DateTime.fromMillisecondsSinceEpoch(0);
+    _lastAnnouncedDistM.clear();
+    _crowdActive = false;
   }
 
   void handleAcousticEvent(AcousticEvent event) {
@@ -474,7 +492,14 @@ class AlertManager {
     );
     _handleNavHint(tracks, imgW, imgH, viewportAspect, now);
 
-    final labels = tracks.map((t) => t.label).toList();
+    
+    
+    
+    
+    
+    final labels = _crowdActive
+        ? [for (final t in tracks) if (t.label != 'person') t.label]
+        : tracks.map((t) => t.label).toList();
     
     
     
@@ -505,6 +530,23 @@ class AlertManager {
           orElse: () => tracks.first,
         );
         if (spoken.id == winner.trackId) spoken.lastSpoken = now;
+
+        
+        
+        
+        
+        if (winner.category == AlertCategory.obstacleClose &&
+            winner.distanceM != null &&
+            winner.distanceM! > 0) {
+          _lastAnnouncedDistM[winner.trackId!] = winner.distanceM!;
+        }
+      }
+
+      
+      
+      
+      if (winner.isGroupAlert) {
+        _lastCrowdAlertAt = now;
       }
     }
 
@@ -733,20 +775,30 @@ class AlertManager {
     bool isCalibrated,
   ) {
     final indoor = _isIndoorMode();
+
+    
+    
+    
+    
+    
     var personCount = 0;
-    if (indoor) {
-      for (final t in tracks) {
-        if (t.label == 'person') personCount++;
+    double personSumCx = 0;
+    double personMinDistM = double.infinity;
+    for (final t in tracks) {
+      if (t.label != 'person') continue;
+      personCount++;
+      personSumCx += t.cx;
+      if (t.distM > 0 && t.distM < personMinDistM) {
+        personMinDistM = t.distM;
       }
     }
+    _crowdActive = personCount >= kIndoorCrowdPersonThreshold;
 
     Track? topProximity;
     double topProximityScore = -1;
     double topProximityPan = 0.0;
     for (final t in tracks) {
-      if (indoor &&
-          personCount >= kIndoorCrowdPersonThreshold &&
-          t.label == 'person') {
+      if (_crowdActive && t.label == 'person') {
         continue;
       }
       if (t.dist == 'very close') continue;
@@ -762,13 +814,15 @@ class AlertManager {
         if (suppressedFar.contains(t.label)) continue;
         if (t.label == 'person') continue;
         if (isVehicle(t.label)) {
-          final pos = posFromCx(
-            t.cx,
-            imgW.toDouble(),
-            imgH: imgH.toDouble(),
-            viewportAspect: viewportAspect,
-          );
-          if (pos != 'center') continue;
+          if (!t.approaching && !t.dynamicThreat) {
+            final pos = posFromCx(
+              t.cx,
+              imgW.toDouble(),
+              imgH: imgH.toDouble(),
+              viewportAspect: viewportAspect,
+            );
+            if (pos != 'center') continue;
+          }
         }
       }
 
@@ -812,6 +866,28 @@ class AlertManager {
 
       final verb = Settings.instance.verbosity;
       if (t.dist == 'close') {
+        
+        
+        
+        
+        final lastAnnouncedDistM = _lastAnnouncedDistM[t.id];
+        final shouldEscalate = lastAnnouncedDistM != null &&
+            t.distM > 0 &&
+            t.distM <=
+                lastAnnouncedDistM *
+                    kSustainedHazardEscalationDistanceFraction;
+
+        final bboxFrac = imgH > 0 ? (t.y2 - t.y1) / imgH : 0.0;
+        final widthFrac = imgW > 0 ? (t.x2 - t.x1) / imgW : 0.0;
+        final sizeSanityEscalation =
+            (isVehicle(t.label) &&
+                (bboxFrac >= 0.60 || widthFrac >= 0.55)) ||
+            (t.label == 'person' && bboxFrac >= 0.75);
+
+        final closePriority = (shouldEscalate || sizeSanityEscalation)
+            ? SpeechPriority.critical
+            : SpeechPriority.warning;
+
         _vibrate([0, 150]);
         final text = switch (verb) {
           Verbosity.minimal => '${S.alert('close')}, $dir.',
@@ -822,7 +898,7 @@ class AlertManager {
         _filter.add(
           AlertCandidate(
             text: text,
-            priority: SpeechPriority.warning,
+            priority: closePriority,
             pan: pan,
             category: AlertCategory.obstacleClose,
             urgency: score * t.avgConf,
@@ -859,6 +935,39 @@ class AlertManager {
             : _distanceEstimate(topProximity.dist),
         topProximityPan,
       );
+    }
+
+    
+    
+    
+    
+    
+    
+    if (_crowdActive) {
+      final avgCx = personSumCx / personCount;
+      final crowdPan = _pan(avgCx, imgW, imgH, viewportAspect);
+
+      if (now.difference(_lastCrowdAlertAt) >= kCrowdAlertCooldown) {
+        final text =
+            '${S.alert('group_ahead')}$personCount ${S.alertLabel('person')}';
+        _filter.add(
+          AlertCandidate(
+            text: text,
+            priority: SpeechPriority.info,
+            pan: crowdPan,
+            category: AlertCategory.obstacleFar,
+            urgency: 0.65,
+            isGroupAlert: true,
+            distanceM: personMinDistM.isFinite ? personMinDistM : null,
+          ),
+        );
+      }
+
+      
+      
+      if (personMinDistM.isFinite) {
+        _emitProximity(personMinDistM, crowdPan);
+      }
     }
   }
 
