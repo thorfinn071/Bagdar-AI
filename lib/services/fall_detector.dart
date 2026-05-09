@@ -6,12 +6,14 @@ import 'package:sensors_plus/sensors_plus.dart';
 
 enum MotionState { stationary, walking, unstable }
 
+enum FallClass { tumble, collapse }
+
 class FallDetector {
   StreamSubscription<AccelerometerEvent>? _sub;
   StreamSubscription<GyroscopeEvent>? _gyroSub;
   bool _ready = false;
 
-  void Function()? onFallDetected;
+  void Function(FallClass fallClass)? onFallDetected;
   void Function(MotionState state)? onMotionStateChanged;
   void Function(
     String stage, {
@@ -34,6 +36,12 @@ class FallDetector {
   double _postImpactGyroPeak = 0;
   bool _wasStationaryAtImpact = false;
 
+  DateTime? _classBAboveStartedAt;
+  bool _classBSustainQualified = false;
+  DateTime? _classBPostImpactStartedAt;
+  int _classBStillFrames = 0;
+  bool _classBWasWalking = false;
+
   static const double _freeFallThreshold = 3.5;
   static const double _impactThreshold = 30.0;
   static const double _stillThreshold = 3.5;
@@ -48,6 +56,11 @@ class FallDetector {
   static const double _fallGyroImpactRadPerSec = 2.50;
 
   static const double _phoneDropGyroMaxRadPerSec = 1.00;
+
+  static const double _classBImpactThreshold = 19.62;
+  static const Duration _classBSustainMin = Duration(milliseconds: 200);
+  static const int _classBStillFramesRequired = 100;
+  static const Duration _classBPostImpactTimeout = Duration(seconds: 10);
 
   DateTime _lastDetectionAt = DateTime.fromMillisecondsSinceEpoch(0);
 
@@ -116,6 +129,8 @@ class FallDetector {
         );
       }
     }
+
+    _processClassB(now, accelWithoutGravity);
 
     if (!_impactDetected) {
       if (accelWithoutGravity > _impactThreshold) {
@@ -226,8 +241,87 @@ class FallDetector {
         accel: accelWithoutGravity,
         gyro: peak,
       );
-      onFallDetected?.call();
+      _resetClassB();
+      onFallDetected?.call(FallClass.tumble);
     }
+  }
+
+  void _processClassB(DateTime now, double accelWithoutGravity) {
+    if (accelWithoutGravity > _classBImpactThreshold) {
+      _classBAboveStartedAt ??= now;
+      if (!_classBSustainQualified &&
+          now.difference(_classBAboveStartedAt!) >= _classBSustainMin) {
+        _classBSustainQualified = true;
+        _classBWasWalking = _motionState == MotionState.walking;
+        onStageChange?.call(
+          'class_b_sustain',
+          accel: accelWithoutGravity,
+          gyro: _lastGyroMagnitude,
+        );
+      }
+      _classBStillFrames = 0;
+      return;
+    }
+
+    _classBAboveStartedAt = null;
+    if (!_classBSustainQualified) return;
+
+    if (_classBPostImpactStartedAt == null) {
+      _classBPostImpactStartedAt = now;
+      _classBStillFrames = 0;
+    }
+
+    if (now.difference(_classBPostImpactStartedAt!) >
+        _classBPostImpactTimeout) {
+      onStageChange?.call(
+        'class_b_aborted_timeout',
+        accel: accelWithoutGravity,
+        gyro: _lastGyroMagnitude,
+        stillFrames: _classBStillFrames,
+      );
+      _resetClassB();
+      return;
+    }
+
+    final accelStill = accelWithoutGravity < _stillThreshold;
+    final gyroStill = _lastGyroMagnitude < _stillGyroMaxRadPerSec;
+    if (accelStill && gyroStill) {
+      _classBStillFrames++;
+    } else {
+      _classBStillFrames = 0;
+    }
+
+    if (_classBStillFrames < _classBStillFramesRequired) return;
+
+    if (!_classBWasWalking) {
+      onStageChange?.call(
+        'class_b_aborted_not_walking',
+        accel: accelWithoutGravity,
+        gyro: _lastGyroMagnitude,
+        stillFrames: _classBStillFrames,
+      );
+      _resetClassB();
+      return;
+    }
+
+    _lastDetectionAt = now;
+    debugPrint('FallDetector: CLASS B (slow collapse) CONFIRMED');
+    onStageChange?.call(
+      'class_b_confirmed',
+      accel: accelWithoutGravity,
+      gyro: _lastGyroMagnitude,
+      stillFrames: _classBStillFrames,
+    );
+    _resetClassB();
+    onFallDetected?.call(FallClass.collapse);
+  }
+
+  void _resetClassB() {
+    _classBAboveStartedAt = null;
+    _classBSustainQualified = false;
+    _classBPostImpactStartedAt = null;
+    _classBStillFrames = 0;
+    _classBWasWalking = false;
   }
 
   void _onGyro(GyroscopeEvent event) {
@@ -271,6 +365,7 @@ class FallDetector {
     _stillFrames = 0;
     _postImpactGyroPeak = 0;
     _wasStationaryAtImpact = false;
+    _resetClassB();
   }
 
   
@@ -283,6 +378,7 @@ class FallDetector {
     _stillFrames = 0;
     _postImpactGyroPeak = 0;
     _wasStationaryAtImpact = false;
+    _resetClassB();
   }
 
   void dispose() {

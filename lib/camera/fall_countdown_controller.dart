@@ -6,6 +6,7 @@ import 'package:sensors_plus/sensors_plus.dart';
 
 import '../models/speech_job.dart';
 import '../models/strings.dart';
+import '../services/fall_detector.dart' show FallClass;
 import '../services/haptic_service.dart';
 import '../services/sos_service.dart';
 import '../services/tts_service.dart';
@@ -18,6 +19,7 @@ class FallCountdownController extends ChangeNotifier {
   final VoidCallback? onCancelled;
 
   static const Duration kInitialDuration = Duration(seconds: 15);
+  static const Duration kCollapseDuration = Duration(seconds: 30);
 
   static const Duration kVoiceConfirmWindow = Duration(seconds: 4);
   static const Duration kCorroborationWindow = Duration(seconds: 3);
@@ -27,6 +29,7 @@ class FallCountdownController extends ChangeNotifier {
 
   Timer? _timer;
   int _secondsLeft = 0;
+  Duration _currentDuration = kInitialDuration;
   bool _active = false;
   bool _cancelListenerActive = false;
   bool _disposed = false;
@@ -48,13 +51,19 @@ class FallCountdownController extends ChangeNotifier {
   int get secondsLeft => _secondsLeft;
   bool get active => _active;
 
-  void start() {
+  void start({FallClass fallClass = FallClass.tumble}) {
     if (_active) return;
     _active = true;
-    _secondsLeft = kInitialDuration.inSeconds;
+    _currentDuration = fallClass == FallClass.collapse
+        ? kCollapseDuration
+        : kInitialDuration;
+    _secondsLeft = _currentDuration.inSeconds;
 
+    final detectedKey = fallClass == FallClass.collapse
+        ? 'sos_fall_classb_detected'
+        : 'sos_fall_detected';
     tts.say(
-      S.get('sos_fall_detected'),
+      S.get(detectedKey),
       SpeechPriority.critical,
       pan: 0.0,
       barge: true,
@@ -190,7 +199,7 @@ class FallCountdownController extends ChangeNotifier {
     _cancelListenerActive = true;
     unawaited(
       voice.startContinuousListening(
-        sessionDuration: kInitialDuration,
+        sessionDuration: _currentDuration,
         listenFor: const Duration(seconds: 30),
         pauseFor: const Duration(seconds: 5),
       ),

@@ -435,7 +435,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
       await VisionForegroundService.start();
 
-      _vm.fallDetector.onFallDetected = _fallCountdown.start;
+      _vm.fallDetector.onFallDetected = (fallClass) =>
+          _fallCountdown.start(fallClass: fallClass);
       _vm.fallDetector.onStageChange = (stage, {accel, gyro, stillFrames}) {
         _fieldLog.logFallStage(
           stage,

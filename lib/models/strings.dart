@@ -433,6 +433,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sos_error': 'Не удалось отправить SOS.',
     'sos_fall_detected':
         'Обнаружено падение. SOS будет отправлен через 15 секунд. Нажмите на экран для отмены.',
+    'sos_fall_classb_detected':
+        'Вы в порядке? Нажмите на экран для отмены. SOS будет отправлен через 30 секунд.',
     'sos_fall_countdown': 'SOS через',
     'sos_fall_seconds': 'секунд.',
     'sos_fall_cancelled': 'Отправка SOS отменена.',
@@ -1122,6 +1124,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sos_error': 'SOS жіберу мүмкін болмады.',
     'sos_fall_detected':
         'Құлау анықталды. SOS 15 секундтан кейін жіберіледі. Болдырмау үшін экранды басыңыз.',
+    'sos_fall_classb_detected':
+        'Сіз жақсысыз ба? Болдырмау үшін экранды басыңыз. SOS 30 секундтан кейін жіберіледі.',
     'sos_fall_countdown': 'SOS',
     'sos_fall_seconds': 'секундтан кейін.',
     'sos_fall_cancelled': 'SOS жіберу болдырылмады.',
@@ -1810,6 +1814,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sos_error': 'Failed to send SOS.',
     'sos_fall_detected':
         'Fall detected. SOS will be sent in 15 seconds. Tap screen to cancel.',
+    'sos_fall_classb_detected':
+        'Are you OK? Tap screen to cancel. SOS will be sent in 30 seconds.',
     'sos_fall_countdown': 'SOS in',
     'sos_fall_seconds': 'seconds.',
     'sos_fall_cancelled': 'SOS cancelled.',
