@@ -176,13 +176,10 @@ class VoiceCommandService {
     'звони 112',
   };
 
+  
+  
+  
   static const Set<String> _ruCancelFallExact = {
-    'стоп',
-    'отмена',
-    'отменить',
-    'отмени',
-    'отбой',
-    'прекрати',
     'я в порядке',
     'всё хорошо',
     'все хорошо',
@@ -370,14 +367,13 @@ class VoiceCommandService {
     'жәрдем шұғыл',
   };
 
+  
+  
+  
   static const Set<String> _kkCancelFallExact = {
-    'тоқта',
-    'болдырма',
-    'болдырмау',
     'мен жақсымын',
     'мен дұрыспын',
     'жалған дабыл',
-    'қате',
     'мәселе жоқ',
     'еш нәрсе болмады',
     'мен құламадым',
@@ -534,10 +530,10 @@ class VoiceCommandService {
     'call 112',
   };
 
+  
+  
+  
   static const Set<String> _enCancelFallExact = {
-    'stop',
-    'cancel',
-    'abort',
     'i am fine',
     "i'm fine",
     'i am okay',
@@ -549,7 +545,6 @@ class VoiceCommandService {
     'no problems',
     'nothing happened',
     "it's a mistake",
-    'mistake',
     "i didn't fall",
     'i did not fall',
   };

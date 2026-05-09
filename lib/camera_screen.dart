@@ -596,7 +596,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   void _handleTap() {
     FeatureUsageTracker.instance.increment(FeatureUsageKeys.gesture('tap'));
     if (_fallCountdown.active) {
-      _fallCountdown.cancel();
+      _fallCountdown.notifyTouch();
       return;
     }
     if (Settings.instance.sosTrigger == SosTrigger.tripleTap) {

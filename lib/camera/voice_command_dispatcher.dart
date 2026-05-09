@@ -40,7 +40,7 @@ class VoiceCommandDispatcher {
     if (fallCountdown.active) {
       if (cmd == VoiceCommand.cancelFall || cmd == VoiceCommand.sos) {
         if (cmd == VoiceCommand.cancelFall) {
-          fallCountdown.cancel();
+          fallCountdown.requestVoiceCancel();
           return;
         }
         fallCountdown.cancel();

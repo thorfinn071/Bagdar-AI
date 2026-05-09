@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
+import 'package:sensors_plus/sensors_plus.dart';
 
 import '../models/speech_job.dart';
 import '../models/strings.dart';
@@ -17,11 +19,24 @@ class FallCountdownController extends ChangeNotifier {
 
   static const Duration kInitialDuration = Duration(seconds: 15);
 
+  static const Duration kVoiceConfirmWindow = Duration(seconds: 4);
+  static const Duration kCorroborationWindow = Duration(seconds: 3);
+  static const double kDeliberateTapThresholdMps2 = 14.7;
+  static const Duration kDeliberateTapMaxDuration =
+      Duration(milliseconds: 100);
+
   Timer? _timer;
   int _secondsLeft = 0;
   bool _active = false;
   bool _cancelListenerActive = false;
   bool _disposed = false;
+
+  bool _voiceConfirmPending = false;
+  Timer? _voiceConfirmTimeout;
+  DateTime? _lastTouchAt;
+  DateTime? _lastDeliberateTapAt;
+  DateTime? _userAccelAboveStartedAt;
+  StreamSubscription<UserAccelerometerEvent>? _userAccelSub;
 
   FallCountdownController({
     required this.tts,
@@ -52,6 +67,7 @@ class FallCountdownController extends ChangeNotifier {
     HapticService.vibrate([0, 300, 200, 300, 200, 300]);
 
     _startFallCancelListener();
+    _startCorroborationSensor();
 
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (t) => _tick(t));
@@ -64,10 +80,59 @@ class FallCountdownController extends ChangeNotifier {
     _active = false;
     _secondsLeft = 0;
     _stopFallCancelListener();
+    _stopCorroborationSensor();
+    _resetVoiceConfirm();
     tts.say(S.get('sos_fall_cancelled'), SpeechPriority.critical, pan: 0.0);
     HapticService.vibrate([0, 100]);
     onCancelled?.call();
     notifyListeners();
+  }
+
+  void notifyTouch() {
+    _lastTouchAt = DateTime.now();
+    if (_active) cancel();
+  }
+
+  void requestVoiceCancel() {
+    if (!_active) return;
+    final now = DateTime.now();
+    if (!_voiceConfirmPending) {
+      _voiceConfirmPending = true;
+      tts.say(
+        S.get('sos_fall_voice_confirm_prompt'),
+        SpeechPriority.critical,
+        pan: 0.0,
+        barge: true,
+      );
+      _voiceConfirmTimeout?.cancel();
+      _voiceConfirmTimeout = Timer(kVoiceConfirmWindow, () {
+        _voiceConfirmTimeout = null;
+        _voiceConfirmPending = false;
+      });
+      return;
+    }
+    final touchOk = _lastTouchAt != null &&
+        now.difference(_lastTouchAt!) <= kCorroborationWindow;
+    final tapOk = _lastDeliberateTapAt != null &&
+        now.difference(_lastDeliberateTapAt!) <= kCorroborationWindow;
+    if (!touchOk && !tapOk) {
+      tts.say(
+        S.get('sos_fall_voice_cancel_rejected'),
+        SpeechPriority.critical,
+        pan: 0.0,
+        barge: true,
+      );
+      _resetVoiceConfirm();
+      return;
+    }
+    _resetVoiceConfirm();
+    cancel();
+  }
+
+  void _resetVoiceConfirm() {
+    _voiceConfirmPending = false;
+    _voiceConfirmTimeout?.cancel();
+    _voiceConfirmTimeout = null;
   }
 
   void _tick(Timer t) {
@@ -76,6 +141,8 @@ class FallCountdownController extends ChangeNotifier {
       t.cancel();
       _active = false;
       _stopFallCancelListener();
+      _stopCorroborationSensor();
+      _resetVoiceConfirm();
       notifyListeners();
       unawaited(_sendFallSos());
       return;
@@ -147,10 +214,47 @@ class FallCountdownController extends ChangeNotifier {
     unawaited(voice.stopListening());
   }
 
+  void _startCorroborationSensor() {
+    _userAccelSub?.cancel();
+    _userAccelAboveStartedAt = null;
+    _lastDeliberateTapAt = null;
+    try {
+      _userAccelSub = userAccelerometerEventStream(
+        samplingPeriod: const Duration(milliseconds: 50),
+      ).listen(_onUserAccel, onError: (_) {});
+    } catch (_) {
+      _userAccelSub = null;
+    }
+  }
+
+  void _stopCorroborationSensor() {
+    _userAccelSub?.cancel();
+    _userAccelSub = null;
+    _userAccelAboveStartedAt = null;
+  }
+
+  void _onUserAccel(UserAccelerometerEvent e) {
+    final mag = math.sqrt(e.x * e.x + e.y * e.y + e.z * e.z);
+    final now = DateTime.now();
+    if (mag > kDeliberateTapThresholdMps2) {
+      _userAccelAboveStartedAt ??= now;
+      return;
+    }
+    final aboveStart = _userAccelAboveStartedAt;
+    if (aboveStart == null) return;
+    final duration = now.difference(aboveStart);
+    _userAccelAboveStartedAt = null;
+    if (duration <= kDeliberateTapMaxDuration) {
+      _lastDeliberateTapAt = now;
+    }
+  }
+
   @override
   void dispose() {
     _disposed = true;
     _timer?.cancel();
+    _voiceConfirmTimeout?.cancel();
+    _userAccelSub?.cancel();
     super.dispose();
   }
 }

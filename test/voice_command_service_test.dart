@@ -37,17 +37,47 @@ void main() {
       }
     });
 
-    test('cancel fall exact phrases fire cancelFall', () {
+    test('multi-word cancel phrases fire cancelFall', () {
       final svc = VoiceCommandService();
       for (final phrase in [
-        'stop',
-        'cancel',
         'i am fine',
+        "i'm fine",
+        'i am okay',
         "i'm ok",
         'false alarm',
+        'no problem',
+        "i didn't fall",
       ]) {
         final r = _feed(svc, phrase, locale: 'en-US');
         expect(r.cmd, VoiceCommand.cancelFall, reason: 'phrase="$phrase"');
+      }
+    });
+
+    test('bare single-word triggers must not cancel a fall SOS', () {
+      final svc = VoiceCommandService();
+      for (final phrase in ['stop', 'cancel', 'abort', 'mistake']) {
+        final r = _feed(svc, phrase, locale: 'en-US');
+        expect(
+          r.cmd,
+          isNot(VoiceCommand.cancelFall),
+          reason: 'bare word "$phrase" must not cancel a fall SOS',
+        );
+      }
+      for (final phrase in ['стоп', 'отмена', 'отбой', 'прекрати']) {
+        final r = _feed(svc, phrase, locale: 'ru-RU');
+        expect(
+          r.cmd,
+          isNot(VoiceCommand.cancelFall),
+          reason: 'bare word "$phrase" must not cancel a fall SOS',
+        );
+      }
+      for (final phrase in ['тоқта', 'болдырма', 'қате']) {
+        final r = _feed(svc, phrase, locale: 'kk-KZ');
+        expect(
+          r.cmd,
+          isNot(VoiceCommand.cancelFall),
+          reason: 'bare word "$phrase" must not cancel a fall SOS',
+        );
       }
     });
 

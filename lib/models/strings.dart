@@ -438,7 +438,11 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sos_fall_cancelled': 'Отправка SOS отменена.',
     'sos_fall_sent': 'SOS отправлен после падения.',
     'sos_fall_cancel_hint':
-        'Скажите стоп, отмена или я в порядке чтобы отменить.',
+        'Скажите "я в порядке" или "ложная тревога". Прикоснитесь к экрану для отмены.',
+    'sos_fall_voice_confirm_prompt':
+        'Подтвердите: скажите "я в порядке".',
+    'sos_fall_voice_cancel_rejected':
+        'Отмена не подтверждена. Продолжаю отсчёт.',
     'sos_112_fallback':
         'Контакт не задан. SOS будет отправлен на экстренный номер 112.',
     'sos_position_stale': 'Местоположение устарело на',
@@ -1123,7 +1127,11 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sos_fall_cancelled': 'SOS жіберу болдырылмады.',
     'sos_fall_sent': 'Құлаудан кейін SOS жіберілді.',
     'sos_fall_cancel_hint':
-        'Болдырмау үшін тоқта, болдырма немесе мен жақсы деп айтыңыз.',
+        '"Мен жақсымын" немесе "жалған дабыл" деп айтыңыз. Болдырмау үшін экранды басыңыз.',
+    'sos_fall_voice_confirm_prompt':
+        'Растаңыз: "мен жақсымын" деп айтыңыз.',
+    'sos_fall_voice_cancel_rejected':
+        'Болдырмау расталмады. Кері санақ жалғасуда.',
     'sos_112_fallback': 'Байланыс нөмірі жоқ. SOS 112 нөміріне жіберіледі.',
     'sos_position_stale': 'Орналасу ескі, жасы',
     'sos_position_unit_min': 'минут',
@@ -1806,7 +1814,12 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sos_fall_seconds': 'seconds.',
     'sos_fall_cancelled': 'SOS cancelled.',
     'sos_fall_sent': 'SOS sent after fall.',
-    'sos_fall_cancel_hint': 'Say stop, cancel, or I am okay to cancel.',
+    'sos_fall_cancel_hint':
+        'Say "I am fine" or "false alarm". Tap screen to cancel.',
+    'sos_fall_voice_confirm_prompt':
+        'Confirm: say "I am fine".',
+    'sos_fall_voice_cancel_rejected':
+        'Cancel not confirmed. Countdown continues.',
     'sos_112_fallback':
         'No contact specified. SOS will be sent to emergency 112.',
     'sos_position_stale': 'Location is stale by',
