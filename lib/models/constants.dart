@@ -190,6 +190,27 @@ const Duration kInfoCooldown = Duration(seconds: 10);
 const Duration kPersonCooldown = Duration(seconds: 15);
 const Duration kIndoorPersonCooldown = Duration(seconds: 15);
 const int kIndoorCrowdPersonThreshold = 3;
+
+/// Cooldown between successive grouped "crowd ahead, N persons" alerts.
+///
+/// Safety audit 2.4: previously, person grouping ran indoor-only, so
+/// outdoors each person carried its own [kPersonCooldown] (15 s) and
+/// AlertFilter's 1.5 s minimum gap could pass up to ~7 person alerts in
+/// 10 s — drowning out vehicle and critical alerts. AlertManager now
+/// suppresses individual person alerts and emits one grouped alert at
+/// this cadence regardless of indoor/outdoor.
+const Duration kCrowdAlertCooldown = Duration(seconds: 10);
+
+/// Sustained-hazard escalation threshold for `_handleCloseFar`.
+///
+/// Safety audit 6.1: when a track previously announced as a 'close'
+/// warning has its measured `distM` drop to
+/// `<= last * kSustainedHazardEscalationDistanceFraction` (i.e. ≥30 %
+/// closer), the next alert for that track is promoted to critical
+/// priority. Mirrors the per-category convention used by AlertFilter's
+/// `kEscalationDistanceFraction`.
+const double kSustainedHazardEscalationDistanceFraction = 0.70;
+
 const Duration kApproachCooldown = Duration(milliseconds: 2500);
 const double kApproachingLabelThreatMaxDistM = 15.0;
 const Duration kStaticObjectCooldown = Duration(seconds: 20);
@@ -442,3 +463,6 @@ const int kAwmMelBins = 64;
 const int kAwmFftSize = 512;
 const int kAwmBearingFftSize = 256;
 const double kAwmTransientThresholdMultiplier = 3.0;
+
+const double kNavGpsAccuracyMaxM = 30.0;
+const int kNavGpsMaxAgeSec = 30;

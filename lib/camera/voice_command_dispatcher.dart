@@ -109,16 +109,6 @@ class VoiceCommandDispatcher {
       case VoiceCommand.togglePaymentSms:
         unawaited(vm.togglePaymentSms());
         break;
-      case VoiceCommand.toggleAcoustic:
-        final enabled = !vm.awm.isEnabled;
-        vm.awm.setEnabled(enabled);
-        unawaited(Settings.instance.setAcousticWorldModel(enabled));
-        vm.tts.say(
-          S.alert(enabled ? 'awm_enabled' : 'awm_disabled'),
-          SpeechPriority.info,
-          pan: 0.0,
-        );
-        break;
       case VoiceCommand.stopNavigation:
         vm.nav.stopNavigation();
         vm.tts.say(S.get('nav_stopped'), SpeechPriority.info, pan: 0.0);

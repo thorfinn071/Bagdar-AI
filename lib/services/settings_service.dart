@@ -43,6 +43,8 @@ class SettingsService {
   static const _kAudioTourSeen = 'audio_tour_seen';
   static const _kSceneNarrationEnabled = 'scene_narration_enabled';
   static const _kPaymentSmsEnabled = 'payment_sms_enabled';
+  static const _kCalibrationDeclined = 'calibration_declined';
+  static const _kDisclaimerAcknowledged = 'disclaimer_acknowledged';
 
   Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
@@ -230,11 +232,15 @@ class SettingsService {
   Future<void> setPaymentSmsEnabled(bool v) async =>
       _prefs!.setBool(_kPaymentSmsEnabled, v);
 
-  static const _kAcousticWorldModel = 'acoustic_world_model';
-  bool get acousticWorldModel =>
-      _prefs?.getBool(_kAcousticWorldModel) ?? true;
-  Future<void> setAcousticWorldModel(bool v) async =>
-      _prefs!.setBool(_kAcousticWorldModel, v);
+  bool get calibrationDeclined =>
+      _prefs?.getBool(_kCalibrationDeclined) ?? false;
+  Future<void> setCalibrationDeclined(bool v) async =>
+      _prefs!.setBool(_kCalibrationDeclined, v);
+
+  bool get disclaimerAcknowledged =>
+      _prefs?.getBool(_kDisclaimerAcknowledged) ?? false;
+  Future<void> setDisclaimerAcknowledged(bool v) async =>
+      _prefs!.setBool(_kDisclaimerAcknowledged, v);
 
   Future<void> resetAll() async => _prefs!.clear();
 }

@@ -150,6 +150,11 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Калибровка. Можно пропустить. '
         'Двойной тап — продолжить без калибровки.',
     'onb_ready_tts': 'Всё готово. Двойной тап — начать.',
+    'onb_secondary_aid_tts':
+        'Bagdar предупреждает о препятствиях, но может их пропустить. '
+        'Продолжайте использовать белую трость или собаку-поводыря. '
+        'Bagdar — дополнительное средство.',
+    'onb_secondary_aid_check': 'Bagdar — дополнительное средство, не замена трости',
     'onb_blind_intro':
         'Bagdar для незрячих. Управление жестами. '
         'Один тап — повторить. Двойной тап — продолжить. '
@@ -506,6 +511,9 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Качество глубины снизилось. Внимательнее к препятствиям.',
     'depth_recovered': 'Качество глубины восстановлено.',
     'depth_quality_low': 'Качество глубины низкое. Перехожу на MiDaS.',
+    'reduced_mode_depth':
+        'Сниженный режим: обнаружение глубины приостановлено.',
+    'reduced_mode_restored': 'Обнаружение глубины восстановлено.',
 
     'camera_perm_title': 'Нет доступа к камере',
     'camera_perm_body':
@@ -568,6 +576,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'nav_walk_to_dest': 'Идём к месту назначения.',
     'nav_nearest_stop': 'Ближайшая остановка',
     'nav_gps_wait': 'Жду сигнал GPS...',
+    'nav_gps_unreliable': 'GPS ненадёжен. Навигация приостановлена.',
+    'nav_gps_restored': 'GPS восстановлен.',
     'nav_rerouting': 'Перестраиваю маршрут...',
     'nav_auto_boarded': 'Обнаружено движение. Слежу за остановками.',
     'nav_bus_interval': 'Следующий автобус примерно через',
@@ -832,6 +842,11 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Калибрлеу. Өткізуге болады. '
         'Қос тию — калибрлеусіз жалғастыру.',
     'onb_ready_tts': 'Бәрі дайын. Қос тию — бастау.',
+    'onb_secondary_aid_tts':
+        'Bagdar кедергілер туралы ескертеді, бірақ оларды жіберіп алуы мүмкін. '
+        'Ақ таяқты немесе жолбасшы итті пайдалануды жалғастырыңыз. '
+        'Bagdar — қосымша құрал.',
+    'onb_secondary_aid_check': 'Bagdar — қосымша құрал, таяқтың орнына емес',
     'onb_blind_intro':
         'Bagdar — көрмейтіндерге арналған. Қимылдармен басқару. '
         'Бір тию — қайталау. Қос тию — жалғастыру. '
@@ -1186,6 +1201,9 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Тереңдік сапасы төмендеді. Кедергілерге көбірек назар аударыңыз.',
     'depth_recovered': 'Тереңдік сапасы қалпына келді.',
     'depth_quality_low': 'Тереңдік сапасы төмен. MiDaS-ке ауысып жатырмын.',
+    'reduced_mode_depth':
+        'Шектелген режим: тереңдікті анықтау уақытша өшірілді.',
+    'reduced_mode_restored': 'Тереңдікті анықтау қалпына келтірілді.',
 
     'camera_perm_title': 'Камераға рұқсат жоқ',
     'camera_perm_body':
@@ -1248,6 +1266,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'nav_walk_to_dest': 'Мақсат нүктесіне бара жатырмыз.',
     'nav_nearest_stop': 'Жақын аялдама',
     'nav_gps_wait': 'GPS сигналын күтемін...',
+    'nav_gps_unreliable': 'GPS сенімсіз. Навигация тоқтатылды.',
+    'nav_gps_restored': 'GPS қалпына келді.',
     'nav_rerouting': 'Маршрут қайта құрылуда...',
     'nav_auto_boarded': 'Қозғалыс анықталды. Аялдамаларды бақылаймын.',
     'nav_bus_interval': 'Келесі автобус шамамен',
@@ -1511,6 +1531,11 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Calibration. Optional. '
         'Double tap to continue without calibration.',
     'onb_ready_tts': 'All set. Double tap to start.',
+    'onb_secondary_aid_tts':
+        'Bagdar warns about hazards but can miss them. '
+        'Continue using your white cane or guide dog. '
+        'Bagdar is a secondary aid.',
+    'onb_secondary_aid_check': 'Bagdar is a secondary aid, not a cane replacement',
     'onb_blind_intro':
         'Bagdar for blind users. Gesture-based control. '
         'Single tap to repeat. Double tap to continue. '
@@ -1851,6 +1876,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'depth_degraded': 'Depth quality degraded. Pay extra attention.',
     'depth_recovered': 'Depth quality recovered.',
     'depth_quality_low': 'Depth quality low. Switching to MiDaS.',
+    'reduced_mode_depth': 'Operating in reduced mode — depth disabled.',
+    'reduced_mode_restored': 'Depth restored.',
 
     'camera_perm_title': 'No camera access',
     'camera_perm_body':
@@ -1912,6 +1939,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'nav_walk_to_dest': 'Walking to destination.',
     'nav_nearest_stop': 'Nearest stop',
     'nav_gps_wait': 'Waiting for GPS signal...',
+    'nav_gps_unreliable': 'GPS unreliable. Pausing turn-by-turn.',
+    'nav_gps_restored': 'GPS restored.',
     'nav_rerouting': 'Rerouting...',
     'nav_auto_boarded': 'Movement detected. Tracking stops.',
     'nav_bus_interval': 'Next bus in about',

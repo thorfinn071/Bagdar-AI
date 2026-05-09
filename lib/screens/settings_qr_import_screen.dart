@@ -9,15 +9,15 @@ import '../services/haptic_service.dart';
 import '../services/settings_codec.dart';
 import '../services/tts_service.dart';
 
-
-
-
-
-
-
-
-
-
+/// Scans a settings-backup QR (produced by `SettingsQrExportScreen`),
+/// previews the payload via TTS, and applies it only after a deliberate
+/// long-press confirmation — designed for blind users who cannot tap a
+/// small "Apply" button precisely.
+///
+/// IMPORTANT: the host (CameraScreen) MUST release its own camera
+/// controller before pushing this screen and reinitialise it after pop,
+/// because mobile_scanner opens its own camera and Android only allows
+/// one foreground camera consumer.
 class SettingsQrImportScreen extends StatefulWidget {
   final TtsService tts;
 
@@ -83,7 +83,7 @@ class _SettingsQrImportScreenState extends State<SettingsQrImportScreen> {
       await Future<void>.delayed(const Duration(milliseconds: 250));
       await _scanner.toggleTorch();
     } catch (_) {
-      
+      // Some devices have no torch — silent fallback.
     }
   }
 
@@ -347,9 +347,9 @@ class _PreviewSheet extends StatelessWidget {
   }
 }
 
-
-
-
+/// Apply button that requires a deliberate 1.5s hold. The 500 ms default
+/// long-press is far too easy to trigger accidentally with shaky hands;
+/// 1.5 s gives the user time to abort by lifting the finger.
 class _LongPressApplyButton extends StatefulWidget {
   final bool applying;
   final Future<void> Function() onConfirmed;

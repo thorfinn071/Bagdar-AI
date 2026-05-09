@@ -136,7 +136,9 @@ class AcousticWorldModel {
 
     counts.forEach((cls, count) {
       if (cls == BagdarAudioClass.unknown ||
-          cls == BagdarAudioClass.silence) return;
+          cls == BagdarAudioClass.silence) {
+        return;
+      }
       if (count >= 2 && count > dominantCount) {
         dominantCount = count;
         dominantClass = cls;

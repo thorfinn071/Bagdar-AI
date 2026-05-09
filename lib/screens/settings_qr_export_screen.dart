@@ -7,12 +7,12 @@ import '../services/haptic_service.dart';
 import '../services/settings_codec.dart';
 import '../services/tts_service.dart';
 
-
-
-
-
-
-
+/// Renders a QR code that contains the user's accessibility settings so a
+/// sighted helper can scan it from another device. Payload built by
+/// [SettingsCodec] — never includes PII (e.g. SOS contact).
+///
+/// On open the screen announces "QR ready, show it to your helper" via
+/// TTS so a blind primary user understands what is on screen.
 class SettingsQrExportScreen extends StatefulWidget {
   final TtsService tts;
 

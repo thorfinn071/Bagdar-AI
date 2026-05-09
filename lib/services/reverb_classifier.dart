@@ -88,7 +88,9 @@ class ReverbClassifier {
     final maxLag = (sampleRate * 0.1).toInt().clamp(1, n ~/ 2);
 
     double energy = 0.0;
-    for (int i = 0; i < n; i++) energy += mono[i] * mono[i];
+    for (int i = 0; i < n; i++) {
+      energy += mono[i] * mono[i];
+    }
     if (energy < 1e-10) return 0.0;
 
     final autocorr = Float32List(maxLag);

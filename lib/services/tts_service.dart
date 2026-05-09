@@ -11,24 +11,7 @@ import 'field_logger.dart';
 
 class TtsService {
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   static const Duration _kCriticalStaleAfter = Duration(seconds: 4);
-
-  
-  
-  
   
   FlutterTts? _ttsImpl;
   FlutterTts get _tts => _ttsImpl ??= FlutterTts();
@@ -73,13 +56,6 @@ class TtsService {
       _pruneStaleCriticals(now, maxAge: maxAge);
 
   void _pruneStaleCriticals(DateTime now, {Duration? maxAge}) {
-    
-    
-    
-    
-    
-    
-    
     
     if (maxAge == null) return;
     _queue.removeWhere(
@@ -449,17 +425,6 @@ class TtsService {
     if (_queue.any((j) => j.text == text)) return;
 
     if (_queue.length >= 4) {
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
       int oldestInfoIdx = -1;
       DateTime oldestInfoTime = DateTime.now();
       int oldestWarnIdx = -1;
@@ -594,6 +559,12 @@ class TtsService {
     
     
     _pruneStaleCriticals(DateTime.now());
+    final now = DateTime.now();
+    _queue.removeWhere(
+      (j) =>
+          j.priority != SpeechPriority.critical &&
+          now.difference(j.enqueuedAt) > const Duration(seconds: 5),
+    );
     if (_speaking || _queue.isEmpty) return;
     final job = _queue.removeAt(0);
     try {

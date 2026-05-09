@@ -130,25 +130,25 @@ class ModelService {
     );
   }
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+  /// B-1: Adaptive YOLO input size with thermal awareness.
+  ///
+  /// At `ThermalSeverity.hot/critical` we swap to a 320×320 small-tier
+  /// model (~30-40% inference time reduction) so the burst-frame mechanism
+  /// in `PerformanceThrottler` stays effective even under sustained heat.
+  ///
+  /// Safety: at 320×320 a 0.5 m obstacle still occupies ~30% of the frame —
+  /// recall on safety-critical classes (person/car/bicycle) is preserved
+  /// per design.
+  ///
+  /// Asset requirement: `assets/yolov8n_320_int8.tflite` must be bundled
+  /// (export via `yolo export model=yolov8n.pt format=tflite imgsz=320
+  /// int8=True`). When the asset is absent, this method is a no-op and the
+  /// pipeline continues with the standard 640×640 model — degraded perf
+  /// but no functional regression.
+  ///
+  /// Hysteresis: `severity` here is already committed via `PerformanceThrottler`'s
+  /// 60 s commit-dwell, so this method is safe from rapid warm↔hot flapping.
+  /// The `_yoloReloadBusy` guard further prevents concurrent reloads.
   Future<void> adjustForThermal(ThermalSeverity severity) async {
     if (!_yoloLoaded || _yoloReloadBusy) return;
     final desired =

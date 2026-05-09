@@ -5,22 +5,22 @@ import 'package:flutter/foundation.dart';
 import '../models/a11y_prefs.dart';
 import 'settings_service.dart';
 
-
-
-
-
-
-
+/// Serializes accessibility-relevant SettingsService values to a compact
+/// JSON payload that fits inside a QR code (target: ~300 bytes).
+///
+/// PII (e.g. SOS contact number) is intentionally excluded — the payload
+/// is meant to be shown to a sighted helper or scanned across devices,
+/// so secrets must never leave the device through this channel.
 class SettingsCodec {
   const SettingsCodec._();
   static const SettingsCodec instance = SettingsCodec._();
 
-  
-  
-  
+  /// Schema version. Bump when fields are added/removed in a way that
+  /// older clients cannot interpret. Reader rejects payloads with
+  /// versions it does not understand.
   static const int schemaVersion = 1;
 
-  
+  /// Builds a snapshot Map from the current [Settings] state.
   Map<String, dynamic> exportToMap() {
     final s = Settings.instance;
     return <String, dynamic>{
@@ -42,10 +42,10 @@ class SettingsCodec {
 
   String exportToJson() => jsonEncode(exportToMap());
 
-  
-  
-  
-  
+  /// Decodes the payload, validates schema + ranges, and applies it via
+  /// SettingsService setters. Returns true on success, false on rejection.
+  /// Unknown keys are silently ignored. Out-of-range values are clamped
+  /// to the enum/double range. Missing keys leave existing values intact.
   Future<bool> importFromJson(String json) async {
     Map<String, dynamic>? map;
     try {
@@ -121,8 +121,8 @@ class SettingsCodec {
     return true;
   }
 
-  
-  
+  /// Quickly inspect a payload without applying it. Returns null on
+  /// invalid input. Used by import screen for the audio preview.
   Map<String, dynamic>? peek(String json) {
     try {
       final decoded = jsonDecode(json);

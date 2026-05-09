@@ -77,13 +77,19 @@ class MotionPreAlert {
   double get baselineCenter => 0.0;
   double get baselineRight => 0.0;
 
+  bool _indoorHint = false;
+
   MotionIntrusionEvent? feed(
     CameraImage image,
     DateTime now, {
     bool weatherDegraded = false,
+    bool aeTransitioning = false,
+    bool indoor = false,
   }) {
     if (image.planes.isEmpty) return null;
+    if (aeTransitioning) return null;
     _weatherDegradedHint = weatherDegraded;
+    _indoorHint = indoor;
     _downsampleImage(image);
     return _processFrame(now);
   }
@@ -93,8 +99,10 @@ class MotionPreAlert {
     Uint8List grid,
     DateTime now, {
     bool weatherDegraded = false,
+    bool aeTransitioning = false,
   }) {
     if (grid.length != kEventGridW * kEventGridH) return null;
+    if (aeTransitioning) return null;
     _weatherDegradedHint = weatherDegraded;
     _grid.setAll(0, grid);
     return _processFrame(now);
@@ -129,12 +137,13 @@ class MotionPreAlert {
     
     
     
+    final indoorScale = _indoorHint ? 1.4 : 1.0;
     final diffThreshold = _weatherDegradedHint
-        ? kEventDiffThreshold * 1.6
-        : kEventDiffThreshold.toDouble();
+        ? kEventDiffThreshold * 1.6 * indoorScale
+        : kEventDiffThreshold.toDouble() * indoorScale;
     final baselineMult = _weatherDegradedHint
-        ? kEventBaselineMultiplier * 1.5
-        : kEventBaselineMultiplier;
+        ? kEventBaselineMultiplier * 1.5 * indoorScale
+        : kEventBaselineMultiplier * indoorScale;
     const n = kEventGridW * kEventGridH;
     int eventTotal = 0;
     for (int i = 0; i < n; i++) {

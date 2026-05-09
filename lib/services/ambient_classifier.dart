@@ -48,54 +48,6 @@ class AmbientClassifier {
   bool _ready = false;
   bool get isReady => _ready;
 
-  static const Map<String, BagdarAudioClass> _classMap = {
-    'Vehicle': BagdarAudioClass.vehicle,
-    'Car': BagdarAudioClass.vehicle,
-    'Engine': BagdarAudioClass.vehicle,
-    'Truck': BagdarAudioClass.vehicle,
-    'Bus': BagdarAudioClass.vehicle,
-    'Motor vehicle (road)': BagdarAudioClass.vehicle,
-    'Car horn': BagdarAudioClass.horn,
-    'Honking': BagdarAudioClass.horn,
-    'Vehicle horn, car horn, honking': BagdarAudioClass.horn,
-    'Air horn, truck horn': BagdarAudioClass.horn,
-    'Siren': BagdarAudioClass.siren,
-    'Emergency vehicle': BagdarAudioClass.siren,
-    'Ambulance (siren)': BagdarAudioClass.siren,
-    'Fire engine, fire truck (siren)': BagdarAudioClass.siren,
-    'Police car (siren)': BagdarAudioClass.siren,
-    'Civil defense siren': BagdarAudioClass.siren,
-    'Dog': BagdarAudioClass.dog,
-    'Bark': BagdarAudioClass.dog,
-    'Growling': BagdarAudioClass.dog,
-    'Bow-wow': BagdarAudioClass.dog,
-    'Yip': BagdarAudioClass.dog,
-    'Howl': BagdarAudioClass.dog,
-    'Crowd': BagdarAudioClass.crowd,
-    'Speech': BagdarAudioClass.crowd,
-    'Babble': BagdarAudioClass.crowd,
-    'Chatter': BagdarAudioClass.crowd,
-    'Hubbub, speech noise, speech babble': BagdarAudioClass.crowd,
-    'Train': BagdarAudioClass.tram,
-    'Rail transport': BagdarAudioClass.tram,
-    'Train horn': BagdarAudioClass.tram,
-    'Bicycle bell': BagdarAudioClass.bicycle,
-    'Bicycle': BagdarAudioClass.bicycle,
-    'Jackhammer': BagdarAudioClass.construction,
-    'Drill': BagdarAudioClass.construction,
-    'Power tool': BagdarAudioClass.construction,
-    'Sawing': BagdarAudioClass.construction,
-    'Hammer': BagdarAudioClass.construction,
-    'Silence': BagdarAudioClass.silence,
-    'Wind': BagdarAudioClass.wind,
-    'Wind noise (microphone)': BagdarAudioClass.wind,
-    'Rustling leaves': BagdarAudioClass.wind,
-    'Rain': BagdarAudioClass.rain,
-    'Rain on surface': BagdarAudioClass.rain,
-    'Raindrop': BagdarAudioClass.rain,
-    'Traffic noise, roadway noise': BagdarAudioClass.trafficFlow,
-  };
-
   Future<void> init() async {
     _melFilterbank = Float32List(_melBins * (_fftSize ~/ 2 + 1));
     _computeMelFilterbank();
@@ -164,7 +116,7 @@ class AmbientClassifier {
 
   Float32List _computeMelSpectrogram(Float32List mono) {
     final numFrames = (mono.length - _fftSize) ~/ _hopLength + 1;
-    final specBins = _fftSize ~/ 2 + 1;
+    const specBins = _fftSize ~/ 2 + 1;
     final melSpec = Float32List(numFrames * _melBins);
 
     final powerSpec = Float32List(specBins);
@@ -218,8 +170,8 @@ class AmbientClassifier {
     double lowEnergy = 0.0;
     double midEnergy = 0.0;
     double highEnergy = 0.0;
-    final lowEnd = _melBins ~/ 4;
-    final midEnd = _melBins * 3 ~/ 4;
+    const lowEnd = _melBins ~/ 4;
+    const midEnd = _melBins * 3 ~/ 4;
     for (int m = 0; m < _melBins; m++) {
       if (m < lowEnd) {
         lowEnergy += avgEnergy[m];
@@ -297,9 +249,9 @@ class AmbientClassifier {
       1.0 / (1.0 + math.exp(-x * scale));
 
   void _computeMelFilterbank() {
-    final specBins = _fftSize ~/ 2 + 1;
-    final fMin = 0.0;
-    final fMax = _sampleRate / 2.0;
+    const specBins = _fftSize ~/ 2 + 1;
+    const fMin = 0.0;
+    const fMax = _sampleRate / 2.0;
     final melMin = _hzToMel(fMin);
     final melMax = _hzToMel(fMax);
     final melPoints = Float64List(_melBins + 2);
