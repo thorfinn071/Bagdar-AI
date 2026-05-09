@@ -14,6 +14,7 @@ class FallDetector {
   bool _ready = false;
 
   void Function(FallClass fallClass)? onFallDetected;
+  void Function()? onSecondFallDuringLockout;
   void Function(MotionState state)? onMotionStateChanged;
   void Function(
     String stage, {
@@ -62,7 +63,12 @@ class FallDetector {
   static const int _classBStillFramesRequired = 100;
   static const Duration _classBPostImpactTimeout = Duration(seconds: 10);
 
+  static const Duration _postCancelGraceWindow = Duration(seconds: 60);
+  static const Duration _sosLockoutWindow = Duration(seconds: 20);
+
   DateTime _lastDetectionAt = DateTime.fromMillisecondsSinceEpoch(0);
+  DateTime? _postCancelGraceUntil;
+  DateTime? _sosLockoutEndAt;
 
   Future<void> init() async {
     _ready = false;
@@ -104,6 +110,20 @@ class FallDetector {
 
   MotionState get motionState => _motionState;
 
+  @visibleForTesting
+  bool isInPostCancelGraceAt(DateTime t) =>
+      _postCancelGraceUntil != null && t.isBefore(_postCancelGraceUntil!);
+
+  @visibleForTesting
+  bool isInSosLockoutAt(DateTime t) =>
+      _sosLockoutEndAt != null && t.isBefore(_sosLockoutEndAt!);
+
+  @visibleForTesting
+  Duration get postCancelGraceWindow => _postCancelGraceWindow;
+
+  @visibleForTesting
+  Duration get sosLockoutWindow => _sosLockoutWindow;
+
   void _onAccel(AccelerometerEvent event) {
     final magnitude = math.sqrt(
       event.x * event.x + event.y * event.y + event.z * event.z,
@@ -115,7 +135,16 @@ class FallDetector {
 
     final now = DateTime.now();
 
-    if (now.difference(_lastDetectionAt) < _cooldownAfterDetection) return;
+    final inPostCancelGrace = _postCancelGraceUntil != null &&
+        now.isBefore(_postCancelGraceUntil!);
+    final inSosLockout =
+        _sosLockoutEndAt != null && now.isBefore(_sosLockoutEndAt!);
+    final cooldownActive =
+        now.difference(_lastDetectionAt) < _cooldownAfterDetection;
+    if (!inPostCancelGrace && !inSosLockout && cooldownActive) return;
+    if (_sosLockoutEndAt != null && !now.isBefore(_sosLockoutEndAt!)) {
+      _sosLockoutEndAt = null;
+    }
 
     if (magnitude < _freeFallThreshold) {
       _lastFreeFallAt = now;
@@ -234,6 +263,19 @@ class FallDetector {
         );
         return;
       }
+      if (_sosLockoutEndAt != null && now.isBefore(_sosLockoutEndAt!)) {
+        debugPrint(
+          'FallDetector: Class A SECOND FALL DURING LOCKOUT — queueing follow-up',
+        );
+        onStageChange?.call(
+          'confirmed_during_lockout',
+          accel: accelWithoutGravity,
+          gyro: peak,
+        );
+        _resetClassB();
+        onSecondFallDuringLockout?.call();
+        return;
+      }
       _lastDetectionAt = now;
       debugPrint('FallDetector: FALL CONFIRMED — triggering callback');
       onStageChange?.call(
@@ -304,6 +346,20 @@ class FallDetector {
       return;
     }
 
+    if (_sosLockoutEndAt != null && now.isBefore(_sosLockoutEndAt!)) {
+      debugPrint(
+        'FallDetector: Class B SECOND FALL DURING LOCKOUT — queueing follow-up',
+      );
+      onStageChange?.call(
+        'class_b_confirmed_during_lockout',
+        accel: accelWithoutGravity,
+        gyro: _lastGyroMagnitude,
+        stillFrames: _classBStillFrames,
+      );
+      _resetClassB();
+      onSecondFallDuringLockout?.call();
+      return;
+    }
     _lastDetectionAt = now;
     debugPrint('FallDetector: CLASS B (slow collapse) CONFIRMED');
     onStageChange?.call(
@@ -372,8 +428,27 @@ class FallDetector {
   
   
   void notifyCancelled() {
+    final now = DateTime.now();
     _lastDetectionAt =
-        DateTime.now().subtract(_cooldownAfterDetection - _cooldownAfterCancel);
+        now.subtract(_cooldownAfterDetection - _cooldownAfterCancel);
+    _postCancelGraceUntil = now.add(_postCancelGraceWindow);
+    _sosLockoutEndAt = null;
+    _impactDetected = false;
+    _stillFrames = 0;
+    _postImpactGyroPeak = 0;
+    _wasStationaryAtImpact = false;
+    _resetClassB();
+  }
+
+  /// Marks that the SOS for the just-confirmed fall has been delivered.
+  /// Opens a [_sosLockoutWindow] during which any second confirmed fall is
+  /// routed to [onSecondFallDuringLockout] instead of [onFallDetected],
+  /// so the host can queue a follow-up SMS without re-triggering the
+  /// countdown UI / a duplicate primary SOS.
+  void notifyFallSosSent() {
+    final now = DateTime.now();
+    _sosLockoutEndAt = now.add(_sosLockoutWindow);
+    _lastDetectionAt = now;
     _impactDetected = false;
     _stillFrames = 0;
     _postImpactGyroPeak = 0;

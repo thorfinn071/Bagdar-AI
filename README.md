@@ -36,12 +36,13 @@ The app currently supports **Russian**, **Kazakh**, and **English** – covering
 | **Object detection** | YOLOv8n quantized to INT8 (~3.2 MB). Runs at 8–25 FPS depending on hardware |
 | **Depth estimation** | MiDaS v2.1 Small via NCNN FP16 (~32 MB) with Vulkan GPU acceleration: monocular depth without LiDAR or ToF sensor |
 | **Ground plane analysis** | RANSAC-based plane fitting on the depth map. Detects potholes, steps, curbs, slopes, and overhead obstacles by measuring deviations from the estimated ground surface |
-| **Multi-object tracking** | Kalman filter with Hungarian assignment and appearance embedding. Tracks identity across frames, detects approaching vehicles via bounding-box area rate, classifies turning trajectories via 3-point curvature |
+| **Multi-object tracking** | Kalman filter with Hungarian assignment and appearance embedding. Tracks identity across frames, detects approaching vehicles via bounding-box area rate and heading-based prioritization, classifies turning trajectories via 3-point curvature |
 | **Traffic light recognition** | Direct YUV colorimetry on the camera stream using three-zone brightness analysis with temporal confirmation. No separate model required |
 | **Synthetic event camera** | Heuristic pipeline using Luma-grid differencing across left/center/right sectors. Detects fast-moving objects entering the periphery before the YOLO detector picks them up. Acts as a motion pre-alert |
 | **Glass door detection** | Luma variance analysis identifies transparent surfaces that depth models misinterpret as open space |
-| **Slippery surface warning** | Luma pattern analysis for high-reflectance wet or polished floors |
+| **Slippery surface warning** | Luma pattern analysis for high-reflectance wet or polished floors. Centre-corridor slippery hazards auto-promote to critical when the user is walking |
 | **Frame quality guard** | Laplacian-variance blur detection + exposure analysis. Rejects frames that would produce unreliable detections |
+| **Weather gate** | Luminosity variance + average brightness classifier with hysteresis. Detects rain, fog, and glare that degrade depth-map accuracy. Adjusts pedestrian detection thresholds and disables non-critical depth features while preserving stairs-down detection |
 | **Sensor fusion engine** | Combines depth hazard scores with YOLO confidence via EMA-smoothed temporal filtering. Reduces false positives by requiring multi-frame confirmation before alerting |
 
 ### 🎧 Acoustic Pipeline
@@ -59,7 +60,7 @@ The app currently supports **Russian**, **Kazakh**, and **English** – covering
 |---|---|
 | **Priority TTS queue** | Three-tier system (critical → warning → info) with interrupt semantics: critical alerts preempt all queued speech. Stale message pruning, per-track deduplication, stall watchdog with automatic recovery |
 | **Scene Narrator** | On-demand comprehensive scene description. Synthesizes detected objects, depth hazards, traffic lights, and OCR text into a natural language snapshot with directional filtering |
-| **Object Memory** | Voice-activated object finding. Users can command the system to "remember" an object, and later "find" it using a Y-histogram visual backend and a continuous audio beacon for spatial guidance |
+| **Object Memory** | Voice-activated object finding. Users can command the system to "remember" an object, and later "find" it using a Y-histogram visual backend and a continuous proximity beacon for spatial guidance. The beacon accelerates its pulse rate as the user approaches the target |
 | **Audio session management** | Proper ducking of background audio, interruption handling (phone calls, other apps), automatic route recovery when audio output changes |
 | **Voice commands** | 35+ commands across 3 languages. Natural-language prefixes for navigation ("веди в аптеку", "take me to pharmacy", "дәріханаға жол көрсет"). Fall cancellation, SOS, mode switching, speech rate / volume / language control via voice |
 | **Payment SMS reader** | Intercepts, parses, and reads aloud payment and balance SMS messages. Automatically extracts payment amounts, currency, and direction (incoming/outgoing) |
@@ -80,6 +81,7 @@ The app currently supports **Russian**, **Kazakh**, and **English** – covering
 | **Off-route detection** | Automatic rerouting when GPS indicates significant deviation. Cooldown prevents alert spam in noisy GPS environments |
 | **GPS drift rejection** | Pedometer cross-validation: large GPS jumps are ignored if the step counter disagrees, which is critical for indoor/urban-canyon accuracy |
 | **Public transit** | GTFS data stored locally in SQLite. Nearest stop search, route lookup, schedule queries, stop-by-stop ride tracking, auto-boarding detection via speed sensor |
+| **2GIS integration** | Optional online fallback for cities with 2GIS coverage. Place search, pedestrian routing, and multimodal transit directions (bus, tram, trolleybus, metro) via the 2GIS Catalog + Routing API. Activates only when an API key is configured; the app remains fully functional without it |
 | **Offline POI search** | FTS5-indexed SQLite with Levenshtein fuzzy matching. Finds places by name even with typos or partial input |
 | **Waypoints** | Save and navigate back to important locations |
 
@@ -87,10 +89,13 @@ The app currently supports **Russian**, **Kazakh**, and **English** – covering
 
 | Feature | Details |
 |---|---|
-| **Fall detection** | IMU-based (accelerometer + gyroscope). Three-phase FSM: freefall → impact → stillness. Gyroscope rotational impact confirmation reduces false positives from phone drops. Automatic SOS countdown with voice cancellation |
-| **SOS** | One-touch emergency SMS with GPS coordinates and Google Maps link. Native SMS dispatch with retry + fallback to 112 |
+| **Fall detection** | IMU-based (accelerometer + gyroscope). Two detection classes: **Class A** (sharp tumble) — three-phase FSM: freefall → impact → stillness with gyroscope rotational confirmation; **Class B** (slow vertical collapse) — sustained above-threshold deceleration → prolonged stillness, gated on prior walking state. Phone-drop false positives suppressed via low-rotation + no-freefall heuristic. Automatic SOS countdown with voice cancellation. Second-fall-during-lockout detection queues follow-up SMS |
+| **SOS** | One-touch emergency SMS with GPS coordinates and Google Maps link. Native SMS dispatch with retry + fallback to 112. Follow-up SMS on repeated falls during SOS lockout window |
+| **Misalignment watchdog** | Detects sustained phone misalignment (too high / too low / flat) while walking with no recent detections. Distinguishes "empty scene" from "camera is blind" via depth-pipeline confidence monitoring. Verbal warning escalation (warning → critical) gated on depth-blind confirmation; tactile triple-tap haptic channel independent of speech |
 | **Indoor auto-switch** | GPS quality + motion state classifier with hysteresis. Detects transition into GPS-denied environments (elevators, malls). Adjusts detection cadence to prevent battery-saving delays when you're standing in front of elevator doors |
-| **Thermal protection** | Real-time battery temperature + thermal status monitoring. Four-tier severity system with committed dwell to prevent oscillation |
+| **Thermal protection** | Real-time battery temperature + thermal status monitoring. Four-tier severity system with committed dwell to prevent oscillation. Adaptive YOLO input size: swaps to 320×320 model at hot/critical thermal state for ~30–40% inference time reduction |
+| **Orientation monitor** | Accelerometer-based device pitch and roll tracking. Feeds the misalignment watchdog and dynamically adjusts the depth-map crop-top fraction to match camera viewing angle. Excessive roll detection with enter/exit hysteresis demotes plane-geometry hazards |
+| **Field telemetry logger** | Optional on-device JSONL session recorder. Logs detections, depth hazards, TTS events, throttler decisions, fall stages, thermal transitions, weather gate changes, camera stalls, and resource snapshots. Post-processed offline via `tools/analyze_session.py` |
 | **Settings backup** | QR code export/import of all user preferences to enable caregivers to configure one device and replicate settings across others |
 
 ---
@@ -120,6 +125,12 @@ graph TB
         AWM[Acoustic World Model]
     end
 
+    subgraph Orientation
+        ORI[Orientation Service]
+        MISALIGN[Misalignment Watchdog]
+        WEATHER[Weather Gate]
+    end
+
     subgraph Processing
         TRACKER["Kalman Tracker\n(Hungarian + Appearance)"]
         GPA["Ground Plane Analyzer\n(RANSAC)"]
@@ -127,6 +138,7 @@ graph TB
         ALERT[Alert Filter + Decision Engine]
         NARRATOR[Scene Narrator]
         OBJ_MEM[Object Memory]
+        OBJ_FIND[Object Finder Session]
         THROTTLE[Performance Throttler]
         SMS_PARSER[Payment SMS Parser]
     end
@@ -155,8 +167,13 @@ graph TB
     CAM --> OCR --> ALERT
     CAM --> MOTION --> ALERT
     CAM --> TL --> ALERT
+    CAM --> WEATHER
+    WEATHER --> GPA
     IMU --> FALL --> SOS
     IMU --> INDOOR
+    IMU --> ORI --> MISALIGN
+    MISALIGN --> TTS
+    MISALIGN --> HAPTIC
     GPS --> NAV
     GPS --> INDOOR
     GPS --> SOS
@@ -168,7 +185,7 @@ graph TB
     FUSION --> NARRATOR
     YOLO --> NARRATOR
     YOLO --> OBJ_MEM
-    OBJ_MEM --> EARCON
+    OBJ_MEM --> OBJ_FIND --> EARCON
     OCR --> NARRATOR
     TL --> NARRATOR
     NARRATOR --> TTS
@@ -266,7 +283,7 @@ The `PerformanceThrottler` continuously monitors inference latency, thermal stat
 | **Motion-aware cadence** | Stationary user → longer intervals (battery savings). Unstable motion → shorter intervals (heightened vigilance). Indoor override: stationary-in-elevator penalty is removed |
 | **Memory-pressure response** | Low memory → increased detection intervals. Critical memory → MiDaS disabled entirely, detection intervals significantly increased |
 | **Stall watchdog** | Detects pipeline stalls with thermal-state-aware thresholds. Automatically recovers detection loop if inference hangs |
-| **Weather-degraded mode** | Adjusts pedestrian detection thresholds and disables staircase detection during conditions that degrade depth map quality |
+| **Weather-degraded mode** | Adjusts pedestrian detection thresholds and raises score floors in degraded visibility. Stairs-down detection is never fully disabled — instead requires higher MiDaS score (≥0.715) to preserve fall-cliff safety |
 
 ### Approximate Performance Characteristics
 
@@ -307,19 +324,28 @@ bagdar/
 │   │   ├── depth_pipeline_controller  # Depth provider lifecycle
 │   │   ├── camera_lifecycle_controller # Camera start/stop FSM
 │   │   ├── fall_countdown_controller   # Fall → SOS countdown UI
+│   │   ├── object_finder_session       # Visual object search session
 │   │   ├── stall_watchdog      # Inference hang detection + recovery
 │   │   └── voice_command_dispatcher    # Voice → action routing
-│   ├── services/          # 39 service modules
+│   ├── services/          # 49 service modules
 │   │   ├── tts_service         # Priority speech queue with interrupt semantics
 │   │   ├── navigation_service  # Turn-by-turn walk + transit navigation
 │   │   ├── depth_provider      # Multi-tier depth estimation orchestrator
 │   │   ├── ncnn_depth_provider # NCNN-based MiDaS inference + auto-disable
 │   │   ├── ncnn_depth_bridge   # Native FFI bridge to NCNN C++ library
-│   │   ├── fall_detector        # IMU-based fall detection FSM
+│   │   ├── fall_detector        # Dual-class IMU fall detection FSM
 │   │   ├── traffic_light_analyzer  # YUV colorimetric traffic light classification
 │   │   ├── thermal_monitor     # Battery temp + thermal status polling
 │   │   ├── indoor_gate         # GPS quality + motion indoor classifier
 │   │   ├── motion_prealert     # Peripheral intrusion detector
+│   │   ├── misalignment_watchdog  # Sustained phone misalignment detector
+│   │   ├── orientation_service # Device pitch/roll tracking + crop adaptation
+│   │   ├── weather_gate        # Visibility degradation classifier
+│   │   ├── twogis_service      # 2GIS place search + routing (optional online)
+│   │   ├── field_logger        # On-device JSONL telemetry recorder
+│   │   ├── foreground_service  # Android foreground service for background nav
+│   │   ├── proximity_beacon_service  # Distance-adaptive audio proximity beacon
+│   │   ├── ch_router           # Contraction hierarchy pedestrian router
 │   │   ├── gtfs_service        # Offline transit data queries
 │   │   ├── offline_poi_service # FTS5 + Levenshtein place search
 │   │   ├── device_capability   # Hardware probe + depth tier selection
@@ -330,6 +356,7 @@ bagdar/
 │   ├── utils/             # Vision pipeline core
 │   │   ├── ground_plane_analyzer  # RANSAC plane fitting + hazard classification
 │   │   ├── fusion_engine       # EMA-smoothed multi-sensor hazard confirmation
+│   │   ├── decision_engine     # Corridor width analysis + navigation decisions
 │   │   ├── blur_detector       # Laplacian-variance frame sharpness scoring
 │   │   ├── performance_throttler  # Adaptive multi-signal cadence governor
 │   │   ├── distance_utils      # Metric distance estimation
@@ -339,14 +366,16 @@ bagdar/
 │   │   ├── kalman_box_tracker  # Per-track state estimation
 │   │   ├── hungarian           # Optimal assignment solver
 │   │   └── appearance          # Visual feature similarity
-│   ├── models/            # Domain models + i18n (96 KB string table)
+│   ├── models/            # Domain models + i18n (120 KB string table)
 │   ├── viewmodels/        # MVVM presentation layer
 │   ├── widgets/           # UI overlays, controls, HUD
 │   ├── screens/           # Settings QR export/import
 │   ├── gesture_tutorial_screen.dart  # Interactive gesture onboarding
+│   ├── onboarding_screen.dart        # 4-step accessible onboarding flow
 │   └── camera_screen.dart # Main orchestration layer
 ├── tools/
-│   └── analyze_session.py # Field telemetry post-processor
+│   ├── analyze_session.py # Field telemetry post-processor
+│   └── build_source_deposit.py  # Source code archival tool
 ├── scripts/               # Data pipeline tooling
 │   ├── build_ch_graph.py  # OSM PBF → binary CH routing graph
 │   ├── build_gtfs_db.py   # GTFS ZIP → SQLite transit database
@@ -355,13 +384,14 @@ bagdar/
 │   └── parse_perf_logs.py # Performance log analysis
 ├── assets/
 │   ├── yolov8n_int8.tflite
+│   ├── yolov8n_320_int8.tflite  # Thermal-fallback small model
 │   ├── midas_small.ncnn.param
 │   ├── midas_small.ncnn.bin
 │   └── labels.txt
-└── test/                  # 27 test files
+└── test/                  # 34 test files
 ```
 
-**83 Dart source files** · **~752 KB** of application code · **39 service modules** · **27 unit test files**
+**94 Dart source files** · **~974 KB** of application code · **49 service modules** · **34 unit test files**
 
 ---
 
@@ -409,7 +439,7 @@ The app guides you through onboarding on first launch: language selection, usage
 - [ ] iOS support
 - [ ] Additional language packs (Turkish, Arabic, Hindi)
 - [ ] Integration with municipal accessibility APIs where available
-- [ ] Proximity beacon support for indoor wayfinding
+- [ ] Indoor wayfinding via BLE infrastructure beacons
 
 ---
 

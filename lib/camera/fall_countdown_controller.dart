@@ -17,6 +17,7 @@ class FallCountdownController extends ChangeNotifier {
   final SosService sos;
   final VoiceCommandService voice;
   final VoidCallback? onCancelled;
+  final VoidCallback? onSosSent;
 
   static const Duration kInitialDuration = Duration(seconds: 15);
   static const Duration kCollapseDuration = Duration(seconds: 30);
@@ -46,6 +47,7 @@ class FallCountdownController extends ChangeNotifier {
     required this.sos,
     required this.voice,
     this.onCancelled,
+    this.onSosSent,
   });
 
   int get secondsLeft => _secondsLeft;
@@ -182,6 +184,10 @@ class FallCountdownController extends ChangeNotifier {
     tts.say(S.get('sos_sending'), SpeechPriority.critical, pan: 0.0);
     final result = await sos.sendSos();
     if (_disposed) return;
+    final delivered = result == SosResult.sent ||
+        result == SosResult.sentFallback ||
+        result == SosResult.noLocation;
+    if (delivered) onSosSent?.call();
     final msg = switch (result) {
       SosResult.sent => S.get('sos_fall_sent'),
       SosResult.sentFallback =>

@@ -236,7 +236,11 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       tts: _vm.tts,
       sos: _vm.sos,
       voice: _vm.voice,
-      onCancelled: () => _vm.fallDetector.notifyCancelled(),
+      onCancelled: () {
+        _vm.fallDetector.notifyCancelled();
+        _vm.sos.cancelQueuedFollowUp();
+      },
+      onSosSent: () => _vm.fallDetector.notifyFallSosSent(),
     );
     _voiceDispatcher = VoiceCommandDispatcher(
       vm: _vm,
@@ -307,6 +311,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _indoorPollTimer?.cancel();
     _misalignmentTickTimer?.cancel();
     _vm.tracksNotifier.removeListener(_onTracksUpdatedForWatchdog);
+    _vm.sos.cancelQueuedFollowUp();
     _lifecycle.dispose();
     _controller?.dispose();
     _controller = null;
@@ -477,6 +482,12 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
       _vm.fallDetector.onFallDetected = (fallClass) =>
           _fallCountdown.start(fallClass: fallClass);
+      _vm.fallDetector.onSecondFallDuringLockout = () {
+        _vm.sos.queueFollowUpFall();
+        _fieldLog.log('second_fall_during_lockout', {
+          'pending': _vm.sos.pendingFollowUpCount,
+        });
+      };
       _vm.fallDetector.onStageChange = (stage, {accel, gyro, stillFrames}) {
         _fieldLog.logFallStage(
           stage,

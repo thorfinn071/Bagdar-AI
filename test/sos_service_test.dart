@@ -75,6 +75,69 @@ void main() {
       );
       expect(message, contains('12m'));
     });
+
+    test(
+      'buildMessageText prepends an optional preamble before the main '
+      'message body (Safety follow-up H7 follow-up SMS)',
+      () {
+        final message = SosService.buildMessageText(
+          latitude: 51.0,
+          longitude: 71.0,
+          preamble: S.get('sos_user_fallen_again'),
+        );
+        expect(message.startsWith(S.get('sos_user_fallen_again')), isTrue,
+            reason:
+                'the follow-up alert text must come first so the recipient '
+                'sees "user has fallen again" before the location link');
+        expect(message, contains(S.get('sos_message')));
+        expect(
+          message,
+          contains('https://maps.google.com/?q=51.000000,71.000000'),
+        );
+      },
+    );
+
+    test(
+      'buildMessageText with empty preamble is identical to no preamble',
+      () {
+        final a = SosService.buildMessageText(latitude: 51.0, longitude: 71.0);
+        final b = SosService.buildMessageText(
+          latitude: 51.0,
+          longitude: 71.0,
+          preamble: '',
+        );
+        expect(b, equals(a));
+      },
+    );
+  });
+
+  group('SosService follow-up SMS scheduler (Safety follow-up H7)', () {
+    test('queueFollowUpFall increments the count and arms the timer', () {
+      final service = SosService();
+      expect(service.hasQueuedFollowUp, isFalse);
+      expect(service.pendingFollowUpCount, 0);
+
+      service.queueFollowUpFall();
+      expect(service.hasQueuedFollowUp, isTrue);
+      expect(service.pendingFollowUpCount, 1);
+
+      service.queueFollowUpFall();
+      expect(service.pendingFollowUpCount, 2,
+          reason:
+              'a second second-fall during the lockout should accumulate, '
+              'not replace, so the eventual SMS reflects the actual count');
+
+      service.cancelQueuedFollowUp();
+    });
+
+    test('cancelQueuedFollowUp clears the timer and resets the count', () {
+      final service = SosService();
+      service.queueFollowUpFall();
+      service.queueFollowUpFall();
+      service.cancelQueuedFollowUp();
+      expect(service.hasQueuedFollowUp, isFalse);
+      expect(service.pendingFollowUpCount, 0);
+    });
   });
 
   group('SosResult enum', () {

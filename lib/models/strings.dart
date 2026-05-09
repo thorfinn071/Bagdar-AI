@@ -439,6 +439,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sos_fall_seconds': 'секунд.',
     'sos_fall_cancelled': 'Отправка SOS отменена.',
     'sos_fall_sent': 'SOS отправлен после падения.',
+    'sos_user_fallen_again':
+        'Внимание: пользователь упал снова.',
     'sos_fall_cancel_hint':
         'Скажите "я в порядке" или "ложная тревога". Прикоснитесь к экрану для отмены.',
     'sos_fall_voice_confirm_prompt':
@@ -1132,6 +1134,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sos_fall_seconds': 'секундтан кейін.',
     'sos_fall_cancelled': 'SOS жіберу болдырылмады.',
     'sos_fall_sent': 'Құлаудан кейін SOS жіберілді.',
+    'sos_user_fallen_again':
+        'Назар аударыңыз: пайдаланушы қайта құлады.',
     'sos_fall_cancel_hint':
         '"Мен жақсымын" немесе "жалған дабыл" деп айтыңыз. Болдырмау үшін экранды басыңыз.',
     'sos_fall_voice_confirm_prompt':
@@ -1824,6 +1828,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sos_fall_seconds': 'seconds.',
     'sos_fall_cancelled': 'SOS cancelled.',
     'sos_fall_sent': 'SOS sent after fall.',
+    'sos_user_fallen_again':
+        'Alert: user has fallen again.',
     'sos_fall_cancel_hint':
         'Say "I am fine" or "false alarm". Tap screen to cancel.',
     'sos_fall_voice_confirm_prompt':

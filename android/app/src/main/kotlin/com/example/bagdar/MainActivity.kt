@@ -29,7 +29,6 @@ class MainActivity : FlutterActivity() {
     private var incomingSmsSink: EventChannel.EventSink? = null
     private var incomingSmsReceiver: BroadcastReceiver? = null
     private val mainHandler = Handler(Looper.getMainLooper())
-    private var audioCapturePlugin: AudioCapturePlugin? = null
 
     private var lastPingTime: Long = 0
     private val watchdogHandler = Handler(Looper.getMainLooper())
@@ -65,8 +64,6 @@ class MainActivity : FlutterActivity() {
         super.onDestroy()
         watchdogHandler.removeCallbacks(watchdogRunnable)
         unregisterIncomingSmsReceiver()
-        audioCapturePlugin?.dispose()
-        audioCapturePlugin = null
     }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
@@ -232,19 +229,6 @@ class MainActivity : FlutterActivity() {
                 incomingSmsSink = null
             }
         })
-
-        val audioPlugin = AudioCapturePlugin(this)
-        audioPlugin.setupChannels(
-            MethodChannel(
-                flutterEngine.dartExecutor.binaryMessenger,
-                "bagdar/audio_capture",
-            ),
-            EventChannel(
-                flutterEngine.dartExecutor.binaryMessenger,
-                "bagdar/audio_frames",
-            ),
-        )
-        audioCapturePlugin = audioPlugin
     }
 
     private fun registerIncomingSmsReceiver() {

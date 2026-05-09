@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
@@ -26,6 +28,11 @@ class SosService {
   String? _contactNumber;
   Position? _cachedPosition;
   DateTime? _cachedPositionAt;
+
+  Timer? _followUpTimer;
+  int _pendingFollowUpCount = 0;
+
+  static const Duration kFollowUpDelay = Duration(seconds: 5);
 
   String? get contactNumber => _contactNumber;
 
@@ -140,8 +147,11 @@ class SosService {
     double? longitude,
     DateTime? positionTimestamp,
     double? accuracyMeters,
+    String? preamble,
   }) {
-    final parts = <String>[S.get('sos_message')];
+    final parts = <String>[];
+    if (preamble != null && preamble.isNotEmpty) parts.add(preamble);
+    parts.add(S.get('sos_message'));
 
     if (latitude != null && longitude != null) {
       final lat = latitude.toStringAsFixed(6);
@@ -217,6 +227,52 @@ class SosService {
     } catch (e) {
       debugPrint('SosService: native sendSms error: $e');
       return false;
+    }
+  }
+
+  /// Schedules a follow-up SMS to be sent shortly (after [kFollowUpDelay]) so
+  /// it lands after the primary SOS. Each call increments the queued-fall
+  /// counter; a single SMS goes out summarising the count. Used by the H7
+  /// second-fall-during-SOS-lockout flow in `FallDetector`.
+  void queueFollowUpFall() {
+    _pendingFollowUpCount++;
+    if (_followUpTimer?.isActive == true) return;
+    _followUpTimer = Timer(kFollowUpDelay, _flushFollowUp);
+  }
+
+  /// Cancels any queued follow-up SMS. Called by the host on cleanup or when
+  /// the user explicitly silences SOS handling.
+  void cancelQueuedFollowUp() {
+    _followUpTimer?.cancel();
+    _followUpTimer = null;
+    _pendingFollowUpCount = 0;
+  }
+
+  bool get hasQueuedFollowUp => (_followUpTimer?.isActive ?? false);
+  int get pendingFollowUpCount => _pendingFollowUpCount;
+
+  Future<void> _flushFollowUp() async {
+    final count = _pendingFollowUpCount;
+    _pendingFollowUpCount = 0;
+    _followUpTimer = null;
+    if (count == 0) return;
+    final position = await _resolvePosition();
+    final base = S.get('sos_user_fallen_again');
+    final preamble = count == 1 ? base : '$base (×$count)';
+    final message = buildMessageText(
+      latitude: position?.latitude,
+      longitude: position?.longitude,
+      positionTimestamp: position?.timestamp,
+      accuracyMeters: position?.accuracy,
+      preamble: preamble,
+    );
+    final contact = _contactNumber;
+    final hasUserContact = contact != null && contact.isNotEmpty;
+    final target = hasUserContact ? contact : emergencyFallbackNumber;
+    try {
+      await _tryDeliver(target, message, isFallback: !hasUserContact);
+    } catch (e) {
+      debugPrint('SosService: follow-up SMS delivery error: $e');
     }
   }
 
