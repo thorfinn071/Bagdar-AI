@@ -428,13 +428,12 @@ void main() {
       );
 
       test(
-        'rollExcessive (phone tilted sideways) demotes everything to '
-        'warning to avoid spurious criticals from a misoriented depth map',
+        'rollExcessive does NOT demote hazards whose detection is '
+        'independent of plane geometry (Safety follow-up H5)',
         () {
           for (final type in const [
             DepthHazardType.stairsDown,
             DepthHazardType.overhead,
-            DepthHazardType.pothole,
             DepthHazardType.glassDoor,
             DepthHazardType.nearFieldIntrusion,
           ]) {
@@ -443,11 +442,35 @@ void main() {
                 make(type, score: 0.85),
                 rollExcessive: true,
               ),
+              isTrue,
+              reason:
+                  '$type is a flat-against-user / luma-based hazard whose '
+                  'detection does not rely on plane fit; rolling the phone '
+                  'must not strip the critical tier from a head-strike or '
+                  'fall-cliff alert.',
+            );
+          }
+        },
+      );
+
+      test(
+        'rollExcessive DOES demote hazards that depend on plane geometry '
+        '(pothole, stepDown — Safety follow-up H5)',
+        () {
+          for (final type in const [
+            DepthHazardType.pothole,
+            DepthHazardType.stepDown,
+          ]) {
+            expect(
+              DepthPipelineController.isHazardCriticalForTesting(
+                make(type, score: 0.85),
+                rollExcessive: true,
+              ),
               isFalse,
               reason:
-                  'with the phone rolled sideways, depth interpretation '
-                  'is unreliable so even high-score $type must not fire '
-                  'a critical-priority alert.',
+                  '$type is RANSAC-plane-derived; with the phone rolled '
+                  'sideways the plane fit is unreliable so a high-score '
+                  '$type must drop to warning to avoid spurious criticals.',
             );
           }
         },

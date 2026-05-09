@@ -337,8 +337,6 @@ class DepthPipelineController {
     required bool rollExcessive,
     bool userStationary = false,
   }) {
-    if (rollExcessive) return false;
-
     switch (hazard.type) {
       case DepthHazardType.stairsDown:
       case DepthHazardType.overhead:
@@ -346,6 +344,10 @@ class DepthPipelineController {
 
       case DepthHazardType.pothole:
       case DepthHazardType.stepDown:
+        if (rollExcessive) return false;
+        return _isCenterZone(hazard.zone) &&
+            hazard.midasScore >= _kCriticalCenterScore;
+
       case DepthHazardType.glassDoor:
         return _isCenterZone(hazard.zone) &&
             hazard.midasScore >= _kCriticalCenterScore;
