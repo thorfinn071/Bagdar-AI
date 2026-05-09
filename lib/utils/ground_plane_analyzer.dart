@@ -427,15 +427,13 @@ class GroundPlaneAnalyzer {
     
     
     
-    if (!_weatherDegradedHint) {
-      final stairsHazard = _detectStairsDown(depthMap);
-      if (stairsHazard != null) {
+    final stairsHazard = _detectStairsDown(depthMap);
+    if (stairsHazard != null) {
+      const double weatherDegradedStairsScoreFloor = 0.715;
+      if (!_weatherDegradedHint ||
+          stairsHazard.midasScore >= weatherDegradedStairsScoreFloor) {
         results.add(stairsHazard);
       }
-    } else {
-      _lastStairSignal = null;
-      _lastStairSignalAt = _kStairSignalEpoch;
-      _escalatorStreak = 0;
     }
 
     

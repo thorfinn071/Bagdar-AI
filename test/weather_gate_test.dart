@@ -194,23 +194,25 @@ void main() {
     }
 
     test(
-      'stairs hazard is produced when weatherDegraded=false but suppressed '
-      'when weatherDegraded=true',
+      'high-confidence stairs hazard survives weatherDegraded — '
+      'fall-cliff detectors are never silently disabled',
       () {
         final analyzer = GroundPlaneAnalyzer();
         final map = makeStaircaseMap();
 
-        
         final clear = analyzer.debugDetectStairsDown(
           map,
           userStationary: false,
         );
         expect(clear, isNotNull);
         expect(clear!.type, DepthHazardType.stairsDown);
+        expect(
+          clear.midasScore,
+          greaterThanOrEqualTo(0.715),
+          reason: 'synthetic staircase must score above the degraded floor '
+              'so the regression covers the surviving path',
+        );
 
-        
-        
-        
         analyzer.resetTemporalFilter();
         final hazards = analyzer.analyze(
           map,
@@ -219,7 +221,12 @@ void main() {
         final stairsHit = hazards.any(
           (h) => h.type == DepthHazardType.stairsDown,
         );
-        expect(stairsHit, isFalse);
+        expect(
+          stairsHit,
+          isTrue,
+          reason: 'stairs-down must still fire in degraded weather when the '
+              'score clears the elevated floor',
+        );
       },
     );
 
