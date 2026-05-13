@@ -10,6 +10,9 @@ dependencies:
     sdk: flutter
   google_mlkit_text_recognition: ^0.13.0
   speech_to_text: ^7.3.0
+  # Vosk offline STT — used for Kazakh recognition behind the
+  # `enableKazakhStackV2` feature flag. Maintained fork of `vosk_flutter`.
+  vosk_flutter_2: ^1.0.5
   audioplayers: ^6.1.0
   ffi: ^2.1.4
   cupertino_icons: ^1.0.8
@@ -31,6 +34,8 @@ dependencies:
   path_provider: ^2.1.0
   dio: ^5.4.0
   archive: ^3.6.1
+  # Used by `LanguagePackManager` for SHA-256 verification of downloaded packs.
+  crypto: ^3.0.3
   connectivity_plus: ^6.0.0
   sensors_plus: ^6.1.1
   qr_flutter: ^4.1.0
