@@ -187,6 +187,19 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   DateTime _lastWinterHeartbeatAt = DateTime.fromMillisecondsSinceEpoch(0);
   static const Duration _kWinterHeartbeatInterval = Duration(seconds: 60);
 
+  
+  
+  
+  
+  
+  
+  
+  
+  DateTime _lastWeatherDepthHeartbeatAt =
+      DateTime.fromMillisecondsSinceEpoch(0);
+  static const Duration _kWeatherDepthHeartbeatInterval =
+      Duration(seconds: 60);
+
   @override
   void initState() {
     super.initState();
@@ -374,6 +387,36 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     }
     _phoneAbandonedTick();
     _winterHeartbeatTick();
+    _weatherDepthHeartbeatTick();
+  }
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  void _weatherDepthHeartbeatTick() {
+    if (!_vm.weatherGate.degraded) return;
+    
+    if (_vm.fallDetector.motionState != MotionState.walking) return;
+    
+    if (_vm.mode != AppMode.street && _vm.mode != AppMode.cane) return;
+    final now = DateTime.now();
+    if (now.difference(_lastWeatherDepthHeartbeatAt) <
+        _kWeatherDepthHeartbeatInterval) {
+      return;
+    }
+    _lastWeatherDepthHeartbeatAt = now;
+    _vm.tts.say(
+      S.get('weather_depth_off_walking'),
+      SpeechPriority.warning,
+      pan: 0.0,
+    );
+    _fieldLog.log('weather_depth_heartbeat', const {});
   }
 
   /// Winter Mode: while weather is degraded AND winter mode is active, speak
