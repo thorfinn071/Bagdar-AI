@@ -5,8 +5,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../models/app_mode.dart';
+import '../models/language_pack.dart';
 import '../models/speech_job.dart';
 import '../models/strings.dart';
+import '../services/language_pack_manager.dart';
 import '../services/settings_service.dart';
 import '../services/tts_service.dart';
 import 'camera_screen.dart';
@@ -137,6 +139,62 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       await _tts.awaitCurrentSpeech();
       if (!mounted) return;
       _speak(_current, barge: true);
+      // After the language change announcement settles, offer the Kazakh
+      // language pack download if (a) the user just picked kk, (b) the
+      // pack isn't installed, and (c) the user hasn't recently skipped
+      // it. Pack install requires online connectivity, so we surface the
+      // prompt eagerly but don't block onboarding.
+      if (lang == AppLanguage.kk) {
+        unawaited(_maybeOfferKkPackDownload());
+      }
+    }
+  }
+
+  Future<void> _maybeOfferKkPackDownload() async {
+    final pm = LanguagePackManager.instance;
+    if (!pm.isReady) return;
+    if (pm.isInstalled(LanguagePackIds.voskKk)) return;
+    if (await pm.wasPackSkippedRecently(LanguagePackIds.voskKk)) return;
+    if (!mounted) return;
+
+    final choice = await showDialog<_KkPackPromptChoice>(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => _KkPackPromptDialog(),
+    );
+    if (!mounted || choice == null) return;
+
+    switch (choice) {
+      case _KkPackPromptChoice.download:
+        _tts.say(
+          S.get('lang_pack_downloading'),
+          SpeechPriority.info,
+          barge: true,
+        );
+        // Auto-enable the v2 flag so the moment the pack lands, the
+        // routing layer activates. Skip on failure — error path is
+        // announced inside downloadPack via the manager's callbacks.
+        await Settings.instance.setEnableKazakhStackV2(true);
+        final ok = await pm.downloadPack(LanguagePackIds.voskKk);
+        if (!mounted) return;
+        _tts.say(
+          S.get(ok ? 'lang_pack_install_complete' : 'lang_pack_install_failed'),
+          SpeechPriority.info,
+          barge: true,
+        );
+        break;
+      case _KkPackPromptChoice.skip:
+        await pm.markPackSkipped(LanguagePackIds.voskKk);
+        break;
+      case _KkPackPromptChoice.later:
+        await pm.markPackSkipped(LanguagePackIds.voskKk);
+        await pm.setPromptOnFirstOnline(true);
+        _tts.say(
+          S.get('lang_pack_offline_skip'),
+          SpeechPriority.info,
+          barge: true,
+        );
+        break;
     }
   }
 
@@ -1264,6 +1322,74 @@ class _SecondaryButton extends StatelessWidget {
           child: Text(label, style: const TextStyle(fontSize: 14)),
         ),
       ),
+    );
+  }
+}
+
+enum _KkPackPromptChoice { download, skip, later }
+
+/// Dialog shown after a user selects Kazakh as the onboarding language.
+/// Offers three explicit choices instead of a binary yes/no so blind users
+/// can distinguish "no, never ask" from "no, but ask me again when online".
+/// All three buttons are full-width with large hit targets and explicit
+/// Semantics labels for screen-reader navigation; the dialog is dismissed
+/// only via one of the three buttons (barrierDismissible:false at caller).
+class _KkPackPromptDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: Colors.grey[900],
+      title: Text(
+        S.get('onb_kk_pack_prompt_title'),
+        style: const TextStyle(color: Colors.white),
+      ),
+      content: Text(
+        S.get('onb_kk_pack_prompt_body'),
+        style: const TextStyle(color: Colors.white70, height: 1.5),
+      ),
+      actionsAlignment: MainAxisAlignment.spaceBetween,
+      actions: [
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.cyanAccent,
+              foregroundColor: Colors.black,
+              padding: const EdgeInsets.symmetric(vertical: 14),
+            ),
+            onPressed: () =>
+                Navigator.pop(context, _KkPackPromptChoice.download),
+            child: Text(S.get('onb_kk_pack_yes')),
+          ),
+        ),
+        const SizedBox(height: 8),
+        SizedBox(
+          width: double.infinity,
+          child: OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              side: const BorderSide(color: Colors.white54),
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 12),
+            ),
+            onPressed: () =>
+                Navigator.pop(context, _KkPackPromptChoice.later),
+            child: Text(S.get('onb_kk_pack_later')),
+          ),
+        ),
+        const SizedBox(height: 4),
+        SizedBox(
+          width: double.infinity,
+          child: TextButton(
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.white60,
+              padding: const EdgeInsets.symmetric(vertical: 10),
+            ),
+            onPressed: () =>
+                Navigator.pop(context, _KkPackPromptChoice.skip),
+            child: Text(S.get('onb_kk_pack_skip')),
+          ),
+        ),
+      ],
     );
   }
 }
