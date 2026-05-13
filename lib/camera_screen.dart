@@ -55,8 +55,13 @@ import 'camera/voice_command_dispatcher.dart';
 import 'camera/camera_lifecycle_controller.dart';
 import 'services/scene_narrator.dart';
 import 'gesture_tutorial_screen.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+
+import 'models/language_pack.dart';
+import 'screens/language_packs_screen.dart';
 import 'screens/settings_qr_export_screen.dart';
 import 'screens/settings_qr_import_screen.dart';
+import 'services/language_pack_manager.dart';
 
 class AiCameraScreen extends StatefulWidget {
   final AppMode? initialMode;
@@ -113,6 +118,12 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
   
   StreamSubscription<AccelerometerEvent>? _shakeSub;
+
+  /// Connectivity listener for the onboarding "remind me when online" path.
+  /// Subscribed in initState, cancelled in dispose. One-shot: fires the
+  /// announcement at most once per app process via `_onlineKkPromptDone`.
+  StreamSubscription<List<ConnectivityResult>>? _connSub;
+  bool _onlineKkPromptDone = false;
   final List<DateTime> _shakeSpikes = [];
   static const double _shakeMagnitudeThreshold = 25.0;
   static const Duration _shakeWindow = Duration(milliseconds: 1500);
@@ -296,6 +307,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       },
       onSosRequested: _triggerSos,
       onDescribeSceneRequested: _describeScene,
+      onShowLanguagePacks: _openLanguagePacks,
     );
 
     _vm.addListener(() {
@@ -367,6 +379,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     WidgetsBinding.instance.addObserver(this);
     _initAll();
     _applySosTriggerListener();
+    _startConnectivityKkPromptListener();
   }
 
   void _onTracksUpdatedForWatchdog() {
@@ -496,6 +509,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _twoFingerSosTimer?.cancel();
     _tripleTapStatusTimer?.cancel();
     _shakeSub?.cancel();
+    _connSub?.cancel();
     _fallCountdown.dispose();
     _stallWatchdog.stop();
     _indoorPollTimer?.cancel();
@@ -2137,6 +2151,59 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         builder: (_) => SettingsQrExportScreen(tts: _vm.tts),
       ),
     );
+  }
+
+  void _openLanguagePacks() {
+    if (!mounted) return;
+    Navigator.of(context).push<void>(
+      MaterialPageRoute(
+        builder: (_) => LanguagePacksScreen(tts: _vm.tts),
+      ),
+    );
+  }
+
+  /// Start the connectivity-driven kk pack re-prompt flow. Called once at
+  /// initState. Handles two cases:
+  /// 1. User is already online when the camera screen first opens -- we run
+  ///    a one-shot check via `Connectivity.checkConnectivity()`.
+  /// 2. User boots offline and later regains connectivity -- the
+  ///    `onConnectivityChanged` stream fires and we announce then.
+  ///
+  /// Both paths route through `_maybePromptKkPackOnline`, which guards
+  /// against duplicate announcements via `_onlineKkPromptDone` and clears
+  /// the persisted `setPromptOnFirstOnline` flag so we don't nag again.
+  void _startConnectivityKkPromptListener() {
+    _connSub = Connectivity().onConnectivityChanged.listen(
+      (results) => unawaited(_maybePromptKkPackOnline(results)),
+      onError: (_) {},
+    );
+    unawaited(
+      Connectivity().checkConnectivity().then(_maybePromptKkPackOnline),
+    );
+  }
+
+  Future<void> _maybePromptKkPackOnline(
+    List<ConnectivityResult> results,
+  ) async {
+    if (_onlineKkPromptDone) return;
+    final isOnline = results.any((r) => r != ConnectivityResult.none);
+    if (!isOnline) return;
+    final pm = LanguagePackManager.instance;
+    if (!pm.isReady) return;
+    if (pm.isInstalled(LanguagePackIds.voskKk)) return;
+    final wants = await pm.shouldPromptOnFirstOnline();
+    if (!wants) return;
+    _onlineKkPromptDone = true;
+    await pm.setPromptOnFirstOnline(false);
+    // Opportunistic manifest refresh now that we have a network.
+    unawaited(pm.fetchManifest());
+    if (!mounted) return;
+    _vm.tts.say(
+      S.get('lang_pack_online_ready'),
+      SpeechPriority.info,
+      pan: 0.0,
+    );
+    FieldLogger.instance.log('lang_pack_online_prompt', {});
   }
 
   Future<void> _openSettingsQrImport() async {
