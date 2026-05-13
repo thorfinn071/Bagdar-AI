@@ -36,6 +36,7 @@ class SettingsService {
   static const _kHapticStrength = 'a11y_haptic_strength';
   static const _kSosTrigger = 'a11y_sos_trigger';
   static const _kDominantHand = 'a11y_dominant_hand';
+  static const _kTapSensitivity = 'a11y_tap_sensitivity';
   static const _kNcnnDisabled = 'ncnn_disabled';
   static const _kClearPathAnnounce = 'pref_clear_path_announce';
   static const _kBatteryAnnounce = 'pref_battery_announce';
@@ -139,6 +140,20 @@ class SettingsService {
     final i = _prefs!.getInt(_kDominantHand) ?? DominantHand.right.index;
     return DominantHand.values[i.clamp(0, DominantHand.values.length - 1)];
   }
+
+  
+  
+  
+  
+  
+  TapSensitivity get tapSensitivity {
+    final i = _prefs?.getInt(_kTapSensitivity) ?? TapSensitivity.normal.index;
+    return TapSensitivity.values[
+        i.clamp(0, TapSensitivity.values.length - 1)];
+  }
+
+  Future<void> setTapSensitivity(TapSensitivity v) async =>
+      _prefs?.setInt(_kTapSensitivity, v.index) ?? Future<void>.value();
 
   Future<void> setOnboardingDone(bool v) async =>
       _prefs!.setBool(_kOnboardingDone, v);
