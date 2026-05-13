@@ -43,6 +43,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   bool _calibrated = false;
   bool _pendingSkip = false;
   Timer? _skipConfirmTimer;
+  
+  
+  Timer? _skipReplayTimer;
 
   final Set<int> _activePointers = {};
   Timer? _emergencyTimer;
@@ -81,6 +84,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   void dispose() {
     _skipConfirmTimer?.cancel();
+    _skipReplayTimer?.cancel();
     _emergencyTimer?.cancel();
     _tts.stop();
     _page.dispose();
@@ -162,20 +166,45 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       barge: true,
     );
     _skipConfirmTimer?.cancel();
-    _skipConfirmTimer = Timer(const Duration(seconds: 5), () {
+    _skipReplayTimer?.cancel();
+    
+    
+    
+    
+    
+    
+    
+    _skipConfirmTimer = Timer(const Duration(seconds: 10), () {
       _pendingSkip = false;
+      _skipReplayTimer?.cancel();
+    });
+    _skipReplayTimer = Timer(const Duration(seconds: 5), () {
+      if (!_pendingSkip) return;
+      _tts.say(
+        S.get('onb_skip_confirm'),
+        SpeechPriority.warning,
+        barge: true,
+      );
     });
   }
 
-  void _handleTap() {
-    if (_pendingSkip) {
-      _pendingSkip = false;
-      _skipConfirmTimer?.cancel();
+  void _cancelSkipConfirm({bool announce = false}) {
+    if (!_pendingSkip) return;
+    _pendingSkip = false;
+    _skipConfirmTimer?.cancel();
+    _skipReplayTimer?.cancel();
+    if (announce) {
       _tts.say(
         S.get('onb_skip_cancelled'),
         SpeechPriority.info,
         barge: true,
       );
+    }
+  }
+
+  void _handleTap() {
+    if (_pendingSkip) {
+      _cancelSkipConfirm(announce: true);
       return;
     }
     _speak(_current, barge: true);
@@ -185,6 +214,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     if (_pendingSkip) {
       _pendingSkip = false;
       _skipConfirmTimer?.cancel();
+      _skipReplayTimer?.cancel();
       unawaited(_emergencyExit());
       return;
     }
