@@ -199,6 +199,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       tts: _vm.tts,
       fieldLog: _fieldLog,
       indoorGate: _vm.indoorGate,
+      motionStateProvider: () => _vm.fallDetector.motionState,
+      onPausedWalkingEarcon: () => _vm.earcon.play(Earcon.heartbeat),
     );
     _stallWatchdog = StallWatchdog(
       thresholdProvider: () => _vm.throttler.stallWatchdogThreshold(),
