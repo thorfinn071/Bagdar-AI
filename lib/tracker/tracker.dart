@@ -136,7 +136,7 @@ class Tracker {
       if (det.appearance != null) {
         t.appearance = Float32List.fromList(det.appearance!);
       }
-      if (_shouldFastTrack(det)) {
+      if (_shouldFastTrack(det) || _shouldFastTrackVeryCloseCenter(det, imgW)) {
         t.fastTrack = true;
         t.nearFrameCount = 1;
         if (det.conf >= kMinAlertConf) t.reliableFrames = 1;
@@ -369,6 +369,35 @@ class Tracker {
         }
       }
     }
+  }
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  bool _shouldFastTrackVeryCloseCenter(RawDet det, int imgW) {
+    if (!isVehicle(det.label)) return false;
+    if (det.dist != 'very close') return false;
+    if (det.conf < kMinAlertConf) return false;
+    if (det.distM <= 0 || det.distM > 1.5) return false;
+    if (imgW <= 0) return false;
+    final centerFrac = det.cx / imgW;
+    if (centerFrac < 0.40 || centerFrac > 0.60) return false;
+    if (userWalking) {
+      final hasAcousticCorroboration =
+          lastVehicleApproachingAcousticAt != null &&
+              DateTime.now().difference(lastVehicleApproachingAcousticAt!) <=
+                  const Duration(seconds: 1);
+      if (!hasAcousticCorroboration) return false;
+    }
+    return true;
   }
 
   bool _shouldFastTrack(RawDet det) {
