@@ -229,10 +229,27 @@ class NcnnDepthProvider implements DepthProvider {
         _recordFailure();
         return const [];
       }
-      if (_isOutputDegenerate(flat)) {
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      final outputClass = _classifyOutput(flat);
+      if (outputClass == _OutputClass.invalid) {
         debugPrint(
-            'NcnnDepthProvider: degenerate output — recording failure');
+            'NcnnDepthProvider: invalid output (NaN/Inf) — recording failure');
         _recordFailure();
+        return const [];
+      }
+      if (outputClass == _OutputClass.degenerate) {
+        
+        
         return const [];
       }
       return _analyzer.analyze(
@@ -272,8 +289,16 @@ class NcnnDepthProvider implements DepthProvider {
     }
   }
 
-  bool _isOutputDegenerate(Float32List flat) {
-    if (flat.isEmpty) return true;
+  
+  
+  
+  
+  
+  
+  
+  
+  _OutputClass _classifyOutput(Float32List flat) {
+    if (flat.isEmpty) return _OutputClass.invalid;
     double minV = double.infinity;
     double maxV = double.negativeInfinity;
     int badCount = 0;
@@ -286,10 +311,14 @@ class NcnnDepthProvider implements DepthProvider {
       if (v < minV) minV = v;
       if (v > maxV) maxV = v;
     }
-    if (badCount > flat.length ~/ 20) return true;
-    if (!minV.isFinite || !maxV.isFinite) return true;
-    if ((maxV - minV).abs() < 1e-3) return true;
-    return false;
+    
+    if (badCount > flat.length ~/ 20) return _OutputClass.invalid;
+    if (!minV.isFinite || !maxV.isFinite) return _OutputClass.invalid;
+    
+    
+    
+    if ((maxV - minV).abs() < 1e-3) return _OutputClass.degenerate;
+    return _OutputClass.ok;
   }
 
   void _recordFailure() {
@@ -332,4 +361,17 @@ class NcnnDepthProvider implements DepthProvider {
 
   @visibleForTesting
   bool get debugIsPermanentlyDisabled => _permanentlyDisabled;
+}
+
+
+enum _OutputClass {
+  
+  ok,
+  
+  
+  
+  degenerate,
+  
+  
+  invalid,
 }
