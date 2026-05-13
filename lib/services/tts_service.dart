@@ -34,6 +34,11 @@ class TtsService {
   DateTime _currentSpeakStartedAt = DateTime.fromMillisecondsSinceEpoch(0);
   Completer<void>? _currentSpeechCompleter;
 
+  
+  
+  String? _currentText;
+  SpeechPriority? _currentPriority;
+
   static final TtsService _instance = TtsService._();
   static TtsService get instance => _instance;
 
@@ -172,7 +177,10 @@ class TtsService {
       _tts.setStartHandler(() {
         _speaking = true;
         _currentSpeakStartedAt = DateTime.now();
-        _armStallTimer();
+        
+        
+        
+        _armStallTimer(_currentText, _currentPriority);
       });
       _tts.setCompletionHandler(() {
         _speaking = false;
@@ -319,11 +327,27 @@ class TtsService {
     onAudioRouteResumed?.call();
   }
 
-  void _armStallTimer() {
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  void _armStallTimer([String? text, SpeechPriority? priority]) {
     _stallTimer?.cancel();
-    _stallTimer = Timer(kTtsStallTimeout, () {
+    final timeout = _computeStallTimeout(text: text, priority: priority);
+    _stallTimer = Timer(timeout, () {
       if (!_speaking) return;
-      debugPrint('TtsService: stall detected — resetting speaking flag');
+      debugPrint(
+        'TtsService: stall detected (${timeout.inMilliseconds}ms) '
+        '— resetting speaking flag',
+      );
       _speaking = false;
       try {
         _tts.stop();
@@ -331,6 +355,29 @@ class TtsService {
       onTtsStall?.call();
       if (_queue.isNotEmpty) _pump();
     });
+  }
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  Duration _computeStallTimeout({String? text, SpeechPriority? priority}) {
+    if (text == null) return kTtsStallTimeout;
+    
+    if (priority == SpeechPriority.critical) return kTtsStallTimeout;
+    
+    
+    
+    final scaledMs = 4000 + text.length * 70;
+    final cappedMs = scaledMs.clamp(kTtsStallTimeout.inMilliseconds, 30000);
+    return Duration(milliseconds: cappedMs);
   }
 
   void _disarmStallTimer() {
@@ -581,6 +628,9 @@ class TtsService {
       _speaking = true;
       _currentIsCritical = job.priority == SpeechPriority.critical;
       _currentSpeakStartedAt = DateTime.now();
+      
+      _currentText = job.text;
+      _currentPriority = job.priority;
       if (_reverseVehicleSuspected &&
           job.priority != SpeechPriority.critical) {
         try {
