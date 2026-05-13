@@ -441,7 +441,13 @@ const int kEventGridH = 60;
 const int kEventDiffThreshold = 18;
 const double kEventBaselineMultiplier = 4.0;
 const double kEventBaselineEmaAlpha = 0.05;
-const double kEventGlobalPanFrac = 0.40;
+
+
+
+
+
+
+const double kEventGlobalPanFrac = 0.60;
 const int kEventMinBlobArea = 4;
 const double kEventMaxBlobAreaFrac = 0.20;
 const int kEventMaxBlobsPerFrame = 16;
