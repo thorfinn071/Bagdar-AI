@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'onboarding_screen.dart';
 import 'services/feature_usage_tracker.dart';
 import 'services/language_pack_manager.dart';
+import 'services/native_tts_bridge.dart';
 import 'services/settings_service.dart';
 import 'theme/bagdar_theme.dart';
 import 'theme/bagdar_tokens.dart';
@@ -21,6 +22,11 @@ void main() async {
   // background and silently no-ops when offline.
   await LanguagePackManager.instance.init();
   unawaited(LanguagePackManager.instance.fetchManifest());
+  // Phase 2 — Probe the native TTS bridge capabilities (RHVoice /
+  // espeak-ng) eagerly so the first kk speech does not block on a channel
+  // round-trip. Bridge init is best-effort and silently no-ops when the
+  // Android plugin is missing (e.g. on test hosts).
+  unawaited(NativeTtsBridge.instance.init());
 
   bagdarThemeNotifier.value = Settings.instance.themeMode;
 
