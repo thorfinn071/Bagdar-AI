@@ -3,7 +3,11 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:audio_session/audio_session.dart';
-import '../../models/constants.dart' show kTtsStallTimeout;
+import '../../models/constants.dart'
+    show
+        kTtsStallTimeout,
+        kHapticTtsStallPattern,
+        kHapticTtsStallIntensities;
 import '../../models/speech_job.dart';
 import '../../models/strings.dart';
 import 'haptic_service.dart';
@@ -73,6 +77,14 @@ class TtsService {
   void Function()? onAudioRouteInterrupted;
   void Function()? onAudioRouteResumed;
   void Function()? onTtsStall;
+  
+  
+  
+  
+  
+  
+  
+  void Function()? onTtsUnavailable;
 
   DateTime _lastAudioRouteAlertAt = DateTime.fromMillisecondsSinceEpoch(0);
   Timer? _stallTimer;
@@ -419,7 +431,39 @@ class TtsService {
     int? trackId,
     bool barge = false,
   }) {
-    if (!_ready || text.isEmpty) return;
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    if (!_ready) {
+      if (priority == SpeechPriority.critical && text.isNotEmpty) {
+        debugPrint(
+          'TtsService: critical alert dropped because engine is not ready '
+          '— firing fallback haptic + listener',
+        );
+        try {
+          HapticService.vibrate(
+            kHapticTtsStallPattern,
+            intensities: kHapticTtsStallIntensities,
+          );
+        } catch (_) {}
+        try {
+          onTtsUnavailable?.call();
+        } catch (_) {}
+        FieldLogger.instance.log('tts_unavailable_critical', {
+          'text': text,
+          'priority': priority.name,
+        });
+      }
+      return;
+    }
+    if (text.isEmpty) return;
     final now = DateTime.now();
     final rate = _rateFor(priority);
 
