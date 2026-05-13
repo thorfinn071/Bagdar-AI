@@ -2341,9 +2341,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
                         color: Colors.redAccent,
                         icon: Icons.cancel,
                         label: 'FP',
-                        onTap: () {
+                        onActivate: () {
                           _fieldLog.logFpMarker();
-                          HapticService.vibrate(const [0, 60]);
+                          HapticService.vibrate(const [0, 60, 40, 60]);
                         },
                       ),
                       const SizedBox(width: 12),
@@ -2351,9 +2351,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
                         color: Colors.amber,
                         icon: Icons.warning,
                         label: 'FN',
-                        onTap: () {
+                        onActivate: () {
                           _fieldLog.logFnMarker();
-                          HapticService.vibrate(const [0, 60]);
+                          HapticService.vibrate(const [0, 60, 40, 60]);
                         },
                       ),
                     ],
@@ -2463,19 +2463,22 @@ class _FieldMarkerButton extends StatelessWidget {
   final Color color;
   final IconData icon;
   final String label;
-  final VoidCallback onTap;
+  final VoidCallback onActivate;
 
   const _FieldMarkerButton({
     required this.color,
     required this.icon,
     required this.label,
-    required this.onTap,
+    required this.onActivate,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      
+      
+      
+      onLongPress: onActivate,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
