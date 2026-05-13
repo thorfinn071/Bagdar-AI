@@ -295,6 +295,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
 
     if (mounted) {
+      
+      
+      
+      
+      
+      _tts.say(
+        S.get('camera_perm_denied_retry'),
+        SpeechPriority.critical,
+        barge: true,
+      );
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(S.get('camera_perm_body'))));
