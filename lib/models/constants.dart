@@ -213,7 +213,11 @@ const double kSustainedHazardEscalationDistanceFraction = 0.70;
 
 const Duration kApproachCooldown = Duration(milliseconds: 2500);
 const double kApproachingLabelThreatMaxDistM = 15.0;
-const Duration kStaticObjectCooldown = Duration(seconds: 20);
+
+
+
+
+const Duration kStaticObjectCooldown = Duration(seconds: 10);
 
 const Duration kClearAnnounceDuration = Duration(milliseconds: 1200);
 
