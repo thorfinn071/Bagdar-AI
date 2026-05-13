@@ -44,6 +44,12 @@ class EarconService {
   bool _ready = false;
   double _volume = 0.85;
 
+  
+  
+  
+  
+  void Function()? onInitFailed;
+
   Future<void> init() async {
     try {
       await AudioPlayer.global.setAudioContext(
@@ -70,8 +76,16 @@ class EarconService {
     } catch (e) {
       debugPrint('EarconService init error: $e');
       _ready = false;
+      
+      try {
+        onInitFailed?.call();
+      } catch (_) {}
     }
   }
+
+  
+  
+  bool get isReady => _ready;
 
   bool get isEnabled => _enabled;
   double get volume => _volume;
