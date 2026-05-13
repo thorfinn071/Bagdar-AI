@@ -810,7 +810,23 @@ class VoiceCommandService {
       sorted = _ruSorted;
     }
 
-    if (cancelSet.contains(lower)) {
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    if (cancelSet.contains(lower) || _matchesFallCancelKeyword(lower, isKk: isKk, isEn: isEn)) {
       onCommand?.call(VoiceCommand.cancelFall);
       return;
     }
@@ -912,5 +928,94 @@ class VoiceCommandService {
     } finally {
       _locale = saved;
     }
+  }
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  static const List<String> _ruCancelFallKeywords = <String>[
+    'порядк', 
+    'норм', 
+    'хорош', 
+    'ложн', 
+    'не пада', 
+    'не упа', 
+    'не упал', 
+    'ничего не случил',
+    'это не паден',
+    'нет проблем',
+    'не страшно',
+    'все ок',
+    'всё ок',
+    'я ок',
+    'ошибк',
+  ];
+
+  static const List<String> _kkCancelFallKeywords = <String>[
+    'жақсы', 
+    'дұрыс', 
+    'жалған', 
+    'құлама', 
+    'құлаған жоқ',
+    'мәселе жоқ',
+    'еш нәрсе',
+    
+    
+  ];
+
+  static const List<String> _enCancelFallKeywords = <String>[
+    'fine',
+    'okay',
+    " ok",
+    'ok ',
+    "i'm ok",
+    'i am ok',
+    "didn't fall",
+    'did not fall',
+    'no problem',
+    'no problems',
+    'false alarm',
+    
+    
+    'nothing happened',
+    'all good',
+    'i am good',
+  ];
+
+  
+  static bool _matchesFallCancelKeyword(
+    String lower, {
+    required bool isKk,
+    required bool isEn,
+  }) {
+    final keywords = isEn
+        ? _enCancelFallKeywords
+        : isKk
+            ? _kkCancelFallKeywords
+            : _ruCancelFallKeywords;
+    for (final kw in keywords) {
+      if (lower.contains(kw)) return true;
+    }
+    return false;
   }
 }
