@@ -139,7 +139,18 @@ class AcousticWorldModel {
           cls == BagdarAudioClass.silence) {
         return;
       }
-      if (count >= 2 && count > dominantCount) {
+      
+      
+      
+      
+      
+      
+      
+      final requiredCount = (cls == BagdarAudioClass.horn ||
+              cls == BagdarAudioClass.siren)
+          ? 3
+          : 2;
+      if (count >= requiredCount && count > dominantCount) {
         dominantCount = count;
         dominantClass = cls;
       }
