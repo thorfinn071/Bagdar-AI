@@ -231,6 +231,16 @@ class FallCountdownController extends ChangeNotifier {
 
   void _restartFallCancelListener() {
     if (!_cancelListenerActive) return;
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    voice.extendContinuousDeadline(Duration(seconds: _secondsLeft + 1));
     if (voice.isListening) return;
     unawaited(
       voice.startContinuousListening(
