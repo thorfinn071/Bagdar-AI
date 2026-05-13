@@ -166,6 +166,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   static const Duration _kStallTtsMinDuration = Duration(seconds: 4);
   DateTime _initCompletedAt = DateTime.fromMillisecondsSinceEpoch(0);
 
+  
+  AppMode? _lastObservedMode;
+
   final Map<FrameQualityEventType, DateTime> _lastQualityTtsAt = {};
   static const Duration _kQualityEventCooldown = Duration(seconds: 30);
 
@@ -275,6 +278,11 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
     _vm.addListener(() {
       if (mounted) setState(() {});
+      
+      
+      
+      
+      _qualityGuard.setMode(scanModeActive: _vm.mode == AppMode.scan);
     });
     _fallCountdown.addListener(() {
       if (mounted) setState(() {});
