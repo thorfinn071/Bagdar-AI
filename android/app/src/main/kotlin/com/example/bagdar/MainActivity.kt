@@ -77,6 +77,22 @@ class MainActivity : FlutterActivity() {
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
+        // Phase 2 — Kazakh-only native TTS bridge (RHVoice + espeak-ng).
+        // Registered first so any bridge probe issued from Dart during
+        // `NativeTtsBridge.init()` lands on a live channel.
+        run {
+            val plugin = NativeTtsPlugin(applicationContext)
+            val method = MethodChannel(
+                flutterEngine.dartExecutor.binaryMessenger,
+                "bagdar/native_tts",
+            )
+            val event = EventChannel(
+                flutterEngine.dartExecutor.binaryMessenger,
+                "bagdar/native_tts_events",
+            )
+            plugin.register(method, event)
+        }
+
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
             "bagdar/device_info",
