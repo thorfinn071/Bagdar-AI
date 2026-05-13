@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'onboarding_screen.dart';
 import 'services/feature_usage_tracker.dart';
+import 'services/language_pack_manager.dart';
 import 'services/settings_service.dart';
 import 'theme/bagdar_theme.dart';
 import 'theme/bagdar_tokens.dart';
@@ -11,6 +14,13 @@ void main() async {
 
   await Settings.instance.init();
   await FeatureUsageTracker.instance.init();
+  // Language pack registry must be ready before the first VoiceCommandService
+  // init runs (CameraViewModel constructor), otherwise the kk routing branch
+  // can never observe an installed pack. The init itself is cheap (read
+  // SharedPreferences + scan storage); manifest refresh runs in the
+  // background and silently no-ops when offline.
+  await LanguagePackManager.instance.init();
+  unawaited(LanguagePackManager.instance.fetchManifest());
 
   bagdarThemeNotifier.value = Settings.instance.themeMode;
 
