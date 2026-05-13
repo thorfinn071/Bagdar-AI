@@ -255,6 +255,11 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       },
       onSosSent: () => _vm.fallDetector.notifyFallSosSent(),
       winterModeProvider: () => _vm.winterMode.active,
+      
+      
+      
+      deliberateTapThresholdProvider: () =>
+          Settings.instance.tapSensitivity.accelThresholdMps2,
     );
     _voiceDispatcher = VoiceCommandDispatcher(
       vm: _vm,
