@@ -6,6 +6,7 @@ import 'onboarding_screen.dart';
 import 'services/feature_usage_tracker.dart';
 import 'services/language_pack_manager.dart';
 import 'services/native_tts_bridge.dart';
+import 'services/paddle_ocr_bridge.dart';
 import 'services/settings_service.dart';
 import 'theme/bagdar_theme.dart';
 import 'theme/bagdar_tokens.dart';
@@ -27,6 +28,10 @@ void main() async {
   // round-trip. Bridge init is best-effort and silently no-ops when the
   // Android plugin is missing (e.g. on test hosts).
   unawaited(NativeTtsBridge.instance.init());
+  // Phase 3 — same pattern for the PaddleOCR multilingual recognizer.
+  // Until the PaddleLite `.aar` + model assets ship, the probe returns
+  // unavailable and `OcrService` falls back to ML Kit.
+  unawaited(PaddleOcrBridge.instance.init());
 
   bagdarThemeNotifier.value = Settings.instance.themeMode;
 
