@@ -93,6 +93,18 @@ class MainActivity : FlutterActivity() {
             plugin.register(method, event)
         }
 
+        // Phase 3 — multilingual OCR via PaddleOCR. Reports
+        // `available = false` until PaddleLite.aar + model artifacts
+        // ship; OcrService falls back to ML Kit until then.
+        run {
+            val plugin = PaddleOcrPlugin(applicationContext)
+            val method = MethodChannel(
+                flutterEngine.dartExecutor.binaryMessenger,
+                PaddleOcrPlugin.METHOD_CHANNEL,
+            )
+            plugin.register(method)
+        }
+
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
             "bagdar/device_info",
