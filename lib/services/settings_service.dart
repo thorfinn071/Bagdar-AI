@@ -46,6 +46,7 @@ class SettingsService {
   static const _kPaymentSmsEnabled = 'payment_sms_enabled';
   static const _kCalibrationDeclined = 'calibration_declined';
   static const _kDisclaimerAcknowledged = 'disclaimer_acknowledged';
+  static const _kDisclaimerAcknowledgedAt = 'disclaimer_acknowledged_at';
   static const _kWinterModeManual = 'winter_mode_manual';
 
   Future<void> init() async {
@@ -260,8 +261,35 @@ class SettingsService {
 
   bool get disclaimerAcknowledged =>
       _prefs?.getBool(_kDisclaimerAcknowledged) ?? false;
-  Future<void> setDisclaimerAcknowledged(bool v) async =>
-      _prefs!.setBool(_kDisclaimerAcknowledged, v);
+  Future<void> setDisclaimerAcknowledged(bool v) async {
+    await _prefs!.setBool(_kDisclaimerAcknowledged, v);
+    if (v) {
+      await _prefs!.setInt(
+        _kDisclaimerAcknowledgedAt,
+        DateTime.now().millisecondsSinceEpoch,
+      );
+    }
+  }
+
+  
+  
+  DateTime? get disclaimerAcknowledgedAt {
+    final ms = _prefs?.getInt(_kDisclaimerAcknowledgedAt);
+    if (ms == null || ms == 0) return null;
+    return DateTime.fromMillisecondsSinceEpoch(ms);
+  }
+
+  
+  
+  
+  
+  
+  bool get disclaimerNeedsReprompt {
+    if (!disclaimerAcknowledged) return true;
+    final at = disclaimerAcknowledgedAt;
+    if (at == null) return true;
+    return DateTime.now().difference(at) > const Duration(days: 7);
+  }
 
   /// Winter Mode: manual toggle persisted across launches. The effective
   /// active state can also be auto-driven by [WinterModeService] based on
