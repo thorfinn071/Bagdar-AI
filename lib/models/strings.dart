@@ -837,6 +837,40 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'vosk_kk_loading': 'Готовлю казахское распознавание.',
     'vosk_kk_load_failed':
         'Не удалось загрузить казахское распознавание. Использую запасной вариант.',
+    'lang_packs_screen_title': 'Языковые пакеты',
+    'lang_packs_screen_intro':
+        'Управление языковыми пакетами для казахского.',
+    'lang_packs_v2_toggle_label':
+        'Улучшенное казахское распознавание',
+    'lang_packs_v2_toggle_desc':
+        'Использовать Vosk для распознавания казахской речи. Требуется языковой пакет.',
+    'lang_packs_v2_enabled': 'Улучшенное распознавание включено.',
+    'lang_packs_v2_disabled': 'Улучшенное распознавание выключено.',
+    'lang_packs_refresh': 'Обновить список',
+    'lang_packs_refresh_done': 'Список пакетов обновлён.',
+    'lang_packs_refresh_failed':
+        'Не удалось обновить список. Проверьте сеть.',
+    'lang_packs_install': 'Установить',
+    'lang_packs_delete': 'Удалить',
+    'lang_packs_update': 'Обновить',
+    'lang_packs_installed': 'Установлен',
+    'lang_packs_not_installed': 'Не установлен',
+    'lang_packs_size_mb': '{size} МБ',
+    'lang_packs_no_packs':
+        'Языковые пакеты не найдены. Нажмите «Обновить».',
+    'lang_packs_close': 'Закрыть',
+    'lang_packs_delete_confirm': 'Удалить пакет {name}?',
+    'voice_kk_v2_pack_missing':
+        'Пакет не установлен. Откройте языковые пакеты для установки.',
+    'voice_manage_lang_packs_announce': 'Открываю языковые пакеты.',
+    'onb_kk_pack_prompt_title': 'Казахское распознавание',
+    'onb_kk_pack_prompt_body':
+        'Скачать пакет казахского распознавания сейчас? Около 50 МБ.',
+    'onb_kk_pack_yes': 'Скачать',
+    'onb_kk_pack_skip': 'Пропустить',
+    'onb_kk_pack_later': 'Напомнить в сети',
+    'lang_pack_online_ready':
+        'Сеть восстановлена. Пакет казахского распознавания готов к установке. Скажите «языковые пакеты».',
   },
 
   AppLanguage.kk: {
@@ -1611,6 +1645,39 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'vosk_kk_loading': 'Қазақша тануды дайындап жатырмын.',
     'vosk_kk_load_failed':
         'Қазақша тануды жүктеу мүмкін болмады. Қосымша нұсқаны қолданамын.',
+    'lang_packs_screen_title': 'Тіл пакеттері',
+    'lang_packs_screen_intro':
+        'Қазақ тіліне арналған тіл пакеттерін басқару.',
+    'lang_packs_v2_toggle_label': 'Жетілдірілген қазақша тану',
+    'lang_packs_v2_toggle_desc':
+        'Қазақша сөйлеуді тану үшін Vosk қолдану. Тіл пакеті қажет.',
+    'lang_packs_v2_enabled': 'Жетілдірілген тану қосылды.',
+    'lang_packs_v2_disabled': 'Жетілдірілген тану өшірілді.',
+    'lang_packs_refresh': 'Тізімді жаңарту',
+    'lang_packs_refresh_done': 'Пакеттер тізімі жаңартылды.',
+    'lang_packs_refresh_failed':
+        'Тізімді жаңарту мүмкін болмады. Желіні тексеріңіз.',
+    'lang_packs_install': 'Орнату',
+    'lang_packs_delete': 'Жою',
+    'lang_packs_update': 'Жаңарту',
+    'lang_packs_installed': 'Орнатылған',
+    'lang_packs_not_installed': 'Орнатылмаған',
+    'lang_packs_size_mb': '{size} МБ',
+    'lang_packs_no_packs':
+        'Тіл пакеттері табылмады. «Жаңарту» түймесін басыңыз.',
+    'lang_packs_close': 'Жабу',
+    'lang_packs_delete_confirm': '{name} пакетін жою керек пе?',
+    'voice_kk_v2_pack_missing':
+        'Пакет орнатылмаған. Орнату үшін тіл пакеттерін ашыңыз.',
+    'voice_manage_lang_packs_announce': 'Тіл пакеттерін ашамын.',
+    'onb_kk_pack_prompt_title': 'Қазақша тану',
+    'onb_kk_pack_prompt_body':
+        'Қазақша тану пакетін қазір жүктеп алу керек пе? Шамамен 50 МБ.',
+    'onb_kk_pack_yes': 'Жүктеп алу',
+    'onb_kk_pack_skip': 'Өткізіп жіберу',
+    'onb_kk_pack_later': 'Желі болғанда еске салу',
+    'lang_pack_online_ready':
+        'Желі қалпына келді. Қазақша тану пакетін орнатуға дайын. «Тіл пакеттері» деп айтыңыз.',
   },
   AppLanguage.en: {
     'stop': 'Stop',
@@ -2365,6 +2432,37 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'vosk_kk_loading': 'Preparing Kazakh recognition.',
     'vosk_kk_load_failed':
         'Could not load Kazakh recognition. Using fallback.',
+    'lang_packs_screen_title': 'Language packs',
+    'lang_packs_screen_intro': 'Manage language packs for Kazakh.',
+    'lang_packs_v2_toggle_label': 'Enhanced Kazakh recognition',
+    'lang_packs_v2_toggle_desc':
+        'Use Vosk for Kazakh speech recognition. Requires the language pack.',
+    'lang_packs_v2_enabled': 'Enhanced recognition enabled.',
+    'lang_packs_v2_disabled': 'Enhanced recognition disabled.',
+    'lang_packs_refresh': 'Refresh list',
+    'lang_packs_refresh_done': 'Pack list refreshed.',
+    'lang_packs_refresh_failed': 'Failed to refresh list. Check the network.',
+    'lang_packs_install': 'Install',
+    'lang_packs_delete': 'Delete',
+    'lang_packs_update': 'Update',
+    'lang_packs_installed': 'Installed',
+    'lang_packs_not_installed': 'Not installed',
+    'lang_packs_size_mb': '{size} MB',
+    'lang_packs_no_packs': 'No language packs available. Tap Refresh.',
+    'lang_packs_close': 'Close',
+    'lang_packs_delete_confirm': 'Delete pack {name}?',
+    'voice_kk_v2_pack_missing':
+        'Pack not installed. Open language packs to install.',
+    'voice_manage_lang_packs_announce': 'Opening language packs.',
+    'onb_kk_pack_prompt_title': 'Kazakh recognition',
+    'onb_kk_pack_prompt_body':
+        'Download the Kazakh recognition pack now? About 50 MB.',
+    'onb_kk_pack_yes': 'Download',
+    'onb_kk_pack_skip': 'Skip',
+    'onb_kk_pack_later': 'Remind me online',
+    'lang_pack_online_ready':
+        'You are online. The Kazakh recognition pack is ready to install. '
+        'Say "language packs".',
   },
 };
 
