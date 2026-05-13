@@ -197,15 +197,19 @@ class FallCountdownController extends ChangeNotifier {
     tts.say(S.get('sos_sending'), SpeechPriority.critical, pan: 0.0);
     final result = await sos.sendSos();
     if (_disposed) return;
+    
+    
+    
     final delivered = result == SosResult.sent ||
         result == SosResult.sentFallback ||
-        result == SosResult.noLocation;
+        result == SosResult.sentWithoutLocation;
     if (delivered) onSosSent?.call();
     final msg = switch (result) {
       SosResult.sent => S.get('sos_fall_sent'),
       SosResult.sentFallback =>
         '${S.get('sos_112_fallback')} ${S.get('sos_sent')}',
-      SosResult.noLocation => S.get('sos_sent_no_location'),
+      SosResult.sentWithoutLocation => S.get('sos_sent_no_location'),
+      SosResult.noLocation => S.get('sos_no_location'),
       SosResult.launchFailed => S.get('sos_launch_failed'),
       SosResult.noContact => S.get('sos_no_contact'),
       SosResult.error => S.get('sos_error'),
