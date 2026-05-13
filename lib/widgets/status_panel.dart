@@ -10,7 +10,6 @@ class StatusPanel extends StatelessWidget {
   final ValueNotifier<List<Track>> tracksNotifier;
   final int imgW, imgH;
   final double? viewportAspect;
-  final String Function(String) ruLabel;
   final AppMode mode;
 
   const StatusPanel({
@@ -20,7 +19,6 @@ class StatusPanel extends StatelessWidget {
     required this.imgW,
     required this.imgH,
     this.viewportAspect,
-    required this.ruLabel,
     required this.mode,
   });
 
@@ -64,7 +62,7 @@ class StatusPanel extends StatelessWidget {
           }
 
           if (top != null && imgH > 0 && imgW > 0) {
-            label = ruLabel(top.label);
+            label = S.label(top.label);
             distText = _distLabel(top.dist);
             dirText = clockDir(
               top.x1,
