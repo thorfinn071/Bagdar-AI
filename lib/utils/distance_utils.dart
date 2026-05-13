@@ -35,7 +35,11 @@ Future<void> calibrateFocalLength(
   await Settings.instance.setFocalLength(newFocal);
 }
 
-const double _kPersonShoulderWidth = 0.45; 
+
+
+
+
+const double _kPersonShoulderWidth = 0.48; 
 
 
 double focalDistM(String label, double x1, double y1, double x2, double y2) {
