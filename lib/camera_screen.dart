@@ -870,7 +870,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       FeatureUsageKeys.gesture('long_press'),
     );
     HapticService.vibrate([0, 100, 50, 100]);
-    _vm.tts.say(S.get('voice_listening'), SpeechPriority.critical, pan: 0.0);
+    
+    
+    _vm.tts.say(S.get('voice_listening'), SpeechPriority.info, pan: 0.0);
     await _vm.voice.startListening();
   }
 
