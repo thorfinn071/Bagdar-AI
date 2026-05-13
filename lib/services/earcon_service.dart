@@ -88,7 +88,7 @@ class EarconService {
     }
   }
 
-  Future<void> play(Earcon earcon, {double pan = 0.0}) async {
+  Future<void> play(Earcon earcon, {double pan = 0.0, double? volume}) async {
     if (!_ready || !_enabled) return;
     final now = DateTime.now();
     final lastAt = _lastPlayedAt[earcon];
@@ -108,8 +108,13 @@ class EarconService {
           player.state == PlayerState.completed) {
         final bytes = _generate(earcon);
         await player.setSourceBytes(bytes, mimeType: 'audio/wav');
-        await player.setVolume(_volume);
       }
+      // M12: support per-call quieter playback (e.g. soft heartbeat at 0.3)
+      // without permanently mutating the global volume. Always re-set to the
+      // effective volume so a previous override does not leak to the next
+      // normal play.
+      final effectiveVolume = (volume ?? _volume).clamp(0.0, 1.0);
+      await player.setVolume(effectiveVolume);
       await player.setBalance(pan.clamp(-1.0, 1.0));
       await player.seek(Duration.zero);
       await player.resume();

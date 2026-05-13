@@ -479,6 +479,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'pitch_too_low': 'Поднимите телефон чуть выше.',
     'pitch_misaligned_blind':
         'Поднимите телефон — я не вижу дорогу.',
+    'phone_abandoned':
+        'Bagdar лежит — проверьте телефон.',
     'curtain_on': 'Экранная шторка включена. Экран скрыт.',
     'curtain_off': 'Экранная шторка выключена.',
     'help_summary':
@@ -1186,6 +1188,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'pitch_too_low': 'Телефонды сәл жоғары көтеріңіз.',
     'pitch_misaligned_blind':
         'Телефонды көтеріңіз — мен жолды көрмеймін.',
+    'phone_abandoned':
+        'Bagdar жатыр — телефонды тексеріңіз.',
     'curtain_on': 'Экран пердесі қосулы. Экран жасырын.',
     'curtain_off': 'Экран пердесі өшірулі.',
     'help_summary':
@@ -1892,6 +1896,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'pitch_too_low': 'Tilt phone slightly up.',
     'pitch_misaligned_blind':
         "Raise the phone — I can't see the road.",
+    'phone_abandoned':
+        'Bagdar is lying down — please check your phone.',
     'curtain_on': 'Screen curtain on. Screen hidden.',
     'curtain_off': 'Screen curtain off.',
     'help_summary':

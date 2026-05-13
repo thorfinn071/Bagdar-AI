@@ -43,6 +43,7 @@ import 'services/feature_usage_tracker.dart';
 import 'services/field_logger.dart';
 import 'services/indoor_gate.dart';
 import 'services/misalignment_watchdog.dart';
+import 'services/phone_abandoned_detector.dart';
 import 'camera/frame_quality_guard.dart';
 import 'camera/depth_pipeline_controller.dart';
 import 'camera/stall_watchdog.dart';
@@ -178,6 +179,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   Timer? _misalignmentTickTimer;
   static const Duration _kMisalignmentTickInterval = Duration(seconds: 1);
 
+  final PhoneAbandonedDetector _phoneAbandoned = PhoneAbandonedDetector();
+
   @override
   void initState() {
     super.initState();
@@ -297,6 +300,45 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         'sustained_since': _misalignmentWatchdog.sustainedSinceAt
             ?.toIso8601String(),
       });
+    }
+    _phoneAbandonedTick();
+  }
+
+  /// M12: detect the "phone left on a bench / table" failure mode. Pulls the
+  /// already-computed signals from FallDetector and FrameQualityGuard, ticks
+  /// the detector, and dispatches the resulting alert / soft heartbeat.
+  void _phoneAbandonedTick() {
+    _phoneAbandoned.noteMotionState(_vm.fallDetector.motionState);
+    _phoneAbandoned.noteCameraFrozen(_qualityGuard.cameraFrozenWarned);
+    // Luma is "normal" when the camera is neither fully blocked (pocket /
+    // covered) nor in an AE transition that produces noise frames.
+    final lumaNormal = !_qualityGuard.cameraBlockedWarned &&
+        !_qualityGuard.aeTransitioning;
+    _phoneAbandoned.noteLumaNormal(lumaNormal);
+
+    final result = _phoneAbandoned.tick();
+    if (result.fireCriticalAlert) {
+      _vm.tts.say(
+        S.get(PhoneAbandonedDetector.kAnnounceKey),
+        SpeechPriority.critical,
+        pan: 0.0,
+      );
+      final pattern = result.hapticPattern;
+      if (pattern != null) {
+        HapticService.vibrate(pattern);
+      }
+      _vm.earcon.play(Earcon.cameraBlocked);
+      _fieldLog.log('phone_abandoned_critical', {
+        'haptic_level': result.hapticEscalationLevel,
+        'stationary_since': _phoneAbandoned.stationarySinceAt
+            ?.toIso8601String(),
+      });
+    }
+    if (result.fireSoftHeartbeat) {
+      _vm.earcon.play(
+        Earcon.heartbeat,
+        volume: PhoneAbandonedDetector.kSoftHeartbeatVolume,
+      );
     }
   }
 
