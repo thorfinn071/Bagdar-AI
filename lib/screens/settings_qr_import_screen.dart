@@ -119,9 +119,11 @@ class _SettingsQrImportScreenState extends State<SettingsQrImportScreen> {
     final ok = await SettingsCodec.instance.importFromJson(raw);
     if (!mounted) return;
     if (ok) {
+      
+      
       widget.tts.say(
         S.get('qr_import_applied'),
-        SpeechPriority.critical,
+        SpeechPriority.warning,
         pan: 0.0,
       );
       Navigator.of(context).pop(true);
