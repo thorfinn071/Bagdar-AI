@@ -638,6 +638,31 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     } catch (e) {
       _fieldLog.logError('initAll', e.toString());
       _vm.setStatus('Сбой: $e');
+      
+      
+      
+      
+      
+      
+      
+      
+      try {
+        _vm.tts.say(
+          S.get('init_failed'),
+          SpeechPriority.critical,
+          pan: 0.0,
+          barge: true,
+        );
+      } catch (_) {}
+      try {
+        HapticService.vibrate(
+          kHapticTtsStallPattern,
+          intensities: kHapticTtsStallIntensities,
+        );
+      } catch (_) {}
+      try {
+        _vm.earcon.play(Earcon.cameraBlocked);
+      } catch (_) {}
     }
   }
 
