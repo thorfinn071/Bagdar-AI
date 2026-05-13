@@ -1,11 +1,21 @@
 import 'package:vibration/vibration.dart';
 
+import '../models/constants.dart'
+    show kHapticTtsStallPattern, kHapticCriticalCooldownPattern;
+
 class HapticService {
   HapticService._();
 
   static bool? _hasVibrator;
   static bool? _hasAmplitude;
   static double _strengthMultiplier = 1.0;
+
+  
+  
+  
+  
+  
+  static const double _kCriticalFloorMultiplier = 1.0;
 
   static Future<void> init() async {
     try {
@@ -31,22 +41,40 @@ class HapticService {
   }) async {
     if (_hasVibrator == null) await init();
     if (!(_hasVibrator ?? false)) return;
-    if (_strengthMultiplier <= 0.05) return;
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    final isCriticalPattern = identical(pattern, kHapticTtsStallPattern) ||
+        identical(pattern, kHapticCriticalCooldownPattern);
+    final effectiveMultiplier = isCriticalPattern
+        ? (_strengthMultiplier < _kCriticalFloorMultiplier
+            ? _kCriticalFloorMultiplier
+            : _strengthMultiplier)
+        : _strengthMultiplier;
+    if (!isCriticalPattern && effectiveMultiplier <= 0.05) return;
     try {
-      final scaledPattern = _strengthMultiplier == 1.0
+      final scaledPattern = effectiveMultiplier == 1.0
           ? pattern
           : [
               for (int i = 0; i < pattern.length; i++)
                 i == 0
                     ? pattern[i]
-                    : (pattern[i] * _strengthMultiplier).round().clamp(0, 5000),
+                    : (pattern[i] * effectiveMultiplier).round().clamp(0, 5000),
             ];
       if ((_hasAmplitude ?? false) && intensities != null) {
-        final scaledIntens = _strengthMultiplier == 1.0
+        final scaledIntens = effectiveMultiplier == 1.0
             ? intensities
             : [
                 for (final a in intensities)
-                  (a * _strengthMultiplier).round().clamp(1, 255),
+                  (a * effectiveMultiplier).round().clamp(1, 255),
               ];
         await Vibration.vibrate(
           pattern: scaledPattern,
