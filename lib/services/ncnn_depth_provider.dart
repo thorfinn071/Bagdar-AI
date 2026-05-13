@@ -154,6 +154,7 @@ class NcnnDepthProvider implements DepthProvider {
     double cropTopFrac = 0.40,
     bool userStationary = false,
     bool weatherDegraded = false,
+    bool winterMode = false,
   }) async {
     if (_permanentlyDisabled || !_ready || _busy) return const [];
     _busy = true;
@@ -202,6 +203,7 @@ class NcnnDepthProvider implements DepthProvider {
         lumaMap: _lumaBuffer,
         userStationary: userStationary,
         weatherDegraded: weatherDegraded,
+        winterMode: winterMode,
       );
     } catch (e) {
       debugPrint('NcnnDepthProvider: analyze failed ($e)');

@@ -188,6 +188,7 @@ class DepthPipelineController {
         cropTopFrac: cropTopFrac,
         userStationary: userStationary,
         weatherDegraded: vm.weatherGate.degraded,
+        winterMode: vm.winterMode.active,
       );
       _inFlight = false;
 
@@ -215,12 +216,14 @@ class DepthPipelineController {
         if (h.type == DepthHazardType.slippery && h.midasScore < 0.55) return false;
         return true;
       });
+      final winterMode = vm.winterMode.active;
       final out = <DepthHazardAlert>[];
       for (final h in filteredHazards) {
         bool isCritical = _isHazardCritical(
           h,
           rollExcessive: rollExcessive,
           userStationary: userStationary,
+          winterMode: winterMode,
         );
 
         
@@ -325,17 +328,20 @@ class DepthPipelineController {
     DepthHazard hazard, {
     required bool rollExcessive,
     bool userStationary = false,
+    bool winterMode = false,
   }) =>
       _isHazardCritical(
         hazard,
         rollExcessive: rollExcessive,
         userStationary: userStationary,
+        winterMode: winterMode,
       );
 
   static bool _isHazardCritical(
     DepthHazard hazard, {
     required bool rollExcessive,
     bool userStationary = false,
+    bool winterMode = false,
   }) {
     switch (hazard.type) {
       case DepthHazardType.stairsDown:
@@ -356,6 +362,15 @@ class DepthPipelineController {
         return hazard.midasScore >= _kCriticalNearFieldScore;
 
       case DepthHazardType.slippery:
+        // Winter Mode: any slippery patch the user is moving toward is
+        // critical regardless of which lateral zone it is in — black ice
+        // outside the center band still ends a walk badly. Still gated on
+        // userStationary (no point shouting "Stop!" at a standing user) and
+        // on the score floor (avoids spurious wet-asphalt criticals).
+        if (winterMode) {
+          return !userStationary &&
+              hazard.midasScore >= _kCriticalSlipperyScore;
+        }
         return !userStationary &&
             _isCenterZone(hazard.zone) &&
             hazard.midasScore >= _kCriticalSlipperyScore;

@@ -181,6 +181,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
   final PhoneAbandonedDetector _phoneAbandoned = PhoneAbandonedDetector();
 
+  DateTime _lastWinterHeartbeatAt = DateTime.fromMillisecondsSinceEpoch(0);
+  static const Duration _kWinterHeartbeatInterval = Duration(seconds: 60);
+
   @override
   void initState() {
     super.initState();
@@ -246,6 +249,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         _vm.sos.cancelQueuedFollowUp();
       },
       onSosSent: () => _vm.fallDetector.notifyFallSosSent(),
+      winterModeProvider: () => _vm.winterMode.active,
     );
     _voiceDispatcher = VoiceCommandDispatcher(
       vm: _vm,
@@ -302,6 +306,27 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       });
     }
     _phoneAbandonedTick();
+    _winterHeartbeatTick();
+  }
+
+  /// Winter Mode: while weather is degraded AND winter mode is active, speak
+  /// a brief "плохая видимость — аккуратно" heartbeat every 60 s. Reminds
+  /// the user that degradation is sustained (not a one-shot warning) and
+  /// keeps them in slow-walk mental state.
+  void _winterHeartbeatTick() {
+    if (!_vm.winterMode.active) return;
+    if (!_vm.weatherGate.degraded) return;
+    final now = DateTime.now();
+    if (now.difference(_lastWinterHeartbeatAt) < _kWinterHeartbeatInterval) {
+      return;
+    }
+    _lastWinterHeartbeatAt = now;
+    _vm.tts.say(
+      S.get('winter_visibility_heartbeat'),
+      SpeechPriority.warning,
+      pan: 0.0,
+    );
+    _fieldLog.log('winter_heartbeat', const {});
   }
 
   /// M12: detect the "phone left on a bench / table" failure mode. Pulls the
@@ -1625,6 +1650,11 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   void _handleThermalChanged(ThermalReadings readings) {
     if (!mounted) return;
     _vm.throttler.setThermal(readings);
+    // Winter Mode: feed battery temp into the auto-detect streak. When the
+    // streak flips, the VM listener reclassifies the current reading via
+    // ThermalMonitor.setWinterMode(true), so the severity callback will
+    // fire again with the updated ceiling on the next poll.
+    _vm.winterMode.noteThermalReading(readings);
     unawaited(_models.adjustForThermal(_vm.throttler.effectiveSeverity));
     _fieldLog.logThermal(
       _vm.throttler.effectiveSeverity.name,

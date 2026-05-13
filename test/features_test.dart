@@ -27,7 +27,7 @@ class _RecordingEarconService extends EarconService {
   Future<void> init() async {}
 
   @override
-  Future<void> play(Earcon earcon, {double pan = 0.0}) async {
+  Future<void> play(Earcon earcon, {double pan = 0.0, double? volume}) async {
     calls++;
     played.add(earcon);
     pans.add(pan);
@@ -111,6 +111,7 @@ class _RecordingFallbackProvider implements DepthProvider {
     double cropTopFrac = 0.40,
     bool userStationary = false,
     bool weatherDegraded = false,
+    bool winterMode = false,
   }) async {
     analyzeCalls++;
     return const [];

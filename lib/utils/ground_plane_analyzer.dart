@@ -105,11 +105,14 @@ class GroundPlaneAnalyzer {
     return coverage >= kWalkingMinCoverage;
   }
 
+  bool _winterModeHint = false;
+
   List<DepthHazard> analyze(
     Float32List depthMap, {
     Uint8List? lumaMap,
     bool userStationary = false,
     bool weatherDegraded = false,
+    bool winterMode = false,
   }) {
     assert(depthMap.length == kMapSize * kMapSize);
     assert(lumaMap == null || lumaMap.length == kMapSize * kMapSize);
@@ -122,6 +125,7 @@ class GroundPlaneAnalyzer {
     
     
     _weatherDegradedHint = weatherDegraded;
+    _winterModeHint = winterMode;
 
     _pointCount = 0;
     for (int y = kZoneStartRow; y < kMapSize; y += 4) {
@@ -430,7 +434,13 @@ class GroundPlaneAnalyzer {
     final stairsHazard = _detectStairsDown(depthMap);
     if (stairsHazard != null) {
       const double weatherDegradedStairsScoreFloor = 0.715;
-      if (!_weatherDegradedHint ||
+      // Winter Mode: never raise the score floor on stairs-down. A snow-
+      // covered staircase is the highest-consequence physical-harm scenario
+      // in Astana winter and is exactly the case the degraded gate would
+      // otherwise hide. Plan: "stairsDown forced outside weather-degraded
+      // gate" universally.
+      if (_winterModeHint ||
+          !_weatherDegradedHint ||
           stairsHazard.midasScore >= weatherDegradedStairsScoreFloor) {
         results.add(stairsHazard);
       }

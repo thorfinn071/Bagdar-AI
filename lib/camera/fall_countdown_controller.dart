@@ -19,8 +19,16 @@ class FallCountdownController extends ChangeNotifier {
   final VoidCallback? onCancelled;
   final VoidCallback? onSosSent;
 
+  /// Optional probe for Winter Mode. When it returns true at the moment
+  /// [start] is called, the countdown window is scaled by
+  /// [WinterModeService.kCancelWindowScale] (= 0.7, 30 % shorter) per the
+  /// Winter Mode spec. Two-phrase confirmation for voice cancel is already
+  /// always mandatory (C1), so the only additional tightening is the timer.
+  final bool Function()? winterModeProvider;
+
   static const Duration kInitialDuration = Duration(seconds: 15);
   static const Duration kCollapseDuration = Duration(seconds: 30);
+  static const double kWinterCancelWindowScale = 0.7;
 
   static const Duration kVoiceConfirmWindow = Duration(seconds: 4);
   static const Duration kCorroborationWindow = Duration(seconds: 3);
@@ -48,6 +56,7 @@ class FallCountdownController extends ChangeNotifier {
     required this.voice,
     this.onCancelled,
     this.onSosSent,
+    this.winterModeProvider,
   });
 
   int get secondsLeft => _secondsLeft;
@@ -56,9 +65,13 @@ class FallCountdownController extends ChangeNotifier {
   void start({FallClass fallClass = FallClass.tumble}) {
     if (_active) return;
     _active = true;
-    _currentDuration = fallClass == FallClass.collapse
+    final baseDuration = fallClass == FallClass.collapse
         ? kCollapseDuration
         : kInitialDuration;
+    final winterActive = winterModeProvider?.call() ?? false;
+    _currentDuration = winterActive
+        ? _scaleDuration(baseDuration, kWinterCancelWindowScale)
+        : baseDuration;
     _secondsLeft = _currentDuration.inSeconds;
 
     final detectedKey = fallClass == FallClass.collapse
@@ -262,6 +275,19 @@ class FallCountdownController extends ChangeNotifier {
     if (duration <= kDeliberateTapMaxDuration) {
       _lastDeliberateTapAt = now;
     }
+  }
+
+  /// Ceil-rounded second scaling so a 15 s window at 0.7 becomes 11 s
+  /// (10.5 rounded up), not 10 s — the ceiling errs on the side of leaving
+  /// the user slightly more time rather than slightly less.
+  @visibleForTesting
+  static Duration scaleDurationForTesting(Duration base, double scale) =>
+      _scaleDuration(base, scale);
+
+  static Duration _scaleDuration(Duration base, double scale) {
+    final scaled = (base.inMilliseconds * scale).ceil();
+    final seconds = (scaled / 1000).ceil();
+    return Duration(seconds: seconds.clamp(1, 1 << 30));
   }
 
   @override

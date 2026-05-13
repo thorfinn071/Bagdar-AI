@@ -26,7 +26,10 @@ class ThermalReadings {
 
   bool get isAvailable => batteryTempC != null || thermalStatus != null;
 
-  static ThermalReadings fromMap(Map<dynamic, dynamic>? map) {
+  static ThermalReadings fromMap(
+    Map<dynamic, dynamic>? map, {
+    bool winterMode = false,
+  }) {
     final tempRaw = map?['batteryTempC'];
     final statusRaw = map?['thermalStatus'];
     final temp = tempRaw is num ? tempRaw.toDouble() : null;
@@ -34,20 +37,30 @@ class ThermalReadings {
     return ThermalReadings(
       batteryTempC: temp,
       thermalStatus: status,
-      severity: severityFor(batteryTempC: temp, thermalStatus: status),
+      severity: severityFor(
+        batteryTempC: temp,
+        thermalStatus: status,
+        winterMode: winterMode,
+      ),
     );
   }
+
+  /// Winter Mode lowers the critical battery-temp ceiling from
+  /// [kThermalCriticalTempC] (43 °C) to this value: a cold-acclimated device
+  /// hitting 38 °C is already running hot relative to ambient.
+  static const double kWinterCriticalTempC = 38.0;
 
   static ThermalSeverity severityFor({
     double? batteryTempC,
     int? thermalStatus,
+    bool winterMode = false,
   }) {
     var severity = ThermalSeverity.normal;
 
     if (batteryTempC != null) {
-      
-      
-      if (batteryTempC >= kThermalCriticalTempC) {
+      final criticalCeiling =
+          winterMode ? kWinterCriticalTempC : kThermalCriticalTempC;
+      if (batteryTempC >= criticalCeiling) {
         severity = ThermalSeverity.critical;
       } else if (batteryTempC >= kThermalHotTempC) {
         severity = ThermalSeverity.hot;
@@ -90,6 +103,29 @@ class ThermalMonitor {
   Timer? _pollTimer;
   bool _ready = false;
   ThermalReadings _current = const ThermalReadings.unavailable();
+  bool _winterMode = false;
+
+  /// Winter Mode flag, normally driven by [WinterModeService]. When true,
+  /// [ThermalReadings.severityFor] uses the 38 °C critical ceiling instead
+  /// of 43 °C. Updates immediately reclassify the current reading.
+  void setWinterMode(bool winter) {
+    if (winter == _winterMode) return;
+    _winterMode = winter;
+    if (_current.isAvailable) {
+      final reclassified = ThermalReadings(
+        batteryTempC: _current.batteryTempC,
+        thermalStatus: _current.thermalStatus,
+        severity: ThermalReadings.severityFor(
+          batteryTempC: _current.batteryTempC,
+          thermalStatus: _current.thermalStatus,
+          winterMode: winter,
+        ),
+      );
+      _setCurrent(reclassified);
+    }
+  }
+
+  bool get winterMode => _winterMode;
 
   ThermalReadings get current => _current;
   bool get isReady => _ready;
@@ -120,7 +156,7 @@ class ThermalMonitor {
       final result = await _channel.invokeMethod<Map<dynamic, dynamic>>(
         'getThermalReadings',
       );
-      _setCurrent(ThermalReadings.fromMap(result));
+      _setCurrent(ThermalReadings.fromMap(result, winterMode: _winterMode));
     } catch (e) {
       debugPrint('ThermalMonitor: refresh failed: $e');
       _setCurrent(const ThermalReadings.unavailable());

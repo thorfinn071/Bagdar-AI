@@ -43,6 +43,7 @@ import '../camera/object_finder_session.dart';
 
 import '../services/orientation_service.dart';
 import '../services/step_service.dart';
+import '../services/winter_mode_service.dart';
 
 class CameraViewModel extends ChangeNotifier {
   final Tracker tracker = Tracker();
@@ -75,6 +76,8 @@ class CameraViewModel extends ChangeNotifier {
   
   
   final IndoorGate indoorGate = IndoorGate();
+
+  final WinterModeService winterMode = WinterModeService();
 
   late final AlertManager alertMgr;
   late final ProximityBeaconService proximityBeacon;
@@ -129,6 +132,16 @@ class CameraViewModel extends ChangeNotifier {
       earcon: earcon,
       memory: objectMemory,
     );
+    // Winter Mode: load persisted manual toggle and propagate into the
+    // thermal monitor. The thermal → winterMode auto-detect feedback is
+    // wired in `camera_screen.dart:_handleThermalChanged` to coexist with
+    // the existing throttler / model-service thermal listeners.
+    winterMode.loadFromSettings();
+    thermal.setWinterMode(winterMode.active);
+    winterMode.addListener(() {
+      thermal.setWinterMode(winterMode.active);
+      notifyListeners();
+    });
   }
 
   Future<void> togglePaymentSms() async {

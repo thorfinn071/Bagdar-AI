@@ -481,6 +481,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Поднимите телефон — я не вижу дорогу.',
     'phone_abandoned':
         'Bagdar лежит — проверьте телефон.',
+    'winter_visibility_heartbeat':
+        'Плохая видимость — аккуратно.',
     'curtain_on': 'Экранная шторка включена. Экран скрыт.',
     'curtain_off': 'Экранная шторка выключена.',
     'help_summary':
@@ -1190,6 +1192,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Телефонды көтеріңіз — мен жолды көрмеймін.',
     'phone_abandoned':
         'Bagdar жатыр — телефонды тексеріңіз.',
+    'winter_visibility_heartbeat':
+        'Көріну нашар — абайлаңыз.',
     'curtain_on': 'Экран пердесі қосулы. Экран жасырын.',
     'curtain_off': 'Экран пердесі өшірулі.',
     'help_summary':
@@ -1898,6 +1902,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         "Raise the phone — I can't see the road.",
     'phone_abandoned':
         'Bagdar is lying down — please check your phone.',
+    'winter_visibility_heartbeat':
+        'Low visibility — walk carefully.',
     'curtain_on': 'Screen curtain on. Screen hidden.',
     'curtain_off': 'Screen curtain off.',
     'help_summary':

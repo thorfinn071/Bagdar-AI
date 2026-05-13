@@ -73,6 +73,7 @@ class _StubDepthProvider implements DepthProvider {
     double cropTopFrac = 0.40,
     bool userStationary = false,
     bool weatherDegraded = false,
+    bool winterMode = false,
   }) async => const [];
 
   @override

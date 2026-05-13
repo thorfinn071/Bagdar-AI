@@ -19,6 +19,7 @@ abstract class DepthProvider {
     double cropTopFrac = 0.40,
     bool userStationary = false,
     bool weatherDegraded = false,
+    bool winterMode = false,
   });
   bool get nativeBridgeEnabled;
   bool get nativeBridgeAvailable;
@@ -205,6 +206,7 @@ class HardwareDepthProvider implements DepthProvider {
     double cropTopFrac = 0.40,
     bool userStationary = false,
     bool weatherDegraded = false,
+    bool winterMode = false,
   }) async {
     final analyzeSw = Stopwatch()..start();
     if (_hardwareStarted) {
@@ -222,6 +224,7 @@ class HardwareDepthProvider implements DepthProvider {
             cropTopFrac: cropTopFrac,
             userStationary: userStationary,
             weatherDegraded: weatherDegraded,
+            winterMode: winterMode,
           );
           _lastPreprocessMs = fallback.lastPreprocessMs;
           _lastInferenceMs = fallback.lastInferenceMs;
@@ -240,6 +243,7 @@ class HardwareDepthProvider implements DepthProvider {
           depthMap,
           userStationary: userStationary,
           weatherDegraded: weatherDegraded,
+          winterMode: winterMode,
         );
         analyzeSw.stop();
         _lastAnalyzeMs = analyzeSw.elapsedMicroseconds / 1000.0;
@@ -254,6 +258,7 @@ class HardwareDepthProvider implements DepthProvider {
         cropTopFrac: cropTopFrac,
         userStationary: userStationary,
         weatherDegraded: weatherDegraded,
+        winterMode: winterMode,
       );
       _lastPreprocessMs = fallback.lastPreprocessMs;
       _lastInferenceMs = fallback.lastInferenceMs;
@@ -461,6 +466,7 @@ class FocalLengthDepthProvider implements DepthProvider {
     double cropTopFrac = 0.40,
     bool userStationary = false,
     bool weatherDegraded = false,
+    bool winterMode = false,
   }) async => const [];
 
   @override

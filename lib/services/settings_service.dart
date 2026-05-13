@@ -45,6 +45,7 @@ class SettingsService {
   static const _kPaymentSmsEnabled = 'payment_sms_enabled';
   static const _kCalibrationDeclined = 'calibration_declined';
   static const _kDisclaimerAcknowledged = 'disclaimer_acknowledged';
+  static const _kWinterModeManual = 'winter_mode_manual';
 
   Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
@@ -241,6 +242,14 @@ class SettingsService {
       _prefs?.getBool(_kDisclaimerAcknowledged) ?? false;
   Future<void> setDisclaimerAcknowledged(bool v) async =>
       _prefs!.setBool(_kDisclaimerAcknowledged, v);
+
+  /// Winter Mode: manual toggle persisted across launches. The effective
+  /// active state can also be auto-driven by [WinterModeService] based on
+  /// battery temperature; this getter exposes only the user-set bit.
+  bool get winterModeManual =>
+      _prefs?.getBool(_kWinterModeManual) ?? false;
+  Future<void> setWinterModeManual(bool v) async =>
+      _prefs!.setBool(_kWinterModeManual, v);
 
   Future<void> resetAll() async => _prefs!.clear();
 }
