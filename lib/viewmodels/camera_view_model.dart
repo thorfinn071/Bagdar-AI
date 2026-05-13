@@ -192,9 +192,13 @@ class CameraViewModel extends ChangeNotifier {
     );
     FieldLogger.instance.logModeSwitch(newMode.name, from: oldMode.name);
     if (Settings.instance.modeAnnounce) {
+      
+      
+      
+      
       tts.say(
         '${S.get('mode_changed')} ${mode.label}',
-        SpeechPriority.critical,
+        SpeechPriority.warning,
         pan: 0.0,
       );
     }
@@ -213,7 +217,9 @@ class CameraViewModel extends ChangeNotifier {
     isPitchBlack = !isPitchBlack;
     unawaited(Settings.instance.setPitchBlackUi(isPitchBlack));
     final msg = isPitchBlack ? S.get('curtain_on') : S.get('curtain_off');
-    tts.say(msg, SpeechPriority.critical, pan: 0.0);
+    
+    
+    tts.say(msg, SpeechPriority.info, pan: 0.0);
     HapticService.vibrate([0, 150]);
     notifyListeners();
   }
@@ -225,7 +231,9 @@ class CameraViewModel extends ChangeNotifier {
         ? S.alert('guide_dog_on')
         : S.alert('guide_dog_off');
     earcon.play(Earcon.success);
-    tts.say(msg, SpeechPriority.critical, pan: 0.0);
+    
+    
+    tts.say(msg, SpeechPriority.info, pan: 0.0);
     HapticService.vibrate([0, 150]);
     notifyListeners();
   }
@@ -234,7 +242,9 @@ class CameraViewModel extends ChangeNotifier {
     final key = Settings.instance.classicGestures
         ? 'help_summary_classic'
         : 'help_summary';
-    tts.say(S.get(key), SpeechPriority.critical, pan: 0.0);
+    
+    
+    tts.say(S.get(key), SpeechPriority.info, pan: 0.0);
   }
 
   void applyA11yPrefs() {
@@ -340,7 +350,9 @@ class CameraViewModel extends ChangeNotifier {
     nav.onSoftOffRoute = () =>
         tts.say(S.get('nav_maybe_off_route'), SpeechPriority.info, pan: 0.0);
     nav.onArrived = () =>
-        tts.say(S.get('nav_arrived_short'), SpeechPriority.critical, pan: 0.0);
+        
+        
+        tts.say(S.get('nav_arrived_short'), SpeechPriority.warning, pan: 0.0);
 
     nav.onOffRouteBearing = (bearing, distanceMeters) {
       final clockHint = _bearingToClockHint(bearing);
