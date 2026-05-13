@@ -82,9 +82,8 @@ class WeatherGate {
       _recoveredStreak++;
       _degradedStreak = 0;
     } else {
-      
-      
-      
+      if (_degradedStreak > 0) _degradedStreak--;
+      if (_recoveredStreak > 0) _recoveredStreak--;
     }
 
     if (!_degraded && _degradedStreak >= _kConfirmIn) {
