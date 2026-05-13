@@ -50,6 +50,11 @@ class SettingsService {
   static const _kDisclaimerAcknowledgedAt = 'disclaimer_acknowledged_at';
   static const _kWinterModeManual = 'winter_mode_manual';
   static const _kThemeMode = 'theme_mode';
+  // Phase 1+ of the Kazakh language stack rework (Vosk STT, RHVoice TTS,
+  // PaddleOCR). Default off until each phase ships and a native speaker
+  // signs off. When false, all kk-language code paths use the legacy
+  // `speech_to_text` / `flutter_tts` / ML Kit pipeline.
+  static const _kEnableKazakhStackV2 = 'enable_kazakh_stack_v2';
 
   Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
@@ -314,5 +319,16 @@ class SettingsService {
   Future<void> setThemeMode(BagdarThemeName v) async =>
       _prefs?.setString(_kThemeMode, v.id) ?? Future<void>.value();
 
+  /// Enable the next-generation Kazakh language stack (Vosk STT in Phase 1,
+  /// RHVoice/espeak-ng TTS in Phase 2, PaddleOCR in Phase 3). Default false:
+  /// new code paths must be opted in until acceptance criteria are met for
+  /// each phase. Toggleable from the dev/settings menu.
+  bool get enableKazakhStackV2 =>
+      _prefs?.getBool(_kEnableKazakhStackV2) ?? false;
+
+  Future<void> setEnableKazakhStackV2(bool v) async =>
+      _prefs?.setBool(_kEnableKazakhStackV2, v) ?? Future<void>.value();
+
   Future<void> resetAll() async => _prefs!.clear();
 }
+
