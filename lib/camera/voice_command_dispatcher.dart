@@ -11,6 +11,8 @@ import '../models/strings.dart';
 import '../services/feature_usage_tracker.dart';
 import '../services/settings_service.dart';
 import '../services/voice_command_service.dart';
+import '../theme/bagdar_theme.dart';
+import '../theme/bagdar_tokens.dart';
 import '../viewmodels/camera_view_model.dart';
 import '../services/scene_narrator.dart';
 import 'fall_countdown_controller.dart';
@@ -212,7 +214,39 @@ class VoiceCommandDispatcher {
       case VoiceCommand.tutorialRepeat:
         vm.tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
         break;
+      case VoiceCommand.restartPipeline:
+        vm.tts.say(
+          S.get('restart_pipeline'),
+          SpeechPriority.warning,
+          pan: 0.0,
+        );
+        break;
+      case VoiceCommand.themeDark:
+        _switchTheme(BagdarThemeName.dark, 'theme_selected_dark');
+        break;
+      case VoiceCommand.themeLight:
+        _switchTheme(BagdarThemeName.light, 'theme_selected_light');
+        break;
+      case VoiceCommand.themeHighContrast:
+        _switchTheme(
+          BagdarThemeName.highContrast,
+          'theme_selected_high_contrast',
+        );
+        break;
+      case VoiceCommand.themeWarm:
+        _switchTheme(BagdarThemeName.warm, 'theme_selected_warm');
+        break;
     }
+  }
+
+  void _switchTheme(BagdarThemeName name, String announcementKey) {
+    unawaited(setBagdarTheme(name));
+    vm.tts.say(
+      S.get(announcementKey),
+      SpeechPriority.warning,
+      pan: 0.0,
+      barge: true,
+    );
   }
 
   void handleNavCommand(VoiceCommand cmd, String destination) {

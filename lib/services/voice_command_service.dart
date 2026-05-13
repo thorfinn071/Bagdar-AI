@@ -56,6 +56,11 @@ enum VoiceCommand {
   findObject,
   cancelFind,
   forgetObject,
+  restartPipeline,
+  themeDark,
+  themeLight,
+  themeHighContrast,
+  themeWarm,
   unknown,
 }
 
@@ -162,6 +167,15 @@ class VoiceCommandService {
     'повторить': VoiceCommand.tutorialRepeat,
     'еще раз': VoiceCommand.tutorialRepeat,
     'ещё раз': VoiceCommand.tutorialRepeat,
+    'перезапусти распознавание': VoiceCommand.restartPipeline,
+    'перезапусти': VoiceCommand.restartPipeline,
+    'сбрось': VoiceCommand.restartPipeline,
+    'тёмная тема': VoiceCommand.themeDark,
+    'темная тема': VoiceCommand.themeDark,
+    'светлая тема': VoiceCommand.themeLight,
+    'высокий контраст': VoiceCommand.themeHighContrast,
+    'тёплая тема': VoiceCommand.themeWarm,
+    'теплая тема': VoiceCommand.themeWarm,
   };
 
   static const Set<String> _ruSosExact = {
@@ -355,6 +369,13 @@ class VoiceCommandService {
     'қайтала': VoiceCommand.tutorialRepeat,
     'тағы': VoiceCommand.tutorialRepeat,
     'тағы бір рет': VoiceCommand.tutorialRepeat,
+    'тануды қайта қос': VoiceCommand.restartPipeline,
+    'қайта қосу': VoiceCommand.restartPipeline,
+    'қайта бастау': VoiceCommand.restartPipeline,
+    'қара тақырып': VoiceCommand.themeDark,
+    'ашық тақырып': VoiceCommand.themeLight,
+    'жоғары контраст': VoiceCommand.themeHighContrast,
+    'жылы тақырып': VoiceCommand.themeWarm,
   };
 
   static const Set<String> _kkSosExact = {
@@ -517,6 +538,13 @@ class VoiceCommandService {
     'repeat': VoiceCommand.tutorialRepeat,
     'again': VoiceCommand.tutorialRepeat,
     'one more time': VoiceCommand.tutorialRepeat,
+    'restart recognition': VoiceCommand.restartPipeline,
+    'restart': VoiceCommand.restartPipeline,
+    'reset': VoiceCommand.restartPipeline,
+    'dark theme': VoiceCommand.themeDark,
+    'light theme': VoiceCommand.themeLight,
+    'high contrast': VoiceCommand.themeHighContrast,
+    'warm theme': VoiceCommand.themeWarm,
   };
 
   static const Set<String> _enSosExact = {
