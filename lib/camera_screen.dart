@@ -20,6 +20,7 @@ import 'services/thermal_monitor.dart';
 import 'services/haptic_service.dart';
 import 'services/earcon_service.dart';
 import 'services/sos_service.dart';
+import 'services/navigation_service.dart' show NavState;
 import 'models/nav_models.dart';
 import 'tracker/appearance.dart';
 import 'tracker/raw_det.dart';
@@ -28,6 +29,8 @@ import 'tracker/tracker.dart' show isVehicle;
 import 'widgets/status_panel.dart';
 import 'widgets/track_painter.dart';
 import 'widgets/camera_controls_sheet.dart';
+import 'widgets/quick_shelf.dart';
+import 'widgets/a11y/voice_layer.dart';
 import 'viewmodels/camera_view_model.dart';
 import 'services/model_service.dart';
 import 'services/battery_monitor.dart';
@@ -88,6 +91,12 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   bool _wantOcr = false;
   DateTime _ocrStartedAt = DateTime.fromMillisecondsSinceEpoch(0);
   TrafficLightColor? _lastAnnouncedLight;
+
+  ShelfTask _shelfTask = ShelfTask.camera;
+  bool _isVoiceListening = false;
+
+  Timer? _pitchBlackHeartbeatTimer;
+  static const Duration _kPitchBlackHeartbeatInterval = Duration(seconds: 30);
 
   Timer? _heartbeatTimer;
   int _detectionCompletions = 0;
@@ -291,6 +300,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
     _vm.addListener(() {
       if (mounted) setState(() {});
+      _managePitchBlackHeartbeat();
       
       
       
@@ -481,6 +491,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _heartbeatTimer?.cancel();
+    _pitchBlackHeartbeatTimer?.cancel();
     _resourceLogTimer?.cancel();
     _twoFingerSosTimer?.cancel();
     _tripleTapStatusTimer?.cancel();
@@ -729,6 +740,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       _vm.voice.onCommand = _voiceDispatcher.handleCommand;
       _vm.voice.onNavCommand = _voiceDispatcher.handleNavCommand;
       _vm.voice.onListeningStateChanged = (listening) {
+        if (mounted) {
+          setState(() => _isVoiceListening = listening);
+        }
         if (listening) {
           _vm.awm.pause();
         } else {
@@ -979,6 +993,68 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     
     _vm.tts.say(S.get('voice_listening'), SpeechPriority.info, pan: 0.0);
     await _vm.voice.startListening();
+  }
+
+  /// Quick Shelf is hidden when the camera surface needs to stay
+  /// visually empty: pitch-black UI (blind-user mode), an active
+  /// fall countdown that already covers the screen, or while
+  /// turn-by-turn navigation owns the layout.
+  bool _shouldShowShelf() {
+    if (_vm.isPitchBlack) return false;
+    if (_fallCountdown.active) return false;
+    if (_vm.nav.state != NavState.idle) return false;
+    return true;
+  }
+
+  /// Pitch-black mode hides every visual cue, so a periodic earcon
+  /// every 30 s is the only way for a blind user to confirm the app
+  /// is still running. Started/stopped from `_vm.addListener` and
+  /// torn down in [dispose].
+  void _managePitchBlackHeartbeat() {
+    final shouldRun = _vm.isPitchBlack;
+    final isRunning = _pitchBlackHeartbeatTimer != null;
+    if (shouldRun && !isRunning) {
+      _pitchBlackHeartbeatTimer = Timer.periodic(
+        _kPitchBlackHeartbeatInterval,
+        (_) => _vm.earcon.play(Earcon.heartbeat),
+      );
+    } else if (!shouldRun && isRunning) {
+      _pitchBlackHeartbeatTimer?.cancel();
+      _pitchBlackHeartbeatTimer = null;
+    }
+  }
+
+  void _onShelfTaskSelected(ShelfTask task) {
+    FeatureUsageTracker.instance.increment(
+      FeatureUsageKeys.gesture('shelf_${task.name}'),
+    );
+    HapticService.vibrate(const [0, 30, 50, 30]);
+    setState(() => _shelfTask = task);
+    switch (task) {
+      case ShelfTask.camera:
+        if (_wantOcr) {
+          _wantOcr = false;
+        }
+        break;
+      case ShelfTask.read:
+        _wantOcr = true;
+        _ocrStartedAt = DateTime.now();
+        _vm.tts.say(
+          S.get('shelf_read_started'),
+          SpeechPriority.info,
+          pan: 0.0,
+        );
+        break;
+      case ShelfTask.navigate:
+        _vm.tts.say(
+          S.get('shelf_navigate_started'),
+          SpeechPriority.warning,
+          pan: 0.0,
+          barge: true,
+        );
+        unawaited(_vm.voice.startListening());
+        break;
+    }
   }
 
   
@@ -2318,15 +2394,28 @@ class _AiCameraScreenState extends State<AiCameraScreen>
               Align(
                 alignment: Alignment.bottomCenter,
                 child: SafeArea(
-                  child: ExcludeSemantics(
-                    child: StatusPanel(
-                      statusLine: _vm.statusLine,
-                      tracksNotifier: _vm.tracksNotifier,
-                      imgW: _imgW,
-                      imgH: _imgH,
-                      viewportAspect: MediaQuery.sizeOf(context).aspectRatio,
-                      mode: _vm.mode,
-                    ),
+                  top: false,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      ExcludeSemantics(
+                        child: StatusPanel(
+                          statusLine: _vm.statusLine,
+                          tracksNotifier: _vm.tracksNotifier,
+                          imgW: _imgW,
+                          imgH: _imgH,
+                          viewportAspect:
+                              MediaQuery.sizeOf(context).aspectRatio,
+                          mode: _vm.mode,
+                        ),
+                      ),
+                      if (_shouldShowShelf())
+                        QuickShelf(
+                          activeTask: _shelfTask,
+                          onTaskSelected: _onShelfTaskSelected,
+                        ),
+                    ],
                   ),
                 ),
               ),
@@ -2358,6 +2447,13 @@ class _AiCameraScreenState extends State<AiCameraScreen>
                       ),
                     ],
                   ),
+                ),
+
+              if (_isVoiceListening)
+                VoiceLayer(
+                  onCancel: () {
+                    unawaited(_vm.voice.stopListening());
+                  },
                 ),
             ],
           ),
