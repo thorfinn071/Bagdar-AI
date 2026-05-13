@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/a11y_prefs.dart';
 import '../models/strings.dart';
+import '../theme/bagdar_tokens.dart';
 import 'device_capability.dart';
 
 typedef Settings = SettingsService;
@@ -48,6 +49,7 @@ class SettingsService {
   static const _kDisclaimerAcknowledged = 'disclaimer_acknowledged';
   static const _kDisclaimerAcknowledgedAt = 'disclaimer_acknowledged_at';
   static const _kWinterModeManual = 'winter_mode_manual';
+  static const _kThemeMode = 'theme_mode';
 
   Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
@@ -298,6 +300,19 @@ class SettingsService {
       _prefs?.getBool(_kWinterModeManual) ?? false;
   Future<void> setWinterModeManual(bool v) async =>
       _prefs!.setBool(_kWinterModeManual, v);
+
+  /// Visual theme. Default: dark/OLED with electric-yellow accent — chosen
+  /// because the majority of target users either run pitch-black mode (so
+  /// theme is invisible) or benefit from OLED power savings on budget
+  /// devices. Persisted as a string id to remain forward-compatible with
+  /// future themes.
+  BagdarThemeName get themeMode {
+    final id = _prefs?.getString(_kThemeMode);
+    return BagdarThemeNameX.fromId(id);
+  }
+
+  Future<void> setThemeMode(BagdarThemeName v) async =>
+      _prefs?.setString(_kThemeMode, v.id) ?? Future<void>.value();
 
   Future<void> resetAll() async => _prefs!.clear();
 }

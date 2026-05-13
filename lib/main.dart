@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 import 'onboarding_screen.dart';
 import 'services/feature_usage_tracker.dart';
 import 'services/settings_service.dart';
+import 'theme/bagdar_theme.dart';
+import 'theme/bagdar_tokens.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Settings.instance.init();
   await FeatureUsageTracker.instance.init();
+
+  bagdarThemeNotifier.value = Settings.instance.themeMode;
 
   final startScreen = await resolveStartScreen();
   runApp(BagdarApp(home: startScreen));
@@ -20,16 +24,21 @@ class BagdarApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Bagdar AI',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark().copyWith(
-        colorScheme: const ColorScheme.dark(
-          primary: Colors.cyanAccent,
-          secondary: Colors.orangeAccent,
-        ),
-      ),
-      home: home,
+    return ValueListenableBuilder<BagdarThemeName>(
+      valueListenable: bagdarThemeNotifier,
+      builder: (context, themeName, _) {
+        final colors = BagdarColors.of(themeName);
+        return MaterialApp(
+          title: 'Bagdar AI',
+          debugShowCheckedModeBanner: false,
+          theme: BagdarTheme.buildMaterialTheme(themeName),
+          home: BagdarTheme(
+            name: themeName,
+            colors: colors,
+            child: home,
+          ),
+        );
+      },
     );
   }
 }
