@@ -87,7 +87,12 @@ class SettingsService {
   int get language => _prefs!.getInt(_kLanguage) ?? 0;
   bool get useGpu => _prefs!.getBool(_kUseGpu) ?? false;
   bool get useNativeDepthBridge =>
-      _prefs!.getBool(_kUseNativeDepthBridge) ?? true;
+      
+      
+      
+      
+      
+      _prefs!.getBool(_kUseNativeDepthBridge) ?? false;
   bool get useHardwareDepthMode =>
       _prefs!.getBool(_kUseHardwareDepthMode) ?? false;
   int get numThreads => _prefs!.getInt(_kNumThreads) ?? 3;
