@@ -216,7 +216,6 @@ const double kApproachingLabelThreatMaxDistM = 15.0;
 
 
 
-
 const Duration kStaticObjectCooldown = Duration(seconds: 10);
 
 const Duration kClearAnnounceDuration = Duration(milliseconds: 1200);
@@ -344,7 +343,6 @@ const double kHardwareDepthMinMeanMeters = 0.30;
 
 
 
-
 const double kHardwareDepthMaxMeanMeters = 15.0;
 const int kHardwareDepthLowConfFrames = 5;
 
@@ -378,6 +376,22 @@ const int kDetectIntervalSafetyCeilingMs = 500;
 const int kStationaryGateDetectMs = 300;
 const Duration kStationaryGateResumeWindow = Duration(seconds: 5);
 const Duration kStationaryGatePostCriticalBlock = Duration(seconds: 5);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const Duration kStationaryGateMidasOff = Duration(hours: 1);
 
 const double kThermalWarmTempC = 37.0;
