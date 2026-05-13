@@ -103,14 +103,18 @@ build_abi() {
     local ranlib="$TOOLCHAIN/bin/llvm-ranlib"
     local strip="$TOOLCHAIN/bin/llvm-strip"
 
+    # Build espeak-ng as a static library so we can link our JNI shim
+    # plus espeak-ng into a single libbagdar-espeakng.so. Bagdar never
+    # exposes espeak-ng's public C API directly — only the three JNI
+    # entry points declared by EspeakNgEngine.kt.
     CC="$cc" AR="$ar" RANLIB="$ranlib" STRIP="$strip" \
-        CFLAGS="-O2 -fPIC -DANDROID -DNDEBUG" \
+        CFLAGS="-O2 -fPIC -DANDROID -DNDEBUG -fvisibility=hidden" \
         LDFLAGS="-Wl,--no-undefined" \
         "$SRC_DIR/configure" \
             --host="$triple" \
             --prefix="$prefix" \
-            --disable-static \
-            --enable-shared \
+            --enable-static \
+            --disable-shared \
             --with-pic \
             --without-async \
             --without-pcaudiolib \
@@ -120,20 +124,61 @@ build_abi() {
 
     make -j"$(getconf _NPROCESSORS_ONLN || echo 4)"
     make install
-
-    # Rename to avoid colliding with any system-installed espeak-ng.
-    if [[ -f "$prefix/lib/libespeak-ng.so" ]]; then
-        cp -f "$prefix/lib/libespeak-ng.so" \
-            "$prefix/lib/libbagdar-espeakng.so"
-        "$strip" --strip-unneeded "$prefix/lib/libbagdar-espeakng.so"
-    fi
-
-    mkdir -p "$JNI_LIBS_DIR/$abi"
-    if [[ -f "$prefix/lib/libbagdar-espeakng.so" ]]; then
-        cp -f "$prefix/lib/libbagdar-espeakng.so" \
-            "$JNI_LIBS_DIR/$abi/libbagdar-espeakng.so"
-    fi
     popd >/dev/null
+
+    link_jni_shim "$abi" "$cc" "$strip" "$prefix"
+}
+
+# Final link step: compile tools/espeak-ng/jni/bagdar_espeakng.c and
+# statically link it with espeak-ng's archive to produce a single
+# `libbagdar-espeakng.so` per ABI. Drop into
+# android/app/src/main/jniLibs/<abi>/.
+link_jni_shim() {
+    local abi="$1"
+    local cc="$2"
+    local strip="$3"
+    local prefix="$4"
+
+    local shim_src="$SCRIPT_DIR/jni/bagdar_espeakng.c"
+    if [[ ! -f "$shim_src" ]]; then
+        echo "==> JNI shim missing: $shim_src — skipping link for $abi" >&2
+        echo "    (espeak engine will report available=false until the" >&2
+        echo "    shim is committed; resolver falls back to ru voice.)" >&2
+        return 0
+    fi
+
+    local archive="$prefix/lib/libespeak-ng.a"
+    if [[ ! -f "$archive" ]]; then
+        echo "libespeak-ng.a not produced at $archive" >&2
+        return 1
+    fi
+
+    # ucd-tools ships as a bundled archive in espeak-ng >= 1.50. Some
+    # distributions emit it as libucd.a alongside libespeak-ng.a — pick
+    # it up automatically when present.
+    local extra_archives=()
+    if [[ -f "$prefix/lib/libucd.a" ]]; then
+        extra_archives+=("$prefix/lib/libucd.a")
+    fi
+
+    local out_dir="$JNI_LIBS_DIR/$abi"
+    mkdir -p "$out_dir"
+    local out_so="$out_dir/libbagdar-espeakng.so"
+
+    echo "==> Linking $out_so"
+    "$cc" \
+        -shared -fPIC -O2 \
+        -fvisibility=hidden \
+        -Wl,--gc-sections \
+        -Wl,--no-undefined \
+        -I"$prefix/include" \
+        "$shim_src" \
+        -Wl,--whole-archive "$archive" -Wl,--no-whole-archive \
+        ${extra_archives[@]:+"${extra_archives[@]}"} \
+        -o "$out_so" \
+        -llog -lm
+
+    "$strip" --strip-unneeded "$out_so"
 }
 
 stage_voice_data() {
@@ -161,19 +206,13 @@ main() {
     echo "==> Staging voice data into assets/espeak-ng-data/"
     stage_voice_data
 
-    if [[ ! -f "$SCRIPT_DIR/jni/bagdar_espeakng.c" ]]; then
-        cat >&2 <<'EOF'
-==> NOTE: tools/espeak-ng/jni/bagdar_espeakng.c is not yet present.
-    espeak-ng itself was built and staged, but the Bagdar JNI shim that
-    exposes `nativeInit / nativeVersion / nativeSynth` to Kotlin has not
-    been written yet. EspeakNgEngine.probe() will keep returning
-    `available = false` until the shim is added and rebuilt.
-    See tools/espeak-ng/README.md for the symbol contract.
-EOF
-    fi
-
     echo "==> Done."
-    echo "    Verify the output with: ./verify_build.sh"
+    echo "    Inputs:"
+    echo "      NDK:           $ANDROID_NDK_HOME ($HOST_TAG)"
+    echo "      espeak-ng rev: $ESPEAKNG_GIT_REV"
+    echo "      Min SDK:       $MIN_SDK_VERSION"
+    echo "    Verify reproducibility with: ./verify_build.sh"
+    echo "    Then commit the produced .so files + assets/espeak-ng-data/."
 }
 
 main "$@"

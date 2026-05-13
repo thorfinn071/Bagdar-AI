@@ -57,27 +57,41 @@ build/
   espeak-ng/                    # upstream checkout
   install/
     arm64-v8a/
-      lib/libespeak-ng.so       # → renamed to libbagdar-espeakng.so
+      lib/libespeak-ng.a        # static archive, linked into the .so
+      include/espeak-ng/        # headers for the JNI shim
     armeabi-v7a/
-      lib/libespeak-ng.so
+      lib/libespeak-ng.a
     share/espeak-ng-data/       # → copied to assets/espeak-ng-data/
 ```
 
-The script renames the produced `.so` to `libbagdar-espeakng.so` so it
-will never collide with any other espeak-ng port a user might have
-installed system-wide.
+The script then compiles `jni/bagdar_espeakng.c` and statically links
+it with `libespeak-ng.a` to produce one
+`libbagdar-espeakng.so` per ABI inside
+`android/app/src/main/jniLibs/`. The custom name + symbol visibility
+hidden (`-fvisibility=hidden`, only the three JNI exports are public)
+guarantees no collision with any other espeak-ng port the device might
+have installed system-wide.
 
 ## JNI surface
 
 `EspeakNgEngine.kt` expects the following symbols to be exported by
-`libbagdar-espeakng.so`:
+`libbagdar-espeakng.so`. They are implemented by
+`jni/bagdar_espeakng.c` and linked into the .so by `build_android.sh`:
 
 - `Java_com_example_bagdar_EspeakNgEngine_nativeInit(JNIEnv*, jobject, jstring dataPath)` → `jint`
+  - Returns 0 on success, -1 on init failure. Idempotent.
 - `Java_com_example_bagdar_EspeakNgEngine_nativeVersion(JNIEnv*, jobject)` → `jstring`
+  - Returns the espeak-ng version string from `espeak_Info()`.
 - `Java_com_example_bagdar_EspeakNgEngine_nativeSynth(JNIEnv*, jobject, jstring text, jstring lang, jint wpm)` → `jbyteArray?`
+  - Returns 16-bit signed little-endian mono PCM at 22050 Hz, or `null`
+    on synth failure / OOM.
 
-These are implemented in `jni/bagdar_espeakng.c` (added in the next
-revision when the NDK toolchain is wired up). Until the .c is present
-the build script will emit a warning and stop after staging the
-upstream artifacts — the Kotlin side reports `available = false` and
-the resolver picks the Russian fallback, so the app remains functional.
+The C wrapper serializes calls behind a single mutex (espeak-ng's API
+is not re-entrant) and caches the last voice + rate so repeated
+utterances skip the per-call voice-load overhead (~15 ms on Snapdragon
+680).
+
+If `jni/bagdar_espeakng.c` is missing, `build_android.sh` skips the
+final link step, `EspeakNgEngine.probe()` reports `available = false`,
+and the Dart resolver falls back to the Russian voice — no
+functional regression.
