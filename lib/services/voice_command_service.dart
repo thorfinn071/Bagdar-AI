@@ -724,8 +724,43 @@ class VoiceCommandService {
     return startListening(listenFor: listenFor, pauseFor: pauseFor);
   }
 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  void extendContinuousDeadline(Duration newSessionDuration) {
+    if (!_continuous) return;
+    final newDeadline = DateTime.now().add(newSessionDuration);
+    if (newDeadline.isAfter(_continuousDeadline)) {
+      _continuousDeadline = newDeadline;
+    } else {
+      
+      
+      _continuousDeadline = newDeadline;
+    }
+  }
+
+  
+  
+  DateTime get continuousDeadline => _continuousDeadline;
+
+  
+  
+  bool get isContinuousActive =>
+      _continuous && DateTime.now().isBefore(_continuousDeadline);
+
   Future<void> stopListening() async {
     _continuous = false;
+    
+    
+    _continuousDeadline = DateTime.fromMillisecondsSinceEpoch(0);
     if (!_listening) return;
     try {
       await _stt.stop();
@@ -930,7 +965,6 @@ class VoiceCommandService {
     }
   }
 
-  
   
   
   
