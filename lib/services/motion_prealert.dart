@@ -41,8 +41,8 @@ class MotionPreAlert {
   
   
   
-  static const int _weatherDegradedMinPersistFrames = 5;
-  static const int _weatherDegradedPersonMinPersistFrames = 6;
+  static const int _weatherDegradedMinPersistFrames = 4;
+  static const int _weatherDegradedPersonMinPersistFrames = 5;
 
   bool _weatherDegradedHint = false;
 

@@ -168,6 +168,68 @@ void main() {
     expect(earcon.pans.last, closeTo(0.25, 0.001));
   });
 
+  group('ProximityBeaconService weather-degraded haptic boost (M10)', () {
+    test('clear weather returns base pattern unchanged', () {
+      final (pattern, intensities) =
+          ProximityBeaconService.resolveHapticPulse(false);
+      expect(pattern, equals([0, 25]));
+      expect(intensities, equals([0, 140]));
+    });
+
+    test('degraded weather scales the active pulse +30 % '
+        '(both duration and amplitude)', () {
+      final (pattern, intensities) =
+          ProximityBeaconService.resolveHapticPulse(true);
+      
+      
+      expect(pattern[0], 0);
+      expect(pattern[1], (25 * 1.3).round());
+      
+      expect(intensities[0], 0);
+      expect(intensities[1], (140 * 1.3).round());
+    });
+
+    test('degraded amplitude never exceeds the 255 device ceiling', () {
+      
+      
+      
+      final (_, intensities) =
+          ProximityBeaconService.resolveHapticPulse(true);
+      for (final v in intensities) {
+        expect(v, lessThanOrEqualTo(255));
+      }
+    });
+
+    test('setWeatherDegraded flips the boost flag persistently', () {
+      final earcon = _RecordingEarconService();
+      final beacon = ProximityBeaconService(earcon: earcon);
+      addTearDown(beacon.dispose);
+
+      expect(beacon.isWeatherDegraded, isFalse);
+      beacon.setWeatherDegraded(true);
+      expect(beacon.isWeatherDegraded, isTrue);
+      beacon.setWeatherDegraded(false);
+      expect(beacon.isWeatherDegraded, isFalse);
+    });
+
+    test('update() carries the latest weatherDegraded flag through', () {
+      final earcon = _RecordingEarconService();
+      final beacon = ProximityBeaconService(earcon: earcon);
+      addTearDown(beacon.dispose);
+
+      beacon.update(kBeaconNearDistM, 0.0, weatherDegraded: true);
+      expect(beacon.isWeatherDegraded, isTrue);
+
+      beacon.update(kBeaconNearDistM, 0.0, weatherDegraded: false);
+      expect(beacon.isWeatherDegraded, isFalse);
+
+      
+      beacon.setWeatherDegraded(true);
+      beacon.update(kBeaconNearDistM, 0.0);
+      expect(beacon.isWeatherDegraded, isTrue);
+    });
+  });
+
   test('HardwareDepthProvider falls back to NCNN on repeated low-confidence depth', () async {
     final depthMap = Float32List(GroundPlaneAnalyzer.kMapSize * GroundPlaneAnalyzer.kMapSize)
       ..fillRange(0, GroundPlaneAnalyzer.kMapSize * GroundPlaneAnalyzer.kMapSize, 0.0);

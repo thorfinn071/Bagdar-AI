@@ -112,7 +112,11 @@ class CameraViewModel extends ChangeNotifier {
         if (dist == null) {
           proximityBeacon.pause();
         } else {
-          proximityBeacon.update(dist, pan);
+          proximityBeacon.update(
+            dist,
+            pan,
+            weatherDegraded: weatherGate.degraded,
+          );
         }
       },
       isGuideDogMode: () => guideDogMode,
