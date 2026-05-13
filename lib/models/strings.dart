@@ -553,6 +553,9 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Камера запрещена системой. '
         'Двойной тап — открыть настройки телефона. '
         'Один тап — отменить.',
+    'camera_perm_denied_retry':
+        'Доступ к камере отклонён. Без этого Bagdar не видит препятствий. '
+        'Двойной тап — попробовать снова.',
     'calib_no_person':
         'Нет человека в кадре. Наведите камеру и попробуйте снова.',
     'calib_invalid_dist': 'Введите корректное расстояние (0–50 м)',
@@ -1273,6 +1276,9 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Камера жүйеде тыйылған. '
         'Қос тию — телефон баптауларын ашу. '
         'Бір тию — болдырмау.',
+    'camera_perm_denied_retry':
+        'Камераға рұқсат берілмеді. Бұл рұқсатсыз Bagdar кедергіні көрмейді. '
+        'Қос тию — қайталау.',
     'calib_no_person': 'Кадрда адам жоқ. Камераны бағыттап, қайта көріңіз.',
     'calib_invalid_dist': 'Дұрыс қашықтықты енгізіңіз (0–50 м)',
 
@@ -1978,6 +1984,9 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Camera is blocked by the system. '
         'Double tap to open phone settings. '
         'Single tap to cancel.',
+    'camera_perm_denied_retry':
+        'Camera access was denied. Without it Bagdar cannot see obstacles. '
+        'Double tap to try again.',
     'calib_no_person': 'No person in frame. Aim the camera and try again.',
     'calib_invalid_dist': 'Enter a valid distance (0–50 m)',
 
