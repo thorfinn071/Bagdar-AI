@@ -134,6 +134,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'camera_not_found': 'Камера не найдена',
     'camera_started': 'Камера запущена',
     'system_ready': 'Система готова',
+    'init_failed':
+        'Не удалось запустить систему. Остановитесь. Перезапустите приложение.',
     'mode_changed': 'Режим',
 
     'calib_aim': 'Наведите камеру на человека для калибровки.',
@@ -854,6 +856,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'camera_not_found': 'Камера табылмады',
     'camera_started': 'Камера қосылды',
     'system_ready': 'Жүйе дайын',
+    'init_failed':
+        'Жүйені іске қосу сәтсіз. Тоқтаңыз. Қосымшаны қайта іске қосыңыз.',
     'mode_changed': 'Режим',
 
     'calib_aim': 'Калибрлеу үшін камераны адамға бағыттаңыз.',
@@ -1571,6 +1575,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'camera_not_found': 'Camera not found',
     'camera_started': 'Camera started',
     'system_ready': 'System ready',
+    'init_failed':
+        'System start failed. Stop where you are. Please restart the app.',
     'mode_changed': 'Mode',
 
     'calib_aim': 'Point the camera at a person for calibration.',
