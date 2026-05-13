@@ -18,6 +18,16 @@ class NcnnDepthProvider implements DepthProvider {
   static const String _paramAsset = 'assets/midas_small.ncnn.param';
   static const String _binAsset = 'assets/midas_small.ncnn.bin';
 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   static const int _kMaxFailuresInWindow = 3;
   static const Duration _kFailureWindow = Duration(minutes: 5);
 
@@ -28,6 +38,15 @@ class NcnnDepthProvider implements DepthProvider {
   bool _busy = false;
   bool _permanentlyDisabled = false;
   final List<DateTime> _recentFailures = [];
+
+  
+  
+  
+  
+  
+  
+  
+  void Function()? onSessionDisabled;
 
   late final Uint8List _lumaBuffer = Uint8List(_inputSize * _inputSize);
 
@@ -86,14 +105,30 @@ class NcnnDepthProvider implements DepthProvider {
 
   @override
   Future<bool> init({int threads = 2}) async {
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     if (Settings.instance.isReady && Settings.instance.ncnnDisabled) {
-      _permanentlyDisabled = true;
-      debugPrint('NcnnDepthProvider: skipped — ncnnDisabled flag set');
-      return false;
+      debugPrint(
+        'NcnnDepthProvider: ncnnDisabled flag present in prefs — '
+        'clearing (transient failures from a previous session are not '
+        'persisted; only structural load failures should persist).',
+      );
+      
+      Settings.instance.setNcnnDisabled(false).ignore();
     }
     final paths = await _extractAssets();
     if (paths == null) {
       debugPrint('NcnnDepthProvider: NCNN assets missing — provider unavailable');
+      
+      
       return false;
     }
     final ok = _bridge.init(
@@ -105,6 +140,8 @@ class NcnnDepthProvider implements DepthProvider {
     _ready = ok;
     if (!ok) {
       debugPrint('NcnnDepthProvider: bridge init failed');
+      
+      
     }
     return ok;
   }
@@ -260,20 +297,31 @@ class NcnnDepthProvider implements DepthProvider {
     _recentFailures.removeWhere((t) => now.difference(t) > _kFailureWindow);
     _recentFailures.add(now);
     if (_recentFailures.length >= _kMaxFailuresInWindow) {
-      _markPermanentlyDisabled();
+      _markSessionDisabled();
     }
   }
 
-  void _markPermanentlyDisabled() {
+  
+  
+  
+  
+  
+  
+  void _markSessionDisabled() {
     if (_permanentlyDisabled) return;
     _permanentlyDisabled = true;
     debugPrint(
-      'NcnnDepthProvider: $_kMaxFailuresInWindow failures in '
-      '${_kFailureWindow.inMinutes}m — disabling for this and future sessions',
+      'NcnnDepthProvider: $_kMaxFailuresInWindow invalid-output failures in '
+      '${_kFailureWindow.inMinutes}m — disabling for THIS session only. '
+      'A restart will re-enable NCNN depth.',
     );
-    if (Settings.instance.isReady) {
-      Settings.instance.setNcnnDisabled(true).ignore();
-    }
+    
+    
+    
+    
+    
+    
+    onSessionDisabled?.call();
   }
 
   @override
