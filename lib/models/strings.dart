@@ -827,6 +827,16 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'voice_layer_cancel': 'Отменить прослушивание.',
     'restart_pipeline': 'Перезапустить распознавание.',
     'restart_pipeline_done': 'Распознавание перезапущено.',
+    'lang_pack_required_for_kk':
+        'Для лучшего распознавания казахского скачайте языковой пакет.',
+    'lang_pack_downloading': 'Скачиваю казахский языковой пакет.',
+    'lang_pack_install_complete': 'Казахский языковой пакет установлен.',
+    'lang_pack_install_failed': 'Не удалось установить казахский пакет.',
+    'lang_pack_offline_skip':
+        'Нет сети. Запрошу при следующем подключении.',
+    'vosk_kk_loading': 'Готовлю казахское распознавание.',
+    'vosk_kk_load_failed':
+        'Не удалось загрузить казахское распознавание. Использую запасной вариант.',
   },
 
   AppLanguage.kk: {
@@ -1591,6 +1601,16 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'voice_layer_cancel': 'Тыңдауды тоқтату.',
     'restart_pipeline': 'Тануды қайта қосу.',
     'restart_pipeline_done': 'Тану қайта қосылды.',
+    'lang_pack_required_for_kk':
+        'Қазақ тілін жақсырақ тану үшін тіл пакетін жүктеп алыңыз.',
+    'lang_pack_downloading': 'Қазақ тіл пакетін жүктеп жатырмын.',
+    'lang_pack_install_complete': 'Қазақ тіл пакеті орнатылды.',
+    'lang_pack_install_failed': 'Қазақ пакетін орнату мүмкін болмады.',
+    'lang_pack_offline_skip':
+        'Желі жоқ. Келесі жалғану кезінде сұраймын.',
+    'vosk_kk_loading': 'Қазақша тануды дайындап жатырмын.',
+    'vosk_kk_load_failed':
+        'Қазақша тануды жүктеу мүмкін болмады. Қосымша нұсқаны қолданамын.',
   },
   AppLanguage.en: {
     'stop': 'Stop',
@@ -2336,6 +2356,15 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'voice_layer_cancel': 'Cancel listening.',
     'restart_pipeline': 'Restart recognition.',
     'restart_pipeline_done': 'Recognition restarted.',
+    'lang_pack_required_for_kk':
+        'For better Kazakh recognition, please download the language pack.',
+    'lang_pack_downloading': 'Downloading Kazakh language pack.',
+    'lang_pack_install_complete': 'Kazakh language pack installed.',
+    'lang_pack_install_failed': 'Failed to install Kazakh pack.',
+    'lang_pack_offline_skip': 'Offline. Will ask next time online.',
+    'vosk_kk_loading': 'Preparing Kazakh recognition.',
+    'vosk_kk_load_failed':
+        'Could not load Kazakh recognition. Using fallback.',
   },
 };
 
