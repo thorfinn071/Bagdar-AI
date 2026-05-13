@@ -32,9 +32,27 @@ class FallCountdownController extends ChangeNotifier {
 
   static const Duration kVoiceConfirmWindow = Duration(seconds: 4);
   static const Duration kCorroborationWindow = Duration(seconds: 3);
+  
+  
+  
+  
+  
+  
   static const double kDeliberateTapThresholdMps2 = 14.7;
   static const Duration kDeliberateTapMaxDuration =
       Duration(milliseconds: 100);
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  final double Function()? deliberateTapThresholdProvider;
 
   Timer? _timer;
   int _secondsLeft = 0;
@@ -57,6 +75,7 @@ class FallCountdownController extends ChangeNotifier {
     this.onCancelled,
     this.onSosSent,
     this.winterModeProvider,
+    this.deliberateTapThresholdProvider,
   });
 
   int get secondsLeft => _secondsLeft;
@@ -278,7 +297,12 @@ class FallCountdownController extends ChangeNotifier {
   void _onUserAccel(UserAccelerometerEvent e) {
     final mag = math.sqrt(e.x * e.x + e.y * e.y + e.z * e.z);
     final now = DateTime.now();
-    if (mag > kDeliberateTapThresholdMps2) {
+    
+    
+    
+    final threshold =
+        deliberateTapThresholdProvider?.call() ?? kDeliberateTapThresholdMps2;
+    if (mag > threshold) {
       _userAccelAboveStartedAt ??= now;
       return;
     }
