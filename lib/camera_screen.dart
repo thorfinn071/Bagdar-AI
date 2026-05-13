@@ -594,6 +594,22 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           const MethodChannel('bagdar/watchdog').invokeMethod('ping');
         } catch (_) {}
       };
+      
+      
+      
+      
+      
+      
+      _vm.tts.onTtsUnavailable = () {
+        try {
+          _vm.earcon.play(Earcon.cameraBlocked);
+        } catch (_) {}
+        _fieldLog.logTtsEvent('tts_unavailable');
+        
+        
+        
+        unawaited(_vm.tts.init());
+      };
 
       _heartbeatTimer = Timer.periodic(
         _currentHeartbeatInterval(),
