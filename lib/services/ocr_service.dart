@@ -20,6 +20,16 @@ class OcrService {
   static const int _kStableFrames = 2;
   final ListQueue<String> _stabilizeBuffer = ListQueue<String>();
 
+  
+  
+  
+  
+  
+  
+  
+  
+  int sensorOrientationDeg = 90;
+
   Future<String?> recognizeFromFrame(
     CameraImage image, {
     bool stabilize = false,
@@ -105,7 +115,7 @@ class OcrService {
 
       final metadata = InputImageMetadata(
         size: Size(image.width.toDouble(), image.height.toDouble()),
-        rotation: InputImageRotation.rotation0deg,
+        rotation: _rotationFromDegrees(sensorOrientationDeg),
         format: InputImageFormat.yuv420,
         bytesPerRow: image.planes[0].bytesPerRow,
       );
@@ -113,6 +123,22 @@ class OcrService {
       return InputImage.fromBytes(bytes: bytes, metadata: metadata);
     } catch (_) {
       return null;
+    }
+  }
+
+  static InputImageRotation _rotationFromDegrees(int deg) {
+    final normalized = ((deg % 360) + 360) % 360;
+    switch (normalized) {
+      case 0:
+        return InputImageRotation.rotation0deg;
+      case 90:
+        return InputImageRotation.rotation90deg;
+      case 180:
+        return InputImageRotation.rotation180deg;
+      case 270:
+        return InputImageRotation.rotation270deg;
+      default:
+        return InputImageRotation.rotation90deg;
     }
   }
 }
