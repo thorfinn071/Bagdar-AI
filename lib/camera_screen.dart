@@ -1245,10 +1245,21 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         if (now.difference(_ocrStartedAt) > const Duration(seconds: 10)) {
           _wantOcr = false;
           _vm.tts.say(S.get('ocr_timeout'), SpeechPriority.info, pan: 0.0);
+        } else if (_vm.fallDetector.motionState == MotionState.walking) {
+          
+          
+          
+          
+          
+          
         } else {
           final text = await _vm.ocr.recognizeFromFrame(image, stabilize: true);
           if (text != null && text.isNotEmpty) {
-            _vm.tts.say(text, SpeechPriority.critical, pan: 0.0);
+            
+            
+            
+            
+            _vm.tts.say(text, SpeechPriority.info, pan: 0.0);
             _wantOcr = false;
           }
         }
