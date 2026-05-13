@@ -227,10 +227,15 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           stalled: true,
           thresholdMs: threshold.inMilliseconds,
         );
-        _vm.alertMgr.markCameraStall(now);
+        
+        
+        
+        
+        
         if (now.difference(_lastStallWarnTtsAt) < _kStallTtsCooldown) {
           return;
         }
+        _vm.alertMgr.markCameraStall(now);
         _lastStallWarnTtsAt = now;
         _vm.earcon.play(Earcon.cameraBlocked);
         _vm.tts.say(
