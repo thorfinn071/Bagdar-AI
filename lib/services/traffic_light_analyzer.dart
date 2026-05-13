@@ -570,9 +570,15 @@ class TrafficLightAnalyzer {
   bool _matchesTarget(int yVal, int u, int v, _ColorTarget target) {
     switch (target) {
       case _ColorTarget.red:
-        return yVal > 80 && v > 160 && u < 120 && (v - u) > 50;
+        
+        
+        
+        return yVal > 80 && yVal <= 200 && v >= 175 && u < 120 && (v - u) > 50;
       case _ColorTarget.yellow:
-        return yVal > 150 && v > 135 && u < 115 && (v - u) > 30;
+        
+        
+        
+        return yVal >= 180 && v > 135 && u >= 90 && u < 115 && (v - u) > 30;
       case _ColorTarget.green:
         return yVal > 60 && u > 140 && v < 130 && (u - v) > 20;
     }
