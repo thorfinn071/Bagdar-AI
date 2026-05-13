@@ -6,6 +6,7 @@ import '../services/earcon_service.dart';
 import '../services/device_capability.dart';
 import '../services/settings_service.dart';
 import '../services/field_logger.dart';
+import 'a11y/stepper_field.dart';
 
 class CameraSettingsSheet extends StatefulWidget {
   final AppLanguage currentLanguage;
@@ -1174,6 +1175,13 @@ class _EarconTestButton extends StatelessWidget {
   }
 }
 
+/// Adapter that preserves the original `_SliderRow` call sites in
+/// this sheet but renders the AAA-compliant [StepperField] under the
+/// hood. The [Slider] widget had two failures: TalkBack reports
+/// percentages with poor granularity on small screens, and shaky
+/// hands could not reliably reach a 4 dp thumb on a 64 dp track.
+/// The stepper trio has 64 × 64 dp ± buttons and announces the new
+/// value verbally.
 class _SliderRow extends StatelessWidget {
   final String label;
   final double value;
@@ -1202,43 +1210,14 @@ class _SliderRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Semantics(
-      label: '$label: ${_format(value)}',
-      slider: true,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-        child: Row(
-          children: [
-            SizedBox(
-              width: 130,
-              child: Text(
-                label,
-                style: const TextStyle(color: Colors.white, fontSize: 13),
-              ),
-            ),
-            Expanded(
-              child: Slider(
-                value: value.clamp(min, max),
-                min: min,
-                max: max,
-                divisions: divisions,
-                activeColor: Colors.cyanAccent,
-                inactiveColor: Colors.white24,
-                label: _format(value),
-                onChanged: onChanged,
-              ),
-            ),
-            SizedBox(
-              width: 48,
-              child: Text(
-                _format(value),
-                textAlign: TextAlign.end,
-                style: const TextStyle(color: Colors.white70, fontSize: 12),
-              ),
-            ),
-          ],
-        ),
-      ),
+    return StepperField(
+      label: label,
+      value: value.clamp(min, max),
+      min: min,
+      max: max,
+      divisions: divisions,
+      formatValue: _format,
+      onChanged: onChanged,
     );
   }
 }
