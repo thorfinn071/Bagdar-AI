@@ -108,18 +108,21 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
   }
 
   Future<void> _speakIntro() async {
-    _tts.say(S.get('tut_intro'), SpeechPriority.critical, pan: 0.0);
+    
+    
+    
+    _tts.say(S.get('tut_intro'), SpeechPriority.warning, pan: 0.0);
     await _tts.awaitCurrentSpeech();
     await Future<void>.delayed(const Duration(milliseconds: 300));
   }
 
   Future<void> _speakPrompt({bool initial = false}) async {
     if (_step == _TutStep.done) {
-      _tts.say(S.get('tut_finished'), SpeechPriority.critical, pan: 0.0);
+      _tts.say(S.get('tut_finished'), SpeechPriority.warning, pan: 0.0);
       return;
     }
     _lastPromptAt = DateTime.now();
-    _tts.say(S.get(_stepKey), SpeechPriority.critical, pan: 0.0);
+    _tts.say(S.get(_stepKey), SpeechPriority.warning, pan: 0.0);
     if (!initial) {
       HapticService.vibrate(const [0, 40]);
     }
@@ -153,7 +156,7 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
 
   void _speakDetailedHelp() {
     final detailKey = 'tut_detail_${_step.name}';
-    _tts.say(S.get(detailKey), SpeechPriority.critical, pan: 0.0);
+    _tts.say(S.get(detailKey), SpeechPriority.warning, pan: 0.0);
   }
 
   Future<void> _advance() async {
@@ -162,7 +165,7 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
     _voiceListenTimer?.cancel();
     unawaited(_voice.stopListening());
     _earcon.play(Earcon.success);
-    _tts.say(S.get(_doneKey), SpeechPriority.critical, pan: 0.0);
+    _tts.say(S.get(_doneKey), SpeechPriority.warning, pan: 0.0);
     HapticService.vibrate(const [0, 60, 40, 60]);
 
     final next = _TutStep.values[_step.index + 1];
@@ -192,7 +195,7 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
     _voiceListenTimer?.cancel();
     unawaited(_voice.stopListening());
     await Settings.instance.setTutorialSeen(true);
-    _tts.say(S.get('tut_finished'), SpeechPriority.critical, pan: 0.0);
+    _tts.say(S.get('tut_finished'), SpeechPriority.warning, pan: 0.0);
     if (!mounted) return;
     if (widget.onFinished != null) {
       widget.onFinished!.call();
@@ -304,7 +307,7 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
         now.difference(_lastPromptAt!) < const Duration(seconds: 3)) {
       if (_failCount >= 2) {
         _lastPromptAt = now;
-        _tts.say(S.get('tut_fail_hint'), SpeechPriority.critical, pan: 0.0);
+        _tts.say(S.get('tut_fail_hint'), SpeechPriority.warning, pan: 0.0);
         _failCount = 0;
       }
       return;
