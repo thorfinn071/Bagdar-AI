@@ -464,5 +464,5 @@ const int kAwmFftSize = 512;
 const int kAwmBearingFftSize = 256;
 const double kAwmTransientThresholdMultiplier = 3.0;
 
-const double kNavGpsAccuracyMaxM = 30.0;
+const double kNavGpsAccuracyMaxM = 25.0;
 const int kNavGpsMaxAgeSec = 30;

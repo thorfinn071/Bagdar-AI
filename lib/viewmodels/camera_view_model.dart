@@ -342,6 +342,9 @@ class CameraViewModel extends ChangeNotifier {
 
     nav.onGpsError = (msg) => tts.say(msg, SpeechPriority.warning, pan: 0.0);
 
+    nav.onNavMuteChanged = (msg) =>
+        tts.say(msg, SpeechPriority.warning, pan: 0.0);
+
     nav.onPositionUpdated = (pos) {
       sos.updateCachedPosition(pos);
     };

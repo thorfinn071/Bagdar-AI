@@ -84,7 +84,6 @@ class NavigationService {
   int _lastProgressMeters = -1;
   static const Duration _progressInterval = Duration(seconds: 20);
 
-  DateTime _lastFixAt = DateTime.fromMillisecondsSinceEpoch(0);
   bool _navMuted = false;
   DateTime _lastNavMuteChangeAt = DateTime.fromMillisecondsSinceEpoch(0);
   static const Duration _navMuteFlapGuard = Duration(seconds: 10);
@@ -183,7 +182,6 @@ class NavigationService {
     _lastSoftOffRouteAt = DateTime.fromMillisecondsSinceEpoch(0);
     _lastRerouteAt = DateTime.fromMillisecondsSinceEpoch(0);
     _rerouteInFlight = false;
-    _lastFixAt = DateTime.fromMillisecondsSinceEpoch(0);
     _navMuted = false;
     _lastNavMuteChangeAt = DateTime.fromMillisecondsSinceEpoch(0);
     if (wasActive) onRouteStopped?.call();
@@ -249,11 +247,10 @@ class NavigationService {
   void _onPositionUpdate(Position pos) {
     final now = DateTime.now();
 
-    _lastFixAt = now;
-
-    final gpsBad = pos.accuracy > kNavGpsAccuracyMaxM ||
-        (_lastFixAt.millisecondsSinceEpoch != 0 &&
-            now.difference(_lastFixAt) > const Duration(seconds: kNavGpsMaxAgeSec));
+    // M11: gate on the fix's own timestamp age (Geolocator hands us older
+    // cached fixes when the device is in an urban canyon / tunnel). The
+    // previous self-comparison against `_lastFixAt` was dead code.
+    final gpsBad = isGpsBad(pos.accuracy, pos.timestamp, now);
 
     if (gpsBad && !_navMuted) {
       if (now.difference(_lastNavMuteChangeAt) >= _navMuteFlapGuard) {
@@ -475,6 +472,14 @@ class NavigationService {
 
   static double _toRad(double deg) => deg * math.pi / 180;
   static double _toDeg(double rad) => rad * 180 / math.pi;
+
+  /// M11: GPS-quality gate. Returns true when the fix should not drive
+  /// turn-by-turn output. Public for tests and for IndoorGate alignment.
+  static bool isGpsBad(double accuracyM, DateTime fixTimestamp, DateTime now) {
+    final fixAge = now.difference(fixTimestamp);
+    return accuracyM > kNavGpsAccuracyMaxM ||
+        fixAge > const Duration(seconds: kNavGpsMaxAgeSec);
+  }
 
   void _announceCurrentStep() {
     if (_route == null || _currentStepIndex >= _route!.steps.length) return;
