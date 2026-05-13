@@ -39,7 +39,7 @@ Future<void> calibrateFocalLength(
 
 
 
-const double _kPersonShoulderWidth = 0.48; 
+const double _kPersonShoulderWidth = 0.48;
 
 
 double focalDistM(String label, double x1, double y1, double x2, double y2) {
@@ -185,10 +185,14 @@ String clockDir(
     imgH: imgH,
     viewportAspect: viewportAspect,
   );
+  
+  
+  
+  
   if (n < 0.10) return d('9');
   if (n < 0.22) return d('10');
-  if (n < 0.38) return d('11');
-  if (n < 0.62) return d('forward');
+  if (n < 0.42) return d('11');
+  if (n < 0.58) return d('forward');
   if (n < 0.78) return d('1');
   if (n < 0.90) return d('2');
   return d('3');
