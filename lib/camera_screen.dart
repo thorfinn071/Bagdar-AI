@@ -1534,10 +1534,12 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       if (t.approaching) return true;
       
       
-      if (t.dist == 'very close') return true;
       
       
       
+      
+      
+      if (t.dist == 'very close' || t.dist == 'close') return true;
     }
     return false;
   }
