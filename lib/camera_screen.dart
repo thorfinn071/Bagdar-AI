@@ -283,6 +283,35 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       
       
       _qualityGuard.setMode(scanModeActive: _vm.mode == AppMode.scan);
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      final newMode = _vm.mode;
+      if (newMode != _lastObservedMode) {
+        final transitioningIntoSafetyMode =
+            (newMode == AppMode.street || newMode == AppMode.cane) &&
+                (_lastObservedMode == null ||
+                    !(_lastObservedMode == AppMode.street ||
+                        _lastObservedMode == AppMode.cane));
+        if (transitioningIntoSafetyMode &&
+            _initCompletedAt.millisecondsSinceEpoch != 0 &&
+            !_depthController.providerReady) {
+          _vm.tts.say(
+            S.get('depth_unavailable_street'),
+            SpeechPriority.warning,
+            pan: 0.0,
+          );
+        }
+        _lastObservedMode = newMode;
+      }
     });
     _fallCountdown.addListener(() {
       if (mounted) setState(() {});
