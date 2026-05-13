@@ -536,7 +536,14 @@ const Map<AppLanguage, Map<String, String>> _ui = {
 
     'depth_unavailable': 'Обнаружение глубины недоступно.',
     'depth_unavailable_street':
-        'Внимание: безопасность по препятствиям на уровне пола отключена на этом устройстве.',
+        'Внимание: безопасность по препятствиям на уровне пола отключена на этом устройстве. Обнаружение бордюров, лестниц и ям не работает. Используйте трость.',
+    'depth_session_disabled':
+        'Обнаружение глубины отключено из-за ошибок. Лестницы и бордюры не объявляются до перезапуска. Идите осторожно.',
+    'hazard_detection_resumed': 'Обнаружение препятствий возобновлено.',
+    'depth_paused_explicit':
+        'Обнаружение лестниц и бордюров приостановлено.',
+    'weather_depth_off_walking':
+        'Видимость плохая. Лестницы и бордюры могут не определяться. Ступайте медленно.',
     'depth_degraded':
         'Качество глубины снизилось. Внимательнее к препятствиям.',
     'depth_recovered': 'Качество глубины восстановлено.',
@@ -1260,6 +1267,13 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'depth_unavailable': 'Тереңдікті анықтау қолжетімсіз.',
     'depth_unavailable_street':
         'Назар аударыңыз: еден деңгейіндегі кедергілерге қауіпсіздік өшірілген.',
+    'depth_session_disabled':
+        'Қателерге байланысты тереңдікті анықтау өшірілді. Қайта іске қосылғанша саты мен бордюр хабарланбайды. Абай болыңыз.',
+    'hazard_detection_resumed': 'Кедергілерді анықтау қайта қосылды.',
+    'depth_paused_explicit':
+        'Саты мен бордюрді анықтау уақытша тоқтатылды.',
+    'weather_depth_off_walking':
+        'Көріну нашар. Саты мен бордюр анықталмауы мүмкін. Ақырын жүріңіз.',
     'depth_degraded':
         'Тереңдік сапасы төмендеді. Кедергілерге көбірек назар аударыңыз.',
     'depth_recovered': 'Тереңдік сапасы қалпына келді.',
@@ -1390,14 +1404,14 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'gtfs_stale': 'Кесте ескіруі мүмкін. Жаңартуды тексеріңіз.',
     'gtfs_bus_routes': 'Аялдамадағы автобус маршруттары',
 
-    'tts_lang_title': 'Дауыс табылмады',
+    'tts_lang_title': 'Дауыстық пакет табылмады',
     'tts_lang_body':
         'Таңдалған тіл үшін дауыстық пакет орнатылмаған. '
         'Баптаулар → Арнайы мүмкіндіктер → '
         'Сөйлеу синтезі бөліміне өтіп, тілдің дауысын орнатыңыз.',
     'tts_lang_open': 'Түсінікті',
 
-    'sem_step_of': '{total} қадамнан {step}',
+    'sem_step_of': '{count} қадамнан {step}',
     'sem_required': 'Міндетті',
     'sem_optional_perm': 'Міндетті емес',
     'sem_done': 'Орындалды',
@@ -1428,7 +1442,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
 
     'audio_tour':
         'Сіз негізгі экрандасыз. '
-        'Камера жұмыс істеп, айналаны сканерлеп тұр. '
+        'Камера жұмыс істеуде, айналаны сканерлеп тұр. '
         'Режимді ауыстыру үшін солға не оңға сырғытыңыз. '
         'Дауыстық команда үшін саусақты ұстап тұрыңыз. '
         'Анықтама үшін жоғары сырғытыңыз.',
@@ -1969,7 +1983,14 @@ const Map<AppLanguage, Map<String, String>> _ui = {
 
     'depth_unavailable': 'Depth detection unavailable.',
     'depth_unavailable_street':
-        'Warning: floor-level obstacle safety is disabled.',
+        'Warning: floor-level obstacle safety is off on this device. Curb, stair and pothole detection are not active. Please use your cane',
+    'depth_session_disabled':
+        'Depth detection disabled due to repeated errors. Stairs and curbs will not be announced until you restart the app. Walk with care',
+    'hazard_detection_resumed': 'Hazard detection resumed.',
+    'depth_paused_explicit':
+        'Stair and curb detection are paused.',
+    'weather_depth_off_walking':
+        'Visibility is poor. Stairs and curbs may not be detected. Walk slowly.',
     'depth_degraded': 'Depth quality degraded. Pay extra attention.',
     'depth_recovered': 'Depth quality recovered.',
     'depth_quality_low': 'Depth quality low. Switching to MiDaS.',
