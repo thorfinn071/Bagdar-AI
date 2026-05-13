@@ -70,7 +70,10 @@ class CameraViewModel extends ChangeNotifier {
   final GtfsService gtfs = GtfsService();
   final VoiceCommandService voice = VoiceCommandService();
   final TrafficLightAnalyzer trafficLight = TrafficLightAnalyzer();
-  final OcrService ocr = OcrService();
+  // Phase 3: pass `memory` so OcrService can refuse to start a new
+  // PaddleOCR session when the device is under critical memory pressure
+  // (PaddleLite predictors total ~80 MB resident when active).
+  late final OcrService ocr = OcrService(memoryMonitor: memory);
   final MotionPreAlert motionPreAlert = MotionPreAlert();
   final WeatherGate weatherGate = WeatherGate();
   
