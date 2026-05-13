@@ -871,6 +871,28 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'onb_kk_pack_later': 'Напомнить в сети',
     'lang_pack_online_ready':
         'Сеть восстановлена. Пакет казахского распознавания готов к установке. Скажите «языковые пакеты».',
+
+    // -- Phase 2: Kazakh TTS engine labels & RHVoice onboarding ----------
+    'tts_kk_engine_system': 'Системный казахский голос',
+    'tts_kk_engine_rhvoice': 'RHVoice (Aigul)',
+    'tts_kk_engine_espeak': 'espeak-ng (резервный)',
+    'tts_kk_engine_fallback_ru': 'Русское чтение казахского текста',
+    'tts_kk_using_rhvoice': 'Использую RHVoice для казахского.',
+    'tts_kk_using_espeak':
+        'Использую базовый казахский голос. Произношение может быть упрощённым.',
+    'tts_kk_using_system': 'Использую системный казахский голос.',
+    'tts_kk_using_russian_fallback':
+        'Казахский голос недоступен. Читаю казахский текст русским голосом.',
+    'tts_kk_engine_load_failed':
+        'Не удалось загрузить казахский голос. Перехожу на запасной вариант.',
+    'onb_rhvoice_pack_prompt_title': 'Лучший казахский голос',
+    'onb_rhvoice_pack_prompt_body':
+        'Скачать высококачественный казахский голос сейчас? Около 30 МБ. Голос работает без интернета.',
+    'onb_rhvoice_pack_yes': 'Скачать',
+    'onb_rhvoice_pack_skip': 'Пропустить',
+    'onb_rhvoice_pack_later': 'Напомнить в сети',
+    'lang_pack_rhvoice_online_ready':
+        'Сеть восстановлена. Пакет казахского голоса готов к установке. Скажите «языковые пакеты».',
   },
 
   AppLanguage.kk: {
@@ -1678,6 +1700,28 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'onb_kk_pack_later': 'Желі болғанда еске салу',
     'lang_pack_online_ready':
         'Желі қалпына келді. Қазақша тану пакетін орнатуға дайын. «Тіл пакеттері» деп айтыңыз.',
+
+    // -- Phase 2: Kazakh TTS engine labels & RHVoice onboarding ----------
+    'tts_kk_engine_system': 'Жүйелік қазақша дауыс',
+    'tts_kk_engine_rhvoice': 'RHVoice (Айгүл)',
+    'tts_kk_engine_espeak': 'espeak-ng (қосалқы)',
+    'tts_kk_engine_fallback_ru': 'Қазақ мәтінін орысша оқу',
+    'tts_kk_using_rhvoice': 'Қазақша үшін RHVoice қолданамын.',
+    'tts_kk_using_espeak':
+        'Базалық қазақша дауысты қолданамын. Дыбыстау қарапайым болуы мүмкін.',
+    'tts_kk_using_system': 'Жүйелік қазақша дауысты қолданамын.',
+    'tts_kk_using_russian_fallback':
+        'Қазақша дауыс жоқ. Қазақ мәтінін орысша оқимын.',
+    'tts_kk_engine_load_failed':
+        'Қазақша дауысты жүктеу мүмкін болмады. Қосалқы нұсқаға көшемін.',
+    'onb_rhvoice_pack_prompt_title': 'Жақсы қазақша дауыс',
+    'onb_rhvoice_pack_prompt_body':
+        'Жоғары сапалы қазақша дауысты қазір жүктеп алу керек пе? Шамамен 30 МБ. Дауыс интернетсіз жұмыс істейді.',
+    'onb_rhvoice_pack_yes': 'Жүктеп алу',
+    'onb_rhvoice_pack_skip': 'Өткізіп жіберу',
+    'onb_rhvoice_pack_later': 'Желі болғанда еске салу',
+    'lang_pack_rhvoice_online_ready':
+        'Желі қалпына келді. Қазақша дауыс пакетін орнатуға дайын. «Тіл пакеттері» деп айтыңыз.',
   },
   AppLanguage.en: {
     'stop': 'Stop',
@@ -2462,6 +2506,29 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'onb_kk_pack_later': 'Remind me online',
     'lang_pack_online_ready':
         'You are online. The Kazakh recognition pack is ready to install. '
+        'Say "language packs".',
+
+    // -- Phase 2: Kazakh TTS engine labels & RHVoice onboarding ----------
+    'tts_kk_engine_system': 'System Kazakh voice',
+    'tts_kk_engine_rhvoice': 'RHVoice (Aigul)',
+    'tts_kk_engine_espeak': 'espeak-ng (fallback)',
+    'tts_kk_engine_fallback_ru': 'Russian voice reading Kazakh text',
+    'tts_kk_using_rhvoice': 'Using RHVoice for Kazakh.',
+    'tts_kk_using_espeak':
+        'Using the basic Kazakh voice. Pronunciation may be simplified.',
+    'tts_kk_using_system': 'Using the system Kazakh voice.',
+    'tts_kk_using_russian_fallback':
+        'Kazakh voice is unavailable. Reading Kazakh text with the Russian voice.',
+    'tts_kk_engine_load_failed':
+        'Failed to load the Kazakh voice. Falling back.',
+    'onb_rhvoice_pack_prompt_title': 'Better Kazakh voice',
+    'onb_rhvoice_pack_prompt_body':
+        'Download a high-quality Kazakh voice now? About 30 MB. The voice works offline.',
+    'onb_rhvoice_pack_yes': 'Download',
+    'onb_rhvoice_pack_skip': 'Skip',
+    'onb_rhvoice_pack_later': 'Remind me online',
+    'lang_pack_rhvoice_online_ready':
+        'You are online. The Kazakh voice pack is ready to install. '
         'Say "language packs".',
   },
 };
