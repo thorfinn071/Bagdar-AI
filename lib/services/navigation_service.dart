@@ -492,11 +492,24 @@ class NavigationService {
     final dir = _maneuverToText(step.maneuver);
     final dist = step.distanceMeters;
 
+    
+    
+    
+    
+    
+    
+    
+    
+    final useImmediateForm = dist < 3;
     String msg;
     if (step.instruction.isNotEmpty) {
-      msg = '${step.instruction}. $dist ${S.get('meters')}.';
+      msg = useImmediateForm
+          ? '${step.instruction}, ${S.get('now_imminent')}.'
+          : '${step.instruction}. $dist ${S.get('meters')}.';
     } else {
-      msg = '$dir. $dist ${S.get('meters')}.';
+      msg = useImmediateForm
+          ? '$dir, ${S.get('now_imminent')}.'
+          : '$dir. $dist ${S.get('meters')}.';
     }
 
     _lastInstructionAt = DateTime.now();
