@@ -339,7 +339,13 @@ const double kBeaconMinHz = 0.5;
 
 const double kHardwareDepthMinConfidence = 0.30;
 const double kHardwareDepthMinMeanMeters = 0.30;
-const double kHardwareDepthMaxMeanMeters = 25.0;
+
+
+
+
+
+
+const double kHardwareDepthMaxMeanMeters = 15.0;
 const int kHardwareDepthLowConfFrames = 5;
 
 
