@@ -558,7 +558,11 @@ class TtsService {
     if (_testMode) return;
     
     
-    _pruneStaleCriticals(DateTime.now());
+    
+    
+    
+    
+    _pruneStaleCriticals(DateTime.now(), maxAge: _kCriticalStaleAfter);
     final now = DateTime.now();
     _queue.removeWhere(
       (j) =>
