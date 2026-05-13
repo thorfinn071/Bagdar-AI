@@ -845,11 +845,25 @@ class AlertManager {
       }
 
       final confFactor = t.avgConf >= kHighConfLevel ? 1.0 : 1.5;
-      final baseCooldown = t.label == 'person'
-          ? (indoor ? kIndoorPersonCooldown : kPersonCooldown)
-          : t.dist == 'close'
-          ? kWarningCooldown
-          : kInfoCooldown;
+      
+      
+      
+      
+      
+      
+      
+      final Duration baseCooldown;
+      if (t.label == 'person') {
+        if (indoor) {
+          baseCooldown = kIndoorPersonCooldown;
+        } else if (t.dist == 'close' || t.dist == 'very close') {
+          baseCooldown = const Duration(seconds: 6);
+        } else {
+          baseCooldown = kPersonCooldown;
+        }
+      } else {
+        baseCooldown = t.dist == 'close' ? kWarningCooldown : kInfoCooldown;
+      }
       final freqMult = Settings.instance.alertFrequency.multiplier;
       final cooldown = Duration(
         milliseconds:
