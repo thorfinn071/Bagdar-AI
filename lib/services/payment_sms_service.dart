@@ -175,12 +175,15 @@ class PaymentSmsService {
     final text = PaymentSmsParser.formatTts(event);
     FieldLogger.instance.logTtsSay(
       text: 'payment_sms:${event.direction.name}',
-      priority: SpeechPriority.critical.name,
+      priority: SpeechPriority.warning.name,
       pan: 0.0,
       trackId: null,
     );
     _earcon.play(Earcon.paymentReceived);
-    _tts.say(text, SpeechPriority.critical, pan: 0.0);
+    
+    
+    
+    _tts.say(text, SpeechPriority.warning, pan: 0.0);
   }
 
   void _gcRecent(DateTime now) {
