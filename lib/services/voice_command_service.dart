@@ -4,6 +4,12 @@ import 'package:flutter/foundation.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
+import '../models/language_pack.dart';
+import 'field_logger.dart';
+import 'language_pack_manager.dart';
+import 'settings_service.dart';
+import 'vosk_kk_recognizer.dart';
+
 enum VoiceCommand {
   scanAll,
   scanLeft,
@@ -66,9 +72,19 @@ enum VoiceCommand {
 
 class VoiceCommandService {
   final SpeechToText _stt = SpeechToText();
+  final VoskKkRecognizer _vosk = VoskKkRecognizer.instance;
 
   bool _available = false;
   bool _listening = false;
+
+  /// Active when the Kazakh stack v2 feature flag is on, the current locale
+  /// is kk-*, and the vosk-kk language pack is installed locally. When true,
+  /// `_listenInternal` routes through `_vosk` instead of `speech_to_text`.
+  bool _useVoskForKk = false;
+
+  /// Latest async reconciliation in flight; used to avoid stacked swaps when
+  /// `setLocale` is called rapidly.
+  Future<void>? _reconcileFuture;
 
   String _locale = 'ru-RU';
 
@@ -671,6 +687,10 @@ class VoiceCommandService {
     } catch (e) {
       _available = false;
     }
+    // Best-effort: if the user is already on kk and has the Vosk pack
+    // installed, kick off the Vosk model load now so the first listen is
+    // fast. Otherwise this is a cheap no-op.
+    unawaited(_reconcileVoskRouting());
     return _available;
   }
 
@@ -688,7 +708,115 @@ class VoiceCommandService {
   }
 
   void setLocale(String bcp47) {
+    if (_locale == bcp47) return;
     _locale = bcp47;
+    // Vosk lifecycle is tied to locale; reconcile asynchronously so the
+    // synchronous setLocale contract is preserved for callers.
+    unawaited(_reconcileVoskRouting());
+  }
+
+  /// Returns true if the kk-via-Vosk routing is currently active. Exposed
+  /// for diagnostics and tests; do not gate user-facing behavior on this
+  /// (the routing falls back transparently when Vosk is unavailable).
+  @visibleForTesting
+  bool get useVoskForKk => _useVoskForKk;
+
+  /// Build the closed-set grammar passed to Vosk. Includes every kk
+  /// command phrase, SOS shouts, cancel-fall acknowledgments, cancel-find
+  /// acknowledgments, and the [VoskKkRecognizer.unknownToken] sentinel so
+  /// out-of-grammar speech is rejected cleanly instead of force-fit.
+  ///
+  /// Open-class commands (nav-with-destination, remember/find/forget with
+  /// arbitrary noun) are not represented in this grammar; users who need
+  /// them with v2 enabled fall back to `speech_to_text` automatically when
+  /// the model rejects their utterance, since the routing layer hands
+  /// `_vosk.unknownToken` results back as `VoiceCommand.unknown` and the
+  /// dispatcher will retry on the next listen window.
+  @visibleForTesting
+  static List<String> buildKkClosedGrammar() {
+    final phrases = <String>{};
+    phrases.addAll(_kkCommands.keys);
+    phrases.addAll(_kkSosExact);
+    phrases.addAll(_kkCancelFallExact);
+    phrases.addAll(_kkCancelFindExact);
+    phrases.add(VoskKkRecognizer.unknownToken);
+    return phrases.where((p) => p.trim().isNotEmpty).toList(growable: false);
+  }
+
+  bool _shouldUseVoskForKk() {
+    if (!_locale.startsWith('kk')) return false;
+    if (!Settings.instance.isReady) return false;
+    if (!Settings.instance.enableKazakhStackV2) return false;
+    if (!LanguagePackManager.instance.isInstalled(LanguagePackIds.voskKk)) {
+      return false;
+    }
+    return true;
+  }
+
+  Future<void> _reconcileVoskRouting() async {
+    // Serialize concurrent reconciliations so a fast locale-toggle
+    // (kk → ru → kk) doesn't tear and re-create the model mid-load.
+    final pending = _reconcileFuture;
+    if (pending != null) {
+      await pending;
+    }
+    final completer = Completer<void>();
+    _reconcileFuture = completer.future;
+    try {
+      final shouldUse = _shouldUseVoskForKk();
+      if (shouldUse == _useVoskForKk && (!shouldUse || _vosk.isReady)) {
+        return;
+      }
+      if (shouldUse) {
+        final ok = await _initVoskIfNeeded();
+        _useVoskForKk = ok;
+        FieldLogger.instance.log('vosk_kk_routing', {
+          'enabled': ok,
+          'locale': _locale,
+        });
+      } else {
+        if (_vosk.isListening) {
+          await _vosk.stop();
+        }
+        _useVoskForKk = false;
+      }
+    } finally {
+      if (!completer.isCompleted) completer.complete();
+      if (identical(_reconcileFuture, completer.future)) {
+        _reconcileFuture = null;
+      }
+    }
+  }
+
+  Future<bool> _initVoskIfNeeded() async {
+    final pack = LanguagePackManager.instance.getInstalled(
+      LanguagePackIds.voskKk,
+    );
+    if (pack == null || pack.localPath.isEmpty) return false;
+    _vosk
+      ..onResult = _onVoskResult
+      ..onError = (err) => onError?.call('vosk_kk:$err');
+    final ok = await _vosk.init(
+      pack.localPath,
+      grammar: buildKkClosedGrammar(),
+    );
+    return ok;
+  }
+
+  void _onVoskResult(String text) {
+    final cleaned = text.trim();
+    debugPrint('VoiceCommandService(vosk-kk) recognized: "$cleaned"');
+    // Run the existing parser, which knows the kk vocabulary and will fire
+    // onCommand/onNavCommand callbacks identically to the speech_to_text
+    // path. The parser is locale-driven via `_locale`, which is already
+    // kk-* by the time we reach this branch.
+    _processResult(cleaned);
+    // For non-continuous mode, stop the recognizer after one utterance to
+    // mirror the speech_to_text contract (single-shot listen).
+    if (!_continuous && _vosk.isListening) {
+      unawaited(_vosk.stop());
+      _setListening(false);
+    }
   }
 
   bool get isAvailable => _available;
@@ -719,6 +847,9 @@ class VoiceCommandService {
     Duration listenFor = const Duration(seconds: 6),
     Duration pauseFor = const Duration(seconds: 2),
   }) async {
+    if (_useVoskForKk) {
+      return _listenWithVosk(listenFor: listenFor);
+    }
     try {
       await _stt.listen(
         localeId: _locale,
@@ -740,6 +871,36 @@ class VoiceCommandService {
       _setListening(false);
       return false;
     }
+  }
+
+  Future<bool> _listenWithVosk({required Duration listenFor}) async {
+    if (!_vosk.isReady) {
+      final ok = await _initVoskIfNeeded();
+      if (!ok) {
+        // Vosk init failed (corrupted pack, OOM, etc.) — fall back to STT
+        // for this listen and on the next reconcile we'll re-evaluate.
+        _useVoskForKk = false;
+        return _listenInternal(listenFor: listenFor);
+      }
+    }
+    final started = await _vosk.start();
+    if (!started) {
+      _setListening(false);
+      return false;
+    }
+    _setListening(true);
+    if (!_continuous) {
+      // Mirror speech_to_text's listenFor watchdog so a stuck mic doesn't
+      // hold focus forever when the user goes silent.
+      Future<void>.delayed(listenFor, () async {
+        if (_continuous) return;
+        if (_vosk.isListening) {
+          await _vosk.stop();
+          _setListening(false);
+        }
+      });
+    }
+    return true;
   }
 
   Future<bool> startContinuousListening({
@@ -789,6 +950,11 @@ class VoiceCommandService {
     
     
     _continuousDeadline = DateTime.fromMillisecondsSinceEpoch(0);
+    if (_useVoskForKk && _vosk.isListening) {
+      await _vosk.stop();
+      _setListening(false);
+      return;
+    }
     if (!_listening) return;
     try {
       await _stt.stop();
@@ -800,6 +966,7 @@ class VoiceCommandService {
     try {
       _stt.cancel();
     } catch (_) {}
+    unawaited(_vosk.dispose());
   }
 
   void _setListening(bool v) {

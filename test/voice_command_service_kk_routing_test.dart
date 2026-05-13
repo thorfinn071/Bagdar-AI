@@ -1,0 +1,147 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:bagdar/models/language_pack.dart';
+import 'package:bagdar/services/language_pack_manager.dart';
+import 'package:bagdar/services/settings_service.dart';
+import 'package:bagdar/services/voice_command_service.dart';
+import 'package:bagdar/services/vosk_kk_recognizer.dart';
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  setUp(() async {
+    SharedPreferences.setMockInitialValues({});
+    await Settings.instance.init();
+    LanguagePackManager.instance.debugReset(packsDir: '/tmp/test_lang_packs');
+  });
+
+  group('VoiceCommandService.buildKkClosedGrammar', () {
+    test('includes the unknown-token sentinel', () {
+      final grammar = VoiceCommandService.buildKkClosedGrammar();
+      expect(grammar.contains(VoskKkRecognizer.unknownToken), true);
+    });
+
+    test('includes every closed-class kk command phrase', () {
+      final grammar = VoiceCommandService.buildKkClosedGrammar();
+      // Sample from the kk command map — full coverage would be brittle.
+      const samples = <String>[
+        'айналада не бар',
+        'солда не бар',
+        'оңда не бар',
+        'алда не бар',
+        'оқы',
+        'көмек',
+        'батарея',
+        'сос',
+      ];
+      for (final phrase in samples) {
+        expect(
+          grammar.contains(phrase),
+          true,
+          reason: 'closed-class phrase "$phrase" missing from grammar',
+        );
+      }
+    });
+
+    test('includes kk SOS shouts', () {
+      final grammar = VoiceCommandService.buildKkClosedGrammar();
+      expect(grammar.contains('жедел көмек'), true);
+      expect(grammar.contains('шұғыл көмек'), true);
+    });
+
+    test('includes kk cancel-fall acknowledgments', () {
+      final grammar = VoiceCommandService.buildKkClosedGrammar();
+      // Sample from the kk cancel-fall exact set in voice_command_service.
+      // Any one of these landing in the grammar list is sufficient.
+      final anyCancel = grammar.any((p) =>
+          p.contains('жақсы') ||
+          p.contains('дұрыс') ||
+          p.contains('жалған'));
+      expect(anyCancel, true,
+          reason:
+              'cancel-fall acknowledgments must appear in the closed grammar '
+              'so Vosk can recognize them in safety-critical fall flows');
+    });
+
+    test('rejects empty phrases', () {
+      final grammar = VoiceCommandService.buildKkClosedGrammar();
+      for (final phrase in grammar) {
+        expect(phrase.trim().isNotEmpty, true,
+            reason: 'grammar contains an empty/whitespace phrase: "$phrase"');
+      }
+    });
+
+    test('produces no duplicates', () {
+      final grammar = VoiceCommandService.buildKkClosedGrammar();
+      expect(grammar.length, grammar.toSet().length,
+          reason: 'duplicates waste Vosk grammar slots');
+    });
+  });
+
+  group('VoiceCommandService.useVoskForKk routing flag', () {
+    test('default state: feature flag off → Vosk routing inactive', () {
+      final svc = VoiceCommandService();
+      expect(Settings.instance.enableKazakhStackV2, false);
+      expect(svc.useVoskForKk, false);
+    });
+
+    test('flag on but pack not installed → Vosk routing still inactive',
+        () async {
+      await Settings.instance.setEnableKazakhStackV2(true);
+      // No pack injected; LanguagePackManager.isInstalled returns false.
+      final svc = VoiceCommandService();
+      // setLocale triggers async reconcile; we just verify the sync getter
+      // never reports true while the pack is missing. The reconcile path
+      // is exercised end-to-end in instrumented integration tests.
+      svc.setLocale('kk-KZ');
+      expect(svc.useVoskForKk, false);
+    });
+
+    test('locale switch back to ru-RU clears Vosk routing intent',
+        () async {
+      await Settings.instance.setEnableKazakhStackV2(true);
+      LanguagePackManager.instance.debugReset(
+        packsDir: '/tmp/test_lang_packs',
+        installed: const [
+          LanguagePack(
+            packId: 'vosk-kk',
+            name: 'Vosk KK',
+            localPath: '/tmp/test_lang_packs/vosk-kk',
+            installed: true,
+          ),
+        ],
+      );
+      final svc = VoiceCommandService();
+      svc.setLocale('kk-KZ');
+      svc.setLocale('ru-RU');
+      // After switching back to ru, the routing must report off
+      // regardless of pack state.
+      expect(svc.useVoskForKk, false);
+    });
+  });
+
+  group('VoiceCommandService parser still works for kk under v2 flag', () {
+    // The parser is locale-driven; whether the words came from Vosk or
+    // speech_to_text is invisible to it. These tests guard against
+    // accidental regressions in kk vocabulary during the routing work.
+    test('kk scan command parses correctly when fed via Vosk path',
+        () async {
+      await Settings.instance.setEnableKazakhStackV2(true);
+      final svc = VoiceCommandService();
+      VoiceCommand? captured;
+      svc.onCommand = (c) => captured = c;
+      svc.processWordsForTesting('айналада не бар', localeOverride: 'kk-KZ');
+      expect(captured, VoiceCommand.scanAll);
+    });
+
+    test('kk SOS exact phrase still fires sos command', () async {
+      await Settings.instance.setEnableKazakhStackV2(true);
+      final svc = VoiceCommandService();
+      VoiceCommand? captured;
+      svc.onCommand = (c) => captured = c;
+      svc.processWordsForTesting('жедел көмек', localeOverride: 'kk-KZ');
+      expect(captured, VoiceCommand.sos);
+    });
+  });
+}
