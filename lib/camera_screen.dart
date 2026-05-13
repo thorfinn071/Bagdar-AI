@@ -310,6 +310,26 @@ class _AiCameraScreenState extends State<AiCameraScreen>
             pan: 0.0,
           );
         }
+        
+        
+        
+        
+        
+        
+        
+        if (transitioningIntoSafetyMode &&
+            _initCompletedAt.millisecondsSinceEpoch != 0 &&
+            Settings.instance.disclaimerNeedsReprompt) {
+          _vm.tts.say(
+            S.get('onb_secondary_aid_tts'),
+            SpeechPriority.warning,
+            pan: 0.0,
+          );
+          unawaited(Settings.instance.setDisclaimerAcknowledged(true));
+          _fieldLog.log('disclaimer_reprompted', {
+            'mode': newMode.name,
+          });
+        }
         _lastObservedMode = newMode;
       }
     });
