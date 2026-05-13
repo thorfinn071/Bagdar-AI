@@ -100,9 +100,38 @@ class FrameQualityGuard {
   static const double kDropletMinVariance = 50.0;
   static const int kDropletMinStreak = 60;
 
-  static const Duration kFrozenFrameThreshold = Duration(seconds: 5);
+  
+  
+  
+  
+  
+  
+  
+  static const Duration kFrozenFrameThreshold = Duration(seconds: 2);
+
+  
+  
+  static const Duration kFrozenFrameThresholdScan = Duration(seconds: 5);
 
   final WeatherGate weatherGate;
+
+  
+  
+  
+  
+  
+  
+  Duration _frozenThreshold = kFrozenFrameThreshold;
+
+  
+  
+  
+  
+  
+  void setMode({required bool scanModeActive}) {
+    _frozenThreshold =
+        scanModeActive ? kFrozenFrameThresholdScan : kFrozenFrameThreshold;
+  }
 
   int _lowLuminosityFrames = 0;
   bool _cameraBlockedWarned = false;
@@ -372,7 +401,7 @@ class FrameQualityGuard {
         _cameraFrozenWarned = false;
       }
     } else {
-      if (now.difference(_lastImageChangeAt) > kFrozenFrameThreshold &&
+      if (now.difference(_lastImageChangeAt) > _frozenThreshold &&
           !_cameraFrozenWarned) {
         _cameraFrozenWarned = true;
         events.add(const FrameQualityEvent.frozen());
