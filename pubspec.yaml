@@ -53,3 +53,9 @@ flutter:
     - assets/labels.txt
     - assets/midas_small.ncnn.param
     - assets/midas_small.ncnn.bin
+    # Phase 2 — espeak-ng kk voice data unpacked by `EspeakNgEngine` on
+    # first activation. Populated by `tools/espeak-ng/build_android.sh`.
+    # Until the build script has been run, the directory only carries a
+    # README; the engine reports `available = false` and the resolver
+    # transparently falls back to the Russian voice.
+    - assets/espeak-ng-data/
