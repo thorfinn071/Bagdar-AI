@@ -353,7 +353,13 @@ class TtsService {
     }
   }
 
-  static const Duration _kCriticalDedupWindow = Duration(seconds: 8);
+  
+  
+  
+  
+  
+  
+  static const Duration _kCriticalDedupWindow = Duration(seconds: 4);
   static const Duration _kWarningDedupWindow = Duration(seconds: 5);
   static const Duration _kInfoDedupWindow = Duration(seconds: 2);
 
