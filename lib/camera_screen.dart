@@ -855,8 +855,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       SosResult.sent => S.get('sos_sent'),
       SosResult.sentFallback =>
         '${S.get('sos_112_fallback')} ${S.get('sos_sent')}',
+      SosResult.sentWithoutLocation => S.get('sos_sent_no_location'),
       SosResult.noContact => S.get('sos_no_contact'),
-      SosResult.noLocation => S.get('sos_sent_no_location'),
+      SosResult.noLocation => S.get('sos_no_location'),
       SosResult.launchFailed => S.get('sos_launch_failed'),
       SosResult.error => S.get('sos_error'),
     };
