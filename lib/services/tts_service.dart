@@ -10,8 +10,11 @@ import '../../models/constants.dart'
         kHapticTtsStallIntensities;
 import '../../models/speech_job.dart';
 import '../../models/strings.dart';
+import '../../models/tts_engine.dart';
 import 'haptic_service.dart';
 import 'field_logger.dart';
+import 'native_tts_bridge.dart';
+import 'settings_service.dart';
 
 class TtsService {
   
@@ -30,6 +33,22 @@ class TtsService {
   bool _testMode = false;
   String _requestedLang = 'ru-RU';
   final List<SpeechJob> _queue = [];
+
+  // Phase 2 — Kazakh TTS engine resolution.
+  //
+  // [_activeKkEngine] is non-null only when `_requestedLang == 'kk-KZ'` and
+  // [_resolveKkEngine] has run. When the engine is `rhvoice` or `espeak`,
+  // `_pump` and `stop` route speech through `NativeTtsBridge`; otherwise
+  // (`system`, `russianFallback`, or null) speech continues to go through
+  // `flutter_tts` exactly as it did before Phase 2.
+  KkTtsEngine? _activeKkEngine;
+  bool _bridgeListenersAttached = false;
+
+  // Test-only override for the FlutterTts language probe inside
+  // [_resolveKkEngine]. When non-null, the resolver uses this value instead
+  // of querying `flutter_tts.getLanguages` so the engine selection logic
+  // can be exercised under `flutter_test` without a real platform channel.
+  bool? _kkSystemTtsAvailableOverride;
 
   bool _initStarted = false;
   Completer<void>? _initCompleter;
@@ -91,6 +110,16 @@ class TtsService {
 
   bool get languageAvailable => _languageAvailable;
   bool get usingEnglishFallback => _usingEnglishFallback;
+
+  /// Currently active Kazakh TTS engine, or `null` when the requested
+  /// language is not Kazakh (or [_resolveKkEngine] has not run yet).
+  KkTtsEngine? get activeKkEngine => _activeKkEngine;
+
+  /// True when the active Kazakh engine routes through the native bridge
+  /// instead of `flutter_tts`. Used by [_pump], [stop], and
+  /// [_interruptAndSpeak] to dispatch correctly.
+  bool get _useNativeBackend =>
+      _activeKkEngine != null && _activeKkEngine!.usesNativeBridge;
 
   String _lastText = '';
   int? _lastTrackId;
@@ -260,6 +289,12 @@ class TtsService {
 
   void Function()? onKazakhVoiceMissing;
 
+  /// Fired whenever [_resolveKkEngine] commits a new Kazakh engine.
+  /// Used by the UI / FieldLogger to surface engine changes (e.g. announce
+  /// "using RHVoice for Kazakh") without TtsService itself having to
+  /// barge-speak from inside `_applyLanguage`.
+  void Function(KkTtsEngine engine)? onKazakhEngineResolved;
+
   Future<void> preClaimAudioFocus() async {
     if (!_ready) return;
     try {
@@ -269,19 +304,15 @@ class TtsService {
 
   Future<void> _applyLanguage(String bcp47Tag) async {
     if (bcp47Tag == 'kk-KZ') {
-      final hasKk = await _trySetLanguage('kk-KZ') ||
-          await _trySetLanguage('kk');
-      if (!hasKk) {
-        debugPrint('TtsService: no kk voice — falling back to ru-RU for Kazakh text');
-        await _trySetLanguage('ru-RU');
-        AppStrings.setAlertLanguage(null);
-        onKazakhVoiceMissing?.call();
-        return;
-      }
+      await _resolveKkEngine();
       await _checkLanguageAvailability(bcp47Tag);
-      AppStrings.setAlertLanguage(null);
       return;
     }
+
+    // Non-Kazakh language: clear any leftover kk engine state so the
+    // _useNativeBackend gate flips back off and speech goes through
+    // flutter_tts as before Phase 2.
+    _activeKkEngine = null;
 
     try {
       await _tts.setLanguage(bcp47Tag);
@@ -300,6 +331,152 @@ class TtsService {
     } else if (_languageAvailable) {
       AppStrings.setAlertLanguage(null);
     }
+  }
+
+  /// Phase 2 — resolve which Kazakh TTS engine should render `kk-KZ`
+  /// speech, following the priority chain:
+  ///
+  ///   1. System TTS engine that natively supports kk-KZ.
+  ///   2. Bagdar-bundled RHVoice (downloaded language pack).
+  ///   3. Bagdar-bundled espeak-ng (always available once the .so ships).
+  ///   4. Russian fallback (legacy behavior — read kk text with the
+  ///      ru-RU voice).
+  ///
+  /// Steps 2/3 are only attempted when [Settings.enableKazakhStackV2] is
+  /// true. The resolver is safe to call from any state and is the only
+  /// path that mutates [_activeKkEngine].
+  Future<KkTtsEngine> _resolveKkEngine() async {
+    // 1. System TTS engine.
+    if (await _systemHasKkVoice()) {
+      try {
+        if (!_testMode) {
+          await _tts.setLanguage('kk-KZ');
+        }
+      } catch (_) {
+        try {
+          if (!_testMode) await _tts.setLanguage('kk');
+        } catch (_) {}
+      }
+      _languageAvailable = true;
+      _activeKkEngine = KkTtsEngine.system;
+      AppStrings.setAlertLanguage(null);
+      FieldLogger.instance.log('tts_kk_engine_used', {'engine': 'system'});
+      onKazakhEngineResolved?.call(KkTtsEngine.system);
+      return KkTtsEngine.system;
+    }
+
+    // 2 & 3. Native engines, gated on the v2 feature flag.
+    if (_isKazakhStackV2Enabled()) {
+      final engine = await _resolveNativeKkEngine();
+      if (engine != null) {
+        _activeKkEngine = engine;
+        AppStrings.setAlertLanguage(null);
+        _attachBridgeListeners();
+        FieldLogger.instance.log('tts_kk_engine_used', {'engine': engine.id});
+        onKazakhEngineResolved?.call(engine);
+        return engine;
+      }
+    }
+
+    // 4. Russian fallback — legacy behavior, preserved.
+    debugPrint(
+      'TtsService: no kk voice — falling back to ru-RU for Kazakh text',
+    );
+    if (!_testMode) {
+      await _trySetLanguage('ru-RU');
+    }
+    AppStrings.setAlertLanguage(null);
+    onKazakhVoiceMissing?.call();
+    _activeKkEngine = KkTtsEngine.russianFallback;
+    FieldLogger.instance.log(
+      'tts_kk_engine_used',
+      {'engine': 'russianFallback'},
+    );
+    onKazakhEngineResolved?.call(KkTtsEngine.russianFallback);
+    return KkTtsEngine.russianFallback;
+  }
+
+  Future<bool> _systemHasKkVoice() async {
+    if (_kkSystemTtsAvailableOverride != null) {
+      return _kkSystemTtsAvailableOverride!;
+    }
+    if (_testMode) return false;
+    try {
+      final langs = await _tts.getLanguages;
+      if (langs is List) {
+        final set = langs.map((l) => l.toString().toLowerCase()).toSet();
+        return set.contains('kk-kz') || set.any((l) => l.startsWith('kk'));
+      }
+    } catch (_) {}
+    return false;
+  }
+
+  Future<KkTtsEngine?> _resolveNativeKkEngine() async {
+    final bridge = NativeTtsBridge.instance;
+    if (!bridge.isInitialized) {
+      // Best-effort init. Failure leaves capabilities empty and the
+      // resolver falls through to russianFallback below.
+      try {
+        await bridge.init();
+      } catch (_) {}
+    }
+
+    Future<bool> activate(KkTtsEngine engine) async {
+      if (_testMode) return true; // unit tests skip the channel hop.
+      return bridge.setEngine(engine);
+    }
+
+    if (bridge.hasRhvoiceKk() && await activate(KkTtsEngine.rhvoice)) {
+      return KkTtsEngine.rhvoice;
+    }
+    if (bridge.hasEspeakKk() && await activate(KkTtsEngine.espeak)) {
+      return KkTtsEngine.espeak;
+    }
+    return null;
+  }
+
+  bool _isKazakhStackV2Enabled() {
+    try {
+      return Settings.instance.enableKazakhStackV2;
+    } catch (_) {
+      // Settings not initialized (e.g. early tests). Treat as off.
+      return false;
+    }
+  }
+
+  void _attachBridgeListeners() {
+    if (_bridgeListenersAttached) return;
+    final bridge = NativeTtsBridge.instance;
+    bridge.onSpeechStart = _handleNativeSpeechStart;
+    bridge.onSpeechComplete = _handleNativeSpeechComplete;
+    bridge.onSpeechError = _handleNativeSpeechError;
+    _bridgeListenersAttached = true;
+  }
+
+  void _handleNativeSpeechStart() {
+    _speaking = true;
+    _currentSpeakStartedAt = DateTime.now();
+    _armStallTimer(_currentText, _currentPriority);
+  }
+
+  void _handleNativeSpeechComplete() {
+    _speaking = false;
+    _currentIsCritical = false;
+    _disarmStallTimer();
+    _completeCurrentSpeech();
+    _pump();
+    if (_queue.isEmpty) _session?.setActive(false);
+  }
+
+  void _handleNativeSpeechError(String reason) {
+    debugPrint('TtsService: native bridge error: $reason');
+    FieldLogger.instance.log('tts_kk_native_error', {'reason': reason});
+    _speaking = false;
+    _currentIsCritical = false;
+    _disarmStallTimer();
+    _completeCurrentSpeech();
+    _pump();
+    if (_queue.isEmpty) _session?.setActive(false);
   }
 
   Future<bool> _trySetLanguage(String tag) async {
@@ -627,6 +804,11 @@ class TtsService {
     try {
       await _tts.stop();
     } catch (_) {}
+    if (_useNativeBackend) {
+      try {
+        await NativeTtsBridge.instance.stop();
+      } catch (_) {}
+    }
     _speaking = false;
     _currentIsCritical = false;
     _completeCurrentSpeech();
@@ -645,6 +827,11 @@ class TtsService {
     try {
       await _tts.stop();
     } catch (_) {}
+    if (_useNativeBackend) {
+      try {
+        await NativeTtsBridge.instance.stop();
+      } catch (_) {}
+    }
     _speaking = false;
     _currentIsCritical = false;
     _completeCurrentSpeech();
@@ -705,7 +892,35 @@ class TtsService {
         unawaited(HapticService.vibrate(const [0, 80]));
       }
 
-      await _tts.speak(job.text);
+      if (_useNativeBackend) {
+        final ok = await NativeTtsBridge.instance.speak(
+          text: job.text,
+          priority: job.priority.name,
+          rate: targetRate,
+          volume: _userVolume,
+          pan: job.pan,
+        );
+        if (!ok) {
+          // Native engine rejected the utterance — demote this kk session
+          // to the Russian fallback so subsequent speech keeps flowing.
+          // We still attempt to read *this* utterance via flutter_tts.
+          debugPrint(
+            'TtsService: native bridge speak() returned false — '
+            'demoting kk to russianFallback for this session',
+          );
+          FieldLogger.instance.log('tts_kk_native_speak_rejected', {
+            'engine': _activeKkEngine?.id ?? 'unknown',
+            'priority': job.priority.name,
+          });
+          _activeKkEngine = KkTtsEngine.russianFallback;
+          try {
+            await _tts.setLanguage('ru-RU');
+          } catch (_) {}
+          await _tts.speak(job.text);
+        }
+      } else {
+        await _tts.speak(job.text);
+      }
     } catch (_) {
       _speaking = false;
       _currentIsCritical = false;
@@ -718,6 +933,7 @@ class TtsService {
     onAudioRouteInterrupted = null;
     onAudioRouteResumed = null;
     onTtsStall = null;
+    onKazakhEngineResolved = null;
     _disarmStallTimer();
     _ready = false;
     _initStarted = false;
@@ -734,5 +950,32 @@ class TtsService {
     try {
       _tts.stop();
     } catch (_) {}
+    if (_bridgeListenersAttached) {
+      final bridge = NativeTtsBridge.instance;
+      bridge.onSpeechStart = null;
+      bridge.onSpeechComplete = null;
+      bridge.onSpeechError = null;
+      _bridgeListenersAttached = false;
+    }
   }
+
+  // -- Test hooks ------------------------------------------------------------
+
+  /// Drive [_resolveKkEngine] directly from tests so engine-selection logic
+  /// can be exercised without standing up a real `flutter_tts` instance.
+  @visibleForTesting
+  Future<KkTtsEngine> debugResolveKkEngine() => _resolveKkEngine();
+
+  /// Override the FlutterTts kk-availability probe inside
+  /// [_resolveKkEngine]. Set to `true` to simulate a device that ships
+  /// with a Kazakh system voice, `false` to force the resolver into the
+  /// native / russianFallback branches, or `null` to delegate back to the
+  /// real probe.
+  @visibleForTesting
+  set debugKkSystemTtsAvailableOverride(bool? v) =>
+      _kkSystemTtsAvailableOverride = v;
+
+  @visibleForTesting
+  void debugSetActiveKkEngine(KkTtsEngine? engine) =>
+      _activeKkEngine = engine;
 }
