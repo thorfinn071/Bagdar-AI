@@ -67,6 +67,9 @@ enum VoiceCommand {
   themeLight,
   themeHighContrast,
   themeWarm,
+  manageLanguagePacks,
+  enableKkV2,
+  disableKkV2,
   unknown,
 }
 
@@ -192,6 +195,20 @@ class VoiceCommandService {
     'высокий контраст': VoiceCommand.themeHighContrast,
     'тёплая тема': VoiceCommand.themeWarm,
     'теплая тема': VoiceCommand.themeWarm,
+    'языковые пакеты': VoiceCommand.manageLanguagePacks,
+    'управление пакетами': VoiceCommand.manageLanguagePacks,
+    'управление языками': VoiceCommand.manageLanguagePacks,
+    'настройки языков': VoiceCommand.manageLanguagePacks,
+    'включи улучшенное распознавание':
+        VoiceCommand.enableKkV2,
+    'улучшенное распознавание': VoiceCommand.enableKkV2,
+    'новое казахское распознавание':
+        VoiceCommand.enableKkV2,
+    'выключи улучшенное распознавание':
+        VoiceCommand.disableKkV2,
+    'обычное казахское распознавание':
+        VoiceCommand.disableKkV2,
+    'старое распознавание': VoiceCommand.disableKkV2,
   };
 
   static const Set<String> _ruSosExact = {
@@ -392,6 +409,13 @@ class VoiceCommandService {
     'ашық тақырып': VoiceCommand.themeLight,
     'жоғары контраст': VoiceCommand.themeHighContrast,
     'жылы тақырып': VoiceCommand.themeWarm,
+    'тіл пакеттері': VoiceCommand.manageLanguagePacks,
+    'пакеттерді басқару': VoiceCommand.manageLanguagePacks,
+    'тіл басқару': VoiceCommand.manageLanguagePacks,
+    'жетілдірілген тану': VoiceCommand.enableKkV2,
+    'жаңа қазақша тану': VoiceCommand.enableKkV2,
+    'қарапайым қазақша тану': VoiceCommand.disableKkV2,
+    'ескі тану': VoiceCommand.disableKkV2,
   };
 
   static const Set<String> _kkSosExact = {
@@ -561,6 +585,13 @@ class VoiceCommandService {
     'light theme': VoiceCommand.themeLight,
     'high contrast': VoiceCommand.themeHighContrast,
     'warm theme': VoiceCommand.themeWarm,
+    'language packs': VoiceCommand.manageLanguagePacks,
+    'manage packs': VoiceCommand.manageLanguagePacks,
+    'manage language packs': VoiceCommand.manageLanguagePacks,
+    'enhanced kazakh': VoiceCommand.enableKkV2,
+    'new kazakh recognition': VoiceCommand.enableKkV2,
+    'standard kazakh': VoiceCommand.disableKkV2,
+    'legacy kazakh recognition': VoiceCommand.disableKkV2,
   };
 
   static const Set<String> _enSosExact = {

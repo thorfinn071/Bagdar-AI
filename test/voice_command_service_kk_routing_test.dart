@@ -144,4 +144,86 @@ void main() {
       expect(captured, VoiceCommand.sos);
     });
   });
+
+  group('Language pack management voice commands', () {
+    test('manageLanguagePacks fires for ru/kk/en phrases', () {
+      final svc = VoiceCommandService();
+      VoiceCommand? captured;
+      svc.onCommand = (c) => captured = c;
+
+      svc.processWordsForTesting('языковые пакеты', localeOverride: 'ru-RU');
+      expect(captured, VoiceCommand.manageLanguagePacks);
+
+      captured = null;
+      svc.processWordsForTesting('тіл пакеттері', localeOverride: 'kk-KZ');
+      expect(captured, VoiceCommand.manageLanguagePacks);
+
+      captured = null;
+      svc.processWordsForTesting('language packs', localeOverride: 'en-US');
+      expect(captured, VoiceCommand.manageLanguagePacks);
+    });
+
+    test('enableKkV2 fires for ru/kk/en variants', () {
+      final svc = VoiceCommandService();
+      VoiceCommand? captured;
+      svc.onCommand = (c) => captured = c;
+
+      svc.processWordsForTesting(
+        'включи улучшенное распознавание',
+        localeOverride: 'ru-RU',
+      );
+      expect(captured, VoiceCommand.enableKkV2);
+
+      captured = null;
+      svc.processWordsForTesting(
+        'жетілдірілген тану',
+        localeOverride: 'kk-KZ',
+      );
+      expect(captured, VoiceCommand.enableKkV2);
+
+      captured = null;
+      svc.processWordsForTesting(
+        'enhanced kazakh',
+        localeOverride: 'en-US',
+      );
+      expect(captured, VoiceCommand.enableKkV2);
+    });
+
+    test('disableKkV2 fires for ru/kk/en variants', () {
+      final svc = VoiceCommandService();
+      VoiceCommand? captured;
+      svc.onCommand = (c) => captured = c;
+
+      svc.processWordsForTesting(
+        'выключи улучшенное распознавание',
+        localeOverride: 'ru-RU',
+      );
+      expect(captured, VoiceCommand.disableKkV2);
+
+      captured = null;
+      svc.processWordsForTesting(
+        'қарапайым қазақша тану',
+        localeOverride: 'kk-KZ',
+      );
+      expect(captured, VoiceCommand.disableKkV2);
+
+      captured = null;
+      svc.processWordsForTesting(
+        'standard kazakh',
+        localeOverride: 'en-US',
+      );
+      expect(captured, VoiceCommand.disableKkV2);
+    });
+
+    test('kk closed grammar includes the new manage/enable/disable phrases',
+        () {
+      // These commands must be in the closed grammar so Vosk can still
+      // recognize them when v2 routing is active for kk (otherwise the
+      // user couldn't toggle the feature off after enabling it).
+      final grammar = VoiceCommandService.buildKkClosedGrammar();
+      expect(grammar.contains('тіл пакеттері'), true);
+      expect(grammar.contains('жетілдірілген тану'), true);
+      expect(grammar.contains('қарапайым қазақша тану'), true);
+    });
+  });
 }
