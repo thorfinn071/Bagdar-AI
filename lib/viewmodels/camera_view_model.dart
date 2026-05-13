@@ -32,6 +32,7 @@ import '../utils/performance_throttler.dart';
 import '../models/strings.dart';
 import '../models/nav_models.dart';
 import '../services/voice_command_service.dart';
+import '../services/vosk_kk_recognizer.dart';
 import '../services/traffic_light_analyzer.dart';
 import '../services/ocr_service.dart';
 import '../services/motion_prealert.dart';
@@ -393,6 +394,19 @@ class CameraViewModel extends ChangeNotifier {
         availMb: readings.isAvailable ? readings.availMB : null,
         totalMb: readings.isAvailable ? readings.totalMB : null,
       );
+      // Vosk-kk loads a ~150 MB acoustic model into RAM. Under critical
+      // pressure (~250 MB available), keeping it resident risks OOM kill
+      // of the foreground process — far worse than degrading to
+      // speech_to_text for the kk locale until pressure recovers. The
+      // VoiceCommandService routing layer transparently falls back to
+      // speech_to_text on the next listen window after dispose.
+      if (readings.level == MemoryPressureLevel.critical &&
+          VoskKkRecognizer.instance.isReady) {
+        FieldLogger.instance.log('vosk_kk_unloaded_oom', {
+          'availMb': readings.availMB,
+        });
+        unawaited(VoskKkRecognizer.instance.dispose());
+      }
       notifyListeners();
     };
 
