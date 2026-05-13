@@ -62,9 +62,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       AppStrings.setLanguage(AppLanguage.values[Settings.instance.language]);
       await _tts.setLanguage(AppStrings.ttsLang);
       if (mounted) setState(() => _calibrated = Settings.instance.isCalibrated);
+      
+      
       _tts.say(
         S.get('onb_blind_intro'),
-        SpeechPriority.critical,
+        SpeechPriority.warning,
         pan: 0.0,
       );
       await _tts.awaitCurrentSpeech();
@@ -110,7 +112,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void _speak(int index, {bool barge = false}) {
     _tts.say(
       _stepNarrations[index],
-      barge ? SpeechPriority.critical : SpeechPriority.info,
+      
+      
+      barge ? SpeechPriority.warning : SpeechPriority.info,
       barge: barge,
     );
   }
@@ -123,7 +127,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       setState(() {});
       _tts.say(
         S.get('onb_lang_switched'),
-        SpeechPriority.critical,
+        SpeechPriority.warning,
         barge: true,
       );
       await _tts.awaitCurrentSpeech();
@@ -146,14 +150,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final text = S
         .get('onb_mode_select_announce')
         .replaceFirst('{mode}', next.label);
-    _tts.say(text, SpeechPriority.critical, barge: true);
+    
+    _tts.say(text, SpeechPriority.warning, barge: true);
   }
 
   void _requestSkipConfirm() {
     _pendingSkip = true;
     _tts.say(
       S.get('onb_skip_confirm'),
-      SpeechPriority.critical,
+      SpeechPriority.warning,
       barge: true,
     );
     _skipConfirmTimer?.cancel();
@@ -168,7 +173,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       _skipConfirmTimer?.cancel();
       _tts.say(
         S.get('onb_skip_cancelled'),
-        SpeechPriority.critical,
+        SpeechPriority.info,
         barge: true,
       );
       return;
