@@ -793,6 +793,40 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'acoustic_construction': 'Стройка рядом.',
     'awm_enabled': 'Акустика включена.',
     'awm_disabled': 'Акустика выключена.',
+
+    'shelf_camera_short': 'Камера',
+    'shelf_read_short': 'Читать',
+    'shelf_navigate_short': 'Куда',
+    'shelf_camera_label': 'Камера. Активна.',
+    'shelf_camera_hint': 'Двойное касание — вернуться к обычному режиму.',
+    'shelf_read_label': 'Читать вслух то, что видит камера.',
+    'shelf_read_hint': 'Двойное касание — начать чтение.',
+    'shelf_navigate_label': 'Проложить маршрут голосом.',
+    'shelf_navigate_hint': 'Двойное касание — выбрать место назначения.',
+    'shelf_read_started': 'Читаю что вижу. Держите телефон ровно.',
+    'shelf_navigate_started': 'Куда вести? Скажите название места.',
+    'shelf_cane_confirm': 'Удерживайте секунду, чтобы переключить режим.',
+    'ocr_aim_hint': 'Поднесите текст ближе и держите камеру ровно.',
+    'ocr_timeout': 'Не нашёл текст за восемь секунд. Попробуйте ещё раз.',
+    'ocr_lines_count': 'Нашёл {n} строк. Читаю.',
+    'processing_heartbeat': 'Анализирую... подождите.',
+    'pitch_black_heartbeat': '',
+    'offline_banner_no_gps': 'Без сигнала GPS. Положение приблизительное.',
+    'offline_banner_no_map':
+        'Карта района не загружена. Скажите "загрузи карту".',
+    'settings_save_failed':
+        'Не удалось сохранить настройку. Попробуйте ещё раз.',
+    'theme_selected_dark': 'Тёмная тема, чёрный экран и жёлтый акцент.',
+    'theme_selected_light':
+        'Светлая тема, белый экран и тёмно-синий акцент.',
+    'theme_selected_high_contrast':
+        'Высокий контраст, только белое на чёрном.',
+    'theme_selected_warm':
+        'Тёплая тема, кремовый экран и тёмно-коричневый текст.',
+    'voice_layer_listening': 'Слушаю команду.',
+    'voice_layer_cancel': 'Отменить прослушивание.',
+    'restart_pipeline': 'Перезапустить распознавание.',
+    'restart_pipeline_done': 'Распознавание перезапущено.',
   },
 
   AppLanguage.kk: {
@@ -1523,6 +1557,40 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'acoustic_construction': 'Жақында құрылыс.',
     'awm_enabled': 'Акустика қосылды.',
     'awm_disabled': 'Акустика өшірілді.',
+
+    'shelf_camera_short': 'Камера',
+    'shelf_read_short': 'Оқу',
+    'shelf_navigate_short': 'Қайда',
+    'shelf_camera_label': 'Камера. Белсенді.',
+    'shelf_camera_hint': 'Қос түрту — қалыпты режимге қайту.',
+    'shelf_read_label': 'Камера көріп тұрғанды дауыстап оқу.',
+    'shelf_read_hint': 'Қос түрту — оқуды бастау.',
+    'shelf_navigate_label': 'Дауыспен бағыт салу.',
+    'shelf_navigate_hint': 'Қос түрту — бару орнын таңдау.',
+    'shelf_read_started':
+        'Көрген нәрсемді оқимын. Телефонды тігінен ұстаңыз.',
+    'shelf_navigate_started': 'Қайда барамыз? Орынның атын айтыңыз.',
+    'shelf_cane_confirm': 'Режимді ауыстыру үшін секунд ұстаңыз.',
+    'ocr_aim_hint': 'Мәтінді жақынырақ ұстап, камераны тігінен ұстаңыз.',
+    'ocr_timeout': 'Сегіз секундта мәтін табылмады. Қайталап көріңіз.',
+    'ocr_lines_count': '{n} жол табылды. Оқимын.',
+    'processing_heartbeat': 'Талдап жатырмын... күтіңіз.',
+    'pitch_black_heartbeat': '',
+    'offline_banner_no_gps': 'GPS сигналы жоқ. Орналасу шамамен.',
+    'offline_banner_no_map':
+        'Аймақ картасы жүктелмеген. "Картаны жүкте" деп айтыңыз.',
+    'settings_save_failed': 'Параметр сақталмады. Қайталап көріңіз.',
+    'theme_selected_dark': 'Қара тақырып, қара экран мен сары акцент.',
+    'theme_selected_light':
+        'Ашық тақырып, ақ экран мен қара-көк акцент.',
+    'theme_selected_high_contrast':
+        'Жоғары контраст, тек қара үстіндегі ақ.',
+    'theme_selected_warm':
+        'Жылы тақырып, кілегейлі экран мен қара-қоңыр мәтін.',
+    'voice_layer_listening': 'Команданы тыңдап тұрмын.',
+    'voice_layer_cancel': 'Тыңдауды тоқтату.',
+    'restart_pipeline': 'Тануды қайта қосу.',
+    'restart_pipeline_done': 'Тану қайта қосылды.',
   },
   AppLanguage.en: {
     'stop': 'Stop',
@@ -2235,6 +2303,39 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'acoustic_construction': 'Construction nearby.',
     'awm_enabled': 'Acoustic sensing enabled.',
     'awm_disabled': 'Acoustic sensing disabled.',
+
+    'shelf_camera_short': 'Camera',
+    'shelf_read_short': 'Read',
+    'shelf_navigate_short': 'Where to',
+    'shelf_camera_label': 'Camera. Active.',
+    'shelf_camera_hint': 'Double-tap to return to normal mode.',
+    'shelf_read_label': 'Read aloud what the camera sees.',
+    'shelf_read_hint': 'Double-tap to start reading.',
+    'shelf_navigate_label': 'Set a route by voice.',
+    'shelf_navigate_hint': 'Double-tap to choose destination.',
+    'shelf_read_started': 'Reading what I see. Hold the phone steady.',
+    'shelf_navigate_started':
+        'Where shall I take you? Say the place name.',
+    'shelf_cane_confirm': 'Hold for one second to switch mode.',
+    'ocr_aim_hint': 'Hold the text closer and keep the camera steady.',
+    'ocr_timeout': 'Could not find text in eight seconds. Try again.',
+    'ocr_lines_count': 'Found {n} lines. Reading now.',
+    'processing_heartbeat': 'Analyzing... please hold.',
+    'pitch_black_heartbeat': '',
+    'offline_banner_no_gps': 'No GPS. Position approximate.',
+    'offline_banner_no_map':
+        'Area map not loaded. Say "download map".',
+    'settings_save_failed': 'Could not save setting. Try again.',
+    'theme_selected_dark': 'Dark theme, black screen with yellow accent.',
+    'theme_selected_light':
+        'Light theme, white screen with deep navy accent.',
+    'theme_selected_high_contrast': 'High contrast, white on black only.',
+    'theme_selected_warm':
+        'Warm theme, cream screen with dark brown text.',
+    'voice_layer_listening': 'Listening for a command.',
+    'voice_layer_cancel': 'Cancel listening.',
+    'restart_pipeline': 'Restart recognition.',
+    'restart_pipeline_done': 'Recognition restarted.',
   },
 };
 
