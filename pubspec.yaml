@@ -59,3 +59,10 @@ flutter:
     # README; the engine reports `available = false` and the resolver
     # transparently falls back to the Russian voice.
     - assets/espeak-ng-data/
+    # Phase 3 — PaddleOCR multilingual models + Kazakh wordlist for
+    # post-correction. `PaddleOcrEngine` unpacks det/cls/rec/keys on
+    # first activation; `KkDictionary` decompresses
+    # `kk_wordlist.txt.gz`. Until the four model artifacts are added
+    # the engine reports `available = false` and `OcrService` falls
+    # back to the legacy ML Kit pipeline.
+    - assets/paddle_ocr/
