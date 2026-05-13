@@ -6,9 +6,11 @@ import 'package:geolocator/geolocator.dart';
 import '../models/app_mode.dart';
 import '../models/a11y_prefs.dart';
 import '../models/constants.dart';
+import '../models/language_pack.dart';
 import '../models/speech_job.dart';
 import '../models/strings.dart';
 import '../services/feature_usage_tracker.dart';
+import '../services/language_pack_manager.dart';
 import '../services/settings_service.dart';
 import '../services/voice_command_service.dart';
 import '../theme/bagdar_theme.dart';
@@ -23,6 +25,10 @@ class VoiceCommandDispatcher {
   final VoidCallback onReadTextRequested;
   final VoidCallback onSosRequested;
   final void Function({SceneFilter filter}) onDescribeSceneRequested;
+  /// Pushes the Language Packs settings screen. Required because the
+  /// dispatcher has no BuildContext of its own and Navigator pushes must
+  /// originate from the camera screen which owns the navigator stack.
+  final VoidCallback? onShowLanguagePacks;
 
   VoiceCommandDispatcher({
     required this.vm,
@@ -30,6 +36,7 @@ class VoiceCommandDispatcher {
     required this.onReadTextRequested,
     required this.onSosRequested,
     required this.onDescribeSceneRequested,
+    this.onShowLanguagePacks,
   });
 
   void handleCommand(VoiceCommand cmd) {
@@ -236,7 +243,36 @@ class VoiceCommandDispatcher {
       case VoiceCommand.themeWarm:
         _switchTheme(BagdarThemeName.warm, 'theme_selected_warm');
         break;
+      case VoiceCommand.manageLanguagePacks:
+        vm.tts.say(
+          S.get('voice_manage_lang_packs_announce'),
+          SpeechPriority.info,
+          pan: 0.0,
+        );
+        onShowLanguagePacks?.call();
+        break;
+      case VoiceCommand.enableKkV2:
+        _toggleKkV2(true);
+        break;
+      case VoiceCommand.disableKkV2:
+        _toggleKkV2(false);
+        break;
     }
+  }
+
+  Future<void> _toggleKkV2(bool enable) async {
+    await Settings.instance.setEnableKazakhStackV2(enable);
+    // Re-evaluate routing immediately so the next listen window picks up
+    // the new state. setLocale with the same locale is a no-op for
+    // speech_to_text but triggers the reconcile path in VoiceCommandService.
+    vm.voice.setLocale(AppStrings.ttsLang);
+    final packInstalled = LanguagePackManager.instance.isInstalled(
+      LanguagePackIds.voskKk,
+    );
+    final key = enable
+        ? (packInstalled ? 'lang_packs_v2_enabled' : 'voice_kk_v2_pack_missing')
+        : 'lang_packs_v2_disabled';
+    vm.tts.say(S.get(key), SpeechPriority.info, pan: 0.0);
   }
 
   void _switchTheme(BagdarThemeName name, String announcementKey) {
