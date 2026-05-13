@@ -192,9 +192,15 @@ class AlertFilter {
 
     if (cand.priority == SpeechPriority.critical) {
       final lastSameAt = _lastCriticalByCat[cand.category];
+      
+      
+      
+      
+      
       final repeatCooldown =
           cand.category == AlertCategory.obstacleClose ||
-              cand.category == AlertCategory.corridorBlocked
+              cand.category == AlertCategory.corridorBlocked ||
+              cand.category == AlertCategory.approachingVehicle
           ? kCriticalRepeatCooldownSafety
           : kCriticalRepeatCooldownDefault;
       if (lastSameAt == null ||
