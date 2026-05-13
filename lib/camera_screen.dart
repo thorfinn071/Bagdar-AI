@@ -1678,6 +1678,18 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       final distM = focalDistM(label, x1, y1, x2, y2);
       final boxCat = distByBox(areaRatio, heightRatio, bottomRatio);
       final dist = distMToCategory(distM, boxCat);
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      if (label == 'person' && dist == 'far' && conf < 0.50) {
+        continue;
+      }
       final appearance = canExtractAppearance
           ? Appearance.extractFromYPlane(
               yPlane: yPlane,
