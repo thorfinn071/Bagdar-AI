@@ -158,6 +158,14 @@ class MotionPreAlert {
       eventTotal += fired;
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
     if (eventTotal > n * kEventGlobalPanFrac) {
       _blobsCurCount = 0;
       _swapGrid();
