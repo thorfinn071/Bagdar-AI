@@ -129,6 +129,11 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'ocr_reading': 'Читаю...',
     'ocr_not_found': 'Текст не найден.',
     'ocr_camera_not_ready': 'Камера не готова.',
+    // Phase 3 — PaddleOCR pipeline diagnostics.
+    'ocr_low_memory':
+        'Не хватает памяти для распознавания текста. Закройте другие приложения и попробуйте снова.',
+    'ocr_paddle_init_failed':
+        'Не удалось запустить улучшенный распознаватель. Использую стандартный вариант.',
 
     'camera_unavailable': 'Камера недоступна.',
     'camera_not_found': 'Камера не найдена',
@@ -961,6 +966,11 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'ocr_reading': 'Оқып жатырмын...',
     'ocr_not_found': 'Мәтін табылмады.',
     'ocr_camera_not_ready': 'Камера дайын емес.',
+    // Phase 3 — PaddleOCR pipeline diagnostics.
+    'ocr_low_memory':
+        'Мәтінді тану үшін жады жетпейді. Басқа қосымшаларды жауып, қайта көріңіз.',
+    'ocr_paddle_init_failed':
+        'Жетілдірілген тануды іске қосу мүмкін болмады. Стандартты нұсқаны қолданамын.',
 
     'camera_unavailable': 'Камера қолжетімсіз.',
     'camera_not_found': 'Камера табылмады',
@@ -1789,6 +1799,11 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'ocr_reading': 'Reading...',
     'ocr_not_found': 'No text found.',
     'ocr_camera_not_ready': 'Camera not ready.',
+    // Phase 3 — PaddleOCR pipeline diagnostics.
+    'ocr_low_memory':
+        'Not enough memory to recognize text. Close other apps and try again.',
+    'ocr_paddle_init_failed':
+        'Could not start the enhanced recognizer. Falling back to the default.',
 
     'camera_unavailable': 'Camera unavailable.',
     'camera_not_found': 'Camera not found',
