@@ -91,6 +91,18 @@ class NavigationService {
 
   void Function(String message)? onNavMuteChanged;
 
+  /// Fires when a walk or transit route starts navigating. Receives the
+  /// resolved destination label (already falls back to the localized
+  /// generic "destination" when the route had no name). Consumed by
+  /// `SosService` to cache the planned destination for the SOS fallback
+  /// when GPS is unavailable.
+  void Function(String destination)? onRouteStarted;
+
+  /// Fires whenever the active route is torn down (manual stop, arrived,
+  /// or implicit stop before starting a new route). Lets `SosService`
+  /// clear the cached planned destination.
+  void Function()? onRouteStopped;
+
   NavigationService({required this.compass, this.stepService});
 
   void startWalkNavigation(NavRoute route) {
@@ -114,6 +126,7 @@ class NavigationService {
       '$totalDist ${S.get('meters')}. '
       '${S.get('nav_approx')} $mins ${S.get('nav_minutes')}.',
     );
+    onRouteStarted?.call(dest);
 
     _announceCurrentStep();
     _startGpsTracking();
@@ -142,6 +155,7 @@ class NavigationService {
       '${S.get('nav_transit_route_built')} $dest. '
       '${S.get('nav_approx')} $mins ${S.get('nav_minutes')}.',
     );
+    onRouteStarted?.call(dest);
 
     _advanceTransitLeg();
     _startGpsTracking();
@@ -151,6 +165,7 @@ class NavigationService {
   }
 
   void stopNavigation() {
+    final wasActive = _route != null || _transitRoute != null;
     _gpsSub?.cancel();
     _gpsSub = null;
     _state = NavState.idle;
@@ -171,6 +186,7 @@ class NavigationService {
     _lastFixAt = DateTime.fromMillisecondsSinceEpoch(0);
     _navMuted = false;
     _lastNavMuteChangeAt = DateTime.fromMillisecondsSinceEpoch(0);
+    if (wasActive) onRouteStopped?.call();
   }
 
   void pauseNavigation() {

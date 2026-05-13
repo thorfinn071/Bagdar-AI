@@ -25,16 +25,44 @@ class SosService {
 
   static const String emergencyFallbackNumber = '112';
 
+  /// Returns the current step counter total. The H9 fallback uses the
+  /// delta between this value at SOS time and the value captured at the
+  /// last GPS fix to infer how far the user has walked indoors.
+  final int Function()? stepProvider;
+
+  /// Returns the current compass heading in degrees (0–360, 0 = north).
+  /// The H9 fallback snapshots this at the last GPS fix so the SMS can
+  /// say "+N steps northwest of last known location".
+  final double Function()? headingProvider;
+
+  /// Returns an opportunistic snapshot of the device's network context:
+  /// `wifiSsid`, `wifiBssid`, `cellId`, `carrier`. Implemented by the
+  /// platform layer; missing keys are skipped.
+  final Future<Map<String, String>> Function()? networkContextProvider;
+
   String? _contactNumber;
   Position? _cachedPosition;
   DateTime? _cachedPositionAt;
+  int? _stepsAtCachedPosition;
+  double? _headingAtCachedPosition;
+  String? _plannedDestination;
+  Map<String, String>? _lastNetworkContext;
+  DateTime? _lastNetworkContextAt;
 
   Timer? _followUpTimer;
   int _pendingFollowUpCount = 0;
 
   static const Duration kFollowUpDelay = Duration(seconds: 5);
+  static const Duration kNetworkContextMaxAge = Duration(minutes: 10);
+
+  SosService({
+    this.stepProvider,
+    this.headingProvider,
+    this.networkContextProvider,
+  });
 
   String? get contactNumber => _contactNumber;
+  String? get plannedDestination => _plannedDestination;
 
   bool get _isAndroid =>
       !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
@@ -52,6 +80,43 @@ class SosService {
   void updateCachedPosition(Position pos) {
     _cachedPosition = pos;
     _cachedPositionAt = DateTime.now();
+    _stepsAtCachedPosition = stepProvider?.call();
+    _headingAtCachedPosition = headingProvider?.call();
+  }
+
+  /// Caches the destination of the active navigation route so that SOS
+  /// SMS can include it as a hint when GPS is unavailable (H9). Pass
+  /// `null` when the route is cancelled or arrives.
+  void setPlannedDestination(String? destination) {
+    _plannedDestination = (destination != null && destination.trim().isNotEmpty)
+        ? destination.trim()
+        : null;
+  }
+
+  /// Opportunistically refreshes the cached Wi-Fi / cell-tower fingerprint
+  /// used as an SMS fallback locator when GPS is unavailable. Silently
+  /// no-ops if the platform did not return anything within `timeout`.
+  Future<void> refreshNetworkContext({
+    Duration timeout = const Duration(seconds: 2),
+  }) async {
+    final provider = networkContextProvider;
+    if (provider == null) return;
+    try {
+      final snapshot = await provider().timeout(timeout);
+      if (snapshot.isNotEmpty) {
+        _lastNetworkContext = Map<String, String>.unmodifiable(snapshot);
+        _lastNetworkContextAt = DateTime.now();
+      }
+    } catch (_) {}
+  }
+
+  @visibleForTesting
+  Map<String, String>? get cachedNetworkContextForTesting => _lastNetworkContext;
+
+  @visibleForTesting
+  void setCachedNetworkContextForTesting(Map<String, String>? ctx) {
+    _lastNetworkContext = ctx == null ? null : Map<String, String>.unmodifiable(ctx);
+    _lastNetworkContextAt = ctx == null ? null : DateTime.now();
   }
 
   Future<bool> setContact(String phoneNumber) async {
@@ -76,11 +141,19 @@ class SosService {
     attemptTargets.add(emergencyFallbackNumber);
 
     final position = await _resolvePosition();
+    if (position == null) {
+      await refreshNetworkContext();
+    }
+    final fallback = _buildFallbackContext(positionMissing: position == null);
     final message = buildMessageText(
       latitude: position?.latitude,
       longitude: position?.longitude,
       positionTimestamp: position?.timestamp,
       accuracyMeters: position?.accuracy,
+      plannedDestination: fallback.plannedDestination,
+      networkContext: fallback.networkContext,
+      stepsFromLastFix: fallback.stepsFromLastFix,
+      headingFromLastFix: fallback.headingFromLastFix,
     );
 
     
@@ -148,6 +221,10 @@ class SosService {
     DateTime? positionTimestamp,
     double? accuracyMeters,
     String? preamble,
+    String? plannedDestination,
+    Map<String, String>? networkContext,
+    int? stepsFromLastFix,
+    double? headingFromLastFix,
   }) {
     final parts = <String>[];
     if (preamble != null && preamble.isNotEmpty) parts.add(preamble);
@@ -172,8 +249,92 @@ class SosService {
       }
     } else {
       parts.add('(${S.get('sos_no_gps')})');
+      if (stepsFromLastFix != null && stepsFromLastFix > 0) {
+        final dirKey = headingFromLastFix == null
+            ? null
+            : _cardinalKey(headingFromLastFix);
+        final dir = dirKey == null ? '' : ' ${S.get(dirKey)}';
+        parts.add(
+          '+$stepsFromLastFix ${S.get('sos_steps_from_last')}$dir '
+          '${S.get('sos_of_last_known')}',
+        );
+      }
     }
+
+    if (plannedDestination != null && plannedDestination.isNotEmpty) {
+      parts.add('${S.get('sos_planned_destination')} $plannedDestination');
+    }
+
+    if (networkContext != null && networkContext.isNotEmpty) {
+      final ssid = networkContext['wifiSsid'];
+      final bssid = networkContext['wifiBssid'];
+      final cellId = networkContext['cellId'];
+      final carrier = networkContext['carrier'];
+      if (ssid != null && ssid.isNotEmpty) {
+        final bssidSuffix = (bssid != null && bssid.isNotEmpty)
+            ? ' ($bssid)'
+            : '';
+        parts.add('${S.get('sos_near_wifi')} $ssid$bssidSuffix');
+      } else if (bssid != null && bssid.isNotEmpty) {
+        parts.add('${S.get('sos_near_wifi')} $bssid');
+      }
+      if (cellId != null && cellId.isNotEmpty) {
+        final carrierPrefix = (carrier != null && carrier.isNotEmpty)
+            ? '$carrier '
+            : '';
+        parts.add('${S.get('sos_near_cell')} $carrierPrefix$cellId');
+      } else if (carrier != null && carrier.isNotEmpty) {
+        parts.add('${S.get('sos_near_cell')} $carrier');
+      }
+    }
+
     return parts.join(' ');
+  }
+
+  static const List<String> _cardinalKeys = [
+    'sos_dir_n',
+    'sos_dir_ne',
+    'sos_dir_e',
+    'sos_dir_se',
+    'sos_dir_s',
+    'sos_dir_sw',
+    'sos_dir_w',
+    'sos_dir_nw',
+  ];
+
+  static String _cardinalKey(double bearingDeg) {
+    final normalized = ((bearingDeg % 360) + 360) % 360;
+    final idx = (((normalized + 22.5) / 45).floor()) % 8;
+    return _cardinalKeys[idx];
+  }
+
+  _FallbackContext _buildFallbackContext({required bool positionMissing}) {
+    String? destination = _plannedDestination;
+    Map<String, String>? network;
+    int? steps;
+    double? heading;
+    if (positionMissing) {
+      final ctx = _lastNetworkContext;
+      final ctxAt = _lastNetworkContextAt;
+      if (ctx != null && ctxAt != null) {
+        final age = DateTime.now().difference(ctxAt);
+        if (age <= kNetworkContextMaxAge) {
+          network = ctx;
+        }
+      }
+      final stepsNow = stepProvider?.call();
+      if (stepsNow != null && _stepsAtCachedPosition != null) {
+        final delta = stepsNow - _stepsAtCachedPosition!;
+        if (delta > 0) steps = delta;
+      }
+      heading = _headingAtCachedPosition;
+    }
+    return _FallbackContext(
+      plannedDestination: destination,
+      networkContext: network,
+      stepsFromLastFix: steps,
+      headingFromLastFix: heading,
+    );
   }
 
   static Uri buildSmsUri(String contactNumber, String message) {
@@ -257,6 +418,10 @@ class SosService {
     _followUpTimer = null;
     if (count == 0) return;
     final position = await _resolvePosition();
+    if (position == null) {
+      await refreshNetworkContext();
+    }
+    final fallback = _buildFallbackContext(positionMissing: position == null);
     final base = S.get('sos_user_fallen_again');
     final preamble = count == 1 ? base : '$base (×$count)';
     final message = buildMessageText(
@@ -265,6 +430,10 @@ class SosService {
       positionTimestamp: position?.timestamp,
       accuracyMeters: position?.accuracy,
       preamble: preamble,
+      plannedDestination: fallback.plannedDestination,
+      networkContext: fallback.networkContext,
+      stepsFromLastFix: fallback.stepsFromLastFix,
+      headingFromLastFix: fallback.headingFromLastFix,
     );
     final contact = _contactNumber;
     final hasUserContact = contact != null && contact.isNotEmpty;
@@ -302,4 +471,18 @@ class SosService {
       return cached;
     }
   }
+}
+
+class _FallbackContext {
+  final String? plannedDestination;
+  final Map<String, String>? networkContext;
+  final int? stepsFromLastFix;
+  final double? headingFromLastFix;
+
+  const _FallbackContext({
+    required this.plannedDestination,
+    required this.networkContext,
+    required this.stepsFromLastFix,
+    required this.headingFromLastFix,
+  });
 }

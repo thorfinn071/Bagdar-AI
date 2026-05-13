@@ -317,7 +317,7 @@ const List<int> kHapticTtsStallIntensities = [0, 255, 0, 255, 0, 255];
 const Duration kSosTwoFingerHold = Duration(milliseconds: 1500);
 const int kSosRetries = 3;
 const Duration kSosRetryDelay = Duration(seconds: 2);
-const Duration kSosCachedPositionMaxAge = Duration(minutes: 5);
+const Duration kSosCachedPositionMaxAge = Duration(minutes: 30);
 
 const double kVoiceSpeechRateStep = 0.15;
 const double kVoiceVolumeStep = 0.1;

@@ -237,6 +237,30 @@ class DeviceCapabilityProbe {
     }
   }
 
+  /// Returns whatever opportunistic network locators the OS exposes:
+  /// Wi-Fi SSID/BSSID, registered cell tower fingerprint, carrier name.
+  /// All fields are optional. Used by SOS fallback when GPS is unavailable.
+  /// Returns an empty map on non-Android or any failure.
+  static Future<Map<String, String>> getNetworkContext() async {
+    if (!Platform.isAndroid) return const <String, String>{};
+    try {
+      final raw = await _channel
+          .invokeMethod<Map<dynamic, dynamic>>('getNetworkContext')
+          .timeout(const Duration(seconds: 2));
+      if (raw == null) return const <String, String>{};
+      final out = <String, String>{};
+      for (final entry in raw.entries) {
+        final key = entry.key?.toString();
+        final value = entry.value?.toString();
+        if (key == null || value == null || value.isEmpty) continue;
+        out[key] = value;
+      }
+      return out;
+    } catch (_) {
+      return const <String, String>{};
+    }
+  }
+
   @visibleForTesting
   static void resetCacheForTesting() => _cached = null;
 }

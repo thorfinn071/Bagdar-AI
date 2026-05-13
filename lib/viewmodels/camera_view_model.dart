@@ -15,6 +15,7 @@ import '../services/thermal_monitor.dart';
 import '../services/proximity_beacon_service.dart';
 import '../services/haptic_service.dart';
 import '../services/payment_sms_service.dart';
+import '../services/device_capability.dart';
 import '../services/sos_service.dart';
 import '../services/waypoint_service.dart';
 import '../services/fall_detector.dart';
@@ -55,7 +56,11 @@ class CameraViewModel extends ChangeNotifier {
   final OrientationService orientation = OrientationService();
   final StepService steps = StepService();
   final WaypointService waypoints = WaypointService();
-  final SosService sos = SosService();
+  late final SosService sos = SosService(
+    stepProvider: () => steps.steps,
+    headingProvider: () => compass.heading,
+    networkContextProvider: DeviceCapabilityProbe.getNetworkContext,
+  );
   final FallDetector fallDetector = FallDetector();
   final TwoGisService twoGis = TwoGisService();
   final MapPackageManager mapPkg = MapPackageManager();
@@ -335,6 +340,13 @@ class CameraViewModel extends ChangeNotifier {
 
     nav.onPositionUpdated = (pos) {
       sos.updateCachedPosition(pos);
+    };
+
+    nav.onRouteStarted = (destination) {
+      sos.setPlannedDestination(destination);
+    };
+    nav.onRouteStopped = () {
+      sos.setPlannedDestination(null);
     };
 
     fallDetector.onMotionStateChanged = (state) {

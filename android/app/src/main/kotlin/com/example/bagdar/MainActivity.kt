@@ -1,11 +1,14 @@
 package com.example.bagdar
 
+import android.Manifest
 import android.app.ActivityManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.media.RingtoneManager
+import android.net.wifi.WifiManager
 import android.os.BatteryManager
 import android.os.Build
 import android.os.Handler
@@ -15,8 +18,14 @@ import android.os.StatFs
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.provider.Telephony
+import android.telephony.CellInfo
+import android.telephony.CellInfoCdma
+import android.telephony.CellInfoGsm
+import android.telephony.CellInfoLte
+import android.telephony.CellInfoWcdma
 import android.telephony.SmsManager
 import android.telephony.SmsMessage
+import android.telephony.TelephonyManager
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.EventChannel
@@ -121,6 +130,9 @@ class MainActivity : FlutterActivity() {
                             "sdkInt" to Build.VERSION.SDK_INT,
                         ),
                     )
+                }
+                "getNetworkContext" -> {
+                    result.success(readNetworkContext())
                 }
                 else -> result.notImplemented()
             }
@@ -290,6 +302,87 @@ class MainActivity : FlutterActivity() {
         } catch (_: Exception) {
         }
         incomingSmsReceiver = null
+    }
+
+    private fun readNetworkContext(): Map<String, Any?> {
+        val out = mutableMapOf<String, Any?>()
+        try {
+            val wifi = applicationContext.getSystemService(Context.WIFI_SERVICE) as? WifiManager
+            @Suppress("DEPRECATION")
+            val info = wifi?.connectionInfo
+            if (info != null) {
+                val rawSsid = info.ssid?.trim('"')
+                if (!rawSsid.isNullOrBlank() && rawSsid != "<unknown ssid>") {
+                    out["wifiSsid"] = rawSsid
+                }
+                val bssid = info.bssid
+                if (!bssid.isNullOrBlank() && bssid != "02:00:00:00:00:00") {
+                    out["wifiBssid"] = bssid
+                }
+            }
+        } catch (_: Exception) {
+        }
+        try {
+            val fineGranted = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED
+            val coarseGranted = checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED
+            if (fineGranted || coarseGranted) {
+                val tm = getSystemService(Context.TELEPHONY_SERVICE) as? TelephonyManager
+                if (tm != null) {
+                    val cellList: List<CellInfo>? = try {
+                        tm.allCellInfo
+                    } catch (_: SecurityException) {
+                        null
+                    }
+                    if (!cellList.isNullOrEmpty()) {
+                        val registered = cellList.firstOrNull { it.isRegistered } ?: cellList.first()
+                        val cellLabel = describeCellInfo(registered)
+                        if (!cellLabel.isNullOrBlank()) {
+                            out["cellId"] = cellLabel
+                        }
+                    }
+                    val operator = tm.networkOperatorName
+                    if (!operator.isNullOrBlank()) {
+                        out["carrier"] = operator
+                    }
+                }
+            }
+        } catch (_: Exception) {
+        }
+        return out
+    }
+
+    private fun describeCellInfo(info: CellInfo): String? {
+        return try {
+            when (info) {
+                is CellInfoLte -> {
+                    val id = info.cellIdentity
+                    val mcc = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) id.mccString else id.mcc.toString()
+                    val mnc = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) id.mncString else id.mnc.toString()
+                    "LTE/${mcc ?: "?"}-${mnc ?: "?"}/tac=${id.tac}/ci=${id.ci}"
+                }
+                is CellInfoGsm -> {
+                    val id = info.cellIdentity
+                    val mcc = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) id.mccString else id.mcc.toString()
+                    val mnc = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) id.mncString else id.mnc.toString()
+                    "GSM/${mcc ?: "?"}-${mnc ?: "?"}/lac=${id.lac}/cid=${id.cid}"
+                }
+                is CellInfoWcdma -> {
+                    val id = info.cellIdentity
+                    val mcc = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) id.mccString else id.mcc.toString()
+                    val mnc = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) id.mncString else id.mnc.toString()
+                    "WCDMA/${mcc ?: "?"}-${mnc ?: "?"}/lac=${id.lac}/cid=${id.cid}"
+                }
+                is CellInfoCdma -> {
+                    val id = info.cellIdentity
+                    "CDMA/sid=${id.systemId}/nid=${id.networkId}/bid=${id.basestationId}"
+                }
+                else -> null
+            }
+        } catch (_: Exception) {
+            null
+        }
     }
 
     private fun readBatteryTemperatureC(): Double? {
