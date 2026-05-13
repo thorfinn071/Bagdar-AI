@@ -134,6 +134,11 @@ class AlertManager {
   String _lastGuideText = '';
   DateTime _objectLastSeen = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _emptySince = DateTime.fromMillisecondsSinceEpoch(0);
+  
+  
+  
+  
+  bool _emptySinceIndoor = false;
   bool _clearAnnounced = false;
   DateTime _lastCriticalAt = DateTime.fromMillisecondsSinceEpoch(0);
   bool _guidanceGiven = false;
@@ -432,7 +437,20 @@ class AlertManager {
       _emptySince = DateTime.fromMillisecondsSinceEpoch(0);
       _clearAnnounced = false;
     } else {
-      if (_emptySince.millisecondsSinceEpoch == 0) _emptySince = now;
+      
+      
+      
+      
+      
+      
+      final currentIndoor = _isIndoorMode();
+      if (_emptySince.millisecondsSinceEpoch == 0) {
+        _emptySince = now;
+        _emptySinceIndoor = currentIndoor;
+      } else if (_emptySinceIndoor != currentIndoor) {
+        _emptySince = now;
+        _emptySinceIndoor = currentIndoor;
+      }
     }
 
     if (!hasTracks) {
