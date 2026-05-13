@@ -1055,6 +1055,16 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       );
       if (stallFor >= _kStallTtsMinDuration &&
           _stallStartedAt.millisecondsSinceEpoch != 0) {
+        
+        
+        
+        
+        _vm.earcon.play(Earcon.success);
+        _vm.tts.say(
+          S.get('camera_resumed'),
+          SpeechPriority.warning,
+          pan: 0.0,
+        );
       }
       _stallStartedAt = DateTime.fromMillisecondsSinceEpoch(0);
     }
