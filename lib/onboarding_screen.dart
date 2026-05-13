@@ -153,8 +153,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Future<void> _maybeOfferKkPackDownload() async {
     final pm = LanguagePackManager.instance;
     if (!pm.isReady) return;
-    if (pm.isInstalled(LanguagePackIds.voskKk)) return;
-    if (await pm.wasPackSkippedRecently(LanguagePackIds.voskKk)) return;
+    if (pm.isInstalled(LanguagePackIds.voskKk)) {
+      // Vosk already installed — go straight to the RHVoice prompt so the
+      // user gets the matching voice pack without re-prompting for Vosk.
+      await _maybeOfferRhvoicePackDownload();
+      return;
+    }
+    if (await pm.wasPackSkippedRecently(LanguagePackIds.voskKk)) {
+      // User recently declined Vosk — still offer the RHVoice voice pack
+      // (it's a separate decision and serves different users).
+      await _maybeOfferRhvoicePackDownload();
+      return;
+    }
     if (!mounted) return;
 
     final choice = await showDialog<_KkPackPromptChoice>(
@@ -188,6 +198,65 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         break;
       case _KkPackPromptChoice.later:
         await pm.markPackSkipped(LanguagePackIds.voskKk);
+        await pm.setPromptOnFirstOnline(true);
+        _tts.say(
+          S.get('lang_pack_offline_skip'),
+          SpeechPriority.info,
+          barge: true,
+        );
+        break;
+    }
+
+    // Phase 2 — after the Vosk decision is settled (regardless of which
+    // branch the user took above), offer the RHVoice voice pack as a
+    // *separate* tap-to-confirm. The plan locks in this sequencing:
+    // never two simultaneous downloads, never auto-chain.
+    if (!mounted) return;
+    await _tts.awaitCurrentSpeech();
+    if (!mounted) return;
+    await _maybeOfferRhvoicePackDownload();
+  }
+
+  Future<void> _maybeOfferRhvoicePackDownload() async {
+    final pm = LanguagePackManager.instance;
+    if (!pm.isReady) return;
+    if (pm.isInstalled(LanguagePackIds.rhvoiceKkAigul)) return;
+    if (await pm.wasPackSkippedRecently(LanguagePackIds.rhvoiceKkAigul)) {
+      return;
+    }
+    if (!mounted) return;
+
+    final choice = await showDialog<_KkPackPromptChoice>(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => _RhvoicePackPromptDialog(),
+    );
+    if (!mounted || choice == null) return;
+
+    switch (choice) {
+      case _KkPackPromptChoice.download:
+        _tts.say(
+          S.get('lang_pack_downloading'),
+          SpeechPriority.info,
+          barge: true,
+        );
+        // The kk-stack-v2 flag may already be on from the Vosk path; if
+        // the user is *only* installing RHVoice (Vosk skipped), flip it
+        // on too so TtsService._resolveKkEngine picks up the new voice.
+        await Settings.instance.setEnableKazakhStackV2(true);
+        final ok = await pm.downloadPack(LanguagePackIds.rhvoiceKkAigul);
+        if (!mounted) return;
+        _tts.say(
+          S.get(ok ? 'lang_pack_install_complete' : 'lang_pack_install_failed'),
+          SpeechPriority.info,
+          barge: true,
+        );
+        break;
+      case _KkPackPromptChoice.skip:
+        await pm.markPackSkipped(LanguagePackIds.rhvoiceKkAigul);
+        break;
+      case _KkPackPromptChoice.later:
+        await pm.markPackSkipped(LanguagePackIds.rhvoiceKkAigul);
         await pm.setPromptOnFirstOnline(true);
         _tts.say(
           S.get('lang_pack_offline_skip'),
@@ -1387,6 +1456,71 @@ class _KkPackPromptDialog extends StatelessWidget {
             onPressed: () =>
                 Navigator.pop(context, _KkPackPromptChoice.skip),
             child: Text(S.get('onb_kk_pack_skip')),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Dialog shown right after the Vosk pack decision when a Kazakh user is
+/// onboarding. Asks for explicit consent to download the high-quality
+/// RHVoice voice pack (~30 MB). Mirrors `_KkPackPromptDialog` for
+/// accessibility (full-width buttons, large hit targets, three explicit
+/// choices instead of binary yes/no).
+class _RhvoicePackPromptDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: Colors.grey[900],
+      title: Text(
+        S.get('onb_rhvoice_pack_prompt_title'),
+        style: const TextStyle(color: Colors.white),
+      ),
+      content: Text(
+        S.get('onb_rhvoice_pack_prompt_body'),
+        style: const TextStyle(color: Colors.white70, height: 1.5),
+      ),
+      actionsAlignment: MainAxisAlignment.spaceBetween,
+      actions: [
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.cyanAccent,
+              foregroundColor: Colors.black,
+              padding: const EdgeInsets.symmetric(vertical: 14),
+            ),
+            onPressed: () =>
+                Navigator.pop(context, _KkPackPromptChoice.download),
+            child: Text(S.get('onb_rhvoice_pack_yes')),
+          ),
+        ),
+        const SizedBox(height: 8),
+        SizedBox(
+          width: double.infinity,
+          child: OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              side: const BorderSide(color: Colors.white54),
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 12),
+            ),
+            onPressed: () =>
+                Navigator.pop(context, _KkPackPromptChoice.later),
+            child: Text(S.get('onb_rhvoice_pack_later')),
+          ),
+        ),
+        const SizedBox(height: 4),
+        SizedBox(
+          width: double.infinity,
+          child: TextButton(
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.white60,
+              padding: const EdgeInsets.symmetric(vertical: 10),
+            ),
+            onPressed: () =>
+                Navigator.pop(context, _KkPackPromptChoice.skip),
+            child: Text(S.get('onb_rhvoice_pack_skip')),
           ),
         ),
       ],
