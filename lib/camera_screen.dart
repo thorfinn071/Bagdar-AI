@@ -1044,6 +1044,10 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       );
       await ctrl.initialize();
       _controller = ctrl;
+      
+      
+      
+      _vm.ocr.sensorOrientationDeg = back.sensorOrientation;
       await ctrl.startImageStream(_onFrame);
 
       
