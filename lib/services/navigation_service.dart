@@ -517,8 +517,19 @@ class NavigationService {
   }
 
   void _announceApproach(Position pos, RouteStep step, int distToEnd) {
+    
+    
+    
+    
+    
+    
+    
+    
     if (!compass.isAvailable) {
-      _lastInstructionAt = DateTime.now();
+      onInstruction?.call('$distToEnd ${S.get('meters')}.');
+      
+      
+      
       return;
     }
 
