@@ -1522,7 +1522,11 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       return;
     }
     _lastMidasModeAnnounceAt = now;
-    final key = paused ? 'reduced_mode_depth' : 'reduced_mode_restored';
+    
+    
+    
+    
+    final key = paused ? 'depth_paused_explicit' : 'hazard_detection_resumed';
     final priority =
         paused ? SpeechPriority.warning : SpeechPriority.info;
     _fieldLog.log('midas_pause_changed', {'paused': paused});
