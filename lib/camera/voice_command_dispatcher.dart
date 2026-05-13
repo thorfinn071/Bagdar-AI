@@ -87,15 +87,17 @@ class VoiceCommandDispatcher {
         break;
       case VoiceCommand.modeStreet:
         vm.setMode(AppMode.street);
-        vm.tts.say(S.get('mode_street'), SpeechPriority.critical, pan: 0.0);
+        
+        
+        vm.tts.say(S.get('mode_street'), SpeechPriority.warning, pan: 0.0);
         break;
       case VoiceCommand.modeCane:
         vm.setMode(AppMode.cane);
-        vm.tts.say(S.get('mode_cane'), SpeechPriority.critical, pan: 0.0);
+        vm.tts.say(S.get('mode_cane'), SpeechPriority.warning, pan: 0.0);
         break;
       case VoiceCommand.modeScan:
         vm.setMode(AppMode.scan);
-        vm.tts.say(S.get('mode_scan'), SpeechPriority.critical, pan: 0.0);
+        vm.tts.say(S.get('mode_scan'), SpeechPriority.warning, pan: 0.0);
         break;
       case VoiceCommand.toggleMode:
         vm.cycleMode(1);
@@ -421,7 +423,9 @@ class VoiceCommandDispatcher {
     await Settings.instance.setLanguage(lang.index);
     await vm.tts.setLanguage(AppStrings.ttsLang);
     vm.voice.setLocale(AppStrings.ttsLang);
-    vm.tts.say(S.get('lang_switched'), SpeechPriority.critical, pan: 0.0);
+    
+    
+    vm.tts.say(S.get('lang_switched'), SpeechPriority.warning, pan: 0.0);
   }
 
   void _announceBatteryStatus() {
