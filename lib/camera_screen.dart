@@ -2431,9 +2431,10 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       hazards: _lastDepthHazards,
       trafficLight: _vm.trafficLight.confirmedColor,
       trafficLightKind: _vm.trafficLight.lastKind,
-      ocrText: (DateTime.now().difference(_ocrStartedAt).inSeconds < 5) 
-          ? null // For now, ocrText requires a dedicated cache if we want to read the last recognized text. We will skip caching text here to keep it simple, or we need to add _lastOcrText. Let's just omit it. Wait, the plan says "if recently captured". But there's no `_lastOcrText` in camera_screen.dart. Let me pass null.
-          : null,
+      
+      
+      
+      ocrText: null,
       isIndoor: _vm.indoorGate.state == IndoorState.indoor,
       mode: _vm.mode,
       filter: filter,
