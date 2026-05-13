@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../models/nav_models.dart';
 import '../models/strings.dart';
 import '../services/navigation_service.dart';
+import '../theme/bagdar_tokens.dart';
 
 class NavHud extends StatelessWidget {
   final NavState navState;
@@ -54,17 +55,22 @@ class NavHud extends StatelessWidget {
                 ],
               ),
               if (destinationName.isNotEmpty) ...[
-                const SizedBox(height: 6),
+                const SizedBox(height: BagdarSpacing.s),
                 Row(
                   children: [
-                    Icon(Icons.place, color: _accentColor, size: 14),
-                    const SizedBox(width: 4),
+                    Icon(Icons.place, color: _accentColor, size: 18),
+                    const SizedBox(width: BagdarSpacing.xs),
                     Expanded(
                       child: Text(
                         destinationName,
-                        style: const TextStyle(
-                          color: Colors.white60,
-                          fontSize: 12,
+                        style: BagdarTypography.caption.copyWith(
+                          color: Colors.white,
+                          shadows: [
+                            Shadow(
+                              color: Colors.black.withValues(alpha: 0.8),
+                              blurRadius: 4,
+                            ),
+                          ],
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -151,10 +157,8 @@ class NavHud extends StatelessWidget {
       children: [
         Text(
           mainText,
-          style: TextStyle(
+          style: BagdarTypography.title.copyWith(
             color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
             shadows: [
               Shadow(color: Colors.black.withValues(alpha: 0.8), blurRadius: 4),
             ],
@@ -163,10 +167,9 @@ class NavHud extends StatelessWidget {
         if (subText.isNotEmpty)
           Text(
             subText,
-            style: TextStyle(
+            style: BagdarTypography.body.copyWith(
               color: _accentColor,
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w700,
             ),
           ),
       ],
