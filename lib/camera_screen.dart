@@ -2171,7 +2171,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     );
   }
 
-  String _ruLabel(String label) => label;
 
   @override
   Widget build(BuildContext context) {
@@ -2326,7 +2325,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
                       imgW: _imgW,
                       imgH: _imgH,
                       viewportAspect: MediaQuery.sizeOf(context).aspectRatio,
-                      ruLabel: _ruLabel,
                       mode: _vm.mode,
                     ),
                   ),
