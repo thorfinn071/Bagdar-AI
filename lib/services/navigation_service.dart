@@ -70,7 +70,12 @@ class NavigationService {
   static const int _driftMinStepsRequired = 5;
 
   static const Duration _offRouteCooldown = Duration(seconds: 30);
-  static const Duration _softOffRouteCooldown = Duration(seconds: 15);
+  
+  
+  
+  
+  
+  static const Duration _softOffRouteCooldown = Duration(seconds: 8);
   static const Duration _rerouteCooldown = Duration(seconds: 60);
   DateTime _lastOffRouteAt = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _lastSoftOffRouteAt = DateTime.fromMillisecondsSinceEpoch(0);
