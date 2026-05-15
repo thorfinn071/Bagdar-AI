@@ -8,6 +8,7 @@ import '../models/language_pack.dart';
 import 'field_logger.dart';
 import 'language_pack_manager.dart';
 import 'settings_service.dart';
+import 'voice_adaptation_store.dart';
 import 'vosk_kk_recognizer.dart';
 
 enum VoiceCommand {
@@ -70,6 +71,18 @@ enum VoiceCommand {
   manageLanguagePacks,
   enableKkV2,
   disableKkV2,
+  // Phase 1 — Indoor trail (Direction 6)
+  recordTrail,
+  replayTrail,
+  stopTrailRecord,
+  addTrailLandmark,
+  deleteTrail,
+  // Phase 1 — Bazaar / livestock (Direction 9)
+  toggleBazaarMode,
+  toggleLivestockMode,
+  // Phase 1 — Voice adaptation (Direction 12)
+  toggleVoiceAdaptation,
+  clearAdaptationData,
   unknown,
 }
 
@@ -209,6 +222,22 @@ class VoiceCommandService {
     'обычное казахское распознавание':
         VoiceCommand.disableKkV2,
     'старое распознавание': VoiceCommand.disableKkV2,
+    // Phase 1 — Indoor trail
+    'стоп маршрут': VoiceCommand.stopTrailRecord,
+    'остановить маршрут': VoiceCommand.stopTrailRecord,
+    'стоп запись маршрута': VoiceCommand.stopTrailRecord,
+    // Phase 1 — Bazaar / livestock
+    'режим базар': VoiceCommand.toggleBazaarMode,
+    'базарный режим': VoiceCommand.toggleBazaarMode,
+    'режим рынок': VoiceCommand.toggleBazaarMode,
+    'режим животные': VoiceCommand.toggleLivestockMode,
+    'режим скот': VoiceCommand.toggleLivestockMode,
+    // Phase 1 — Voice adaptation
+    'адаптация голоса': VoiceCommand.toggleVoiceAdaptation,
+    'включи адаптацию': VoiceCommand.toggleVoiceAdaptation,
+    'выключи адаптацию': VoiceCommand.toggleVoiceAdaptation,
+    'удалить данные адаптации': VoiceCommand.clearAdaptationData,
+    'очистить адаптацию': VoiceCommand.clearAdaptationData,
   };
 
   static const Set<String> _ruSosExact = {
@@ -263,6 +292,38 @@ class VoiceCommandService {
     'транспортом до ',
     'на автобусе до ',
     'на автобусе в ',
+  ];
+
+  // Phase 1 — Indoor trail record/replay prefixes (ru)
+  static const List<String> _ruRecordTrailPrefixes = [
+    'запиши маршрут до ',
+    'запиши маршрут в ',
+    'запиши путь до ',
+    'запиши путь в ',
+    'запомни маршрут до ',
+    'запомни маршрут в ',
+    'запомни путь до ',
+  ];
+
+  static const List<String> _ruReplayTrailPrefixes = [
+    'веди по маршруту ',
+    'веди по маршруту до ',
+    'повтори маршрут до ',
+    'повтори маршрут ',
+    'маршрут внутри до ',
+    'маршрут внутри ',
+  ];
+
+  static const List<String> _ruLandmarkPrefixes = [
+    'ориентир ',
+    'отметка ',
+    'точка ',
+  ];
+
+  static const List<String> _ruDeleteTrailPrefixes = [
+    'удали маршрут ',
+    'удалить маршрут ',
+    'забудь маршрут ',
   ];
 
   static const List<String> _ruBusRoutePrefixes = [
@@ -416,6 +477,17 @@ class VoiceCommandService {
     'жаңа қазақша тану': VoiceCommand.enableKkV2,
     'қарапайым қазақша тану': VoiceCommand.disableKkV2,
     'ескі тану': VoiceCommand.disableKkV2,
+    // Phase 1 — Indoor trail
+    'маршрутты тоқтат': VoiceCommand.stopTrailRecord,
+    'жазуды тоқтат': VoiceCommand.stopTrailRecord,
+    // Phase 1 — Bazaar / livestock
+    'базар режимі': VoiceCommand.toggleBazaarMode,
+    'нарық режимі': VoiceCommand.toggleBazaarMode,
+    'мал режимі': VoiceCommand.toggleLivestockMode,
+    'жануарлар режимі': VoiceCommand.toggleLivestockMode,
+    // Phase 1 — Voice adaptation
+    'дауыс бейімдеу': VoiceCommand.toggleVoiceAdaptation,
+    'бейімдеу деректерін жою': VoiceCommand.clearAdaptationData,
   };
 
   static const Set<String> _kkSosExact = {
@@ -465,6 +537,29 @@ class VoiceCommandService {
     'кесте ',
     'автобус кестесі ',
     'автобус қашан ',
+  ];
+
+  // Phase 1 — Indoor trail record/replay prefixes (kk)
+  static const List<String> _kkRecordTrailPrefixes = [
+    'маршрутты жаз ',
+    'жолды жаз ',
+    'маршрутты есте сақта ',
+  ];
+
+  static const List<String> _kkReplayTrailPrefixes = [
+    'маршрутпен жүр ',
+    'маршрутты қайтала ',
+    'ішкі маршрут ',
+  ];
+
+  static const List<String> _kkLandmarkPrefixes = [
+    'белгі ',
+    'нүкте ',
+  ];
+
+  static const List<String> _kkDeleteTrailPrefixes = [
+    'маршрутты жой ',
+    'маршрутты өшір ',
   ];
 
   static const List<String> _kkRememberPrefixes = [
@@ -592,6 +687,20 @@ class VoiceCommandService {
     'new kazakh recognition': VoiceCommand.enableKkV2,
     'standard kazakh': VoiceCommand.disableKkV2,
     'legacy kazakh recognition': VoiceCommand.disableKkV2,
+    // Phase 1 — Indoor trail
+    'stop trail': VoiceCommand.stopTrailRecord,
+    'stop recording trail': VoiceCommand.stopTrailRecord,
+    'stop trail recording': VoiceCommand.stopTrailRecord,
+    // Phase 1 — Bazaar / livestock
+    'bazaar mode': VoiceCommand.toggleBazaarMode,
+    'market mode': VoiceCommand.toggleBazaarMode,
+    'livestock mode': VoiceCommand.toggleLivestockMode,
+    'animal mode': VoiceCommand.toggleLivestockMode,
+    // Phase 1 — Voice adaptation
+    'voice adaptation': VoiceCommand.toggleVoiceAdaptation,
+    'toggle adaptation': VoiceCommand.toggleVoiceAdaptation,
+    'clear adaptation data': VoiceCommand.clearAdaptationData,
+    'delete adaptation data': VoiceCommand.clearAdaptationData,
   };
 
   static const Set<String> _enSosExact = {
@@ -652,6 +761,34 @@ class VoiceCommandService {
     'bus schedule ',
     'when does bus ',
     'when is bus ',
+  ];
+
+  // Phase 1 — Indoor trail record/replay prefixes (en)
+  static const List<String> _enRecordTrailPrefixes = [
+    'record trail to ',
+    'record path to ',
+    'record indoor trail to ',
+    'remember trail to ',
+    'save trail to ',
+  ];
+
+  static const List<String> _enReplayTrailPrefixes = [
+    'replay trail to ',
+    'follow trail to ',
+    'indoor go to ',
+    'indoor trail to ',
+    'follow trail ',
+  ];
+
+  static const List<String> _enLandmarkPrefixes = [
+    'landmark ',
+    'mark ',
+  ];
+
+  static const List<String> _enDeleteTrailPrefixes = [
+    'delete trail ',
+    'remove trail ',
+    'forget trail ',
   ];
 
   static const List<String> _enRememberPrefixes = [
@@ -1028,6 +1165,10 @@ class VoiceCommandService {
     final List<String> rememberPrefixes;
     final List<String> findPrefixes;
     final List<String> forgetPrefixes;
+    final List<String> recordTrailPrefixes;
+    final List<String> replayTrailPrefixes;
+    final List<String> landmarkPrefixes;
+    final List<String> deleteTrailPrefixes;
     final Map<String, VoiceCommand> commands;
     final List<String> sorted;
     if (isEn) {
@@ -1041,6 +1182,10 @@ class VoiceCommandService {
       rememberPrefixes = _enRememberPrefixes;
       findPrefixes = _enFindPrefixes;
       forgetPrefixes = _enForgetPrefixes;
+      recordTrailPrefixes = _enRecordTrailPrefixes;
+      replayTrailPrefixes = _enReplayTrailPrefixes;
+      landmarkPrefixes = _enLandmarkPrefixes;
+      deleteTrailPrefixes = _enDeleteTrailPrefixes;
       commands = _enCommands;
       sorted = _enSorted;
     } else if (isKk) {
@@ -1054,6 +1199,10 @@ class VoiceCommandService {
       rememberPrefixes = _kkRememberPrefixes;
       findPrefixes = _kkFindPrefixes;
       forgetPrefixes = _kkForgetPrefixes;
+      recordTrailPrefixes = _kkRecordTrailPrefixes;
+      replayTrailPrefixes = _kkReplayTrailPrefixes;
+      landmarkPrefixes = _kkLandmarkPrefixes;
+      deleteTrailPrefixes = _kkDeleteTrailPrefixes;
       commands = _kkCommands;
       sorted = _kkSorted;
     } else {
@@ -1067,6 +1216,10 @@ class VoiceCommandService {
       rememberPrefixes = _ruRememberPrefixes;
       findPrefixes = _ruFindPrefixes;
       forgetPrefixes = _ruForgetPrefixes;
+      recordTrailPrefixes = _ruRecordTrailPrefixes;
+      replayTrailPrefixes = _ruReplayTrailPrefixes;
+      landmarkPrefixes = _ruLandmarkPrefixes;
+      deleteTrailPrefixes = _ruDeleteTrailPrefixes;
       commands = _ruCommands;
       sorted = _ruSorted;
     }
@@ -1114,7 +1267,54 @@ class VoiceCommandService {
       if (lower.startsWith(prefix)) {
         final dest = lower.substring(prefix.length).trim();
         if (dest.isNotEmpty) {
+          _recordAdaptation(lower, 'transitTo');
           onNavCommand?.call(VoiceCommand.transitTo, dest);
+          return;
+        }
+      }
+    }
+
+    // Phase 1 — Indoor trail prefixes (before sorted-key scan so
+    // more specific patterns win over generic keyword matches).
+    for (final prefix in recordTrailPrefixes) {
+      if (lower.startsWith(prefix)) {
+        final name = lower.substring(prefix.length).trim();
+        if (name.isNotEmpty) {
+          _recordAdaptation(lower, 'recordTrail');
+          onNavCommand?.call(VoiceCommand.recordTrail, name);
+          return;
+        }
+      }
+    }
+
+    for (final prefix in replayTrailPrefixes) {
+      if (lower.startsWith(prefix)) {
+        final name = lower.substring(prefix.length).trim();
+        if (name.isNotEmpty) {
+          _recordAdaptation(lower, 'replayTrail');
+          onNavCommand?.call(VoiceCommand.replayTrail, name);
+          return;
+        }
+      }
+    }
+
+    for (final prefix in landmarkPrefixes) {
+      if (lower.startsWith(prefix)) {
+        final name = lower.substring(prefix.length).trim();
+        if (name.isNotEmpty) {
+          _recordAdaptation(lower, 'addTrailLandmark');
+          onNavCommand?.call(VoiceCommand.addTrailLandmark, name);
+          return;
+        }
+      }
+    }
+
+    for (final prefix in deleteTrailPrefixes) {
+      if (lower.startsWith(prefix)) {
+        final name = lower.substring(prefix.length).trim();
+        if (name.isNotEmpty) {
+          _recordAdaptation(lower, 'deleteTrail');
+          onNavCommand?.call(VoiceCommand.deleteTrail, name);
           return;
         }
       }
@@ -1142,7 +1342,9 @@ class VoiceCommandService {
 
     for (final key in sorted) {
       if (lower.contains(key)) {
-        onCommand?.call(commands[key]!);
+        final cmd = commands[key]!;
+        _recordAdaptation(lower, cmd.name);
+        onCommand?.call(cmd);
         return;
       }
     }
@@ -1178,6 +1380,16 @@ class VoiceCommandService {
     }
 
     onCommand?.call(VoiceCommand.unknown);
+  }
+
+  /// Fire-and-forget: record successful voice command for future
+  /// on-device ASR adaptation (Phase 1 / Direction 12).
+  void _recordAdaptation(String transcript, String commandId) {
+    unawaited(VoiceAdaptationStore.instance.record(
+      locale: _locale,
+      transcript: transcript,
+      commandId: commandId,
+    ));
   }
 
   @visibleForTesting

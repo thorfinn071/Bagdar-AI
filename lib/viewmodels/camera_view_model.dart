@@ -45,6 +45,9 @@ import '../camera/object_finder_session.dart';
 import '../services/orientation_service.dart';
 import '../services/step_service.dart';
 import '../services/winter_mode_service.dart';
+import '../services/indoor_trail_recorder.dart';
+import '../services/indoor_trail_replay.dart';
+import '../services/bazaar_livestock_service.dart';
 
 class CameraViewModel extends ChangeNotifier {
   final Tracker tracker = Tracker();
@@ -90,6 +93,9 @@ class CameraViewModel extends ChangeNotifier {
   final ObjectMemoryService objectMemory = ObjectMemoryService();
   final AcousticWorldModel awm = AcousticWorldModel();
   late final ObjectFinderSession objectFinder;
+  late final IndoorTrailRecorder trailRecorder;
+  late final IndoorTrailReplay trailReplay;
+  final BazaarLivestockService bazaarLivestock = BazaarLivestockService.instance;
 
   AppMode mode = AppMode.street;
   String statusLine = 'Запуск Bagdar...';
@@ -135,6 +141,15 @@ class CameraViewModel extends ChangeNotifier {
       tts: tts,
       earcon: earcon,
       memory: objectMemory,
+    );
+    trailRecorder = IndoorTrailRecorder(
+      compass: compass,
+      steps: steps,
+      indoorGate: indoorGate,
+    );
+    trailReplay = IndoorTrailReplay(
+      compass: compass,
+      steps: steps,
     );
     // Winter Mode: load persisted manual toggle and propagate into the
     // thermal monitor. The thermal → winterMode auto-detect feedback is
@@ -288,6 +303,24 @@ class CameraViewModel extends ChangeNotifier {
     };
     awm.onReverbEstimate = (estimate) {
       indoorGate.feedAcousticPrior(estimate);
+    };
+
+    // Phase 1 — Indoor trail replay: route prompts through AlertManager
+    // so navigation cooldowns and verbosity gating apply.
+    trailReplay.onHazard = (event) {
+      alertMgr.handleExternalHazard(event);
+    };
+    trailReplay.onArrived = (trail) {
+      earcon.play(Earcon.success);
+    };
+    trailReplay.onLost = () {
+      earcon.play(Earcon.fail);
+    };
+
+    // Phase 1 — Bazaar / Livestock: route livestock announcements
+    // through AlertManager.
+    bazaarLivestock.onHazard = (event) {
+      alertMgr.handleExternalHazard(event);
     };
 
     applyA11yPrefs();
@@ -532,6 +565,8 @@ class CameraViewModel extends ChangeNotifier {
     objectMemory.dispose();
     objectFinder.dispose();
     awm.dispose();
+    trailRecorder.dispose();
+    trailReplay.dispose();
     tracksNotifier.dispose();
     super.dispose();
   }

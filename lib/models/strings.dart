@@ -898,6 +898,37 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'onb_rhvoice_pack_later': 'Напомнить в сети',
     'lang_pack_rhvoice_online_ready':
         'Сеть восстановлена. Пакет казахского голоса готов к установке. Скажите «языковые пакеты».',
+
+    // -- Phase 1: Indoor trail (Direction 6) ------------------------------
+    'trail_recording_started': 'Запись маршрута начата. Идите к цели.',
+    'trail_recording_stopped': 'Маршрут сохранён.',
+    'trail_recording_failed': 'Не удалось начать запись маршрута.',
+    'trail_recording_empty': 'Маршрут пуст, не сохранён.',
+    'trail_recording_cancelled': 'Запись маршрута отменена.',
+    'trail_landmark_added': 'Ориентир отмечен.',
+    'trail_replay_started': 'Следую по маршруту.',
+    'trail_replay_stopped': 'Повтор маршрута остановлен.',
+    'trail_not_found': 'Маршрут не найден.',
+    'trail_deleted': 'Маршрут удалён.',
+    'trail_arrived': 'Вы на месте.',
+    'trail_lost': 'Маршрут потерян. Вернитесь назад.',
+
+    // -- Phase 1: Bazaar / Livestock (Direction 9) ------------------------
+    'bazaar_mode_on': 'Режим базара включён.',
+    'bazaar_mode_off': 'Режим базара выключен.',
+    'livestock_mode_on': 'Режим животных включён.',
+    'livestock_mode_off': 'Режим животных выключен.',
+    'livestock_cow': 'Корова',
+    'livestock_horse': 'Лошадь',
+    'livestock_sheep': 'Овца',
+    'livestock_dog': 'Собака',
+    'livestock_cat': 'Кошка',
+    'livestock_bird': 'Птица',
+
+    // -- Phase 1: Voice adaptation (Direction 12) -------------------------
+    'voice_adapt_on': 'Адаптация голоса включена. Данные остаются на устройстве.',
+    'voice_adapt_off': 'Адаптация голоса выключена.',
+    'voice_adapt_samples_cleared': 'Данные адаптации удалены.',
   },
 
   AppLanguage.kk: {
@@ -1732,6 +1763,37 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'onb_rhvoice_pack_later': 'Желі болғанда еске салу',
     'lang_pack_rhvoice_online_ready':
         'Желі қалпына келді. Қазақша дауыс пакетін орнатуға дайын. «Тіл пакеттері» деп айтыңыз.',
+
+    // -- Phase 1: Indoor trail (Direction 6) ------------------------------
+    'trail_recording_started': 'Маршрут жазуы басталды. Мақсатқа қарай жүріңіз.',
+    'trail_recording_stopped': 'Маршрут сақталды.',
+    'trail_recording_failed': 'Маршрут жазуын бастау мүмкін болмады.',
+    'trail_recording_empty': 'Маршрут бос, сақталмады.',
+    'trail_recording_cancelled': 'Маршрут жазуы тоқтатылды.',
+    'trail_landmark_added': 'Белгі қойылды.',
+    'trail_replay_started': 'Маршрутпен жүремін.',
+    'trail_replay_stopped': 'Маршрут қайталау тоқтатылды.',
+    'trail_not_found': 'Маршрут табылмады.',
+    'trail_deleted': 'Маршрут жойылды.',
+    'trail_arrived': 'Жеттіңіз.',
+    'trail_lost': 'Маршрут жоғалды. Кері қайтыңыз.',
+
+    // -- Phase 1: Bazaar / Livestock (Direction 9) ------------------------
+    'bazaar_mode_on': 'Базар режимі қосылды.',
+    'bazaar_mode_off': 'Базар режимі өшірілді.',
+    'livestock_mode_on': 'Мал режимі қосылды.',
+    'livestock_mode_off': 'Мал режимі өшірілді.',
+    'livestock_cow': 'Сиыр',
+    'livestock_horse': 'Жылқы',
+    'livestock_sheep': 'Қой',
+    'livestock_dog': 'Ит',
+    'livestock_cat': 'Мысық',
+    'livestock_bird': 'Құс',
+
+    // -- Phase 1: Voice adaptation (Direction 12) -------------------------
+    'voice_adapt_on': 'Дауыс бейімдеу қосылды. Деректер құрылғыда қалады.',
+    'voice_adapt_off': 'Дауыс бейімдеу өшірілді.',
+    'voice_adapt_samples_cleared': 'Бейімдеу деректері жойылды.',
   },
   AppLanguage.en: {
     'stop': 'Stop',
@@ -2545,6 +2607,37 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'lang_pack_rhvoice_online_ready':
         'You are online. The Kazakh voice pack is ready to install. '
         'Say "language packs".',
+
+    // -- Phase 1: Indoor trail (Direction 6) ------------------------------
+    'trail_recording_started': 'Trail recording started. Walk to your destination.',
+    'trail_recording_stopped': 'Trail saved.',
+    'trail_recording_failed': 'Could not start trail recording.',
+    'trail_recording_empty': 'Trail is empty, not saved.',
+    'trail_recording_cancelled': 'Trail recording cancelled.',
+    'trail_landmark_added': 'Landmark marked.',
+    'trail_replay_started': 'Following trail.',
+    'trail_replay_stopped': 'Trail replay stopped.',
+    'trail_not_found': 'Trail not found.',
+    'trail_deleted': 'Trail deleted.',
+    'trail_arrived': 'You have arrived.',
+    'trail_lost': 'Trail lost. Go back.',
+
+    // -- Phase 1: Bazaar / Livestock (Direction 9) ------------------------
+    'bazaar_mode_on': 'Bazaar mode on.',
+    'bazaar_mode_off': 'Bazaar mode off.',
+    'livestock_mode_on': 'Livestock mode on.',
+    'livestock_mode_off': 'Livestock mode off.',
+    'livestock_cow': 'Cow',
+    'livestock_horse': 'Horse',
+    'livestock_sheep': 'Sheep',
+    'livestock_dog': 'Dog',
+    'livestock_cat': 'Cat',
+    'livestock_bird': 'Bird',
+
+    // -- Phase 1: Voice adaptation (Direction 12) -------------------------
+    'voice_adapt_on': 'Voice adaptation enabled. Data stays on device.',
+    'voice_adapt_off': 'Voice adaptation disabled.',
+    'voice_adapt_samples_cleared': 'Adaptation data cleared.',
   },
 };
 

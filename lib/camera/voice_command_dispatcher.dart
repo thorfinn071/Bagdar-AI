@@ -10,8 +10,12 @@ import '../models/language_pack.dart';
 import '../models/speech_job.dart';
 import '../models/strings.dart';
 import '../services/feature_usage_tracker.dart';
+import '../services/earcon_service.dart';
+import '../services/indoor_trail_replay.dart';
+import '../services/indoor_trail_store.dart';
 import '../services/language_pack_manager.dart';
 import '../services/settings_service.dart';
+import '../services/voice_adaptation_store.dart';
 import '../services/voice_command_service.dart';
 import '../theme/bagdar_theme.dart';
 import '../theme/bagdar_tokens.dart';
@@ -257,6 +261,31 @@ class VoiceCommandDispatcher {
       case VoiceCommand.disableKkV2:
         _toggleKkV2(false);
         break;
+      // Phase 1 — Indoor trail (handled in handleNavCommand for
+      // record/replay/landmark/delete which carry a destination arg).
+      case VoiceCommand.stopTrailRecord:
+        _stopTrailRecord();
+        break;
+      case VoiceCommand.recordTrail:
+      case VoiceCommand.replayTrail:
+      case VoiceCommand.addTrailLandmark:
+      case VoiceCommand.deleteTrail:
+        vm.tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
+        break;
+      // Phase 1 — Bazaar / livestock
+      case VoiceCommand.toggleBazaarMode:
+        _toggleBazaarMode();
+        break;
+      case VoiceCommand.toggleLivestockMode:
+        _toggleLivestockMode();
+        break;
+      // Phase 1 — Voice adaptation
+      case VoiceCommand.toggleVoiceAdaptation:
+        _toggleVoiceAdaptation();
+        break;
+      case VoiceCommand.clearAdaptationData:
+        _clearAdaptationData();
+        break;
     }
   }
 
@@ -321,6 +350,24 @@ class VoiceCommandDispatcher {
         break;
       case VoiceCommand.forgetObject:
         unawaited(vm.objectMemory.forget(destination));
+        break;
+      // Phase 1 — Indoor trail
+      case VoiceCommand.recordTrail:
+        _startTrailRecord(destination);
+        break;
+      case VoiceCommand.replayTrail:
+        _replayTrail(destination);
+        break;
+      case VoiceCommand.addTrailLandmark:
+        vm.trailRecorder.addLandmark(destination);
+        vm.tts.say(
+          S.alert('trail_landmark_added'),
+          SpeechPriority.info,
+          pan: 0.0,
+        );
+        break;
+      case VoiceCommand.deleteTrail:
+        _deleteTrail(destination);
         break;
       default:
         break;
@@ -540,6 +587,132 @@ class VoiceCommandDispatcher {
     vm.applyA11yPrefs();
     vm.tts.say(
       '${S.get('settings_haptic_strength')}: ${S.get('haptic_${v.name}')}',
+      SpeechPriority.info,
+      pan: 0.0,
+    );
+  }
+
+  // -- Phase 1 — Indoor trail ------------------------------------------
+
+  void _startTrailRecord(String name) {
+    final langCode = Settings.instance.language == 1
+        ? 'kk'
+        : Settings.instance.language == 2
+            ? 'en'
+            : 'ru';
+    unawaited(vm.trailRecorder.start(name: name, langCode: langCode).then((ok) {
+      if (ok) {
+        vm.tts.say(
+          S.alert('trail_recording_started'),
+          SpeechPriority.info,
+          pan: 0.0,
+        );
+      } else {
+        vm.tts.say(
+          S.alert('trail_recording_failed'),
+          SpeechPriority.info,
+          pan: 0.0,
+        );
+      }
+    }));
+  }
+
+  void _stopTrailRecord() {
+    if (!vm.trailRecorder.isActive) {
+      // Maybe the user is stopping a replay instead.
+      if (vm.trailReplay.state != IndoorTrailReplayState.idle) {
+        unawaited(vm.trailReplay.stop());
+        vm.tts.say(
+          S.alert('trail_replay_stopped'),
+          SpeechPriority.info,
+          pan: 0.0,
+        );
+        return;
+      }
+      vm.tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
+      return;
+    }
+    unawaited(vm.trailRecorder.stop().then((trail) {
+      if (trail != null) {
+        vm.tts.say(
+          S.alert('trail_recording_stopped'),
+          SpeechPriority.info,
+          pan: 0.0,
+        );
+      } else {
+        vm.tts.say(
+          S.alert('trail_recording_empty'),
+          SpeechPriority.info,
+          pan: 0.0,
+        );
+      }
+    }));
+  }
+
+  void _replayTrail(String name) {
+    unawaited(vm.trailReplay.startByName(name));
+  }
+
+  void _deleteTrail(String name) {
+    unawaited(IndoorTrailStore.instance.findByName(name).then((trail) async {
+      if (trail == null) {
+        vm.tts.say(
+          S.alert('trail_not_found'),
+          SpeechPriority.info,
+          pan: 0.0,
+        );
+        return;
+      }
+      await IndoorTrailStore.instance.delete(trail.id);
+      vm.tts.say(
+        S.alert('trail_deleted'),
+        SpeechPriority.info,
+        pan: 0.0,
+      );
+    }));
+  }
+
+  // -- Phase 1 — Bazaar / livestock ------------------------------------
+
+  void _toggleBazaarMode() {
+    final current = Settings.instance.bazaarMode;
+    unawaited(Settings.instance.setBazaarMode(!current));
+    if (!current) {
+      // Turning on bazaar → turn off livestock (mutually exclusive).
+      unawaited(Settings.instance.setLivestockAwareness(false));
+    }
+    vm.bazaarLivestock.reset();
+    final key = !current ? 'bazaar_mode_on' : 'bazaar_mode_off';
+    vm.tts.say(S.alert(key), SpeechPriority.info, pan: 0.0);
+    vm.earcon.play(Earcon.success);
+  }
+
+  void _toggleLivestockMode() {
+    final current = Settings.instance.livestockAwareness;
+    unawaited(Settings.instance.setLivestockAwareness(!current));
+    if (!current) {
+      // Turning on livestock → turn off bazaar (mutually exclusive).
+      unawaited(Settings.instance.setBazaarMode(false));
+    }
+    vm.bazaarLivestock.reset();
+    final key = !current ? 'livestock_mode_on' : 'livestock_mode_off';
+    vm.tts.say(S.alert(key), SpeechPriority.info, pan: 0.0);
+    vm.earcon.play(Earcon.success);
+  }
+
+  // -- Phase 1 — Voice adaptation --------------------------------------
+
+  void _toggleVoiceAdaptation() {
+    final current = Settings.instance.localAsrAdaptation;
+    unawaited(Settings.instance.setLocalAsrAdaptation(!current));
+    final key = !current ? 'voice_adapt_on' : 'voice_adapt_off';
+    vm.tts.say(S.alert(key), SpeechPriority.info, pan: 0.0);
+  }
+
+  void _clearAdaptationData() {
+    unawaited(VoiceAdaptationStore.instance.deleteAll());
+    vm.tts.say(
+      S.alert('voice_adapt_samples_cleared'),
       SpeechPriority.info,
       pan: 0.0,
     );

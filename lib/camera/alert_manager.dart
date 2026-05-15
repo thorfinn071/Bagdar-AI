@@ -1,13 +1,16 @@
 import '../models/a11y_prefs.dart';
 import '../models/app_mode.dart';
 import '../models/constants.dart';
+import '../models/external_hazard.dart';
 import '../models/speech_job.dart';
 import '../models/strings.dart';
 import '../services/settings_service.dart';
 import '../services/earcon_service.dart';
+import '../services/field_logger.dart';
 import '../services/haptic_service.dart';
 import '../services/tts_service.dart';
 import '../services/acoustic_world_model.dart';
+import '../services/bazaar_livestock_service.dart';
 import '../services/motion_prealert.dart'
     show MotionEventClass, MotionIntrusionEvent, MotionIntrusionSide;
 import '../services/stereo_bearing_estimator.dart' show BearingSide;
@@ -216,6 +219,58 @@ class AlertManager {
     _lastCrowdAlertAt = DateTime.fromMillisecondsSinceEpoch(0);
     _lastAnnouncedDistM.clear();
     _crowdActive = false;
+  }
+
+  /// Adapter that funnels non-camera hazards (indoor trail, mesh-net,
+  /// OSCP cane, FMCW sonar, bazaar/livestock context, VLM companion)
+  /// through the same `AlertFilter` + `TtsService` lane the camera
+  /// pipeline uses. Producers build a localized [ExternalHazardEvent]
+  /// and call this method; they never call `_tts.say` directly so the
+  /// user-preference cooldowns, verbosity gating, and alertFrequency
+  /// multiplier apply uniformly.
+  ///
+  /// This method MUST NOT raise priorities beyond what the producer
+  /// chose: a mesh "earlier hazard reported nearby" stays at info even
+  /// if the candidate distance is tiny, because the local sensors
+  /// haven't confirmed the threat. Only the producer can choose
+  /// `SpeechPriority.critical`.
+  void handleExternalHazard(ExternalHazardEvent event) {
+    if (event.text.isEmpty) {
+      FieldLogger.instance.log('external_hazard_drop', {
+        'source': event.source.name,
+        'reason': 'empty_text',
+      });
+      return;
+    }
+
+    final pan = event.pan.clamp(-1.0, 1.0);
+
+    _filter.add(AlertCandidate(
+      text: event.text,
+      priority: event.priority,
+      pan: pan.toDouble(),
+      category: event.category,
+      urgency: event.urgency.clamp(0.0, 1.0),
+      distanceM: event.distanceM,
+    ));
+
+    FieldLogger.instance.log('external_hazard', {
+      'source': event.source.name,
+      'priority': event.priority.name,
+      'category': event.category.name,
+      if (event.distanceM != null) 'distM': event.distanceM,
+      if (event.correlationId != null) 'id': event.correlationId,
+    });
+
+    final winner = _filter.flush(
+      0,
+      event.at,
+      verbosity: Settings.instance.verbosity,
+      alertFrequency: Settings.instance.alertFrequency,
+    );
+    if (winner != null) {
+      _tts.say(winner.text, winner.priority, pan: winner.pan);
+    }
   }
 
   void handleAcousticEvent(AcousticEvent event) {
@@ -518,6 +573,17 @@ class AlertManager {
     final labels = _crowdActive
         ? [for (final t in tracks) if (t.label != 'person') t.label]
         : tracks.map((t) => t.label).toList();
+
+    // Phase 1 — Direction 9: Feed livestock label taxonomy for
+    // context-mode announcements. Distances are approximate.
+    final trackDistances = <String, double>{};
+    for (final t in tracks) {
+      if (t.distM > 0) trackDistances[t.label] = t.distM;
+    }
+    BazaarLivestockService.instance.feedLabels(
+      labels,
+      trackDistances: trackDistances,
+    );
     
     
     
