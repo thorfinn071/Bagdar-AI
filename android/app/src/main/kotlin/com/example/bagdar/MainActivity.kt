@@ -2,11 +2,15 @@ package com.example.bagdar
 
 import android.Manifest
 import android.app.ActivityManager
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.media.AudioFormat
+import android.media.AudioRecord
 import android.media.RingtoneManager
 import android.net.wifi.WifiManager
 import android.os.BatteryManager
@@ -34,6 +38,8 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity : FlutterActivity() {
     private var hardwareDepthSession: HardwareDepthSession? = null
     private var hardwareDepthEventSink: EventChannel.EventSink? = null
+
+    private var audioCapturePlugin: AudioCapturePlugin? = null
 
     private var incomingSmsSink: EventChannel.EventSink? = null
     private var incomingSmsReceiver: BroadcastReceiver? = null
@@ -73,6 +79,11 @@ class MainActivity : FlutterActivity() {
         super.onDestroy()
         watchdogHandler.removeCallbacks(watchdogRunnable)
         unregisterIncomingSmsReceiver()
+        try {
+            audioCapturePlugin?.dispose()
+        } catch (_: Exception) {
+        }
+        audioCapturePlugin = null
     }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
@@ -103,6 +114,26 @@ class MainActivity : FlutterActivity() {
                 PaddleOcrPlugin.METHOD_CHANNEL,
             )
             plugin.register(method)
+        }
+
+        // Phase 0 foundations — register the AudioCapturePlugin so the
+        // Dart `AudioCaptureBroker` (bagdar/audio_capture +
+        // bagdar/audio_frames) is reachable. AWM, reverb classifier,
+        // ambient classifier, and future ASR backends all depend on
+        // this channel; without registration they silently fail to
+        // observe the mic. Plugin honours mic permission internally.
+        run {
+            val plugin = AudioCapturePlugin(applicationContext)
+            val method = MethodChannel(
+                flutterEngine.dartExecutor.binaryMessenger,
+                "bagdar/audio_capture",
+            )
+            val event = EventChannel(
+                flutterEngine.dartExecutor.binaryMessenger,
+                "bagdar/audio_frames",
+            )
+            plugin.setupChannels(method, event)
+            audioCapturePlugin = plugin
         }
 
         MethodChannel(
@@ -161,6 +192,9 @@ class MainActivity : FlutterActivity() {
                 }
                 "getNetworkContext" -> {
                     result.success(readNetworkContext())
+                }
+                "getHardwareCapabilities" -> {
+                    result.success(readHardwareCapabilities())
                 }
                 else -> result.notImplemented()
             }
@@ -330,6 +364,89 @@ class MainActivity : FlutterActivity() {
         } catch (_: Exception) {
         }
         incomingSmsReceiver = null
+    }
+
+    /// Collect optional non-camera hardware capability flags consumed by
+    /// `DeviceCapabilityProbe.readHardwareCapabilities()`. Conservative
+    /// defaults: every flag is `false` until the underlying probe
+    /// confirms support, so a probe failure never claims a capability
+    /// the device does not have.
+    private fun readHardwareCapabilities(): Map<String, Any?> {
+        val out = mutableMapOf<String, Any?>()
+
+        // BLE roles. Central is widely supported on API 26+; peripheral
+        // is gated by chipset firmware and is checked via the Android
+        // adapter helper. Both can be false on emulators.
+        try {
+            val pm = applicationContext.packageManager
+            val hasBle = pm.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)
+            var central = false
+            var peripheral = false
+            if (hasBle) {
+                val bm = applicationContext.getSystemService(Context.BLUETOOTH_SERVICE)
+                    as? BluetoothManager
+                val adapter: BluetoothAdapter? = bm?.adapter
+                if (adapter != null) {
+                    central = true
+                    peripheral = try {
+                        adapter.isMultipleAdvertisementSupported
+                    } catch (_: Exception) {
+                        false
+                    }
+                }
+            }
+            out["bleCentral"] = central
+            out["blePeripheral"] = peripheral
+        } catch (_: Exception) {
+            out["bleCentral"] = false
+            out["blePeripheral"] = false
+        }
+
+        // 48 kHz mic capture support. AudioRecord.getMinBufferSize is
+        // the canonical way to ask the platform whether a (rate,
+        // channel, encoding) tuple is realisable. Negative return ⇒
+        // unsupported. Mono PCM-16 is the only combination the sonar
+        // prototype needs.
+        try {
+            val minBuf = AudioRecord.getMinBufferSize(
+                48000,
+                AudioFormat.CHANNEL_IN_MONO,
+                AudioFormat.ENCODING_PCM_16BIT,
+            )
+            out["micSupports48kHz"] = minBuf > 0
+        } catch (_: Exception) {
+            out["micSupports48kHz"] = false
+        }
+
+        // Speaker high-freq capability cannot be reliably probed from
+        // SDK metadata; advertise `null` so Dart records "unknown".
+        out["speakerSupportsHighFreq"] = null
+
+        // Charging state. Battery service surfaces this without
+        // requiring permissions. Conservative default is false.
+        try {
+            val intent = registerReceiver(
+                null,
+                IntentFilter(Intent.ACTION_BATTERY_CHANGED),
+            )
+            val status = intent?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
+            val charging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
+                status == BatteryManager.BATTERY_STATUS_FULL
+            out["charging"] = charging
+        } catch (_: Exception) {
+            out["charging"] = false
+        }
+
+        // Free internal storage in megabytes. -1 sentinel on failure.
+        try {
+            val stat = StatFs(filesDir.absolutePath)
+            val bytes = stat.availableBlocksLong * stat.blockSizeLong
+            out["freeStorageMb"] = (bytes / (1024L * 1024L)).toInt()
+        } catch (_: Exception) {
+            out["freeStorageMb"] = -1
+        }
+
+        return out
     }
 
     private fun readNetworkContext(): Map<String, Any?> {
