@@ -43,24 +43,96 @@ class DeviceInfo {
 
 enum DepthTier { hardware, ncnnVulkan, ncnnCpu, focalLength }
 
+/// Capability flags for optional non-camera hardware. Populated at probe
+/// time and stored alongside the depth tier so growth-direction services
+/// (mesh-net BLE, OSCP cane, sonar FMCW chirp, charging-mode VLM) can
+/// gate themselves without re-querying the OS on every frame.
+///
+/// All flags default to `false` so a probe failure never claims a
+/// capability the device does not have.
+class HardwareCapabilities {
+  /// BLE central role available (advertise/scan as the active peer).
+  /// Required for both `MeshBuddyAlertService` and `OscpService`.
+  final bool bleCentral;
+
+  /// BLE peripheral role available (advertise GATT services). Some
+  /// budget chipsets support central only; mesh fall-back degrades to
+  /// scan-only behaviour when this is false.
+  final bool blePeripheral;
+
+  /// Microphone reports support for 48 kHz capture. Required by the
+  /// FMCW sonar prototype (chirps fall in the 18–22 kHz band and need
+  /// the 24 kHz Nyquist of a 48 kHz stream).
+  final bool micSupports48kHz;
+
+  /// Loudspeaker is believed to reproduce 18–22 kHz at usable SPL.
+  /// `null` when unknown (most devices). Sonar pre-flight calibration
+  /// will refine this at runtime; the flag is advisory only.
+  final bool? speakerSupportsHighFreq;
+
+  /// Device is currently charging (any charger type). Re-read on demand;
+  /// this snapshot is a hint for the probe-time decision only.
+  final bool charging;
+
+  /// Free internal storage at probe time, in megabytes. Used by optional
+  /// pack downloaders (`LanguagePackManager`, `MapPackageManager`,
+  /// future `ModelPackManager`) to refuse downloads that would breach
+  /// the safety margin.
+  final int freeStorageMb;
+
+  const HardwareCapabilities({
+    this.bleCentral = false,
+    this.blePeripheral = false,
+    this.micSupports48kHz = false,
+    this.speakerSupportsHighFreq,
+    this.charging = false,
+    this.freeStorageMb = -1,
+  });
+
+  /// Storage class buckets exposed for pack manifests so they can refuse
+  /// (or warn about) installs when free space is tight.
+  bool get freeStorageGtTwoGb => freeStorageMb >= 2048;
+  bool get freeStorageGtFiveHundredMb => freeStorageMb >= 500;
+  bool get freeStorageGtOneHundredMb => freeStorageMb >= 100;
+
+  @override
+  String toString() =>
+      'HardwareCapabilities(bleCentral=$bleCentral, blePeripheral=$blePeripheral, '
+      'mic48k=$micSupports48kHz, hiFreq=$speakerSupportsHighFreq, '
+      'charging=$charging, freeMb=$freeStorageMb)';
+}
+
 class DeviceCapabilities {
   final DepthTier bestDepthTier;
   final int androidSdkInt;
   final DeviceInfo deviceInfo;
+  final HardwareCapabilities hardware;
 
   const DeviceCapabilities({
     required this.bestDepthTier,
     required this.androidSdkInt,
     this.deviceInfo = const DeviceInfo.unknown(),
+    this.hardware = const HardwareCapabilities(),
   });
 
   bool get isLowEnd =>
       deviceInfo.isLikelyLowEnd || bestDepthTier == DepthTier.focalLength;
 
+  /// Convenience: true when the device satisfies the *minimum* feasibility
+  /// gate for mesh-net buddy alerts (BLE central role + Android 8+).
+  bool get meshFeasible =>
+      hardware.bleCentral && androidSdkInt >= 26;
+
+  /// Convenience: true when the device satisfies the minimum gate for
+  /// the FMCW sonar prototype (48 kHz mic). The Hi-freq speaker flag is
+  /// advisory only — calibration confirms it at runtime.
+  bool get sonarFeasible => hardware.micSupports48kHz;
+
   @override
   String toString() =>
       'DeviceCapabilities(tier=$bestDepthTier, '
-      'sdk=$androidSdkInt, model=${deviceInfo.model})';
+      'sdk=$androidSdkInt, model=${deviceInfo.model}, '
+      'hw=$hardware)';
 }
 
 class DeviceCapabilityProbe {
@@ -117,6 +189,7 @@ class DeviceCapabilityProbe {
     final sdk = info.sdkInt > 0 ? info.sdkInt : await _androidSdkInt();
     final hardwareDepth = await _probeHardwareDepthWithWhitelist(info);
     final ncnnAvailable = _probeNcnn();
+    final hw = await _readHardwareCapabilities();
 
     final DepthTier tier;
     if (hardwareDepth) {
@@ -134,10 +207,47 @@ class DeviceCapabilityProbe {
       bestDepthTier: tier,
       androidSdkInt: sdk,
       deviceInfo: info,
+      hardware: hw,
     );
     debugPrint('DeviceCapabilityProbe: зондирование завершено — $_cached');
     return _cached!;
   }
+
+  /// Probe non-camera hardware. The native side (`bagdar/device_info`
+  /// `getHardwareCapabilities`) is the source of truth when present;
+  /// older builds return `null` and we fall back to conservative
+  /// defaults. Result is never cached on disk because charging state is
+  /// inherently volatile — re-probe on demand if a service needs a
+  /// fresh read.
+  static Future<HardwareCapabilities> _readHardwareCapabilities() async {
+    if (!Platform.isAndroid) return const HardwareCapabilities();
+    try {
+      final raw = await _channel
+          .invokeMethod<Map<dynamic, dynamic>>('getHardwareCapabilities')
+          .timeout(const Duration(seconds: 2));
+      if (raw == null) return const HardwareCapabilities();
+      return HardwareCapabilities(
+        bleCentral: (raw['bleCentral'] as bool?) ?? false,
+        blePeripheral: (raw['blePeripheral'] as bool?) ?? false,
+        micSupports48kHz: (raw['micSupports48kHz'] as bool?) ?? false,
+        speakerSupportsHighFreq: raw['speakerSupportsHighFreq'] as bool?,
+        charging: (raw['charging'] as bool?) ?? false,
+        freeStorageMb: ((raw['freeStorageMb'] as num?) ?? -1).toInt(),
+      );
+    } catch (e) {
+      debugPrint(
+        'DeviceCapabilityProbe: getHardwareCapabilities unavailable '
+        '($e). Optional features will gate themselves off.',
+      );
+      return const HardwareCapabilities();
+    }
+  }
+
+  /// Re-read volatile hardware state (charging / free storage). Cheap.
+  /// Optional pack downloaders should call this before kicking off
+  /// large downloads instead of trusting the boot-time snapshot.
+  static Future<HardwareCapabilities> readHardwareCapabilities() =>
+      _readHardwareCapabilities();
 
   static bool _probeNcnn() {
     if (!Platform.isAndroid) return false;

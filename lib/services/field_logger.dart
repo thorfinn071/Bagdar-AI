@@ -337,6 +337,62 @@ class FieldLogger {
     });
   }
 
+  // -- Growth-direction telemetry (Phase 0 foundations) ------------------
+  //
+  // All logs below stay on-device under existing `FieldLogger` rules.
+  // No raw audio, no images, no GPS trails, no near-miss clips.
+  // Producers must scrub or hash any PII (mesh device id, OSCP serial)
+  // before calling these helpers.
+
+  void logIndoorTrail(String event, {Map<String, dynamic>? data}) {
+    log('indoor_trail', {
+      'event': event,
+      if (data != null) ...data,
+    });
+  }
+
+  void logMeshBuddy(String event, {Map<String, dynamic>? data}) {
+    log('mesh_buddy', {
+      'event': event,
+      if (data != null) ...data,
+    });
+  }
+
+  void logOscpPod(String event, {Map<String, dynamic>? data}) {
+    log('oscp_pod', {
+      'event': event,
+      if (data != null) ...data,
+    });
+  }
+
+  void logSonarChirp(String event, {Map<String, dynamic>? data}) {
+    log('sonar_chirp', {
+      'event': event,
+      if (data != null) ...data,
+    });
+  }
+
+  void logAsrAdaptation(String event, {Map<String, dynamic>? data}) {
+    log('asr_adapt', {
+      'event': event,
+      if (data != null) ...data,
+    });
+  }
+
+  void logVlmCompanion(String event, {Map<String, dynamic>? data}) {
+    log('vlm_companion', {
+      'event': event,
+      if (data != null) ...data,
+    });
+  }
+
+  void logContextMode(String mode, {String? from}) {
+    log('context_mode', {
+      'mode': mode,
+      if (from != null) 'from': from,
+    });
+  }
+
   Future<void> stopSession() async {
     if (!_active) return;
     _sessionSw.stop();

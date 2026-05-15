@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/a11y_prefs.dart';
+import '../models/context_mode.dart';
 import '../models/strings.dart';
 import '../theme/bagdar_tokens.dart';
 import 'device_capability.dart';
@@ -55,6 +56,23 @@ class SettingsService {
   // signs off. When false, all kk-language code paths use the legacy
   // `speech_to_text` / `flutter_tts` / ML Kit pipeline.
   static const _kEnableKazakhStackV2 = 'enable_kazakh_stack_v2';
+
+  // -- Growth-direction feature flags (Phase 0 foundations) --------------
+  //
+  // Every flag below is disabled by default. They gate large new
+  // subsystems whose runtime must remain optional until each direction
+  // ships a verified, benchmark-evidenced milestone. Toggling a flag
+  // must never affect the camera-side safety pipeline (Camera →
+  // FrameQualityGuard → YOLO / MiDaS / MotionPreAlert → Tracker →
+  // FusionEngine → AlertFilter → AlertManager → TTS / Haptic / Earcon).
+  static const _kIndoorTrailMemory = 'feature_indoor_trail_memory';
+  static const _kMeshBuddyAlerts = 'feature_mesh_buddy_alerts';
+  static const _kBazaarMode = 'feature_bazaar_mode';
+  static const _kLivestockAwareness = 'feature_livestock_awareness';
+  static const _kOscpPod = 'feature_oscp_pod';
+  static const _kLocalAsrAdaptation = 'feature_local_asr_adaptation';
+  static const _kVlmCompanion = 'feature_vlm_companion';
+  static const _kSonarDepth = 'feature_sonar_depth';
 
   Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
@@ -328,6 +346,88 @@ class SettingsService {
 
   Future<void> setEnableKazakhStackV2(bool v) async =>
       _prefs?.setBool(_kEnableKazakhStackV2, v) ?? Future<void>.value();
+
+  // -- Growth-direction feature flag getters/setters ---------------------
+  //
+  // All return `false` by default; missing services tolerate the flag
+  // being off and degrade to legacy behaviour. Setters are tolerant of
+  // an uninitialised SharedPreferences instance (early-call safety).
+
+  /// Geomagnetic indoor trail memory (Phase 1 — Direction 6). When on,
+  /// `IndoorTrailRecorder` is allowed to capture step+heading+magnetic
+  /// signatures and `IndoorTrailReplay` may emit nav prompts.
+  bool get indoorTrailMemory =>
+      _prefs?.getBool(_kIndoorTrailMemory) ?? false;
+  Future<void> setIndoorTrailMemory(bool v) async =>
+      _prefs?.setBool(_kIndoorTrailMemory, v) ?? Future<void>.value();
+
+  /// Mesh-net buddy alerts (Phase 2 — Direction 3). When on, the BLE
+  /// peer-network plugin starts advertising/scanning. Disabled by
+  /// default until the `BleBuddyPlugin` ships and battery/permission
+  /// UX is validated.
+  bool get meshBuddyAlerts =>
+      _prefs?.getBool(_kMeshBuddyAlerts) ?? false;
+  Future<void> setMeshBuddyAlerts(bool v) async =>
+      _prefs?.setBool(_kMeshBuddyAlerts, v) ?? Future<void>.value();
+
+  /// Bazaar mode (Phase 1 — Direction 9 sub-mode). Adjusts crowd
+  /// suppression / hanging-obstacle priority via threshold tuning;
+  /// does not bundle new ML assets.
+  bool get bazaarMode =>
+      _prefs?.getBool(_kBazaarMode) ?? false;
+  Future<void> setBazaarMode(bool v) async =>
+      _prefs?.setBool(_kBazaarMode, v) ?? Future<void>.value();
+
+  /// Livestock awareness (Phase 1 — Direction 9 sub-mode). Enables
+  /// localized announcements for cow/sheep/goat/horse/chicken/stray dog
+  /// when corresponding labels enter the YOLO label set. Never
+  /// reduces vehicle/pedestrian sensitivity.
+  bool get livestockAwareness =>
+      _prefs?.getBool(_kLivestockAwareness) ?? false;
+  Future<void> setLivestockAwareness(bool v) async =>
+      _prefs?.setBool(_kLivestockAwareness, v) ?? Future<void>.value();
+
+  /// Open Smart-Cane Sensor Pod (Phase 2 — Direction 7). When on, the
+  /// app attempts to scan for a paired OSCP cane via BLE. The app
+  /// remains fully usable when the pod is absent.
+  bool get oscpPod =>
+      _prefs?.getBool(_kOscpPod) ?? false;
+  Future<void> setOscpPod(bool v) async =>
+      _prefs?.setBool(_kOscpPod, v) ?? Future<void>.value();
+
+  /// Local ASR adaptation (Phase 1 — Direction 12 foundations). When
+  /// on, `VoiceAdaptationStore` retains transcripts of successful
+  /// commands and (later) audio features for a user-controlled on-device
+  /// LoRA adapter. No data leaves the device.
+  bool get localAsrAdaptation =>
+      _prefs?.getBool(_kLocalAsrAdaptation) ?? false;
+  Future<void> setLocalAsrAdaptation(bool v) async =>
+      _prefs?.setBool(_kLocalAsrAdaptation, v) ?? Future<void>.value();
+
+  /// On-device VLM companion (Phase 4 — Direction 11). Gated by
+  /// charging + thermal + memory; never preempts hazard detection.
+  bool get vlmCompanion =>
+      _prefs?.getBool(_kVlmCompanion) ?? false;
+  Future<void> setVlmCompanion(bool v) async =>
+      _prefs?.setBool(_kVlmCompanion, v) ?? Future<void>.value();
+
+  /// FMCW chirp echolocation depth (Phase 5 — Direction 1).
+  /// Experimental; disabled when headphones / call audio / AWM / ASR
+  /// own the mic.
+  bool get sonarDepth =>
+      _prefs?.getBool(_kSonarDepth) ?? false;
+  Future<void> setSonarDepth(bool v) async =>
+      _prefs?.setBool(_kSonarDepth, v) ?? Future<void>.value();
+
+  /// Effective `ContextMode` derived from the bazaar/livestock feature
+  /// flags. Bazaar takes precedence over livestock when both are on
+  /// (bazaar tuning is louder); when neither is on the result is
+  /// [ContextMode.none].
+  ContextMode get contextMode {
+    if (bazaarMode) return ContextMode.bazaar;
+    if (livestockAwareness) return ContextMode.livestock;
+    return ContextMode.none;
+  }
 
   Future<void> resetAll() async => _prefs!.clear();
 }
