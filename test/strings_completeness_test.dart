@@ -32,6 +32,11 @@ const List<String> _newKeysFromDesignPlan = [
   'voice_layer_cancel',
   'restart_pipeline',
   'restart_pipeline_done',
+  'trail_continue_straight',
+  'trail_turn_left',
+  'trail_turn_right',
+  'trail_slight_left',
+  'trail_slight_right',
 ];
 
 const Set<String> _allowedEmpty = {

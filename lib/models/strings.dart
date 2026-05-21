@@ -455,6 +455,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Подтвердите: скажите "я в порядке".',
     'sos_fall_voice_cancel_rejected':
         'Отмена не подтверждена. Продолжаю отсчёт.',
+    'sos_fall_are_you_ok':
+        'Вы в порядке? Нажмите для подтверждения.',
     'sos_112_fallback':
         'Контакт не задан. SOS будет отправлен на экстренный номер 112.',
     'sos_position_stale': 'Местоположение устарело на',
@@ -912,6 +914,11 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'trail_deleted': 'Маршрут удалён.',
     'trail_arrived': 'Вы на месте.',
     'trail_lost': 'Маршрут потерян. Вернитесь назад.',
+    'trail_continue_straight': 'Продолжайте прямо, осталось {n} шагов.',
+    'trail_turn_left': 'Поверните налево.',
+    'trail_turn_right': 'Поверните направо.',
+    'trail_slight_left': 'Немного влево.',
+    'trail_slight_right': 'Немного вправо.',
 
     // -- Phase 1: Bazaar / Livestock (Direction 9) ------------------------
     'bazaar_mode_on': 'Режим базара включён.',
@@ -929,6 +936,41 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'voice_adapt_on': 'Адаптация голоса включена. Данные остаются на устройстве.',
     'voice_adapt_off': 'Адаптация голоса выключена.',
     'voice_adapt_samples_cleared': 'Данные адаптации удалены.',
+
+    // -- Phase 2: Mesh-Net Buddy Alerts (Direction 3) ---------------------
+    'mesh_hazard_generic': 'Другой пользователь сообщил о препятствии рядом.',
+    'mesh_hazard_pothole': 'Другой пользователь сообщил о яме рядом.',
+    'mesh_hazard_construction': 'Другой пользователь сообщил о стройке рядом.',
+    'mesh_hazard_ice': 'Другой пользователь сообщил о гололёде рядом.',
+    'mesh_hazard_stairs': 'Другой пользователь сообщил о лестнице рядом.',
+    'mesh_buddy_started': 'Сеть помощников включена.',
+    'mesh_buddy_stopped': 'Сеть помощников выключена.',
+    'mesh_buddy_no_ble': 'Bluetooth не поддерживается. Сеть помощников недоступна.',
+
+    // -- Phase 2: OSCP Smart-Cane Sensor Pod (Direction 7) -----------------
+    'oscp_near_field': 'Трость: препятствие впереди',
+    'oscp_connected': 'Трость подключена.',
+    'oscp_disconnected': 'Трость отключена.',
+    'oscp_battery_low': 'Низкий заряд трости.',
+    'oscp_no_ble': 'Bluetooth не поддерживается. Трость недоступна.',
+
+    // -- Phase 3: Near-Miss Buffer (Direction 4) --------------------------
+    'near_miss_recorded': 'Опасная ситуация записана.',
+    'near_miss_cleared': 'Записи опасных ситуаций удалены.',
+
+    // -- Phase 4: VLM Scene Companion (Direction 11) ----------------------
+    'vlm_loading': 'Загружаю модель описания сцены.',
+    'vlm_ready': 'Модель описания готова.',
+    'vlm_not_available': 'Описание сцены недоступно. Нужна зарядка и свободная память.',
+    'vlm_thinking': 'Думаю...',
+    'vlm_answer_fallback': 'Модель не ответила. Использую стандартное описание.',
+
+    // -- Phase 5: Sonar-on-Phone (Direction 1) ----------------------------
+    'sonar_near_field': 'Эхолот: объект впереди',
+    'sonar_started': 'Эхолот включён.',
+    'sonar_stopped': 'Эхолот выключен.',
+    'sonar_calibrating': 'Калибрую эхолот.',
+    'sonar_no_48k': 'Микрофон не поддерживает эхолот.',
   },
 
   AppLanguage.kk: {
@@ -1316,6 +1358,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Растаңыз: "мен жақсымын" деп айтыңыз.',
     'sos_fall_voice_cancel_rejected':
         'Болдырмау расталмады. Кері санақ жалғасуда.',
+    'sos_fall_are_you_ok':
+        'Жайсыз ба? Растау үшін басыңыз.',
     'sos_112_fallback': 'Байланыс нөмірі жоқ. SOS 112 нөміріне жіберіледі.',
     'sos_position_stale': 'Орналасу ескі, жасы',
     'sos_position_unit_min': 'минут',
@@ -1777,6 +1821,11 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'trail_deleted': 'Маршрут жойылды.',
     'trail_arrived': 'Жеттіңіз.',
     'trail_lost': 'Маршрут жоғалды. Кері қайтыңыз.',
+    'trail_continue_straight': 'Тура жүріңіз, {n} қадам қалды.',
+    'trail_turn_left': 'Солға бұрылыңыз.',
+    'trail_turn_right': 'Оңға бұрылыңыз.',
+    'trail_slight_left': 'Сәл солға.',
+    'trail_slight_right': 'Сәл оңға.',
 
     // -- Phase 1: Bazaar / Livestock (Direction 9) ------------------------
     'bazaar_mode_on': 'Базар режимі қосылды.',
@@ -1794,6 +1843,41 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'voice_adapt_on': 'Дауыс бейімдеу қосылды. Деректер құрылғыда қалады.',
     'voice_adapt_off': 'Дауыс бейімдеу өшірілді.',
     'voice_adapt_samples_cleared': 'Бейімдеу деректері жойылды.',
+
+    // -- Phase 2: Mesh-Net Buddy Alerts (Direction 3) ---------------------
+    'mesh_hazard_generic': 'Басқа пайдаланушы жақын маңда кедергі туралы хабарлады.',
+    'mesh_hazard_pothole': 'Басқа пайдаланушы жақын маңда шұңқыр туралы хабарлады.',
+    'mesh_hazard_construction': 'Басқа пайдаланушы жақын маңда құрылыс туралы хабарлады.',
+    'mesh_hazard_ice': 'Басқа пайдаланушы жақын маңда мұз туралы хабарлады.',
+    'mesh_hazard_stairs': 'Басқа пайдаланушы жақын маңда баспалдақ туралы хабарлады.',
+    'mesh_buddy_started': 'Көмекшілер желісі қосылды.',
+    'mesh_buddy_stopped': 'Көмекшілер желісі өшірілді.',
+    'mesh_buddy_no_ble': 'Bluetooth қолдау көрсетілмейді. Көмекшілер желісі қол жетімсіз.',
+
+    // -- Phase 2: OSCP Smart-Cane Sensor Pod (Direction 7) -----------------
+    'oscp_near_field': 'Таяқ: алда кедергі',
+    'oscp_connected': 'Таяқ қосылды.',
+    'oscp_disconnected': 'Таяқ ажыратылды.',
+    'oscp_battery_low': 'Таяқтың заряды төмен.',
+    'oscp_no_ble': 'Bluetooth қолдау көрсетілмейді. Таяқ қол жетімсіз.',
+
+    // -- Phase 3: Near-Miss Buffer (Direction 4) --------------------------
+    'near_miss_recorded': 'Қауіпті жағдай жазылды.',
+    'near_miss_cleared': 'Қауіпті жағдай жазбалары жойылды.',
+
+    // -- Phase 4: VLM Scene Companion (Direction 11) ----------------------
+    'vlm_loading': 'Сахна сипаттау моделін жүктеп жатырмын.',
+    'vlm_ready': 'Сахна сипаттау моделі дайын.',
+    'vlm_not_available': 'Сахна сипаттау қол жетімсіз. Зарядтау және бос жад қажет.',
+    'vlm_thinking': 'Ойланып жатырмын...',
+    'vlm_answer_fallback': 'Модель жауап бермеді. Стандартты сипаттама қолданылуда.',
+
+    // -- Phase 5: Sonar-on-Phone (Direction 1) ----------------------------
+    'sonar_near_field': 'Эхолот: алда нысан',
+    'sonar_started': 'Эхолот қосылды.',
+    'sonar_stopped': 'Эхолот өшірілді.',
+    'sonar_calibrating': 'Эхолотты калибрлеу.',
+    'sonar_no_48k': 'Микрофон эхолотты қолдамайды.',
   },
   AppLanguage.en: {
     'stop': 'Stop',
@@ -2175,6 +2259,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Confirm: say "I am fine".',
     'sos_fall_voice_cancel_rejected':
         'Cancel not confirmed. Countdown continues.',
+    'sos_fall_are_you_ok':
+        'Are you ok? Tap to confirm.',
     'sos_112_fallback':
         'No contact specified. SOS will be sent to emergency 112.',
     'sos_position_stale': 'Location is stale by',
@@ -2621,6 +2707,11 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'trail_deleted': 'Trail deleted.',
     'trail_arrived': 'You have arrived.',
     'trail_lost': 'Trail lost. Go back.',
+    'trail_continue_straight': 'Continue straight, {n} steps left.',
+    'trail_turn_left': 'Turn left.',
+    'trail_turn_right': 'Turn right.',
+    'trail_slight_left': 'Slightly left.',
+    'trail_slight_right': 'Slightly right.',
 
     // -- Phase 1: Bazaar / Livestock (Direction 9) ------------------------
     'bazaar_mode_on': 'Bazaar mode on.',
@@ -2638,6 +2729,41 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'voice_adapt_on': 'Voice adaptation enabled. Data stays on device.',
     'voice_adapt_off': 'Voice adaptation disabled.',
     'voice_adapt_samples_cleared': 'Adaptation data cleared.',
+
+    // -- Phase 2: Mesh-Net Buddy Alerts (Direction 3) ---------------------
+    'mesh_hazard_generic': 'Another user reported an obstacle nearby.',
+    'mesh_hazard_pothole': 'Another user reported a pothole nearby.',
+    'mesh_hazard_construction': 'Another user reported construction nearby.',
+    'mesh_hazard_ice': 'Another user reported ice nearby.',
+    'mesh_hazard_stairs': 'Another user reported stairs nearby.',
+    'mesh_buddy_started': 'Buddy network enabled.',
+    'mesh_buddy_stopped': 'Buddy network disabled.',
+    'mesh_buddy_no_ble': 'Bluetooth not supported. Buddy network unavailable.',
+
+    // -- Phase 2: OSCP Smart-Cane Sensor Pod (Direction 7) -----------------
+    'oscp_near_field': 'Cane: obstacle ahead',
+    'oscp_connected': 'Smart cane connected.',
+    'oscp_disconnected': 'Smart cane disconnected.',
+    'oscp_battery_low': 'Smart cane battery low.',
+    'oscp_no_ble': 'Bluetooth not supported. Smart cane unavailable.',
+
+    // -- Phase 3: Near-Miss Buffer (Direction 4) --------------------------
+    'near_miss_recorded': 'Near-miss recorded.',
+    'near_miss_cleared': 'Near-miss records cleared.',
+
+    // -- Phase 4: VLM Scene Companion (Direction 11) ----------------------
+    'vlm_loading': 'Loading scene description model.',
+    'vlm_ready': 'Scene description model ready.',
+    'vlm_not_available': 'Scene description not available. Charging and free memory required.',
+    'vlm_thinking': 'Thinking...',
+    'vlm_answer_fallback': 'Model did not respond. Using standard description.',
+
+    // -- Phase 5: Sonar-on-Phone (Direction 1) ----------------------------
+    'sonar_near_field': 'Sonar: object ahead',
+    'sonar_started': 'Sonar enabled.',
+    'sonar_stopped': 'Sonar disabled.',
+    'sonar_calibrating': 'Calibrating sonar.',
+    'sonar_no_48k': 'Microphone does not support sonar.',
   },
 };
 
