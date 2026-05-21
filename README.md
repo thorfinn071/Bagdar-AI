@@ -36,23 +36,16 @@ The app currently supports **Russian**, **Kazakh**, and **English** – covering
 | **Object detection** | YOLOv8n quantized to INT8 (~3.2 MB). Runs at 8–25 FPS depending on hardware |
 | **Depth estimation** | MiDaS v2.1 Small via NCNN FP16 (~32 MB) with Vulkan GPU acceleration: monocular depth without LiDAR or ToF sensor |
 | **Ground plane analysis** | RANSAC-based plane fitting on the depth map. Detects potholes, steps, curbs, slopes, and overhead obstacles by measuring deviations from the estimated ground surface |
-| **Multi-object tracking** | Kalman filter with Hungarian assignment and appearance embedding. Tracks identity across frames, detects approaching vehicles via bounding-box area rate and heading-based prioritization, classifies turning trajectories via 3-point curvature |
-| **Traffic light recognition** | Direct YUV colorimetry on the camera stream using three-zone brightness analysis with temporal confirmation. No separate model required |
-| **Synthetic event camera** | Heuristic pipeline using Luma-grid differencing across left/center/right sectors. Detects fast-moving objects entering the periphery before the YOLO detector picks them up. Acts as a motion pre-alert |
+| **Multi-object tracking** | Kalman filter with Hungarian assignment and appearance embedding. Tracks identity across frames, detects approaching vehicles via bounding-box area rate, and validates distance with MiDaS metric cross-checks |
+| **Traffic light recognition** | Direct YUV colorimetry on the camera stream using three-zone brightness analysis and per-color spatial fraction sanity checks to filter false positives. No separate model required |
+| **Synthetic event camera** | Heuristic pipeline using Luma-grid differencing across left/center/right sectors. Detects fast-moving objects entering the periphery with auto-exposure transition suppression to prevent lighting false-alerts |
+| **Crowd grouping** | Dynamically groups 3 or more people into a single 'group ahead' alert to prevent TTS spam and ensure critical vehicle threats remain audible |
+| **Size-sanity escalation** | Hazards are automatically promoted to critical priority if they occupy a dangerous fraction of the frame (>55-75%) or if their approach distance rapidly halves |
 | **Glass door detection** | Luma variance analysis identifies transparent surfaces that depth models misinterpret as open space |
 | **Slippery surface warning** | Luma pattern analysis for high-reflectance wet or polished floors. Centre-corridor slippery hazards auto-promote to critical when the user is walking |
 | **Frame quality guard** | Laplacian-variance blur detection + exposure analysis. Rejects frames that would produce unreliable detections |
 | **Weather gate** | Luminosity variance + average brightness classifier with hysteresis. Detects rain, fog, and glare that degrade depth-map accuracy. Adjusts pedestrian detection thresholds and disables non-critical depth features while preserving stairs-down detection |
 | **Sensor fusion engine** | Combines depth hazard scores with YOLO confidence via EMA-smoothed temporal filtering. Reduces false positives by requiring multi-frame confirmation before alerting |
-
-### 🎧 Acoustic Pipeline
-
-| Feature | Details |
-|---|---|
-| **Acoustic World Model** | Processes the microphone array stream to understand the user's acoustic environment |
-| **Ambient classification** | Classifies background noise (street, indoor, transit, quiet) to dynamically adjust alert volumes, TTS speech rates, and pipeline processing cadence |
-| **Stereo bearing estimation** | Analyzes phase differences between microphones to estimate the direction of incoming sound sources |
-| **Reverb classification** | Measures acoustic reverberation to assist the Indoor Gate in differentiating between open outdoor spaces and enclosed indoor environments |
 
 ### 🗣️ Accessible Interface
 
@@ -62,7 +55,7 @@ The app currently supports **Russian**, **Kazakh**, and **English** – covering
 | **Scene Narrator** | On-demand comprehensive scene description. Synthesizes detected objects, depth hazards, traffic lights, and OCR text into a natural language snapshot with directional filtering |
 | **Object Memory** | Voice-activated object finding. Users can command the system to "remember" an object, and later "find" it using a Y-histogram visual backend and a continuous proximity beacon for spatial guidance. The beacon accelerates its pulse rate as the user approaches the target |
 | **Audio session management** | Proper ducking of background audio, interruption handling (phone calls, other apps), automatic route recovery when audio output changes |
-| **Voice commands** | 35+ commands across 3 languages. Natural-language prefixes for navigation ("веди в аптеку", "take me to pharmacy", "дәріханаға жол көрсет"). Fall cancellation, SOS, mode switching, speech rate / volume / language control via voice |
+| **Voice commands** | 30+ commands across 3 languages. Natural-language prefixes for navigation ("веди в аптеку", "take me to pharmacy", "дәріханаға жол көрсет"). Fall cancellation, SOS, mode switching, speech rate / volume / language control via voice |
 | **Payment SMS reader** | Intercepts, parses, and reads aloud payment and balance SMS messages. Automatically extracts payment amounts, currency, and direction (incoming/outgoing) |
 | **Haptic feedback** | Configurable vibration strength (weak / normal / strong). Patterns encode spatial direction (left/right/center) and urgency level |
 | **Earcon audio cues** | Non-speech audio signals for events that don't warrant spoken alerts. Independently adjustable volume |
@@ -78,6 +71,7 @@ The app currently supports **Russian**, **Kazakh**, and **English** – covering
 |---|---|
 | **Pedestrian routing** | Offline route computation from OpenStreetMap data. No server API involved |
 | **Turn-by-turn guidance** | Voice instructions with compass-based relative direction ("turn left", "go straight"). Periodic progress updates |
+| **GPS reliability gate** | Automatically pauses turn-by-turn guidance and issues a verbal warning if GPS accuracy degrades severely or becomes stale |
 | **Off-route detection** | Automatic rerouting when GPS indicates significant deviation. Cooldown prevents alert spam in noisy GPS environments |
 | **GPS drift rejection** | Pedometer cross-validation: large GPS jumps are ignored if the step counter disagrees, which is critical for indoor/urban-canyon accuracy |
 | **Public transit** | GTFS data stored locally in SQLite. Nearest stop search, route lookup, schedule queries, stop-by-stop ride tracking, auto-boarding detection via speed sensor |
@@ -89,14 +83,14 @@ The app currently supports **Russian**, **Kazakh**, and **English** – covering
 
 | Feature | Details |
 |---|---|
-| **Fall detection** | IMU-based (accelerometer + gyroscope). Two detection classes: **Class A** (sharp tumble) — three-phase FSM: freefall → impact → stillness with gyroscope rotational confirmation; **Class B** (slow vertical collapse) — sustained above-threshold deceleration → prolonged stillness, gated on prior walking state. Phone-drop false positives suppressed via low-rotation + no-freefall heuristic. Automatic SOS countdown with voice cancellation. Second-fall-during-lockout detection queues follow-up SMS |
+| **Fall detection** | IMU-based (accelerometer + gyroscope). Two detection classes: **Class A** (sharp tumble) — three-phase FSM: freefall → impact → stillness with gyroscope rotational confirmation; **Class B** (slow vertical collapse) — sustained above-threshold deceleration → prolonged stillness, gated on prior walking state. Phone-drop and placed-down false positives suppressed via low-rotation, no-freefall, and stationary-impact heuristics. Automatic SOS countdown with voice cancellation. Second-fall-during-lockout detection queues follow-up SMS |
 | **SOS** | One-touch emergency SMS with GPS coordinates and Google Maps link. Native SMS dispatch with retry + fallback to 112. Follow-up SMS on repeated falls during SOS lockout window |
 | **Misalignment watchdog** | Detects sustained phone misalignment (too high / too low / flat) while walking with no recent detections. Distinguishes "empty scene" from "camera is blind" via depth-pipeline confidence monitoring. Verbal warning escalation (warning → critical) gated on depth-blind confirmation; tactile triple-tap haptic channel independent of speech |
 | **Indoor auto-switch** | GPS quality + motion state classifier with hysteresis. Detects transition into GPS-denied environments (elevators, malls). Adjusts detection cadence to prevent battery-saving delays when you're standing in front of elevator doors |
-| **Thermal protection** | Real-time battery temperature + thermal status monitoring. Four-tier severity system with committed dwell to prevent oscillation. Adaptive YOLO input size: swaps to 320×320 model at hot/critical thermal state for ~30–40% inference time reduction |
+| **Thermal protection** | Real-time battery temperature + thermal status monitoring. Four-tier severity system with committed dwell to prevent oscillation. Adaptive YOLO input size: swaps to 320×320 model at hot/critical thermal state for ~30–40% inference time reduction. Issues verbal 'reduced mode' TTS announcements when depth features are suspended |
 | **Orientation monitor** | Accelerometer-based device pitch and roll tracking. Feeds the misalignment watchdog and dynamically adjusts the depth-map crop-top fraction to match camera viewing angle. Excessive roll detection with enter/exit hysteresis demotes plane-geometry hazards |
 | **Field telemetry logger** | Optional on-device JSONL session recorder. Logs detections, depth hazards, TTS events, throttler decisions, fall stages, thermal transitions, weather gate changes, camera stalls, and resource snapshots. Post-processed offline via `tools/analyze_session.py` |
-| **Settings backup** | QR code export/import of all user preferences to enable caregivers to configure one device and replicate settings across others |
+| **Settings backup** | QR code export/import of all user preferences to enable caregivers to configure one device and replicate settings across others. Excludes PII (like emergency contacts). Import requires a deliberate long-press confirmation designed for motor-impaired users |
 
 ---
 
@@ -119,10 +113,6 @@ graph TB
         MOTION[Synthetic Event Camera]
         TL[Traffic Light Analyzer]
         FQG[Frame Quality Guard]
-    end
-
-    subgraph Audio["Acoustic Pipeline"]
-        AWM[Acoustic World Model]
     end
 
     subgraph Orientation
@@ -178,10 +168,6 @@ graph TB
     GPS --> INDOOR
     GPS --> SOS
     MIC --> VOICE[Voice Commands] --> NAV
-    MIC --> AWM
-    AWM --> INDOOR
-    AWM --> THROTTLE
-    AWM --> ALERT
     FUSION --> NARRATOR
     YOLO --> NARRATOR
     YOLO --> OBJ_MEM
@@ -302,7 +288,7 @@ The `PerformanceThrottler` continuously monitors inference latency, thermal stat
 
 | | Russian | Kazakh | English |
 |---|:---:|:---:|:---:|
-| Voice commands | ✅ 35+ commands | ✅ 35+ commands | ✅ 35+ commands |
+| Voice commands | ✅ 30+ commands | ✅ 30+ commands | ✅ 30+ commands |
 | TTS alerts | ✅ | ✅ | ✅ |
 | OCR | ✅ | ✅ | ✅ |
 | Navigation instructions | ✅ | ✅ | ✅ |
