@@ -25,6 +25,10 @@ enum ExternalHazardSource {
   /// VLM companion answer routed back through the alert lane so it
   /// inherits cooldowns (Phase 4 / direction 11).
   vlmCompanion,
+
+  /// Payment SMS notification routed through the alert lane so it
+  /// inherits alertFrequency / cooldown gating (Phase 1).
+  paymentSms,
 }
 
 /// Generic event payload that every non-camera hazard producer emits

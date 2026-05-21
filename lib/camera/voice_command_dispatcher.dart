@@ -286,6 +286,18 @@ class VoiceCommandDispatcher {
       case VoiceCommand.clearAdaptationData:
         _clearAdaptationData();
         break;
+      // Phase 2 — Mesh-Net Buddy Alerts
+      case VoiceCommand.toggleMeshBuddy:
+        _toggleMeshBuddy();
+        break;
+      // Phase 3 — Near-Miss Buffer
+      case VoiceCommand.recordNearMiss:
+        _recordNearMiss();
+        break;
+      // Phase 5 — Sonar-on-Phone
+      case VoiceCommand.toggleSonar:
+        _toggleSonar();
+        break;
     }
   }
 
@@ -716,5 +728,46 @@ class VoiceCommandDispatcher {
       SpeechPriority.info,
       pan: 0.0,
     );
+  }
+
+  // -- Phase 2 — Mesh-Net Buddy Alerts ----------------------------------
+
+  void _toggleMeshBuddy() {
+    final current = Settings.instance.meshBuddyAlerts;
+    unawaited(Settings.instance.setMeshBuddyAlerts(!current));
+    if (!current) {
+      unawaited(vm.meshBuddy.start());
+      vm.tts.say(S.alert('mesh_buddy_started'), SpeechPriority.info, pan: 0.0);
+    } else {
+      unawaited(vm.meshBuddy.stop());
+      vm.tts.say(S.alert('mesh_buddy_stopped'), SpeechPriority.info, pan: 0.0);
+    }
+    vm.earcon.play(Earcon.success);
+  }
+
+  // -- Phase 3 — Near-Miss Buffer ---------------------------------------
+
+  void _recordNearMiss() {
+    unawaited(vm.nearMissBuffer.record(
+      triggerSource: 'voice',
+      labels: const [],
+    ));
+    vm.tts.say(S.alert('near_miss_recorded'), SpeechPriority.info, pan: 0.0);
+    vm.earcon.play(Earcon.success);
+  }
+
+  // -- Phase 5 — Sonar-on-Phone -----------------------------------------
+
+  void _toggleSonar() {
+    final current = Settings.instance.sonarDepth;
+    unawaited(Settings.instance.setSonarDepth(!current));
+    if (!current) {
+      unawaited(vm.sonar.start());
+      vm.tts.say(S.alert('sonar_started'), SpeechPriority.info, pan: 0.0);
+    } else {
+      unawaited(vm.sonar.stop());
+      vm.tts.say(S.alert('sonar_stopped'), SpeechPriority.info, pan: 0.0);
+    }
+    vm.earcon.play(Earcon.success);
   }
 }

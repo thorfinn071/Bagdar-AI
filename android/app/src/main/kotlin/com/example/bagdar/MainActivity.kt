@@ -40,6 +40,10 @@ class MainActivity : FlutterActivity() {
     private var hardwareDepthEventSink: EventChannel.EventSink? = null
 
     private var audioCapturePlugin: AudioCapturePlugin? = null
+    private var sonarPlugin: SonarPlugin? = null
+    private var bleBuddyPlugin: BleBuddyPlugin? = null
+    private var oscpPlugin: OscpPlugin? = null
+    private var onDeviceModelPlugin: OnDeviceModelPlugin? = null
 
     private var incomingSmsSink: EventChannel.EventSink? = null
     private var incomingSmsReceiver: BroadcastReceiver? = null
@@ -84,6 +88,13 @@ class MainActivity : FlutterActivity() {
         } catch (_: Exception) {
         }
         audioCapturePlugin = null
+        try { sonarPlugin?.dispose() } catch (_: Exception) {}
+        sonarPlugin = null
+        try { bleBuddyPlugin?.dispose() } catch (_: Exception) {}
+        bleBuddyPlugin = null
+        try { oscpPlugin?.dispose() } catch (_: Exception) {}
+        oscpPlugin = null
+        onDeviceModelPlugin = null
     }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
@@ -134,6 +145,51 @@ class MainActivity : FlutterActivity() {
             )
             plugin.setupChannels(method, event)
             audioCapturePlugin = plugin
+        }
+
+        // Phase 2 — BLE mesh-net buddy alerts (Direction 3).
+        run {
+            val plugin = BleBuddyPlugin(applicationContext)
+            val channel = MethodChannel(
+                flutterEngine.dartExecutor.binaryMessenger,
+                "bagdar/ble_buddy",
+            )
+            plugin.register(channel)
+            bleBuddyPlugin = plugin
+        }
+
+        // Phase 2 — Open Smart-Cane Sensor Pod GATT bridge (Direction 7).
+        run {
+            val plugin = OscpPlugin(applicationContext)
+            val channel = MethodChannel(
+                flutterEngine.dartExecutor.binaryMessenger,
+                "bagdar/oscp_pod",
+            )
+            plugin.register(channel)
+            oscpPlugin = plugin
+        }
+
+        // Phase 5 — FMCW sonar chirp echolocation (Direction 1).
+        run {
+            val plugin = SonarPlugin(applicationContext)
+            val channel = MethodChannel(
+                flutterEngine.dartExecutor.binaryMessenger,
+                "bagdar/sonar",
+            )
+            plugin.register(channel)
+            sonarPlugin = plugin
+        }
+
+        // Phase 4 — On-device VLM companion stub (Direction 11).
+        // Returns false for loadVlmModel until a model pack is installed.
+        run {
+            val plugin = OnDeviceModelPlugin(applicationContext)
+            val channel = MethodChannel(
+                flutterEngine.dartExecutor.binaryMessenger,
+                "bagdar/vlm_engine",
+            )
+            plugin.register(channel)
+            onDeviceModelPlugin = plugin
         }
 
         MethodChannel(

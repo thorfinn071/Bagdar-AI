@@ -291,9 +291,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       },
       onSosSent: () => _vm.fallDetector.notifyFallSosSent(),
       winterModeProvider: () => _vm.winterMode.active,
-      
-      
-      
+      motionStateProvider: () => _vm.fallDetector.motionState,
       deliberateTapThresholdProvider: () =>
           Settings.instance.tapSensitivity.accelThresholdMps2,
     );

@@ -48,6 +48,13 @@ import '../services/winter_mode_service.dart';
 import '../services/indoor_trail_recorder.dart';
 import '../services/indoor_trail_replay.dart';
 import '../services/bazaar_livestock_service.dart';
+import '../services/mesh_buddy_alert_service.dart';
+import '../services/oscp_service.dart';
+import '../services/near_miss_buffer.dart';
+import '../services/charging_job_scheduler.dart';
+import '../services/model_pack_manager.dart';
+import '../services/scene_question_service.dart';
+import '../services/sonar_service.dart';
 
 class CameraViewModel extends ChangeNotifier {
   final Tracker tracker = Tracker();
@@ -96,6 +103,21 @@ class CameraViewModel extends ChangeNotifier {
   late final IndoorTrailRecorder trailRecorder;
   late final IndoorTrailReplay trailReplay;
   final BazaarLivestockService bazaarLivestock = BazaarLivestockService.instance;
+
+  // Phase 2 — Direction 3: BLE mesh-net buddy alerts
+  final MeshBuddyAlertService meshBuddy = MeshBuddyAlertService.instance;
+  // Phase 2 — Direction 7: Open Smart-Cane Sensor Pod
+  final OscpService oscp = OscpService.instance;
+  // Phase 3 — Direction 4: Near-miss buffer
+  final NearMissBuffer nearMissBuffer = NearMissBuffer.instance;
+  // Phase 3 — Direction 4: Charging-gated training scheduler
+  final ChargingJobScheduler chargingJobs = ChargingJobScheduler.instance;
+  // Phase 3 — Direction 9: Regional model pack manager
+  final ModelPackManager modelPacks = ModelPackManager.instance;
+  // Phase 4 — Direction 11: On-device VLM scene companion
+  final SceneQuestionService vlmCompanion = SceneQuestionService.instance;
+  // Phase 5 — Direction 1: FMCW chirp echolocation prototype
+  final SonarService sonar = SonarService.instance;
 
   AppMode mode = AppMode.street;
   String statusLine = 'Запуск Bagdar...';
@@ -157,10 +179,12 @@ class CameraViewModel extends ChangeNotifier {
     // the existing throttler / model-service thermal listeners.
     winterMode.loadFromSettings();
     thermal.setWinterMode(winterMode.active);
-    winterMode.addListener(() {
-      thermal.setWinterMode(winterMode.active);
-      notifyListeners();
-    });
+    winterMode.addListener(_onWinterModeChanged);
+  }
+
+  void _onWinterModeChanged() {
+    thermal.setWinterMode(winterMode.active);
+    notifyListeners();
   }
 
   Future<void> togglePaymentSms() async {
@@ -322,6 +346,38 @@ class CameraViewModel extends ChangeNotifier {
     bazaarLivestock.onHazard = (event) {
       alertMgr.handleExternalHazard(event);
     };
+
+    // Phase 2 — Mesh buddy alerts: route peer hazards through AlertManager.
+    meshBuddy.onHazard = (event) {
+      alertMgr.handleExternalHazard(event);
+    };
+
+    // Phase 2 — OSCP smart-cane: route range hazards through AlertManager.
+    oscp.onHazard = (event) {
+      alertMgr.handleExternalHazard(event);
+    };
+
+    // Phase 4 — VLM companion: route answers through AlertManager.
+    vlmCompanion.onAnswer = (event) {
+      alertMgr.handleExternalHazard(event);
+    };
+
+    // Phase 5 — Sonar: route range hazards through AlertManager.
+    sonar.onHazard = (event) {
+      alertMgr.handleExternalHazard(event);
+    };
+
+    // Payment SMS: route alert through AlertManager.
+    paymentSms.onHazard = (event) {
+      alertMgr.handleExternalHazard(event);
+    };
+
+    // Direction 4: wire ChargingJobScheduler gate providers.
+    chargingJobs.isChargingProvider = () => battery.isCharging;
+    chargingJobs.isWifiProvider = () => battery.isWifi;
+    chargingJobs.batteryPctProvider = () => battery.batteryPct;
+    chargingJobs.thermalProvider = () => thermal.severity;
+    chargingJobs.memoryProvider = () => memory.level;
 
     applyA11yPrefs();
 
@@ -548,6 +604,15 @@ class CameraViewModel extends ChangeNotifier {
 
   @override
   void dispose() {
+    winterMode.removeListener(_onWinterModeChanged);
+    winterMode.dispose();
+    bazaarLivestock.onHazard = null;
+    meshBuddy.onHazard = null;
+    oscp.onHazard = null;
+    vlmCompanion.onAnswer = null;
+    sonar.onHazard = null;
+    trailReplay.onHazard = null;
+    paymentSms.onHazard = null;
     tts.dispose();
     earcon.dispose();
     battery.dispose();
@@ -567,6 +632,12 @@ class CameraViewModel extends ChangeNotifier {
     awm.dispose();
     trailRecorder.dispose();
     trailReplay.dispose();
+    meshBuddy.dispose();
+    oscp.dispose();
+    chargingJobs.dispose();
+    vlmCompanion.dispose();
+    sonar.dispose();
+    modelPacks.dispose();
     tracksNotifier.dispose();
     super.dispose();
   }

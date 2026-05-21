@@ -83,6 +83,12 @@ enum VoiceCommand {
   // Phase 1 — Voice adaptation (Direction 12)
   toggleVoiceAdaptation,
   clearAdaptationData,
+  // Phase 2 — Mesh-Net Buddy Alerts (Direction 3)
+  toggleMeshBuddy,
+  // Phase 3 — Near-Miss Buffer (Direction 4)
+  recordNearMiss,
+  // Phase 5 — Sonar-on-Phone (Direction 1)
+  toggleSonar,
   unknown,
 }
 
@@ -238,6 +244,18 @@ class VoiceCommandService {
     'выключи адаптацию': VoiceCommand.toggleVoiceAdaptation,
     'удалить данные адаптации': VoiceCommand.clearAdaptationData,
     'очистить адаптацию': VoiceCommand.clearAdaptationData,
+    // Phase 2 — Mesh-Net Buddy Alerts
+    'сеть помощников': VoiceCommand.toggleMeshBuddy,
+    'режим помощников': VoiceCommand.toggleMeshBuddy,
+    'меш сеть': VoiceCommand.toggleMeshBuddy,
+    // Phase 3 — Near-Miss Buffer
+    'опасная ситуация': VoiceCommand.recordNearMiss,
+    'записать опасность': VoiceCommand.recordNearMiss,
+    'было опасно': VoiceCommand.recordNearMiss,
+    // Phase 5 — Sonar-on-Phone
+    'эхолот': VoiceCommand.toggleSonar,
+    'режим эхолота': VoiceCommand.toggleSonar,
+    'сонар': VoiceCommand.toggleSonar,
   };
 
   static const Set<String> _ruSosExact = {
@@ -488,6 +506,16 @@ class VoiceCommandService {
     // Phase 1 — Voice adaptation
     'дауыс бейімдеу': VoiceCommand.toggleVoiceAdaptation,
     'бейімдеу деректерін жою': VoiceCommand.clearAdaptationData,
+    // Phase 2 — Mesh-Net Buddy Alerts
+    'көмекшілер желісі': VoiceCommand.toggleMeshBuddy,
+    'көмекшілер режимі': VoiceCommand.toggleMeshBuddy,
+    // Phase 3 — Near-Miss Buffer
+    'қауіпті жағдай': VoiceCommand.recordNearMiss,
+    'қауіпті жаз': VoiceCommand.recordNearMiss,
+    // Phase 5 — Sonar-on-Phone
+    'эхолот': VoiceCommand.toggleSonar,
+    'эхолот режимі': VoiceCommand.toggleSonar,
+    'сонар': VoiceCommand.toggleSonar,
   };
 
   static const Set<String> _kkSosExact = {
@@ -701,6 +729,19 @@ class VoiceCommandService {
     'toggle adaptation': VoiceCommand.toggleVoiceAdaptation,
     'clear adaptation data': VoiceCommand.clearAdaptationData,
     'delete adaptation data': VoiceCommand.clearAdaptationData,
+    // Phase 2 — Mesh-Net Buddy Alerts
+    'buddy network': VoiceCommand.toggleMeshBuddy,
+    'mesh network': VoiceCommand.toggleMeshBuddy,
+    'toggle buddy': VoiceCommand.toggleMeshBuddy,
+    // Phase 3 — Near-Miss Buffer
+    'near miss': VoiceCommand.recordNearMiss,
+    'record hazard': VoiceCommand.recordNearMiss,
+    'record near miss': VoiceCommand.recordNearMiss,
+    'it was dangerous': VoiceCommand.recordNearMiss,
+    // Phase 5 — Sonar-on-Phone
+    'sonar': VoiceCommand.toggleSonar,
+    'sonar mode': VoiceCommand.toggleSonar,
+    'echolocation': VoiceCommand.toggleSonar,
   };
 
   static const Set<String> _enSosExact = {

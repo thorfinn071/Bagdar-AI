@@ -502,3 +502,27 @@ const double kAwmTransientThresholdMultiplier = 3.0;
 
 const double kNavGpsAccuracyMaxM = 25.0;
 const int kNavGpsMaxAgeSec = 30;
+
+// --- Sonar (Direction 1) ---
+const double kSonarMinConfidence = 0.4;
+const Duration kSonarHazardCooldown = Duration(seconds: 4);
+const double kSonarMaxRangeM = 3.0;
+const double kSonarMinChirpHz = 18000;
+
+// --- OSCP Smart-Cane (Direction 7) ---
+const double kOscpNearFieldThresholdM = 1.2;
+const double kOscpSweepGyroThreshold = 2.5;
+const Duration kOscpNearFieldCooldown = Duration(seconds: 3);
+const double kOscpRangeEmaAlpha = 0.35;
+
+// --- Mesh-Net Buddy Alerts (Direction 3) ---
+const int kMeshMaxPayloadAgeMs = 120000;
+const int kMeshMaxAgeTtlMs = 300000;
+const Duration kMeshBuddyCooldown = Duration(seconds: 30);
+const double kMeshRelevanceRadiusM = 50.0;
+
+// --- Near-Miss Buffer (Direction 4) ---
+const int kNearMissMaxRecords = 100;
+
+// --- Indoor Trail Replay (Direction 6) ---
+const int kIndoorTrailParticleCount = 200;
