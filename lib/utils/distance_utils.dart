@@ -255,11 +255,11 @@ double threatScore(String label, String pos, String dist, double areaRatio) {
 
   final String hint;
   if (bestI < midI) {
-    hint = bestI == 0 ? S.get('nav_left') : S.get('nav_slight_left');
+    hint = bestI == 0 ? S.alert('nav_left') : S.alert('nav_slight_left');
   } else {
     hint = bestI == kZoneCount - 1
-        ? S.get('nav_right')
-        : S.get('nav_slight_right');
+        ? S.alert('nav_right')
+        : S.alert('nav_slight_right');
   }
   return (hint, centTh, bestTh);
 }

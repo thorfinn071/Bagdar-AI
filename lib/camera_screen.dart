@@ -42,6 +42,7 @@ import 'utils/blur_detector.dart';
 import 'utils/depth_hazard.dart';
 import 'utils/distance_utils.dart';
 import 'services/fall_detector.dart' show MotionState;
+import 'models/tts_engine.dart' show KkTtsEngine;
 import 'services/feature_usage_tracker.dart';
 import 'services/field_logger.dart';
 import 'services/indoor_gate.dart';
@@ -268,7 +269,11 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         
         
         
-        if (now.difference(_lastStallWarnTtsAt) < _kStallTtsCooldown) {
+        final stallCooldown =
+            (_vm.mode == AppMode.street || _vm.mode == AppMode.cane)
+                ? const Duration(seconds: 15)
+                : _kStallTtsCooldown;
+        if (now.difference(_lastStallWarnTtsAt) < stallCooldown) {
           return;
         }
         _vm.alertMgr.markCameraStall(now);
@@ -299,6 +304,16 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       vm: _vm,
       fallCountdown: _fallCountdown,
       onReadTextRequested: () {
+        if (!_isCameraReady) {
+          _vm.tts.say(
+            S.get('ocr_camera_not_ready'),
+            SpeechPriority.warning,
+            pan: 0.0,
+          );
+          _vm.earcon.play(Earcon.fail);
+          HapticService.vibrate(const [0, 100, 50, 100]);
+          return;
+        }
         _wantOcr = true;
         _ocrStartedAt = DateTime.now();
         _vm.tts.say(S.get('ocr_reading'), SpeechPriority.info, pan: 0.0);
@@ -699,6 +714,21 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         );
       };
       await _vm.fallDetector.init();
+      if (!_vm.fallDetector.isReady) {
+        _vm.tts.say(
+          S.get('fall_detector_unavailable'),
+          SpeechPriority.warning,
+          pan: 0.0,
+        );
+      }
+
+      _vm.tts.onKazakhVoiceMissing = () {
+        _vm.tts.say(
+          S.get('tts_fallback_ru'),
+          SpeechPriority.warning,
+          pan: 0.0,
+        );
+      };
 
       _vm.tts.onAudioRouteInterrupted = () {
         final elapsed = DateTime.now().difference(_initCompletedAt);
@@ -781,6 +811,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       }
       if (!_vm.tts.languageAvailable || _vm.tts.usingEnglishFallback) {
         _vm.tts.say(S.get('tts_fallback_en'), SpeechPriority.warning, pan: 0.0);
+      } else if (_vm.tts.activeKkEngine == KkTtsEngine.russianFallback) {
+        _vm.tts.say(S.get('tts_fallback_ru'), SpeechPriority.warning, pan: 0.0);
       }
 
       _vm.setStatus(S.get('system_ready'));
@@ -1124,6 +1156,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       switch (e.type) {
         case FrameQualityEventType.aeTransitionStarted:
           _fieldLog.logAeTransition(started: true);
+          if (_qualityCooldownOk(e.type, now)) {
+            _vm.earcon.play(Earcon.cameraBlocked);
+          }
           break;
         case FrameQualityEventType.aeTransitionEnded:
           _fieldLog.logAeTransition(started: false, frames: e.frames);
@@ -1190,6 +1225,16 @@ class _AiCameraScreenState extends State<AiCameraScreen>
             );
           }
           break;
+        case FrameQualityEventType.lensSmearDetected:
+          _fieldLog.logCameraQuality('lens_smear');
+          if (_qualityCooldownOk(e.type, now)) {
+            _vm.tts.say(
+              S.alert('camera_smear'),
+              SpeechPriority.warning,
+              pan: 0.0,
+            );
+          }
+          break;
         case FrameQualityEventType.cameraFrozen:
           _fieldLog.logFrozenFrame();
           if (_qualityCooldownOk(e.type, now)) {
@@ -1228,13 +1273,40 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           success: false,
           error: 'no_cameras',
         );
+        _vm.tts.say(
+          S.get('camera_not_found'),
+          SpeechPriority.critical,
+          barge: true,
+          pan: 0.0,
+        );
+        HapticService.vibrate(kHapticTtsStallPattern);
         return;
       }
 
-      final back = cameras.firstWhere(
-        (c) => c.lensDirection == CameraLensDirection.back,
-        orElse: () => cameras.first,
-      );
+      final backCameras = cameras
+          .where(
+            (c) =>
+                c.lensDirection == CameraLensDirection.back ||
+                c.lensDirection == CameraLensDirection.external,
+          )
+          .toList();
+      if (backCameras.isEmpty) {
+        initSw.stop();
+        _fieldLog.logCameraInit(
+          initMs: initSw.elapsedMilliseconds,
+          success: false,
+          error: 'no_back_camera',
+        );
+        _vm.tts.say(
+          S.get('camera_not_found'),
+          SpeechPriority.critical,
+          barge: true,
+          pan: 0.0,
+        );
+        HapticService.vibrate(kHapticTtsStallPattern);
+        return;
+      }
+      final back = backCameras.first;
 
       
       final ctrl = CameraController(
@@ -1335,6 +1407,18 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _vm.tracker.weatherDegraded = qualityReport.weatherDegraded;
 
     if (qualityReport.aePipelineFrozen) {
+      if (_vm.mode == AppMode.street || _vm.mode == AppMode.cane) {
+        final aeMotionEvent = _vm.motionPreAlert.feed(
+          image,
+          now,
+          weatherDegraded: _vm.weatherGate.degraded,
+          aeTransitioning: true,
+          indoor: _vm.isIndoor,
+        );
+        if (aeMotionEvent != null) {
+          _handleMotionIntrusion(aeMotionEvent);
+        }
+      }
       _finalizeFramePerf(now: now, frameSw: frameSw);
       return;
     }
@@ -1396,7 +1480,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         image,
         now,
         weatherDegraded: _vm.weatherGate.degraded,
-        aeTransitioning: qualityReport.aePipelineFrozen,
+        aeTransitioning: false,
         indoor: _vm.isIndoor,
       );
       if (event != null) {
@@ -1417,7 +1501,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     final shouldRunDetect =
         now.difference(_lastDetectAt) >= currentDetectInterval;
 
-    if (!shouldRunDetect || _isDetecting) {
+    if (!shouldRunDetect || _isDetecting || !_models.yoloLoaded) {
       final predictedTracks = _vm.tracker.predict();
       if (predictedTracks.isNotEmpty) {
         final uiNow = DateTime.now();
@@ -2100,6 +2184,16 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           },
           onReplayTutorial: _openGestureTutorial,
           onReadText: () {
+            if (!_isCameraReady) {
+              _vm.tts.say(
+                S.get('ocr_camera_not_ready'),
+                SpeechPriority.warning,
+                pan: 0.0,
+              );
+              _vm.earcon.play(Earcon.fail);
+              HapticService.vibrate(const [0, 100, 50, 100]);
+              return;
+            }
             _wantOcr = true;
             _ocrStartedAt = DateTime.now();
             _vm.tts.say(S.get('ocr_reading'), SpeechPriority.info, pan: 0.0);
@@ -2115,12 +2209,12 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           onScanRight: () =>
               _vm.tts.say(S.get('scan_right'), SpeechPriority.info, pan: 1.0),
           onVoiceWarningTest: () => _vm.tts.say(
-            'Тест: внимание слева',
+            S.get('test_alert_warning'),
             SpeechPriority.warning,
             pan: -1.0,
           ),
           onVoiceCriticalTest: () => _vm.tts.say(
-            'Тест: критично по центру',
+            S.get('test_alert_critical'),
             SpeechPriority.critical,
             pan: 0.0,
           ),

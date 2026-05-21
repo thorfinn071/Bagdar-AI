@@ -367,7 +367,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'obj_find_lost': '{name} не вижу.',
     'obj_find_found': '{name} перед вами.',
     'obj_find_stopped': 'Поиск остановлен.',
-    'obj_forget_done': '{name} забыто.',
+    'obj_find_searching': 'Ищу {name}...',
+    'obj_forget_done': '{name} забыто',
     'obj_forget_unknown': 'Не помню {name}.',
     'obj_unknown_target': 'Не помню такой предмет. Скажите запомни {name}.',
     'obj_busy_remembering': 'Сейчас запоминаю, подождите.',
@@ -398,8 +399,14 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'audio_resumed': 'Звук восстановлен.',
     'tts_fallback_en':
         'Voice pack for your language is missing. Using English fallback.',
+    'tts_fallback_ru':
+        'Казахский голос недоступен. Используется русский язык.',
+    'fall_detector_unavailable':
+        'Датчик падения недоступен. Автоматический SOS отключён.',
+    'test_alert_warning': 'Тест: внимание слева',
+    'test_alert_critical': 'Тест: критично по центру',
     'lifecycle_background':
-        'Приложение свёрнуто. Верните его на экран, иначе сканирование не работает.',
+        'Приложение свёрнуто. Верните его на экран, иначе сканирование не работает',
     'lifecycle_resumed': 'Приложение восстановлено.',
 
     'night_mode_on': 'Ночной режим включён.',
@@ -419,8 +426,9 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'camera_reinit': 'Камера перезапускается. Подождите.',
     'camera_droplet':
         'Возможно, капля на объективе. Протрите.',
+    'camera_smear': 'Объектив загрязнён. Протрите.',
 
-    'waypoint_saved': 'Место сохранено.',
+    'waypoint_saved': 'Место сохранено',
     'waypoint_near': 'Вы рядом с',
     'waypoint_name_prompt': 'Название места',
     'waypoint_none': 'Нет сохранённых мест.',
@@ -1276,7 +1284,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'obj_find_lost': '{name} көрінбейді.',
     'obj_find_found': '{name} алдыңызда.',
     'obj_find_stopped': 'Іздеу тоқтатылды.',
-    'obj_forget_done': '{name} ұмытылды.',
+    'obj_find_searching': '{name} іздеу жалғасуда...',
+    'obj_forget_done': '{name} ұмытылды',
     'obj_forget_unknown': '{name} есімде жоқ.',
     'obj_unknown_target': 'Мұндай зат есімде жоқ. {name} есте сақта деп айтыңыз.',
     'obj_busy_remembering': 'Қазір есте сақтап жатырмын, күтіңіз.',
@@ -1307,8 +1316,10 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'audio_resumed': 'Дыбыс қалпына келді.',
     'tts_fallback_en':
         'Voice pack for your language is missing. Using English fallback.',
+    'test_alert_warning': 'Тест: назар аударыңыз, солда',
+    'test_alert_critical': 'Тест: критикалық, алда',
     'lifecycle_background':
-        'Қосымша жиналды. Сканерлеу жұмыс істемейді, экранға қайтарыңыз.',
+        'Қосымша жиналды. Сканерлеу жұмыс істемейді, экранға қайтарыңыз',
     'lifecycle_resumed': 'Қосымша қалпына келтірілді.',
 
     'night_mode_on': 'Түнгі режим қосылды.',
@@ -1328,8 +1339,9 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'camera_reinit': 'Камера қайта қосылуда. Күтіңіз.',
     'camera_droplet':
         'Линзада тамшы болуы мүмкін. Сүртіңіз.',
+    'camera_smear': 'Линза ластанған. Сүртіңіз.',
 
-    'waypoint_saved': 'Орын сақталды.',
+    'waypoint_saved': 'Орын сақталды',
     'waypoint_near': 'Сіз жақынсыз',
     'waypoint_name_prompt': 'Орын атауы',
     'waypoint_none': 'Сақталған орындар жоқ.',
@@ -2177,6 +2189,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'obj_find_lost': "I don't see {name}.",
     'obj_find_found': '{name} in front of you.',
     'obj_find_stopped': 'Search stopped.',
+    'obj_find_searching': 'Still searching for {name}...',
     'obj_forget_done': '{name} forgotten.',
     'obj_forget_unknown': "I don't remember {name}.",
     'obj_unknown_target': "I don't remember such object. Say remember {name}.",
@@ -2205,8 +2218,12 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'audio_resumed': 'Audio resumed.',
     'tts_fallback_en':
         'Voice pack for your language is missing. Using English fallback.',
+    'fall_detector_unavailable':
+        'Fall detector unavailable. Automatic SOS disabled.',
+    'test_alert_warning': 'Test: warning left',
+    'test_alert_critical': 'Test: critical center',
     'lifecycle_background':
-        'App hidden. Bring it to foreground, otherwise scanning stops.',
+        'App hidden. Bring it to foreground, otherwise scanning stops',
     'lifecycle_resumed': 'App resumed.',
 
     'night_mode_on': 'Night mode on.',
@@ -2224,8 +2241,9 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'group_ahead': 'Group ahead: ',
     'camera_reinit': 'Camera restarting. Please wait.',
     'camera_droplet': 'Possible droplet on lens. Wipe clean.',
+    'camera_smear': 'Lens smeared. Wipe clean.',
 
-    'waypoint_saved': 'Location saved.',
+    'waypoint_saved': 'Location saved',
     'waypoint_near': 'You are near',
     'waypoint_name_prompt': 'Location title',
     'waypoint_none': 'No saved locations.',

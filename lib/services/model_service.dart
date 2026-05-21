@@ -160,6 +160,7 @@ class ModelService {
       return;
     }
     _yoloReloadBusy = true;
+    _yoloLoaded = false;
     try {
       await _loadYoloAtTier(
         tier: desired,

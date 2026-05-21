@@ -191,7 +191,7 @@ class TtsService {
             contentType: AndroidAudioContentType.speech,
           ),
           androidAudioFocusGainType:
-              AndroidAudioFocusGainType.gainTransientMayDuck,
+              AndroidAudioFocusGainType.gainTransient,
           androidWillPauseWhenDucked: true,
         ),
       );
@@ -740,9 +740,6 @@ class TtsService {
           'incoming_priority': priority.name,
         });
       } else {
-        
-        
-        
         FieldLogger.instance.log('tts_queue_drop', {
           'reason': 'queue_full_drop_incoming',
           'evicted_text': text,

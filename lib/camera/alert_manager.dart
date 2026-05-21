@@ -155,7 +155,7 @@ class AlertManager {
   DateTime _lastClearAnnounceAt = DateTime.fromMillisecondsSinceEpoch(0);
   static const Duration _kPostStallClearGuard = Duration(seconds: 6);
   static const Duration _kClearAnnounceMinInterval = Duration(seconds: 12);
-  static const Duration _kClearAnnounceRepeatInterval = Duration(seconds: 90);
+  static const Duration _kClearAnnounceRepeatInterval = Duration(seconds: 45);
 
   String _pendingHint = '';
   int _pendingHintFrames = 0;
@@ -1262,7 +1262,16 @@ class AlertManager {
               : '$dir.';
         }
         top.lastSpoken = now;
-        _tts.say(ttsText, SpeechPriority.info, pan: pan, trackId: top.id);
+        final canePriority = effectiveDist == 'very close'
+            ? SpeechPriority.critical
+            : (top.approaching ? SpeechPriority.warning : SpeechPriority.info);
+        _tts.say(
+          ttsText,
+          canePriority,
+          pan: pan,
+          barge: effectiveDist == 'very close',
+          trackId: top.id,
+        );
       } else {
         top.lastSpoken = now;
       }

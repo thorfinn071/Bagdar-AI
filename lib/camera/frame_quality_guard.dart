@@ -11,6 +11,7 @@ enum FrameQualityEventType {
   cameraPartiallyBlocked,
   cameraFrozen,
   dropletDetected,
+  lensSmearDetected,
 }
 
 class FrameQualityEvent {
@@ -66,6 +67,9 @@ class FrameQualityEvent {
           type: FrameQualityEventType.dropletDetected,
           dirtyRegions: dirtyRegions,
         );
+
+  const FrameQualityEvent.lensSmear()
+      : this._(type: FrameQualityEventType.lensSmearDetected);
 }
 
 class FrameQualityReport {
@@ -93,12 +97,13 @@ class FrameQualityGuard {
   static const double kAeAvgDarkThreshold = 15.0;
   static const int kAeTransitionMinFrames = 2;
   static const int kAeTransitionMaxFrames = 30;
-  static const Duration kAePostTransitionGuard = Duration(milliseconds: 3000);
+  static const Duration kAePostTransitionGuard = Duration(milliseconds: 1500);
 
   static const int kDropletGridSize = 3;
   static const int kDropletGridCount = kDropletGridSize * kDropletGridSize;
   static const double kDropletMinVariance = 50.0;
-  static const int kDropletMinStreak = 60;
+  static const int kDropletMinStreak = 30;
+  static const int kSmearMinStreak = 45;
 
   
   
@@ -146,6 +151,7 @@ class FrameQualityGuard {
       List<int>.filled(kDropletGridCount, 0);
   bool _dropletSuspected = false;
   bool _dropletWarned = false;
+  bool _smearWarned = false;
 
   int? _lastImageHash;
   late DateTime _lastImageChangeAt;
@@ -378,6 +384,15 @@ class FrameQualityGuard {
       events.add(FrameQualityEvent.droplet(dirtyRegions));
     } else if (!_dropletSuspected && _dropletWarned) {
       _dropletWarned = false;
+    }
+
+    final allLowVar = _dropletLowVarStreak
+        .every((s) => s >= kSmearMinStreak);
+    if (allLowVar && !_smearWarned) {
+      _smearWarned = true;
+      events.add(const FrameQualityEvent.lensSmear());
+    } else if (!allLowVar && _smearWarned) {
+      _smearWarned = false;
     }
 
     int hash = 0;

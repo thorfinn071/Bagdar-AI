@@ -52,6 +52,7 @@ class ObjectFinderSession {
   DateTime _lastSeenAt = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _lastLostAt = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _lastFeedAt = DateTime.fromMillisecondsSinceEpoch(0);
+  DateTime _lastHeartbeatAt = DateTime.fromMillisecondsSinceEpoch(0);
   int _steadyCloseFrames = 0;
 
   List<Track> _lastTracks = const [];
@@ -91,6 +92,7 @@ class ObjectFinderSession {
     _lastHapticAt = DateTime.fromMillisecondsSinceEpoch(0);
     _lastSeenAt = now;
     _lastLostAt = DateTime.fromMillisecondsSinceEpoch(0);
+    _lastHeartbeatAt = now;
     _steadyCloseFrames = 0;
     if (!wasActive) {
       tts.say(
@@ -271,6 +273,18 @@ class ObjectFinderSession {
     final name = _targetName ?? '';
     tts.say(
       S.get('obj_find_lost').replaceAll('{name}', name),
+      SpeechPriority.info,
+      pan: 0.0,
+    );
+    _checkHeartbeat(now);
+  }
+
+  void _checkHeartbeat(DateTime now) {
+    if (now.difference(_lastHeartbeatAt) < kObjectFinderHeartbeatInterval) return;
+    _lastHeartbeatAt = now;
+    final name = _targetName ?? '';
+    tts.say(
+      S.get('obj_find_searching').replaceAll('{name}', name),
       SpeechPriority.info,
       pan: 0.0,
     );

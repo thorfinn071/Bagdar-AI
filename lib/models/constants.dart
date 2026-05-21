@@ -326,7 +326,7 @@ const Duration kSosRetryDelay = Duration(seconds: 2);
 
 
 
-const Duration kSosCachedPositionMaxAge = Duration(minutes: 5);
+const Duration kSosCachedPositionMaxAge = Duration(minutes: 2);
 
 const double kVoiceSpeechRateStep = 0.15;
 const double kVoiceVolumeStep = 0.1;
@@ -449,6 +449,7 @@ const double kObjectFinderFoundDistM = 0.6;
 const int kObjectFinderFoundSteadyFrames = 5;
 const double kObjectFinderCenterCropRatio = 0.4;
 const Duration kObjectFinderFeedThrottle = Duration(milliseconds: 200);
+const Duration kObjectFinderHeartbeatInterval = Duration(seconds: 20);
 
 const int kEventGridW = 80;
 const int kEventGridH = 60;
@@ -516,8 +517,8 @@ const Duration kOscpNearFieldCooldown = Duration(seconds: 3);
 const double kOscpRangeEmaAlpha = 0.35;
 
 // --- Mesh-Net Buddy Alerts (Direction 3) ---
-const int kMeshMaxPayloadAgeMs = 120000;
-const int kMeshMaxAgeTtlMs = 300000;
+const int kMeshMaxPayloadAgeMs = 60000;
+const int kMeshMaxAgeTtlMs = 120000;
 const Duration kMeshBuddyCooldown = Duration(seconds: 30);
 const double kMeshRelevanceRadiusM = 50.0;
 
