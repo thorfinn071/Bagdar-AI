@@ -6,7 +6,8 @@ import 'package:sensors_plus/sensors_plus.dart';
 
 import '../models/speech_job.dart';
 import '../models/strings.dart';
-import '../services/fall_detector.dart' show FallClass;
+import '../services/fall_detector.dart' show FallClass, MotionState;
+import '../services/field_logger.dart';
 import '../services/haptic_service.dart';
 import '../services/sos_service.dart';
 import '../services/tts_service.dart';
@@ -25,6 +26,12 @@ class FallCountdownController extends ChangeNotifier {
   /// Winter Mode spec. Two-phrase confirmation for voice cancel is already
   /// always mandatory (C1), so the only additional tightening is the timer.
   final bool Function()? winterModeProvider;
+
+  /// Optional motion-state probe for the dazed-user SOS path (audit 4.2).
+  /// When provided, the controller reads the current [MotionState] at the
+  /// 5-second dazed check to decide whether to cancel (user moving) or
+  /// escalate to early SOS (user stationary and unresponsive).
+  final MotionState Function()? motionStateProvider;
 
   static const Duration kInitialDuration = Duration(seconds: 15);
   static const Duration kCollapseDuration = Duration(seconds: 30);
@@ -62,6 +69,7 @@ class FallCountdownController extends ChangeNotifier {
   bool _disposed = false;
 
   bool _voiceConfirmPending = false;
+  bool _dazedCheckPending = false;
   Timer? _voiceConfirmTimeout;
   DateTime? _lastTouchAt;
   DateTime? _lastDeliberateTapAt;
@@ -75,11 +83,28 @@ class FallCountdownController extends ChangeNotifier {
     this.onCancelled,
     this.onSosSent,
     this.winterModeProvider,
+    this.motionStateProvider,
     this.deliberateTapThresholdProvider,
   });
 
   int get secondsLeft => _secondsLeft;
   bool get active => _active;
+
+  @visibleForTesting
+  bool get dazedCheckPendingForTesting => _dazedCheckPending;
+
+  /// Sets up the countdown state without starting the real [Timer] or any
+  /// platform channels (voice listener, accel stream). Use in unit tests to
+  /// drive [processTickForTesting] manually.
+  @visibleForTesting
+  void initForTesting({
+    required int secondsLeft,
+    Duration duration = kInitialDuration,
+  }) {
+    _active = true;
+    _currentDuration = duration;
+    _secondsLeft = secondsLeft;
+  }
 
   void start({FallClass fallClass = FallClass.tumble}) {
     if (_active) return;
@@ -119,6 +144,7 @@ class FallCountdownController extends ChangeNotifier {
 
   void cancel() {
     if (!_active) return;
+    _dazedCheckPending = false;
     _timer?.cancel();
     _active = false;
     _secondsLeft = 0;
@@ -178,11 +204,17 @@ class FallCountdownController extends ChangeNotifier {
     _voiceConfirmTimeout = null;
   }
 
-  void _tick(Timer t) {
+  void _tick(Timer t) => _processTick();
+
+  @visibleForTesting
+  void processTickForTesting() => _processTick();
+
+  void _processTick() {
     _secondsLeft--;
     if (_secondsLeft <= 0) {
-      t.cancel();
+      _timer?.cancel();
       _active = false;
+      _dazedCheckPending = false;
       _stopFallCancelListener();
       _stopCorroborationSensor();
       _resetVoiceConfirm();
@@ -190,6 +222,16 @@ class FallCountdownController extends ChangeNotifier {
       unawaited(_sendFallSos());
       return;
     }
+
+    if (_secondsLeft == 12 && _currentDuration.inSeconds >= 13) {
+      _triggerDazedCheck();
+    }
+
+    if (_dazedCheckPending && _secondsLeft == 7) {
+      _evaluateDazedCheck();
+      return;
+    }
+
     if (_secondsLeft == 10 ||
         _secondsLeft == 5 ||
         _secondsLeft <= 3) {
@@ -206,6 +248,44 @@ class FallCountdownController extends ChangeNotifier {
       }
     }
     notifyListeners();
+  }
+
+  void _triggerDazedCheck() {
+    _dazedCheckPending = true;
+    HapticService.vibrate([0, 600, 200, 600, 200, 600]);
+    tts.say(
+      S.get('sos_fall_are_you_ok'),
+      SpeechPriority.critical,
+      pan: 0.0,
+      barge: true,
+    );
+    _restartFallCancelListener();
+  }
+
+  void _evaluateDazedCheck() {
+    if (!_dazedCheckPending) return;
+    _dazedCheckPending = false;
+
+    final motion = motionStateProvider?.call();
+    if (motion != null && motion != MotionState.stationary) {
+      FieldLogger.instance.log('fall_dazed_path', {
+        'outcome': 'mobile_cancel',
+        'secondsLeft': _secondsLeft,
+      });
+      cancel();
+    } else {
+      FieldLogger.instance.log('fall_dazed_path', {
+        'outcome': 'stationary_early_sos',
+        'secondsLeft': _secondsLeft,
+      });
+      _timer?.cancel();
+      _active = false;
+      _stopFallCancelListener();
+      _stopCorroborationSensor();
+      _resetVoiceConfirm();
+      notifyListeners();
+      unawaited(_sendFallSos());
+    }
   }
 
   Future<void> _sendFallSos() async {
