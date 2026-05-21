@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:battery_plus/battery_plus.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 
 enum ThrottleLevel { normal, moderate, aggressive, critical }
@@ -11,9 +12,24 @@ class BatteryMonitor {
 
   ThrottleLevel _level = ThrottleLevel.normal;
   int _lastBatteryLevel = 100;
+  bool _isCharging = false;
+  bool _isWifi = false;
+
+  StreamSubscription<List<ConnectivityResult>>? _connSub;
 
   ThrottleLevel get level => _level;
   int get batteryLevel => _lastBatteryLevel;
+
+  /// Battery percentage [0–100].
+  int get batteryPct => _lastBatteryLevel;
+
+  /// True when the device is plugged in and charging (or full).
+  bool get isCharging => _isCharging;
+
+  /// True when the device has a Wi-Fi connection (online data may be used
+  /// for optional model-pack downloads).
+  bool get isWifi => _isWifi;
+
   void Function(ThrottleLevel level)? onThrottleChanged;
 
   static ThrottleLevel levelForBatteryLevel(int batteryLevel) {
@@ -80,9 +96,14 @@ class BatteryMonitor {
   Future<void> init() async {
     try {
       _lastBatteryLevel = await _battery.batteryLevel;
+      final state = await _battery.batteryState;
+      _isCharging =
+          state == BatteryState.charging || state == BatteryState.full;
       _updateLevel();
 
-      _stateSub = _battery.onBatteryStateChanged.listen((_) {
+      _stateSub = _battery.onBatteryStateChanged.listen((s) {
+        _isCharging =
+            s == BatteryState.charging || s == BatteryState.full;
         _checkLevel();
       });
 
@@ -91,6 +112,19 @@ class BatteryMonitor {
       });
     } catch (e) {
       debugPrint('BatteryMonitor: init error: $e');
+    }
+
+    try {
+      final results = await Connectivity().checkConnectivity();
+      _isWifi = results.contains(ConnectivityResult.wifi);
+
+      _connSub = Connectivity()
+          .onConnectivityChanged
+          .listen((results) {
+        _isWifi = results.contains(ConnectivityResult.wifi);
+      });
+    } catch (e) {
+      debugPrint('BatteryMonitor: connectivity init error: $e');
     }
   }
 
@@ -113,6 +147,7 @@ class BatteryMonitor {
 
   void dispose() {
     unawaited(_stateSub?.cancel());
+    unawaited(_connSub?.cancel());
     _pollTimer?.cancel();
   }
 }

@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
+import '../models/constants.dart';
 import '../models/external_hazard.dart';
 import '../models/indoor_trail.dart';
 import '../models/speech_job.dart';
@@ -167,7 +168,7 @@ class IndoorTrailReplay {
   void dispose() {
     _pollTimer?.cancel();
     _pollTimer = null;
-    _detachSensors();
+    unawaited(_detachSensors());
     _state = IndoorTrailReplayState.idle;
   }
 
@@ -256,7 +257,7 @@ class IndoorTrailReplay {
       FieldLogger.instance.logIndoorTrail('arrived', data: {'id': trail.id});
       _pollTimer?.cancel();
       _pollTimer = null;
-      _detachSensors();
+      unawaited(_detachSensors());
       try {
         onArrived?.call(trail);
       } catch (_) {}
@@ -356,11 +357,10 @@ class IndoorTrailReplay {
     ));
   }
 
-  /// Rough particle-count reference matching `ParticleTrailLocalizer`'s
-  /// default. The replay layer doesn't read it from the localizer to
-  /// keep the abstraction one-directional; used only for the ESS
-  /// threshold ratio.
-  static const double _kParticleCountReference = 200.0;
+  /// Particle-count reference for ESS threshold: shared with
+  /// `ParticleTrailLocalizer` via `kIndoorTrailParticleCount` in
+  /// `models/constants.dart` so both stay in sync.
+  static const double _kParticleCountReference = kIndoorTrailParticleCount * 1.0;
 
   static double _angleDiff(double a, double b) {
     var d = (a - b) % 360.0;

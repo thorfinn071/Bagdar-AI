@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import '../models/constants.dart';
 import '../models/indoor_trail.dart';
 
 /// One hypothesis tracked by the particle filter. Position is expressed
@@ -57,7 +58,7 @@ class TrailLocalization {
 /// service announces "trail lost" rather than guessing.
 class ParticleTrailLocalizer {
   ParticleTrailLocalizer({
-    int particleCount = 200,
+    int particleCount = kIndoorTrailParticleCount,
     double headingSigmaDeg = 25.0,
     double magSigmaMicroT = 8.0,
     double stepDriftSigma = 0.4,

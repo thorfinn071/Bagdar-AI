@@ -195,7 +195,7 @@ class IndoorTrailRecorder {
   void dispose() {
     _pollTimer?.cancel();
     _pollTimer = null;
-    _detachSensors();
+    unawaited(_detachSensors());
     _state = IndoorTrailRecorderState.idle;
   }
 

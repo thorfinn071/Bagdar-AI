@@ -150,7 +150,7 @@ class BazaarLivestockService {
           text: text,
           priority: SpeechPriority.info,
           category: AlertCategory.acousticEvent,
-          urgency: 0.45,
+          urgency: dist != null && dist < 1.0 ? 0.70 : 0.45,
           distanceM: dist,
           at: now,
           correlationId: 'livestock_$label',
@@ -176,11 +176,10 @@ class BazaarLivestockService {
   /// apply the bazaar priority boost.
   static const Set<String> hangingLabels = {
     'umbrella',
-    'kite',
-    'sports ball',
     'handbag',
     'suitcase',
     'backpack',
+    'dining table',
   };
 
   /// COCO-80 labels that represent low or ground-level obstacles

@@ -5,8 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../models/constants.dart';
+import '../models/external_hazard.dart';
 import '../models/speech_job.dart';
 import '../models/strings.dart';
+import '../utils/alert_filter.dart' show AlertCategory;
 import 'earcon_service.dart';
 import 'field_logger.dart';
 import 'settings_service.dart';
@@ -23,6 +25,10 @@ class PaymentSmsService {
   final Map<String, DateTime> _recentKeys = {};
   bool _enabled = false;
   bool _permissionGranted = false;
+
+  /// Receives every payment-SMS alert. Wire to
+  /// `AlertManager.handleExternalHazard` in `CameraViewModel.init()`.
+  void Function(ExternalHazardEvent event)? onHazard;
 
   PaymentSmsService({
     required TtsService tts,
@@ -180,10 +186,20 @@ class PaymentSmsService {
       trackId: null,
     );
     _earcon.play(Earcon.paymentReceived);
-    
-    
-    
-    _tts.say(text, SpeechPriority.warning, pan: 0.0);
+    onHazard?.call(ExternalHazardEvent(
+      source: ExternalHazardSource.paymentSms,
+      text: text,
+      priority: SpeechPriority.warning,
+      category: AlertCategory.acousticEvent,
+      urgency: 0.5,
+      at: DateTime.now(),
+      correlationId: 'payment_sms',
+    ));
+    if (onHazard == null) {
+      FieldLogger.instance.log('payment_sms_no_handler', {
+        'event': event.direction.name,
+      });
+    }
   }
 
   void _gcRecent(DateTime now) {

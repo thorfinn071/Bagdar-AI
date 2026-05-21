@@ -85,7 +85,7 @@ class SessionLease {
   final String owner;
   final DateTime grantedAt;
 
-  const SessionLease._({
+  SessionLease._({
     required this.id,
     required this.resource,
     required this.priority,

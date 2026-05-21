@@ -78,12 +78,13 @@ class AcousticWorldModel {
 
   Future<void> _startCapture() async {
     if (_running) return;
+    _running = true;
     final ok = await _broker.start();
     if (!ok) {
+      _running = false;
       debugPrint('AcousticWorldModel: audio capture failed to start');
       return;
     }
-    _running = true;
     _frameSub = _broker.frames.listen(_onFrame);
     debugPrint(
       'AcousticWorldModel: started (stereo=${_broker.isStereo}, '
@@ -258,7 +259,7 @@ class AcousticWorldModel {
     if (_enabled == enabled) return;
     _enabled = enabled;
     if (enabled && !_running) {
-      _startCapture();
+      unawaited(_startCapture());
     } else if (!enabled && _running) {
       _stopCapture();
     }
