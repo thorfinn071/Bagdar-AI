@@ -46,6 +46,8 @@ The app currently supports **Russian**, **Kazakh**, and **English** – covering
 | **Frame quality guard** | Laplacian-variance blur detection + exposure analysis. Rejects frames that would produce unreliable detections |
 | **Weather gate** | Luminosity variance + average brightness classifier with hysteresis. Detects rain, fog, and glare that degrade depth-map accuracy. Adjusts pedestrian detection thresholds and disables non-critical depth features while preserving stairs-down detection |
 | **Sensor fusion engine** | Combines depth hazard scores with YOLO confidence via EMA-smoothed temporal filtering. Reduces false positives by requiring multi-frame confirmation before alerting |
+| **Context Modes (Bazaar/Livestock)** | Custom threshold tuning for crowded bazaars (shorter crowd cooldowns, prioritized low/hanging obstacles) and voice alerts for animals (cows, horses, sheep, dogs, cats, birds) with estimated metric distance |
+| **Acoustic World Model** | Environmental audio classifier (horn blasts, sirens, dogs, crowds, construction, trams, bikes) with stereo bearing direction and RT60 reverberation room-type classifier (indoor vs outdoor) |
 
 ### 🗣️ Accessible Interface
 
@@ -64,6 +66,8 @@ The app currently supports **Russian**, **Kazakh**, and **English** – covering
 | **Verbosity control** | Three levels (minimal / normal / detailed) integrated into the alert filter to reduce alert fatigue by suppressing lower-priority announcements |
 | **Gesture tutorial** | Interactive 6-step onboarding that teaches tap, double-tap, long-press, horizontal swipe, vertical swipe, and two-finger SOS gesture, complete with voice prompts and earcon feedback |
 | **Accessibility preferences** | Configurable speech rate, dominant hand, SOS trigger method, per-channel volume control, and alert frequency |
+| **Scene QA VLM Companion** | Voice-activated natural language scene Q&A utilizing MobileVLM, MiniCPM, or Phi vision models via native llama.cpp integration (`bagdar/vlm_engine`) when resource gates pass |
+| **Kazakh Speech Stack & OCR dictionary** | Constrained grammar Vosk-kk ASR model for offline commands, and PaddleOCR post-correction utilizing Cyrillic confusion pairs |
 
 ### 🧭 Offline Navigation
 
@@ -78,6 +82,7 @@ The app currently supports **Russian**, **Kazakh**, and **English** – covering
 | **2GIS integration** | Optional online fallback for cities with 2GIS coverage. Place search, pedestrian routing, and multimodal transit directions (bus, tram, trolleybus, metro) via the 2GIS Catalog + Routing API. Activates only when an API key is configured; the app remains fully functional without it |
 | **Offline POI search** | FTS5-indexed SQLite with Levenshtein fuzzy matching. Finds places by name even with typos or partial input |
 | **Waypoints** | Save and navigate back to important locations |
+| **Indoor Trail Retracing** | Step heading + magnetic signature + IMU recording for indoor routes, tracked and retraced offline using a low-overhead Particle Filter |
 
 ### 🛡️ Safety Systems
 
@@ -91,6 +96,9 @@ The app currently supports **Russian**, **Kazakh**, and **English** – covering
 | **Orientation monitor** | Accelerometer-based device pitch and roll tracking. Feeds the misalignment watchdog and dynamically adjusts the depth-map crop-top fraction to match camera viewing angle. Excessive roll detection with enter/exit hysteresis demotes plane-geometry hazards |
 | **Field telemetry logger** | Optional on-device JSONL session recorder. Logs detections, depth hazards, TTS events, throttler decisions, fall stages, thermal transitions, weather gate changes, camera stalls, and resource snapshots. Post-processed offline via `tools/analyze_session.py` |
 | **Settings backup** | QR code export/import of all user preferences to enable caregivers to configure one device and replicate settings across others. Excludes PII (like emergency contacts). Import requires a deliberate long-press confirmation designed for motor-impaired users |
+| **Winter Mode** | Automated cold-weather operations (tripped at battery temp $\le 5^\circ\text{C}$). Adapts thermal severity levels, promotes slippery surfaces to critical, disables weather overrides for stairs-down safety, and speaks a periodic warning |
+| **Phone Abandoned Detector** | Watchdog checking if a stationary phone with a frozen camera is left behind on a surface, alerting with escalating vibrations and periodic heartbeat tones |
+| **Charging Job Scheduler** | Resource-gated scheduler for running background training / adapter optimization tasks (requires charger, Wi-Fi, battery $> 40\%$, normal thermal, and normal memory) |
 
 ---
 
@@ -313,7 +321,7 @@ bagdar/
 │   │   ├── object_finder_session       # Visual object search session
 │   │   ├── stall_watchdog      # Inference hang detection + recovery
 │   │   └── voice_command_dispatcher    # Voice → action routing
-│   ├── services/          # 49 service modules
+│   ├── services/          # 71 service modules
 │   │   ├── tts_service         # Priority speech queue with interrupt semantics
 │   │   ├── navigation_service  # Turn-by-turn walk + transit navigation
 │   │   ├── depth_provider      # Multi-tier depth estimation orchestrator
@@ -338,6 +346,18 @@ bagdar/
 │   │   ├── memory_monitor      # Runtime memory pressure tracking
 │   │   ├── feature_usage_tracker  # Feature analytics + tutorial tracking
 │   │   ├── map_package_manager # City map package download + extraction
+│   │   ├── bazaar_livestock_service # Bazaar and livestock context modes
+│   │   ├── acoustic_world_model # Sound event environment mapper
+│   │   ├── oscp_service        # Open Smart-Cane BLE pod client
+│   │   ├── mesh_buddy_alert_service # Peer-to-peer BLE mesh telemetry exchange
+│   │   ├── indoor_trail_recorder # Walk-step heading & magnetic signature recorder
+│   │   ├── particle_trail_localizer # Particle Filter trajectory localizer
+│   │   ├── charging_job_scheduler # Gated background training task controller
+│   │   ├── phone_abandoned_detector # Ceiling/table watchdog
+│   │   ├── scene_question_service # VLM Companion voice Q&A engine
+│   │   ├── winter_mode_service # Cold-weather parameter adjuster
+│   │   ├── vosk_kk_recognizer  # Offline Kazakh Vosk ASR backend
+│   │   ├── kk_dictionary       # OCR Cyrillic confusion-pair correction
 │   │   └── ...                 # SOS, compass, haptic, voice, battery, etc.
 │   ├── utils/             # Vision pipeline core
 │   │   ├── ground_plane_analyzer  # RANSAC plane fitting + hazard classification
@@ -352,7 +372,7 @@ bagdar/
 │   │   ├── kalman_box_tracker  # Per-track state estimation
 │   │   ├── hungarian           # Optimal assignment solver
 │   │   └── appearance          # Visual feature similarity
-│   ├── models/            # Domain models + i18n (120 KB string table)
+│   ├── models/            # Domain models + i18n (158 KB string table)
 │   ├── viewmodels/        # MVVM presentation layer
 │   ├── widgets/           # UI overlays, controls, HUD
 │   ├── screens/           # Settings QR export/import
@@ -374,10 +394,10 @@ bagdar/
 │   ├── midas_small.ncnn.param
 │   ├── midas_small.ncnn.bin
 │   └── labels.txt
-└── test/                  # 34 test files
+└── test/                  # 58 test files
 ```
 
-**94 Dart source files** · **~974 KB** of application code · **49 service modules** · **34 unit test files**
+**132 Dart source files** · **~1382 KB** of application code · **71 service modules** · **58 unit test files**
 
 ---
 
