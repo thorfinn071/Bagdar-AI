@@ -2,18 +2,7 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 
 
-
-
-
-
-
-
-
-
-
-
 class Appearance {
-  
   
   
   static const int kBins = 16;
@@ -21,8 +10,6 @@ class Appearance {
   
   static const int kMaxSamplesPerAxis = 16;
 
-  
-  
   
   static Float32List? extractFromYPlane({
     required Uint8List yPlane,
@@ -43,8 +30,6 @@ class Appearance {
     final yHi = y2.clamp(0, imgH - 1).toInt();
     if (xHi - xLo < 2 || yHi - yLo < 2) return null;
 
-    
-    
     
     final strideX = math
         .max(1, ((xHi - xLo) / kMaxSamplesPerAxis).ceil());
@@ -77,9 +62,6 @@ class Appearance {
   }
 
   
-  
-  
-  
   static double similarity(Float32List? a, Float32List? b) {
     if (a == null || b == null) return 0.0;
     if (a.isEmpty || a.length != b.length) return 0.0;
@@ -94,8 +76,6 @@ class Appearance {
     return sum;
   }
 
-  
-  
   
   static Float32List blend(
     Float32List current,

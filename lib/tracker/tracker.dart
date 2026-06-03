@@ -15,14 +15,48 @@ bool isVehicle(String label) =>
 bool isPedestrian(String label) =>
     const {'person', 'dog', 'cat'}.contains(label);
 
+class _GraveyardEntry {
+  final double cx, cy, x1, y1, x2, y2;
+  final ListQueue<(DateTime, double)> areaHist;
+  final ListQueue<(DateTime, double)> heightHist;
+  final DateTime diedAt;
+
+  _GraveyardEntry({
+    required this.cx,
+    required this.cy,
+    required this.x1,
+    required this.y1,
+    required this.x2,
+    required this.y2,
+    required ListQueue<(DateTime, double)> areaHist,
+    required ListQueue<(DateTime, double)> heightHist,
+    required this.diedAt,
+  })  : areaHist = ListQueue.of(areaHist),
+        heightHist = ListQueue.of(heightHist);
+
+  static double _iou(
+    double ax1, double ay1, double ax2, double ay2,
+    double bx1, double by1, double bx2, double by2,
+  ) {
+    final ix1 = ax1 > bx1 ? ax1 : bx1;
+    final iy1 = ay1 > by1 ? ay1 : by1;
+    final ix2 = ax2 < bx2 ? ax2 : bx2;
+    final iy2 = ay2 < by2 ? ay2 : by2;
+    if (ix2 <= ix1 || iy2 <= iy1) return 0.0;
+    final inter = (ix2 - ix1) * (iy2 - iy1);
+    final aArea = (ax2 - ax1) * (ay2 - ay1);
+    final bArea = (bx2 - bx1) * (by2 - by1);
+    return inter / (aArea + bArea - inter);
+  }
+
+  bool matchesDet(RawDet det) =>
+      _iou(x1, y1, x2, y2, det.x1, det.y1, det.x2, det.y2) >= 0.15;
+}
+
 class Tracker {
   
   
-  
-  
-  
   static const double _kIouWeight = 0.6;
-  
   
   
   static const double _kAppearanceBlend = 0.3;
@@ -30,35 +64,21 @@ class Tracker {
   int _nextId = 1;
   final Map<int, Track> _tracks = {};
   int _predictTick = 0;
+  final List<_GraveyardEntry> _graveyard = [];
+  static const Duration _kGraveyardTtl = Duration(seconds: 3);
 
-  
-  
-  
   
   final Map<int, int> _predictOnlyFrames = {};
 
-  
-  
-  
-  
-  
-  
   
   DateTime? lastVehicleApproachingAcousticAt;
 
   TtsService? ttsService;
 
   
-  
-  
-  
-  
-  
   bool weatherDegraded = false;
   static const double _kPedWeatherBoost = 1.3;
 
-  
-  
   
   bool userWalking = false;
   static const double _kEgoMotionApproachBoost = 1.8;
@@ -76,9 +96,6 @@ class Tracker {
     if (trackList.isEmpty || dets.isEmpty) {
       unmatched.addAll(dets);
     } else {
-      
-      
-      
       
       
       final cost = List<List<double>>.generate(
@@ -129,9 +146,6 @@ class Tracker {
       t.distHist.addLast(det.dist);
       
       
-      
-      
-      
       t.centerHist.addLast((now, det.cx, det.cy));
       if (det.appearance != null) {
         t.appearance = Float32List.fromList(det.appearance!);
@@ -141,21 +155,49 @@ class Tracker {
         t.nearFrameCount = 1;
         if (det.conf >= kMinAlertConf) t.reliableFrames = 1;
       }
+      // Inherit approach history from a recently-lost track at the same
+      // spatial position (ID swap). This prevents the approaching-vehicle
+      // ramp-up from restarting from zero after a brief tracker ID switch.
+      if (isVehicle(det.label)) {
+        final graveIdx = _graveyard.indexWhere(
+          (e) => e.matchesDet(det),
+        );
+        if (graveIdx >= 0) {
+          final g = _graveyard.removeAt(graveIdx);
+          for (final entry in g.areaHist) {
+            t.areaHist.addLast(entry);
+          }
+          for (final entry in g.heightHist) {
+            t.heightHist.addLast(entry);
+          }
+          t.approaching = true;
+        }
+      }
       _tracks[t.id] = t;
     }
 
     _tracks.forEach((id, t) {
       if (t.age > kTrackMaxAge) {
+        if (t.approaching && isVehicle(t.label) && t.areaHist.isNotEmpty) {
+          _graveyard.add(
+            _GraveyardEntry(
+              cx: t.cx, cy: t.cy,
+              x1: t.x1, y1: t.y1, x2: t.x2, y2: t.y2,
+              areaHist: t.areaHist,
+              heightHist: t.heightHist,
+              diedAt: now,
+            ),
+          );
+        }
         ttsService?.evictTrack(id);
         _predictOnlyFrames.remove(id);
       }
     });
     _tracks.removeWhere((_, t) => t.age > kTrackMaxAge);
+    _graveyard.removeWhere(
+      (e) => now.difference(e.diedAt) > _kGraveyardTtl,
+    );
 
-    
-    
-    
-    
     
     return _tracks.values
         .where((t) =>
@@ -166,12 +208,6 @@ class Tracker {
   }
 
   
-  
-  
-  
-  
-  
-  
   bool _fastTrackAllowed(Track t, DateTime now) {
     if (t.reliableFrames >= 2) return true;
     if (t.avgConf < 0.75) return false;
@@ -180,8 +216,6 @@ class Tracker {
     return now.difference(ac) <= const Duration(seconds: 1);
   }
 
-  
-  
   
   double _combinedScore(Track t, RawDet det) {
     final iou = t.kalman.matchScore(det);
@@ -205,12 +239,6 @@ class Tracker {
     if (t.seenCount >= kTrackConfirmFrames) t.fastTrack = false;
 
     
-    
-    
-    
-    
-    
-    
     final gap = _predictOnlyFrames.remove(t.id) ?? 0;
     final preserveApproaching = t.approaching && gap >= 1 && gap <= 3;
     t.cx = det.cx;
@@ -224,10 +252,6 @@ class Tracker {
         : t.avgConf * (1.0 - kConfEmaAlpha) + det.conf * kConfEmaAlpha;
 
     
-    
-    
-    
-    
     t.centerHist.addLast((now, det.cx, det.cy));
     while (t.centerHist.length > kVehTurnMinCenterHist) {
       t.centerHist.removeFirst();
@@ -236,8 +260,6 @@ class Tracker {
     t.lastAngularVelocity = turnState.angularVelocity;
     t.turning = turnState.turning;
 
-    
-    
     
     if (det.appearance != null) {
       final existing = t.appearance;
@@ -288,7 +310,6 @@ class Tracker {
       if (t.heightHist.length > kApproachHistLen) t.heightHist.removeFirst();
 
       
-      
       t.approaching = preserveApproaching;
       t.dynamicThreat = false;
       if (t.areaHist.length >= 2) {
@@ -306,14 +327,7 @@ class Tracker {
           if (isVehicle(t.label)) {
             
             
-            
-            
             final closeRange = t.distM > 0 && t.distM <= 4.0;
-            
-            
-            
-            
-            
             
             
             final turningNear = t.turning &&
@@ -337,9 +351,6 @@ class Tracker {
               t.approaching = true;
             }
           } else if (isPedestrian(t.label)) {
-            
-            
-            
             
             
             double areaT = weatherDegraded
@@ -371,16 +382,6 @@ class Tracker {
     }
   }
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   
   bool _shouldFastTrackVeryCloseCenter(RawDet det, int imgW) {
     if (!isVehicle(det.label)) return false;
@@ -438,12 +439,6 @@ class Tracker {
       t.y2 = pBox[3];
 
       
-      
-      
-      
-      
-      
-      
       final next = (_predictOnlyFrames[t.id] ?? 0) + 1;
       _predictOnlyFrames[t.id] = next;
 
@@ -477,10 +472,6 @@ class Tracker {
   }
 
   
-  
-  
-  
-  
   static ({bool turning, double angularVelocity}) _computeTurnState(
     ListQueue<(DateTime, double, double)> hist,
   ) {
@@ -503,14 +494,11 @@ class Tracker {
     }
 
     
-    
-    
     final dtSec = p2.$1.difference(p1.$1).inMicroseconds / 1e6;
     if (dtSec <= 0.05 || dtSec >= 1.0) {
       return (turning: false, angularVelocity: 0.0);
     }
 
-    
     
     final a1 = math.atan2(v1y, v1x);
     final a2 = math.atan2(v2y, v2x);
@@ -523,8 +511,6 @@ class Tracker {
     }
     final angVel = dA / dtSec;
 
-    
-    
     
     final cross = v1x * v2y - v1y * v2x;
     final d1cubed = d1 * d1 * d1;

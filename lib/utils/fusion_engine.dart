@@ -18,10 +18,19 @@ class FusionEngine {
     required DepthHazard hazard,
     double yoloHazardConf = 0.0,
     required DateTime now,
+    Duration yoloAge = Duration.zero,
   }) {
+    // If YOLO data is older than 2 depth intervals, its zone confidence is
+    // too stale to contribute meaningfully for moving-object hazards.
+    const _kStaleYoloThreshold = Duration(milliseconds: 1600);
+    if (yoloAge > _kStaleYoloThreshold) {
+      yoloHazardConf = 0.0;
+    }
     final zoneIdx = hazard.zone.index;
 
-    if (_lastZoneIdx != null && _lastZoneIdx != zoneIdx) {
+    if (_lastZoneIdx != null &&
+        _lastZoneIdx != zoneIdx &&
+        (zoneIdx - _lastZoneIdx!).abs() >= 2) {
       _history.clear();
       _emaScore.clear();
     }

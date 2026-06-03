@@ -20,9 +20,8 @@ class GroundPlaneAnalyzer {
   static const double kFootZoneCoverage = 0.25;
 
   static const double kReflectiveInlierRatioMin = 0.88;
-  static const double kReflectiveLumaVarianceMax = 120.0;
+  static const double kReflectiveLumaVarianceMax = 60.0;
 
-  
   
   static const int _kMaxPoints = 2048;
 
@@ -64,43 +63,27 @@ class GroundPlaneAnalyzer {
   int _pointCount = 0;
 
   
-  
-  
-  
-  
-  
   bool _userStationaryHint = false;
 
-  
-  
-  
-  
-  
   
   bool _weatherDegradedHint = false;
 
   
-  
-  
-  
-  
-  
-  
   bool _lastPlaneFitOk = true;
 
-  
-  
-  
   
   bool get debugLastPlaneFitOk => _lastPlaneFitOk;
 
   
-  
-  
   bool get lastPlaneFitOk => _lastPlaneFitOk;
 
   bool _passesWarningGate(double coverage) {
-    if (_weatherDegradedHint) return false;
+    if (_weatherDegradedHint) {
+      // In degraded weather, allow high-confidence hazards through instead
+      // of killing ALL plane-based detection. A large pothole in rain is
+      // more dangerous than a false positive from MiDaS noise.
+      return coverage >= kWalkingMinCoverage * 1.3;
+    }
     if (_userStationaryHint) return true;
     return coverage >= kWalkingMinCoverage;
   }
@@ -118,10 +101,6 @@ class GroundPlaneAnalyzer {
     assert(lumaMap == null || lumaMap.length == kMapSize * kMapSize);
 
     _userStationaryHint = userStationary;
-    
-    
-    
-    
     
     
     _weatherDegradedHint = weatherDegraded;
@@ -226,7 +205,6 @@ class GroundPlaneAnalyzer {
       double dropSum = 0.0;
       double dropSqSum = 0.0;
       double dropLumaSum = 0.0;
-      
       
       
       double dropLumaSqSum = 0.0;
@@ -336,17 +314,16 @@ class GroundPlaneAnalyzer {
     }
 
     
-    
-    
-    
-
     _appendPlaneIndependentHazards(depthMap, results, lumaMap: lumaMap);
 
-    
-    
-    
-    
-    
+    // Good plane fit with high inlier ratio means the foot zone is flat and
+    // well-modelled. High depth variance there is likely surface texture
+    // (cobblestones, gravel, brick), not an actual hazard. Suppress dead-zone
+    // false positives while keeping them when the plane fit is poor.
+    if (inlierRatio > 0.75) {
+      results.removeWhere((h) => h.type == DepthHazardType.deadZone);
+    }
+
     
     final emitted = _applyTemporalConfirmation(results);
 
@@ -354,14 +331,6 @@ class GroundPlaneAnalyzer {
     return emitted;
   }
 
-  
-  
-  
-  
-  
-  
-  
-  
   
   DepthHazard? debugDetectStairsDown(
     Float32List depthMap, {
@@ -372,20 +341,15 @@ class GroundPlaneAnalyzer {
   }
 
   
-  
-  
-  
   void resetTemporalFilter() {
     _recentHazardFrames.clear();
     _lowCurbStreak = 0;
     _deadZoneStreak = 0;
     
     
-    
     _lastStairSignal = null;
     _lastStairSignalAt = _kStairSignalEpoch;
     _escalatorStreak = 0;
-    
     
     
     _nearFieldBaseline.clear();
@@ -411,7 +375,13 @@ class GroundPlaneAnalyzer {
           matches++;
         }
       }
-      if (matches >= _kTemporalMinMatches) confirmed.add(h);
+      // High-score hazards (score >= 0.7) get faster confirmation: 3 of 4
+      // frames instead of 4 of 5. This reduces detection latency from
+      // ~3.2s to ~2.4s at walking speed (~3.1m to ~2.4m before alert).
+      final required = (h.midasScore >= 0.7)
+          ? _kTemporalMinMatches - 1
+          : _kTemporalMinMatches;
+      if (matches >= required) confirmed.add(h);
     }
     return confirmed;
   }
@@ -427,18 +397,11 @@ class GroundPlaneAnalyzer {
     }
 
     
-    
-    
-    
-    
     final stairsHazard = _detectStairsDown(depthMap);
     if (stairsHazard != null) {
       const double weatherDegradedStairsScoreFloor = 0.715;
-      // Winter Mode: never raise the score floor on stairs-down. A snow-
-      // covered staircase is the highest-consequence physical-harm scenario
-      // in Astana winter and is exactly the case the degraded gate would
-      // otherwise hide. Plan: "stairsDown forced outside weather-degraded
-      // gate" universally.
+      
+      
       if (_winterModeHint ||
           !_weatherDegradedHint ||
           stairsHazard.midasScore >= weatherDegradedStairsScoreFloor) {
@@ -446,12 +409,6 @@ class GroundPlaneAnalyzer {
       }
     }
 
-    
-    
-    
-    
-    
-    
     
     final nearFieldHazard = _detectNearFieldIntrusion(depthMap);
     if (nearFieldHazard != null) {
@@ -470,9 +427,6 @@ class GroundPlaneAnalyzer {
           (h.type == DepthHazardType.pothole ||
               h.type == DepthHazardType.stepDown),
     );
-    
-    
-    
     
     
     if (!hasCenterDrop && !_weatherDegradedHint) {
@@ -494,33 +448,14 @@ class GroundPlaneAnalyzer {
   }
 
   
-  
-  
-  
-  
-  
-  
   static const double _kLowCurbMinDelta = 0.05;
   static const double _kLowCurbMaxDelta = 0.20;
   static const double _kLowCurbCoverage = 0.18;
   
   
-  
-  
-  
-  
-  
   static const int _kLowCurbConfirmFrames = 2;
   int _lowCurbStreak = 0;
 
-  
-  
-  
-  
-  
-  
-  
-  
   
   static const int _kTemporalWindow = 5;
   static const int _kTemporalMinMatches = 4;
@@ -794,8 +729,10 @@ class GroundPlaneAnalyzer {
     );
   }
 
-  static const int _kPitColLo = 96;
-  static const int _kPitColHi = 160;
+  // Widened from 96-160 (center 25%) to 48-208 (center 62.5%) to detect
+  // off-center drop-offs such as sidewalk edges and angled approaches.
+  static const int _kPitColLo = 48;
+  static const int _kPitColHi = 208;
   static const int _kPitBaselineRowLo = 240;
   static const int _kPitBaselineRowHi = 256;
   static const int _kPitRowLo = 90;
@@ -922,9 +859,6 @@ class GroundPlaneAnalyzer {
   static const int _kShadowMinSamples = 8;
   
   
-  
-  
-  
   static const double _kReflectiveDropLumaVariance = 500.0;
 
   static bool isLikelyShadowArtifact({
@@ -952,18 +886,9 @@ class GroundPlaneAnalyzer {
     final flatLumaMean = flatLumaSum / flatLumaCount;
 
     
-    
-    
-    
-    
-    
     final lumaDelta = (flatLumaMean - dropLumaMean).abs();
     if (lumaDelta >= _kShadowMinLumaDelta) return true;
 
-    
-    
-    
-    
     
     final sqSum = dropLumaSqSum;
     if (sqSum != null && dropLumaCount > 1) {
@@ -975,22 +900,12 @@ class GroundPlaneAnalyzer {
   }
 
   
-  
-  
-  
-  
-  
   Float64List? _lastStairSignal;
   DateTime _lastStairSignalAt = _kStairSignalEpoch;
   
   
-  
-  
-  
   int _escalatorStreak = 0;
   static const int _kEscalatorConfirmFrames = 2;
-  
-  
   
   
   static const int _kStairsPhaseSearchPx = 10;
@@ -1002,7 +917,6 @@ class GroundPlaneAnalyzer {
   DepthHazard? _detectStairsDown(Float32List depthMap) {
     final signal = _computeStairsSignal(depthMap);
     if (signal == null) {
-      
       
       
       return null;
@@ -1023,10 +937,6 @@ class GroundPlaneAnalyzer {
       return null;
     }
 
-    
-    
-    
-    
     
     if (!_userStationaryHint) {
       _escalatorStreak = 0;
@@ -1049,10 +959,6 @@ class GroundPlaneAnalyzer {
     }
 
     
-    
-    
-    
-    
     _escalatorStreak++;
     if (_escalatorStreak < _kEscalatorConfirmFrames) {
       return null;
@@ -1069,18 +975,6 @@ class GroundPlaneAnalyzer {
   }
 
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   static const int _kNearFieldRowStart = kFootZoneStartRow;
   static const double _kNearFieldMinValidZ = 0.05;
   static const int _kNearFieldMinSamples = 512;
@@ -1094,13 +988,10 @@ class GroundPlaneAnalyzer {
   int _nearFieldStreak = 0;
 
   DepthHazard? _detectNearFieldIntrusion(Float32List depthMap) {
-    
-    
-    
-    if (_userStationaryHint) {
-      _nearFieldStreak = 0;
-      return null;
-    }
+    // Stationary users still need near-field detection (e.g. approaching
+    // vehicles, cyclists) but require a higher confirmation threshold
+    // to avoid false positives from static scene noise.
+    const stationaryConfirmFrames = _kNearFieldConfirmFrames + 2; // 4 vs 2
 
     double sum = 0;
     int count = 0;
@@ -1116,15 +1007,12 @@ class GroundPlaneAnalyzer {
     }
     
     
-    
     if (count < _kNearFieldMinSamples) {
       _nearFieldStreak = 0;
       return null;
     }
     final currentMean = sum / count;
 
-    
-    
     
     if (_nearFieldBaseline.length < _kNearFieldBaselineMin) {
       _nearFieldBaseline.addLast(currentMean);
@@ -1138,13 +1026,13 @@ class GroundPlaneAnalyzer {
     if (delta > _kNearFieldJumpThreshold) {
       
       
-      
       _nearFieldStreak++;
-      if (_nearFieldStreak < _kNearFieldConfirmFrames) {
+      final confirmThreshold = _userStationaryHint
+          ? stationaryConfirmFrames
+          : _kNearFieldConfirmFrames;
+      if (_nearFieldStreak < confirmThreshold) {
         return null;
       }
-      
-      
       
       
       final coverage = (delta / 0.25).clamp(0.0, 1.0);
@@ -1157,8 +1045,6 @@ class GroundPlaneAnalyzer {
       );
     }
 
-    
-    
     
     _nearFieldBaseline.addLast(currentMean);
     while (_nearFieldBaseline.length > _kNearFieldBaselineMax) {
@@ -1176,9 +1062,6 @@ class GroundPlaneAnalyzer {
   }
 
   
-  
-  
-  
   DepthHazard? debugDetectNearFieldIntrusion(
     Float32List depthMap, {
     bool userStationary = false,
@@ -1188,10 +1071,6 @@ class GroundPlaneAnalyzer {
   }
 
   static int _findStairsPhaseShift(Float64List prev, Float64List curr) {
-    
-    
-    
-    
     
     
     const stride = 4;
@@ -1237,7 +1116,6 @@ class GroundPlaneAnalyzer {
     }
     
     
-    
     if (bestCorr <= 0) return 0;
     return bestLag;
   }
@@ -1251,8 +1129,10 @@ class GroundPlaneAnalyzer {
     return diff;
   }
 
-  static const int _kStairsColLo = 96;
-  static const int _kStairsColHi = 160;
+  // Widened from 96-160 (center 25%) to 48-208 (center 62.5%) to detect
+  // stairs approached at an angle or offset to left/right of frame.
+  static const int _kStairsColLo = 48;
+  static const int _kStairsColHi = 208;
   static const int _kStairsRowLo = 64;
   static const int _kStairsLagMin = 12;
   static const int _kStairsLagMax = 48;
@@ -1260,9 +1140,6 @@ class GroundPlaneAnalyzer {
   static const double _kStairsMinEnergy = 1e-4;
   static const double _kStairsMinDirectionality = 0.58;
 
-  
-  
-  
   
   static Float64List? _computeStairsSignal(Float32List depthMap) {
     if (depthMap.length != kMapSize * kMapSize) return null;
@@ -1368,8 +1245,6 @@ class GroundPlaneAnalyzer {
   }
 
   
-  
-  
   static DepthHazard? detectStairsDownFromMap(Float32List depthMap) {
     final signal = _computeStairsSignal(depthMap);
     if (signal == null) return null;
@@ -1417,11 +1292,6 @@ class GroundPlaneAnalyzer {
   }
 
   
-
-  
-
-  
-  
   static const int _kGlassRowHi = 153;
   static const double _kGlassSymmetryThreshold = 0.70;
   static const double _kGlassMinWidthFrac = 0.20;
@@ -1432,7 +1302,17 @@ class GroundPlaneAnalyzer {
     Float32List? depthMap,
   }) {
     final sym = detectGlassDoorFromLuma(lumaMap);
-    if (sym != null) return sym;
+    if (sym != null) {
+      // Require depth corroboration when available: symmetric corridors and
+      // tunnels also satisfy the luma symmetry check but lack the shallow
+      // depth boundary that a real glass door creates (glass surface close,
+      // scene behind it far). If edges+depth don't confirm, suppress.
+      if (depthMap != null &&
+          _detectGlassDoorFromEdges(depthMap, lumaMap) == null) {
+        return null;
+      }
+      return sym;
+    }
     if (depthMap != null) {
       return _detectGlassDoorFromEdges(depthMap, lumaMap);
     }
@@ -1578,11 +1458,11 @@ class GroundPlaneAnalyzer {
   }
 
   
-
-  
-
   static const double _kSlipperyAnisotropyThreshold = 5.0;
   static const double _kSlipperyMinLumaVariance = 800.0;
+  // Wet surfaces reflect light → high mean luma. Dry crosswalk stripes,
+  // brick paths, and escalator treads typically have mean luma < 140.
+  static const double _kSlipperyMinMeanLuma = 140.0;
 
   static DepthHazard? detectSlipperyFromLuma(Uint8List lumaMap) {
     if (lumaMap.length != kMapSize * kMapSize) return null;
@@ -1620,6 +1500,20 @@ class GroundPlaneAnalyzer {
 
     final lumaVar = scanZoneLumaVariance(lumaMap);
     if (lumaVar < _kSlipperyMinLumaVariance) return null;
+
+    // Mean-luma gate: require bright, reflective surface (wet pavement
+    // reflects ambient light). Dry surfaces with strong horizontal lines
+    // (crosswalks, escalator treads) are typically not bright enough.
+    double lumaSum = 0;
+    int lumaN = 0;
+    for (int y = kZoneStartRow; y < kMapSize; y += 2) {
+      for (int x = 0; x < kMapSize; x += 2) {
+        lumaSum += lumaMap[y * kMapSize + x];
+        lumaN++;
+      }
+    }
+    if (lumaN == 0) return null;
+    if (lumaSum / lumaN < _kSlipperyMinMeanLuma) return null;
 
     final score = (0.40 + 0.20 * (anisotropy / 10.0).clamp(0.0, 1.0)).clamp(
       0.0,

@@ -24,13 +24,6 @@ class AlertCandidate {
   final bool isGroupAlert;
 
   
-  
-  
-  
-  
-  
-  
-  
   final double? distanceM;
 
   const AlertCandidate({
@@ -52,27 +45,11 @@ class AlertFilter {
   final Map<AlertCategory, DateTime> _lastCriticalByCat = {};
 
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   final Map<AlertCategory, double> _lastCriticalDistMByCat = {};
 
   DateTime _lastSpokenAt = DateTime.fromMillisecondsSinceEpoch(0);
   AlertCategory? _lastCategory;
 
-  
-  
-  
-  
-  
-  
   
   final Map<AlertCategory, DateTime> _suppressUntilByCategory = {};
 
@@ -154,14 +131,9 @@ class AlertFilter {
       _lastCriticalByCat[picked.category] = now;
       
       
-      
       if (picked.distanceM != null && picked.distanceM! > 0) {
         _lastCriticalDistMByCat[picked.category] = picked.distanceM!;
       }
-      
-      
-      
-      
       
       
       _suppressUntilByCategory[picked.category] =
@@ -194,9 +166,6 @@ class AlertFilter {
       final lastSameAt = _lastCriticalByCat[cand.category];
       
       
-      
-      
-      
       final repeatCooldown =
           cand.category == AlertCategory.obstacleClose ||
               cand.category == AlertCategory.corridorBlocked ||
@@ -207,16 +176,6 @@ class AlertFilter {
           now.difference(lastSameAt) >= repeatCooldown) {
         return true;
       }
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
       
       
       final lastDistM = _lastCriticalDistMByCat[cand.category];
@@ -236,11 +195,6 @@ class AlertFilter {
     final catGap = _categoryCooldown(cand.category, trackCount, alertFrequency);
     if (now.difference(lastAt) < catGap) return false;
 
-    
-    
-    
-    
-    
     
     if (cand.category != AlertCategory.approachingVehicle) {
       final suppressedUntil = _suppressUntilByCategory[cand.category];
@@ -283,6 +237,100 @@ class AlertFilter {
     }
 
     return true;
+  }
+
+  /// Register a critical alert that was spoken outside the filter pipeline
+  /// (e.g. very-close direct TTS path) so that subsequent [flush]/[flushMulti]
+  /// calls respect the per-category cooldown and don't double-fire.
+  void noteCritical(AlertCategory category, DateTime now) {
+    _lastCriticalByCat[category] = now;
+    _lastByCat[category] = now;
+    _suppressUntilByCategory[category] =
+        now.add(const Duration(milliseconds: 2000));
+    _lastSpokenAt = now;
+    _lastCategory = category;
+  }
+
+  /// Like [flush] but returns up to 2 winners from *different* categories:
+  /// the highest-urgency allowed candidate, then the highest-urgency allowed
+  /// candidate from a different category. This lets a simultaneously-approaching
+  /// vehicle and a nearby obstacle both be announced in the same frame.
+  List<AlertCandidate> flushMulti(
+    int trackCount,
+    DateTime now, {
+    List<String>? labels,
+    Set<int>? reliableTrackIds,
+    Verbosity verbosity = Verbosity.normal,
+    AlertFrequency alertFrequency = AlertFrequency.normal,
+  }) {
+    if (_candidates.isEmpty) return const [];
+
+    if (labels != null && labels.length >= 3) {
+      final counts = <String, int>{};
+      for (final l in labels) {
+        counts[l] = (counts[l] ?? 0) + 1;
+      }
+      for (final entry in counts.entries) {
+        if (entry.value >= 3) {
+          final alreadyHaveGroup = _candidates.any((c) => c.isGroupAlert);
+          if (!alreadyHaveGroup) {
+            final pluralLabel = S.alertLabel(entry.key);
+            _candidates.add(
+              AlertCandidate(
+                text: '${S.alert('group_ahead')}${entry.value} $pluralLabel',
+                priority: SpeechPriority.info,
+                pan: 0.0,
+                category: AlertCategory.obstacleFar,
+                urgency: 0.6,
+                isGroupAlert: true,
+              ),
+            );
+          }
+        }
+      }
+    }
+
+    _candidates.sort((a, b) {
+      final p = b.priority.index.compareTo(a.priority.index);
+      return p != 0 ? p : b.urgency.compareTo(a.urgency);
+    });
+
+    AlertCandidate? first;
+    AlertCandidate? second;
+    final rejected = <AlertCandidate>[];
+    for (final cand in _candidates) {
+      if (_isAllowed(cand, trackCount, now, reliableTrackIds,
+          verbosity: verbosity, alertFrequency: alertFrequency)) {
+        if (first == null) {
+          first = cand;
+        } else if (second == null && cand.category != first.category) {
+          second = cand;
+          break;
+        }
+      } else {
+        rejected.add(cand);
+      }
+    }
+    _lastRejected = rejected;
+    _candidates.clear();
+
+    final winners = <AlertCandidate>[];
+    for (final w in [first, second]) {
+      if (w == null) continue;
+      winners.add(w);
+      _lastSpokenAt = now;
+      _lastCategory = w.category;
+      _lastByCat[w.category] = now;
+      if (w.priority == SpeechPriority.critical) {
+        _lastCriticalByCat[w.category] = now;
+        if (w.distanceM != null && w.distanceM! > 0) {
+          _lastCriticalDistMByCat[w.category] = w.distanceM!;
+        }
+        _suppressUntilByCategory[w.category] =
+            now.add(const Duration(milliseconds: 2000));
+      }
+    }
+    return winners;
   }
 
   void reset() {

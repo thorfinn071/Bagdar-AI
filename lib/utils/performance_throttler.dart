@@ -26,9 +26,6 @@ class PerformanceThrottler {
   void Function(bool midasPaused)? onMidasPauseChanged;
   
   
-  
-  
-  
   bool _indoorMode = false;
   MotionState _motionState = MotionState.walking;
   MemoryPressureLevel _memory = MemoryPressureLevel.normal;
@@ -86,14 +83,10 @@ class PerformanceThrottler {
   }
 
   
-  
-  
-  
   void noteCriticalAlert({DateTime? now}) {
     _lastCriticalAlertAt = now ?? DateTime.now();
   }
 
-  
   
   void signalActivity({DateTime? now}) {
     _gateResumeUntil = (now ?? DateTime.now()).add(
@@ -101,7 +94,6 @@ class PerformanceThrottler {
     );
   }
 
-  
   
   bool isStationaryGateActive({DateTime? now}) {
     if (_motionState != MotionState.stationary) return false;
@@ -115,8 +107,6 @@ class PerformanceThrottler {
     return true;
   }
 
-  
-  
   
   void setIndoorMode(bool enabled) {
     _indoorMode = enabled;
@@ -153,8 +143,7 @@ class PerformanceThrottler {
       _midasPausedUntil = DateTime.fromMillisecondsSinceEpoch(0);
     }
 
-    // Detect pause-state transition exactly once per flip so the host can
-    // speak a single "reduced mode" / "depth restored" announcement.
+    
     final pausedNow = now.isBefore(_midasPausedUntil);
     if (pausedNow != _midasPaused) {
       _midasPaused = pausedNow;
@@ -174,7 +163,6 @@ class PerformanceThrottler {
   bool isMidasPaused(DateTime now) => now.isBefore(_midasPausedUntil);
 
   Duration detectInterval(int batteryMs) {
-    
     
     
     if (isStationaryGateActive()) {
@@ -206,8 +194,6 @@ class PerformanceThrottler {
         : kTargetFrameBudgetMs;
 
     
-    
-    
     final stationaryBias = _indoorMode ? 0 : 150;
     final motionBias = switch (_motionState) {
       MotionState.stationary => stationaryBias,
@@ -233,8 +219,8 @@ class PerformanceThrottler {
         requestedMs = math.max(batteryMs, (perfMs + thermalPenalty ~/ 2));
       } else {
         _thermalBurstCount = 0;
-        // 2 FPS floor: idle gap must never exceed 500 ms even when
-        // base is large due to memory pressure or slow inference.
+        
+        
         requestedMs = math.min(
           math.max(batteryMs, _kThermalIdleMs + base),
           kDetectIntervalSafetyCeilingMs,
@@ -246,9 +232,6 @@ class PerformanceThrottler {
     }
 
     
-    
-    
-    
     return Duration(
       milliseconds: math.min(requestedMs, kDetectIntervalSafetyCeilingMs),
     );
@@ -257,19 +240,10 @@ class PerformanceThrottler {
   Duration midasInterval(int batteryMs) {
     
     
-    
-    
-    
-    
-    
-    
-    
     if (batteryMs <= 0) return kStationaryGateMidasOff;
     if (_memory == MemoryPressureLevel.critical) {
       return kStationaryGateMidasOff;
     }
-    
-    
     
     
     if (isStationaryGateActive()) return kStationaryGateMidasOff;

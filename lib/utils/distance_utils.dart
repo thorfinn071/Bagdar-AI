@@ -36,9 +36,6 @@ Future<void> calibrateFocalLength(
 }
 
 
-
-
-
 const double _kPersonShoulderWidth = 0.48;
 
 
@@ -185,8 +182,6 @@ String clockDir(
     imgH: imgH,
     viewportAspect: viewportAspect,
   );
-  
-  
   
   
   if (n < 0.10) return d('9');

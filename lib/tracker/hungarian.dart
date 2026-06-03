@@ -36,13 +36,13 @@ class Hungarian {
     final int cols = cost[0].length;
     if (cols == 0) return List<int>.filled(rows, -1);
 
-    // The classic algorithm requires #rows ≤ #cols. Transpose if needed.
+    
     final bool transposed = rows > cols;
     final int n = transposed ? cols : rows;
     final int m = transposed ? rows : cols;
     final src = transposed ? _transpose(cost, rows, cols) : cost;
 
-    // 1-indexed internal arrays so the textbook algorithm maps directly.
+    
     final u = List<double>.filled(n + 1, 0.0);
     final v = List<double>.filled(m + 1, 0.0);
     final p = List<int>.filled(m + 1, 0);
@@ -72,9 +72,7 @@ class Hungarian {
           }
         }
 
-        // No reachable column left — the remaining rows will stay
-        // unmatched. Break out cleanly; any row whose `p[j] == i` after
-        // the outer loop will be resolved via the original cost filter.
+        
         if (j1 == -1) break;
 
         for (int j = 0; j <= m; j++) {
@@ -88,7 +86,7 @@ class Hungarian {
         j0 = j1;
       } while (p[j0] != 0);
 
-      // Backtrack the augmenting path.
+      
       while (j0 != 0) {
         final int j1 = way[j0];
         p[j0] = p[j1];
@@ -96,28 +94,27 @@ class Hungarian {
       }
     }
 
-    // Invert: for each internal "row" (1..n), find which column it was
-    // assigned to (if any).
+    
     final internalAssign = List<int>.filled(n, -1);
     for (int j = 1; j <= m; j++) {
       if (p[j] > 0) internalAssign[p[j] - 1] = j - 1;
     }
 
-    // Map back to the original orientation.
+    
     final List<int> assignment = List<int>.filled(rows, -1);
     if (!transposed) {
       for (int i = 0; i < rows; i++) {
         assignment[i] = internalAssign[i];
       }
     } else {
-      // In transposed mode, internalAssign[col] = row.
+      
       for (int col = 0; col < n; col++) {
         final row = internalAssign[col];
         if (row >= 0) assignment[row] = col;
       }
     }
 
-    // Drop forbidden / over-threshold assignments.
+    
     for (int i = 0; i < rows; i++) {
       final j = assignment[i];
       if (j < 0) continue;
@@ -160,7 +157,7 @@ class Hungarian {
       if (j < 0) continue;
       total += cost[i][j];
     }
-    // Guard against NaN infiltration in tests.
+    
     return total.isNaN ? double.infinity : total;
   }
 

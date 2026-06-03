@@ -10,7 +10,6 @@ class KalmanBoxTracker {
     final stats = _boxStats(det.x1, det.y1, det.x2, det.y2);
 
     
-    
     x = [det.cx, det.cy, stats.area, stats.aspect, 0, 0, 0];
     P = List.generate(7, (i) => List.filled(7, 0.0));
     for (int i = 0; i < 4; i++) {
