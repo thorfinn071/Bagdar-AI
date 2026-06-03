@@ -142,11 +142,6 @@ class AcousticWorldModel {
       }
       
       
-      
-      
-      
-      
-      
       final requiredCount = (cls == BagdarAudioClass.horn ||
               cls == BagdarAudioClass.siren)
           ? 3

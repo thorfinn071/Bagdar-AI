@@ -241,7 +241,7 @@ class LanguagePackManager {
     });
 
     try {
-      // Clean up any half-finished previous attempt.
+      
       final stale = File(zipPath);
       if (await stale.exists()) await stale.delete();
       final extractDirHandle = Directory(extractDir);
@@ -259,8 +259,7 @@ class LanguagePackManager {
         },
       );
 
-      // SHA-256 verification — mandatory per plan. Empty manifest hash
-      // means "skip verification" only for dev/testing manifests.
+      
       if (remote.sha256.isNotEmpty) {
         final actual = await compute(_doSha256, (zipPath,));
         if (actual.toLowerCase() != remote.sha256.toLowerCase()) {
@@ -348,8 +347,7 @@ class LanguagePackManager {
     return total;
   }
 
-  // -- Skip / re-prompt cooldown helpers (used by onboarding & UI) -----------
-
+  
   Future<void> markPackSkipped(String packId) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(
@@ -376,8 +374,7 @@ class LanguagePackManager {
     return prefs.getBool(_prefsKeyPromptOnFirstOnline) ?? false;
   }
 
-  // -- Internals -------------------------------------------------------------
-
+  
   Future<void> _extractZip(String zipPath, String targetDir) async {
     await compute(_doExtractZip, (zipPath, targetDir));
   }
@@ -416,8 +413,7 @@ class LanguagePackManager {
     _dio.close();
   }
 
-  // -- Test hooks ------------------------------------------------------------
-
+  
   @visibleForTesting
   void debugReset({
     String packsDir = '',

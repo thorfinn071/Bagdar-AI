@@ -39,8 +39,7 @@ class OcrService {
   /// monitor reports `MemoryPressureLevel.critical`.
   OcrService({MemoryMonitor? memoryMonitor}) : _memoryMonitor = memoryMonitor;
 
-  // -- Public surface (unchanged from the Phase 2 baseline) -----------------
-
+  
   int sensorOrientationDeg = 90;
 
   Future<String?> recognizeFromFrame(
@@ -80,22 +79,14 @@ class OcrService {
   void resetStabilizer() => _stabilizeBuffer.clear();
 
   void dispose() {
-    // ML Kit's close() returns a Future that hits the missing
-    // `google_mlkit_text_recognizer` platform channel under
-    // `flutter_test`. Swallow the async failure so tests don't
-    // surface "test failed after it had already completed" noise.
+    
+    
     unawaited(_latinRecognizer.close().catchError((Object _) {}));
     unawaited(_defaultRecognizer.close().catchError((Object _) {}));
     unawaited(PaddleOcrBridge.instance.dispose());
   }
 
-  // -- Internals -------------------------------------------------------------
-
-  // ML Kit recognizers — kept private so the rest of the app never
-  // touches the Phase-0 surface directly. Once Phase 3 acceptance
-  // criteria pass and the v2 flag flips to true by default, both
-  // recognizers + the `google_mlkit_text_recognition` dependency can
-  // be dropped in one follow-up commit.
+  
   final TextRecognizer _latinRecognizer = TextRecognizer(
     script: TextRecognitionScript.latin,
   );
@@ -246,8 +237,8 @@ class OcrService {
   String _applyKkCorrection(String text) {
     final dict = KkDictionary.instance;
     if (!dict.isLoaded) {
-      // Best-effort lazy load; first call kicks off the read, subsequent
-      // OCR sessions benefit from it.
+      
+      
       unawaited(dict.load());
       return text;
     }
@@ -341,8 +332,7 @@ class OcrService {
     }
   }
 
-  // -- Test hooks ------------------------------------------------------------
-
+  
   /// Lower the confidence threshold from tests so canned mock lines
   /// reach the final string. Production code never calls this.
   @visibleForTesting

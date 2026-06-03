@@ -337,13 +337,7 @@ class FieldLogger {
     });
   }
 
-  // -- Growth-direction telemetry (Phase 0 foundations) ------------------
-  //
-  // All logs below stay on-device under existing `FieldLogger` rules.
-  // No raw audio, no images, no GPS trails, no near-miss clips.
-  // Producers must scrub or hash any PII (mesh device id, OSCP serial)
-  // before calling these helpers.
-
+  
   void logIndoorTrail(String event, {Map<String, dynamic>? data}) {
     log('indoor_trail', {
       'event': event,

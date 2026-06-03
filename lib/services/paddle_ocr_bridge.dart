@@ -234,8 +234,7 @@ class PaddleOcrBridge {
     }
   }
 
-  // -- Test hooks ------------------------------------------------------------
-
+  
   @visibleForTesting
   void debugSetCapability(PaddleOcrCapability cap) {
     _capability = cap;

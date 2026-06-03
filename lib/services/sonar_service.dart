@@ -100,7 +100,7 @@ class SonarService {
       return false;
     }
 
-    // Acquire exclusive mic.
+    
     final micGrant = SensorSessionCoordinator.instance.request(
       resource: SensorResource.microphone,
       priority: SessionPriority.optional,
@@ -114,7 +114,7 @@ class SonarService {
     }
     _micLease = micGrant.lease;
 
-    // Acquire exclusive speaker.
+    
     final spkGrant = SensorSessionCoordinator.instance.request(
       resource: SensorResource.speaker,
       priority: SessionPriority.optional,

@@ -51,20 +51,11 @@ class SettingsService {
   static const _kDisclaimerAcknowledgedAt = 'disclaimer_acknowledged_at';
   static const _kWinterModeManual = 'winter_mode_manual';
   static const _kThemeMode = 'theme_mode';
-  // Phase 1+ of the Kazakh language stack rework (Vosk STT, RHVoice TTS,
-  // PaddleOCR). Default off until each phase ships and a native speaker
-  // signs off. When false, all kk-language code paths use the legacy
-  // `speech_to_text` / `flutter_tts` / ML Kit pipeline.
+  
+  
   static const _kEnableKazakhStackV2 = 'enable_kazakh_stack_v2';
 
-  // -- Growth-direction feature flags (Phase 0 foundations) --------------
-  //
-  // Every flag below is disabled by default. They gate large new
-  // subsystems whose runtime must remain optional until each direction
-  // ships a verified, benchmark-evidenced milestone. Toggling a flag
-  // must never affect the camera-side safety pipeline (Camera →
-  // FrameQualityGuard → YOLO / MiDaS / MotionPreAlert → Tracker →
-  // FusionEngine → AlertFilter → AlertManager → TTS / Haptic / Earcon).
+  
   static const _kIndoorTrailMemory = 'feature_indoor_trail_memory';
   static const _kMeshBuddyAlerts = 'feature_mesh_buddy_alerts';
   static const _kBazaarMode = 'feature_bazaar_mode';
@@ -116,9 +107,6 @@ class SettingsService {
   bool get useNativeDepthBridge =>
       
       
-      
-      
-      
       _prefs!.getBool(_kUseNativeDepthBridge) ?? false;
   bool get useHardwareDepthMode =>
       _prefs!.getBool(_kUseHardwareDepthMode) ?? false;
@@ -167,10 +155,6 @@ class SettingsService {
     return DominantHand.values[i.clamp(0, DominantHand.values.length - 1)];
   }
 
-  
-  
-  
-  
   
   TapSensitivity get tapSensitivity {
     final i = _prefs?.getInt(_kTapSensitivity) ?? TapSensitivity.normal.index;
@@ -297,17 +281,12 @@ class SettingsService {
   }
 
   
-  
   DateTime? get disclaimerAcknowledgedAt {
     final ms = _prefs?.getInt(_kDisclaimerAcknowledgedAt);
     if (ms == null || ms == 0) return null;
     return DateTime.fromMillisecondsSinceEpoch(ms);
   }
 
-  
-  
-  
-  
   
   bool get disclaimerNeedsReprompt {
     if (!disclaimerAcknowledged) return true;
@@ -347,12 +326,7 @@ class SettingsService {
   Future<void> setEnableKazakhStackV2(bool v) async =>
       _prefs?.setBool(_kEnableKazakhStackV2, v) ?? Future<void>.value();
 
-  // -- Growth-direction feature flag getters/setters ---------------------
-  //
-  // All return `false` by default; missing services tolerate the flag
-  // being off and degrade to legacy behaviour. Setters are tolerant of
-  // an uninitialised SharedPreferences instance (early-call safety).
-
+  
   /// Geomagnetic indoor trail memory (Phase 1 — Direction 6). When on,
   /// `IndoorTrailRecorder` is allowed to capture step+heading+magnetic
   /// signatures and `IndoorTrailReplay` may emit nav prompts.

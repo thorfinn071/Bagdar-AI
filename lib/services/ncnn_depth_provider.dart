@@ -19,15 +19,6 @@ class NcnnDepthProvider implements DepthProvider {
   static const String _binAsset = 'assets/midas_small.ncnn.bin';
 
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
   static const int _kMaxFailuresInWindow = 3;
   static const Duration _kFailureWindow = Duration(minutes: 5);
 
@@ -36,15 +27,10 @@ class NcnnDepthProvider implements DepthProvider {
 
   bool _ready = false;
   bool _busy = false;
+  double _lastOutputConfidence = 0;
   bool _permanentlyDisabled = false;
   final List<DateTime> _recentFailures = [];
 
-  
-  
-  
-  
-  
-  
   
   void Function()? onSessionDisabled;
 
@@ -79,7 +65,7 @@ class NcnnDepthProvider implements DepthProvider {
   bool get lowConfidenceFallbackActive => false;
 
   @override
-  double get lastConfidenceScore => 0;
+  double get lastConfidenceScore => _lastOutputConfidence;
 
   @override
   double get lastPreprocessMs => _lastPreprocessMs;
@@ -94,7 +80,6 @@ class NcnnDepthProvider implements DepthProvider {
   bool get lastUsedNativeBridge => true;
 
   
-  
   @override
   bool get lastPlaneFitOk => _analyzer.lastPlaneFitOk;
 
@@ -105,14 +90,6 @@ class NcnnDepthProvider implements DepthProvider {
 
   @override
   Future<bool> init({int threads = 2}) async {
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     if (Settings.instance.isReady && Settings.instance.ncnnDisabled) {
@@ -231,27 +208,19 @@ class NcnnDepthProvider implements DepthProvider {
       }
       
       
-      
-      
-      
-      
-      
-      
-      
-      
-      
       final outputClass = _classifyOutput(flat);
       if (outputClass == _OutputClass.invalid) {
         debugPrint(
             'NcnnDepthProvider: invalid output (NaN/Inf) — recording failure');
+        _lastOutputConfidence = 0;
         _recordFailure();
         return const [];
       }
       if (outputClass == _OutputClass.degenerate) {
-        
-        
+        _lastOutputConfidence = 0;
         return const [];
       }
+      _lastOutputConfidence = _computeOutputConfidence(flat);
       return _analyzer.analyze(
         flat,
         lumaMap: _lumaBuffer,
@@ -290,13 +259,6 @@ class NcnnDepthProvider implements DepthProvider {
   }
 
   
-  
-  
-  
-  
-  
-  
-  
   _OutputClass _classifyOutput(Float32List flat) {
     if (flat.isEmpty) return _OutputClass.invalid;
     double minV = double.infinity;
@@ -316,9 +278,45 @@ class NcnnDepthProvider implements DepthProvider {
     if (!minV.isFinite || !maxV.isFinite) return _OutputClass.invalid;
     
     
-    
     if ((maxV - minV).abs() < 1e-3) return _OutputClass.degenerate;
     return _OutputClass.ok;
+  }
+
+  /// Compute a pseudo-confidence score [0..1] from depth map statistics.
+  /// Low range, many near-zero pixels, or low variance indicate poor output.
+  double _computeOutputConfidence(Float32List flat) {
+    if (flat.isEmpty) return 0;
+    final n = flat.length;
+    double sum = 0;
+    double sqSum = 0;
+    int nearZeroCount = 0;
+    double minV = double.infinity;
+    double maxV = double.negativeInfinity;
+    for (int i = 0; i < n; i++) {
+      final v = flat[i];
+      if (!v.isFinite) continue;
+      sum += v;
+      sqSum += v * v;
+      if (v < 0.02) nearZeroCount++;
+      if (v < minV) minV = v;
+      if (v > maxV) maxV = v;
+    }
+    if (!minV.isFinite || !maxV.isFinite) return 0;
+
+    final range = maxV - minV;
+    final mean = sum / n;
+    final variance = (sqSum / n) - mean * mean;
+    final nearZeroRatio = nearZeroCount / n;
+
+    // Score components:
+    // 1. Range should be > 0.1 for good depth maps (max 0.3 contribution)
+    final rangeScore = (range / 0.5).clamp(0.0, 1.0) * 0.3;
+    // 2. Low near-zero ratio (max 0.4 contribution)
+    final validScore = (1.0 - nearZeroRatio * 2).clamp(0.0, 1.0) * 0.4;
+    // 3. Reasonable variance (max 0.3 contribution)
+    final varScore = (variance / 0.01).clamp(0.0, 1.0) * 0.3;
+
+    return (rangeScore + validScore + varScore).clamp(0.0, 1.0);
   }
 
   void _recordFailure() {
@@ -331,11 +329,6 @@ class NcnnDepthProvider implements DepthProvider {
   }
 
   
-  
-  
-  
-  
-  
   void _markSessionDisabled() {
     if (_permanentlyDisabled) return;
     _permanentlyDisabled = true;
@@ -344,10 +337,6 @@ class NcnnDepthProvider implements DepthProvider {
       '${_kFailureWindow.inMinutes}m — disabling for THIS session only. '
       'A restart will re-enable NCNN depth.',
     );
-    
-    
-    
-    
     
     
     onSessionDisabled?.call();
@@ -367,7 +356,6 @@ class NcnnDepthProvider implements DepthProvider {
 enum _OutputClass {
   
   ok,
-  
   
   
   degenerate,

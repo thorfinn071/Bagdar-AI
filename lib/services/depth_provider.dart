@@ -31,12 +31,6 @@ abstract class DepthProvider {
   bool get lastUsedNativeBridge;
 
   
-  
-  
-  
-  
-  
-  
   bool get lastPlaneFitOk;
 
   void setNativeBridgeEnabled(bool enabled);
@@ -59,6 +53,10 @@ class HardwareDepthProvider implements DepthProvider {
   double _lastInferenceMs = 0;
   double _lastAnalyzeMs = 0;
   bool _lastUsedNativeBridge = false;
+
+  static const int _kLumaSize = GroundPlaneAnalyzer.kMapSize;
+  late final Uint8List _lumaBuffer =
+      Uint8List(_kLumaSize * _kLumaSize);
 
   
   DateTime? _highConfStreakStartedAt;
@@ -117,9 +115,6 @@ class HardwareDepthProvider implements DepthProvider {
   @override
   bool get lastUsedNativeBridge => _lastUsedNativeBridge;
 
-  
-  
-  
   
   @override
   bool get lastPlaneFitOk =>
@@ -239,8 +234,16 @@ class HardwareDepthProvider implements DepthProvider {
         _lastInferenceMs = 0;
         _lastUsedNativeBridge = false;
         _effectiveTier = DepthTier.hardware;
+        _extractLuma(
+          yBytes: image.planes[0].bytes,
+          srcWidth: image.width,
+          srcHeight: image.height,
+          rowStride: image.planes[0].bytesPerRow,
+          cropTopFrac: cropTopFrac,
+        );
         final hazards = _analyzer.analyze(
           depthMap,
+          lumaMap: _lumaBuffer,
           userStationary: userStationary,
           weatherDegraded: weatherDegraded,
           winterMode: winterMode,
@@ -275,6 +278,28 @@ class HardwareDepthProvider implements DepthProvider {
     _lastAnalyzeMs = analyzeSw.elapsedMicroseconds / 1000.0;
     _lastUsedNativeBridge = false;
     return const [];
+  }
+
+  void _extractLuma({
+    required Uint8List yBytes,
+    required int srcWidth,
+    required int srcHeight,
+    required int rowStride,
+    required double cropTopFrac,
+  }) {
+    final cropTop =
+        (srcHeight * cropTopFrac).toInt().clamp(0, srcHeight - 1);
+    final cropH = (srcHeight - cropTop).clamp(1, srcHeight);
+    int outIdx = 0;
+    for (int dy = 0; dy < _kLumaSize; dy++) {
+      final sy =
+          ((dy * cropH) ~/ _kLumaSize).clamp(0, cropH - 1) + cropTop;
+      final rowStart = sy * rowStride;
+      for (int dx = 0; dx < _kLumaSize; dx++) {
+        final sx = ((dx * srcWidth) ~/ _kLumaSize).clamp(0, srcWidth - 1);
+        _lumaBuffer[outIdx++] = yBytes[rowStart + sx];
+      }
+    }
   }
 
   @override
@@ -449,7 +474,6 @@ class FocalLengthDepthProvider implements DepthProvider {
   @override
   bool get lastUsedNativeBridge => false;
 
-  
   
   @override
   bool get lastPlaneFitOk => true;

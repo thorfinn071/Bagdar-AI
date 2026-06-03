@@ -248,7 +248,7 @@ class MeshBuddyAlertService {
     switch (call.method) {
       case 'onBuddyPayload':
         try {
-          // Flutter codec: ByteArray → Uint8List; do not change to List<Byte>.
+          
           assert(call.arguments is Uint8List,
               'onBuddyPayload must be Uint8List — do not refactor native side to List<Byte>');
           final data = call.arguments as Uint8List;

@@ -14,7 +14,7 @@ import 'package:flutter/services.dart' show AssetBundle, rootBundle;
 /// Source: PaddleOCR Cyrillic substitution analysis + standard Kazakh
 /// orthography reference.
 const Map<String, List<String>> kKkConfusionPairs = {
-  // Lowercase
+  
   'а': ['ә'],
   'г': ['ғ'],
   'к': ['қ'],
@@ -24,7 +24,7 @@ const Map<String, List<String>> kKkConfusionPairs = {
   'х': ['һ'],
   'ы': ['і'],
   'и': ['і'],
-  // Uppercase
+  
   'А': ['Ә'],
   'Г': ['Ғ'],
   'К': ['Қ'],
@@ -152,8 +152,7 @@ class KkDictionary {
   /// True iff [word] exists verbatim in the dictionary (case-insensitive).
   bool contains(String word) => _words.contains(word.toLowerCase());
 
-  // -- Internals -------------------------------------------------------------
-
+  
   String _correctWord(String word) {
     if (word.length < 2) return word;
     final lower = word.toLowerCase();
@@ -188,11 +187,11 @@ class KkDictionary {
   /// + Latin + digits check is enough for the OCR pipeline and avoids
   /// the regex compile cost per call.
   bool _isWordChar(int rune) {
-    if (rune >= 0x30 && rune <= 0x39) return true;       // 0-9
-    if (rune >= 0x41 && rune <= 0x5A) return true;       // A-Z
-    if (rune >= 0x61 && rune <= 0x7A) return true;       // a-z
-    if (rune >= 0x0400 && rune <= 0x04FF) return true;   // Cyrillic block
-    if (rune == 0x2D || rune == 0x27) return true;       // hyphen, apostrophe
+    if (rune >= 0x30 && rune <= 0x39) return true;       
+    if (rune >= 0x41 && rune <= 0x5A) return true;       
+    if (rune >= 0x61 && rune <= 0x7A) return true;       
+    if (rune >= 0x0400 && rune <= 0x04FF) return true;   
+    if (rune == 0x2D || rune == 0x27) return true;       
     return false;
   }
 
@@ -205,8 +204,7 @@ class KkDictionary {
     }
   }
 
-  // -- Test hooks ------------------------------------------------------------
-
+  
   /// Seed the in-memory dictionary directly (bypasses the asset load).
   /// Tests should never depend on `assets/paddle_ocr/kk_wordlist.txt.gz`
   /// being present.

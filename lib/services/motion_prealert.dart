@@ -33,14 +33,6 @@ class MotionPreAlert {
   static const double _absMin = 3.5;
 
   
-  
-  
-  
-  
-  
-  
-  
-  
   static const int _weatherDegradedMinPersistFrames = 4;
   static const int _weatherDegradedPersonMinPersistFrames = 5;
 
@@ -133,10 +125,6 @@ class MotionPreAlert {
     }
 
     
-    
-    
-    
-    
     final indoorScale = _indoorHint ? 1.4 : 1.0;
     final diffThreshold = _weatherDegradedHint
         ? kEventDiffThreshold * 1.6 * indoorScale
@@ -158,13 +146,6 @@ class MotionPreAlert {
       eventTotal += fired;
     }
 
-    
-    
-    
-    
-    
-    
-    
     
     if (eventTotal > n * kEventGlobalPanFrac) {
       _blobsCurCount = 0;
@@ -394,8 +375,6 @@ class MotionPreAlert {
     final cyFrac = b.cy / kEventGridH;
     final cxFrac = b.cx / kEventGridW;
 
-    
-    
     
     final vehiclePersistThreshold = _weatherDegradedHint
         ? _weatherDegradedMinPersistFrames

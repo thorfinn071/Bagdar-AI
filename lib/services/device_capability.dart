@@ -139,8 +139,6 @@ class DeviceCapabilityProbe {
   DeviceCapabilityProbe._();
 
   
-  
-  
   static const String _kTierKey = 'vg_depth_tier_v3';
   static const String _kSdkKey = 'vg_android_sdk_v3';
   static const MethodChannel _channel = MethodChannel('bagdar/device_info');

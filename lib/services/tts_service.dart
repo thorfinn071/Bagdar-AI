@@ -34,20 +34,11 @@ class TtsService {
   String _requestedLang = 'ru-RU';
   final List<SpeechJob> _queue = [];
 
-  // Phase 2 — Kazakh TTS engine resolution.
-  //
-  // [_activeKkEngine] is non-null only when `_requestedLang == 'kk-KZ'` and
-  // [_resolveKkEngine] has run. When the engine is `rhvoice` or `espeak`,
-  // `_pump` and `stop` route speech through `NativeTtsBridge`; otherwise
-  // (`system`, `russianFallback`, or null) speech continues to go through
-  // `flutter_tts` exactly as it did before Phase 2.
+  
   KkTtsEngine? _activeKkEngine;
   bool _bridgeListenersAttached = false;
 
-  // Test-only override for the FlutterTts language probe inside
-  // [_resolveKkEngine]. When non-null, the resolver uses this value instead
-  // of querying `flutter_tts.getLanguages` so the engine selection logic
-  // can be exercised under `flutter_test` without a real platform channel.
+  
   bool? _kkSystemTtsAvailableOverride;
 
   bool _initStarted = false;
@@ -57,7 +48,6 @@ class TtsService {
   DateTime _currentSpeakStartedAt = DateTime.fromMillisecondsSinceEpoch(0);
   Completer<void>? _currentSpeechCompleter;
 
-  
   
   String? _currentText;
   SpeechPriority? _currentPriority;
@@ -96,11 +86,6 @@ class TtsService {
   void Function()? onAudioRouteInterrupted;
   void Function()? onAudioRouteResumed;
   void Function()? onTtsStall;
-  
-  
-  
-  
-  
   
   
   void Function()? onTtsUnavailable;
@@ -220,7 +205,6 @@ class TtsService {
         _currentSpeakStartedAt = DateTime.now();
         
         
-        
         _armStallTimer(_currentText, _currentPriority);
       });
       _tts.setCompletionHandler(() {
@@ -243,10 +227,6 @@ class TtsService {
 
       _ready = true;
 
-      
-      
-      
-      
       
       try {
         await _tts.setVolume(0.0);
@@ -309,9 +289,7 @@ class TtsService {
       return;
     }
 
-    // Non-Kazakh language: clear any leftover kk engine state so the
-    // _useNativeBackend gate flips back off and speech goes through
-    // flutter_tts as before Phase 2.
+    
     _activeKkEngine = null;
 
     try {
@@ -346,7 +324,7 @@ class TtsService {
   /// true. The resolver is safe to call from any state and is the only
   /// path that mutates [_activeKkEngine].
   Future<KkTtsEngine> _resolveKkEngine() async {
-    // 1. System TTS engine.
+    
     if (await _systemHasKkVoice()) {
       try {
         if (!_testMode) {
@@ -365,7 +343,7 @@ class TtsService {
       return KkTtsEngine.system;
     }
 
-    // 2 & 3. Native engines, gated on the v2 feature flag.
+    
     if (_isKazakhStackV2Enabled()) {
       final engine = await _resolveNativeKkEngine();
       if (engine != null) {
@@ -378,7 +356,7 @@ class TtsService {
       }
     }
 
-    // 4. Russian fallback — legacy behavior, preserved.
+    
     debugPrint(
       'TtsService: no kk voice — falling back to ru-RU for Kazakh text',
     );
@@ -414,15 +392,15 @@ class TtsService {
   Future<KkTtsEngine?> _resolveNativeKkEngine() async {
     final bridge = NativeTtsBridge.instance;
     if (!bridge.isInitialized) {
-      // Best-effort init. Failure leaves capabilities empty and the
-      // resolver falls through to russianFallback below.
+      
+      
       try {
         await bridge.init();
       } catch (_) {}
     }
 
     Future<bool> activate(KkTtsEngine engine) async {
-      if (_testMode) return true; // unit tests skip the channel hop.
+      if (_testMode) return true; 
       return bridge.setEngine(engine);
     }
 
@@ -439,7 +417,7 @@ class TtsService {
     try {
       return Settings.instance.enableKazakhStackV2;
     } catch (_) {
-      // Settings not initialized (e.g. early tests). Treat as off.
+      
       return false;
     }
   }
@@ -517,17 +495,6 @@ class TtsService {
   }
 
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   void _armStallTimer([String? text, SpeechPriority? priority]) {
     _stallTimer?.cancel();
     final timeout = _computeStallTimeout(text: text, priority: priority);
@@ -547,21 +514,10 @@ class TtsService {
   }
 
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   Duration _computeStallTimeout({String? text, SpeechPriority? priority}) {
     if (text == null) return kTtsStallTimeout;
     
     if (priority == SpeechPriority.critical) return kTtsStallTimeout;
-    
     
     
     final scaledMs = 4000 + text.length * 70;
@@ -590,11 +546,6 @@ class TtsService {
   }
 
   
-  
-  
-  
-  
-  
   static const Duration _kCriticalDedupWindow = Duration(seconds: 4);
   static const Duration _kWarningDedupWindow = Duration(seconds: 5);
   static const Duration _kInfoDedupWindow = Duration(seconds: 2);
@@ -608,14 +559,6 @@ class TtsService {
     int? trackId,
     bool barge = false,
   }) {
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     if (!_ready) {
@@ -663,8 +606,6 @@ class TtsService {
     }
 
     if (priority == SpeechPriority.critical) {
-      
-      
       
       
       _queue.removeWhere((j) => j.priority != SpeechPriority.critical);
@@ -722,7 +663,6 @@ class TtsService {
         evictIdx = oldestInfoIdx;
         evictReason = 'queue_full_evict_oldest_info';
       } else if (priority == SpeechPriority.warning && oldestWarnIdx >= 0) {
-        
         
         
         evictIdx = oldestWarnIdx;
@@ -839,10 +779,6 @@ class TtsService {
     if (_testMode) return;
     
     
-    
-    
-    
-    
     _pruneStaleCriticals(DateTime.now(), maxAge: _kCriticalStaleAfter);
     final now = DateTime.now();
     _queue.removeWhere(
@@ -881,10 +817,6 @@ class TtsService {
       }
 
       
-      
-      
-      
-      
       if (job.priority == SpeechPriority.critical) {
         unawaited(HapticService.vibrate(const [0, 80]));
       }
@@ -898,9 +830,8 @@ class TtsService {
           pan: job.pan,
         );
         if (!ok) {
-          // Native engine rejected the utterance — demote this kk session
-          // to the Russian fallback so subsequent speech keeps flowing.
-          // We still attempt to read *this* utterance via flutter_tts.
+          
+          
           debugPrint(
             'TtsService: native bridge speak() returned false — '
             'demoting kk to russianFallback for this session',
@@ -956,8 +887,7 @@ class TtsService {
     }
   }
 
-  // -- Test hooks ------------------------------------------------------------
-
+  
   /// Drive [_resolveKkEngine] directly from tests so engine-selection logic
   /// can be exercised without standing up a real `flutter_tts` instance.
   @visibleForTesting

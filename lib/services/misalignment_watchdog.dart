@@ -43,9 +43,12 @@ class MisalignmentTickResult {
 ///
 /// All time arithmetic accepts an injectable `now` for deterministic tests.
 class MisalignmentWatchdog {
-  static const Duration kWarningThreshold = Duration(seconds: 20);
-  static const Duration kCriticalThreshold = Duration(seconds: 60);
-  static const Duration kLowConfidenceConfirmation = Duration(seconds: 30);
+  // Reduced from 20/60/30 to 10/35/15 to cut time-to-first-warning from
+  // ~50s to ~25s. At 1.3 m/s walking speed, this means ~32m blind instead
+  // of ~65m before the user hears "raise the phone."
+  static const Duration kWarningThreshold = Duration(seconds: 10);
+  static const Duration kCriticalThreshold = Duration(seconds: 35);
+  static const Duration kLowConfidenceConfirmation = Duration(seconds: 15);
   static const Duration kHapticInterval = Duration(seconds: 15);
   static const Duration kCriticalReannounce = Duration(seconds: 60);
   static const Duration kDetectionFreshness = Duration(seconds: 5);

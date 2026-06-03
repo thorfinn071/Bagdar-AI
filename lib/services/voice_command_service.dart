@@ -71,23 +71,23 @@ enum VoiceCommand {
   manageLanguagePacks,
   enableKkV2,
   disableKkV2,
-  // Phase 1 — Indoor trail (Direction 6)
+  
   recordTrail,
   replayTrail,
   stopTrailRecord,
   addTrailLandmark,
   deleteTrail,
-  // Phase 1 — Bazaar / livestock (Direction 9)
+  
   toggleBazaarMode,
   toggleLivestockMode,
-  // Phase 1 — Voice adaptation (Direction 12)
+  
   toggleVoiceAdaptation,
   clearAdaptationData,
-  // Phase 2 — Mesh-Net Buddy Alerts (Direction 3)
+  
   toggleMeshBuddy,
-  // Phase 3 — Near-Miss Buffer (Direction 4)
+  
   recordNearMiss,
-  // Phase 5 — Sonar-on-Phone (Direction 1)
+  
   toggleSonar,
   unknown,
 }
@@ -228,31 +228,31 @@ class VoiceCommandService {
     'обычное казахское распознавание':
         VoiceCommand.disableKkV2,
     'старое распознавание': VoiceCommand.disableKkV2,
-    // Phase 1 — Indoor trail
+    
     'стоп маршрут': VoiceCommand.stopTrailRecord,
     'остановить маршрут': VoiceCommand.stopTrailRecord,
     'стоп запись маршрута': VoiceCommand.stopTrailRecord,
-    // Phase 1 — Bazaar / livestock
+    
     'режим базар': VoiceCommand.toggleBazaarMode,
     'базарный режим': VoiceCommand.toggleBazaarMode,
     'режим рынок': VoiceCommand.toggleBazaarMode,
     'режим животные': VoiceCommand.toggleLivestockMode,
     'режим скот': VoiceCommand.toggleLivestockMode,
-    // Phase 1 — Voice adaptation
+    
     'адаптация голоса': VoiceCommand.toggleVoiceAdaptation,
     'включи адаптацию': VoiceCommand.toggleVoiceAdaptation,
     'выключи адаптацию': VoiceCommand.toggleVoiceAdaptation,
     'удалить данные адаптации': VoiceCommand.clearAdaptationData,
     'очистить адаптацию': VoiceCommand.clearAdaptationData,
-    // Phase 2 — Mesh-Net Buddy Alerts
+    
     'сеть помощников': VoiceCommand.toggleMeshBuddy,
     'режим помощников': VoiceCommand.toggleMeshBuddy,
     'меш сеть': VoiceCommand.toggleMeshBuddy,
-    // Phase 3 — Near-Miss Buffer
+    
     'опасная ситуация': VoiceCommand.recordNearMiss,
     'записать опасность': VoiceCommand.recordNearMiss,
     'было опасно': VoiceCommand.recordNearMiss,
-    // Phase 5 — Sonar-on-Phone
+    
     'эхолот': VoiceCommand.toggleSonar,
     'режим эхолота': VoiceCommand.toggleSonar,
     'сонар': VoiceCommand.toggleSonar,
@@ -270,8 +270,6 @@ class VoiceCommandService {
     'звони 112',
   };
 
-  
-  
   
   static const Set<String> _ruCancelFallExact = {
     'я в порядке',
@@ -312,7 +310,7 @@ class VoiceCommandService {
     'на автобусе в ',
   ];
 
-  // Phase 1 — Indoor trail record/replay prefixes (ru)
+  
   static const List<String> _ruRecordTrailPrefixes = [
     'запиши маршрут до ',
     'запиши маршрут в ',
@@ -495,24 +493,24 @@ class VoiceCommandService {
     'жаңа қазақша тану': VoiceCommand.enableKkV2,
     'қарапайым қазақша тану': VoiceCommand.disableKkV2,
     'ескі тану': VoiceCommand.disableKkV2,
-    // Phase 1 — Indoor trail
+    
     'маршрутты тоқтат': VoiceCommand.stopTrailRecord,
     'жазуды тоқтат': VoiceCommand.stopTrailRecord,
-    // Phase 1 — Bazaar / livestock
+    
     'базар режимі': VoiceCommand.toggleBazaarMode,
     'нарық режимі': VoiceCommand.toggleBazaarMode,
     'мал режимі': VoiceCommand.toggleLivestockMode,
     'жануарлар режимі': VoiceCommand.toggleLivestockMode,
-    // Phase 1 — Voice adaptation
+    
     'дауыс бейімдеу': VoiceCommand.toggleVoiceAdaptation,
     'бейімдеу деректерін жою': VoiceCommand.clearAdaptationData,
-    // Phase 2 — Mesh-Net Buddy Alerts
+    
     'көмекшілер желісі': VoiceCommand.toggleMeshBuddy,
     'көмекшілер режимі': VoiceCommand.toggleMeshBuddy,
-    // Phase 3 — Near-Miss Buffer
+    
     'қауіпті жағдай': VoiceCommand.recordNearMiss,
     'қауіпті жаз': VoiceCommand.recordNearMiss,
-    // Phase 5 — Sonar-on-Phone
+    
     'эхолот': VoiceCommand.toggleSonar,
     'эхолот режимі': VoiceCommand.toggleSonar,
     'сонар': VoiceCommand.toggleSonar,
@@ -528,8 +526,6 @@ class VoiceCommandService {
     'жәрдем шұғыл',
   };
 
-  
-  
   
   static const Set<String> _kkCancelFallExact = {
     'мен жақсымын',
@@ -567,7 +563,7 @@ class VoiceCommandService {
     'автобус қашан ',
   ];
 
-  // Phase 1 — Indoor trail record/replay prefixes (kk)
+  
   static const List<String> _kkRecordTrailPrefixes = [
     'маршрутты жаз ',
     'жолды жаз ',
@@ -715,30 +711,30 @@ class VoiceCommandService {
     'new kazakh recognition': VoiceCommand.enableKkV2,
     'standard kazakh': VoiceCommand.disableKkV2,
     'legacy kazakh recognition': VoiceCommand.disableKkV2,
-    // Phase 1 — Indoor trail
+    
     'stop trail': VoiceCommand.stopTrailRecord,
     'stop recording trail': VoiceCommand.stopTrailRecord,
     'stop trail recording': VoiceCommand.stopTrailRecord,
-    // Phase 1 — Bazaar / livestock
+    
     'bazaar mode': VoiceCommand.toggleBazaarMode,
     'market mode': VoiceCommand.toggleBazaarMode,
     'livestock mode': VoiceCommand.toggleLivestockMode,
     'animal mode': VoiceCommand.toggleLivestockMode,
-    // Phase 1 — Voice adaptation
+    
     'voice adaptation': VoiceCommand.toggleVoiceAdaptation,
     'toggle adaptation': VoiceCommand.toggleVoiceAdaptation,
     'clear adaptation data': VoiceCommand.clearAdaptationData,
     'delete adaptation data': VoiceCommand.clearAdaptationData,
-    // Phase 2 — Mesh-Net Buddy Alerts
+    
     'buddy network': VoiceCommand.toggleMeshBuddy,
     'mesh network': VoiceCommand.toggleMeshBuddy,
     'toggle buddy': VoiceCommand.toggleMeshBuddy,
-    // Phase 3 — Near-Miss Buffer
+    
     'near miss': VoiceCommand.recordNearMiss,
     'record hazard': VoiceCommand.recordNearMiss,
     'record near miss': VoiceCommand.recordNearMiss,
     'it was dangerous': VoiceCommand.recordNearMiss,
-    // Phase 5 — Sonar-on-Phone
+    
     'sonar': VoiceCommand.toggleSonar,
     'sonar mode': VoiceCommand.toggleSonar,
     'echolocation': VoiceCommand.toggleSonar,
@@ -755,8 +751,6 @@ class VoiceCommandService {
     'call 112',
   };
 
-  
-  
   
   static const Set<String> _enCancelFallExact = {
     'i am fine',
@@ -804,7 +798,7 @@ class VoiceCommandService {
     'when is bus ',
   ];
 
-  // Phase 1 — Indoor trail record/replay prefixes (en)
+  
   static const List<String> _enRecordTrailPrefixes = [
     'record trail to ',
     'record path to ',
@@ -896,9 +890,8 @@ class VoiceCommandService {
     } catch (e) {
       _available = false;
     }
-    // Best-effort: if the user is already on kk and has the Vosk pack
-    // installed, kick off the Vosk model load now so the first listen is
-    // fast. Otherwise this is a cheap no-op.
+    
+    
     unawaited(_reconcileVoskRouting());
     return _available;
   }
@@ -919,8 +912,8 @@ class VoiceCommandService {
   void setLocale(String bcp47) {
     if (_locale == bcp47) return;
     _locale = bcp47;
-    // Vosk lifecycle is tied to locale; reconcile asynchronously so the
-    // synchronous setLocale contract is preserved for callers.
+    
+    
     unawaited(_reconcileVoskRouting());
   }
 
@@ -963,8 +956,8 @@ class VoiceCommandService {
   }
 
   Future<void> _reconcileVoskRouting() async {
-    // Serialize concurrent reconciliations so a fast locale-toggle
-    // (kk → ru → kk) doesn't tear and re-create the model mid-load.
+    
+    
     final pending = _reconcileFuture;
     if (pending != null) {
       await pending;
@@ -1015,13 +1008,11 @@ class VoiceCommandService {
   void _onVoskResult(String text) {
     final cleaned = text.trim();
     debugPrint('VoiceCommandService(vosk-kk) recognized: "$cleaned"');
-    // Run the existing parser, which knows the kk vocabulary and will fire
-    // onCommand/onNavCommand callbacks identically to the speech_to_text
-    // path. The parser is locale-driven via `_locale`, which is already
-    // kk-* by the time we reach this branch.
+    
+    
     _processResult(cleaned);
-    // For non-continuous mode, stop the recognizer after one utterance to
-    // mirror the speech_to_text contract (single-shot listen).
+    
+    
     if (!_continuous && _vosk.isListening) {
       unawaited(_vosk.stop());
       _setListening(false);
@@ -1086,8 +1077,8 @@ class VoiceCommandService {
     if (!_vosk.isReady) {
       final ok = await _initVoskIfNeeded();
       if (!ok) {
-        // Vosk init failed (corrupted pack, OOM, etc.) — fall back to STT
-        // for this listen and on the next reconcile we'll re-evaluate.
+        
+        
         _useVoskForKk = false;
         return _listenInternal(listenFor: listenFor);
       }
@@ -1099,8 +1090,8 @@ class VoiceCommandService {
     }
     _setListening(true);
     if (!_continuous) {
-      // Mirror speech_to_text's listenFor watchdog so a stuck mic doesn't
-      // hold focus forever when the user goes silent.
+      
+      
       Future<void>.delayed(listenFor, () async {
         if (_continuous) return;
         if (_vosk.isListening) {
@@ -1123,16 +1114,6 @@ class VoiceCommandService {
   }
 
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   void extendContinuousDeadline(Duration newSessionDuration) {
     if (!_continuous) return;
     final newDeadline = DateTime.now().add(newSessionDuration);
@@ -1146,10 +1127,8 @@ class VoiceCommandService {
   }
 
   
-  
   DateTime get continuousDeadline => _continuousDeadline;
 
-  
   
   bool get isContinuousActive =>
       _continuous && DateTime.now().isBefore(_continuousDeadline);
@@ -1266,21 +1245,6 @@ class VoiceCommandService {
     }
 
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     if (cancelSet.contains(lower) || _matchesFallCancelKeyword(lower, isKk: isKk, isEn: isEn)) {
       onCommand?.call(VoiceCommand.cancelFall);
       return;
@@ -1315,8 +1279,7 @@ class VoiceCommandService {
       }
     }
 
-    // Phase 1 — Indoor trail prefixes (before sorted-key scan so
-    // more specific patterns win over generic keyword matches).
+    
     for (final prefix in recordTrailPrefixes) {
       if (lower.startsWith(prefix)) {
         final name = lower.substring(prefix.length).trim();
@@ -1444,27 +1407,6 @@ class VoiceCommandService {
     }
   }
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   
   static const List<String> _ruCancelFallKeywords = <String>[
     'порядк', 

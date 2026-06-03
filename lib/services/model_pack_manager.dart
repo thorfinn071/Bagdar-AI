@@ -198,7 +198,7 @@ class ModelPackManager {
       final modelFile = File('${dir.path}/${pack.modelFileName}');
       final labelsFile = File('${dir.path}/${pack.labelsFileName}');
 
-      // Download model file.
+      
       await _dio.download(
         pack.downloadUrl,
         modelFile.path,
@@ -207,7 +207,7 @@ class ModelPackManager {
         },
       );
 
-      // Verify SHA-256.
+      
       if (pack.sha256.isNotEmpty) {
         final bytes = await modelFile.readAsBytes();
         final hash = sha256.convert(bytes).toString();
@@ -224,7 +224,7 @@ class ModelPackManager {
         }
       }
 
-      // Write labels file.
+      
       await labelsFile.writeAsString(pack.classes.join('\n'), flush: true);
 
       final installed = InstalledModelPack(

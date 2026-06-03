@@ -85,8 +85,8 @@ class ParticleTrailLocalizer {
   /// Recompute everything at the start of a new replay session.
   void reset({int initialSpread = 4}) {
     for (final p in _particles) {
-      // Start every particle at the trail head with a small spread so
-      // we tolerate the user not being precisely at the entry point.
+      
+      
       p.index = (_rng.nextDouble() * initialSpread).clamp(0.0, double.infinity);
       p.weight = 1.0;
     }
@@ -112,13 +112,13 @@ class ParticleTrailLocalizer {
 
     final maxIdx = (trail.sampleCount - 1).toDouble();
 
-    // Predict.
+    
     for (final p in _particles) {
       p.index = (p.index + stepDelta + _gaussian() * _stepDriftSigma)
           .clamp(0.0, maxIdx);
     }
 
-    // Weight.
+    
     double sumW = 0;
     for (final p in _particles) {
       final s = _sampleAt(trail, p.index);
@@ -134,7 +134,7 @@ class ParticleTrailLocalizer {
         p.weight /= sumW;
       }
     } else {
-      // Degenerate observation. Fall back to uniform.
+      
       final uniform = 1.0 / _particles.length;
       for (final p in _particles) {
         p.weight = uniform;
@@ -222,8 +222,7 @@ class ParticleTrailLocalizer {
     }
   }
 
-  // -- Math helpers ----------------------------------------------------
-
+  
   static double _angleDiff(double a, double b) {
     var d = (a - b) % 360.0;
     if (d > 180) d -= 360;
@@ -242,7 +241,7 @@ class ParticleTrailLocalizer {
   }
 
   double _gaussian() {
-    // Box-Muller. Not perf-critical; ~200 calls per step.
+    
     final u1 = math.max(1e-9, _rng.nextDouble());
     final u2 = _rng.nextDouble();
     return math.sqrt(-2.0 * math.log(u1)) * math.cos(2 * math.pi * u2);

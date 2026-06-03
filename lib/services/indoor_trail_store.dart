@@ -83,7 +83,7 @@ class IndoorTrailStore {
     for (final t in all) {
       if (t.name.trim().toLowerCase() == needle) return t;
     }
-    // Fallback: substring match (handles "the pharmacy" vs "pharmacy").
+    
     for (final t in all) {
       if (t.name.trim().toLowerCase().contains(needle)) return t;
     }
@@ -98,7 +98,7 @@ class IndoorTrailStore {
       final file = File('${dir.path}/${trail.id}.json');
       await file.writeAsString(trail.encode(), flush: true);
 
-      // Enforce cap.
+      
       final all = await list();
       if (all.length > kMaxTrails) {
         final excess = all.length - kMaxTrails;

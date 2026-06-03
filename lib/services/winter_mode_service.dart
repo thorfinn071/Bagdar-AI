@@ -91,7 +91,7 @@ class WinterModeService extends ChangeNotifier {
   void noteThermalReading(ThermalReadings readings) {
     final temp = readings.batteryTempC;
     if (temp == null) {
-      // Unknown temp = trust the manual toggle only; clear streak.
+      
       _coldReadingStreak = 0;
       if (_autoEnabled) {
         _autoEnabled = false;

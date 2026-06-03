@@ -172,8 +172,7 @@ class IndoorTrailReplay {
     _state = IndoorTrailReplayState.idle;
   }
 
-  // -- Internals --------------------------------------------------------
-
+  
   void _attachSensors() {
     try {
       _magSub = magnetometerEventStream(
@@ -203,7 +202,7 @@ class IndoorTrailReplay {
     final current = steps.steps;
     final delta = current - _lastSeenStepCount;
     if (delta < 0) {
-      // Step counter reset under us. Treat as no new steps.
+      
       _lastSeenStepCount = current;
       return;
     }
@@ -244,7 +243,7 @@ class IndoorTrailReplay {
       return;
     }
 
-    // Recovered from a lost streak: keep going but don't re-announce.
+    
     _lostStreak = 0;
     if (_state == IndoorTrailReplayState.lost) {
       _state = IndoorTrailReplayState.replaying;
@@ -279,9 +278,8 @@ class IndoorTrailReplay {
   }
 
   void _emitNextPrompt(IndoorTrail trail, int idx) {
-    // Determine the next significant heading change ahead of `idx` and
-    // verbalise it. We deliberately keep instructions sparse (every
-    // 5 steps minimum) to avoid spamming the user.
+    
+    
     final lookahead = math.min(idx + 5, trail.sampleCount - 1);
     if (lookahead == idx) return;
 
@@ -369,8 +367,7 @@ class IndoorTrailReplay {
     return d;
   }
 
-  // -- Test hooks -------------------------------------------------------
-
+  
   @visibleForTesting
   void debugSetMag(double micros) {
     _magMagEma = micros;

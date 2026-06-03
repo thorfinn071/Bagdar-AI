@@ -87,8 +87,7 @@ class BazaarLivestockService {
   /// Whether livestock announcements are active right now.
   bool get isLivestock => contextMode.isLivestock;
 
-  // -- Bazaar threshold helpers ------------------------------------------
-
+  
   /// Crowd-alert cooldown multiplier for the current context. Returns
   /// 1.0 when bazaar mode is off (no change).
   double get crowdCooldownMultiplier =>
@@ -104,8 +103,7 @@ class BazaarLivestockService {
   double get lowObstacleBoost =>
       isBazaar ? BazaarThresholds.lowObstaclePriorityBoost : 0.0;
 
-  // -- Livestock label matching ------------------------------------------
-
+  
   /// Call every frame from `AlertManager.processFrame` with the
   /// current set of YOLO labels. When livestock mode is active and
   /// livestock labels appear, emits localised announcements through
@@ -125,7 +123,7 @@ class BazaarLivestockService {
     for (final label in labels) {
       if (!LivestockTaxonomy.isLivestock(label)) continue;
 
-      // Cooldown per label.
+      
       final last = _lastAnnounced[label];
       if (last != null && now.difference(last) < _kLivestockCooldown) {
         continue;
@@ -135,7 +133,7 @@ class BazaarLivestockService {
       final stringKey = LivestockTaxonomy.labelToStringKey[label]!;
       var text = S.alert(stringKey);
       if (text == stringKey || text.isEmpty) {
-        // Fallback to plain label if the string key isn't localized yet.
+        
         text = label;
       }
 
@@ -169,8 +167,7 @@ class BazaarLivestockService {
     _lastAnnounced.clear();
   }
 
-  // -- Bazaar label helpers -----------------------------------------------
-
+  
   /// COCO-80 labels that represent hanging or overhead obstacles
   /// relevant in bazaar environments. Used by `AlertManager` to
   /// apply the bazaar priority boost.

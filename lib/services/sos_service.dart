@@ -17,14 +17,9 @@ enum SosResult {
   sentFallback,
   
   
-  
-  
-  
-  
   sentWithoutLocation,
   
   noContact,
-  
   
   
   noLocation,
@@ -179,11 +174,6 @@ class SosService {
         final isFallback = i > 0 || !hasUserContact;
         last = await _tryDeliver(target, message, isFallback: isFallback);
         if (last == SosResult.sent || last == SosResult.sentFallback) {
-          
-          
-          
-          
-          
           
           
           final gpsMissing = position == null;

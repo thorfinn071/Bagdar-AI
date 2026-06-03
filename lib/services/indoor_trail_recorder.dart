@@ -199,8 +199,7 @@ class IndoorTrailRecorder {
     _state = IndoorTrailRecorderState.idle;
   }
 
-  // -- Internals --------------------------------------------------------
-
+  
   void _attachSensors() {
     try {
       _accelSub = accelerometerEventStream(
@@ -258,8 +257,8 @@ class IndoorTrailRecorder {
     _lastSeenStepCount = current;
     if (deltaSteps <= 0) return;
     if (!_hasMag) {
-      // Without magnetometer the trail is unrecoverable on replay.
-      // Skip the sample rather than persist a useless record.
+      
+      
       return;
     }
     final stepIndex = current - _baseStepCount;
@@ -277,8 +276,7 @@ class IndoorTrailRecorder {
     _pendingLandmark = null;
   }
 
-  // -- Test hooks -------------------------------------------------------
-
+  
   @visibleForTesting
   void debugInjectSample(IndoorTrailSample s) {
     _samples.add(s);

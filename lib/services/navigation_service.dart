@@ -72,9 +72,6 @@ class NavigationService {
   static const Duration _offRouteCooldown = Duration(seconds: 30);
   
   
-  
-  
-  
   static const Duration _softOffRouteCooldown = Duration(seconds: 4);
   static const Duration _rerouteCooldown = Duration(seconds: 60);
   DateTime _lastOffRouteAt = DateTime.fromMillisecondsSinceEpoch(0);
@@ -252,9 +249,7 @@ class NavigationService {
   void _onPositionUpdate(Position pos) {
     final now = DateTime.now();
 
-    // M11: gate on the fix's own timestamp age (Geolocator hands us older
-    // cached fixes when the device is in an urban canyon / tunnel). The
-    // previous self-comparison against `_lastFixAt` was dead code.
+    
     final gpsBad = isGpsBad(pos.accuracy, pos.timestamp, now);
 
     if (gpsBad && !_navMuted) {
@@ -493,13 +488,6 @@ class NavigationService {
     final dist = step.distanceMeters;
 
     
-    
-    
-    
-    
-    
-    
-    
     final useImmediateForm = dist < 3;
     String msg;
     if (step.instruction.isNotEmpty) {
@@ -519,15 +507,8 @@ class NavigationService {
   void _announceApproach(Position pos, RouteStep step, int distToEnd) {
     
     
-    
-    
-    
-    
-    
-    
     if (!compass.isAvailable) {
       onInstruction?.call('$distToEnd ${S.get('meters')}.');
-      
       
       
       return;

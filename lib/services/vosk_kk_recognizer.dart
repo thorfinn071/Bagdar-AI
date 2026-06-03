@@ -110,7 +110,7 @@ class VoskKkRecognizer {
     final completer = _initCompleter!;
 
     try {
-      // If a previous model is loaded, unload before swapping.
+      
       if (_ready) {
         await _teardownNative();
       }
@@ -176,9 +176,8 @@ class VoskKkRecognizer {
     if (wasListening) await stop();
 
     try {
-      // The plugin does not expose an in-place grammar swap; rebuild the
-      // recognizer + speech service. Model load (the expensive part) is
-      // preserved across the swap.
+      
+      
       await _detachStreams();
       try {
         await _speech?.dispose();
@@ -252,8 +251,8 @@ class VoskKkRecognizer {
     if (_disposed || _recognizer == null) return;
     try {
       await _recognizer!.setMaxAlternatives(0);
-      // The plugin uses `Recognizer.reset()` if available; otherwise
-      // recreating recognizer is overkill mid-session. Best-effort here.
+      
+      
     } catch (_) {}
   }
 
@@ -265,8 +264,7 @@ class VoskKkRecognizer {
     await _teardownNative();
   }
 
-  // -- Internals -------------------------------------------------------------
-
+  
   void _attachStreams() {
     if (_speech == null) return;
     _resultSub = _speech!.onResult().listen(
@@ -331,8 +329,7 @@ class VoskKkRecognizer {
     return '';
   }
 
-  // -- Test hooks ------------------------------------------------------------
-
+  
   @visibleForTesting
   void debugInjectFinalResult(String raw) {
     final text = _extractTextField(raw, key: 'text');
@@ -343,8 +340,8 @@ class VoskKkRecognizer {
   @visibleForTesting
   void debugInjectPartial(String raw) {
     final text = _extractTextField(raw, key: 'partial');
-    // Mirror the production stream filter (empty partials are silently
-    // dropped because they would just spam the UI).
+    
+    
     if (text.isNotEmpty) onPartial?.call(text);
   }
 

@@ -425,8 +425,6 @@ class FallDetector {
   }
 
   
-  
-  
   void notifyCancelled() {
     final now = DateTime.now();
     _lastDetectionAt =

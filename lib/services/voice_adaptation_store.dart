@@ -108,7 +108,7 @@ class VoiceAdaptationStore {
         confidence: confidence,
       ));
 
-      // FIFO eviction.
+      
       while (samples.length > kMaxSamples) {
         samples.removeAt(0);
       }
@@ -152,8 +152,7 @@ class VoiceAdaptationStore {
     return samples.map((s) => s.toJson()).toList();
   }
 
-  // -- Internals ----------------------------------------------------------
-
+  
   Future<List<VoiceAdaptationSample>> _loadCache() async {
     if (_cache != null) return _cache!;
     try {

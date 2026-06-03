@@ -8,6 +8,7 @@ class OrientationService {
   StreamSubscription? _subscription;
   double _pitch = 0;
   double _roll = 0;
+  bool _firstSample = true;
   DevicePitch _state = DevicePitch.flat;
   bool _rollExcessive = false;
 
@@ -44,18 +45,24 @@ class OrientationService {
           samplingPeriod: const Duration(milliseconds: 60),
         ).listen((event) {
           final pitchRad = math.atan2(event.y.abs(), event.z);
-          final pitchDeg = pitchRad * 180 / math.pi;
+          final rawPitch = pitchRad * 180 / math.pi;
+          final rawRoll = computeRoll(event.x, event.z);
 
-          _pitch = pitchDeg;
-
-          _roll = computeRoll(event.x, event.z);
+          if (_firstSample) {
+            _pitch = rawPitch;
+            _roll = rawRoll;
+            _firstSample = false;
+          } else {
+            _pitch = _pitch * 0.8 + rawPitch * 0.2;
+            _roll = _roll * 0.85 + rawRoll * 0.15;
+          }
 
           DevicePitch newState;
-          if (pitchDeg > 75) {
+          if (_pitch > 75) {
             newState = DevicePitch.tooHigh;
-          } else if (pitchDeg < 15) {
+          } else if (_pitch < 15) {
             newState = DevicePitch.tooLow;
-          } else if (pitchDeg > 30 && pitchDeg < 60) {
+          } else if (_pitch > 30 && _pitch < 60) {
             newState = DevicePitch.optimal;
           } else {
             newState = DevicePitch.flat;

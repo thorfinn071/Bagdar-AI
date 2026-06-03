@@ -172,12 +172,12 @@ class SensorSessionCoordinator {
     final existing = _active[resource];
     if (existing != null) {
       if (existing.owner == owner) {
-        // Re-entrant claim. Don't issue a new lease ID; just hand back
-        // the existing one so callers can be tolerant of repeated init.
+        
+        
         return SessionGrant.granted(existing);
       }
-      // Preempt if and only if requester is strictly higher priority.
-      // Equal priority does not preempt — first to arrive keeps it.
+      
+      
       if (priority.index < existing.priority.index) {
         _preempt(existing);
       } else {
@@ -218,7 +218,7 @@ class SensorSessionCoordinator {
     if (lease == null) return;
     final current = _active[lease.resource];
     if (current == null || current.id != lease.id) {
-      // Already preempted or replaced. Mark released and return.
+      
       lease._released = true;
       return;
     }

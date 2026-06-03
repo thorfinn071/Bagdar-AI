@@ -57,7 +57,6 @@ class TwoGisService {
       );
 
       
-      
       final resp = await _client.get(uri).timeout(const Duration(seconds: 8));
       if (resp.statusCode != 200) {
         debugPrint('TwoGisService.searchPlaces: HTTP ${resp.statusCode}');

@@ -128,7 +128,7 @@ class NativeTtsBridge {
     } catch (e, st) {
       debugPrint('NativeTtsBridge.init failed: $e\n$st');
       _capabilities = const {};
-      // Leave _initialized false so callers know they should fall back.
+      
     } finally {
       _initStarted = false;
     }
@@ -160,7 +160,7 @@ class NativeTtsBridge {
   /// `rhvoice` / `espeak`. Idempotent.
   Future<bool> setEngine(KkTtsEngine engine) async {
     if (!engine.usesNativeBridge) {
-      // System / russianFallback aren't routed through here.
+      
       _activeEngine = null;
       return false;
     }
@@ -287,8 +287,7 @@ class NativeTtsBridge {
     onSpeechError = null;
   }
 
-  // -- Internals -------------------------------------------------------------
-
+  
   Future<void> _attachEvents() async {
     if (_eventsAttached) return;
     try {
@@ -300,9 +299,8 @@ class NativeTtsBridge {
       );
       _eventsAttached = true;
     } catch (e) {
-      // MissingPluginException is expected on hosts without the plugin
-      // (tests, desktop). Bridge silently degrades — the resolver in
-      // TtsService will simply never see an available native engine.
+      
+      
       debugPrint('NativeTtsBridge: events unavailable: $e');
     }
   }
@@ -322,7 +320,7 @@ class NativeTtsBridge {
         onSpeechError?.call(reason);
         break;
       default:
-        // Future event types are ignored — bridge stays forward-compatible.
+        
         break;
     }
   }
@@ -347,9 +345,8 @@ class NativeTtsBridge {
       }
       _capabilities = const {};
     } on MissingPluginException {
-      // No Android plugin registered (running in a test host or on a
-      // platform where the plugin isn't compiled in). Bridge degrades
-      // silently.
+      
+      
       _capabilities = const {};
     } on PlatformException catch (e) {
       debugPrint('NativeTtsBridge.availableEngines failed: $e');
@@ -371,8 +368,7 @@ class NativeTtsBridge {
     }
   }
 
-  // -- Test hooks ------------------------------------------------------------
-
+  
   /// Inject a capability map directly. Used by tests that want to drive
   /// `TtsService._resolveKkEngine()` through specific scenarios without a
   /// real native bridge.

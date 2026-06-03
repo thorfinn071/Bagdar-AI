@@ -1,36 +1,14 @@
 
 
-
 enum WeatherTransition {
   none,
 
   
-  
-  
   degraded,
 
   
-  
-  
   recovered,
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 class WeatherGate {
@@ -39,45 +17,40 @@ class WeatherGate {
   static const double _kVarLow = 200.0;
 
   
-  
   static const double _kVarHigh = 400.0;
 
-  
-  
-  
   
   static const double _kAvgHigh = 150.0;
 
   
-  
-  
-  
   static const int _kConfirmIn = 10;
 
   
-  
-  
-  static const int _kConfirmOut = 30;
+  static const int _kConfirmOut = 15;
 
   int _degradedStreak = 0;
   int _recoveredStreak = 0;
   bool _degraded = false;
 
   
-  
-  
   bool get degraded => _degraded;
 
   
-  
-  
-  WeatherTransition feed(double variance, double avgLuminosity) {
+  WeatherTransition feed(double variance, double avgLuminosity, {
+    bool indoorHint = false,
+  }) {
     final isLowVis = variance < _kVarLow && avgLuminosity > _kAvgHigh;
     final isClearlyOk = variance > _kVarHigh;
 
-    if (isLowVis) {
+    // Indoor uniform lighting (fluorescent/LED) matches the low-vis pattern
+    // (low variance, high brightness) but is expected — don't enter degraded.
+    if (isLowVis && !indoorHint) {
       _degradedStreak++;
       _recoveredStreak = 0;
+    } else if (indoorHint && isLowVis) {
+      // Indoor: treat as ambiguous, let recovery proceed if already degraded
+      if (_degradedStreak > 0) _degradedStreak--;
+      if (_recoveredStreak < _kConfirmOut) _recoveredStreak++;
     } else if (isClearlyOk) {
       _recoveredStreak++;
       _degradedStreak = 0;
@@ -101,8 +74,6 @@ class WeatherGate {
     return WeatherTransition.none;
   }
 
-  
-  
   
   void reset() {
     _degradedStreak = 0;

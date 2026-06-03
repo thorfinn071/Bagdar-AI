@@ -11,10 +11,6 @@ class HapticService {
   static double _strengthMultiplier = 1.0;
 
   
-  
-  
-  
-  
   static const double _kCriticalFloorMultiplier = 1.0;
 
   static Future<void> init() async {
@@ -41,15 +37,6 @@ class HapticService {
   }) async {
     if (_hasVibrator == null) await init();
     if (!(_hasVibrator ?? false)) return;
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     final isCriticalPattern = identical(pattern, kHapticTtsStallPattern) ||
