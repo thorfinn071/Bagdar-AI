@@ -50,18 +50,18 @@ void main() {
               severity: ThermalSeverity.normal,
             );
 
-        // single cold reading is not enough
+        
         svc.noteThermalReading(
             cold(WinterModeService.kAutoEnableBatteryTempC - 1));
         expect(svc.isAutoEnabled, isFalse);
 
-        // second cold reading crosses the streak threshold
+        
         svc.noteThermalReading(
             cold(WinterModeService.kAutoEnableBatteryTempC - 2));
         expect(svc.isAutoEnabled, isTrue);
         expect(svc.active, isTrue);
 
-        // one warm reading resets the streak and auto-disables
+        
         svc.noteThermalReading(cold(25.0));
         expect(svc.isAutoEnabled, isFalse);
         expect(svc.active, isFalse);
@@ -92,7 +92,7 @@ void main() {
       ));
       svc.noteThermalReading(const ThermalReadings.unavailable());
       expect(svc.isAutoEnabled, isFalse);
-      // Next two cold readings should again need the full streak
+      
       svc.noteThermalReading(const ThermalReadings(
         batteryTempC: 0.0,
         thermalStatus: null,
@@ -209,7 +209,7 @@ void main() {
     test(
       'winter mode does not change behavior for non-slippery hazards',
       () {
-        final pothole = DepthHazard(
+        const pothole = DepthHazard(
           type: DepthHazardType.pothole,
           zone: HazardZone.right,
           midasScore: 0.70,

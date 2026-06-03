@@ -244,7 +244,6 @@ void main() {
           ..setThermal(_readings(ThermalSeverity.normal), now: t0)
           
           
-          
           ..setIndoorMode(false);
         thr.setMotionState(MotionState.stationary);
 
@@ -289,7 +288,6 @@ void main() {
         thr.setMotionState(MotionState.stationary);
         expect(thr.isStationaryGateActive(now: t0), isTrue);
 
-        
         
         thr.setMotionState(MotionState.walking, now: t0);
         thr.setMotionState(MotionState.stationary, now: t0);

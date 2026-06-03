@@ -136,9 +136,6 @@ void main() {
         expect(hp.debugFallback, isNull);
 
         
-        
-        
-        
         hp.debugUpdateConfidence(
           0.10,
           now: t0.add(const Duration(seconds: 32)),

@@ -89,10 +89,9 @@ void main() {
     test(
       'stationary unresponsive user triggers early SOS at secondsLeft==7',
       () {
-        bool sosSent = false;
         final c = _makeController(
           motionStateProvider: () => MotionState.stationary,
-          onSosSent: () => sosSent = true,
+          onSosSent: () {},
         );
         c.initForTesting(secondsLeft: 15);
 

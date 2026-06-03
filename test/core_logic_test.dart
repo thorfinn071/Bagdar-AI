@@ -120,9 +120,6 @@ void main() {
   });
 
   
-  
-  
-
   group('posFromCx', () {
     const w = 640.0;
 
@@ -149,9 +146,6 @@ void main() {
   });
 
   
-  
-  
-
   group('clockDir', () {
     const w = 640.0;
 
@@ -191,9 +185,6 @@ void main() {
   });
 
   
-  
-  
-
   group('threatScore', () {
     test('very-close object scores higher than close', () {
       final scoreVc = threatScore('person', 'center', 'very close', 0.20);
@@ -232,9 +223,6 @@ void main() {
   });
 
   
-  
-  
-
   group('SOS phone number validation (digit count)', () {
     bool isValidPhone(String phone) {
       final digits = phone.replaceAll(RegExp(r'\D'), '');
@@ -267,16 +255,10 @@ void main() {
   });
 
   
-  
-  
-
   group('GroundPlaneAnalyzer', () {
     final analyzer = GroundPlaneAnalyzer();
     const size = GroundPlaneAnalyzer.kMapSize; 
 
-    
-    
-    
     
     setUp(analyzer.resetTemporalFilter);
 
@@ -343,9 +325,6 @@ void main() {
   });
 
   
-  
-  
-
   group('BatteryMonitor', () {
     test('battery level thresholds map to the intended throttle tiers', () {
       expect(BatteryMonitor.levelForBatteryLevel(100), ThrottleLevel.normal);
@@ -359,9 +338,6 @@ void main() {
   });
 
   
-  
-  
-
   group('AlertFilter', () {
     late AlertFilter filter;
     final t0 = DateTime(2025, 1, 1, 12, 0, 0);
@@ -477,10 +453,6 @@ void main() {
     });
 
     
-    
-    
-    
-    
     test('per-category cooldown: same category blocked, different category '
         'passes', () {
       filter.add(makeCandidate(
@@ -491,7 +463,6 @@ void main() {
       final first = filter.flush(1, t0);
       expect(first!.text, 'pedestrian1');
 
-      
       
       filter.add(makeCandidate(
         priority: SpeechPriority.warning,
@@ -506,7 +477,6 @@ void main() {
       final second = filter.flush(
         1, t0.add(const Duration(milliseconds: 1600)));
       expect(second, isNotNull);
-      
       
       
       expect(second!.category, AlertCategory.approachingVehicle);
@@ -546,7 +516,6 @@ void main() {
       filter.flush(1, t0);
 
       
-      
       filter.add(makeCandidate(
         priority: SpeechPriority.critical,
         category: AlertCategory.obstacleClose,
@@ -568,8 +537,6 @@ void main() {
       filter.flush(1, t0);
 
       
-      
-      
       filter.add(makeCandidate(
         priority: SpeechPriority.warning,
         category: AlertCategory.obstacleClose,
@@ -589,9 +556,6 @@ void main() {
   });
 
   
-  
-  
-
   group('FusionEngine', () {
     late FusionEngine engine;
     final t0 = DateTime(2025, 1, 1, 12, 0, 0);
@@ -686,9 +650,6 @@ void main() {
   });
 
   
-  
-  
-
   group('DeviceCapabilities', () {
     test('hardware tier is preserved', () {
       const caps = DeviceCapabilities(
@@ -734,9 +695,6 @@ void main() {
   });
 
   
-  
-  
-
   group('DepthProviderFactory', () {
     test('hardware caps → HardwareDepthProvider', () {
       const caps = DeviceCapabilities(

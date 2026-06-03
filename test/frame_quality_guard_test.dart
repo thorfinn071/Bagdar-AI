@@ -121,11 +121,11 @@ void main() {
       expect(rep.aePipelineFrozen, isTrue);
 
       expect(
-        guard.aePipelineFrozen(endTime.add(const Duration(seconds: 2))),
+        guard.aePipelineFrozen(endTime.add(const Duration(seconds: 1))),
         isTrue,
       );
       expect(
-        guard.aePipelineFrozen(endTime.add(const Duration(seconds: 4))),
+        guard.aePipelineFrozen(endTime.add(const Duration(seconds: 2))),
         isFalse,
       );
     });

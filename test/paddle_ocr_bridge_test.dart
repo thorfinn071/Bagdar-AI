@@ -142,7 +142,7 @@ void main() {
         });
 
         final bridge = PaddleOcrBridge.forTesting(methodChannel: channel);
-        // No debugSetCapability → capability stays "unknown / unavailable".
+        
         final lines = await bridge.recognize(
           yuvBytes: Uint8List.fromList(const [0, 1, 2, 3]),
           width: 100,
@@ -189,9 +189,8 @@ void main() {
     );
 
     test('init flagged as unavailable when plugin is missing', () async {
-      // No mock handler set → MethodChannel throws
-      // MissingPluginException, which the bridge maps to a
-      // plugin_missing unavailable reason.
+      
+      
       final bridge = PaddleOcrBridge.forTesting(
         methodChannel: const MethodChannel('bagdar/paddle_ocr_unmocked'),
       );

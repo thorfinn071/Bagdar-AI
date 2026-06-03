@@ -11,7 +11,7 @@ void main() {
 
   group('KkDictionary — confusion-pair correction', () {
     test('returns input unchanged when the dictionary is not loaded', () {
-      // No debugSeed — KkDictionary.isLoaded stays false.
+      
       const input = 'қазахстан астанасы';
       expect(KkDictionary.instance.correctSentence(input), input);
     });
@@ -23,8 +23,8 @@ void main() {
     });
 
     test('fixes К→Қ confusion when only the Kazakh variant is in dict', () {
-      // OCR read "казахстан" (Russian К) instead of "қазахстан".
-      // Single-edit example: only the leading К needs to flip to Қ.
+      
+      
       KkDictionary.instance.debugSeed(const ['қазахстан']);
       expect(
         KkDictionary.instance.correctSentence('казахстан'),
@@ -41,16 +41,15 @@ void main() {
     });
 
     test('preserves Russian loanwords that have no Kazakh variant', () {
-      // "телефон" reads correctly in Russian; even though "к" / "о"
-      // could theoretically be confused with "қ" / "ө", we have no
-      // dictionary match for either variant, so the word stays put.
+      
+      
       KkDictionary.instance.debugSeed(const ['қазақстан']);
       const loan = 'телефон';
       expect(KkDictionary.instance.correctSentence(loan), loan);
     });
 
     test('preserves digits and punctuation between words', () {
-      // Single-edit example to match the algorithm spec.
+      
       KkDictionary.instance.debugSeed(const ['қазахстан']);
       const input = 'казахстан, 2024 жыл.';
       final corrected = KkDictionary.instance.correctSentence(input);
@@ -61,12 +60,11 @@ void main() {
       'returns first matching candidate deterministically when multiple '
       'variants exist',
       () {
-        // У has TWO Kazakh confusion partners — Ұ and Ү. If both
-        // variants happen to be in the dictionary, the corrector
-        // must pick the first one listed in kKkConfusionPairs.
+        
+        
         KkDictionary.instance.debugSeed(const ['суы', 'сүй']);
-        // "сүй" exists in dict — corrector should produce "сүй"
-        // when given "суй" (since Ү appears in U's confusion list).
+        
+        
         expect(
           KkDictionary.instance.correctWordForTesting('суй'),
           'сүй',
@@ -76,7 +74,7 @@ void main() {
 
     test('lower / upper case handling is symmetric', () {
       KkDictionary.instance.debugSeed(const ['ұлы']);
-      // OCR returned uppercase "У" prefix — should still match.
+      
       expect(
         KkDictionary.instance.correctWordForTesting('Улы'),
         'Ұлы',
@@ -102,7 +100,7 @@ void main() {
           'ұлы',
           'сүрет',
         ]);
-        // ~210 characters — well past the 200-char acceptance target.
+        
         const input = 'казахстан астанасы мемлекеттік '
             'университеті ұлттық кітапханасы жоғары '
             'мектеп өмір әке ұлы сүрет казахстан астанасы '

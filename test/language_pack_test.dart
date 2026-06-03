@@ -43,8 +43,8 @@ void main() {
     });
 
     test('fromJson accepts manifest-style aliases (id, url, size)', () {
-      // The GitHub Releases manifest uses {id, url, size} keys — see plan
-      // doc § Cross-cutting work. The model must accept both.
+      
+      
       final manifestStyle = {
         'id': LanguagePackIds.voskKk,
         'name': 'Vosk KK',
@@ -112,7 +112,7 @@ void main() {
       const pack = LanguagePack(
         packId: 'x',
         name: 'X',
-        sizeBytes: 52428800, // 50 MB exactly
+        sizeBytes: 52428800, 
       );
       expect(pack.sizeMb, '50.0');
     });
@@ -163,10 +163,8 @@ void main() {
 
   group('LanguagePackIds', () {
     test('exposes the IDs referenced in voice_command_service routing', () {
-      // These IDs are referenced verbatim in
-      // VoiceCommandService._shouldUseVoskForKk and the plan's GitHub
-      // Releases manifest. Hardcoding them in a test catches accidental
-      // renames before they cause silent routing failures.
+      
+      
       expect(LanguagePackIds.voskKk, 'vosk-kk');
       expect(LanguagePackIds.rhvoiceKkAigul, 'rhvoice-kk-aigul');
     });

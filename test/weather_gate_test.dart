@@ -7,10 +7,6 @@ import 'package:bagdar/utils/depth_hazard.dart';
 import 'package:bagdar/utils/ground_plane_analyzer.dart';
 
 
-
-
-
-
 void main() {
   group('WeatherGate state machine', () {
     test('starts in a non-degraded state and stays there on clear frames', () {
@@ -37,7 +33,6 @@ void main() {
         expect(trip, WeatherTransition.degraded);
         expect(gate.degraded, isTrue);
 
-        
         
         final after = gate.feed(100.0, 200.0);
         expect(after, WeatherTransition.none);
@@ -68,7 +63,6 @@ void main() {
         expect(gate.degraded, isTrue);
 
         
-        
         for (int i = 0; i < 100; i++) {
           expect(gate.feed(300.0, 200.0), WeatherTransition.none);
           expect(gate.degraded, isTrue);
@@ -77,7 +71,7 @@ void main() {
     );
 
     test(
-      'recovery requires thirty consecutive clearly-high-variance frames',
+      'recovery requires fifteen consecutive clearly-high-variance frames',
       () {
         final gate = WeatherGate();
 
@@ -88,7 +82,7 @@ void main() {
         expect(gate.degraded, isTrue);
 
         
-        for (int i = 0; i < 29; i++) {
+        for (int i = 0; i < 14; i++) {
           expect(gate.feed(500.0, 120.0), WeatherTransition.none);
           expect(gate.degraded, isTrue);
         }
@@ -128,7 +122,6 @@ void main() {
         expect(gate.degraded, isFalse);
 
         
-        
         expect(gate.feed(100.0, 200.0), WeatherTransition.none);
         expect(gate.degraded, isFalse);
       },
@@ -156,20 +149,21 @@ void main() {
         }
         expect(gate.degraded, isTrue);
 
-        
-        for (int i = 0; i < 20; i++) {
+        // Feed 10 clear frames (less than 15 needed for recovery)
+        for (int i = 0; i < 10; i++) {
           gate.feed(500.0, 120.0);
         }
         
+        // Slipping a low-vis frame resets recovery streak
         gate.feed(100.0, 200.0);
 
-        
-        for (int i = 0; i < 29; i++) {
+        // Needs 14 more clear frames to be just before recovery
+        for (int i = 0; i < 14; i++) {
           expect(gate.feed(500.0, 120.0), WeatherTransition.none);
         }
         expect(gate.degraded, isTrue);
 
-        
+        // 15th clear frame recovers
         expect(gate.feed(500.0, 120.0), WeatherTransition.recovered);
         expect(gate.degraded, isFalse);
       },
@@ -179,7 +173,6 @@ void main() {
   group('GroundPlaneAnalyzer weatherDegraded gating', () {
     const size = GroundPlaneAnalyzer.kMapSize;
 
-    
     
     Float32List makeStaircaseMap() {
       final map = Float32List(size * size);
@@ -239,7 +232,6 @@ void main() {
 
         
         analyzer.analyze(map, weatherDegraded: true);
-        
         
         
         final recovered = analyzer.debugDetectStairsDown(

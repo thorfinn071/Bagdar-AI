@@ -74,9 +74,8 @@ void main() {
     test('handlePayload drops expired payloads', () {
       final events = <ExternalHazardEvent>[];
       service.onHazard = (e) => events.add(e);
-      // Simulate active state by accessing internal state
-      // (service won't handle payloads when not active)
-
+      
+      
       final payload = MeshBuddyPayload(
         hazardType: 'pothole',
         severity: 0.7,
@@ -91,7 +90,7 @@ void main() {
     });
 
     test('handlePayload deduplicates by hash', () {
-      // Cannot fully test without BLE plugin but ensures dedupe logic
+      
       service.resetForTesting();
       expect(service.isActive, false);
     });

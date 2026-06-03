@@ -24,7 +24,7 @@ void main() {
 
     test('includes every closed-class kk command phrase', () {
       final grammar = VoiceCommandService.buildKkClosedGrammar();
-      // Sample from the kk command map — full coverage would be brittle.
+      
       const samples = <String>[
         'айналада не бар',
         'солда не бар',
@@ -52,8 +52,8 @@ void main() {
 
     test('includes kk cancel-fall acknowledgments', () {
       final grammar = VoiceCommandService.buildKkClosedGrammar();
-      // Sample from the kk cancel-fall exact set in voice_command_service.
-      // Any one of these landing in the grammar list is sufficient.
+      
+      
       final anyCancel = grammar.any((p) =>
           p.contains('жақсы') ||
           p.contains('дұрыс') ||
@@ -89,11 +89,10 @@ void main() {
     test('flag on but pack not installed → Vosk routing still inactive',
         () async {
       await Settings.instance.setEnableKazakhStackV2(true);
-      // No pack injected; LanguagePackManager.isInstalled returns false.
+      
       final svc = VoiceCommandService();
-      // setLocale triggers async reconcile; we just verify the sync getter
-      // never reports true while the pack is missing. The reconcile path
-      // is exercised end-to-end in instrumented integration tests.
+      
+      
       svc.setLocale('kk-KZ');
       expect(svc.useVoskForKk, false);
     });
@@ -115,16 +114,15 @@ void main() {
       final svc = VoiceCommandService();
       svc.setLocale('kk-KZ');
       svc.setLocale('ru-RU');
-      // After switching back to ru, the routing must report off
-      // regardless of pack state.
+      
+      
       expect(svc.useVoskForKk, false);
     });
   });
 
   group('VoiceCommandService parser still works for kk under v2 flag', () {
-    // The parser is locale-driven; whether the words came from Vosk or
-    // speech_to_text is invisible to it. These tests guard against
-    // accidental regressions in kk vocabulary during the routing work.
+    
+    
     test('kk scan command parses correctly when fed via Vosk path',
         () async {
       await Settings.instance.setEnableKazakhStackV2(true);
@@ -217,9 +215,8 @@ void main() {
 
     test('kk closed grammar includes the new manage/enable/disable phrases',
         () {
-      // These commands must be in the closed grammar so Vosk can still
-      // recognize them when v2 routing is active for kk (otherwise the
-      // user couldn't toggle the feature off after enabling it).
+      
+      
       final grammar = VoiceCommandService.buildKkClosedGrammar();
       expect(grammar.contains('тіл пакеттері'), true);
       expect(grammar.contains('жетілдірілген тану'), true);

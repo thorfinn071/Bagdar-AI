@@ -28,7 +28,7 @@ void main() {
     });
 
     test(
-      'sustained-but-short (<20s) misalignment fires neither haptic nor speech',
+      'sustained-but-short (<10s) misalignment fires neither haptic nor speech',
       () {
         wd.notePitchState(DevicePitch.tooHigh);
         wd.noteMotionState(MotionState.walking);
@@ -36,11 +36,11 @@ void main() {
           DepthPipelineStatus.lowConfidence,
           now: t0,
         );
-        for (var i = 0; i < 19; i++) {
+        for (var i = 0; i < 9; i++) {
           final r = wd.tick(now: t0.add(Duration(seconds: i)));
           expect(r.fireHaptic, isFalse);
           expect(r.shouldAnnounce, isFalse,
-              reason: 'no announce before 20 s threshold');
+              reason: 'no announce before 10 s threshold');
         }
       },
     );
@@ -51,7 +51,7 @@ void main() {
       () {
         wd.notePitchState(DevicePitch.flat);
         wd.noteMotionState(MotionState.walking);
-        // depth status stays OK throughout
+        
         var hapticCount = 0;
         var announceCount = 0;
         for (var i = 0; i < 30; i++) {
@@ -67,19 +67,19 @@ void main() {
     );
 
     test(
-      'misaligned + walking + depth low \u226530 s + sustained \u226520 s '
+      'misaligned + walking + depth low \u226515 s + sustained \u226510 s '
       'fires warning verbal alert exactly once',
       () {
         wd.notePitchState(DevicePitch.tooLow);
         wd.noteMotionState(MotionState.walking);
-        // depth has been low for the past 30 s
+        
         wd.noteDepthStatus(
           DepthPipelineStatus.lowConfidence,
-          now: t0.subtract(const Duration(seconds: 31)),
+          now: t0.subtract(const Duration(seconds: 16)),
         );
 
         var warnings = 0;
-        for (var i = 0; i < 40; i++) {
+        for (var i = 0; i < 20; i++) {
           final r = wd.tick(now: t0.add(Duration(seconds: i)));
           if (r.shouldAnnounce &&
               r.announcePriority == SpeechPriority.warning) {
@@ -89,22 +89,22 @@ void main() {
         }
         expect(warnings, 1,
             reason:
-                'warning should fire exactly once at ~20 s and not repeat');
+                'warning should fire exactly once at ~10 s and not repeat');
       },
     );
 
     test(
-      'reaches critical priority at 60 s with depth-low confirmation',
+      'reaches critical priority at 35 s with depth-low confirmation',
       () {
         wd.notePitchState(DevicePitch.tooHigh);
         wd.noteMotionState(MotionState.walking);
         wd.noteDepthStatus(
           DepthPipelineStatus.planeFitFailed,
-          now: t0.subtract(const Duration(seconds: 35)),
+          now: t0.subtract(const Duration(seconds: 20)),
         );
 
         SpeechPriority? lastPriority;
-        for (var i = 0; i < 70; i++) {
+        for (var i = 0; i < 40; i++) {
           final r = wd.tick(now: t0.add(Duration(seconds: i)));
           if (r.shouldAnnounce) lastPriority = r.announcePriority;
         }
@@ -118,21 +118,19 @@ void main() {
       wd.noteMotionState(MotionState.walking);
       wd.noteDepthStatus(
         DepthPipelineStatus.lowConfidence,
-        now: t0.subtract(const Duration(seconds: 60)),
+        now: t0.subtract(const Duration(seconds: 30)),
       );
 
-      // run 18 s of sustained misalignment
-      for (var i = 0; i < 18; i++) {
+      // Warning threshold is now 10s. Send detection at 8s to prevent it.
+      for (var i = 0; i < 8; i++) {
         wd.tick(now: t0.add(Duration(seconds: i)));
       }
-      // a detection arrives at t=18 s — resets the sustained timer
-      wd.noteDetection(now: t0.add(const Duration(seconds: 18)));
+      
+      wd.noteDetection(now: t0.add(const Duration(seconds: 8)));
 
-      // continue ticking for another 18 s — should NOT reach 20 s threshold
-      // because the timer restarts from t=18+5=23 (after detection freshness
-      // window expires)
+      
       var announces = 0;
-      for (var i = 18; i < 36; i++) {
+      for (var i = 8; i < 16; i++) {
         final r = wd.tick(now: t0.add(Duration(seconds: i)));
         if (r.shouldAnnounce) announces++;
       }
@@ -144,14 +142,14 @@ void main() {
     test('haptic re-fires every 15 s while sustained', () {
       wd.notePitchState(DevicePitch.tooHigh);
       wd.noteMotionState(MotionState.walking);
-      // no depth-low → only haptic, never verbal
+      
       final hapticTicks = <int>[];
       for (var i = 0; i < 90; i++) {
         final r = wd.tick(now: t0.add(Duration(seconds: i)));
         if (r.fireHaptic) hapticTicks.add(i);
       }
-      // first haptic at 20 s, then every 15 s: 20, 35, 50, 65, 80
-      expect(hapticTicks.first, 20);
+      
+      expect(hapticTicks.first, 10);
       expect(hapticTicks.length, greaterThanOrEqualTo(4));
       for (var i = 1; i < hapticTicks.length; i++) {
         final delta = hapticTicks[i] - hapticTicks[i - 1];
@@ -168,24 +166,24 @@ void main() {
         wd.noteMotionState(MotionState.walking);
         wd.noteDepthStatus(
           DepthPipelineStatus.lowConfidence,
-          now: t0.subtract(const Duration(seconds: 35)),
+          now: t0.subtract(const Duration(seconds: 20)),
         );
 
-        // first episode: walks until warning fires
-        for (var i = 0; i < 25; i++) {
+        
+        for (var i = 0; i < 15; i++) {
           wd.tick(now: t0.add(Duration(seconds: i)));
         }
-        // user briefly aligns the phone
+        
         wd.notePitchState(DevicePitch.optimal);
-        for (var i = 25; i < 30; i++) {
+        for (var i = 15; i < 20; i++) {
           final r = wd.tick(now: t0.add(Duration(seconds: i)));
           expect(r.shouldAnnounce, isFalse);
         }
-        // misaligns again
+        
         wd.notePitchState(DevicePitch.tooLow);
 
         var warnings = 0;
-        for (var i = 30; i < 60; i++) {
+        for (var i = 20; i < 40; i++) {
           final r = wd.tick(now: t0.add(Duration(seconds: i)));
           if (r.shouldAnnounce &&
               r.announcePriority == SpeechPriority.warning) {

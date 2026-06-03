@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:bagdar/services/charging_job_scheduler.dart';
 import 'package:bagdar/utils/performance_throttler.dart';

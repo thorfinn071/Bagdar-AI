@@ -25,7 +25,6 @@ void main() {
         'blurred version', () {
       
       
-      
       const w = 128;
       const h = 96;
       final rng = math.Random(11);

@@ -40,8 +40,8 @@ void main() {
         available: espeakAvailable,
       ),
     });
-    // Setting through the public API persists; tests are isolated via the
-    // mocked SharedPreferences in setUp above.
+    
+    
     Settings.instance.setEnableKazakhStackV2(v2Enabled);
     return svc;
   }
@@ -164,7 +164,7 @@ void main() {
         await svc.debugResolveKkEngine();
         expect(voiceMissingHits, 1);
 
-        // Same callback must NOT fire when a native engine actually picks up.
+        
         voiceMissingHits = 0;
         final svc2 = configureService(
           kkSystemTtsAvailable: false,

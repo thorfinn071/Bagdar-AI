@@ -15,6 +15,26 @@ import 'package:bagdar/utils/fusion_engine.dart';
 
 class _FakeCameraImage implements CameraImage {
   @override
+  List<Plane> get planes => [_FakePlane()];
+
+  @override
+  int get width => 256;
+
+  @override
+  int get height => 256;
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+class _FakePlane implements Plane {
+  @override
+  Uint8List get bytes => Uint8List(256 * 256);
+
+  @override
+  int get bytesPerRow => 256;
+
+  @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
@@ -191,7 +211,6 @@ void main() {
     });
 
     test('degraded amplitude never exceeds the 255 device ceiling', () {
-      
       
       
       final (_, intensities) =

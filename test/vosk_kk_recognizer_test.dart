@@ -41,8 +41,8 @@ void main() {
     });
 
     test('falls through to bare-string mode for non-JSON payloads', () {
-      // Older Vosk builds occasionally emit the bare recognized string
-      // instead of a JSON envelope; the extractor must accept both.
+      
+      
       expect(
         VoskKkRecognizer.testExtractText('тура', 'text'),
         'тура',
@@ -69,19 +69,16 @@ void main() {
 
   group('VoskKkRecognizer.unknownToken', () {
     test('matches Vosk\'s [unk] sentinel verbatim', () {
-      // Vosk expects the literal "[unk]" string in the grammar list to
-      // enable out-of-grammar rejection. Changing this constant breaks
-      // closed-vocabulary mode silently.
+      
+      
       expect(VoskKkRecognizer.unknownToken, '[unk]');
     });
   });
 
   group('VoskKkRecognizer.sampleRateHz', () {
     test('vosk-kk small model expects 16 kHz', () {
-      // The vosk-model-small-kz-0.15 acoustic model is trained at 16 kHz.
-      // Mismatched sample rates yield silent failure (mic input still
-      // streams but the recognizer drops everything). This guard prevents
-      // accidental sample-rate changes during refactors.
+      
+      
       expect(VoskKkRecognizer.sampleRateHz, 16000);
     });
   });

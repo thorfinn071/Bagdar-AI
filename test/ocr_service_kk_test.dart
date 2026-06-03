@@ -22,8 +22,8 @@ void main() {
       KkDictionary.instance.debugSeed(const ['қазақстан']);
       final svc = OcrService();
       const input = 'казакстан';
-      // Same OCR output that would get corrected if language were kk,
-      // but the ru path must leave it untouched.
+      
+      
       expect(
         svc.debugApplyKkCorrection(input),
         input,
@@ -33,7 +33,7 @@ void main() {
     });
 
     test('returns input unchanged when the dictionary has not loaded', () {
-      // Dictionary is reset in setUp → isLoaded == false → no-op.
+      
       final svc = OcrService();
       const input = 'казакстан';
       expect(svc.debugApplyKkCorrection(input), input);
@@ -41,7 +41,7 @@ void main() {
     });
 
     test('applies kk confusion-pair correction when dict is loaded', () {
-      // Single-edit example matching KkDictionary's spec (К → Қ only).
+      
       KkDictionary.instance.debugSeed(const ['қазахстан']);
       final svc = OcrService();
       final corrected = svc.debugApplyKkCorrection('казахстан');
@@ -55,12 +55,12 @@ void main() {
       'requires two identical consecutive reads before emitting',
       () {
         final svc = OcrService();
-        // First read fills the buffer; expect no emission yet.
+        
         final first = svc.debugFinalizeForTesting('exit', stabilize: true);
         expect(first, isNull);
         expect(svc.debugStabilizeBufferLength(), 1);
 
-        // Second identical read should release the text.
+        
         final second = svc.debugFinalizeForTesting('exit', stabilize: true);
         expect(second, 'exit');
         expect(svc.debugStabilizeBufferLength(), 0,
@@ -78,7 +78,7 @@ void main() {
             svc.debugFinalizeForTesting('entrance', stabilize: true);
         expect(divergent, isNull,
             reason: 'stabilizer must require two identical reads');
-        // Buffer should keep the last two values, rotating the older one out.
+        
         expect(svc.debugStabilizeBufferLength(), 2);
         svc.dispose();
       },

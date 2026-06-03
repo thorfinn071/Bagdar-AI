@@ -127,9 +127,7 @@ void main() {
         ),
       );
 
-      // The plus button is rendered disabled — its Semantics.onTap is
-      // null, so a logical tap on the disabled button is a no-op.
-      // Verify no callback fires by tapping the icon directly.
+      
       await tester.tap(find.byIcon(Icons.add), warnIfMissed: false);
       await tester.pump();
 
@@ -176,8 +174,7 @@ void main() {
         ),
       );
 
-      // Visible label and formatted value are both reachable in the
-      // widget tree so screen readers can pick them up.
+      
       expect(find.text('Speech rate'), findsOneWidget);
       expect(find.text('1.2x'), findsOneWidget);
     });

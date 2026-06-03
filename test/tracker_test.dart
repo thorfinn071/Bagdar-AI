@@ -119,8 +119,6 @@ void main() {
         final now = DateTime(2025, 1, 1, 12);
 
         
-        
-        
         final solo = Tracker();
         final soloOut = solo.update(
           [
@@ -298,7 +296,6 @@ void main() {
   });
 
   group('Tracker dynamicThreat (label-agnostic kinematic threat)', () {
-    
     
     
     test('sets dynamicThreat on a non-vehicle label growing fast in frame',
@@ -489,13 +486,6 @@ void main() {
       () {
         
         
-        
-        
-        
-        
-        
-        
-        
         RawDet narrowBox() => makeDet(
               x1: 100,
               y1: 190,
@@ -538,8 +528,6 @@ void main() {
       'weatherDegraded does not affect vehicle approach — OPT-19 owns '
       'the vehicle close-range path',
       () {
-        
-        
         
         
         RawDet f0() => makeDet(

@@ -148,9 +148,6 @@ void main() {
         'flat (puddle reflecting sky)', () {
       
       
-      
-      
-      
       final suppress = GroundPlaneAnalyzer.isLikelyShadowArtifact(
         dropCount: 100,
         dropSum: 35.0,
@@ -167,10 +164,6 @@ void main() {
     test(
         'OPT-04: suppresses a drop with matching mean luma but high intra-zone '
         'variance (patchy puddle)', () {
-      
-      
-      
-      
       
       
       final suppress = GroundPlaneAnalyzer.isLikelyShadowArtifact(
@@ -190,9 +183,6 @@ void main() {
     test(
         'OPT-04: keeps a uniformly dark real pothole even when sqSum is '
         'supplied (low intra-zone variance)', () {
-      
-      
-      
       
       
       final suppress = GroundPlaneAnalyzer.isLikelyShadowArtifact(
@@ -216,8 +206,6 @@ void main() {
     Float32List makeFlat(double value) =>
         Float32List(size * size)..fillRange(0, size * size, value);
 
-    
-    
     
     Float32List makeStableHazardMap() {
       final map = Float32List(size * size)..fillRange(0, size * size, 0.5);
@@ -499,7 +487,6 @@ void main() {
         'caught as a pit', () {
       
       
-      
       final map = makeLinearFloor(0.5, 1.4);
       for (int y = 120; y < 195; y += 2) {
         for (int x = 100; x < 156; x++) {
@@ -772,7 +759,7 @@ void main() {
       final luma = Uint8List(size * size);
       for (int y = 0; y < size; y++) {
         final band = (y ~/ 4) & 1;
-        final base = band == 0 ? 40 : 200;
+        final base = band == 0 ? 100 : 220;
         for (int x = 0; x < size; x++) {
           luma[y * size + x] = base + (x & 3);
         }

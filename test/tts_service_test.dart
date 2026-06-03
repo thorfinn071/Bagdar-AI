@@ -3,14 +3,6 @@ import 'package:bagdar/services/tts_service.dart';
 import 'package:bagdar/models/speech_job.dart';
 
 
-
-
-
-
-
-
-
-
 void main() {
   group('TtsService queue — OPT-07 critical preservation', () {
     test('two distinct critical alerts coexist in the queue', () {
@@ -122,9 +114,6 @@ void main() {
       svc.say('stale warning', SpeechPriority.critical);
 
       
-      
-      
-      
       await Future<void>.delayed(const Duration(milliseconds: 120));
       svc.say('fresh warning', SpeechPriority.critical);
       expect(svc.queueSnapshot, hasLength(2));
@@ -151,7 +140,6 @@ void main() {
       );
 
       
-      
       expect(svc.queueSnapshot, hasLength(2));
       expect(
         svc.queueSnapshot.every((j) => j.priority != SpeechPriority.critical),
@@ -163,10 +151,6 @@ void main() {
       'Safety audit 1.2: pruneStaleCriticals without an explicit maxAge is a '
       'no-op — life-threatening alerts are never silently dropped',
       () {
-        
-        
-        
-        
         
         
         final svc = TtsService.forTesting();

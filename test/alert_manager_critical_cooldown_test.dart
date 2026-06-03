@@ -86,7 +86,6 @@ void main() {
         );
 
         
-        
         final t1 = t0.add(const Duration(milliseconds: 1500));
         mgr.processFrame(
           tracks: [_veryCloseTrack(lastSpoken: t0)],

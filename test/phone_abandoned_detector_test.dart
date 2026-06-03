@@ -18,7 +18,7 @@ void main() {
       det.noteCameraFrozen(true);
       det.noteLumaNormal(true);
       for (var i = 0; i < 700; i++) {
-        // 11+ minutes of walking
+        
         final r = det.tick(now: t0.add(Duration(seconds: i)));
         expect(r.fireCriticalAlert, isFalse, reason: 'tick=$i');
         expect(r.fireSoftHeartbeat, isFalse, reason: 'tick=$i');
@@ -73,14 +73,14 @@ void main() {
           expect(r.fireCriticalAlert, isFalse,
               reason: 'must not fire before 60 s, got at tick=$i');
         }
-        // tick exactly at 60 s — should fire
+        
         final atSixty = det.tick(now: t0.add(const Duration(seconds: 60)));
         expect(atSixty.fireCriticalAlert, isTrue);
         expect(atSixty.hapticEscalationLevel, 1,
             reason: 'first critical = escalation level 1');
         expect(atSixty.hapticPattern, isNotNull);
 
-        // Next 89 seconds: no re-fire
+        
         for (var i = 61; i < 60 + 90; i++) {
           final r = det.tick(now: t0.add(Duration(seconds: i)));
           if (r.fireCriticalAlert) crit++;
@@ -88,7 +88,7 @@ void main() {
         expect(crit, 0,
             reason: 're-announce window is 90 s, no re-fire in between');
 
-        // At 60 + 90 = 150 s, re-announces with level 2
+        
         final at150 =
             det.tick(now: t0.add(const Duration(seconds: 150)));
         expect(at150.fireCriticalAlert, isTrue);
@@ -105,7 +105,7 @@ void main() {
         det.noteLumaNormal(true);
 
         final levelsSeen = <int>[];
-        // run for 10 critical episodes (10 * 90 s + first 60 s = 960 s)
+        
         for (var i = 0; i <= 960; i++) {
           final r = det.tick(now: t0.add(Duration(seconds: i)));
           if (r.fireCriticalAlert) {
@@ -132,7 +132,7 @@ void main() {
         det.noteCameraFrozen(true);
         det.noteLumaNormal(true);
 
-        // Get to a critical alert
+        
         for (var i = 0; i < 60; i++) {
           det.tick(now: t0.add(Duration(seconds: i)));
         }
@@ -140,32 +140,32 @@ void main() {
             det.tick(now: t0.add(const Duration(seconds: 60)));
         expect(firstCritical.fireCriticalAlert, isTrue);
 
-        // Now user starts walking again
+        
         det.noteMotionState(
           MotionState.walking,
           now: t0.add(const Duration(seconds: 65)),
         );
-        // ... walks for 30 s ...
+        
         for (var i = 65; i < 95; i++) {
           final r = det.tick(now: t0.add(Duration(seconds: i)));
           expect(r.fireCriticalAlert, isFalse,
               reason: 'no alerts while walking');
         }
 
-        // Stops again
+        
         det.noteMotionState(
           MotionState.stationary,
           now: t0.add(const Duration(seconds: 95)),
         );
 
-        // Must NOT alert at 95 + 1 = 96 s wall clock (only 1 s of stationary)
+        
         for (var i = 96; i < 95 + 60; i++) {
           final r = det.tick(now: t0.add(Duration(seconds: i)));
           expect(r.fireCriticalAlert, isFalse,
               reason: 'fresh stationary at $i — too early');
         }
 
-        // Must alert at 95 + 60 = 155 s wall clock (60 s of new stationary)
+        
         final reFire =
             det.tick(now: t0.add(const Duration(seconds: 155)));
         expect(reFire.fireCriticalAlert, isTrue,
@@ -177,15 +177,15 @@ void main() {
 
     test('soft heartbeat fires at 10 min intervals of stationary state', () {
       det.noteMotionState(MotionState.stationary, now: t0);
-      // Even WITHOUT cameraFrozen / lumaNormal, the soft heartbeat is the
-      // background presence reminder driven purely by stationary duration.
+      
+      
       det.noteCameraFrozen(false);
       det.noteLumaNormal(false);
 
       var softCount = 0;
       DateTime? lastSoftAt;
       for (var i = 0; i < 60 * 35; i++) {
-        // 35 minutes
+        
         final r = det.tick(now: t0.add(Duration(seconds: i)));
         if (r.fireSoftHeartbeat) {
           softCount++;
@@ -210,14 +210,14 @@ void main() {
         det.noteMotionState(MotionState.stationary, now: t0);
         var softCount = 0;
 
-        // sit for 9 min ... no beep yet
+        
         for (var i = 0; i < 60 * 9; i++) {
           final r = det.tick(now: t0.add(Duration(seconds: i)));
           if (r.fireSoftHeartbeat) softCount++;
         }
         expect(softCount, 0);
 
-        // user walks for 30 s, then stationary again
+        
         det.noteMotionState(
           MotionState.walking,
           now: t0.add(const Duration(minutes: 9)),
@@ -227,7 +227,7 @@ void main() {
           now: t0.add(const Duration(minutes: 9, seconds: 30)),
         );
 
-        // sit for 9 more min ... still no beep, because the clock reset
+        
         for (var i = 0; i < 60 * 9; i++) {
           final r = det.tick(
             now: t0.add(Duration(minutes: 9, seconds: 30 + i)),

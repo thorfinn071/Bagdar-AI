@@ -6,17 +6,9 @@ import 'package:bagdar/utils/depth_hazard.dart';
 import 'package:bagdar/utils/ground_plane_analyzer.dart';
 
 
-
-
-
-
 void main() {
   const size = GroundPlaneAnalyzer.kMapSize;
 
-  
-  
-  
-  
   
   Float32List makeStaircase({
     double baseZ = 0.4,
@@ -57,7 +49,6 @@ void main() {
         final frame = makeStaircase();
 
         
-        
         final first = analyzer.debugDetectStairsDown(
           frame,
           userStationary: true,
@@ -65,7 +56,6 @@ void main() {
         expect(first, isNotNull);
         expect(first!.type, DepthHazardType.stairsDown);
 
-        
         
         final second = analyzer.debugDetectStairsDown(
           frame,
@@ -92,8 +82,6 @@ void main() {
         expect(prime!.type, DepthHazardType.stairsDown);
 
         
-        
-        
         final shifted1 = makeStaircase(rowShift: 6);
         final draft = analyzer.debugDetectStairsDown(
           shifted1,
@@ -101,8 +89,6 @@ void main() {
         );
         expect(draft, isNull);
 
-        
-        
         
         final shifted2 = makeStaircase(rowShift: 12);
         final escalator = analyzer.debugDetectStairsDown(
@@ -124,8 +110,6 @@ void main() {
       () {
         final analyzer = GroundPlaneAnalyzer();
 
-        
-        
         
         analyzer.debugDetectStairsDown(makeStaircase(), userStationary: false);
 
@@ -156,8 +140,6 @@ void main() {
 
         analyzer.resetTemporalFilter();
 
-        
-        
         
         final afterReset = analyzer.debugDetectStairsDown(
           makeStaircase(rowShift: 6),
@@ -202,17 +184,12 @@ void main() {
         );
 
         
-        
         final flat = Float32List(size * size)..fillRange(0, size * size, 0.5);
         expect(
           analyzer.debugDetectStairsDown(flat, userStationary: true),
           isNull,
         );
 
-        
-        
-        
-        
         
         final revived = analyzer.debugDetectStairsDown(
           makeStaircase(rowShift: 8),
@@ -221,8 +198,6 @@ void main() {
         expect(revived, isNotNull);
         expect(revived!.type, DepthHazardType.stairsDown);
 
-        
-        
         
         final followUp = analyzer.debugDetectStairsDown(
           makeStaircase(rowShift: 14),
@@ -248,7 +223,6 @@ void main() {
         );
         expect(streakFrame, isNull);
 
-        
         
         final walkingFrame = analyzer.debugDetectStairsDown(
           makeStaircase(rowShift: 12),

@@ -9,8 +9,8 @@ void main() {
 
   setUp(() {
     SharedPreferences.setMockInitialValues({});
-    // debugReset bypasses path_provider so tests run on the host machine
-    // without needing the platform plugin to be wired up.
+    
+    
     LanguagePackManager.instance.debugReset(packsDir: '/tmp/test_lang_packs');
   });
 
@@ -79,7 +79,7 @@ void main() {
           LanguagePack(
             packId: 'vosk-kk',
             name: 'Vosk KK',
-            // installed: false (default)
+            
           ),
         ],
       );

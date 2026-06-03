@@ -57,7 +57,7 @@ void main() {
         ),
       );
 
-      // The long semantic label drives the screen-reader experience.
+      
       expect(
         find.bySemanticsLabel('Read aloud what the camera sees.'),
         findsOneWidget,

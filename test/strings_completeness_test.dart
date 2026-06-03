@@ -40,7 +40,7 @@ const List<String> _newKeysFromDesignPlan = [
 ];
 
 const Set<String> _allowedEmpty = {
-  // pitch_black_heartbeat is intentionally silent — earcon only.
+  
   'pitch_black_heartbeat',
 };
 
@@ -141,7 +141,7 @@ void main() {
 
     test('restart command does not collide with existing commands', () {
       final svc = VoiceCommandService();
-      // bare 'reset' / 'restart' must NOT fire SOS / cancelFall
+      
       for (final phrase in ['reset', 'restart']) {
         final cmd = _commandFor(svc, phrase, locale: 'en-US');
         expect(cmd, isNot(VoiceCommand.sos));

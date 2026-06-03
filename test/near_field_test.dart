@@ -6,17 +6,10 @@ import 'package:bagdar/utils/depth_hazard.dart';
 import 'package:bagdar/utils/ground_plane_analyzer.dart';
 
 
-
-
-
-
-
 void main() {
   const size = GroundPlaneAnalyzer.kMapSize;
   const bottomStart = GroundPlaneAnalyzer.kFootZoneStartRow;
 
-  
-  
   
   Float32List makeScene({
     double topZ = 0.30,
@@ -83,7 +76,6 @@ void main() {
         }
 
         
-        
         final intrusion = makeScene(bottomZ: 0.70);
         final firstSpike = analyzer.debugDetectNearFieldIntrusion(
           intrusion,
@@ -108,8 +100,7 @@ void main() {
     );
 
     test(
-      'stationary user never gets an intrusion hazard even when the '
-      'band would otherwise trigger — motion gate short-circuits',
+      'stationary user requires 4 confirmation frames to trigger near-field intrusion',
       () {
         final analyzer = GroundPlaneAnalyzer();
         
@@ -119,16 +110,23 @@ void main() {
         }
 
         final intrusion = makeScene(bottomZ: 0.80);
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 3; i++) {
           expect(
             analyzer.debugDetectNearFieldIntrusion(
               intrusion,
               userStationary: true,
             ),
             isNull,
-            reason: 'stationary frame $i should never emit',
+            reason: 'stationary frame $i should not emit before confirmation',
           );
         }
+
+        final hazard = analyzer.debugDetectNearFieldIntrusion(
+          intrusion,
+          userStationary: true,
+        );
+        expect(hazard, isNotNull);
+        expect(hazard!.type, DepthHazardType.nearFieldIntrusion);
       },
     );
 
@@ -184,8 +182,6 @@ void main() {
         analyzer.resetTemporalFilter();
 
         
-        
-        
         final afterReset = analyzer.debugDetectNearFieldIntrusion(
           makeScene(bottomZ: 0.70),
           userStationary: false,
@@ -199,8 +195,6 @@ void main() {
       'baseline tracks gradual scene changes',
       () {
         final analyzer = GroundPlaneAnalyzer();
-        
-        
         
         
         for (int i = 0; i < 15; i++) {
@@ -228,7 +222,6 @@ void main() {
         }
 
         
-        
         final blank = Float32List(size * size);
         expect(
           analyzer.debugDetectNearFieldIntrusion(
@@ -238,8 +231,6 @@ void main() {
           isNull,
         );
 
-        
-        
         
         final intrusion = makeScene(bottomZ: 0.70);
         expect(

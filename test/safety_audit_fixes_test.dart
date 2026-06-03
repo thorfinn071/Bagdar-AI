@@ -43,7 +43,6 @@ void main() {
         () {
           
           
-          
           const irrelevantCocoClasses = {
             'airplane',
             'boat',
@@ -206,10 +205,6 @@ void main() {
           expect(first, isNotNull);
           expect(first!.category, AlertCategory.corridorBlocked);
 
-          
-          
-          
-          
           
           f.add(const AlertCandidate(
             text: 'Stop! pothole ahead',
@@ -595,10 +590,6 @@ void main() {
       }
 
       
-      
-      
-      
-      
       void confirmApproaching(Tracker tr, DateTime base) {
         tr.update(
           [det(label: 'car', x1: 200, y1: 200, x2: 260, y2: 260)],
@@ -637,11 +628,9 @@ void main() {
           confirmApproaching(tr, base);
 
           
-          
           tr.predict();
           tr.predict();
 
-          
           
           final after = tr.update(
             [det(label: 'car', x1: 188, y1: 183, x2: 332, y2: 332)],
@@ -668,7 +657,6 @@ void main() {
           final base = DateTime(2025, 1, 1, 12);
           confirmApproaching(tr, base);
 
-          
           
           List predicted = const [];
           for (int i = 0; i < 5; i++) {
@@ -797,7 +785,6 @@ void main() {
           
           pa.feedDownsampledGrid(uniform(50), t0);
 
-          
           
           final ev = pa.feedDownsampledGrid(
             uniform(200),
