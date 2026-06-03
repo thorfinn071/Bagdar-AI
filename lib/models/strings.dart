@@ -10,9 +10,6 @@ class AppStrings {
   static AppLanguage current = AppLanguage.ru;
 
   
-  
-  
-  
   static AppLanguage? _alertLang;
 
   static AppLanguage get alertLanguage => _alertLang ?? current;
@@ -26,8 +23,6 @@ class AppStrings {
   }
 
   
-  
-  
   static String get(String key, {Verbosity? verbosity}) {
     if (verbosity != null && verbosity != Verbosity.normal) {
       final suffix = verbosity == Verbosity.minimal ? '_minimal' : '_detailed';
@@ -38,7 +33,6 @@ class AppStrings {
     return _ui[current]?[key] ?? _ui[AppLanguage.ru]?[key] ?? key;
   }
 
-  
   
   static String alert(String key) =>
       _ui[alertLanguage]?[key] ?? _ui[AppLanguage.ru]?[key] ?? key;
@@ -129,7 +123,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'ocr_reading': 'Читаю...',
     'ocr_not_found': 'Текст не найден.',
     'ocr_camera_not_ready': 'Камера не готова.',
-    // Phase 3 — PaddleOCR pipeline diagnostics.
+    
     'ocr_low_memory':
         'Не хватает памяти для распознавания текста. Закройте другие приложения и попробуйте снова.',
     'ocr_paddle_init_failed':
@@ -887,7 +881,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'lang_pack_online_ready':
         'Сеть восстановлена. Пакет казахского распознавания готов к установке. Скажите «языковые пакеты».',
 
-    // -- Phase 2: Kazakh TTS engine labels & RHVoice onboarding ----------
+    
     'tts_kk_engine_system': 'Системный казахский голос',
     'tts_kk_engine_rhvoice': 'RHVoice (Aigul)',
     'tts_kk_engine_espeak': 'espeak-ng (резервный)',
@@ -909,7 +903,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'lang_pack_rhvoice_online_ready':
         'Сеть восстановлена. Пакет казахского голоса готов к установке. Скажите «языковые пакеты».',
 
-    // -- Phase 1: Indoor trail (Direction 6) ------------------------------
+    
     'trail_recording_started': 'Запись маршрута начата. Идите к цели.',
     'trail_recording_stopped': 'Маршрут сохранён.',
     'trail_recording_failed': 'Не удалось начать запись маршрута.',
@@ -928,7 +922,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'trail_slight_left': 'Немного влево.',
     'trail_slight_right': 'Немного вправо.',
 
-    // -- Phase 1: Bazaar / Livestock (Direction 9) ------------------------
+    
     'bazaar_mode_on': 'Режим базара включён.',
     'bazaar_mode_off': 'Режим базара выключен.',
     'livestock_mode_on': 'Режим животных включён.',
@@ -940,12 +934,12 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'livestock_cat': 'Кошка',
     'livestock_bird': 'Птица',
 
-    // -- Phase 1: Voice adaptation (Direction 12) -------------------------
+    
     'voice_adapt_on': 'Адаптация голоса включена. Данные остаются на устройстве.',
     'voice_adapt_off': 'Адаптация голоса выключена.',
     'voice_adapt_samples_cleared': 'Данные адаптации удалены.',
 
-    // -- Phase 2: Mesh-Net Buddy Alerts (Direction 3) ---------------------
+    
     'mesh_hazard_generic': 'Другой пользователь сообщил о препятствии рядом.',
     'mesh_hazard_pothole': 'Другой пользователь сообщил о яме рядом.',
     'mesh_hazard_construction': 'Другой пользователь сообщил о стройке рядом.',
@@ -955,25 +949,25 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'mesh_buddy_stopped': 'Сеть помощников выключена.',
     'mesh_buddy_no_ble': 'Bluetooth не поддерживается. Сеть помощников недоступна.',
 
-    // -- Phase 2: OSCP Smart-Cane Sensor Pod (Direction 7) -----------------
+    
     'oscp_near_field': 'Трость: препятствие впереди',
     'oscp_connected': 'Трость подключена.',
     'oscp_disconnected': 'Трость отключена.',
     'oscp_battery_low': 'Низкий заряд трости.',
     'oscp_no_ble': 'Bluetooth не поддерживается. Трость недоступна.',
 
-    // -- Phase 3: Near-Miss Buffer (Direction 4) --------------------------
+    
     'near_miss_recorded': 'Опасная ситуация записана.',
     'near_miss_cleared': 'Записи опасных ситуаций удалены.',
 
-    // -- Phase 4: VLM Scene Companion (Direction 11) ----------------------
+    
     'vlm_loading': 'Загружаю модель описания сцены.',
     'vlm_ready': 'Модель описания готова.',
     'vlm_not_available': 'Описание сцены недоступно. Нужна зарядка и свободная память.',
     'vlm_thinking': 'Думаю...',
     'vlm_answer_fallback': 'Модель не ответила. Использую стандартное описание.',
 
-    // -- Phase 5: Sonar-on-Phone (Direction 1) ----------------------------
+    
     'sonar_near_field': 'Эхолот: объект впереди',
     'sonar_started': 'Эхолот включён.',
     'sonar_stopped': 'Эхолот выключен.',
@@ -1047,7 +1041,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'ocr_reading': 'Оқып жатырмын...',
     'ocr_not_found': 'Мәтін табылмады.',
     'ocr_camera_not_ready': 'Камера дайын емес.',
-    // Phase 3 — PaddleOCR pipeline diagnostics.
+    
     'ocr_low_memory':
         'Мәтінді тану үшін жады жетпейді. Басқа қосымшаларды жауып, қайта көріңіз.',
     'ocr_paddle_init_failed':
@@ -1798,7 +1792,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'lang_pack_online_ready':
         'Желі қалпына келді. Қазақша тану пакетін орнатуға дайын. «Тіл пакеттері» деп айтыңыз.',
 
-    // -- Phase 2: Kazakh TTS engine labels & RHVoice onboarding ----------
+    
     'tts_kk_engine_system': 'Жүйелік қазақша дауыс',
     'tts_kk_engine_rhvoice': 'RHVoice (Айгүл)',
     'tts_kk_engine_espeak': 'espeak-ng (қосалқы)',
@@ -1820,7 +1814,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'lang_pack_rhvoice_online_ready':
         'Желі қалпына келді. Қазақша дауыс пакетін орнатуға дайын. «Тіл пакеттері» деп айтыңыз.',
 
-    // -- Phase 1: Indoor trail (Direction 6) ------------------------------
+    
     'trail_recording_started': 'Маршрут жазуы басталды. Мақсатқа қарай жүріңіз.',
     'trail_recording_stopped': 'Маршрут сақталды.',
     'trail_recording_failed': 'Маршрут жазуын бастау мүмкін болмады.',
@@ -1839,7 +1833,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'trail_slight_left': 'Сәл солға.',
     'trail_slight_right': 'Сәл оңға.',
 
-    // -- Phase 1: Bazaar / Livestock (Direction 9) ------------------------
+    
     'bazaar_mode_on': 'Базар режимі қосылды.',
     'bazaar_mode_off': 'Базар режимі өшірілді.',
     'livestock_mode_on': 'Мал режимі қосылды.',
@@ -1851,12 +1845,12 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'livestock_cat': 'Мысық',
     'livestock_bird': 'Құс',
 
-    // -- Phase 1: Voice adaptation (Direction 12) -------------------------
+    
     'voice_adapt_on': 'Дауыс бейімдеу қосылды. Деректер құрылғыда қалады.',
     'voice_adapt_off': 'Дауыс бейімдеу өшірілді.',
     'voice_adapt_samples_cleared': 'Бейімдеу деректері жойылды.',
 
-    // -- Phase 2: Mesh-Net Buddy Alerts (Direction 3) ---------------------
+    
     'mesh_hazard_generic': 'Басқа пайдаланушы жақын маңда кедергі туралы хабарлады.',
     'mesh_hazard_pothole': 'Басқа пайдаланушы жақын маңда шұңқыр туралы хабарлады.',
     'mesh_hazard_construction': 'Басқа пайдаланушы жақын маңда құрылыс туралы хабарлады.',
@@ -1866,25 +1860,25 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'mesh_buddy_stopped': 'Көмекшілер желісі өшірілді.',
     'mesh_buddy_no_ble': 'Bluetooth қолдау көрсетілмейді. Көмекшілер желісі қол жетімсіз.',
 
-    // -- Phase 2: OSCP Smart-Cane Sensor Pod (Direction 7) -----------------
+    
     'oscp_near_field': 'Таяқ: алда кедергі',
     'oscp_connected': 'Таяқ қосылды.',
     'oscp_disconnected': 'Таяқ ажыратылды.',
     'oscp_battery_low': 'Таяқтың заряды төмен.',
     'oscp_no_ble': 'Bluetooth қолдау көрсетілмейді. Таяқ қол жетімсіз.',
 
-    // -- Phase 3: Near-Miss Buffer (Direction 4) --------------------------
+    
     'near_miss_recorded': 'Қауіпті жағдай жазылды.',
     'near_miss_cleared': 'Қауіпті жағдай жазбалары жойылды.',
 
-    // -- Phase 4: VLM Scene Companion (Direction 11) ----------------------
+    
     'vlm_loading': 'Сахна сипаттау моделін жүктеп жатырмын.',
     'vlm_ready': 'Сахна сипаттау моделі дайын.',
     'vlm_not_available': 'Сахна сипаттау қол жетімсіз. Зарядтау және бос жад қажет.',
     'vlm_thinking': 'Ойланып жатырмын...',
     'vlm_answer_fallback': 'Модель жауап бермеді. Стандартты сипаттама қолданылуда.',
 
-    // -- Phase 5: Sonar-on-Phone (Direction 1) ----------------------------
+    
     'sonar_near_field': 'Эхолот: алда нысан',
     'sonar_started': 'Эхолот қосылды.',
     'sonar_stopped': 'Эхолот өшірілді.',
@@ -1957,7 +1951,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'ocr_reading': 'Reading...',
     'ocr_not_found': 'No text found.',
     'ocr_camera_not_ready': 'Camera not ready.',
-    // Phase 3 — PaddleOCR pipeline diagnostics.
+    
     'ocr_low_memory':
         'Not enough memory to recognize text. Close other apps and try again.',
     'ocr_paddle_init_failed':
@@ -2689,7 +2683,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'You are online. The Kazakh recognition pack is ready to install. '
         'Say "language packs".',
 
-    // -- Phase 2: Kazakh TTS engine labels & RHVoice onboarding ----------
+    
     'tts_kk_engine_system': 'System Kazakh voice',
     'tts_kk_engine_rhvoice': 'RHVoice (Aigul)',
     'tts_kk_engine_espeak': 'espeak-ng (fallback)',
@@ -2712,7 +2706,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'You are online. The Kazakh voice pack is ready to install. '
         'Say "language packs".',
 
-    // -- Phase 1: Indoor trail (Direction 6) ------------------------------
+    
     'trail_recording_started': 'Trail recording started. Walk to your destination.',
     'trail_recording_stopped': 'Trail saved.',
     'trail_recording_failed': 'Could not start trail recording.',
@@ -2731,7 +2725,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'trail_slight_left': 'Slightly left.',
     'trail_slight_right': 'Slightly right.',
 
-    // -- Phase 1: Bazaar / Livestock (Direction 9) ------------------------
+    
     'bazaar_mode_on': 'Bazaar mode on.',
     'bazaar_mode_off': 'Bazaar mode off.',
     'livestock_mode_on': 'Livestock mode on.',
@@ -2743,12 +2737,12 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'livestock_cat': 'Cat',
     'livestock_bird': 'Bird',
 
-    // -- Phase 1: Voice adaptation (Direction 12) -------------------------
+    
     'voice_adapt_on': 'Voice adaptation enabled. Data stays on device.',
     'voice_adapt_off': 'Voice adaptation disabled.',
     'voice_adapt_samples_cleared': 'Adaptation data cleared.',
 
-    // -- Phase 2: Mesh-Net Buddy Alerts (Direction 3) ---------------------
+    
     'mesh_hazard_generic': 'Another user reported an obstacle nearby.',
     'mesh_hazard_pothole': 'Another user reported a pothole nearby.',
     'mesh_hazard_construction': 'Another user reported construction nearby.',
@@ -2758,25 +2752,25 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'mesh_buddy_stopped': 'Buddy network disabled.',
     'mesh_buddy_no_ble': 'Bluetooth not supported. Buddy network unavailable.',
 
-    // -- Phase 2: OSCP Smart-Cane Sensor Pod (Direction 7) -----------------
+    
     'oscp_near_field': 'Cane: obstacle ahead',
     'oscp_connected': 'Smart cane connected.',
     'oscp_disconnected': 'Smart cane disconnected.',
     'oscp_battery_low': 'Smart cane battery low.',
     'oscp_no_ble': 'Bluetooth not supported. Smart cane unavailable.',
 
-    // -- Phase 3: Near-Miss Buffer (Direction 4) --------------------------
+    
     'near_miss_recorded': 'Near-miss recorded.',
     'near_miss_cleared': 'Near-miss records cleared.',
 
-    // -- Phase 4: VLM Scene Companion (Direction 11) ----------------------
+    
     'vlm_loading': 'Loading scene description model.',
     'vlm_ready': 'Scene description model ready.',
     'vlm_not_available': 'Scene description not available. Charging and free memory required.',
     'vlm_thinking': 'Thinking...',
     'vlm_answer_fallback': 'Model did not respond. Using standard description.',
 
-    // -- Phase 5: Sonar-on-Phone (Direction 1) ----------------------------
+    
     'sonar_near_field': 'Sonar: object ahead',
     'sonar_started': 'Sonar enabled.',
     'sonar_stopped': 'Sonar disabled.',

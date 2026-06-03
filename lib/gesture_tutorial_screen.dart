@@ -110,7 +110,6 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
   Future<void> _speakIntro() async {
     
     
-    
     _tts.say(S.get('tut_intro'), SpeechPriority.warning, pan: 0.0);
     await _tts.awaitCurrentSpeech();
     await Future<void>.delayed(const Duration(milliseconds: 300));

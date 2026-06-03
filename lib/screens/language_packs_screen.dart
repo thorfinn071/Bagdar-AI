@@ -83,8 +83,8 @@ class _LanguagePacksScreenState extends State<LanguagePacksScreen> {
         SpeechPriority.info,
         pan: 0.0,
       );
-      // Opportunistic manifest refresh on entry — covers the case where the
-      // initial main.dart fetchManifest() failed because we were offline.
+      
+      
       if (_pm.manifestNeedsRefresh) {
         unawaited(_refreshManifest(announceSuccess: false));
       }
@@ -150,7 +150,7 @@ class _LanguagePacksScreenState extends State<LanguagePacksScreen> {
     if (!mounted) return;
     setState(() => _busy = false);
     if (!ok) {
-      // Error path already announced via onDownloadError callback.
+      
     }
   }
 
@@ -194,9 +194,8 @@ class _LanguagePacksScreenState extends State<LanguagePacksScreen> {
     };
     final merged = [
       ...available,
-      // Show installed packs that are not in the current manifest (e.g.,
-      // they were removed upstream after install). The user should still be
-      // able to delete them.
+      
+      
       ..._pm.installed.where(
         (p) => p.installed && !available.any((a) => a.packId == p.packId),
       ),

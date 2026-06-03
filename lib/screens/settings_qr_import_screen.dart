@@ -83,7 +83,7 @@ class _SettingsQrImportScreenState extends State<SettingsQrImportScreen> {
       await Future<void>.delayed(const Duration(milliseconds: 250));
       await _scanner.toggleTorch();
     } catch (_) {
-      // Some devices have no torch — silent fallback.
+      
     }
   }
 

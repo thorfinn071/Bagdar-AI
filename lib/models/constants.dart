@@ -68,28 +68,28 @@ const Map<String, double> kClassWeight = {
 /// carry items (which usually indicate a person), and a small set of indoor
 /// hazards (chair, potted plant, bottle).
 const Set<String> kAlertClassWhitelist = {
-  // pedestrians / animals
+  
   'person',
   'dog',
   'cat',
-  // wheeled traffic
+  
   'bicycle',
   'car',
   'motorcycle',
   'bus',
   'truck',
-  // signage / street furniture
+  
   'traffic light',
   'fire hydrant',
   'stop sign',
   'parking meter',
   'bench',
-  // carry items (proxy for a person nearby)
+  
   'backpack',
   'handbag',
   'suitcase',
   'umbrella',
-  // indoor hazards a blind user can collide with
+  
   'chair',
   'potted plant',
   'bottle',
@@ -104,25 +104,25 @@ const Set<String> kAlertClassWhitelist = {
 /// of YOLOv8 on COCO and the safety asymmetry: a missed pedestrian or
 /// vehicle is far worse than a missed bench.
 const Map<String, double> kClassMinConf = {
-  // Danger-critical, high precision in YOLOv8n: keep the bar low so we
-  // catch them at distance / in clutter.
+  
+  
   'person': 0.40,
   'car': 0.40,
   'bus': 0.40,
   'truck': 0.40,
   'motorcycle': 0.40,
   'bicycle': 0.42,
-  // Animals — medium precision.
+  
   'dog': 0.45,
   'cat': 0.50,
-  // Signs and traffic infrastructure — must be confident before we say
-  // "stop sign" or "traffic light".
+  
+  
   'traffic light': 0.50,
   'stop sign': 0.55,
   'fire hydrant': 0.55,
   'parking meter': 0.55,
   'bench': 0.50,
-  // Carry items / indoor hazards — narrow false-positive budget.
+  
   'backpack': 0.55,
   'handbag': 0.60,
   'suitcase': 0.55,
@@ -153,13 +153,6 @@ const double kVehApproachHeightRateT = 0.14;
 
 const double kPedApproachAreaRateT = 0.08;
 const double kPedApproachHeightRateT = 0.06;
-
-
-
-
-
-
-
 
 
 const double kVehTurnAngVelThreshold = 0.3;
@@ -215,7 +208,6 @@ const Duration kApproachCooldown = Duration(milliseconds: 2500);
 const double kApproachingLabelThreatMaxDistM = 15.0;
 
 
-
 const Duration kStaticObjectCooldown = Duration(seconds: 10);
 
 const Duration kClearAnnounceDuration = Duration(milliseconds: 1200);
@@ -263,8 +255,6 @@ const Duration kMidasInterval = Duration(milliseconds: 800);
 const double kMidasMinCoverage = 0.12;
 
 const double kMidasDropRatio = 0.30;
-
-
 
 
 const int kMidasStuckTimeoutMs = 3000;
@@ -322,10 +312,6 @@ const int kSosRetries = 3;
 const Duration kSosRetryDelay = Duration(seconds: 2);
 
 
-
-
-
-
 const Duration kSosCachedPositionMaxAge = Duration(minutes: 2);
 
 const double kVoiceSpeechRateStep = 0.15;
@@ -340,14 +326,8 @@ const double kHardwareDepthMinConfidence = 0.30;
 const double kHardwareDepthMinMeanMeters = 0.30;
 
 
-
-
-
 const double kHardwareDepthMaxMeanMeters = 15.0;
 const int kHardwareDepthLowConfFrames = 5;
-
-
-
 
 
 const double kHardwareDepthHighConfThreshold = 0.7;
@@ -360,36 +340,12 @@ const int kSoftFrameBudgetMs = 200;
 const int kHardFrameBudgetMs = 280;
 
 
-
-
-
-
-
 const int kDetectIntervalSafetyCeilingMs = 500;
-
-
-
-
-
 
 
 const int kStationaryGateDetectMs = 300;
 const Duration kStationaryGateResumeWindow = Duration(seconds: 5);
 const Duration kStationaryGatePostCriticalBlock = Duration(seconds: 5);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 const Duration kStationaryGateMidasOff = Duration(hours: 1);
@@ -458,10 +414,6 @@ const double kEventBaselineMultiplier = 4.0;
 const double kEventBaselineEmaAlpha = 0.05;
 
 
-
-
-
-
 const double kEventGlobalPanFrac = 0.60;
 const int kEventMinBlobArea = 4;
 const double kEventMaxBlobAreaFrac = 0.20;
@@ -504,26 +456,26 @@ const double kAwmTransientThresholdMultiplier = 3.0;
 const double kNavGpsAccuracyMaxM = 25.0;
 const int kNavGpsMaxAgeSec = 30;
 
-// --- Sonar (Direction 1) ---
+
 const double kSonarMinConfidence = 0.4;
 const Duration kSonarHazardCooldown = Duration(seconds: 4);
 const double kSonarMaxRangeM = 3.0;
 const double kSonarMinChirpHz = 18000;
 
-// --- OSCP Smart-Cane (Direction 7) ---
+
 const double kOscpNearFieldThresholdM = 1.2;
 const double kOscpSweepGyroThreshold = 2.5;
 const Duration kOscpNearFieldCooldown = Duration(seconds: 3);
 const double kOscpRangeEmaAlpha = 0.35;
 
-// --- Mesh-Net Buddy Alerts (Direction 3) ---
+
 const int kMeshMaxPayloadAgeMs = 60000;
 const int kMeshMaxAgeTtlMs = 120000;
 const Duration kMeshBuddyCooldown = Duration(seconds: 30);
 const double kMeshRelevanceRadiusM = 50.0;
 
-// --- Near-Miss Buffer (Direction 4) ---
+
 const int kNearMissMaxRecords = 100;
 
-// --- Indoor Trail Replay (Direction 6) ---
+
 const int kIndoorTrailParticleCount = 200;

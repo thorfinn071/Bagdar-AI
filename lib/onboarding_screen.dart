@@ -15,17 +15,14 @@ import 'camera_screen.dart';
 import 'gesture_tutorial_screen.dart';
 
 
-
 const String kOnboardingDoneKey = 'onboarding_done';
 const String kOnboardingModeKey = 'onboarding_mode';
-
 
 
 Future<Widget> resolveStartScreen() async {
   if (Settings.instance.onboardingDone) return const AiCameraScreen();
   return const OnboardingScreen();
 }
-
 
 
 class OnboardingScreen extends StatefulWidget {
@@ -139,11 +136,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       await _tts.awaitCurrentSpeech();
       if (!mounted) return;
       _speak(_current, barge: true);
-      // After the language change announcement settles, offer the Kazakh
-      // language pack download if (a) the user just picked kk, (b) the
-      // pack isn't installed, and (c) the user hasn't recently skipped
-      // it. Pack install requires online connectivity, so we surface the
-      // prompt eagerly but don't block onboarding.
+      
+      
       if (lang == AppLanguage.kk) {
         unawaited(_maybeOfferKkPackDownload());
       }
@@ -154,14 +148,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final pm = LanguagePackManager.instance;
     if (!pm.isReady) return;
     if (pm.isInstalled(LanguagePackIds.voskKk)) {
-      // Vosk already installed — go straight to the RHVoice prompt so the
-      // user gets the matching voice pack without re-prompting for Vosk.
+      
+      
       await _maybeOfferRhvoicePackDownload();
       return;
     }
     if (await pm.wasPackSkippedRecently(LanguagePackIds.voskKk)) {
-      // User recently declined Vosk — still offer the RHVoice voice pack
-      // (it's a separate decision and serves different users).
+      
+      
       await _maybeOfferRhvoicePackDownload();
       return;
     }
@@ -181,9 +175,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           SpeechPriority.info,
           barge: true,
         );
-        // Auto-enable the v2 flag so the moment the pack lands, the
-        // routing layer activates. Skip on failure — error path is
-        // announced inside downloadPack via the manager's callbacks.
+        
+        
         await Settings.instance.setEnableKazakhStackV2(true);
         final ok = await pm.downloadPack(LanguagePackIds.voskKk);
         if (!mounted) return;
@@ -207,10 +200,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         break;
     }
 
-    // Phase 2 — after the Vosk decision is settled (regardless of which
-    // branch the user took above), offer the RHVoice voice pack as a
-    // *separate* tap-to-confirm. The plan locks in this sequencing:
-    // never two simultaneous downloads, never auto-chain.
+    
     if (!mounted) return;
     await _tts.awaitCurrentSpeech();
     if (!mounted) return;
@@ -240,9 +230,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           SpeechPriority.info,
           barge: true,
         );
-        // The kk-stack-v2 flag may already be on from the Vosk path; if
-        // the user is *only* installing RHVoice (Vosk skipped), flip it
-        // on too so TtsService._resolveKkEngine picks up the new voice.
+        
+        
         await Settings.instance.setEnableKazakhStackV2(true);
         final ok = await pm.downloadPack(LanguagePackIds.rhvoiceKkAigul);
         if (!mounted) return;
@@ -294,11 +283,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
     _skipConfirmTimer?.cancel();
     _skipReplayTimer?.cancel();
-    
-    
-    
-    
-    
     
     
     _skipConfirmTimer = Timer(const Duration(seconds: 10), () {
@@ -452,9 +436,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
 
     if (mounted) {
-      
-      
-      
       
       
       _tts.say(
@@ -1330,7 +1311,6 @@ class _TipRow extends StatelessWidget {
     );
   }
 }
-
 
 
 class _PrimaryButton extends StatelessWidget {
