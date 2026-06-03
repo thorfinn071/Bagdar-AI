@@ -30,8 +30,6 @@ class AlertManager {
   final bool Function() _isGuideDogMode;
   
   
-  
-  
   final bool Function() _isIndoorMode;
 
   AlertManager({
@@ -55,8 +53,6 @@ class AlertManager {
   );
 
   
-  
-  
   static bool _isGuideDogTrack(Track t, int imgH) {
     if (t.label != 'dog' && t.label != 'cat') return false;
     if (imgH <= 0) return false;
@@ -66,13 +62,6 @@ class AlertManager {
     return true;
   }
 
-  
-  
-  
-  
-  
-  
-  
   
   static const int _kGuideDogLockFrames = 3;
   static const int _kGuideDogUnlockFrames = 10;
@@ -139,17 +128,13 @@ class AlertManager {
   DateTime _emptySince = DateTime.fromMillisecondsSinceEpoch(0);
   
   
-  
-  
   bool _emptySinceIndoor = false;
   bool _clearAnnounced = false;
   DateTime _lastCriticalAt = DateTime.fromMillisecondsSinceEpoch(0);
   bool _guidanceGiven = false;
 
   
-  
   DateTime _lastCameraStallAt = DateTime.fromMillisecondsSinceEpoch(0);
-  
   
   
   DateTime _lastClearAnnounceAt = DateTime.fromMillisecondsSinceEpoch(0);
@@ -163,17 +148,11 @@ class AlertManager {
   final Set<int> _prevCloseTrackIds = {};
 
   
-  
   DateTime _lastCrowdAlertAt = DateTime.fromMillisecondsSinceEpoch(0);
 
   
-  
-  
-  
   bool _crowdActive = false;
 
-  
-  
   
   final Map<int, double> _lastAnnouncedDistM = {};
 
@@ -187,8 +166,6 @@ class AlertManager {
 
   void updateLastCriticalAt(DateTime t) => _lastCriticalAt = t;
 
-  
-  
   
   void markCameraStall(DateTime now) {
     _lastCameraStallAt = now;
@@ -376,29 +353,6 @@ class AlertManager {
   }
 
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   AlertCandidate? handleMotionIntrusion(
     MotionIntrusionEvent event, {
     required String text,
@@ -410,8 +364,6 @@ class AlertManager {
     };
 
     
-    
-    
     final isVehicleLike = event.classGuess == MotionEventClass.vehicleLike;
     final category = isVehicleLike
         ? AlertCategory.approachingVehicle
@@ -421,7 +373,6 @@ class AlertManager {
         ? SpeechPriority.critical
         : SpeechPriority.warning;
 
-    
     
     final urgency = event.isCritical
         ? 0.95
@@ -494,10 +445,6 @@ class AlertManager {
     } else {
       
       
-      
-      
-      
-      
       final currentIndoor = _isIndoorMode();
       if (_emptySince.millisecondsSinceEpoch == 0) {
         _emptySince = now;
@@ -566,16 +513,11 @@ class AlertManager {
     _handleNavHint(tracks, imgW, imgH, viewportAspect, now);
 
     
-    
-    
-    
-    
     final labels = _crowdActive
         ? [for (final t in tracks) if (t.label != 'person') t.label]
         : tracks.map((t) => t.label).toList();
 
-    // Phase 1 — Direction 9: Feed livestock label taxonomy for
-    // context-mode announcements. Distances are approximate.
+    
     final trackDistances = <String, double>{};
     for (final t in tracks) {
       if (t.distM > 0) trackDistances[t.label] = t.distM;
@@ -586,14 +528,11 @@ class AlertManager {
     );
     
     
-    
-    
-    
     final reliableTrackIds = <int>{
       for (final t in tracks)
         if (t.reliableFrames >= 3) t.id,
     };
-    final winner = _filter.flush(
+    final winners = _filter.flushMulti(
       tracks.length,
       now,
       labels: labels,
@@ -601,12 +540,13 @@ class AlertManager {
       verbosity: Settings.instance.verbosity,
       alertFrequency: Settings.instance.alertFrequency,
     );
-    if (winner != null) {
+    for (final winner in winners) {
       _tts.say(
         winner.text,
         winner.priority,
         pan: winner.pan,
         trackId: winner.trackId,
+        barge: winner.priority == SpeechPriority.critical,
       );
       if (winner.trackId != null) {
         final spoken = tracks.firstWhere(
@@ -616,9 +556,6 @@ class AlertManager {
         if (spoken.id == winner.trackId) spoken.lastSpoken = now;
 
         
-        
-        
-        
         if (winner.category == AlertCategory.obstacleClose &&
             winner.distanceM != null &&
             winner.distanceM! > 0) {
@@ -626,8 +563,6 @@ class AlertManager {
         }
       }
 
-      
-      
       
       if (winner.isGroupAlert) {
         _lastCrowdAlertAt = now;
@@ -650,9 +585,6 @@ class AlertManager {
         : kEmptyConfirmDuration;
     
     
-    
-    
-    
     final confirmDuration = _isIndoorMode()
         ? baseConfirm + const Duration(milliseconds: 1500)
         : baseConfirm;
@@ -660,13 +592,9 @@ class AlertManager {
         now.difference(_lastCriticalAt) < kPostCriticalClearDelay;
 
     
-    
-    
     final recentStall = _lastCameraStallAt.millisecondsSinceEpoch != 0 &&
         now.difference(_lastCameraStallAt) < _kPostStallClearGuard;
 
-    
-    
     
     final clearCooldownOk = _lastClearAnnounceAt.millisecondsSinceEpoch == 0 ||
         now.difference(_lastClearAnnounceAt) >= _kClearAnnounceMinInterval;
@@ -691,8 +619,6 @@ class AlertManager {
     }
 
     
-    
-    
     if (_clearAnnounced &&
         Settings.instance.clearPathAnnounce &&
         !recentCritical &&
@@ -713,8 +639,6 @@ class AlertManager {
   ) {
     Track? top;
     for (final t in tracks) {
-      
-      
       
       
       final bool labelThreat =
@@ -774,7 +698,6 @@ class AlertManager {
             urgency: 0.85,
             
             
-            
             distanceM: top.distM > 0 ? top.distM : null,
           ),
         );
@@ -813,10 +736,6 @@ class AlertManager {
     );
 
     
-    
-    
-    
-    
     if (now.difference(_lastCriticalAt) >= kCriticalCooldown) {
       top.lastSpoken = now;
       _lastCriticalAt = now;
@@ -839,6 +758,9 @@ class AlertManager {
         Verbosity.detailed => '${S.alert('stop')}. $label $dir$distPart.',
       };
       _tts.say(text, SpeechPriority.critical, pan: pan, barge: true);
+      // Register in the filter so flushMulti in the same frame doesn't
+      // double-fire an obstacleClose critical (fix 3.2).
+      _filter.noteCritical(AlertCategory.obstacleClose, now);
       _vibrate([0, 250, 80, 450], isCritical: true);
     } else {
       _vibrate(
@@ -861,10 +783,6 @@ class AlertManager {
     final indoor = _isIndoorMode();
 
     
-    
-    
-    
-    
     var personCount = 0;
     double personSumCx = 0;
     double personMinDistM = double.infinity;
@@ -883,7 +801,9 @@ class AlertManager {
     double topProximityPan = 0.0;
     for (final t in tracks) {
       if (_crowdActive && t.label == 'person') {
-        continue;
+        // Breakaway exemption: an approaching crowd member is an individual
+        // threat and must not be silenced by the group-alert suppression.
+        if (!t.approaching) continue;
       }
       if (t.dist == 'very close') continue;
       if (t.nearFrameCount < 2 && t.dist != 'far') continue;
@@ -911,11 +831,6 @@ class AlertManager {
       }
 
       final confFactor = t.avgConf >= kHighConfLevel ? 1.0 : 1.5;
-      
-      
-      
-      
-      
       
       
       final Duration baseCooldown;
@@ -964,8 +879,6 @@ class AlertManager {
 
       final verb = Settings.instance.verbosity;
       if (t.dist == 'close') {
-        
-        
         
         
         final lastAnnouncedDistM = _lastAnnouncedDistM[t.id];
@@ -1036,11 +949,6 @@ class AlertManager {
     }
 
     
-    
-    
-    
-    
-    
     if (_crowdActive) {
       final avgCx = personSumCx / personCount;
       final crowdPan = _pan(avgCx, imgW, imgH, viewportAspect);
@@ -1061,7 +969,6 @@ class AlertManager {
         );
       }
 
-      
       
       if (personMinDistM.isFinite) {
         _emitProximity(personMinDistM, crowdPan);

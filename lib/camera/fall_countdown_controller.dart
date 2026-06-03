@@ -41,23 +41,10 @@ class FallCountdownController extends ChangeNotifier {
   static const Duration kCorroborationWindow = Duration(seconds: 3);
   
   
-  
-  
-  
-  
   static const double kDeliberateTapThresholdMps2 = 14.7;
   static const Duration kDeliberateTapMaxDuration =
       Duration(milliseconds: 100);
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
   
   final double Function()? deliberateTapThresholdProvider;
 
@@ -298,7 +285,6 @@ class FallCountdownController extends ChangeNotifier {
     if (_disposed) return;
     
     
-    
     final delivered = result == SosResult.sent ||
         result == SosResult.sentFallback ||
         result == SosResult.sentWithoutLocation;
@@ -330,13 +316,6 @@ class FallCountdownController extends ChangeNotifier {
 
   void _restartFallCancelListener() {
     if (!_cancelListenerActive) return;
-    
-    
-    
-    
-    
-    
-    
     
     
     voice.extendContinuousDeadline(Duration(seconds: _secondsLeft + 1));
@@ -377,7 +356,6 @@ class FallCountdownController extends ChangeNotifier {
   void _onUserAccel(UserAccelerometerEvent e) {
     final mag = math.sqrt(e.x * e.x + e.y * e.y + e.z * e.z);
     final now = DateTime.now();
-    
     
     
     final threshold =

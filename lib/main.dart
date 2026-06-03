@@ -16,21 +16,15 @@ void main() async {
 
   await Settings.instance.init();
   await FeatureUsageTracker.instance.init();
-  // Language pack registry must be ready before the first VoiceCommandService
-  // init runs (CameraViewModel constructor), otherwise the kk routing branch
-  // can never observe an installed pack. The init itself is cheap (read
-  // SharedPreferences + scan storage); manifest refresh runs in the
-  // background and silently no-ops when offline.
+  
+  
   await LanguagePackManager.instance.init();
   unawaited(LanguagePackManager.instance.fetchManifest());
-  // Phase 2 — Probe the native TTS bridge capabilities (RHVoice /
-  // espeak-ng) eagerly so the first kk speech does not block on a channel
-  // round-trip. Bridge init is best-effort and silently no-ops when the
-  // Android plugin is missing (e.g. on test hosts).
+  
+  
   unawaited(NativeTtsBridge.instance.init());
-  // Phase 3 — same pattern for the PaddleOCR multilingual recognizer.
-  // Until the PaddleLite `.aar` + model assets ship, the probe returns
-  // unavailable and `OcrService` falls back to ML Kit.
+  
+  
   unawaited(PaddleOcrBridge.instance.init());
 
   bagdarThemeNotifier.value = Settings.instance.themeMode;

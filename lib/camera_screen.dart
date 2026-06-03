@@ -145,25 +145,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   late final StallWatchdog _stallWatchdog;
 
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   Timer? _indoorPollTimer;
   static const Duration _kIndoorPollPeriod = Duration(seconds: 5);
 
-  
-  
   
   final List<RawDet> _rawDetBuffer = <RawDet>[];
 
@@ -179,8 +163,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   static const Duration _kShakeWarnCooldown = Duration(seconds: 6);
 
   
-  
-  
   DateTime _lastStallWarnTtsAt = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _stallStartedAt = DateTime.fromMillisecondsSinceEpoch(0);
   static const Duration _kStallTtsCooldown = Duration(seconds: 60);
@@ -193,8 +175,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   final Map<FrameQualityEventType, DateTime> _lastQualityTtsAt = {};
   static const Duration _kQualityEventCooldown = Duration(seconds: 30);
 
-  
-  
   
   DateTime _lastMidasModeAnnounceAt = DateTime.fromMillisecondsSinceEpoch(0);
   static const Duration _kMidasModeAnnounceCooldown = Duration(seconds: 30);
@@ -209,13 +189,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   static const Duration _kWinterHeartbeatInterval = Duration(seconds: 60);
 
   
-  
-  
-  
-  
-  
-  
-  
   DateTime _lastWeatherDepthHeartbeatAt =
       DateTime.fromMillisecondsSinceEpoch(0);
   static const Duration _kWeatherDepthHeartbeatInterval =
@@ -227,12 +200,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _vm = CameraViewModel();
     _qualityGuard = FrameQualityGuard(weatherGate: _vm.weatherGate);
     _depthController = DepthPipelineController(vm: _vm, models: _models);
-    
-    
-    
-    
-    
-    
     
     
     _depthController.onStatusChanged = _onDepthStatusChanged;
@@ -264,9 +231,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           stalled: true,
           thresholdMs: threshold.inMilliseconds,
         );
-        
-        
-        
         
         
         final stallCooldown =
@@ -328,18 +292,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       _managePitchBlackHeartbeat();
       
       
-      
-      
       _qualityGuard.setMode(scanModeActive: _vm.mode == AppMode.scan);
-      
-      
-      
-      
-      
-      
-      
-      
-      
       
       
       final newMode = _vm.mode;
@@ -358,11 +311,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
             pan: 0.0,
           );
         }
-        
-        
-        
-        
-        
         
         
         if (transitioningIntoSafetyMode &&
@@ -427,14 +375,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   }
 
   
-  
-  
-  
-  
-  
-  
-  
-  
   void _weatherDepthHeartbeatTick() {
     if (!_vm.weatherGate.degraded) return;
     
@@ -481,8 +421,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   void _phoneAbandonedTick() {
     _phoneAbandoned.noteMotionState(_vm.fallDetector.motionState);
     _phoneAbandoned.noteCameraFrozen(_qualityGuard.cameraFrozenWarned);
-    // Luma is "normal" when the camera is neither fully blocked (pocket /
-    // covered) nor in an AE transition that produces noise frames.
+    
+    
     final lumaNormal = !_qualityGuard.cameraBlockedWarned &&
         !_qualityGuard.aeTransitioning;
     _phoneAbandoned.noteLumaNormal(lumaNormal);
@@ -743,10 +683,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       _vm.tts.onTtsStall = () {
         
         
-        
-        
-        
-        
         _vm.earcon.play(Earcon.cameraBlocked);
         HapticService.vibrate(
           kHapticTtsStallPattern,
@@ -759,16 +695,11 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       };
       
       
-      
-      
-      
-      
       _vm.tts.onTtsUnavailable = () {
         try {
           _vm.earcon.play(Earcon.cameraBlocked);
         } catch (_) {}
         _fieldLog.logTtsEvent('tts_unavailable');
-        
         
         
         unawaited(_vm.tts.init());
@@ -822,12 +753,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     } catch (e) {
       _fieldLog.logError('initAll', e.toString());
       _vm.setStatus('Сбой: $e');
-      
-      
-      
-      
-      
-      
       
       
       try {
@@ -1102,8 +1027,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   }
 
   
-  
-  
   Future<void> _pollIndoorState() async {
     if (!mounted) return;
     Position? pos;
@@ -1319,11 +1242,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       _controller = ctrl;
       
       
-      
       _vm.ocr.sensorOrientationDeg = back.sensorOrientation;
       await ctrl.startImageStream(_onFrame);
 
-      
       
       unawaited(_vm.tts.preClaimAudioFocus());
 
@@ -1375,8 +1296,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           _stallStartedAt.millisecondsSinceEpoch != 0) {
         
         
-        
-        
         _vm.earcon.play(Earcon.success);
         _vm.tts.say(
           S.get('camera_resumed'),
@@ -1402,6 +1321,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       width: image.width,
       height: image.height,
       now: now,
+      indoorHint: _vm.isIndoor,
     );
     _handleQualityEvents(qualityReport.events);
     _vm.tracker.weatherDegraded = qualityReport.weatherDegraded;
@@ -1450,30 +1370,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     }
     _blurryStreak = 0;
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     if (_vm.mode == AppMode.street || _vm.mode == AppMode.cane) {
       final event = _vm.motionPreAlert.feed(
@@ -1525,15 +1421,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         } else if (_vm.fallDetector.motionState == MotionState.walking) {
           
           
-          
-          
-          
-          
         } else {
           final text = await _vm.ocr.recognizeFromFrame(image, stabilize: true);
           if (text != null && text.isNotEmpty) {
-            
-            
             
             
             _vm.tts.say(text, SpeechPriority.info, pan: 0.0);
@@ -1543,9 +1433,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       }
 
       final planeBytes = _reusePlaneBytes(image);
-      
-      
-      
       
       
       final raw = await _models.vision.yoloOnFrame(
@@ -1559,9 +1446,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
       if (!mounted) return;
 
-      
-      
-      
       
       final yPlaneBytes = planeBytes.isNotEmpty ? planeBytes[0] : null;
       final yStride =
@@ -1601,7 +1485,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         isCalibrated: _isCalibrated,
         frameCount: _frameCount,
       );
-      
       
       
       final criticalAtAfter = _vm.alertMgr.lastCriticalAt;
@@ -1667,8 +1550,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       }
 
       
-      
-      
       _depthController.updateYoloTracks(tracks, imgW: _imgW);
 
       if (_depthController.shouldRun(now) && !_stallWatchdog.isWarned) {
@@ -1707,8 +1588,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           : SpeechPriority.warning;
       
       
-      
-      
       _vm.tts.say(
         S.alert(hazardKey),
         priority,
@@ -1727,16 +1606,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   }
 
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   void _onDepthStatusChanged(
     DepthPipelineStatus from,
     DepthPipelineStatus to,
@@ -1745,9 +1614,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     if (!mounted) return;
     _misalignmentWatchdog.noteDepthStatus(to);
 
-    
-    
-    
     
     String? key;
     SpeechPriority priority = SpeechPriority.warning;
@@ -1776,12 +1642,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   }
 
   
-  
-  
-  
-  
-  
-  
   void _onMidasPauseChanged(bool paused) {
     if (!mounted) return;
     final now = DateTime.now();
@@ -1794,8 +1654,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       return;
     }
     _lastMidasModeAnnounceAt = now;
-    
-    
     
     
     final key = paused ? 'depth_paused_explicit' : 'hazard_detection_resumed';
@@ -1817,10 +1675,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         MotionIntrusionSide.right => 'synth_event_stop_right',
         MotionIntrusionSide.center => 'synth_event_stop_center',
       };
-      
-      
-      
-      
       
       
       final winner = _vm.alertMgr.handleMotionIntrusion(
@@ -1850,7 +1704,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       } else {
         
         
-        
         _fieldLog.log('synth_event_suppressed', {
           'side': event.side.name,
           'reason': 'cross_system_dedup',
@@ -1863,35 +1716,11 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   }
 
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   bool _hasCloseOrApproachingVehicle(List<Track> tracks) {
     for (final t in tracks) {
       if (!isVehicle(t.label)) continue;
       
       if (t.approaching) return true;
-      
-      
-      
-      
-      
       
       
       if (t.dist == 'very close' || t.dist == 'close') return true;
@@ -1951,9 +1780,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       final label = (r['tag'] ?? '').toString();
       
       
-      
-      
-      
       if (!kAlertClassWhitelist.contains(label)) continue;
       final conf = (r['confidence'] as num?)?.toDouble() ?? 0.0;
       
@@ -1973,13 +1799,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       final distM = focalDistM(label, x1, y1, x2, y2);
       final boxCat = distByBox(areaRatio, heightRatio, bottomRatio);
       final dist = distMToCategory(distM, boxCat);
-      
-      
-      
-      
-      
-      
-      
       
       
       if (label == 'person' && dist == 'far' && conf < 0.50) {
@@ -2019,10 +1838,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   void _handleThermalChanged(ThermalReadings readings) {
     if (!mounted) return;
     _vm.throttler.setThermal(readings);
-    // Winter Mode: feed battery temp into the auto-detect streak. When the
-    // streak flips, the VM listener reclassifies the current reading via
-    // ThermalMonitor.setWinterMode(true), so the severity callback will
-    // fire again with the updated ceiling on the next poll.
+    
+    
     _vm.winterMode.noteThermalReading(readings);
     unawaited(_models.adjustForThermal(_vm.throttler.effectiveSeverity));
     _fieldLog.logThermal(
@@ -2287,7 +2104,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     if (!wants) return;
     _onlineKkPromptDone = true;
     await pm.setPromptOnFirstOnline(false);
-    // Opportunistic manifest refresh now that we have a network.
+    
     unawaited(pm.fetchManifest());
     if (!mounted) return;
     _vm.tts.say(
@@ -2300,7 +2117,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
   Future<void> _openSettingsQrImport() async {
     if (!mounted) return;
-    
     
     
     await _releaseCameraForExternalScanner();
@@ -2688,7 +2504,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       trafficLightKind: _vm.trafficLight.lastKind,
       
       
-      
       ocrText: null,
       isIndoor: _vm.indoorGate.state == IndoorState.indoor,
       mode: _vm.mode,
@@ -2731,7 +2546,6 @@ class _FieldMarkerButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      
       
       
       onLongPress: onActivate,

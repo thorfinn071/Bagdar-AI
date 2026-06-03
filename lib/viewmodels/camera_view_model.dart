@@ -80,13 +80,11 @@ class CameraViewModel extends ChangeNotifier {
   final GtfsService gtfs = GtfsService();
   final VoiceCommandService voice = VoiceCommandService();
   final TrafficLightAnalyzer trafficLight = TrafficLightAnalyzer();
-  // Phase 3: pass `memory` so OcrService can refuse to start a new
-  // PaddleOCR session when the device is under critical memory pressure
-  // (PaddleLite predictors total ~80 MB resident when active).
+  
+  
   late final OcrService ocr = OcrService(memoryMonitor: memory);
   final MotionPreAlert motionPreAlert = MotionPreAlert();
   final WeatherGate weatherGate = WeatherGate();
-  
   
   
   final IndoorGate indoorGate = IndoorGate();
@@ -104,19 +102,19 @@ class CameraViewModel extends ChangeNotifier {
   late final IndoorTrailReplay trailReplay;
   final BazaarLivestockService bazaarLivestock = BazaarLivestockService.instance;
 
-  // Phase 2 — Direction 3: BLE mesh-net buddy alerts
+  
   final MeshBuddyAlertService meshBuddy = MeshBuddyAlertService.instance;
-  // Phase 2 — Direction 7: Open Smart-Cane Sensor Pod
+  
   final OscpService oscp = OscpService.instance;
-  // Phase 3 — Direction 4: Near-miss buffer
+  
   final NearMissBuffer nearMissBuffer = NearMissBuffer.instance;
-  // Phase 3 — Direction 4: Charging-gated training scheduler
+  
   final ChargingJobScheduler chargingJobs = ChargingJobScheduler.instance;
-  // Phase 3 — Direction 9: Regional model pack manager
+  
   final ModelPackManager modelPacks = ModelPackManager.instance;
-  // Phase 4 — Direction 11: On-device VLM scene companion
+  
   final SceneQuestionService vlmCompanion = SceneQuestionService.instance;
-  // Phase 5 — Direction 1: FMCW chirp echolocation prototype
+  
   final SonarService sonar = SonarService.instance;
 
   AppMode mode = AppMode.street;
@@ -132,9 +130,6 @@ class CameraViewModel extends ChangeNotifier {
 
   final ValueNotifier<List<Track>> tracksNotifier = ValueNotifier(const []);
 
-  
-  
-  
   
   bool get isIndoor => indoorGate.state == IndoorState.indoor;
 
@@ -173,10 +168,8 @@ class CameraViewModel extends ChangeNotifier {
       compass: compass,
       steps: steps,
     );
-    // Winter Mode: load persisted manual toggle and propagate into the
-    // thermal monitor. The thermal → winterMode auto-detect feedback is
-    // wired in `camera_screen.dart:_handleThermalChanged` to coexist with
-    // the existing throttler / model-service thermal listeners.
+    
+    
     winterMode.loadFromSettings();
     thermal.setWinterMode(winterMode.active);
     winterMode.addListener(_onWinterModeChanged);
@@ -192,8 +185,6 @@ class CameraViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  
-  
   
   void applyIndoorTransition(IndoorTransition transition) {
     if (transition == IndoorTransition.none) return;
@@ -235,8 +226,6 @@ class CameraViewModel extends ChangeNotifier {
     );
     FieldLogger.instance.logModeSwitch(newMode.name, from: oldMode.name);
     if (Settings.instance.modeAnnounce) {
-      
-      
       
       
       tts.say(
@@ -329,8 +318,7 @@ class CameraViewModel extends ChangeNotifier {
       indoorGate.feedAcousticPrior(estimate);
     };
 
-    // Phase 1 — Indoor trail replay: route prompts through AlertManager
-    // so navigation cooldowns and verbosity gating apply.
+    
     trailReplay.onHazard = (event) {
       alertMgr.handleExternalHazard(event);
     };
@@ -341,38 +329,37 @@ class CameraViewModel extends ChangeNotifier {
       earcon.play(Earcon.fail);
     };
 
-    // Phase 1 — Bazaar / Livestock: route livestock announcements
-    // through AlertManager.
+    
     bazaarLivestock.onHazard = (event) {
       alertMgr.handleExternalHazard(event);
     };
 
-    // Phase 2 — Mesh buddy alerts: route peer hazards through AlertManager.
+    
     meshBuddy.onHazard = (event) {
       alertMgr.handleExternalHazard(event);
     };
 
-    // Phase 2 — OSCP smart-cane: route range hazards through AlertManager.
+    
     oscp.onHazard = (event) {
       alertMgr.handleExternalHazard(event);
     };
 
-    // Phase 4 — VLM companion: route answers through AlertManager.
+    
     vlmCompanion.onAnswer = (event) {
       alertMgr.handleExternalHazard(event);
     };
 
-    // Phase 5 — Sonar: route range hazards through AlertManager.
+    
     sonar.onHazard = (event) {
       alertMgr.handleExternalHazard(event);
     };
 
-    // Payment SMS: route alert through AlertManager.
+    
     paymentSms.onHazard = (event) {
       alertMgr.handleExternalHazard(event);
     };
 
-    // Direction 4: wire ChargingJobScheduler gate providers.
+    
     chargingJobs.isChargingProvider = () => battery.isCharging;
     chargingJobs.isWifiProvider = () => battery.isWifi;
     chargingJobs.batteryPctProvider = () => battery.batteryPct;
@@ -486,12 +473,8 @@ class CameraViewModel extends ChangeNotifier {
         availMb: readings.isAvailable ? readings.availMB : null,
         totalMb: readings.isAvailable ? readings.totalMB : null,
       );
-      // Vosk-kk loads a ~150 MB acoustic model into RAM. Under critical
-      // pressure (~250 MB available), keeping it resident risks OOM kill
-      // of the foreground process — far worse than degrading to
-      // speech_to_text for the kk locale until pressure recovers. The
-      // VoiceCommandService routing layer transparently falls back to
-      // speech_to_text on the next listen window after dispose.
+      
+      
       if (readings.level == MemoryPressureLevel.critical &&
           VoskKkRecognizer.instance.isReady) {
         FieldLogger.instance.log('vosk_kk_unloaded_oom', {

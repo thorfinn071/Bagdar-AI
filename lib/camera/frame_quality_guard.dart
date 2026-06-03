@@ -106,32 +106,16 @@ class FrameQualityGuard {
   static const int kSmearMinStreak = 45;
 
   
-  
-  
-  
-  
-  
-  
   static const Duration kFrozenFrameThreshold = Duration(seconds: 2);
 
-  
   
   static const Duration kFrozenFrameThresholdScan = Duration(seconds: 5);
 
   final WeatherGate weatherGate;
 
   
-  
-  
-  
-  
-  
   Duration _frozenThreshold = kFrozenFrameThreshold;
 
-  
-  
-  
-  
   
   void setMode({required bool scanModeActive}) {
     _frozenThreshold =
@@ -185,6 +169,7 @@ class FrameQualityGuard {
     required int width,
     required int height,
     required DateTime now,
+    bool indoorHint = false,
   }) {
     final events = <FrameQualityEvent>[];
     _runLuminosity(
@@ -194,6 +179,7 @@ class FrameQualityGuard {
       height: height,
       now: now,
       events: events,
+      indoorHint: indoorHint,
     );
     _runFrozenFrame(
       yPlane: yPlane,
@@ -217,6 +203,7 @@ class FrameQualityGuard {
     required int height,
     required DateTime now,
     required List<FrameQualityEvent> events,
+    bool indoorHint = false,
   }) {
     if (yPlane.isEmpty) return;
 
@@ -266,7 +253,10 @@ class FrameQualityGuard {
     }
 
     if (!isAeTransition) {
-      final transition = weatherGate.feed(variance, avgLuminosity);
+      final transition = weatherGate.feed(
+        variance, avgLuminosity,
+        indoorHint: indoorHint,
+      );
       switch (transition) {
         case WeatherTransition.degraded:
           events.add(FrameQualityEvent.weatherDegraded(

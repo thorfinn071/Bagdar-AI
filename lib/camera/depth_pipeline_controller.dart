@@ -43,35 +43,15 @@ class DepthPipelineController {
   final ModelService models;
 
   DateTime _lastRunAt = DateTime.fromMillisecondsSinceEpoch(0);
+  DateTime _lastYoloAt = DateTime.fromMillisecondsSinceEpoch(0);
   Duration interval = const Duration(milliseconds: 800);
   bool _providerReady = false;
   bool _inFlight = false;
 
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   final FusionEngine _fusion = FusionEngine();
   final Map<HazardZone, double> _yoloHazardConfByZone = {};
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   
   static const int _kDegradedFramesToAnnounce = 3;
 
@@ -102,20 +82,12 @@ class DepthPipelineController {
       now.difference(_lastRunAt) >= interval;
 
   
-  
-  
-  
-  
-  
-  
-  
-  
   void updateYoloTracks(List<Track> tracks, {required int imgW}) {
+    _lastYoloAt = DateTime.now();
     _yoloHazardConfByZone.clear();
     if (imgW <= 0 || tracks.isEmpty) return;
     final zoneWidth = imgW / HazardZone.values.length;
     for (final t in tracks) {
-      
       
       
       if (t.dist != 'very close' && t.dist != 'close') continue;
@@ -159,7 +131,6 @@ class DepthPipelineController {
     }
     
     
-    
     if (provider.lastConfidenceScore > 0 &&
         provider.lastConfidenceScore < 0.4) {
       _inFlight = false;
@@ -193,10 +164,6 @@ class DepthPipelineController {
       _inFlight = false;
 
       
-      
-      
-      
-      
       if (provider.lastPlaneFitOk) {
         _consecutivePlaneFitFailures = 0;
         if (_status != DepthPipelineStatus.lowConfidence) {
@@ -227,15 +194,14 @@ class DepthPipelineController {
         );
 
         
-        
-        
-        
         if (!isCritical && !rollExcessive) {
           final yoloConf = _yoloHazardConfByZone[h.zone] ?? 0.0;
+          final yoloAge = now.difference(_lastYoloAt);
           final fused = _fusion.evaluate(
             hazard: h,
             yoloHazardConf: yoloConf,
             now: now,
+            yoloAge: yoloAge,
           );
           if (fused != null && fused.level == AlertLevel.critical) {
             isCritical = true;
@@ -257,16 +223,6 @@ class DepthPipelineController {
     _yoloHazardConfByZone.clear();
   }
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   
   void _setStatus(DepthPipelineStatus next) {
     if (_status == next) return;
@@ -296,29 +252,6 @@ class DepthPipelineController {
     };
   }
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   
   static const double _kCriticalCenterScore = 0.65;
   static const double _kCriticalNearFieldScore = 0.55;
@@ -362,11 +295,8 @@ class DepthPipelineController {
         return hazard.midasScore >= _kCriticalNearFieldScore;
 
       case DepthHazardType.slippery:
-        // Winter Mode: any slippery patch the user is moving toward is
-        // critical regardless of which lateral zone it is in — black ice
-        // outside the center band still ends a walk badly. Still gated on
-        // userStationary (no point shouting "Stop!" at a standing user) and
-        // on the score floor (avoids spurious wet-asphalt criticals).
+        
+        
         if (winterMode) {
           return !userStationary &&
               hazard.midasScore >= _kCriticalSlipperyScore;

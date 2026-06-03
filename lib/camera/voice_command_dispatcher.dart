@@ -261,8 +261,8 @@ class VoiceCommandDispatcher {
       case VoiceCommand.disableKkV2:
         _toggleKkV2(false);
         break;
-      // Phase 1 — Indoor trail (handled in handleNavCommand for
-      // record/replay/landmark/delete which carry a destination arg).
+      
+      
       case VoiceCommand.stopTrailRecord:
         _stopTrailRecord();
         break;
@@ -272,29 +272,29 @@ class VoiceCommandDispatcher {
       case VoiceCommand.deleteTrail:
         vm.tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
         break;
-      // Phase 1 — Bazaar / livestock
+      
       case VoiceCommand.toggleBazaarMode:
         _toggleBazaarMode();
         break;
       case VoiceCommand.toggleLivestockMode:
         _toggleLivestockMode();
         break;
-      // Phase 1 — Voice adaptation
+      
       case VoiceCommand.toggleVoiceAdaptation:
         _toggleVoiceAdaptation();
         break;
       case VoiceCommand.clearAdaptationData:
         _clearAdaptationData();
         break;
-      // Phase 2 — Mesh-Net Buddy Alerts
+      
       case VoiceCommand.toggleMeshBuddy:
         _toggleMeshBuddy();
         break;
-      // Phase 3 — Near-Miss Buffer
+      
       case VoiceCommand.recordNearMiss:
         _recordNearMiss();
         break;
-      // Phase 5 — Sonar-on-Phone
+      
       case VoiceCommand.toggleSonar:
         _toggleSonar();
         break;
@@ -303,9 +303,8 @@ class VoiceCommandDispatcher {
 
   Future<void> _toggleKkV2(bool enable) async {
     await Settings.instance.setEnableKazakhStackV2(enable);
-    // Re-evaluate routing immediately so the next listen window picks up
-    // the new state. setLocale with the same locale is a no-op for
-    // speech_to_text but triggers the reconcile path in VoiceCommandService.
+    
+    
     vm.voice.setLocale(AppStrings.ttsLang);
     final packInstalled = LanguagePackManager.instance.isInstalled(
       LanguagePackIds.voskKk,
@@ -363,7 +362,7 @@ class VoiceCommandDispatcher {
       case VoiceCommand.forgetObject:
         unawaited(vm.objectMemory.forget(destination));
         break;
-      // Phase 1 — Indoor trail
+      
       case VoiceCommand.recordTrail:
         _startTrailRecord(destination);
         break;
@@ -604,8 +603,7 @@ class VoiceCommandDispatcher {
     );
   }
 
-  // -- Phase 1 — Indoor trail ------------------------------------------
-
+  
   void _startTrailRecord(String name) {
     final langCode = Settings.instance.language == 1
         ? 'kk'
@@ -631,7 +629,7 @@ class VoiceCommandDispatcher {
 
   void _stopTrailRecord() {
     if (!vm.trailRecorder.isActive) {
-      // Maybe the user is stopping a replay instead.
+      
       if (vm.trailReplay.state != IndoorTrailReplayState.idle) {
         unawaited(vm.trailReplay.stop());
         vm.tts.say(
@@ -684,13 +682,12 @@ class VoiceCommandDispatcher {
     }));
   }
 
-  // -- Phase 1 — Bazaar / livestock ------------------------------------
-
+  
   void _toggleBazaarMode() {
     final current = Settings.instance.bazaarMode;
     unawaited(Settings.instance.setBazaarMode(!current));
     if (!current) {
-      // Turning on bazaar → turn off livestock (mutually exclusive).
+      
       unawaited(Settings.instance.setLivestockAwareness(false));
     }
     vm.bazaarLivestock.reset();
@@ -703,7 +700,7 @@ class VoiceCommandDispatcher {
     final current = Settings.instance.livestockAwareness;
     unawaited(Settings.instance.setLivestockAwareness(!current));
     if (!current) {
-      // Turning on livestock → turn off bazaar (mutually exclusive).
+      
       unawaited(Settings.instance.setBazaarMode(false));
     }
     vm.bazaarLivestock.reset();
@@ -712,8 +709,7 @@ class VoiceCommandDispatcher {
     vm.earcon.play(Earcon.success);
   }
 
-  // -- Phase 1 — Voice adaptation --------------------------------------
-
+  
   void _toggleVoiceAdaptation() {
     final current = Settings.instance.localAsrAdaptation;
     unawaited(Settings.instance.setLocalAsrAdaptation(!current));
@@ -730,8 +726,7 @@ class VoiceCommandDispatcher {
     );
   }
 
-  // -- Phase 2 — Mesh-Net Buddy Alerts ----------------------------------
-
+  
   void _toggleMeshBuddy() {
     final current = Settings.instance.meshBuddyAlerts;
     unawaited(Settings.instance.setMeshBuddyAlerts(!current));
@@ -745,8 +740,7 @@ class VoiceCommandDispatcher {
     vm.earcon.play(Earcon.success);
   }
 
-  // -- Phase 3 — Near-Miss Buffer ---------------------------------------
-
+  
   void _recordNearMiss() {
     unawaited(vm.nearMissBuffer.record(
       triggerSource: 'voice',
@@ -756,8 +750,7 @@ class VoiceCommandDispatcher {
     vm.earcon.play(Earcon.success);
   }
 
-  // -- Phase 5 — Sonar-on-Phone -----------------------------------------
-
+  
   void _toggleSonar() {
     final current = Settings.instance.sonarDepth;
     unawaited(Settings.instance.setSonarDepth(!current));
