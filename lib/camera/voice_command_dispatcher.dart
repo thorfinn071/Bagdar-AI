@@ -298,6 +298,13 @@ class VoiceCommandDispatcher {
       case VoiceCommand.toggleSonar:
         _toggleSonar();
         break;
+      case VoiceCommand.dominantHandRight:
+      case VoiceCommand.dominantHandLeft:
+      case VoiceCommand.allowPermission:
+      case VoiceCommand.confirm:
+      case VoiceCommand.cancel:
+      case VoiceCommand.back:
+        break;
     }
   }
 

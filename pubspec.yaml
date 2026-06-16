@@ -40,6 +40,7 @@ dependencies:
   sensors_plus: ^6.1.1
   qr_flutter: ^4.1.0
   mobile_scanner: ^5.2.3
+  flutter_native_contact_picker: ^0.0.12
 
 dev_dependencies:
   flutter_test:
@@ -66,3 +67,20 @@ flutter:
     # the engine reports `available = false` and `OcrService` falls
     # back to the legacy ML Kit pipeline.
     - assets/paddle_ocr/
+    - assets/lang_packs/
+
+  # Primary UI typeface — Inter (SIL OFL 1.1, see assets/fonts/OFL-Inter.txt).
+  # Bundled as static weights for reliable fontWeight matching on Android.
+  # Full Cyrillic incl. Kazakh-specific glyphs (ә ғ қ ң ө ұ ү һ і). Wired into
+  # the theme via BagdarTypography.fontFamily / BagdarTheme.buildMaterialTheme.
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Inter-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Inter-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Inter-ExtraBold.ttf
+          weight: 800

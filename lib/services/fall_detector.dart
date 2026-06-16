@@ -4,7 +4,13 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
-enum MotionState { stationary, walking, unstable }
+import '../models/constants.dart';
+
+/// V1.2: `running` distinguishes sustained fast movement (high accel, low
+/// gyro jitter) from `unstable` (high accel AND high gyro — e.g. bus ride).
+/// The detection interval is halved when running to compensate for the shorter
+/// time-to-collision at 3 m/s vs 1.5 m/s.
+enum MotionState { stationary, walking, running, unstable }
 
 enum FallClass { tumble, collapse }
 
@@ -294,7 +300,8 @@ class FallDetector {
       if (!_classBSustainQualified &&
           now.difference(_classBAboveStartedAt!) >= _classBSustainMin) {
         _classBSustainQualified = true;
-        _classBWasWalking = _motionState == MotionState.walking;
+        _classBWasWalking = _motionState == MotionState.walking ||
+            _motionState == MotionState.running;
         onStageChange?.call(
           'class_b_sustain',
           accel: accelWithoutGravity,
@@ -403,11 +410,19 @@ class FallDetector {
 
     final combined = (_accelMotionScore * 0.65) + (_gyroMotionScore * 0.35);
 
-    final nextState = combined < 0.12
-        ? MotionState.stationary
-        : combined < 0.45
-        ? MotionState.walking
-        : MotionState.unstable;
+    final MotionState nextState;
+    if (combined < 0.12) {
+      nextState = MotionState.stationary;
+    } else if (combined < 0.45) {
+      nextState = MotionState.walking;
+    } else if (_accelMotionScore > kRunningAccelScoreThreshold &&
+        _gyroMotionScore < kRunningGyroScoreMax) {
+      // High body-motion accel with low rotational jitter = running.
+      // High gyro alongside high accel = being jostled (bus/unstable).
+      nextState = MotionState.running;
+    } else {
+      nextState = MotionState.unstable;
+    }
 
     if (nextState == _motionState) return;
 

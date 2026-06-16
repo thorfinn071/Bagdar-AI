@@ -10,6 +10,7 @@ class SpeechJob {
   final int? trackId;
 
   final DateTime enqueuedAt;
+  final bool skipHaptic;
 
   SpeechJob(
     this.text,
@@ -17,5 +18,6 @@ class SpeechJob {
     this.pan = 0.0,
     this.rate = 0.50,
     this.trackId,
+    this.skipHaptic = false,
   }) : enqueuedAt = DateTime.now();
 }

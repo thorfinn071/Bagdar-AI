@@ -21,7 +21,7 @@ An estimated **2.2 billion people** worldwide live with some form of vision impa
 
 Existing assistive apps overwhelmingly depend on cloud APIs for object recognition, route planning, or scene description. This creates a hard prerequisite, a stable data connection, that excludes precisely the users who need these tools the most.
 
-**Bagdar** takes a fundamentally different approach. Every computation, from real-time object detection and depth estimation to pedestrian routing and transit guidance, happens **entirely on the device**. No server calls, no API keys, no data plan required. The system is purpose-built to run on devices in the **$100–150 price range**, turning hardware constraints into an engineering challenge rather than accepting them as limitations.
+**Bagdar** takes a fundamentally different approach. Every computation, from real-time object detection and depth estimation to pedestrian routing and transit guidance, happens **entirely on the device**. No server calls, no API keys, no data plan required. The system is purpose-built to run on devices starting from $100, with the full Vulkan-accelerated depth pipeline optimized for the **$150–200 price range** (e.g., Snapdragon 680), turning hardware constraints into an engineering challenge rather than accepting them as limitations.
 
 The app currently supports **Russian**, **Kazakh**, and **English** – covering regions where accessible technology options are scarce.
 

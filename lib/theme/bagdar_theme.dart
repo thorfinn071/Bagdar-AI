@@ -78,6 +78,7 @@ class BagdarTheme extends InheritedWidget {
     final base = ThemeData(
       useMaterial3: true,
       brightness: isDarkSurface ? Brightness.dark : Brightness.light,
+      fontFamily: BagdarTypography.fontFamily,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: c.surfaceBg,
       canvasColor: c.surfaceBg,

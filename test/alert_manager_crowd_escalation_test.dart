@@ -22,6 +22,7 @@ class _RecordingTts extends TtsService {
     double pan = 0.0,
     int? trackId,
     bool barge = false,
+    bool skipHaptic = false,
   }) {
     calls.add((text: text, priority: priority));
   }
@@ -60,10 +61,10 @@ Track _carClose({
     label: 'car',
     cx: 320,
     cy: 240,
-    x1: 220,
-    y1: 140,
-    x2: 420,
-    y2: 340,
+    x1: 245,
+    y1: 165,
+    x2: 395,
+    y2: 315,
     dist: 'close',
     distM: distM,
     initialConf: 0.9,

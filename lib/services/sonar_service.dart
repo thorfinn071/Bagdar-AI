@@ -91,6 +91,10 @@ class SonarService {
 
     try {
       final caps = DeviceCapabilityProbe.cached;
+      if (caps.deviceInfo.isEmulator) {
+        FieldLogger.instance.logSonarChirp('start_blocked_emulator');
+        return false;
+      }
       if (!caps.sonarFeasible) {
         FieldLogger.instance.logSonarChirp('start_blocked_no_48k');
         return false;

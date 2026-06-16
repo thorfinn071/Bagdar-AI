@@ -3,6 +3,8 @@ import 'package:battery_plus/battery_plus.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 
+import '../models/constants.dart';
+
 enum ThrottleLevel { normal, moderate, aggressive, critical }
 
 class BatteryMonitor {
@@ -14,6 +16,10 @@ class BatteryMonitor {
   int _lastBatteryLevel = 100;
   bool _isCharging = false;
   bool _isWifi = false;
+
+  /// V5.4: Tracks which proactive thresholds have already been announced in
+  /// the current discharge cycle so they each fire at most once.
+  final Set<int> _announcedThresholds = {};
 
   StreamSubscription<List<ConnectivityResult>>? _connSub;
 
@@ -31,6 +37,11 @@ class BatteryMonitor {
   bool get isWifi => _isWifi;
 
   void Function(ThrottleLevel level)? onThrottleChanged;
+
+  /// V5.4: Fires when the battery crosses a proactive-announce threshold
+  /// (50 %, 30 %, 15 %) for the first time in a discharge cycle.
+  /// The [pct] argument is the threshold that was just crossed.
+  void Function(int pct)? onProactiveAnnounce;
 
   static ThrottleLevel levelForBatteryLevel(int batteryLevel) {
     if (batteryLevel < 5) return ThrottleLevel.critical;
@@ -137,6 +148,25 @@ class BatteryMonitor {
 
   void _updateLevel() {
     final newLevel = levelForBatteryLevel(_lastBatteryLevel);
+
+    // V5.4: Proactive announcements at 50 %, 30 %, 15 % — once per discharge.
+    if (!_isCharging) {
+      for (final threshold in const [
+        kBattery50AnnounceThreshold,
+        kBattery30AnnounceThreshold,
+        kBattery15AnnounceThreshold,
+      ]) {
+        if (_lastBatteryLevel <= threshold &&
+            !_announcedThresholds.contains(threshold)) {
+          _announcedThresholds.add(threshold);
+          onProactiveAnnounce?.call(threshold);
+        }
+      }
+    } else {
+      // Reset announce set when charging so thresholds fire again after
+      // the user charges and re-discharges.
+      _announcedThresholds.clear();
+    }
 
     if (newLevel != _level) {
       _level = newLevel;

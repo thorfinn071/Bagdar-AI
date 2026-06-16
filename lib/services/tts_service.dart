@@ -28,6 +28,7 @@ class TtsService {
 
   bool _ready = false;
   bool _speaking = false;
+  bool get speaking => _speaking;
   bool _languageAvailable = true;
   bool _usingEnglishFallback = false;
   bool _testMode = false;
@@ -46,6 +47,7 @@ class TtsService {
 
   bool _currentIsCritical = false;
   DateTime _currentSpeakStartedAt = DateTime.fromMillisecondsSinceEpoch(0);
+  DateTime _lastSpeechEndedAt = DateTime.fromMillisecondsSinceEpoch(0);
   Completer<void>? _currentSpeechCompleter;
 
   
@@ -210,6 +212,7 @@ class TtsService {
       _tts.setCompletionHandler(() {
         _speaking = false;
         _currentIsCritical = false;
+        _lastSpeechEndedAt = DateTime.now();
         _disarmStallTimer();
         _completeCurrentSpeech();
         _pump();
@@ -219,6 +222,7 @@ class TtsService {
         debugPrint('TtsService: engine error: $msg');
         _speaking = false;
         _currentIsCritical = false;
+        _lastSpeechEndedAt = DateTime.now();
         _disarmStallTimer();
         _completeCurrentSpeech();
         _pump();
@@ -260,6 +264,17 @@ class TtsService {
     await _currentSpeechCompleter!.future;
   }
 
+  /// Wait until the TTS queue is completely drained and no speech is
+  /// active. Unlike [awaitCurrentSpeech] which resolves after a single
+  /// utterance, this loops until the entire queue is empty.
+  Future<void> awaitIdle() async {
+    if (_testMode) return;
+    while (_speaking || _queue.isNotEmpty) {
+      _currentSpeechCompleter ??= Completer<void>();
+      await _currentSpeechCompleter!.future;
+    }
+  }
+
   Future<void> setLanguage(String bcp47Tag) async {
     await stop();
     _requestedLang = bcp47Tag;
@@ -282,6 +297,101 @@ class TtsService {
     } catch (_) {}
   }
 
+  /// Enumerate available TTS voices. Each voice is a map with at least
+  /// 'name' and 'locale' keys. Returns an empty list on failure.
+  Future<List<Map<String, String>>> getAvailableVoices() async {
+    if (_testMode) return [];
+    try {
+      final raw = await _tts.getVoices;
+      if (raw is List) {
+        return raw
+            .whereType<Map>()
+            .map((m) => m.map((k, v) => MapEntry(k.toString(), v.toString())))
+            .toList();
+      }
+    } catch (_) {}
+    return [];
+  }
+
+  /// Select a specific TTS voice by name and locale.
+  Future<void> setVoice(Map<String, String> voice) async {
+    if (_testMode) return;
+    try {
+      await _tts.setVoice(voice);
+    } catch (_) {}
+  }
+
+  /// Auto-select the highest-quality voice for [bcp47Tag]. Prefers voices
+  /// whose name contains quality indicators ('enhanced', 'hq', 'network')
+  /// and avoids low-quality markers ('legacy', 'compact').
+  Future<void> _selectBestVoice(String bcp47Tag) async {
+    if (_testMode) return;
+    try {
+      final voices = await getAvailableVoices();
+      if (voices.isEmpty) return;
+
+      final primary = bcp47Tag.split('-').first.toLowerCase();
+      final matching = voices.where((v) {
+        final locale = (v['locale'] ?? '').toLowerCase();
+        return locale.startsWith(primary);
+      }).toList();
+
+      if (matching.isEmpty) return;
+
+      // Score each voice: prefer quality indicators, penalize low-quality ones.
+      Map<String, String>? best;
+      int bestScore = -999;
+      for (final v in matching) {
+        final name = (v['name'] ?? '').toLowerCase();
+        final voiceLocale = (v['locale'] ?? '').toLowerCase();
+        int score = 0;
+        if (name.contains('enhanced')) score += 3;
+        if (name.contains('hq') || name.contains('high')) score += 2;
+        if (name.contains('network')) score += 2;
+        if (name.contains('premium')) score += 3;
+        if (name.contains('local')) score += 1;
+        if (name.contains('legacy')) score -= 3;
+        if (name.contains('compact')) score -= 2;
+
+        // For English: strongly penalize Indian accent, prefer US/GB/AU
+        if (primary == 'en') {
+          if (voiceLocale.contains('en-in') || voiceLocale.contains('en_in') ||
+              name.contains('india') || name.contains('hindi')) {
+            score -= 5;
+          }
+          if (voiceLocale.contains('en-us') || voiceLocale.contains('en_us')) {
+            score += 2;
+          } else if (voiceLocale.contains('en-gb') || voiceLocale.contains('en_gb') ||
+                     voiceLocale.contains('en-au') || voiceLocale.contains('en_au')) {
+            score += 1;
+          }
+        }
+
+        if (score > bestScore) {
+          bestScore = score;
+          best = v;
+        }
+      }
+
+      if (best != null) {
+        await _tts.setVoice({
+          'name': best['name'] ?? '',
+          'locale': best['locale'] ?? '',
+        });
+        debugPrint(
+          'TtsService: selected voice "${best['name']}" '
+          'for $bcp47Tag (score=$bestScore)',
+        );
+        FieldLogger.instance.log('tts_voice_selected', {
+          'voice': best['name'] ?? '',
+          'locale': bcp47Tag,
+          'score': bestScore,
+        });
+      }
+    } catch (_) {}
+  }
+
+
   Future<void> _applyLanguage(String bcp47Tag) async {
     if (bcp47Tag == 'kk-KZ') {
       await _resolveKkEngine();
@@ -296,6 +406,7 @@ class TtsService {
       await _tts.setLanguage(bcp47Tag);
     } catch (_) {}
     await _checkLanguageAvailability(bcp47Tag);
+    await _selectBestVoice(bcp47Tag);
 
     if (!_languageAvailable && !_usingEnglishFallback) {
       try {
@@ -386,6 +497,18 @@ class TtsService {
         return set.contains('kk-kz') || set.any((l) => l.startsWith('kk'));
       }
     } catch (_) {}
+    // Also check individual voices for kk support.
+    try {
+      final voices = await _tts.getVoices;
+      if (voices is List) {
+        for (final v in voices) {
+          if (v is Map) {
+            final locale = v['locale']?.toString().toLowerCase() ?? '';
+            if (locale.startsWith('kk')) return true;
+          }
+        }
+      }
+    } catch (_) {}
     return false;
   }
 
@@ -440,6 +563,7 @@ class TtsService {
   void _handleNativeSpeechComplete() {
     _speaking = false;
     _currentIsCritical = false;
+    _lastSpeechEndedAt = DateTime.now();
     _disarmStallTimer();
     _completeCurrentSpeech();
     _pump();
@@ -451,6 +575,7 @@ class TtsService {
     FieldLogger.instance.log('tts_kk_native_error', {'reason': reason});
     _speaking = false;
     _currentIsCritical = false;
+    _lastSpeechEndedAt = DateTime.now();
     _disarmStallTimer();
     _completeCurrentSpeech();
     _pump();
@@ -546,7 +671,8 @@ class TtsService {
   }
 
   
-  static const Duration _kCriticalDedupWindow = Duration(seconds: 4);
+  // Safety audit 2026-06 fix A-5: align with kCriticalRepeatCooldownSafety
+  static const Duration _kCriticalDedupWindow = Duration(seconds: 2);
   static const Duration _kWarningDedupWindow = Duration(seconds: 5);
   static const Duration _kInfoDedupWindow = Duration(seconds: 2);
 
@@ -558,6 +684,7 @@ class TtsService {
     double pan = 0.0,
     int? trackId,
     bool barge = false,
+    bool skipHaptic = false,
   }) {
     
     
@@ -584,6 +711,7 @@ class TtsService {
       return;
     }
     if (text.isEmpty) return;
+    _currentSpeechCompleter ??= Completer<void>();
     final now = DateTime.now();
     final rate = _rateFor(priority);
 
@@ -616,7 +744,14 @@ class TtsService {
         return;
       }
       _queue.add(
-        SpeechJob(text, priority, pan: pan, rate: rate, trackId: trackId),
+        SpeechJob(
+          text,
+          priority,
+          pan: pan,
+          rate: rate,
+          trackId: trackId,
+          skipHaptic: skipHaptic,
+        ),
       );
       _lastText = text;
       _lastTrackId = trackId;
@@ -690,7 +825,14 @@ class TtsService {
     }
 
     _queue.add(
-      SpeechJob(text, priority, pan: pan, rate: rate, trackId: trackId),
+      SpeechJob(
+        text,
+        priority,
+        pan: pan,
+        rate: rate,
+        trackId: trackId,
+        skipHaptic: skipHaptic,
+      ),
     );
     _queue.sort((a, b) => b.priority.index.compareTo(a.priority.index));
     _lastText = text;
@@ -711,6 +853,32 @@ class TtsService {
     if (_lastSpokenByText.length < 32) return;
     final cutoff = now.subtract(_kCriticalDedupWindow);
     _lastSpokenByText.removeWhere((_, ts) => ts.isBefore(cutoff));
+  }
+
+  /// Approximate Kazakh→Russian phonetic transliteration for the
+  /// `russianFallback` engine path. Replaces Kazakh-specific Cyrillic
+  /// letters with their closest Russian phonetic equivalents so the
+  /// ru-RU TTS engine produces intelligible (if imperfect) Kazakh.
+  static String transliterateKkToRu(String text) {
+    return text
+        .replaceAll('ә', 'э')
+        .replaceAll('Ә', 'Э')
+        .replaceAll('ғ', 'г')
+        .replaceAll('Ғ', 'Г')
+        .replaceAll('қ', 'к')
+        .replaceAll('Қ', 'К')
+        .replaceAll('ң', 'нг')
+        .replaceAll('Ң', 'Нг')
+        .replaceAll('ө', 'о')
+        .replaceAll('Ө', 'О')
+        .replaceAll('ұ', 'у')
+        .replaceAll('Ұ', 'У')
+        .replaceAll('ү', 'у')
+        .replaceAll('Ү', 'У')
+        .replaceAll('һ', 'х')
+        .replaceAll('Һ', 'Х')
+        .replaceAll('і', 'и')
+        .replaceAll('І', 'И');
   }
 
   void evictTrack(int trackId) {
@@ -736,6 +904,22 @@ class TtsService {
     }
   }
 
+  /// V4.2: Re-enqueue the last critical utterance with barge semantics so
+  /// that a hazard alert that was mid-play during a Bluetooth route change is
+  /// replayed once the audio path has stabilised.  No-ops if no critical text
+  /// is remembered or if the last utterance was not critical.
+  void replayLastCritical() {
+    final text = _currentText;
+    final priority = _currentPriority;
+    if (text == null ||
+        text.isEmpty ||
+        priority != SpeechPriority.critical) {
+      return;
+    }
+    debugPrint('TtsService: replaying last critical after audio route change');
+    say(text, SpeechPriority.critical, pan: 0.0, barge: true);
+  }
+
   Future<void> stop() async {
     _disarmStallTimer();
     try {
@@ -748,6 +932,7 @@ class TtsService {
     }
     _speaking = false;
     _currentIsCritical = false;
+    _lastSpeechEndedAt = DateTime.fromMillisecondsSinceEpoch(0);
     _completeCurrentSpeech();
     _queue.clear();
     _lastSpokenByText.clear();
@@ -771,6 +956,7 @@ class TtsService {
     }
     _speaking = false;
     _currentIsCritical = false;
+    _lastSpeechEndedAt = DateTime.fromMillisecondsSinceEpoch(0);
     _completeCurrentSpeech();
     _pump();
   }
@@ -787,6 +973,22 @@ class TtsService {
           now.difference(j.enqueuedAt) > const Duration(seconds: 5),
     );
     if (_speaking || _queue.isEmpty) return;
+
+    final nextJob = _queue[0];
+    if (nextJob.priority != SpeechPriority.critical) {
+      final elapsed = now.difference(_lastSpeechEndedAt);
+      const sentenceDelay = Duration(milliseconds: 1000);
+      if (elapsed < sentenceDelay) {
+        final remaining = sentenceDelay - elapsed;
+        Timer(remaining, () {
+          if (!_speaking && _queue.isNotEmpty) {
+            _pump();
+          }
+        });
+        return;
+      }
+    }
+
     final job = _queue.removeAt(0);
     try {
       _speaking = true;
@@ -817,7 +1019,7 @@ class TtsService {
       }
 
       
-      if (job.priority == SpeechPriority.critical) {
+      if (job.priority == SpeechPriority.critical && !job.skipHaptic) {
         unawaited(HapticService.vibrate(const [0, 80]));
       }
 
@@ -844,10 +1046,13 @@ class TtsService {
           try {
             await _tts.setLanguage('ru-RU');
           } catch (_) {}
-          await _tts.speak(job.text);
+          await _tts.speak(transliterateKkToRu(job.text));
         }
       } else {
-        await _tts.speak(job.text);
+        final spokenText = (_activeKkEngine == KkTtsEngine.russianFallback)
+            ? transliterateKkToRu(job.text)
+            : job.text;
+        await _tts.speak(spokenText);
       }
     } catch (_) {
       _speaking = false;

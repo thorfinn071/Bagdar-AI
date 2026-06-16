@@ -22,6 +22,7 @@ class _RecordingTts extends TtsService {
     double pan = 0.0,
     int? trackId,
     bool barge = false,
+    bool skipHaptic = false,
   }) {
     calls.add((text: text, priority: priority));
   }

@@ -40,6 +40,9 @@ class SettingsService {
   static const _kDominantHand = 'a11y_dominant_hand';
   static const _kTapSensitivity = 'a11y_tap_sensitivity';
   static const _kNcnnDisabled = 'ncnn_disabled';
+  // V5.3: Cross-session exponential backoff for NCNN failures.
+  static const _kNcnnBackoffLevel = 'ncnn_backoff_level';
+  static const _kNcnnBackoffUntilMs = 'ncnn_backoff_until_ms';
   static const _kClearPathAnnounce = 'pref_clear_path_announce';
   static const _kBatteryAnnounce = 'pref_battery_announce';
   static const _kModeAnnounce = 'pref_mode_announce';
@@ -51,9 +54,12 @@ class SettingsService {
   static const _kDisclaimerAcknowledgedAt = 'disclaimer_acknowledged_at';
   static const _kWinterModeManual = 'winter_mode_manual';
   static const _kThemeMode = 'theme_mode';
+  static const _kSosContactPrompted = 'sos_contact_prompted';
   
   
   static const _kEnableKazakhStackV2 = 'enable_kazakh_stack_v2';
+  static const _kPreferredRuVoice = 'preferred_ru_voice';
+  static const _kPreferredKkVoice = 'preferred_kk_voice';
 
   
   static const _kIndoorTrailMemory = 'feature_indoor_trail_memory';
@@ -117,8 +123,16 @@ class SettingsService {
   bool get guideDogMode => _prefs!.getBool(_kGuideDogMode) ?? false;
   bool get fieldLogging => _prefs!.getBool(_kFieldLogging) ?? false;
   bool get tutorialSeen => _prefs!.getBool(_kTutorialSeen) ?? false;
+  bool get sosContactPrompted => _prefs!.getBool(_kSosContactPrompted) ?? false;
   bool get classicGestures => _prefs!.getBool(_kClassicGestures) ?? false;
   bool get ncnnDisabled => _prefs?.getBool(_kNcnnDisabled) ?? false;
+
+  // V5.3: Cross-session exponential backoff getters.
+  /// Backoff level: 0=never failed, 1=1hr wait, 2=24hr wait, 3+=7day wait.
+  int get ncnnBackoffLevel => _prefs?.getInt(_kNcnnBackoffLevel) ?? 0;
+
+  /// Unix timestamp (ms) before which NCNN init should not be attempted.
+  int get ncnnBackoffUntilMs => _prefs?.getInt(_kNcnnBackoffUntilMs) ?? 0;
 
   double get speechRate =>
       (_prefs!.getDouble(_kSpeechRate) ?? kSpeechRateDefault)
@@ -201,6 +215,9 @@ class SettingsService {
   Future<void> setTutorialSeen(bool v) async =>
       _prefs!.setBool(_kTutorialSeen, v);
 
+  Future<void> setSosContactPrompted(bool v) async =>
+      _prefs!.setBool(_kSosContactPrompted, v);
+
   Future<void> setClassicGestures(bool v) async =>
       _prefs!.setBool(_kClassicGestures, v);
 
@@ -232,6 +249,21 @@ class SettingsService {
 
   Future<void> setNcnnDisabled(bool v) async =>
       _prefs?.setBool(_kNcnnDisabled, v) ?? Future<void>.value();
+
+  // V5.3: Persist exponential backoff state.
+  Future<void> setNcnnBackoff(int level, int untilMs) async {
+    await (_prefs?.setInt(_kNcnnBackoffLevel, level) ??
+        Future<void>.value());
+    await (_prefs?.setInt(_kNcnnBackoffUntilMs, untilMs) ??
+        Future<void>.value());
+  }
+
+  /// Clears all NCNN backoff state so the next init attempt is allowed
+  /// immediately.  Called by the reset depth engine voice command.
+  Future<void> resetNcnnBackoff() async {
+    await (_prefs?.remove(_kNcnnBackoffLevel) ?? Future<void>.value());
+    await (_prefs?.remove(_kNcnnBackoffUntilMs) ?? Future<void>.value());
+  }
 
   bool get clearPathAnnounce =>
       _prefs?.getBool(_kClearPathAnnounce) ?? true;
@@ -325,6 +357,18 @@ class SettingsService {
 
   Future<void> setEnableKazakhStackV2(bool v) async =>
       _prefs?.setBool(_kEnableKazakhStackV2, v) ?? Future<void>.value();
+
+  /// User-selected TTS voice name for Russian. Empty string means auto.
+  String get preferredRuVoice =>
+      _prefs?.getString(_kPreferredRuVoice) ?? '';
+  Future<void> setPreferredRuVoice(String v) async =>
+      _prefs?.setString(_kPreferredRuVoice, v) ?? Future<void>.value();
+
+  /// User-selected TTS voice name for Kazakh. Empty string means auto.
+  String get preferredKkVoice =>
+      _prefs?.getString(_kPreferredKkVoice) ?? '';
+  Future<void> setPreferredKkVoice(String v) async =>
+      _prefs?.setString(_kPreferredKkVoice, v) ?? Future<void>.value();
 
   
   /// Geomagnetic indoor trail memory (Phase 1 — Direction 6). When on,

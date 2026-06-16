@@ -79,6 +79,14 @@ class Tracker {
   bool weatherDegraded = false;
   static const double _kPedWeatherBoost = 1.3;
 
+  /// V1.4: When false, looser approach-rate thresholds are used for vehicles
+  /// to compensate for the missing focal-length calibration.
+  bool isCalibrated = true;
+
+  /// V1.4: When false (depth provider unavailable), approach thresholds are
+  /// lowered further since no depth cross-check is possible.
+  bool depthProviderAvailable = true;
+
   
   bool userWalking = false;
   static const double _kEgoMotionApproachBoost = 1.8;
@@ -333,7 +341,14 @@ class Tracker {
             final turningNear = t.turning &&
                 t.distM > 0 &&
                 t.distM <= kVehTurnDistThreshold;
-            double areaT = kVehApproachAreaRateT;
+            // V1.4: Use looser threshold when calibration is absent and no
+            // depth cross-check is available — earlier warnings at the cost
+            // of somewhat higher false-positive rate.
+            final useUncalibratedThreshold =
+                !isCalibrated && !depthProviderAvailable;
+            double areaT = useUncalibratedThreshold
+                ? kVehApproachAreaRateTUncalibrated
+                : kVehApproachAreaRateT;
             double heightT = kVehApproachHeightRateT;
             if (turningNear) {
               areaT = math.min(areaT, kPedApproachAreaRateT);
@@ -349,6 +364,16 @@ class Tracker {
             }
             if (areaRate >= areaT || heightRate >= heightT) {
               t.approaching = true;
+            }
+
+            // V1.4: Absolute bbox-size danger — any vehicle occupying > 35 %
+            // of frame triggers approaching regardless of rate, since at that
+            // size the vehicle is already dangerously close.
+            if (!t.approaching && t.areaHist.isNotEmpty) {
+              final lastAr = t.areaHist.last.$2;
+              if (lastAr >= kVehBboxDangerAreaRatio) {
+                t.approaching = true;
+              }
             }
           } else if (isPedestrian(t.label)) {
             
@@ -450,6 +475,15 @@ class Tracker {
       if (next > predictLimit && !exemptFastTrack) {
         t.approaching = false;
         t.dynamicThreat = false;
+      }
+
+      // V1.5: Ghost-track confidence decay.  After [kTrackGhostDecayFrames]
+      // consecutive predict-only frames, halve avgConf each frame so that
+      // stale Kalman predictions cannot sustain high-confidence alerts.
+      // This prevents "ghost car" critical alerts when an object leaves frame.
+      if (next > kTrackGhostDecayFrames) {
+        t.avgConf = (t.avgConf * kTrackGhostDecayFactor)
+            .clamp(0.0, t.avgConf);
       }
     }
 

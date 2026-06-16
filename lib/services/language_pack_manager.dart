@@ -7,12 +7,14 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:crypto/crypto.dart' as crypto;
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/language_pack.dart';
 import 'device_capability.dart';
 import 'field_logger.dart';
+import 'settings_service.dart';
 
 /// Top-level for `compute()` — extract zip in an isolate so the UI thread
 /// stays responsive during install (~50 MB packs can take seconds to inflate).
@@ -111,6 +113,10 @@ class LanguagePackManager {
       await Directory(_packsDir).create(recursive: true);
 
       await _loadInstalledFromPrefs();
+
+      // Auto-extract bundled packs from assets on first run / if not installed yet
+      await _extractBundledAssetPack(LanguagePackIds.voskKk, 'assets/lang_packs/vosk-kk.zip');
+      await _extractBundledAssetPack(LanguagePackIds.rhvoiceKkAigul, 'assets/lang_packs/rhvoice-kk-aigul.zip');
 
       final prefs = await SharedPreferences.getInstance();
       final stored = prefs.getString(_prefsKeyManifestUrl) ?? '';
@@ -377,6 +383,51 @@ class LanguagePackManager {
   
   Future<void> _extractZip(String zipPath, String targetDir) async {
     await compute(_doExtractZip, (zipPath, targetDir));
+  }
+
+  Future<void> _extractBundledAssetPack(String packId, String assetPath) async {
+    final extractDir = pathFor(packId);
+    final extractDirHandle = Directory(extractDir);
+
+    if (isInstalled(packId) && await extractDirHandle.exists()) {
+      return;
+    }
+
+    try {
+      debugPrint('LanguagePackManager: extracting bundled asset $assetPath to $extractDir');
+      final byteData = await rootBundle.load(assetPath);
+      final bytes = byteData.buffer.asUint8List();
+
+      final tempZipPath = '$_packsDir/${packId}_temp.zip';
+      final tempFile = File(tempZipPath);
+      await tempFile.writeAsBytes(bytes);
+
+      await _extractZip(tempZipPath, extractDir);
+      await tempFile.delete();
+
+      final defaultPack = LanguagePack(
+        packId: packId,
+        name: packId == LanguagePackIds.voskKk ? 'Vosk KK' : 'RHVoice KK Aigul',
+        downloadUrl: '',
+        sha256: '',
+        sizeBytes: bytes.length,
+        version: 1,
+        installed: true,
+        localPath: extractDir,
+        installedAt: DateTime.now(),
+      );
+
+      final next = List<LanguagePack>.from(_installed)
+        ..removeWhere((p) => p.packId == packId)
+        ..add(defaultPack);
+      _installed = next;
+      await _saveInstalledToPrefs();
+
+      await Settings.instance.setEnableKazakhStackV2(true);
+      debugPrint('LanguagePackManager: Bundled pack $packId extracted and installed.');
+    } catch (e) {
+      debugPrint('LanguagePackManager: Failed to extract bundled asset pack $packId: $e');
+    }
   }
 
   void _parseManifestJson(String jsonStr) {

@@ -129,7 +129,8 @@ class CameraLifecycleController {
   void _firePausedRepeat() {
     if (!_backgroundWarned) return;
     final motion = motionStateProvider?.call();
-    if (motion != MotionState.walking) return;
+    // Safety audit 2026-06 fix C-5a: include running in paused warnings
+    if (motion == MotionState.stationary || motion == null) return;
     _pausedRepeatCount++;
     final (pattern, intensities) = _escalatedPausedPattern(_pausedRepeatCount);
     tts.say(
@@ -146,7 +147,8 @@ class CameraLifecycleController {
   void _firePausedEarcon() {
     if (!_backgroundWarned) return;
     final motion = motionStateProvider?.call();
-    if (motion != MotionState.walking) return;
+    // Safety audit 2026-06 fix C-5a: include running in paused warnings
+    if (motion == MotionState.stationary || motion == null) return;
     onPausedWalkingEarcon?.call();
   }
 
@@ -169,7 +171,8 @@ class CameraLifecycleController {
     );
   }
 
-  void _handleResumed() {
+  // Safety audit 2026-06 fix A-7: made async so startImageStream errors are caught
+  Future<void> _handleResumed() async {
     _cancelPausedWalkingTimers();
     if (_backgroundWarned) {
       _backgroundWarned = false;
@@ -183,9 +186,11 @@ class CameraLifecycleController {
     if (ctrl != null && ctrl.value.isInitialized && _streamPaused) {
       _streamPaused = false;
       try {
-        ctrl.startImageStream(host.onFrame);
+        // Safety audit 2026-06 fix A-7: await the Future to catch async errors
+        await ctrl.startImageStream(host.onFrame);
         host.isCameraReady = true;
       } catch (_) {
+        // Async or sync error — fall back to cold restart
         host.cameraController?.dispose();
         host.cameraController = null;
         unawaited(host.initCamera());

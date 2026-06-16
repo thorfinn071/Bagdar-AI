@@ -26,27 +26,17 @@ android {
 
     defaultConfig {
         applicationId = "com.example.bagdar"
-        minSdk = 26
+        minSdk = 30
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         ndk {
-            abiFilters += "arm64-v8a"
+            abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64", "x86")
         }
     }
 
     androidResources {
         noCompress += listOf("tflite", "bin", "param")
-    }
-
-    packaging {
-        jniLibs {
-            excludes += listOf(
-                "**/x86_64/**",
-                "**/x86/**",
-                "**/armeabi-v7a/**",
-            )
-        }
     }
 
     buildTypes {

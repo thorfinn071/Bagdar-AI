@@ -31,6 +31,7 @@ class AlertManager {
   
   
   final bool Function() _isIndoorMode;
+  final Map<int, bool> _trackIsClose = {};
 
   AlertManager({
     required TtsService tts,
@@ -196,6 +197,7 @@ class AlertManager {
     _lastCrowdAlertAt = DateTime.fromMillisecondsSinceEpoch(0);
     _lastAnnouncedDistM.clear();
     _crowdActive = false;
+    _trackIsClose.clear();
   }
 
   /// Adapter that funnels non-camera hazards (indoor trail, mesh-net,
@@ -247,6 +249,50 @@ class AlertManager {
     );
     if (winner != null) {
       _tts.say(winner.text, winner.priority, pan: winner.pan);
+    }
+  }
+
+  void handleDepthHazard({
+    required String text,
+    required SpeechPriority priority,
+    required double pan,
+    required AlertCategory category,
+    required DateTime now,
+    double? distanceM,
+  }) {
+    _filter.add(AlertCandidate(
+      text: text,
+      priority: priority,
+      pan: pan,
+      category: category,
+      urgency: 0.9,
+      distanceM: distanceM,
+    ));
+
+    final winner = _filter.flush(
+      0,
+      now,
+      verbosity: Settings.instance.verbosity,
+      alertFrequency: Settings.instance.alertFrequency,
+    );
+
+    if (winner != null) {
+      _tts.say(
+        winner.text,
+        winner.priority,
+        pan: winner.pan,
+        barge: winner.priority == SpeechPriority.critical,
+        skipHaptic: winner.priority == SpeechPriority.critical,
+      );
+      if (winner.priority == SpeechPriority.critical) {
+        _earcon.play(Earcon.criticalAlert, pan: winner.pan);
+        _vibrate(
+          kHapticCriticalAlertPattern,
+          isCritical: true,
+          intensities: kHapticCriticalAlertIntensities,
+        );
+        _lastCriticalAt = now;
+      }
     }
   }
 
@@ -424,10 +470,38 @@ class AlertManager {
     _proximityUpdated = false;
     _proximityDistance = double.infinity;
 
+    final presentIds = tracks.map((t) => t.id).toSet();
+    _trackIsClose.removeWhere((id, _) => !presentIds.contains(id));
+
     if (mode == AppMode.street) {
       final currentCloseIds = <int>{};
       for (final t in tracks) {
-        if (t.dist == 'close' || t.dist == 'very close') {
+        final distClose = t.dist == 'close' || t.dist == 'very close';
+        final isInitiallyClose = distClose && (t.nearFrameCount >= 2 || t.fastTrack);
+
+        bool isClose = isInitiallyClose;
+        final prevIsClose = _trackIsClose[t.id];
+        if (prevIsClose != null) {
+          if (prevIsClose) {
+            if (t.distM > 0) {
+              if (t.distM < 3.9) {
+                isClose = true;
+              }
+            } else {
+              final frameArea = (imgW * imgH).toDouble();
+              final ar = frameArea > 0 ? ((t.x2 - t.x1) * (t.y2 - t.y1)) / frameArea : 0.0;
+              final bboxFrac = imgH > 0 ? (t.y2 - t.y1) / imgH : 0.0;
+              final bottomRatio = imgH > 0 ? t.y2 / imgH : 0.0;
+              final score = ar * 0.70 + bboxFrac * 0.25 + bottomRatio * 0.05;
+              if (score > 0.11) {
+                isClose = true;
+              }
+            }
+          }
+        }
+        _trackIsClose[t.id] = isClose;
+
+        if (isClose) {
           currentCloseIds.add(t.id);
         }
       }
@@ -547,6 +621,7 @@ class AlertManager {
         pan: winner.pan,
         trackId: winner.trackId,
         barge: winner.priority == SpeechPriority.critical,
+        skipHaptic: winner.priority == SpeechPriority.critical,
       );
       if (winner.trackId != null) {
         final spoken = tracks.firstWhere(
@@ -757,11 +832,25 @@ class AlertManager {
         Verbosity.normal => '${S.alert('stop')}. $label $dir$distPart.',
         Verbosity.detailed => '${S.alert('stop')}. $label $dir$distPart.',
       };
-      _tts.say(text, SpeechPriority.critical, pan: pan, barge: true);
+      _tts.say(
+        text,
+        SpeechPriority.critical,
+        pan: pan,
+        barge: true,
+        skipHaptic: true,
+      );
+      _earcon.play(Earcon.criticalAlert, pan: pan);
       // Register in the filter so flushMulti in the same frame doesn't
       // double-fire an obstacleClose critical (fix 3.2).
       _filter.noteCritical(AlertCategory.obstacleClose, now);
-      _vibrate([0, 250, 80, 450], isCritical: true);
+      if (isVehicle(top.label)) {
+        _filter.noteCritical(AlertCategory.approachingVehicle, now);
+      }
+      _vibrate(
+        kHapticCriticalAlertPattern,
+        isCritical: true,
+        intensities: kHapticCriticalAlertIntensities,
+      );
     } else {
       _vibrate(
         kHapticCriticalCooldownPattern,
@@ -832,18 +921,18 @@ class AlertManager {
 
       final confFactor = t.avgConf >= kHighConfLevel ? 1.0 : 1.5;
       
-      
+      final isClose = _trackIsClose[t.id] ?? (t.dist == 'close' || t.dist == 'very close');
       final Duration baseCooldown;
       if (t.label == 'person') {
         if (indoor) {
           baseCooldown = kIndoorPersonCooldown;
-        } else if (t.dist == 'close' || t.dist == 'very close') {
+        } else if (isClose) {
           baseCooldown = const Duration(seconds: 6);
         } else {
           baseCooldown = kPersonCooldown;
         }
       } else {
-        baseCooldown = t.dist == 'close' ? kWarningCooldown : kInfoCooldown;
+        baseCooldown = isClose ? kWarningCooldown : kInfoCooldown;
       }
       final freqMult = Settings.instance.alertFrequency.multiplier;
       final cooldown = Duration(
@@ -868,7 +957,7 @@ class AlertManager {
       final pan = _pan(t.cx, imgW, imgH, viewportAspect);
       final score = frameScores[t.id] ?? 0.0;
 
-      if (t.dist == 'close') {
+      if (isClose) {
         final proximityScore = score * t.avgConf;
         if (topProximity == null || proximityScore > topProximityScore) {
           topProximity = t;
@@ -878,7 +967,7 @@ class AlertManager {
       }
 
       final verb = Settings.instance.verbosity;
-      if (t.dist == 'close') {
+      if (isClose) {
         
         
         final lastAnnouncedDistM = _lastAnnouncedDistM[t.id];
@@ -892,14 +981,23 @@ class AlertManager {
         final widthFrac = imgW > 0 ? (t.x2 - t.x1) / imgW : 0.0;
         final sizeSanityEscalation =
             (isVehicle(t.label) &&
-                (bboxFrac >= 0.60 || widthFrac >= 0.55)) ||
+                (bboxFrac >= 0.35 || widthFrac >= 0.35)) ||
             (t.label == 'person' && bboxFrac >= 0.75);
 
         final closePriority = (shouldEscalate || sizeSanityEscalation)
             ? SpeechPriority.critical
             : SpeechPriority.warning;
 
-        _vibrate([0, 150]);
+        if (closePriority == SpeechPriority.critical) {
+          _earcon.play(Earcon.criticalAlert, pan: pan);
+          _vibrate(
+            kHapticCriticalAlertPattern,
+            isCritical: true,
+            intensities: kHapticCriticalAlertIntensities,
+          );
+        } else {
+          _vibrate([0, 150]);
+        }
         final text = switch (verb) {
           Verbosity.minimal => '${S.alert('close')}, $dir.',
           Verbosity.normal => '$label ${S.alert('close')}, $dir$distPart.',

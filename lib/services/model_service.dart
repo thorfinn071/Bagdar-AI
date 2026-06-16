@@ -16,6 +16,9 @@ class ModelService {
   static final ModelService instance = ModelService._();
   ModelService._();
 
+  // Safety audit 2026-06 fix A-1: callback when YOLO cannot be recovered
+  void Function()? onYoloUnavailable;
+
   FlutterVision? _visionImpl;
   DepthProvider? _depthProvider;
 
@@ -169,6 +172,21 @@ class ModelService {
       );
     } catch (e) {
       debugPrint('ModelService: thermal-aware YOLO reload failed ($e)');
+      // Safety audit 2026-06 fix A-1: attempt rollback to previous tier
+      // _currentYoloTier still holds the old value because _loadYoloAtTier
+      // only updates it on success (line 124). The old model was already
+      // closed inside _loadYoloAtTier, so we must reload it.
+      try {
+        await _loadYoloAtTier(
+          tier: _currentYoloTier,
+          gpu: _lastLoadGpu,
+          threads: _lastLoadThreads,
+        );
+      } catch (e2) {
+        debugPrint('ModelService: YOLO rollback also failed ($e2)');
+        // Safety audit 2026-06 fix A-1: notify host that YOLO is dead
+        onYoloUnavailable?.call();
+      }
     } finally {
       _yoloReloadBusy = false;
     }

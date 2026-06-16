@@ -125,21 +125,12 @@ class AlertFilter {
 
     _lastSpokenAt = now;
     _lastCategory = picked.category;
-    _lastByCat[picked.category] = now;
-
-    if (picked.priority == SpeechPriority.critical) {
-      _lastCriticalByCat[picked.category] = now;
-      
-      
-      if (picked.distanceM != null && picked.distanceM! > 0) {
-        _lastCriticalDistMByCat[picked.category] = picked.distanceM!;
-      }
-      
-      
-      _suppressUntilByCategory[picked.category] =
-          now.add(const Duration(milliseconds: 2000));
-    }
-
+    _updateCategoryState(
+      picked.category,
+      now,
+      isCritical: picked.priority == SpeechPriority.critical,
+      distanceM: picked.distanceM,
+    );
     return picked;
   }
 
@@ -185,7 +176,9 @@ class AlertFilter {
           candDistM != null &&
           candDistM > 0 &&
           candDistM <= lastDistM * kEscalationDistanceFraction) {
-        return true;
+        if (now.difference(lastSameAt) >= kCriticalRepeatCooldownSafety) {
+          return true;
+        }
       }
       return false;
     }
@@ -195,12 +188,9 @@ class AlertFilter {
     final catGap = _categoryCooldown(cand.category, trackCount, alertFrequency);
     if (now.difference(lastAt) < catGap) return false;
 
-    
-    if (cand.category != AlertCategory.approachingVehicle) {
-      final suppressedUntil = _suppressUntilByCategory[cand.category];
-      if (suppressedUntil != null && now.isBefore(suppressedUntil)) {
-        return false;
-      }
+    final suppressedUntil = _suppressUntilByCategory[cand.category];
+    if (suppressedUntil != null && now.isBefore(suppressedUntil)) {
+      return false;
     }
 
     if (cand.priority != SpeechPriority.critical &&
@@ -243,10 +233,7 @@ class AlertFilter {
   /// (e.g. very-close direct TTS path) so that subsequent [flush]/[flushMulti]
   /// calls respect the per-category cooldown and don't double-fire.
   void noteCritical(AlertCategory category, DateTime now) {
-    _lastCriticalByCat[category] = now;
-    _lastByCat[category] = now;
-    _suppressUntilByCategory[category] =
-        now.add(const Duration(milliseconds: 2000));
+    _updateCategoryState(category, now, isCritical: true);
     _lastSpokenAt = now;
     _lastCategory = category;
   }
@@ -320,15 +307,12 @@ class AlertFilter {
       winners.add(w);
       _lastSpokenAt = now;
       _lastCategory = w.category;
-      _lastByCat[w.category] = now;
-      if (w.priority == SpeechPriority.critical) {
-        _lastCriticalByCat[w.category] = now;
-        if (w.distanceM != null && w.distanceM! > 0) {
-          _lastCriticalDistMByCat[w.category] = w.distanceM!;
-        }
-        _suppressUntilByCategory[w.category] =
-            now.add(const Duration(milliseconds: 2000));
-      }
+      _updateCategoryState(
+        w.category,
+        now,
+        isCritical: w.priority == SpeechPriority.critical,
+        distanceM: w.distanceM,
+      );
     }
     return winners;
   }
@@ -376,6 +360,31 @@ class AlertFilter {
         return scaled(2500);
       case AlertCategory.acousticEvent:
         return scaled(3000);
+    }
+  }
+
+  void _updateCategoryState(
+    AlertCategory category,
+    DateTime now, {
+    bool isCritical = false,
+    double? distanceM,
+  }) {
+    final categoriesToUpdate =
+        (category == AlertCategory.approachingVehicle ||
+                category == AlertCategory.obstacleClose)
+            ? [AlertCategory.approachingVehicle, AlertCategory.obstacleClose]
+            : [category];
+
+    for (final cat in categoriesToUpdate) {
+      _lastByCat[cat] = now;
+      if (isCritical) {
+        _lastCriticalByCat[cat] = now;
+        _suppressUntilByCategory[cat] =
+            now.add(const Duration(milliseconds: 2000));
+        if (distanceM != null && distanceM > 0) {
+          _lastCriticalDistMByCat[cat] = distanceM;
+        }
+      }
     }
   }
 }

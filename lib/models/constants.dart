@@ -143,6 +143,12 @@ double minConfFor(String label) =>
 
 const int kZoneCount = 5;
 const int kTrackMaxAge = 6;
+
+/// V1.5: After this many predict-only frames with no match, ghost track
+/// confidence starts to decay by [kTrackGhostDecayFactor] per frame,
+/// preventing stale Kalman predictions from generating high-confidence alerts.
+const int kTrackGhostDecayFrames = 3;
+const double kTrackGhostDecayFactor = 0.50;
 const double kTrackMatchDist = 70.0;
 const double kIoUMatchThreshold = 0.2;
 const int kTrackConfirmFrames = 2;
@@ -150,6 +156,16 @@ const int kApproachHistLen = 6;
 const double kApproachMinDtSec = 0.35;
 const double kVehApproachAreaRateT = 0.22;
 const double kVehApproachHeightRateT = 0.14;
+
+/// V1.4: Looser thresholds used when focal calibration is unavailable and
+/// the depth provider is absent, trading more false positives for earlier
+/// approach warnings on uncalibrated hardware.
+const double kVehApproachAreaRateTUncalibrated = 0.15;
+
+/// V1.4: Absolute bbox-area fraction that triggers immediate critical alert
+/// for any vehicle, independent of approach rate.  At 35 % of the frame a
+/// vehicle is already dangerously close regardless of tracking history.
+const double kVehBboxDangerAreaRatio = 0.35;
 
 const double kPedApproachAreaRateT = 0.08;
 const double kPedApproachHeightRateT = 0.06;
@@ -229,11 +245,15 @@ const List<int> kHapticFarLeft = [0, 40, 30, 80];
 const List<int> kHapticFarCenter = [0, 60, 30, 60];
 const List<int> kHapticFarRight = [0, 80, 30, 40];
 
-const List<int> kHapticCloseLeft = [0, 60, 30, 140];
+/// V4.3: 5:1 asymmetry between leading and trailing pulse makes left/right
+/// direction unmistakable even through clothing or with damped vibrations.
+const List<int> kHapticCloseLeft = [0, 40, 60, 200];
 const List<int> kHapticCloseCenter = [0, 100, 30, 100];
-const List<int> kHapticCloseRight = [0, 140, 30, 60];
+const List<int> kHapticCloseRight = [0, 200, 60, 40];
 const List<int> kHapticCriticalCooldownPattern = [0, 80, 30, 80, 30, 80];
 const List<int> kHapticCriticalCooldownIntensities = [0, 255, 0, 255, 0, 255];
+const List<int> kHapticCriticalAlertPattern = [0, 150, 50, 150, 50, 150];
+const List<int> kHapticCriticalAlertIntensities = [0, 255, 0, 255, 0, 255];
 
 const List<int> kHapticVcLeft = [0, 80, 40, 200, 60, 200];
 const List<int> kHapticVcCenter = [0, 200, 40, 80, 40, 200];
@@ -263,7 +283,7 @@ const double kFusionWarningScore = 0.50;
 
 const double kFusionCriticalScore = 0.58;
 
-const int kFusionTemporalFrames = 5;
+const int kFusionTemporalFrames = 3;
 
 const Duration kHazardCriticalCooldown = Duration(milliseconds: 500);
 const Duration kHazardWarningCooldown = Duration(seconds: 4);
@@ -279,7 +299,7 @@ const Duration kHazardDeadZoneCooldown = Duration(seconds: 1);
 
 const Duration kHazardCooldown = kHazardWarningCooldown;
 
-const double kFusionEmaAlpha = 0.12;
+const double kFusionEmaAlpha = 0.30;
 
 const Duration kHeartbeatInterval = Duration(seconds: 30);
 const Duration kHeartbeatIntervalPitchBlack = Duration(seconds: 30);
@@ -362,6 +382,12 @@ const int kThermalPenaltyHotMs = 80;
 const int kThermalPenaltyCriticalMs = 120;
 
 const Duration kThermalCommitDwell = Duration(seconds: 60);
+
+/// V5.1: Shorter dwell used for *recovery* (tier coming down), measured from
+/// the first moment temperature drops below the committed tier.  60 s dwell
+/// still applies to *escalation* (entering a higher tier) to prevent
+/// oscillation; only the cooling path is accelerated.
+const Duration kThermalCommitDwellRecover = Duration(seconds: 30);
 const Duration kThermalTransitionSilence = Duration(seconds: 3);
 
 const double kInfTimeFastMs = 90.0;
@@ -410,6 +436,21 @@ const Duration kObjectFinderHeartbeatInterval = Duration(seconds: 20);
 const int kEventGridW = 80;
 const int kEventGridH = 60;
 const int kEventDiffThreshold = 18;
+
+/// V5.2: Sensitivity boost for the motion prealert when WeatherGate reports
+/// low-light conditions.  Smaller luma changes are more meaningful in dark
+/// scenes so the threshold is lowered.
+const int kLowLightEventDiffThreshold = 12;
+
+/// V1.1: Center-corridor fraction bounds for the sudden-appearance trigger.
+/// Fires for significant luma flux in the central walking corridor even when
+/// no blob has built up velocity — catches opening doors and step-outs.
+const double kEventCenterCorridorFracLo = 0.30;
+const double kEventCenterCorridorFracHi = 0.70;
+
+/// V1.1: Minimum fraction of center-corridor cells that must fire to raise
+/// a center-intrusion event from the luma-delta trigger.
+const double kEventCenterCorridorMinFrac = 0.25;
 const double kEventBaselineMultiplier = 4.0;
 const double kEventBaselineEmaAlpha = 0.05;
 
@@ -476,6 +517,42 @@ const double kMeshRelevanceRadiusM = 50.0;
 
 
 const int kNearMissMaxRecords = 100;
+
+/// V1.2: Accel and gyro EMA-score thresholds used to discriminate *running*
+/// from *unstable* (bus-jostled).  Running has sustained high accel from body
+/// motion but relatively stable angular velocity; being jostled has both.
+const double kRunningAccelScoreThreshold = 0.60;
+const double kRunningGyroScoreMax = 0.35;
+
+/// V2.1: Minimum interval between ground-safety MiDaS passes at critical
+/// thermal when the full MiDaS pipeline is otherwise paused.  One pass every
+/// 5 s costs ~30 ms additional thermal load but preserves curb/step detection.
+const int kCriticalThermalGroundSafetyIntervalMs = 5000;
+
+/// V3.3: After this many repeated alerts at the same distance category with
+/// no escalation, the cooldown doubles for each subsequent repeat.
+const int kAlertFatigueRepeatThreshold = 3;
+
+/// V5.2: Confidence floor reduction applied to safety-critical YOLO classes
+/// when WeatherGate reports low-light conditions.  Lowers the bar to catch
+/// dark-clothing pedestrians at the cost of slightly more false positives.
+const double kLowLightClassMinConfReduction = 0.08;
+
+/// V5.4: Battery percentage thresholds for proactive remaining-time
+/// announcements.  Each threshold fires once per charge cycle.
+const int kBattery50AnnounceThreshold = 50;
+const int kBattery30AnnounceThreshold = 30;
+const int kBattery15AnnounceThreshold = 15;
+
+/// V5.5: Rain-streak blob filtering in MotionPreAlert.  Rain blobs are
+/// characteristically tall-and-thin (aspect < 1/kRainBlobMinAspect) and
+/// short-lived (persist ≤ kRainBlobMaxPersistFrames).
+const double kRainBlobMinAspect = 3.0;
+const int kRainBlobMaxPersistFrames = 2;
+
+/// V5.5: When rain is active, require more persistence frames before alerting,
+/// to filter transient rain-streak blobs while still catching real objects.
+const int kRainEventMinPersistFrames = 5;
 
 
 const int kIndoorTrailParticleCount = 200;

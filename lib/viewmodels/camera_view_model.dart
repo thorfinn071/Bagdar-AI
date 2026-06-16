@@ -125,6 +125,10 @@ class CameraViewModel extends ChangeNotifier {
   bool isPitchBlack = false;
   bool guideDogMode = false;
 
+  /// V1.2: Notified whenever [FallDetector.motionState] changes so that
+  /// camera_screen.dart can issue the "you are running" TTS cue.
+  void Function(MotionState state)? onMotionStateChanged;
+
   DateTime _lastRollWarnAt = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _lastOrientationWarnAt = DateTime.fromMillisecondsSinceEpoch(0);
 
@@ -139,7 +143,7 @@ class CameraViewModel extends ChangeNotifier {
       tts: tts,
       earcon: earcon,
       onProximityChanged: (dist, pan) {
-        if (dist == null) {
+        if (dist == null || tts.speaking) {
           proximityBeacon.pause();
         } else {
           proximityBeacon.update(
@@ -463,6 +467,7 @@ class CameraViewModel extends ChangeNotifier {
 
     fallDetector.onMotionStateChanged = (state) {
       throttler.setMotionState(state);
+      onMotionStateChanged?.call(state);
     };
 
     throttler.setMemoryPressure(memory.level);
@@ -577,7 +582,6 @@ class CameraViewModel extends ChangeNotifier {
       objectMemory.onTracks(tracks, imgW, imgH);
       objectFinder.onTracks(tracks, imgW, imgH);
     }
-    notifyListeners();
   }
 
   void objectMemoryFeed(CameraImage image, DateTime now) {
@@ -621,6 +625,11 @@ class CameraViewModel extends ChangeNotifier {
     vlmCompanion.dispose();
     sonar.dispose();
     modelPacks.dispose();
+    voice.dispose();
+    twoGis.dispose();
+    mapPkg.dispose();
+    offlineRouting.dispose();
+    gtfs.dispose();
     tracksNotifier.dispose();
     super.dispose();
   }

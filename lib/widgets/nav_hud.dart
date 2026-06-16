@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../models/nav_models.dart';
 import '../models/strings.dart';
 import '../services/navigation_service.dart';
+import '../theme/bagdar_theme.dart';
 import '../theme/bagdar_tokens.dart';
 
 class NavHud extends StatelessWidget {
@@ -31,46 +32,50 @@ class NavHud extends StatelessWidget {
   Widget build(BuildContext context) {
     if (navState == NavState.idle) return const SizedBox.shrink();
 
+    final colors = BagdarTheme.colorsOf(context);
+    final accent = _accentColor(colors);
+
     return Positioned(
       top: 0,
       left: 0,
       right: 0,
       child: SafeArea(
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          margin: const EdgeInsets.symmetric(
+            horizontal: BagdarSpacing.m,
+            vertical: BagdarSpacing.s,
+          ),
+          padding: const EdgeInsets.symmetric(
+            horizontal: BagdarSpacing.m,
+            vertical: BagdarSpacing.m,
+          ),
           decoration: BoxDecoration(
-            color: Colors.black.withValues(alpha: 0.75),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: _accentColor, width: 2.5),
+            color: BagdarOverlay.scrim,
+            borderRadius: BorderRadius.circular(BagdarRadius.panel),
+            border: Border.all(color: accent, width: BagdarBorders.thin),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Row(
                 children: [
-                  _buildDirectionArrow(),
-                  const SizedBox(width: 12),
-                  Expanded(child: _buildInfo()),
+                  _buildDirectionArrow(accent),
+                  const SizedBox(width: BagdarSpacing.m),
+                  Expanded(child: _buildInfo(accent)),
                 ],
               ),
               if (destinationName.isNotEmpty) ...[
                 const SizedBox(height: BagdarSpacing.s),
                 Row(
                   children: [
-                    Icon(Icons.place, color: _accentColor, size: 18),
+                    Icon(Icons.place, color: accent, size: 18),
                     const SizedBox(width: BagdarSpacing.xs),
                     Expanded(
                       child: Text(
                         destinationName,
                         style: BagdarTypography.caption.copyWith(
-                          color: Colors.white,
-                          shadows: [
-                            Shadow(
-                              color: Colors.black.withValues(alpha: 0.8),
-                              blurRadius: 4,
-                            ),
-                          ],
+                          color: BagdarOverlay.foreground,
+                          shadows: BagdarOverlay.textShadows,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -86,13 +91,20 @@ class NavHud extends StatelessWidget {
     );
   }
 
-  Color get _accentColor {
-    if (transitPhase == TransitNavPhase.riding) return Colors.orangeAccent;
-    if (transitPhase == TransitNavPhase.waitForBus) return Colors.amberAccent;
-    return Colors.cyanAccent;
+  /// Over-camera-safe accent, distinct per transit phase. Colour is
+  /// redundant with the maneuver icon + text, so it only needs to read on
+  /// the dark scrim across all themes.
+  Color _accentColor(BagdarColors colors) {
+    if (transitPhase == TransitNavPhase.riding) {
+      return BagdarOverlay.statusFill(BagdarStatusLevel.clear, colors);
+    }
+    if (transitPhase == TransitNavPhase.waitForBus) {
+      return BagdarOverlay.statusFill(BagdarStatusLevel.caution, colors);
+    }
+    return BagdarOverlay.signal(colors);
   }
 
-  Widget _buildDirectionArrow() {
+  Widget _buildDirectionArrow(Color accent) {
     double rotation = 0;
     IconData icon = Icons.navigation;
 
@@ -120,20 +132,21 @@ class NavHud extends StatelessWidget {
     }
 
     return Container(
-      width: 64,
-      height: 64,
+      width: BagdarSpacing.tapMinimum,
+      height: BagdarSpacing.tapMinimum,
       decoration: BoxDecoration(
-        color: _accentColor.withValues(alpha: 0.2),
+        color: accent.withValues(alpha: 0.2),
         shape: BoxShape.circle,
+        border: Border.all(color: accent, width: BagdarBorders.thin),
       ),
       child: Transform.rotate(
         angle: rotation,
-        child: Icon(icon, color: _accentColor, size: 36),
+        child: Icon(icon, color: accent, size: 36),
       ),
     );
   }
 
-  Widget _buildInfo() {
+  Widget _buildInfo(Color accent) {
     String mainText;
     String subText = '';
 
@@ -158,18 +171,16 @@ class NavHud extends StatelessWidget {
         Text(
           mainText,
           style: BagdarTypography.title.copyWith(
-            color: Colors.white,
-            shadows: [
-              Shadow(color: Colors.black.withValues(alpha: 0.8), blurRadius: 4),
-            ],
+            color: BagdarOverlay.foreground,
+            shadows: BagdarOverlay.textShadows,
           ),
         ),
         if (subText.isNotEmpty)
           Text(
             subText,
             style: BagdarTypography.body.copyWith(
-              color: _accentColor,
-              fontWeight: FontWeight.w700,
+              color: accent,
+              fontWeight: BagdarTypography.weightBold,
             ),
           ),
       ],

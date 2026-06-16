@@ -31,8 +31,17 @@ class PerformanceThrottler {
   MemoryPressureLevel _memory = MemoryPressureLevel.normal;
 
   ThermalSeverity _committedSeverity = ThermalSeverity.normal;
-  DateTime _severityCommitUntil = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _lastSeverityTransitionAt = DateTime.fromMillisecondsSinceEpoch(0);
+
+  /// V5.1: Timestamp of the first poll cycle where raw severity dropped below
+  /// the committed tier.  Recovery is allowed after [kThermalCommitDwellRecover]
+  /// of *sustained* cooling — not [kThermalCommitDwell] (60 s) — so critical
+  /// → hot recovery happens in 30 s instead of 60 s.
+  DateTime _thermalDropStartedAt = DateTime.fromMillisecondsSinceEpoch(0);
+
+  /// V2.1: Tracks when the next ground-safety MiDaS burst may run during
+  /// critical thermal (once per [kCriticalThermalGroundSafetyIntervalMs]).
+  DateTime _groundSafetyMidasNextAt = DateTime.fromMillisecondsSinceEpoch(0);
 
   
   DateTime _gateResumeUntil = DateTime.fromMillisecondsSinceEpoch(0);
@@ -52,20 +61,45 @@ class PerformanceThrottler {
     final t = now ?? DateTime.now();
     final raw = readings.severity;
     if (raw.index > _committedSeverity.index) {
+      // Escalation: always immediate; reset drop tracker.
       _committedSeverity = raw;
-      _severityCommitUntil = t.add(kThermalCommitDwell);
       _lastSeverityTransitionAt = t;
+      _thermalDropStartedAt = DateTime.fromMillisecondsSinceEpoch(0);
       return;
     }
     if (raw.index == _committedSeverity.index) {
-      if (raw != ThermalSeverity.normal) {
-        _severityCommitUntil = t.add(kThermalCommitDwell);
-      }
+      // Temperature holding — not dropping; reset the drop tracker.
+      _thermalDropStartedAt = DateTime.fromMillisecondsSinceEpoch(0);
       return;
     }
-    if (t.isBefore(_severityCommitUntil)) return;
+    // Recovery path: V5.1 uses [kThermalCommitDwellRecover] (30 s) measured
+    // from the *first* time temperature dropped below the committed tier.
+    if (_thermalDropStartedAt.millisecondsSinceEpoch == 0) {
+      _thermalDropStartedAt = t;
+    }
+    if (t.difference(_thermalDropStartedAt) < kThermalCommitDwellRecover) {
+      return;
+    }
     _committedSeverity = raw;
     _lastSeverityTransitionAt = t;
+    _thermalDropStartedAt = DateTime.fromMillisecondsSinceEpoch(0);
+  }
+
+  /// V2.1: Returns true when a ground-safety MiDaS pass is overdue at
+  /// critical thermal.  Even with MiDaS otherwise paused, one inference
+  /// every [kCriticalThermalGroundSafetyIntervalMs] ms is allowed to preserve
+  /// curb / step-down detection.
+  bool isGroundSafetyMidasDue(DateTime now) {
+    if (_committedSeverity != ThermalSeverity.critical) return false;
+    return !now.isBefore(_groundSafetyMidasNextAt);
+  }
+
+  /// Mark that the ground-safety MiDaS burst has been consumed; schedules
+  /// the next allowed run.
+  void markGroundSafetyMidasDone(DateTime now) {
+    _groundSafetyMidasNextAt = now.add(
+      const Duration(milliseconds: kCriticalThermalGroundSafetyIntervalMs),
+    );
   }
 
   void setLowPowerMode(bool enabled) {
@@ -198,6 +232,9 @@ class PerformanceThrottler {
     final motionBias = switch (_motionState) {
       MotionState.stationary => stationaryBias,
       MotionState.walking => 0,
+      // V1.2: running gets a large negative bias; the result is further
+      // halved below to approach the 60 ms minimum floor.
+      MotionState.running => -50,
       MotionState.unstable => -30,
     };
 
@@ -212,7 +249,7 @@ class PerformanceThrottler {
       perfMs + thermalPenalty + motionBias + memoryBias,
     );
 
-    final int requestedMs;
+    int requestedMs;
     if (severity == ThermalSeverity.critical && !_isLowPowerMode) {
       if (_thermalBurstCount < _kThermalBurstFrames) {
         _thermalBurstCount++;
@@ -231,7 +268,13 @@ class PerformanceThrottler {
       requestedMs = math.max(batteryMs, base);
     }
 
-    
+    // V1.2: When running, halve the effective detection interval to compensate
+    // for the shorter time-to-collision.  Floor at 60 ms to avoid overloading
+    // the pipeline; the safety ceiling still caps the result at 500 ms.
+    if (_motionState == MotionState.running) {
+      requestedMs = math.max(60, requestedMs ~/ 2);
+    }
+
     return Duration(
       milliseconds: math.min(requestedMs, kDetectIntervalSafetyCeilingMs),
     );

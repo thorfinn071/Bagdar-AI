@@ -245,7 +245,7 @@ class BleBuddyPlugin(private val context: Context) {
                 if (status == BluetoothGatt.GATT_SUCCESS &&
                     characteristic.uuid == HAZARD_CHAR_UUID) {
                     val data = characteristic.value
-                    if (!data.isNullOrEmpty()) sendPayload(data)
+                    if (data != null && data.isNotEmpty()) sendPayload(data)
                     mainHandler.postDelayed({ disconnectGatt(gatt) }, 500)
                 }
             }
@@ -257,7 +257,7 @@ class BleBuddyPlugin(private val context: Context) {
             ) {
                 if (characteristic.uuid == HAZARD_CHAR_UUID) {
                     val data = characteristic.value
-                    if (!data.isNullOrEmpty()) sendPayload(data)
+                    if (data != null && data.isNotEmpty()) sendPayload(data)
                 }
             }
         }

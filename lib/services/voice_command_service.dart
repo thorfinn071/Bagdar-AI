@@ -89,6 +89,12 @@ enum VoiceCommand {
   recordNearMiss,
   
   toggleSonar,
+  dominantHandRight,
+  dominantHandLeft,
+  allowPermission,
+  confirm,
+  cancel,
+  back,
   unknown,
 }
 
@@ -98,6 +104,7 @@ class VoiceCommandService {
 
   bool _available = false;
   bool _listening = false;
+  bool _hadResult = false;
 
   /// Active when the Kazakh stack v2 feature flag is on, the current locale
   /// is kk-*, and the vosk-kk language pack is installed locally. When true,
@@ -114,6 +121,7 @@ class VoiceCommandService {
   void Function(VoiceCommand cmd, String destination)? onNavCommand;
   void Function(bool listening)? onListeningStateChanged;
   void Function(String error)? onError;
+  VoidCallback? onListenDone;
 
   static final List<String> _ruSorted = _ruCommands.keys.toList()
     ..sort((a, b) => b.length.compareTo(a.length));
@@ -256,6 +264,34 @@ class VoiceCommandService {
     'эхолот': VoiceCommand.toggleSonar,
     'режим эхолота': VoiceCommand.toggleSonar,
     'сонар': VoiceCommand.toggleSonar,
+    'правая': VoiceCommand.dominantHandRight,
+    'правая рука': VoiceCommand.dominantHandRight,
+    'правша': VoiceCommand.dominantHandRight,
+    'левая': VoiceCommand.dominantHandLeft,
+    'левая рука': VoiceCommand.dominantHandLeft,
+    'левша': VoiceCommand.dominantHandLeft,
+    'улица': VoiceCommand.modeStreet,
+    'трость': VoiceCommand.modeCane,
+    'сканирование': VoiceCommand.modeScan,
+    'разрешить': VoiceCommand.allowPermission,
+    'разреши': VoiceCommand.allowPermission,
+    'да': VoiceCommand.confirm,
+    'нет': VoiceCommand.cancel,
+    'назад': VoiceCommand.back,
+    'русский': VoiceCommand.langRussian,
+    'казахский': VoiceCommand.langKazakh,
+    'английский': VoiceCommand.langEnglish,
+    'қазақша': VoiceCommand.langKazakh,
+    'қазақ': VoiceCommand.langKazakh,
+    'қазақ тілі': VoiceCommand.langKazakh,
+    'казакша': VoiceCommand.langKazakh,
+    'казак тили': VoiceCommand.langKazakh,
+    'казак': VoiceCommand.langKazakh,
+    'орысша': VoiceCommand.langRussian,
+    'орыс': VoiceCommand.langRussian,
+    'орыс тілі': VoiceCommand.langRussian,
+    'english': VoiceCommand.langEnglish,
+    'инглиш': VoiceCommand.langEnglish,
   };
 
   static const Set<String> _ruSosExact = {
@@ -514,6 +550,28 @@ class VoiceCommandService {
     'эхолот': VoiceCommand.toggleSonar,
     'эхолот режимі': VoiceCommand.toggleSonar,
     'сонар': VoiceCommand.toggleSonar,
+    'оң': VoiceCommand.dominantHandRight,
+    'оң қол': VoiceCommand.dominantHandRight,
+    'оңқай': VoiceCommand.dominantHandRight,
+    'сол': VoiceCommand.dominantHandLeft,
+    'сол қол': VoiceCommand.dominantHandLeft,
+    'солқай': VoiceCommand.dominantHandLeft,
+    'көше': VoiceCommand.modeStreet,
+    'таяқ': VoiceCommand.modeCane,
+    'сканерлеу': VoiceCommand.modeScan,
+    'рұқсат': VoiceCommand.allowPermission,
+    'рұқсат ету': VoiceCommand.allowPermission,
+    'иә': VoiceCommand.confirm,
+    'жоқ': VoiceCommand.cancel,
+    'артқа': VoiceCommand.back,
+    'орыс': VoiceCommand.langRussian,
+    'орысша': VoiceCommand.langRussian,
+    'русский': VoiceCommand.langRussian,
+    'русский язык': VoiceCommand.langRussian,
+    'қазақ': VoiceCommand.langKazakh,
+    'қазақша': VoiceCommand.langKazakh,
+    'ағылшын': VoiceCommand.langEnglish,
+    'english': VoiceCommand.langEnglish,
   };
 
   static const Set<String> _kkSosExact = {
@@ -738,6 +796,20 @@ class VoiceCommandService {
     'sonar': VoiceCommand.toggleSonar,
     'sonar mode': VoiceCommand.toggleSonar,
     'echolocation': VoiceCommand.toggleSonar,
+    'right hand': VoiceCommand.dominantHandRight,
+    'left hand': VoiceCommand.dominantHandLeft,
+    'street': VoiceCommand.modeStreet,
+    'cane': VoiceCommand.modeCane,
+    'allow': VoiceCommand.allowPermission,
+    'grant': VoiceCommand.allowPermission,
+    'yes': VoiceCommand.confirm,
+    'no': VoiceCommand.cancel,
+    'back': VoiceCommand.back,
+    'russian': VoiceCommand.langRussian,
+    'русский': VoiceCommand.langRussian,
+    'kazakh': VoiceCommand.langKazakh,
+    'қазақ': VoiceCommand.langKazakh,
+    'english': VoiceCommand.langEnglish,
   };
 
   static const Set<String> _enSosExact = {
@@ -882,8 +954,13 @@ class VoiceCommandService {
         },
         onStatus: (status) {
           if (status == 'done' || status == 'notListening') {
+            final hadResult = _hadResult;
             _setListening(false);
-            _maybeRelistenContinuous();
+            if (_continuous) {
+              _maybeRelistenContinuous();
+            } else if (!hadResult) {
+              onListenDone?.call();
+            }
           }
         },
       );
@@ -1047,6 +1124,7 @@ class VoiceCommandService {
     Duration listenFor = const Duration(seconds: 6),
     Duration pauseFor = const Duration(seconds: 2),
   }) async {
+    _hadResult = false;
     if (_useVoskForKk) {
       return _listenWithVosk(listenFor: listenFor);
     }
@@ -1061,6 +1139,7 @@ class VoiceCommandService {
         ),
         onResult: (result) {
           if (result.finalResult) {
+            _hadResult = true;
             _processResult(result.recognizedWords);
           }
         },

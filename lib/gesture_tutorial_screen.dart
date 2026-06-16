@@ -6,12 +6,15 @@ import 'package:flutter/services.dart';
 import 'models/constants.dart';
 import 'models/speech_job.dart';
 import 'models/strings.dart';
+import 'models/a11y_prefs.dart';
 import 'services/earcon_service.dart';
 import 'services/feature_usage_tracker.dart';
 import 'services/haptic_service.dart';
 import 'services/settings_service.dart';
 import 'services/tts_service.dart';
 import 'services/voice_command_service.dart';
+import 'theme/bagdar_theme.dart';
+import 'theme/bagdar_tokens.dart';
 
 enum _TutStep {
   tap,
@@ -108,8 +111,7 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
   }
 
   Future<void> _speakIntro() async {
-    
-    
+    if (mounted && MediaQuery.of(context).accessibleNavigation) return;
     _tts.say(S.get('tut_intro'), SpeechPriority.warning, pan: 0.0);
     await _tts.awaitCurrentSpeech();
     await Future<void>.delayed(const Duration(milliseconds: 300));
@@ -117,11 +119,15 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
 
   Future<void> _speakPrompt({bool initial = false}) async {
     if (_step == _TutStep.done) {
-      _tts.say(S.get('tut_finished'), SpeechPriority.warning, pan: 0.0);
+      if (mounted && !MediaQuery.of(context).accessibleNavigation) {
+        _tts.say(S.get('tut_finished'), SpeechPriority.warning, pan: 0.0);
+      }
       return;
     }
     _lastPromptAt = DateTime.now();
-    _tts.say(S.get(_stepKey), SpeechPriority.warning, pan: 0.0);
+    if (mounted && !MediaQuery.of(context).accessibleNavigation) {
+      _tts.say(S.get(_stepKey), SpeechPriority.warning, pan: 0.0);
+    }
     if (!initial) {
       HapticService.vibrate(const [0, 40]);
     }
@@ -130,6 +136,7 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
 
   void _scheduleVoiceListen() {
     if (!_voiceReady) return;
+    if (mounted && MediaQuery.of(context).accessibleNavigation) return;
     _voiceListenTimer?.cancel();
     _voiceListenTimer = Timer(const Duration(seconds: 5), () {
       if (!mounted || _step == _TutStep.done) return;
@@ -147,6 +154,9 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
         break;
       case VoiceCommand.showHelp:
         _speakDetailedHelp();
+        break;
+      case VoiceCommand.confirm:
+        unawaited(_advance());
         break;
       default:
         break;
@@ -229,9 +239,19 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
     }
   }
 
+  double get _swipeVelocityThreshold {
+    final sensitivity = Settings.instance.tapSensitivity;
+    switch (sensitivity) {
+      case TapSensitivity.sensitive:
+        return 150.0;
+      case TapSensitivity.normal:
+        return 250.0;
+    }
+  }
+
   void _handleHorizontalSwipe(double? v) {
     if (v == null) return;
-    if (v.abs() < 300) return;
+    if (v.abs() < _swipeVelocityThreshold) return;
     if (_step == _TutStep.swipeHorizontal) {
       unawaited(_advance());
     } else {
@@ -241,7 +261,7 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
 
   void _handleVerticalSwipe(double? v) {
     if (v == null) return;
-    if (v.abs() < 300) return;
+    if (v.abs() < _swipeVelocityThreshold) return;
     if (_step != _TutStep.swipeVertical) {
       _throttledReprompt();
       return;
@@ -317,25 +337,27 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final accessible = MediaQuery.of(context).accessibleNavigation;
+    final colors = BagdarTheme.colorsOf(context);
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: colors.surfaceBg,
       body: SafeArea(
         child: Listener(
-          onPointerDown: _handlePointerDown,
-          onPointerMove: _handlePointerMove,
-          onPointerUp: _handlePointerUp,
+          onPointerDown: accessible ? null : _handlePointerDown,
+          onPointerMove: accessible ? null : _handlePointerMove,
+          onPointerUp: accessible ? null : _handlePointerUp,
           onPointerCancel: (_) {
             _activePointers.clear();
             _twoFingerTimer?.cancel();
             _twoFingerSwipeStart = null;
           },
           child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: _handleTap,
-            onDoubleTap: _handleDoubleTap,
-            onLongPress: _handleLongPress,
-            onHorizontalDragEnd: (d) => _handleHorizontalSwipe(d.primaryVelocity),
-            onVerticalDragEnd: (d) => _handleVerticalSwipe(d.primaryVelocity),
+            behavior: accessible ? HitTestBehavior.deferToChild : HitTestBehavior.opaque,
+            onTap: accessible ? null : _handleTap,
+            onDoubleTap: accessible ? null : _handleDoubleTap,
+            onLongPress: accessible ? null : _handleLongPress,
+            onHorizontalDragEnd: accessible ? null : (d) => _handleHorizontalSwipe(d.primaryVelocity),
+            onVerticalDragEnd: accessible ? null : (d) => _handleVerticalSwipe(d.primaryVelocity),
             child: Stack(
               fit: StackFit.expand,
               children: [
@@ -351,40 +373,61 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
                           children: [
                             Text(
                               S.get('tut_title'),
-                              style: const TextStyle(
-                                color: Colors.cyanAccent,
-                                fontSize: 14,
-                                letterSpacing: 2,
+                              style: BagdarTypography.label.copyWith(
+                                color: colors.accentPrimary,
                               ),
                             ),
-                            const SizedBox(height: 12),
-                            Text(
-                              S
+                            const SizedBox(height: BagdarSpacing.m),
+                            _StepIndicator(
+                              total: _totalSteps,
+                              current: _stepIndex,
+                              color: colors.accentPrimary,
+                              inactive: colors.divider,
+                              semanticsLabel: S
                                   .get('tut_progress')
                                   .replaceFirst('{step}', '$_stepIndex')
                                   .replaceFirst('{total}', '$_totalSteps'),
-                              style: const TextStyle(
-                                color: Colors.white60,
-                                fontSize: 13,
+                            ),
+                            const SizedBox(height: BagdarSpacing.xl),
+                            AnimatedSwitcher(
+                              duration: BagdarMotion.duration(
+                                context,
+                                BagdarMotion.medium,
                               ),
-                            ),
-                            const SizedBox(height: 28),
-                            Icon(
-                              _stepIcon(_step),
-                              size: 72,
-                              color: Colors.cyanAccent,
-                            ),
-                            const SizedBox(height: 24),
-                            Text(
-                              _step == _TutStep.done
-                                  ? S.get('tut_finished')
-                                  : S.get(_stepKey),
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                height: 1.4,
-                                fontWeight: FontWeight.w500,
+                              child: Column(
+                                key: ValueKey<_TutStep>(_step),
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    width: 120,
+                                    height: 120,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: colors.accentPrimary
+                                          .withValues(alpha: 0.12),
+                                      border: Border.all(
+                                        color: colors.accentPrimary,
+                                        width: BagdarBorders.rule,
+                                      ),
+                                    ),
+                                    child: Icon(
+                                      _stepIcon(_step),
+                                      size: 64,
+                                      color: colors.accentPrimary,
+                                    ),
+                                  ),
+                                  const SizedBox(height: BagdarSpacing.l),
+                                  Text(
+                                    _step == _TutStep.done
+                                        ? S.get('tut_finished')
+                                        : S.get(_stepKey),
+                                    textAlign: TextAlign.center,
+                                    style: BagdarTypography.body.copyWith(
+                                      color: colors.textPrimary,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
@@ -394,8 +437,8 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
                   ),
                 ),
                 Positioned(
-                  top: 12,
-                  right: 12,
+                  top: BagdarSpacing.m,
+                  right: BagdarSpacing.m,
                   child: Semantics(
                     button: true,
                     label: S.get('tut_skip'),
@@ -405,16 +448,16 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
                         _skip();
                       },
                       style: TextButton.styleFrom(
-                        foregroundColor: Colors.white70,
-                        backgroundColor: Colors.white12,
+                        foregroundColor: colors.textSecondary,
+                        backgroundColor: colors.surfaceElevated,
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 10,
+                          horizontal: BagdarSpacing.m,
+                          vertical: BagdarSpacing.s,
                         ),
                       ),
                       child: Text(
                         S.get('tut_skip'),
-                        style: const TextStyle(fontSize: 14),
+                        style: BagdarTypography.caption,
                       ),
                     ),
                   ),
@@ -444,6 +487,49 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
       case _TutStep.done:
         return Icons.check_circle;
     }
+  }
+}
+
+/// Signage-style progress bars for the tutorial. Decorative bars carry a
+/// single [semanticsLabel] (e.g. "Step 3 of 6") so TalkBack announces
+/// progress without reading each bar individually.
+class _StepIndicator extends StatelessWidget {
+  final int total;
+  final int current;
+  final Color color;
+  final Color inactive;
+  final String semanticsLabel;
+
+  const _StepIndicator({
+    required this.total,
+    required this.current,
+    required this.color,
+    required this.inactive,
+    required this.semanticsLabel,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: semanticsLabel,
+      container: true,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List<Widget>.generate(total, (i) {
+          final done = i < current;
+          return AnimatedContainer(
+            duration: BagdarMotion.duration(context, BagdarMotion.medium),
+            width: done ? 28 : 16,
+            height: 6,
+            margin: const EdgeInsets.symmetric(horizontal: BagdarSpacing.xs),
+            decoration: BoxDecoration(
+              color: done ? color : inactive,
+              borderRadius: BorderRadius.circular(BagdarRadius.sharp),
+            ),
+          );
+        }),
+      ),
+    );
   }
 }
  

@@ -24,6 +24,7 @@ enum Earcon {
   hornDetected,
   sirenDetected,
   dogDetected,
+  criticalAlert,
 }
 
 class EarconService {
@@ -36,9 +37,18 @@ class EarconService {
     Earcon.cameraBlocked,
   };
 
+  static const Set<Earcon> _kHighPriorityEarcons = {
+    Earcon.criticalAlert,
+    Earcon.approaching,
+    Earcon.hornDetected,
+    Earcon.sirenDetected,
+    Earcon.cameraBlocked,
+  };
+
   final Map<Earcon, AudioPlayer> _players = {};
   final Map<Earcon, DateTime> _lastPlayedAt = {};
   DateTime _lastAnyPlayedAt = DateTime.fromMillisecondsSinceEpoch(0);
+  DateTime _lastHighPriorityPlayedAt = DateTime.fromMillisecondsSinceEpoch(0);
 
   bool _enabled = true;
   bool _ready = false;
@@ -105,12 +115,23 @@ class EarconService {
     if (lastAt != null && now.difference(lastAt) < _kPerEarconCooldown) {
       return;
     }
-    if (!_kThrottleExempt.contains(earcon) &&
-        now.difference(_lastAnyPlayedAt) < _kGlobalEarconCooldown) {
-      return;
+    final isHighPriority = _kHighPriorityEarcons.contains(earcon);
+    if (!_kThrottleExempt.contains(earcon)) {
+      if (isHighPriority) {
+        if (now.difference(_lastHighPriorityPlayedAt) < _kGlobalEarconCooldown) {
+          return;
+        }
+      } else {
+        if (now.difference(_lastAnyPlayedAt) < _kGlobalEarconCooldown) {
+          return;
+        }
+      }
     }
     _lastPlayedAt[earcon] = now;
     _lastAnyPlayedAt = now;
+    if (isHighPriority) {
+      _lastHighPriorityPlayedAt = now;
+    }
     final player = _players[earcon];
     if (player == null) return;
     try {
@@ -182,6 +203,8 @@ class EarconService {
         return _buildWav(_sweep(673, 873, 80, 0.50));
       case Earcon.dogDetected:
         return _buildWav(_noiseClick(30, 0.45, lpAlpha: 0.25));
+      case Earcon.criticalAlert:
+        return _buildWav(_tripleBeep(1200, 40, 30, 0.70));
     }
   }
 
@@ -197,6 +220,18 @@ class EarconService {
     result.setAll(0, b);
     result.setAll(b.length, g);
     result.setAll(b.length + g.length, b);
+    return result;
+  }
+
+  Int16List _tripleBeep(double freq, int beepMs, int gapMs, double amp) {
+    final b = _singleTone(freq, beepMs, amp);
+    final g = Int16List((_sampleRate * gapMs / 1000).round());
+    final result = Int16List(b.length + g.length + b.length + g.length + b.length);
+    result.setAll(0, b);
+    result.setAll(b.length, g);
+    result.setAll(b.length + g.length, b);
+    result.setAll(b.length + g.length + b.length, g);
+    result.setAll(b.length + g.length + b.length + g.length, b);
     return result;
   }
 

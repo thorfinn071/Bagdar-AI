@@ -22,8 +22,8 @@ class FusionEngine {
   }) {
     // If YOLO data is older than 2 depth intervals, its zone confidence is
     // too stale to contribute meaningfully for moving-object hazards.
-    const _kStaleYoloThreshold = Duration(milliseconds: 1600);
-    if (yoloAge > _kStaleYoloThreshold) {
+    const staleYoloThreshold = Duration(milliseconds: 1600);
+    if (yoloAge > staleYoloThreshold) {
       yoloHazardConf = 0.0;
     }
     final zoneIdx = hazard.zone.index;

@@ -79,7 +79,7 @@ void main() {
       );
 
       final result = narrator.narrate(snapshot, Verbosity.normal);
-      expect(result, contains  cvb    ('I see 2 objects.'));
+      expect(result, contains('I see 2 objects.'));
       
       final carIdx = result.indexOf('car');
       final dogIdx = result.indexOf('dog');

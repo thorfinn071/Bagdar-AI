@@ -71,17 +71,29 @@ class MotionPreAlert {
 
   bool _indoorHint = false;
 
+  /// V5.5: Set to true when rain has been detected by WeatherGate.  Enables
+  /// extra blob filtering to suppress vertical rain-streak false positives.
+  bool _rainHint = false;
+
+  /// V5.2: Set to true in low-light conditions to lower the event diff
+  /// threshold and increase sensitivity for dark-scene intrusions.
+  bool _lowLightHint = false;
+
   MotionIntrusionEvent? feed(
     CameraImage image,
     DateTime now, {
     bool weatherDegraded = false,
     bool aeTransitioning = false,
     bool indoor = false,
+    bool rainActive = false,
+    bool lowLight = false,
   }) {
     if (image.planes.isEmpty) return null;
     if (aeTransitioning) return null;
     _weatherDegradedHint = weatherDegraded;
     _indoorHint = indoor;
+    _rainHint = rainActive;
+    _lowLightHint = lowLight;
     _downsampleImage(image);
     return _processFrame(now);
   }
@@ -92,10 +104,14 @@ class MotionPreAlert {
     DateTime now, {
     bool weatherDegraded = false,
     bool aeTransitioning = false,
+    bool rainActive = false,
+    bool lowLight = false,
   }) {
     if (grid.length != kEventGridW * kEventGridH) return null;
     if (aeTransitioning) return null;
     _weatherDegradedHint = weatherDegraded;
+    _rainHint = rainActive;
+    _lowLightHint = lowLight;
     _grid.setAll(0, grid);
     return _processFrame(now);
   }
@@ -126,9 +142,14 @@ class MotionPreAlert {
 
     
     final indoorScale = _indoorHint ? 1.4 : 1.0;
+    // V5.2: Lower the diff threshold in low-light conditions so that small
+    // luma changes in dark scenes still register as events.
+    final baseDiff = _lowLightHint
+        ? kLowLightEventDiffThreshold.toDouble()
+        : kEventDiffThreshold.toDouble();
     final diffThreshold = _weatherDegradedHint
-        ? kEventDiffThreshold * 1.6 * indoorScale
-        : kEventDiffThreshold.toDouble() * indoorScale;
+        ? baseDiff * 1.6 * indoorScale
+        : baseDiff * indoorScale;
     final baselineMult = _weatherDegradedHint
         ? kEventBaselineMultiplier * 1.5 * indoorScale
         : kEventBaselineMultiplier * indoorScale;
@@ -153,6 +174,39 @@ class MotionPreAlert {
       _swapBlobs();
       _prevFrameAt = now;
       return null;
+    }
+
+    // V1.1: Center-corridor sudden-appearance trigger — fires for significant
+    // luma flux in the central walking corridor independent of blob velocity.
+    // Catches opening doors, pedestrian step-outs, and vehicles turning toward
+    // the user that haven't yet built up cross-frame velocity.
+    final centerLoX = (kEventGridW * kEventCenterCorridorFracLo).toInt();
+    final centerHiX = (kEventGridW * kEventCenterCorridorFracHi).toInt();
+    final centerLoY = (kEventGridH * 0.20).toInt();
+    final centerHiY = (kEventGridH * 0.80).toInt();
+    int centerFired = 0;
+    int centerCells = 0;
+    for (int gy = centerLoY; gy < centerHiY; gy++) {
+      final rowOff = gy * kEventGridW;
+      for (int gx = centerLoX; gx < centerHiX; gx++) {
+        centerFired += _events[rowOff + gx];
+        centerCells++;
+      }
+    }
+    final centerFrac = centerCells > 0 ? centerFired / centerCells : 0.0;
+    if (centerFrac >= kEventCenterCorridorMinFrac &&
+        now.difference(_lastSoftAt) >= kEventSoftCooldown) {
+      _swapGrid();
+      _swapBlobs();
+      _prevFrameAt = now;
+      _lastSoftAt = now;
+      return MotionIntrusionEvent(
+        side: MotionIntrusionSide.center,
+        strength: (centerFrac / kEventCenterCorridorMinFrac).clamp(0.0, 1.0),
+        at: now,
+        classGuess: MotionEventClass.unknown,
+        isCritical: false,
+      );
     }
 
     final labelCount = _connectedComponents();
@@ -375,11 +429,27 @@ class MotionPreAlert {
     final cyFrac = b.cy / kEventGridH;
     final cxFrac = b.cx / kEventGridW;
 
-    
-    final vehiclePersistThreshold = _weatherDegradedHint
+    // V5.5: When rain is active, filter blobs that match the rain-streak
+    // signature: tall-and-thin (width/height < 1/kRainBlobMinAspect) and
+    // short-lived (persist ≤ kRainBlobMaxPersistFrames).  Genuine moving
+    // objects are wider or persist longer.
+    if (_rainHint &&
+        b.persistFrames <= kRainBlobMaxPersistFrames &&
+        boxH > 0 &&
+        (boxW / boxH) < (1.0 / kRainBlobMinAspect)) {
+      return null;
+    }
+
+    // V5.5: In rain, require more persistence frames before alerting to
+    // suppress transient rain artifacts while still catching real objects.
+    final vehiclePersistThreshold = _rainHint
+        ? kRainEventMinPersistFrames
+        : _weatherDegradedHint
         ? _weatherDegradedMinPersistFrames
         : kEventMinPersistFrames;
-    final personPersistThreshold = _weatherDegradedHint
+    final personPersistThreshold = _rainHint
+        ? kRainEventMinPersistFrames
+        : _weatherDegradedHint
         ? _weatherDegradedPersonMinPersistFrames
         : kEventPersonMinPersistFrames;
 

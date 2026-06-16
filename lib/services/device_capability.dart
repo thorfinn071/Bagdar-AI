@@ -39,6 +39,29 @@ class DeviceInfo {
     if (b == 'ITEL' || b == 'INFINIX' || b == 'TECNO') return true;
     return false;
   }
+
+  bool get isEmulator {
+    final b = brand.toLowerCase();
+    final m = model.toLowerCase();
+    final h = hardware.toLowerCase();
+    final mf = manufacturer.toLowerCase();
+    final d = device.toLowerCase();
+    return b.contains('generic') ||
+        b.contains('google_sdk') ||
+        b.contains('emulator') ||
+        b.contains('sdk_gphone') ||
+        m.contains('generic') ||
+        m.contains('google_sdk') ||
+        m.contains('emulator') ||
+        m.contains('sdk_gphone') ||
+        h.contains('goldfish') ||
+        h.contains('ranchu') ||
+        h.contains('emulator') ||
+        mf.contains('genymotion') ||
+        (mf.contains('google') && mf.contains('sdk')) ||
+        d.contains('generic') ||
+        d.contains('sdk_gphone');
+  }
 }
 
 enum DepthTier { hardware, ncnnVulkan, ncnnCpu, focalLength }

@@ -218,6 +218,8 @@ class NcnnDepthProvider implements DepthProvider {
       }
       if (outputClass == _OutputClass.degenerate) {
         _lastOutputConfidence = 0;
+        // Safety audit 2026-06 fix A-4: degenerate counts toward session-disable
+        _recordFailure();
         return const [];
       }
       _lastOutputConfidence = _computeOutputConfidence(flat);
@@ -230,6 +232,8 @@ class NcnnDepthProvider implements DepthProvider {
       );
     } catch (e) {
       debugPrint('NcnnDepthProvider: analyze failed ($e)');
+      // Safety audit 2026-06 fix A-4: exception counts toward session-disable
+      _recordFailure();
       return const [];
     } finally {
       totalSw.stop();
@@ -253,6 +257,8 @@ class NcnnDepthProvider implements DepthProvider {
       final rowStart = sy * rowStride;
       for (int dx = 0; dx < _inputSize; dx++) {
         final sx = ((dx * srcWidth) ~/ _inputSize).clamp(0, srcWidth - 1);
+        // Safety audit 2026-06 fix A-3: bounds check before array access
+        if (rowStart + sx >= yBytes.length) continue;
         _lumaBuffer[outIdx++] = yBytes[rowStart + sx];
       }
     }
