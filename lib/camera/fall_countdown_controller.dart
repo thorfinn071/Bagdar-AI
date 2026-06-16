@@ -288,16 +288,27 @@ class FallCountdownController extends ChangeNotifier {
     final delivered = result == SosResult.sent ||
         result == SosResult.sentFallback ||
         result == SosResult.sentWithoutLocation;
+    // E-2: composerOpened / dialerOpened mean the user still has to take
+    // manual action — do NOT mark the SOS as sent or start the lockout.
     if (delivered) onSosSent?.call();
+    // E-2: guide the user to complete the send / call manually.
+    if (result == SosResult.composerOpened ||
+        result == SosResult.dialerOpened) {
+      HapticService.vibrate(const [0, 200, 100, 200]);
+    }
     final msg = switch (result) {
       SosResult.sent => S.get('sos_fall_sent'),
       SosResult.sentFallback =>
         '${S.get('sos_112_fallback')} ${S.get('sos_sent')}',
+      // E-1: native SMS unconfirmed; sms:// fallback was launched.
+      SosResult.pendingEnqueued => S.get('sos_queued'),
       SosResult.sentWithoutLocation => S.get('sos_sent_no_location'),
       SosResult.noLocation => S.get('sos_no_location'),
       SosResult.launchFailed => S.get('sos_launch_failed'),
       SosResult.noContact => S.get('sos_no_contact'),
       SosResult.error => S.get('sos_error'),
+      SosResult.composerOpened => S.get('sos_composer_opened'),
+      SosResult.dialerOpened => S.get('sos_dialer_opened'),
     };
     tts.say(msg, SpeechPriority.critical, pan: 0.0);
   }

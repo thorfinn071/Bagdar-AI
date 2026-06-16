@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sensors_plus/sensors_plus.dart';
+import 'package:flutter_native_contact_picker/flutter_native_contact_picker.dart';
 
 import 'models/app_mode.dart';
 import 'models/strings.dart';
@@ -39,6 +40,7 @@ import 'services/motion_prealert.dart'
     show MotionIntrusionEvent, MotionIntrusionSide;
 import 'services/traffic_light_analyzer.dart' show TrafficLightKind;
 import 'utils/blur_detector.dart';
+import 'utils/alert_filter.dart';
 import 'utils/depth_hazard.dart';
 import 'utils/distance_utils.dart';
 import 'services/fall_detector.dart' show MotionState;
@@ -63,6 +65,8 @@ import 'screens/language_packs_screen.dart';
 import 'screens/settings_qr_export_screen.dart';
 import 'screens/settings_qr_import_screen.dart';
 import 'services/language_pack_manager.dart';
+import 'theme/bagdar_theme.dart';
+import 'theme/bagdar_tokens.dart';
 
 class AiCameraScreen extends StatefulWidget {
   final AppMode? initialMode;
@@ -91,7 +95,10 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   DateTime _lastUiAt = DateTime.fromMillisecondsSinceEpoch(0);
 
   int _imgW = 0, _imgH = 0;
+  double _viewportAspect = 1.0;
   bool _isCalibrated = false;
+  bool _isCalibrating = false;
+  Timer? _calibrationTimeoutTimer;
   bool _useHardwareDepthMode = false;
   final bool _exclusiveDepthTransition = false;
   bool _wantOcr = false;
@@ -129,6 +136,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   static const double _shakeMagnitudeThreshold = 25.0;
   static const Duration _shakeWindow = Duration(milliseconds: 1500);
   DateTime _lastShakeSosAt = DateTime.fromMillisecondsSinceEpoch(0);
+
+  bool _sosContactPromptedThisSession = false;
+  Timer? _nativeWatchdogTimer;
 
   late final FallCountdownController _fallCountdown;
   late final VoiceCommandDispatcher _voiceDispatcher;
@@ -169,6 +179,11 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   static const Duration _kStallTtsMinDuration = Duration(seconds: 4);
   DateTime _initCompletedAt = DateTime.fromMillisecondsSinceEpoch(0);
 
+  /// V4.2: Timestamp of the most recent audio-route interruption (Bluetooth
+  /// disconnect).  Used to decide whether a critical alert needs to be
+  /// replayed after the route stabilises.
+  DateTime? _routeChangeAt;
+
   
   AppMode? _lastObservedMode;
 
@@ -194,6 +209,17 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   static const Duration _kWeatherDepthHeartbeatInterval =
       Duration(seconds: 60);
 
+  // Safety audit 2026-06 fix A-1: YOLO unavailability tracking
+  Timer? _yoloRetryTimer;
+  DateTime _yoloDownSince = DateTime.fromMillisecondsSinceEpoch(0);
+  DateTime _lastYoloUnavailWarnAt = DateTime.fromMillisecondsSinceEpoch(0);
+  static const Duration _kYoloDetectorWarnDelay = Duration(seconds: 10);
+  static const Duration _kYoloRetryInterval = Duration(seconds: 30);
+  static const Duration _kYoloDetectorWarnCooldown = Duration(seconds: 30);
+
+  bool _cameraPermissionDenied = false;
+  Timer? _cameraPermissionTimer;
+
   @override
   void initState() {
     super.initState();
@@ -203,6 +229,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     
     
     _depthController.onStatusChanged = _onDepthStatusChanged;
+    // Safety audit 2026-06 fix A-1: subscribe to YOLO unavailability
+    _models.onYoloUnavailable = _onYoloUnavailable;
     _vm.throttler.onMidasPauseChanged = _onMidasPauseChanged;
     _lifecycle = CameraLifecycleController(
       host: this,
@@ -343,6 +371,12 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _startConnectivityKkPromptListener();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _viewportAspect = MediaQuery.sizeOf(context).aspectRatio;
+  }
+
   void _onTracksUpdatedForWatchdog() {
     if (_vm.tracksNotifier.value.isNotEmpty) {
       _misalignmentWatchdog.noteDetection();
@@ -455,7 +489,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
   @override
   void dispose() {
+    _stopNativeWatchdog();
     WidgetsBinding.instance.removeObserver(this);
+    _cameraPermissionTimer?.cancel();
     _heartbeatTimer?.cancel();
     _pitchBlackHeartbeatTimer?.cancel();
     _resourceLogTimer?.cancel();
@@ -467,6 +503,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _stallWatchdog.stop();
     _indoorPollTimer?.cancel();
     _misalignmentTickTimer?.cancel();
+    _calibrationTimeoutTimer?.cancel();
+    _yoloRetryTimer?.cancel();
     _vm.tracksNotifier.removeListener(_onTracksUpdatedForWatchdog);
     _vm.sos.cancelQueuedFollowUp();
     _lifecycle.dispose();
@@ -514,6 +552,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   @override
   void onBackgroundEntered() {
     _stallWatchdog.stop();
+    _stopNativeWatchdog();
     _indoorPollTimer?.cancel();
     _indoorPollTimer = null;
   }
@@ -521,6 +560,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   @override
   void onForegroundResumed() {
     _stallWatchdog.start();
+    if (_isCameraReady) {
+      _startNativeWatchdog();
+    }
   }
 
   Future<void> _initAll() async {
@@ -549,11 +591,64 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         }
       };
 
+      // V5.4: Proactive battery remaining-time announcements at 50/30/15 %.
+      _vm.battery.onProactiveAnnounce = (pct) {
+        if (!mounted || !Settings.instance.batteryAnnounce) return;
+        final msg = switch (pct) {
+          kBattery50AnnounceThreshold => S.get('battery_50_remaining'),
+          kBattery30AnnounceThreshold => S.get('battery_30_warning'),
+          _ => S.get('battery_15_critical'),
+        };
+        _vm.tts.say(msg, SpeechPriority.warning, pan: 0.0);
+      };
+
+      // V1.2: Announce when the user starts running to prompt them to slow down.
+      _vm.onMotionStateChanged = (state) {
+        if (!mounted) return;
+        if (state == MotionState.running) {
+          _vm.tts.say(
+            S.get('running_detected'),
+            SpeechPriority.warning,
+            pan: 0.0,
+          );
+        }
+      };
+
       _vm.setStatus('Инициализация...');
       await _vm.init();
 
       final granted = await _requestCameraPermission();
-      if (!granted) return;
+      if (!granted) {
+        if (mounted) {
+          setState(() {
+            _cameraPermissionDenied = true;
+          });
+          _speakCameraPermissionDeniedLoop();
+        }
+        return;
+      } else {
+        if (mounted) {
+          setState(() {
+            _cameraPermissionDenied = false;
+          });
+        }
+      }
+
+      // F-18: Proactive SOS Contact Check on first run
+      if ((_vm.sos.contactNumber ?? '').isEmpty &&
+          !Settings.instance.sosContactPrompted &&
+          !_sosContactPromptedThisSession) {
+        _sosContactPromptedThisSession = true;
+        await Settings.instance.setSosContactPrompted(true);
+        _vm.tts.say(
+          S.get('sos_setup_prompt_tts'),
+          SpeechPriority.info,
+          pan: 0.0,
+        );
+        _showSosContactDialog();
+      }
+
+      _startNativeWatchdog();
 
       _vm.thermal.onChanged = _handleThermalChanged;
       _handleThermalChanged(_vm.thermal.current);
@@ -675,10 +770,31 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         if (elapsed < const Duration(seconds: 15)) return;
         _fieldLog.logTtsEvent('audio_interrupted');
         _vm.earcon.play(Earcon.cameraBlocked);
+        _routeChangeAt = DateTime.now();
       };
       _vm.tts.onAudioRouteResumed = () {
         _fieldLog.logTtsEvent('audio_resumed');
-        _vm.tts.say(S.get('audio_resumed'), SpeechPriority.info, pan: 0.0);
+        // V4.2: Insert 50 ms silence so the audio path can stabilize, then
+        // replay any critical alert that was in progress or queued during the
+        // route change.  The "audio resumed" confirmation comes last so it
+        // doesn't bury the hazard.
+        Future<void>.delayed(const Duration(milliseconds: 50)).then((_) {
+          if (!mounted) return;
+          final interrupted = _routeChangeAt;
+          final lastCritical = _vm.alertMgr.lastCriticalAt;
+          if (interrupted != null &&
+              lastCritical.isAfter(interrupted.subtract(
+                const Duration(milliseconds: 300),
+              ))) {
+            _vm.tts.replayLastCritical();
+          }
+          _vm.tts.say(
+            S.get('audio_resumed'),
+            SpeechPriority.info,
+            pan: 0.0,
+          );
+        });
+        _routeChangeAt = null;
       };
       _vm.tts.onTtsStall = () {
         
@@ -749,7 +865,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       _vm.setStatus(S.get('system_ready'));
       _vm.tts.say(S.get('system_ready'), SpeechPriority.info, pan: 0.0);
       _initCompletedAt = DateTime.now();
-      _maybePlayFirstRunAudioTour();
     } catch (e) {
       _fieldLog.logError('initAll', e.toString());
       _vm.setStatus('Сбой: $e');
@@ -773,15 +888,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         _vm.earcon.play(Earcon.cameraBlocked);
       } catch (_) {}
     }
-  }
-
-  void _maybePlayFirstRunAudioTour() {
-    if (Settings.instance.audioTourSeen) return;
-    Future<void>.delayed(const Duration(seconds: 3), () async {
-      if (!mounted) return;
-      _vm.showHelp();
-      await Settings.instance.setAudioTourSeen(true);
-    });
   }
 
   Duration _currentHeartbeatInterval() {
@@ -943,17 +1049,27 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       SosResult.sent => S.get('sos_sent'),
       SosResult.sentFallback =>
         '${S.get('sos_112_fallback')} ${S.get('sos_sent')}',
+      // E-1: native SMS unconfirmed; sms:// fallback was launched.
+      SosResult.pendingEnqueued => S.get('sos_queued'),
       SosResult.sentWithoutLocation => S.get('sos_sent_no_location'),
       SosResult.noContact => S.get('sos_no_contact'),
       SosResult.noLocation => S.get('sos_no_location'),
       SosResult.launchFailed => S.get('sos_launch_failed'),
       SosResult.error => S.get('sos_error'),
+      // E-2: guide the user to complete the action manually; no lockout.
+      SosResult.composerOpened => S.get('sos_composer_opened'),
+      SosResult.dialerOpened => S.get('sos_dialer_opened'),
     };
     _fieldLog.logSosTrigger(source, result: result.name);
     _vm.tts.say(msg, SpeechPriority.critical, pan: 0.0);
+    // E-2: additional haptic cue to draw attention to the manual step.
+    if (result == SosResult.composerOpened ||
+        result == SosResult.dialerOpened) {
+      HapticService.vibrate(const [0, 200, 100, 200]);
+    }
   }
 
-  void _startVoiceCommand() async {
+  Future<void> _startVoiceCommand() async {
     FeatureUsageTracker.instance.increment(
       FeatureUsageKeys.gesture('long_press'),
     );
@@ -961,7 +1077,17 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     
     
     _vm.tts.say(S.get('voice_listening'), SpeechPriority.info, pan: 0.0);
-    await _vm.voice.startListening();
+    try {
+      await _vm.voice.startListening();
+    } catch (e) {
+      _fieldLog.logError('startVoiceCommand', e.toString());
+      _vm.earcon.play(Earcon.fail);
+      _vm.tts.say(
+        S.get('voice_not_available'),
+        SpeechPriority.warning,
+        pan: 0.0,
+      );
+    }
   }
 
   /// Quick Shelf is hidden when the camera surface needs to stay
@@ -1310,7 +1436,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _frameCount++;
     _imgW = image.width;
     _imgH = image.height;
-    final viewportAspect = MediaQuery.sizeOf(context).aspectRatio;
 
     final frameSw = Stopwatch()..start();
 
@@ -1334,6 +1459,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           weatherDegraded: _vm.weatherGate.degraded,
           aeTransitioning: true,
           indoor: _vm.isIndoor,
+          lowLight: _vm.weatherGate.degraded,
         );
         if (aeMotionEvent != null) {
           _handleMotionIntrusion(aeMotionEvent);
@@ -1378,6 +1504,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         weatherDegraded: _vm.weatherGate.degraded,
         aeTransitioning: false,
         indoor: _vm.isIndoor,
+        rainActive: _vm.weatherGate.degraded,
+        lowLight: _vm.weatherGate.degraded,
       );
       if (event != null) {
         _handleMotionIntrusion(event);
@@ -1398,6 +1526,24 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         now.difference(_lastDetectAt) >= currentDetectInterval;
 
     if (!shouldRunDetect || _isDetecting || !_models.yoloLoaded) {
+      // Safety audit 2026-06 fix A-1: warn if YOLO is down in street/cane mode
+      if (!_models.yoloLoaded &&
+          (_vm.mode == AppMode.street || _vm.mode == AppMode.cane)) {
+        final warnNow = DateTime.now();
+        if (_yoloDownSince.millisecondsSinceEpoch == 0) {
+          _yoloDownSince = warnNow;
+        } else if (warnNow.difference(_yoloDownSince) >=
+                _kYoloDetectorWarnDelay &&
+            warnNow.difference(_lastYoloUnavailWarnAt) >=
+                _kYoloDetectorWarnCooldown) {
+          _lastYoloUnavailWarnAt = warnNow;
+          _vm.tts.say(
+            S.get('yolo_detector_not_responding'),
+            SpeechPriority.warning,
+            pan: 0.0,
+          );
+        }
+      }
       final predictedTracks = _vm.tracker.predict();
       if (predictedTracks.isNotEmpty) {
         final uiNow = DateTime.now();
@@ -1412,6 +1558,10 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
     _isDetecting = true;
     _lastDetectAt = now;
+    // Safety audit 2026-06 fix A-1: YOLO is running — reset downtime tracker
+    if (_yoloDownSince.millisecondsSinceEpoch != 0) {
+      _yoloDownSince = DateTime.fromMillisecondsSinceEpoch(0);
+    }
 
     try {
       if (_wantOcr) {
@@ -1446,6 +1596,14 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
       if (!mounted) return;
 
+      // V4.4: Yield to the event loop after blocking YOLO inference so that
+      // any TTS completion callbacks, haptic timing events, or audio-route
+      // change notifications queued during inference can execute before we
+      // proceed to alert generation.  45 ms of inference on a Dart-blocked
+      // isolate can otherwise delay barge-interrupt delivery.
+      await Future<void>.delayed(Duration.zero);
+      if (!mounted) return;
+
       
       final yPlaneBytes = planeBytes.isNotEmpty ? planeBytes[0] : null;
       final yStride =
@@ -1458,8 +1616,43 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         yRowStride: yStride,
       );
       final inferenceMs = frameSw.elapsedMilliseconds;
+      if (_isCalibrating) {
+        final personDet = dets.cast<RawDet?>().firstWhere(
+          (d) => d != null && d.label == 'person',
+          orElse: () => null,
+        );
+        if (personDet != null) {
+          _isCalibrating = false;
+          _calibrationTimeoutTimer?.cancel();
+          unawaited(calibrateFocalLength(
+            'person',
+            personDet.x1,
+            personDet.y1,
+            personDet.x2,
+            personDet.y2,
+            2.0,
+          ).then((_) async {
+            await Settings.instance.setIsCalibrated(true);
+            _isCalibrated = true;
+            _vm.tracker.isCalibrated = true;
+            await _vm.earcon.play(Earcon.success);
+            _vm.tts.say(
+              S.get('calib_saved'),
+              SpeechPriority.warning,
+              barge: true,
+            );
+            if (mounted) setState(() {});
+          }));
+        }
+      }
+
       _vm.tracker.userWalking =
           _vm.fallDetector.motionState != MotionState.stationary;
+      // V1.4: Pass calibration and depth state to the tracker so it can
+      // apply looser approach thresholds when no cross-checks are available.
+      _vm.tracker.isCalibrated = _isCalibrated;
+      _vm.tracker.depthProviderAvailable =
+          _models.depthProvider?.isReady ?? false;
       final tracks = _vm.tracker.update(dets, _imgW, _imgH, now);
       _fieldLog.logDetection(
         frameCount: _frameCount,
@@ -1479,7 +1672,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         tracks: tracks,
         imgW: _imgW,
         imgH: _imgH,
-        viewportAspect: viewportAspect,
+        viewportAspect: _viewportAspect,
         now: now,
         mode: _vm.mode,
         isCalibrated: _isCalibrated,
@@ -1554,6 +1747,13 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
       if (_depthController.shouldRun(now) && !_stallWatchdog.isWarned) {
         unawaited(_processDepthAnalysis(image, now));
+      } else if (_vm.throttler.isGroundSafetyMidasDue(now) &&
+          !_stallWatchdog.isWarned) {
+        // V2.1: Ground-safety MiDaS burst at critical thermal.  Even when the
+        // full MiDaS pipeline is paused by thermal throttling, run one pass
+        // focused on the ground zone to preserve curb / step-down detection.
+        _vm.throttler.markGroundSafetyMidasDone(now);
+        unawaited(_processDepthAnalysis(image, now));
       }
     } finally {
       _finalizeFramePerf(now: now, frameSw: frameSw);
@@ -1587,21 +1787,18 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           ? SpeechPriority.critical
           : SpeechPriority.warning;
       
-      
-      _vm.tts.say(
-        S.alert(hazardKey),
-        priority,
+      _vm.alertMgr.handleDepthHazard(
+        text: S.alert(hazardKey),
+        priority: priority,
         pan: hazard.pan,
-        barge: alert.isCritical,
+        category: AlertCategory.obstacleClose,
+        now: now,
       );
       _fieldLog.logDepthHazard(
         type: hazard.type.name,
         score: hazard.midasScore,
         coverage: hazard.coverage,
       );
-      if (alert.isCritical) {
-        HapticService.vibrate(const [0, 300, 120, 300, 120, 300]);
-      }
     }
   }
 
@@ -1642,6 +1839,23 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   }
 
   
+  // Safety audit 2026-06 fix A-1: handle permanent YOLO failure
+  void _onYoloUnavailable() {
+    if (!mounted) return;
+    _yoloDownSince = DateTime.now();
+    _lastYoloUnavailWarnAt = DateTime.now();
+    _vm.tts.say(S.get('yolo_unavailable'), SpeechPriority.critical, pan: 0.0);
+    _yoloRetryTimer?.cancel();
+    _yoloRetryTimer = Timer.periodic(_kYoloRetryInterval, (_) {
+      if (!mounted || _models.yoloLoaded) {
+        _yoloRetryTimer?.cancel();
+        _yoloRetryTimer = null;
+        return;
+      }
+      _vm.tts.say(S.get('yolo_unavailable'), SpeechPriority.critical, pan: 0.0);
+    });
+  }
+
   void _onMidasPauseChanged(bool paused) {
     if (!mounted) return;
     final now = DateTime.now();
@@ -1783,8 +1997,18 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       if (!kAlertClassWhitelist.contains(label)) continue;
       final conf = (r['confidence'] as num?)?.toDouble() ?? 0.0;
       
-      
-      if (conf < minConfFor(label)) continue;
+      // V5.2: In low-light conditions, lower the confidence floor for
+      // safety-critical classes (vehicles, pedestrians) to reduce missed
+      // detections at the cost of slightly more false positives.
+      final isLowLight = _vm.weatherGate.degraded;
+      final isSafetyCriticalClass = isVehicle(label) || label == 'person';
+      final confFloor = (isLowLight && isSafetyCriticalClass)
+          ? math.max(
+              0.20,
+              minConfFor(label) - kLowLightClassMinConfReduction,
+            )
+          : minConfFor(label);
+      if (conf < confFloor) continue;
       final box = r['box'] as List<dynamic>?;
       if (box == null || box.length < 4) continue;
       final x1 = (box[0] as num).toDouble();
@@ -1835,17 +2059,43 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     return out;
   }
 
+  ThermalSeverity _lastAnnouncedThermalSeverity = ThermalSeverity.normal;
+
   void _handleThermalChanged(ThermalReadings readings) {
     if (!mounted) return;
+    final prevSeverity = _vm.throttler.effectiveSeverity;
     _vm.throttler.setThermal(readings);
-    
-    
+    final newSeverity = _vm.throttler.effectiveSeverity;
+
     _vm.winterMode.noteThermalReading(readings);
-    unawaited(_models.adjustForThermal(_vm.throttler.effectiveSeverity));
+    unawaited(_models.adjustForThermal(newSeverity));
     _fieldLog.logThermal(
-      _vm.throttler.effectiveSeverity.name,
+      newSeverity.name,
       detectIntervalMs: _detectInterval.inMilliseconds,
     );
+
+    if (newSeverity == prevSeverity) return;
+
+    // V5.1 / V2.1: Tier-specific TTS on escalation.
+    if (newSeverity.index > prevSeverity.index &&
+        newSeverity != _lastAnnouncedThermalSeverity) {
+      _lastAnnouncedThermalSeverity = newSeverity;
+      if (newSeverity == ThermalSeverity.warm) {
+        // V5.1: Proactive warning to move to shade.
+        _vm.tts.say(
+          S.get('thermal_warm_move_to_shade'),
+          SpeechPriority.info,
+          pan: 0.0,
+        );
+      } else if (newSeverity == ThermalSeverity.critical) {
+        // V2.1: Explicitly warn that ground-hazard detection is reduced.
+        _vm.tts.say(
+          S.get('thermal_ground_hazard_reduced'),
+          SpeechPriority.warning,
+          pan: 0.0,
+        );
+      }
+    }
   }
 
   void _recomputeCadence() {
@@ -1906,9 +2156,10 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
   void _openSettings() {
     FeatureUsageTracker.instance.increment(FeatureUsageKeys.settingsOpened);
+    final colors = BagdarTheme.colorsOf(context);
     showModalBottomSheet<void>(
       context: context,
-      backgroundColor: Colors.grey[900],
+      backgroundColor: colors.surfaceElevated,
       isScrollControlled: true,
       builder: (_) => SingleChildScrollView(
         child: CameraSettingsSheet(
@@ -2016,7 +2267,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
             _vm.tts.say(S.get('ocr_reading'), SpeechPriority.info, pan: 0.0);
           },
           onCalibrationTap: () {
-            _vm.tts.say(S.get('calib_aim'), SpeechPriority.info, pan: 0.0);
+            _startCalibration();
           },
           onEditSosContact: () => _showSosContactDialog(),
           onScanLeft: () =>
@@ -2051,6 +2302,19 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         ),
       ),
     );
+  }
+
+  void _startCalibration() {
+    _vm.tts.say(S.get('calib_aim'), SpeechPriority.warning, barge: true);
+    setState(() => _isCalibrating = true);
+    _calibrationTimeoutTimer?.cancel();
+    _calibrationTimeoutTimer = Timer(const Duration(seconds: 12), () {
+      if (mounted && _isCalibrating) {
+        setState(() => _isCalibrating = false);
+        _vm.earcon.play(Earcon.fail);
+        _vm.tts.say(S.get('calib_no_person'), SpeechPriority.warning, barge: true);
+      }
+    });
   }
 
   void _openSettingsQrExport() {
@@ -2167,37 +2431,87 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     });
   }
 
+  void _startNativeWatchdog() {
+    _nativeWatchdogTimer?.cancel();
+    _nativeWatchdogTimer = Timer.periodic(const Duration(seconds: 2), (_) {
+      try {
+        const MethodChannel('bagdar/watchdog').invokeMethod('ping');
+      } catch (_) {}
+    });
+    try {
+      const MethodChannel('bagdar/watchdog').invokeMethod('ping');
+    } catch (_) {}
+  }
+
+  void _stopNativeWatchdog() {
+    _nativeWatchdogTimer?.cancel();
+    _nativeWatchdogTimer = null;
+    try {
+      const MethodChannel('bagdar/watchdog').invokeMethod('stop');
+    } catch (_) {}
+  }
+
   void _showSosContactDialog() {
     final controller = TextEditingController(text: _vm.sos.contactNumber ?? '');
+    final colors = BagdarTheme.colorsOf(context);
     showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: Colors.grey[900],
+        backgroundColor: colors.surfaceElevated,
         title: Text(
           S.get('sos_settings'),
-          style: const TextStyle(color: Colors.white),
+          style: BagdarTypography.title.copyWith(color: colors.textPrimary),
         ),
-        content: TextField(
-          controller: controller,
-          keyboardType: TextInputType.phone,
-          style: const TextStyle(color: Colors.white),
-          decoration: const InputDecoration(
-            hintText: '+7 XXX XXX XX XX',
-            hintStyle: TextStyle(color: Colors.white30),
-            enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.white30),
+        content: Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: controller,
+                keyboardType: TextInputType.phone,
+                style:
+                    BagdarTypography.body.copyWith(color: colors.textPrimary),
+                decoration: InputDecoration(
+                  hintText: '+7 XXX XXX XX XX',
+                  hintStyle: BagdarTypography.body.copyWith(
+                    color: colors.textSecondary.withValues(alpha: 0.6),
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: colors.divider),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: colors.accentPrimary,
+                      width: BagdarBorders.thin,
+                    ),
+                  ),
+                ),
+              ),
             ),
-            focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.cyanAccent),
+            IconButton(
+              icon: Icon(Icons.contact_phone, color: colors.accentPrimary),
+              onPressed: () async {
+                try {
+                  final picker = FlutterNativeContactPicker();
+                  final contact = await picker.selectContact();
+                  if (contact != null &&
+                      contact.phoneNumbers != null &&
+                      contact.phoneNumbers!.isNotEmpty) {
+                    controller.text = contact.phoneNumbers!.first;
+                  }
+                } catch (e) {
+                  debugPrint('Error picking contact: $e');
+                }
+              },
             ),
-          ),
+          ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
             child: Text(
               S.get('cancel'),
-              style: const TextStyle(color: Colors.white54),
+              style:
+                  BagdarTypography.body.copyWith(color: colors.textSecondary),
             ),
           ),
           TextButton(
@@ -2214,7 +2528,10 @@ class _AiCameraScreenState extends State<AiCameraScreen>
             },
             child: Text(
               S.get('save'),
-              style: const TextStyle(color: Colors.cyanAccent),
+              style: BagdarTypography.body.copyWith(
+                color: colors.accentPrimary,
+                fontWeight: BagdarTypography.weightBold,
+              ),
             ),
           ),
         ],
@@ -2223,10 +2540,134 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   }
 
 
+  void _speakCameraPermissionDeniedLoop() {
+    _cameraPermissionTimer?.cancel();
+    _vm.tts.say(
+      S.get('camera_perm_recovery_tts'),
+      SpeechPriority.critical,
+      pan: 0.0,
+    );
+    _cameraPermissionTimer = Timer.periodic(const Duration(seconds: 15), (timer) {
+      if (mounted && _cameraPermissionDenied) {
+        _vm.tts.say(
+          S.get('camera_perm_recovery_tts'),
+          SpeechPriority.critical,
+          pan: 0.0,
+        );
+      } else {
+        timer.cancel();
+      }
+    });
+  }
+
+  Future<void> _retryCameraPermission() async {
+    _cameraPermissionTimer?.cancel();
+    final granted = await _requestCameraPermission();
+    if (granted) {
+      if (mounted) {
+        setState(() {
+          _cameraPermissionDenied = false;
+        });
+      }
+      unawaited(_initAll());
+    } else {
+      _speakCameraPermissionDeniedLoop();
+    }
+  }
+
+  Widget _buildPermissionDeniedView() {
+    final colors = BagdarTheme.colorsOf(context);
+    return Scaffold(
+      backgroundColor: colors.surfaceBg,
+      body: SafeArea(
+        child: Semantics(
+          liveRegion: true,
+          label: S.get('camera_perm_recovery_tts'),
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: _retryCameraPermission,
+            onDoubleTap: openAppSettings,
+            child: Padding(
+              padding: const EdgeInsets.all(32),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(
+                    Icons.no_photography,
+                    color: colors.stateDanger,
+                    size: 56,
+                  ),
+                  const SizedBox(height: BagdarSpacing.l),
+                  Text(
+                    S.get('camera_perm_title'),
+                    style: BagdarTypography.title.copyWith(
+                      color: colors.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: BagdarSpacing.m),
+                  Text(
+                    S.get('camera_perm_recovery_tts'),
+                    style: BagdarTypography.body.copyWith(
+                      color: colors.textSecondary,
+                    ),
+                  ),
+                  const Spacer(),
+                  ElevatedButton(
+                    onPressed: openAppSettings,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: colors.accentPrimary,
+                      foregroundColor: colors.accentOnPrimary,
+                      minimumSize:
+                          const Size.fromHeight(BagdarSpacing.tapMinimum),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(BagdarRadius.card),
+                      ),
+                    ),
+                    child: Text(
+                      S.get('settings'),
+                      style: BagdarTypography.body.copyWith(
+                        fontWeight: BagdarTypography.weightHeavy,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  TextButton(
+                    onPressed: _retryCameraPermission,
+                    style: TextButton.styleFrom(
+                      foregroundColor: colors.textSecondary,
+                      minimumSize:
+                          const Size.fromHeight(BagdarSpacing.tapMinimum),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(BagdarRadius.card),
+                        side: BorderSide(
+                          color: colors.divider,
+                          width: BagdarBorders.hairline,
+                        ),
+                      ),
+                    ),
+                    child: Text(
+                      S.get('onb_btn_continue'),
+                      style: BagdarTypography.caption,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_cameraPermissionDenied) {
+      return _buildPermissionDeniedView();
+    }
     final ctrl = _controller;
     final ready = _isCameraReady && ctrl != null && ctrl.value.isInitialized;
+    final colors = BagdarTheme.colorsOf(context);
 
     return Listener(
       onPointerDown: _handlePointerDown,
@@ -2321,7 +2762,10 @@ class _AiCameraScreenState extends State<AiCameraScreen>
               if (_fallCountdown.active)
                 Positioned.fill(
                   child: Container(
-                    color: Colors.red.withValues(alpha: 0.3),
+                    color: BagdarOverlay.statusFill(
+                      BagdarStatusLevel.danger,
+                      colors,
+                    ).withValues(alpha: 0.3),
                     child: Center(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -2329,24 +2773,23 @@ class _AiCameraScreenState extends State<AiCameraScreen>
                           const Icon(
                             Icons.warning_amber,
                             size: 60,
-                            color: Colors.white,
+                            color: BagdarOverlay.foreground,
                           ),
-                          const SizedBox(height: 12),
+                          const SizedBox(height: BagdarSpacing.m),
                           Text(
                             '${S.get('sos_fall_countdown')} ${_fallCountdown.secondsLeft} ${S.get('sos_fall_seconds')}',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
+                            style: BagdarTypography.title.copyWith(
+                              color: BagdarOverlay.foreground,
+                              shadows: BagdarOverlay.textShadows,
                             ),
                             textAlign: TextAlign.center,
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: BagdarSpacing.s),
                           Text(
                             S.get('sos_fall_cancelled'),
-                            style: const TextStyle(
-                              color: Colors.white70,
-                              fontSize: 14,
+                            style: BagdarTypography.caption.copyWith(
+                              color: BagdarOverlay.foregroundMuted,
+                              shadows: BagdarOverlay.textShadows,
                             ),
                             textAlign: TextAlign.center,
                           ),
@@ -2402,7 +2845,10 @@ class _AiCameraScreenState extends State<AiCameraScreen>
                   child: Row(
                     children: [
                       _FieldMarkerButton(
-                        color: Colors.redAccent,
+                        color: BagdarOverlay.statusFill(
+                          BagdarStatusLevel.danger,
+                          colors,
+                        ),
                         icon: Icons.cancel,
                         label: 'FP',
                         onActivate: () {
@@ -2412,7 +2858,10 @@ class _AiCameraScreenState extends State<AiCameraScreen>
                       ),
                       const SizedBox(width: 12),
                       _FieldMarkerButton(
-                        color: Colors.amber,
+                        color: BagdarOverlay.statusFill(
+                          BagdarStatusLevel.caution,
+                          colors,
+                        ),
                         icon: Icons.warning,
                         label: 'FN',
                         onActivate: () {
@@ -2550,11 +2999,14 @@ class _FieldMarkerButton extends StatelessWidget {
       
       onLongPress: onActivate,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: const EdgeInsets.symmetric(
+          horizontal: BagdarSpacing.m,
+          vertical: BagdarSpacing.s,
+        ),
         decoration: BoxDecoration(
           color: color.withValues(alpha: 0.25),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: color, width: 1.5),
+          borderRadius: BorderRadius.circular(BagdarRadius.card),
+          border: Border.all(color: color, width: BagdarBorders.thin),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

@@ -145,13 +145,20 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'onb_welcome_tts':
         'Добро пожаловать в Bagdar. Выберите режим. '
         'Свайп вверх или вниз — режим, двойной тап — выбрать.',
+    'onb_welcome_intro_tts':
+        'Здравствуйте. Багдар — это голосовой помощник для незрячих, помогающий ориентироваться в пространстве и избегать препятствий. Начнем настройку. Выберите язык. Свайп вверх или вниз — изменить язык. Двойной тап — выбрать. Или назовите язык вслух: Русский, Казахский или Английский.',
+    'onb_dominant_hand_tts':
+        'Шаг первый. Выберите ведущую руку. Это влияет на расположение жестов на экране. Свайп вверх или вниз — изменить выбор. Двойной тап — подтвердить. Или скажите вслух: Правая, или Левая.',
+    'onb_mode_tts':
+        'Шаг второй. Выберите режим работы по умолчанию. Свайп вверх или вниз — изменить режим. Двойной тап — подтвердить. Или скажите: Улица, Трость, или Сканирование.',
     'onb_perm_tts':
-        'Разрешение камеры. Двойной тап — открыть запрос системы. '
-        'Найдите кнопку Разрешить.',
+        'Разрешение камеры. Двойной тап — открыть запрос системы. Найдите кнопку Разрешить. Или скажите вслух: Разрешить.',
     'onb_calib_tts':
-        'Калибровка. Можно пропустить. '
-        'Двойной тап — продолжить без калибровки.',
+        'Калибровка расстояния. Для повышения точности рекомендуется калибровка. Вы сможете выполнить её в настройках, наведя камеру на человека в двух метрах от вас. Двойной тап, чтобы продолжить.',
     'onb_ready_tts': 'Всё готово. Двойной тап — начать.',
+    'onb_hand_right': 'Правая рука',
+    'onb_hand_left': 'Левая рука',
+    'onb_hand_changed': 'Ведущая рука изменена на {hand}',
     'onb_secondary_aid_tts':
         'Bagdar предупреждает о препятствиях, но может их пропустить. '
         'Продолжайте использовать белую трость или собаку-поводыря. '
@@ -161,7 +168,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Bagdar для незрячих. Управление жестами. '
         'Один тап — повторить. Двойной тап — продолжить. '
         'Свайп вправо — следующий шаг, влево — назад. '
-        'Долгое нажатие — смена языка.',
+        'Долгое нажатие — смена языка. '
+        'Если рядом есть близкий человек, рекомендуется передать ему телефон для первоначальной настройки.',
     'onb_gesture_help':
         'Жесты онбординга. Один тап — повторить инструкцию. '
         'Двойной тап — основное действие. Свайп вправо или влево — навигация. '
@@ -169,7 +177,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Два пальца на две секунды — экстренный выход.',
     'onb_mode_select_announce': 'Режим: {mode}. Двойной тап — выбрать.',
     'onb_skip_confirm':
-        'Пропустить онбординг? Двойной тап подтвердит. Один тап отменит.',
+        'Пропустить всю настройку приложения? Двойной тап подтвердит. Один тап отменит.',
     'onb_skip_cancelled': 'Отменено.',
     'onb_lang_switched': 'Язык: русский.',
     'onb_calib_saved_tts': 'Отлично! Калибровка сохранена. Нажмите Продолжить.',
@@ -206,6 +214,28 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'onb_feat_settings': 'Настройки — калибровка, GPU, Debug HUD',
     'onb_lang_title': 'Выберите язык',
     'onb_lang_sub': 'Язык можно изменить в настройках',
+    'onb_mic_exhausted':
+        'Я не слышу вашего ответа. Используйте жесты: '
+        'проведите вверх или вниз для выбора, дважды коснитесь для подтверждения. '
+        'Коснитесь экрана один раз, чтобы я повторил.',
+    'onb_mode_choose_first':
+        'Сначала выберите режим. Скажите: улица, трость или сканирование.',
+    'onb_perm_talkback_guide':
+        'Сейчас появятся системные диалоги разрешений. '
+        'Их будет три: камера, микрофон и геолокация. '
+        'Используйте TalkBack — проведите вправо до кнопки Разрешить и дважды коснитесь. '
+        'Я подожду.',
+    'onb_perm_tap_guide':
+        'Сейчас появятся системные диалоги. '
+        'В каждом нажмите кнопку Разрешить в нижней части экрана. '
+        'Если рядом есть зрячий помощник, попросите его помочь. Я подожду.',
+    'onb_perm_camera_ok': 'Камера разрешена.',
+    'onb_perm_mic_ok': 'Микрофон разрешён.',
+    'onb_perm_all_granted':
+        'Все разрешения получены. Отлично! Переходим дальше.',
+    'onb_perm_denied_retry':
+        'Камера не разрешена. Без камеры приложение не видит препятствий. '
+        'Скажите «разрешить» для повторной попытки, или «пропустить».',
 
     'tut_title': 'Обучение жестам',
     'tut_intro':
@@ -384,6 +414,21 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Система перегрета. Частота сканирования снижена, идите медленнее.',
     'thermal_warning_critical':
         'Критическая температура. Частота сканирования сильно снижена.',
+    'thermal_ground_hazard_reduced':
+        'Высокая температура. Обнаружение ям и ступеней временно снижено.',
+    'thermal_warm_move_to_shade':
+        'Устройство нагревается. Зайдите в тень, если возможно. '
+        'При высокой температуре точность обнаружения снижается.',
+    'running_detected':
+        'Вы бежите. Пожалуйста, замедлитесь для безопасности.',
+    'battery_50_remaining':
+        'Заряд 50%. Работы осталось примерно на два часа.',
+    'battery_30_warning':
+        'Заряд 30%. Рекомендуем сократить прогулку.',
+    'battery_15_critical':
+        'Заряд 15%. Обнаружение ям снижено. Используйте трость или запросите помощь.',
+    'low_light_warning':
+        'Слабое освещение. Точность обнаружения снижена. Будьте особенно осторожны.',
     'pitch_black_ui': 'Чёрный экран',
     'pitch_black_ui_desc':
         'Скрывает изображение камеры и весь интерфейс навигации.',
@@ -397,6 +442,9 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Казахский голос недоступен. Используется русский язык.',
     'fall_detector_unavailable':
         'Датчик падения недоступен. Автоматический SOS отключён.',
+    'yolo_unavailable':
+        'Распознавание объектов недоступно. Обнаружение опасностей отключено.',
+    'yolo_detector_not_responding': 'Детектор объектов не отвечает.',
     'test_alert_warning': 'Тест: внимание слева',
     'test_alert_critical': 'Тест: критично по центру',
     'lifecycle_background':
@@ -429,6 +477,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'waypoint_deleted': 'Место удалено.',
 
     'sos_sent': 'SOS отправлен.',
+    'sos_queued': 'SOS поставлен в очередь, ожидаю подтверждение.',
     'sos_sent_no_location':
         'SOS отправлен, но местоположение не удалось определить.',
     'sos_indoor_warning':
@@ -466,6 +515,9 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sos_sending': 'Отправляю SOS...',
     'sos_retry': 'Повторная отправка SOS.',
     'sos_delivered': 'SOS доставлен.',
+    'sos_composer_opened':
+        'Открыто окно сообщения, кнопка «Отправить» — внизу справа.',
+    'sos_dialer_opened': 'Открыт набиратель, нажмите зелёную кнопку вызова.',
     'sos_planned_destination': 'Направлялся к:',
     'sos_near_wifi': 'Рядом с Wi-Fi:',
     'sos_near_cell': 'Рядом с вышкой:',
@@ -973,6 +1025,18 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sonar_stopped': 'Эхолот выключен.',
     'sonar_calibrating': 'Калибрую эхолот.',
     'sonar_no_48k': 'Микрофон не поддерживает эхолот.',
+    'onb_mic_prime_tts': 'Для голосового управления мне нужен доступ к микрофону. Сейчас появится системный диалог.',
+    'onb_mic_denied_fallback_tts': 'Доступ к микрофону отклонён. Голосовое управление отключено. Пожалуйста, используйте жесты для настройки.',
+    'onb_mode_confirm_prompt': 'Режим выбран. Скажите да для продолжения или назовите другой режим.',
+    'sos_setup_prompt_tts': 'Пожалуйста, укажите телефон близкого человека для экстренной помощи SOS.',
+    'camera_perm_recovery_tts': 'Доступ к камере заблокирован. Пожалуйста, разрешите доступ в настройках телефона. Дважды коснитесь для настроек, один раз для повтора.',
+    'onb_help_prompt_lang': 'Выберите язык. Произнесите: Русский, Казахский или Английский.',
+    'onb_help_prompt_hand': 'Выберите ведущую руку. Скажите: Правая или Левая.',
+    'onb_help_prompt_mode': 'Выберите режим по умолчанию. Скажите: Улица, Трость или Сканирование.',
+    'onb_help_prompt_perm': 'Разрешите доступ к камере. Скажите: Разрешить.',
+    'onb_help_prompt_calib': 'Калибровка расстояния. Скажите: Да для продолжения.',
+    'onb_help_prompt_ready': 'Все готово. Скажите: Да чтобы начать.',
+    'onb_emergency_skip_confirm': 'Вы хотите пропустить всю настройку приложения? Двойной тап подтвердит. Один тап отменит.',
   },
 
   AppLanguage.kk: {
@@ -1063,13 +1127,20 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'onb_welcome_tts':
         'Bagdar-ға қош келдіңіз. Режимді таңдаңыз. '
         'Жоғары немесе төмен сипау — режим, қос тию — таңдау.',
+    'onb_welcome_intro_tts':
+        'Сәлеметсіз бе. Бағдар — бұл көру қабілеті шектелген жандарға арналған, кеңістікте бағдарлауға және кедергілерді айналып өтуге көмектесетін дауыстық көмекші. Баптауды бастайық. Тілді таңдаңыз. Солға немесе оңға свайп арқылы тілді ауыстырыңыз, ал қосарлы тартумен таңдаңыз. Немесе дауыстап айтыңыз: Қазақша, Орысша немесе Ағылшынша.',
+    'onb_dominant_hand_tts':
+        'Бірінші қадам. Ведущая қолды таңдаңыз. Бұл экрандағы қимылдардың орналасуына әсер етеді. Таңдау үшін жоғары немесе төмен свайп жасаңыз. Растау үшін екі рет басыңыз. Немесе дауыстап айтыңыз: Оң қол, немесе Сол қол.',
+    'onb_mode_tts':
+        'Екінші қадам. Әдепкі жұмыс режимін таңдаңыз. Режимді өзгерту үшін жоғары немесе төмен свайп жасаңыз. Растау үшін екі рет басыңыз. Немесе дауыстап айтыңыз: Көше, Таяқ, немесе Сканерлеу.',
     'onb_perm_tts':
-        'Камераға рұқсат. Қос тию — жүйелік сұрауды ашу. '
-        'Рұқсат беру түймесін табыңыз.',
+        'Камераға рұқсат. Қос тию — жүйелік сұрауды ашу. Рұқсат беру түймесін табыңыз. Немесе дауыстап айтыңыз: Рұқсат ету.',
     'onb_calib_tts':
-        'Калибрлеу. Өткізуге болады. '
-        'Қос тию — калибрлеусіз жалғастыру.',
+        'Қашықтықты калибрлеу. Дәлдікті арттыру үшін калибрлеу ұсынылады. Оны баптаулар мәзірінде сізден екі метр қашықтықта тұрған адамға камераны бағыттау арқылы орындай аласыз. Жалғастыру үшін екі рет басыңыз.',
     'onb_ready_tts': 'Бәрі дайын. Қос тию — бастау.',
+    'onb_hand_right': 'Оң қол',
+    'onb_hand_left': 'Сол қол',
+    'onb_hand_changed': 'Жетекші қол {hand} болып өзгертілді',
     'onb_secondary_aid_tts':
         'Bagdar кедергілер туралы ескертеді, бірақ оларды жіберіп алуы мүмкін. '
         'Ақ таяқты немесе жолбасшы итті пайдалануды жалғастырыңыз. '
@@ -1079,7 +1150,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Bagdar — көрмейтіндерге арналған. Қимылдармен басқару. '
         'Бір тию — қайталау. Қос тию — жалғастыру. '
         'Оңға сипау — келесі қадам, солға — артқа. '
-        'Ұзақ басу — тілді ауыстыру.',
+        'Ұзақ басу — тілді ауыстыру. '
+        'Егер жаныңызда жақын адамыңыз болса, оған телефонды алғашқы баптау үшін беру ұсынылады.',
     'onb_gesture_help':
         'Онбординг қимылдары. Бір тию — нұсқауды қайталау. '
         'Қос тию — негізгі әрекет. Оңға немесе солға сипау — навигация. '
@@ -1087,7 +1159,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Екі саусақпен екі секунд — шұғыл шығу.',
     'onb_mode_select_announce': 'Режим: {mode}. Қос тию — таңдау.',
     'onb_skip_confirm':
-        'Онбордингті өткізу керек пе? Қос тию растайды. Бір тию болдырмайды.',
+        'Барлық қолданба реттеулерін өткізіп жіберу керек пе? Қос түртіңіз растайды. Бір түрту болдырмайды.',
     'onb_skip_cancelled': 'Болдырылмады.',
     'onb_lang_switched': 'Тіл: қазақша.',
     'onb_calib_saved_tts':
@@ -1124,6 +1196,28 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'onb_feat_settings': 'Баптаулар — калибрлеу, GPU, Debug HUD',
     'onb_lang_title': 'Тілді таңдаңыз',
     'onb_lang_sub': 'Тілді баптауларда өзгертуге болады',
+    'onb_mic_exhausted':
+        'Жауабыңызды естімей тұрмын. Қимылдарды қолданыңыз: '
+        'таңдау үшін жоғары не төмен сырғытыңыз, растау үшін екі рет түртіңіз. '
+        'Қайталау үшін экранды бір рет түртіңіз.',
+    'onb_mode_choose_first':
+        'Алдымен режимді таңдаңыз. Айтыңыз: көше, таяқ немесе шолу.',
+    'onb_perm_talkback_guide':
+        'Қазір рұқсат сұрайтын жүйелік диалогтар пайда болады. '
+        'Олар үшеу: камера, микрофон және геолокация. '
+        'TalkBack қолданыңыз — Рұқсат ету батырмасына оңға сырғытып, екі рет түртіңіз. '
+        'Мен күтемін.',
+    'onb_perm_tap_guide':
+        'Қазір жүйелік диалогтар пайда болады. '
+        'Әрбірінде экранның төменгі жағындағы Рұқсат ету батырмасын басыңыз. '
+        'Маңайыңызда көмекші болса, көмек сұраңыз. Мен күтемін.',
+    'onb_perm_camera_ok': 'Камераға рұқсат берілді.',
+    'onb_perm_mic_ok': 'Микрофонға рұқсат берілді.',
+    'onb_perm_all_granted':
+        'Барлық рұқсаттар алынды. Тамаша! Келесі қадамға өтеміз.',
+    'onb_perm_denied_retry':
+        'Камераға рұқсат берілмеді. Камерасыз қолданба кедергілерді көрмейді. '
+        'Қайталау үшін «рұқсат» деңіз, немесе «өткізіп жіберу» деңіз.',
 
     'tut_title': 'Қимылдарға үйрету',
     'tut_intro':
@@ -1301,6 +1395,21 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Жүйе қызып кетті. Сканерлеу жиілігі төмендетілді, баяуырақ жүріңіз.',
     'thermal_warning_critical':
         'Температура өте жоғары. Сканерлеу жиілігі қатты төмендетілді.',
+    'thermal_ground_hazard_reduced':
+        'Жоғары температура. Шұңқырлар мен баспалдақтарды анықтау уақытша төмендетілді.',
+    'thermal_warm_move_to_shade':
+        'Құрылғы қызып барады. Мүмкіндік болса, көлеңкеге өтіңіз. '
+        'Жоғары температурада анықтау дәлдігі төмендейді.',
+    'running_detected':
+        'Сіз жүгіріп жатырсыз. Қауіпсіздік үшін баяуырақ жүріңіз.',
+    'battery_50_remaining':
+        'Заряд 50%. Жұмыс уақыты шамамен екі сағат.',
+    'battery_30_warning':
+        'Заряд 30%. Серуенді қысқартуды ұсынамыз.',
+    'battery_15_critical':
+        'Заряд 15%. Шұңқырларды анықтау төмендетілді. Таяқ пайдаланыңыз немесе көмек сұраңыз.',
+    'low_light_warning':
+        'Жарық аз. Анықтау дәлдігі төмендетілді. Аса абайлаңыз.',
     'pitch_black_ui': 'Қара экран',
     'pitch_black_ui_desc':
         'Камера көрінісін және навигация интерфейсін жасырады.',
@@ -1342,6 +1451,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'waypoint_deleted': 'Орын жойылды.',
 
     'sos_sent': 'SOS жіберілді.',
+    'sos_queued': 'SOS кезекке қойылды, растауды күтемін.',
     'sos_sent_no_location':
         'SOS жіберілді, бірақ орналасуды анықтау мүмкін болмады.',
     'sos_indoor_warning':
@@ -1372,6 +1482,9 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sos_sending': 'SOS жіберіп жатырмын...',
     'sos_retry': 'SOS қайта жіберу.',
     'sos_delivered': 'SOS жеткізілді.',
+    'sos_composer_opened':
+        'Хабар жазу терезесі ашылды, «Жіберу» түймесі — төменгі оң жақта.',
+    'sos_dialer_opened': 'Теру тақтасы ашылды, жасыл қоңырау шалу түймесін басыңыз.',
     'sos_planned_destination': 'Бара жатқан жер:',
     'sos_near_wifi': 'Wi-Fi жанында:',
     'sos_near_cell': 'Ұялы байланыс мұнарасы жанында:',
@@ -1884,6 +1997,21 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sonar_stopped': 'Эхолот өшірілді.',
     'sonar_calibrating': 'Эхолотты калибрлеу.',
     'sonar_no_48k': 'Микрофон эхолотты қолдамайды.',
+    'onb_mic_prime_tts': 'Дауыспен басқару үшін маған микрофонға рұқсат қажет. Қазір жүйелік сұрау терезесі пайда болады.',
+    'onb_mic_denied_fallback_tts': 'Микрофонға рұқсат берілмеді. Дауыспен басқару өшірілген. Параметрлерді реттеу үшін қимылдарды пайдаланыңыз.',
+    'onb_mode_confirm_prompt': 'Режим таңдалды. Жалғастыру үшін иә деп айтыңыз немесе басқа режимді атаңыз.',
+    'sos_setup_prompt_tts': 'Шұғыл SOS көмегі үшін жақын адамыңыздың телефон нөмірін көрсетіңіз.',
+    'camera_perm_recovery_tts': 'Камераға рұқсат блокталған. Телефон баптауларында рұқсат беріңіз. Баптаулар үшін қос түртіңіз, қайталау үшін бір рет түртіңіз.',
+    'onb_help_prompt_lang': 'Тілді таңдаңыз. Орыс, Қазақ немесе Ағылшын деп айтыңыз.',
+    'onb_help_prompt_hand': 'Ведущий қолды таңдаңыз. Оң немесе Сол деп айтыңыз.',
+    'onb_help_prompt_mode': 'Әдепкі режимді таңдаңыз. Көше, Таяқ немесе Сканерлеу деп айтыңыз.',
+    'onb_help_prompt_perm': 'Камераға рұқсат беріңіз. Рұқсат деп айтыңыз.',
+    'onb_help_prompt_calib': 'Қашықтықты калибрлеу. Жалғастыру үшін Иә деп айтыңыз.',
+    'onb_help_prompt_ready': 'Бәрі дайын. Бастау үшін Иә деп айтыңыз.',
+    'onb_emergency_skip_confirm': 'Барлық қолданба реттеулерін өткізіп жіберу керек пе? Қос түртіңіз растайды. Бір түрту болдырмайды.',
+    'yolo_unavailable':
+        'Нысан тануы қолжетімсіз. Қауіп анықтау өшірілді.',
+    'yolo_detector_not_responding': 'Нысан детекторы жауап бермейді.',
   },
   AppLanguage.en: {
     'stop': 'Stop',
@@ -1973,13 +2101,20 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'onb_welcome_tts':
         'Welcome to Bagdar. Choose your mode. '
         'Swipe up or down to change mode, double tap to select.',
+    'onb_welcome_intro_tts':
+        'Hello. Bagdar is a voice assistant for the blind, helping to orient in space and avoid obstacles. Let\'s begin the setup. Choose language. Swipe up or down to change. Double tap to select. Or say out loud: Russian, Kazakh, or English.',
+    'onb_dominant_hand_tts':
+        'Step one. Select dominant hand. This affects gesture placement on the screen. Swipe up or down to change. Double tap to select. Or say out loud: Right, or Left.',
+    'onb_mode_tts':
+        'Step two. Select default operation mode. Swipe up or down to change. Double tap to select. Or say: Street, Cane, or Scan.',
     'onb_perm_tts':
-        'Camera permission. Double tap to open the system request. '
-        'Find the Allow button.',
+        'Camera permission. Double tap to open the system request. Find the Allow button. Or say out loud: Allow.',
     'onb_calib_tts':
-        'Calibration. Optional. '
-        'Double tap to continue without calibration.',
+        'Distance calibration. Calibration is recommended for better accuracy. You can perform it later in settings by aiming the camera at a person 2 meters away. Double tap to continue.',
     'onb_ready_tts': 'All set. Double tap to start.',
+    'onb_hand_right': 'Right hand',
+    'onb_hand_left': 'Left hand',
+    'onb_hand_changed': 'Dominant hand changed to {hand}',
     'onb_secondary_aid_tts':
         'Bagdar warns about hazards but can miss them. '
         'Continue using your white cane or guide dog. '
@@ -1989,7 +2124,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Bagdar for blind users. Gesture-based control. '
         'Single tap to repeat. Double tap to continue. '
         'Swipe right for next step, left to go back. '
-        'Long press to change language.',
+        'Long press to change language. '
+        'If a loved one is nearby, it is recommended to hand them the phone for initial setup.',
     'onb_gesture_help':
         'Onboarding gestures. Single tap repeats the prompt. '
         'Double tap is the main action. Swipe right or left to navigate. '
@@ -1997,7 +2133,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Two fingers for two seconds for emergency exit.',
     'onb_mode_select_announce': 'Mode: {mode}. Double tap to select.',
     'onb_skip_confirm':
-        'Skip onboarding? Double tap confirms. Single tap cancels.',
+        'Skip all setup? Double tap confirms. Single tap cancels.',
     'onb_skip_cancelled': 'Cancelled.',
     'onb_lang_switched': 'Language: English.',
     'onb_calib_saved_tts': 'Great! Calibration saved. Tap Continue.',
@@ -2033,6 +2169,28 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'onb_feat_settings': 'Settings — calibration, GPU, Debug HUD',
     'onb_lang_title': 'Choose a language',
     'onb_lang_sub': 'Language can be changed in settings',
+    'onb_mic_exhausted':
+        'I cannot hear your response. Use gestures: '
+        'swipe up or down to select, double-tap to confirm. '
+        'Tap once to have me repeat.',
+    'onb_mode_choose_first':
+        'Please choose a mode first. Say: street, cane, or scan.',
+    'onb_perm_talkback_guide':
+        'System permission dialogs will now appear. '
+        'There will be three: camera, microphone, and location. '
+        'Use TalkBack — swipe right to the Allow button and double-tap. '
+        'I will wait.',
+    'onb_perm_tap_guide':
+        'System dialogs will now appear. '
+        'In each one, tap the Allow button at the bottom of the screen. '
+        'If a sighted helper is nearby, ask them for assistance. I will wait.',
+    'onb_perm_camera_ok': 'Camera access granted.',
+    'onb_perm_mic_ok': 'Microphone access granted.',
+    'onb_perm_all_granted':
+        'All permissions granted. Excellent! Moving on.',
+    'onb_perm_denied_retry':
+        'Camera was not allowed. Without the camera, the app cannot detect obstacles. '
+        'Say allow to try again, or skip to continue.',
 
     'tut_title': 'Gesture Tutorial',
     'tut_intro':
@@ -2204,6 +2362,21 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'System getting hot. Scan rate reduced, walk slower.',
     'thermal_warning_critical':
         'Critical temperature. Scan rate heavily reduced.',
+    'thermal_ground_hazard_reduced':
+        'High temperature. Pothole and step detection is temporarily reduced.',
+    'thermal_warm_move_to_shade':
+        'Device warming up. Move to shade if possible. '
+        'Detection accuracy reduces at higher temperatures.',
+    'running_detected':
+        'You are running. Please slow down for safety.',
+    'battery_50_remaining':
+        'Battery at 50%. Approximately two hours of active detection remaining.',
+    'battery_30_warning':
+        'Battery at 30%. Consider shortening your walk.',
+    'battery_15_critical':
+        'Battery at 15%. Ground hazard detection is reduced. Please use a cane or seek assistance.',
+    'low_light_warning':
+        'Low light detected. Detection accuracy is reduced. Please use additional caution.',
     'pitch_black_ui': 'Pitch Black',
     'pitch_black_ui_desc': 'Hides camera preview and whole navigation ui.',
     'pitch_black_on': 'Pitch black mode enabled.',
@@ -2214,6 +2387,9 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Voice pack for your language is missing. Using English fallback.',
     'fall_detector_unavailable':
         'Fall detector unavailable. Automatic SOS disabled.',
+    'yolo_unavailable':
+        'Object recognition unavailable. Hazard detection disabled.',
+    'yolo_detector_not_responding': 'Object detector not responding.',
     'test_alert_warning': 'Test: warning left',
     'test_alert_critical': 'Test: critical center',
     'lifecycle_background':
@@ -2244,6 +2420,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'waypoint_deleted': 'Location deleted.',
 
     'sos_sent': 'SOS sent.',
+    'sos_queued': 'SOS queued, awaiting confirmation.',
     'sos_sent_no_location': 'SOS sent, but location could not be determined.',
     'sos_indoor_warning':
         'You are indoors. Coordinates may be inaccurate.',
@@ -2280,6 +2457,9 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sos_sending': 'Sending SOS...',
     'sos_retry': 'Retrying SOS.',
     'sos_delivered': 'SOS delivered.',
+    'sos_composer_opened':
+        'Message composer opened. Tap the Send button at the bottom right.',
+    'sos_dialer_opened': 'Phone dialer opened. Press the green call button.',
     'sos_planned_destination': 'Heading to:',
     'sos_near_wifi': 'Near Wi-Fi:',
     'sos_near_cell': 'Near cell:',
@@ -2776,6 +2956,18 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sonar_stopped': 'Sonar disabled.',
     'sonar_calibrating': 'Calibrating sonar.',
     'sonar_no_48k': 'Microphone does not support sonar.',
+    'onb_mic_prime_tts': 'For voice control, I need access to your microphone. A system dialog will appear now.',
+    'onb_mic_denied_fallback_tts': 'Microphone access denied. Voice control is disabled. Please use gestures to configure.',
+    'onb_mode_confirm_prompt': 'Mode selected. Say yes to continue, or choose another mode.',
+    'sos_setup_prompt_tts': 'Please set a contact number for emergency SOS help.',
+    'camera_perm_recovery_tts': 'Camera permission is blocked. Please allow access in phone settings. Double tap for settings, single tap to retry.',
+    'onb_help_prompt_lang': 'Choose language. Say: Russian, Kazakh, or English.',
+    'onb_help_prompt_hand': 'Choose dominant hand. Say: Right or Left.',
+    'onb_help_prompt_mode': 'Choose default mode. Say: Street, Cane, or Scan.',
+    'onb_help_prompt_perm': 'Grant camera permission. Say: Allow.',
+    'onb_help_prompt_calib': 'Distance calibration. Say: Yes to continue.',
+    'onb_help_prompt_ready': 'Ready to start. Say: Yes to start.',
+    'onb_emergency_skip_confirm': 'Skip all setup? Double tap to confirm. Single tap to cancel.',
   },
 };
 

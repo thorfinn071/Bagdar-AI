@@ -15,6 +15,10 @@ enum SosResult {
   sent,
   
   sentFallback,
+
+  /// Native SMS channel returned false (OS rejected or timed out after 10 s);
+  /// the sms:// URI fallback was launched but actual delivery is unconfirmed.
+  pendingEnqueued,
   
   
   sentWithoutLocation,
@@ -27,6 +31,16 @@ enum SosResult {
   launchFailed,
   
   error,
+
+  /// SMS composer app was opened via [sms:] URI but the message has NOT been
+  /// sent yet — the user must tap the Send button manually. Do NOT treat
+  /// this as a successful delivery and do NOT start the detector lockout.
+  composerOpened,
+
+  /// Phone dialer was opened via [tel:] URI but the call has NOT been placed
+  /// yet — the user must tap the green call button manually. Do NOT treat
+  /// this as a successful delivery and do NOT start the detector lockout.
+  dialerOpened,
 }
 
 class SosService {
@@ -173,6 +187,11 @@ class SosService {
         final target = attemptTargets[i];
         final isFallback = i > 0 || !hasUserContact;
         last = await _tryDeliver(target, message, isFallback: isFallback);
+        // E-2: also exit the retry loop when the composer was opened —
+        // opening it again would only spawn duplicate SMS-composer windows.
+        if (last == SosResult.composerOpened) return last;
+        // E-1: native SMS unconfirmed; sms:// fallback was launched.
+        if (last == SosResult.pendingEnqueued) return last;
         if (last == SosResult.sent || last == SosResult.sentFallback) {
           
           
@@ -192,7 +211,11 @@ class SosService {
         mode: LaunchMode.externalApplication,
       );
       if (launched) {
-        return hasUserContact ? SosResult.sent : SosResult.sentFallback;
+        // E-2: launchUrl(tel:) opens the dialer (ACTION_DIAL) — no call
+        // is placed until the user taps the green button. Return
+        // dialerOpened so callers can guide the user without treating
+        // this as a successful delivery.
+        return SosResult.dialerOpened;
       }
     } catch (_) {}
     return last;
@@ -220,7 +243,14 @@ class SosService {
         debugPrint('SosService: launchUrl failed for $target');
         return SosResult.launchFailed;
       }
-      return isFallback ? SosResult.sentFallback : SosResult.sent;
+      // E-1/E-2: native SMS unconfirmed; sms:// URI opened as fallback.
+      // Return pendingEnqueued so callers announce "SOS queued" instead
+      // of falsely saying "SOS sent" and starting the detector lockout.
+      debugPrint(
+        'SosService: sms:// URI fallback opened for $target'
+        ' (native SMS unconfirmed)',
+      );
+      return SosResult.pendingEnqueued;
     } catch (e) {
       debugPrint('SosService: delivery error to $target: $e');
       return SosResult.error;
@@ -450,11 +480,28 @@ class SosService {
     final contact = _contactNumber;
     final hasUserContact = contact != null && contact.isNotEmpty;
     final target = hasUserContact ? contact : emergencyFallbackNumber;
-    try {
-      await _tryDeliver(target, message, isFallback: !hasUserContact);
-    } catch (e) {
-      debugPrint('SosService: follow-up SMS delivery error: $e');
+    // S-2: Apply retry logic matching the primary SOS flow so that
+    // follow-up fall notifications are not silently lost.
+    for (var attempt = 0; attempt <= kSosRetries; attempt++) {
+      try {
+        final result = await _tryDeliver(
+          target,
+          message,
+          isFallback: !hasUserContact,
+        );
+        if (result == SosResult.sent ||
+            result == SosResult.sentFallback ||
+            result == SosResult.composerOpened) {
+          return;
+        }
+      } catch (e) {
+        debugPrint('SosService: follow-up SMS attempt $attempt error: $e');
+      }
+      if (attempt < kSosRetries) {
+        await Future.delayed(kSosRetryDelay);
+      }
     }
+    debugPrint('SosService: follow-up SMS exhausted all retries');
   }
 
   Future<Position?> _resolvePosition() async {

@@ -27,8 +27,11 @@ import android.telephony.CellInfoCdma
 import android.telephony.CellInfoGsm
 import android.telephony.CellInfoLte
 import android.telephony.CellInfoWcdma
+import android.app.Activity
+import android.app.PendingIntent
 import android.telephony.SmsManager
 import android.telephony.SmsMessage
+import android.telephony.SubscriptionManager
 import android.telephony.TelephonyManager
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -77,6 +80,12 @@ class MainActivity : FlutterActivity() {
             val r = RingtoneManager.getRingtone(applicationContext, notification)
             r.play()
         } catch (e: Exception) {}
+    }
+
+    override fun onPause() {
+        super.onPause()
+        watchdogHandler.removeCallbacks(watchdogRunnable)
+        lastPingTime = 0L
     }
 
     override fun onDestroy() {
@@ -268,6 +277,11 @@ class MainActivity : FlutterActivity() {
                     lastPingTime = System.currentTimeMillis()
                     result.success(true)
                 }
+                "stop" -> {
+                    watchdogHandler.removeCallbacks(watchdogRunnable)
+                    lastPingTime = 0L
+                    result.success(true)
+                }
                 else -> result.notImplemented()
             }
         }
@@ -287,12 +301,44 @@ class MainActivity : FlutterActivity() {
                     try {
                         val smsManager = SmsManager.getDefault()
                         val parts = smsManager.divideMessage(message)
-                        if (parts.size > 1) {
-                            smsManager.sendMultipartTextMessage(phoneNumber, null, parts, null, null)
-                        } else {
-                            smsManager.sendTextMessage(phoneNumber, null, message, null, null)
+                        val sentAction = "com.example.bagdar.SMS_SENT_${System.nanoTime()}"
+                        val done = BooleanArray(1)
+
+                        val receiver = object : BroadcastReceiver() {
+                            override fun onReceive(ctx: Context, intent: Intent) {
+                                if (done[0]) return
+                                done[0] = true
+                                try { this@MainActivity.unregisterReceiver(this) } catch (_: Exception) {}
+                                result.success(resultCode == Activity.RESULT_OK)
+                            }
                         }
-                        result.success(true)
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            registerReceiver(receiver, IntentFilter(sentAction), Context.RECEIVER_NOT_EXPORTED)
+                        } else {
+                            @Suppress("UnspecifiedRegisterReceiverFlag")
+                            registerReceiver(receiver, IntentFilter(sentAction))
+                        }
+
+                        mainHandler.postDelayed({
+                            if (!done[0]) {
+                                done[0] = true
+                                try { unregisterReceiver(receiver) } catch (_: Exception) {}
+                                result.success(false)
+                            }
+                        }, 10_000L)
+
+                        val flags = PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+                        val sentPi = PendingIntent.getBroadcast(this, 0, Intent(sentAction), flags)
+
+                        if (parts.size > 1) {
+                            val sentIntents = ArrayList<PendingIntent?>(parts.size)
+                            repeat(parts.size - 1) { sentIntents.add(null) }
+                            sentIntents.add(sentPi)
+                            smsManager.sendMultipartTextMessage(phoneNumber, null, parts, sentIntents, null)
+                        } else {
+                            smsManager.sendTextMessage(phoneNumber, null, message, sentPi, null)
+                        }
                     } catch (e: SecurityException) {
                         result.error("SMS_PERMISSION_DENIED", e.message, null)
                     } catch (e: Exception) {
