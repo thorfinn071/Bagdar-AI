@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>BAGDAR — Офлайн AI-ассистент мобильности для незрячих</title>
+  
+  <!-- Reveal.js CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/simple.min.css">
+  
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* Custom Styling Overrides for Premium Light Theme */
+    :root {
+      --bg-gradient-start: #F8FAFC;
+      --bg-gradient-end: #EEF2FF;
+      --accent-start: #3B82F6;
+      --accent-end: #8B5CF6;
+      --text-main: #1E293B;
+      --text-muted: #64748B;
+      --card-bg: rgba(255, 255, 255, 0.75);
+      --card-border: rgba(255, 255, 255, 0.8);
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif !important;
+      background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%) !important;
+      color: var(--text-main) !important;
+    }
+
+    .reveal {
+      font-family: 'Inter', sans-serif !important;
+      color: var(--text-main) !important;
+    }
+
+    /* Slides formatting */
+    .reveal .slides {
+      text-align: left;
+    }
+
+    .reveal .slides section {
+      padding: 20px 40px !important;
+      height: 100%;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Headings */
+    .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+      font-family: 'Inter', sans-serif !important;
+      font-weight: 800 !important;
+      text-transform: none !important;
+      letter-spacing: -0.02em !important;
+      margin: 0 !important;
+      line-height: 1.15 !important;
+    }
+
+    .reveal h1 {
+      font-size: 72px !important;
+      background: linear-gradient(135deg, var(--accent-start) 0%, var(--accent-end) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px !important;
+    }
+
+    .reveal h2 {
+      font-size: 42px !important;
+      color: var(--text-main) !important;
+      margin-bottom: 25px !important;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .reveal h2 span.highlight {
+      background: linear-gradient(135deg, var(--accent-start) 0%, var(--accent-end) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Elements */
+    .reveal p {
+      font-size: 20px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      margin: 0 0 15px 0;
+    }
+
+    /* Glassmorphic Cards */
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 24px 28px;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+
+    .card-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-title svg {
+      width: 24px;
+      height: 24px;
+      fill: none;
+      stroke: url(#gradient-accent);
+      stroke-width: 2;
+    }
+
+    /* Layout Grids */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+      margin-bottom: 15px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 15px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    /* Bullets */
+    ul.custom-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    ul.custom-list li {
+      font-size: 18px;
+      position: relative;
+      padding-left: 28px;
+      margin-bottom: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    ul.custom-list li strong {
+      color: var(--text-main);
+    }
+
+    ul.custom-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 8px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-start) 0%, var(--accent-end) 100%);
+    }
+
+    /* Large Numbers & Stats */
+    .stat-number {
+      font-size: 54px;
+      font-weight: 800;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--accent-start) 0%, var(--accent-end) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .stat-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Accent quotes / banners */
+    .accent-box {
+      border-left: 5px solid;
+      border-image: linear-gradient(to bottom, var(--accent-start), var(--accent-end)) 1;
+      padding: 15px 20px;
+      background: rgba(59, 130, 246, 0.05);
+      border-radius: 0 12px 12px 0;
+      margin: 15px 0;
+    }
+
+    .accent-box p {
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--text-main);
+      margin: 0;
+      font-style: italic;
+    }
+
+    /* Competitor Table */
+    table.comp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15px;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    table.comp-table th, table.comp-table td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    table.comp-table th {
+      background: rgba(59, 130, 246, 0.06);
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    table.comp-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    table.comp-table tr.highlight-row {
+      background: rgba(59, 130, 246, 0.04);
+      font-weight: 600;
+    }
+
+    table.comp-table td.check-yes {
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    table.comp-table td.check-no {
+      color: var(--danger);
+      font-weight: 700;
+    }
+
+    /* Header & Footer elements for presentation */
+    .slide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      padding-top: 12px;
+      margin-top: auto;
+    }
+
+    .slide-footer-logo {
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: 0.05em;
+      background: linear-gradient(135deg, var(--accent-start) 0%, var(--accent-end) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .slide-footer-info {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Video player styling */
+    .video-container {
+      position: relative;
+      width: 100%;
+      max-width: 680px;
+      height: 380px;
+      margin: 0 auto;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      border: 3px solid var(--card-border);
+      background: #000;
+    }
+
+    .video-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .video-caption {
+      text-align: center;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-main);
+      margin-top: 15px;
+    }
+
+    /* Architecture SVG Diagram */
+    .arch-container {
+      width: 100%;
+      height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.4);
+      border-radius: 16px;
+      border: 1px dashed rgba(59, 130, 246, 0.25);
+      padding: 10px;
+    }
+
+    /* Timeline Styling */
+    .timeline-container {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin: 40px 0;
+      padding: 0 20px;
+    }
+
+    .timeline-line {
+      position: absolute;
+      top: 25px;
+      left: 50px;
+      right: 50px;
+      height: 3px;
+      background: linear-gradient(to right, var(--accent-start), var(--accent-end));
+      z-index: 1;
+    }
+
+    .timeline-step {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      width: 28%;
+    }
+
+    .timeline-badge {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #FFF;
+      border: 3px solid var(--accent-start);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: var(--accent-start);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .timeline-step:nth-child(2) .timeline-badge {
+      border-color: #8B5CF6;
+      color: #8B5CF6;
+    }
+
+    .timeline-step:nth-child(3) .timeline-badge {
+      border-color: var(--success);
+      color: var(--success);
+    }
+
+    .timeline-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 5px;
+    }
+
+    .timeline-date {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .timeline-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Define SVG gradients for use in icons/diagrams -->
+  <svg style="position: absolute; width: 0; height: 0;" width="0" height="0" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="gradient-accent" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#3B82F6" />
+        <stop offset="100%" stop-color="#8B5CF6" />
+      </linearGradient>
+      <linearGradient id="gradient-success" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#10B981" />
+        <stop offset="100%" stop-color="#059669" />
+      </linearGradient>
+      <linearGradient id="gradient-warning" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#F59E0B" />
+        <stop offset="100%" stop-color="#D97706" />
+      </linearGradient>
+      <linearGradient id="gradient-danger" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#EF4444" />
+        <stop offset="100%" stop-color="#DC2626" />
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- СЛАЙД 1: Титульный -->
+      <section>
+        <div>
+          <!-- Logo visualization -->
+          <div style="margin-bottom: 30px; display: flex; align-items: center; gap: 15px;">
+            <svg width="60" height="60" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="64" height="64" rx="16" fill="url(#gradient-accent)"/>
+              <!-- Eye outline -->
+              <path d="M16 32C16 32 23 18 32 18C41 18 48 32 48 32C48 32 41 46 32 46C23 46 16 32 16 32Z" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- Navigation arrow inside eye -->
+              <path d="M32 26L36 34L32 32L28 34L32 26Z" fill="white" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+            <span style="font-size: 32px; font-weight: 800; tracking-wide: 0.1em; background: linear-gradient(135deg, var(--accent-start) 0%, var(--accent-end) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">BAGDAR</span>
+          </div>
+
+          <h1 style="font-size: 64px !important; line-height: 1.1;">BAGDAR AI</h1>
+          <p style="font-size: 26px; font-weight: 600; color: var(--text-main); margin-bottom: 40px;">
+            Офлайн-ассистент мобильности для незрячих и слабовидящих пользователей
+          </p>
+
+          <div class="grid-2" style="margin-top: 50px;">
+            <div>
+              <p style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px;">Разработчики:</p>
+              <p style="font-size: 18px; font-weight: 700; color: var(--text-main); margin: 0;">Нурмухамед Сәбит, Нурбакыт Султан</p>
+              <p style="font-size: 15px; color: var(--text-muted); margin: 0;">Ученики NIS Караганда</p>
+            </div>
+            <div>
+              <p style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px;">Научный руководитель:</p>
+              <p style="font-size: 18px; font-weight: 700; color: var(--text-main); margin: 0;">Набиев Кирилл Вячеславович</p>
+              <p style="font-size: 15px; color: var(--text-muted); margin: 0;">Преподаватель робототехники</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <div class="slide-footer-logo">BAGDAR AI</div>
+          <div class="slide-footer-info">Фестиваль Проектов НИШ • 2026</div>
+        </div>
+      </section>
+
+      <!-- СЛАЙД 2: Проблема: Мировой масштаб -->
+      <section>
+        <div>
+          <h2><span>Проблема:</span> <span class="highlight">Мировой масштаб</span></h2>
+          <p style="margin-bottom: 30px;">Потеря зрения ограничивает самостоятельное передвижение человека, лишая его независимости.</p>
+
+          <div class="grid-3" style="margin-top: 20px;">
+            <div class="card">
+              <div class="stat-number">2.2 млрд</div>
+              <div class="stat-label">Людей в мире</div>
+              <div class="stat-desc">имеют различные нарушения зрения (по данным ВОЗ)</div>
+            </div>
+            
+            <div class="card">
+              <div class="stat-number">90%</div>
+              <div class="stat-label">В развивающихся странах</div>
+              <div class="stat-desc">где инфраструктура поддержки маломобильных групп развита слабо</div>
+            </div>
+            
+            <div class="card" style="border-color: rgba(245, 158, 11, 0.4);">
+              <div class="stat-number" style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">100%</div>
+              <div class="stat-label">Зависимость от сети</div>
+              <div class="stat-desc">Популярные ассистенты требуют постоянный интернет для распознавания</div>
+            </div>
+          </div>
+
+          <div class="accent-box">
+            <p>«Потеря связи в дороге лишает незрячего человека ориентира и ставит под угрозу его безопасность.»</p>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <div class="slide-footer-logo">BAGDAR AI</div>
+          <div class="slide-footer-info">Слайд 2 из 13</div>
+        </div>
+      </section>
+
+      <!-- СЛАЙД 3: Проблема: Казахстан -->
+      <section>
+        <div>
+          <h2><span>Проблема:</span> <span class="highlight">Казахстан</span></h2>
+          <p>В нашей стране проблемы доступности городской среды выражены особенно остро.</p>
+
+          <div class="grid-2" style="margin-top: 25px;">
+            <div class="card">
+              <div class="card-title">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                Социальные вызовы в РК
+              </div>
+              <ul class="custom-list">
+                <li><strong>78 000+</strong> граждан Казахстана имеют инвалидность по зрению.</li>
+                <li><strong>Отсутствие казахского языка</strong> в существующих мировых решениях (Seeing AI, Be My Eyes).</li>
+                <li><strong>Финансовый барьер:</strong> специализированные оправы (Envision Glasses) стоят более $3500.</li>
+              </ul>
+            </div>
+
+            <div class="card" style="border-color: rgba(239, 68, 68, 0.3);">
+              <div class="card-title" style="color: var(--danger);">
+                <svg viewBox="0 0 24 24" style="stroke: var(--danger);"><path d="M12 2L2 22h20L12 2zm1 14h-2v-2h2v2zm0-4h-2V8h2v4z"/></svg>
+                Инфраструктурные барьеры
+              </div>
+              <ul class="custom-list">
+                <li><strong>Нестабильный мобильный интернет</strong> во многих жилых массивах и пригородах.</li>
+                <li><strong>Хаотичные препятствия:</strong> открытые колодцы, ямы, парковка на тротуарах, ремонтные работы.</li>
+                <li><strong>Неработающие</strong> тактильные плитки и звуковые светофоры.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <div class="slide-footer-logo">BAGDAR AI</div>
+          <div class="slide-footer-info">Слайд 3 из 13</div>
+        </div>
+      </section>
+
+      <!-- СЛАЙД 4: Цель и задачи -->
+      <section>
+        <div>
+          <h2><span>Цель</span> <span class="highlight">и Задачи проекта</span></h2>
+          
+          <div class="card" style="background: rgba(59, 130, 246, 0.05); border-left: 6px solid var(--accent-start); margin-bottom: 25px;">
+            <div style="font-size: 14px; text-transform: uppercase; font-weight: 700; color: var(--accent-start); margin-bottom: 5px; letter-spacing: 0.05em;">Глобальная цель</div>
+            <div style="font-size: 24px; font-weight: 700; color: var(--text-main); line-height: 1.4;">
+              Создать доступную, полностью автономную (офлайн) систему навигации и детекции опасностей на казахском, русском и английском языках, работающую на смартфонах за $100.
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title">Технические задачи</div>
+              <ul class="custom-list" style="font-size: 16px;">
+                <li><strong>Оптимизация ИИ:</strong> квантование моделей YOLO и MiDaS для запуска на GPU/CPU смартфона.</li>
+                <li><strong>Офлайн-карты:</strong> компиляция дорожного графа из OpenStreetMap в бинарный файл.</li>
+                <li><strong>Сенсорный анализ:</strong> фильтрация данных IMU и GPS для отсечения шумов и трекинга шагов.</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <div class="card-title">Социальные задачи</div>
+              <ul class="custom-list" style="font-size: 16px;">
+                <li><strong>Полный перевод:</strong> создание базы данных голосовых команд на казахском языке.</li>
+                <li><strong>Экономическая доступность:</strong> исключение потребности в платных облачных API.</li>
+                <li><strong>Безопасность жизни:</strong> автоматическая отправка SOS по SMS при падении.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <div class="slide-footer-logo">BAGDAR AI</div>
+          <div class="slide-footer-info">Слайд 4 из 13</div>
+        </div>
+      </section>
+
+      <!-- СЛАЙД 5: Решение: Обзор Bagdar -->
+      <section>
+        <div>
+          <h2><span>Решение:</span> <span class="highlight">Обзор Bagdar</span></h2>
+          <p style="margin-bottom: 20px;">Мобильное приложение на Flutter, объединяющее три независимых контура помощи.</p>
+
+          <div class="grid-3">
+            <div class="card" style="text-align: center;">
+              <div style="width: 50px; height: 50px; background: rgba(59, 130, 246, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto;">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent-start)" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </div>
+              <div class="card-title" style="justify-content: center; font-size: 20px;">1. ВИДЕТЬ (ИИ)</div>
+              <ul class="custom-list" style="font-size: 14px; text-align: left; padding-left: 5px;">
+                <li>Детекция объектов (YOLOv8)</li>
+                <li>Оценка глубины (MiDaS)</li>
+                <li>Распознавание светофоров</li>
+                <li>Определение ям, ступенек</li>
+              </ul>
+            </div>
+
+            <div class="card" style="text-align: center;">
+              <div style="width: 50px; height: 50px; background: rgba(139, 92, 246, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto;">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+              </div>
+              <div class="card-title" style="justify-content: center; font-size: 20px;">2. НАВИГИРОВАТЬ</div>
+              <ul class="custom-list" style="font-size: 14px; text-align: left; padding-left: 5px;">
+                <li>Офлайн-маршруты по OSM</li>
+                <li>Интеграция с ОТ (GTFS)</li>
+                <li>Пошаговые подсказки голосом</li>
+                <li>Поиск заведений без сети</li>
+              </ul>
+            </div>
+
+            <div class="card" style="text-align: center;">
+              <div style="width: 50px; height: 50px; background: rgba(16, 185, 129, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto;">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <div class="card-title" style="justify-content: center; font-size: 20px;">3. ЗАЩИЩАТЬ</div>
+              <ul class="custom-list" style="font-size: 14px; text-align: left; padding-left: 5px;">
+                <li>Детектор падения пользователя</li>
+                <li>Экстренная SMS-рассылка SOS</li>
+                <li>Адаптивный зимний режим</li>
+                <li>Режим «Собака-поводырь»</li>
+              </ul>
+            </div>
+          </div>
+
+          <div style="text-align: center; margin-top: 15px; font-weight: 700; color: var(--accent-end); font-size: 18px;">
+            «Три столпа автономной помощи на одном устройстве»
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <div class="slide-footer-logo">BAGDAR AI</div>
+          <div class="slide-footer-info">Слайд 5 из 13</div>
+        </div>
+      </section>
+
+      <!-- СЛАЙД 6: Архитектура системы -->
+      <section>
+        <div>
+          <h2><span>Архитектура</span> <span class="highlight">системы</span></h2>
+          <p style="margin-bottom: 15px;">Как устроен поток данных внутри смартфона в режиме реального времени:</p>
+
+          <div class="arch-container">
+            <!-- Inline SVG architecture diagram -->
+            <svg width="100%" height="100%" viewBox="0 0 800 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Grid Background inside diagram -->
+              <rect width="800" height="280" rx="12" fill="rgba(255,255,255,0.7)"/>
+              
+              <!-- Device boundary outer line -->
+              <rect x="10" y="10" width="780" height="260" rx="10" stroke="#CBD5E1" stroke-width="2" stroke-dasharray="6,4"/>
+              <text x="25" y="32" fill="#94A3B8" font-family="Inter" font-size="12" font-weight="700" letter-spacing="0.05em">ГРАНИЦА УСТРОЙСТВА (ПОЛНЫЙ ОФЛАЙН)</text>
+              
+              <!-- 1. Sensors -->
+              <rect x="30" y="80" width="110" height="110" rx="8" fill="#FFF" stroke="#E2E8F0" stroke-width="1.5"/>
+              <text x="85" y="110" text-anchor="middle" fill="#1E293B" font-family="Inter" font-size="13" font-weight="700">Сенсоры</text>
+              <text x="85" y="135" text-anchor="middle" fill="#64748B" font-family="Inter" font-size="11">Камера 30 FPS</text>
+              <text x="85" y="153" text-anchor="middle" fill="#64748B" font-family="Inter" font-size="11">IMU (Гироскоп)</text>
+              <text x="85" y="171" text-anchor="middle" fill="#64748B" font-family="Inter" font-size="11">GPS Приемник</text>
+              
+              <!-- Arrow 1 -->
+              <path d="M150 135 H 175" stroke="#94A3B8" stroke-width="2" marker-end="url(#arrow)"/>
+
+              <!-- 2. ML Engine -->
+              <rect x="185" y="80" width="145" height="110" rx="8" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+              <text x="257.5" y="105" text-anchor="middle" fill="#1D4ED8" font-family="Inter" font-size="13" font-weight="700">ИИ Модели (ML)</text>
+              <rect x="195" y="120" width="125" height="26" rx="4" fill="#FFF" stroke="#DBEAFE"/>
+              <text x="257.5" y="137" text-anchor="middle" fill="#1E293B" font-family="Inter" font-size="11" font-weight="600">YOLOv8n INT8</text>
+              <rect x="195" y="152" width="125" height="26" rx="4" fill="#FFF" stroke="#DBEAFE"/>
+              <text x="257.5" y="169" text-anchor="middle" fill="#1E293B" font-family="Inter" font-size="11" font-weight="600">MiDaS NCNN</text>
+
+              <!-- Arrow 2 -->
+              <path d="M340 135 H 365" stroke="#94A3B8" stroke-width="2" marker-end="url(#arrow)"/>
+
+              <!-- 3. Perception / Analysis -->
+              <rect x="375" y="65" width="170" height="140" rx="8" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+              <text x="460" y="88" text-anchor="middle" fill="#6D28D9" font-family="Inter" font-size="13" font-weight="700">Слой анализа</text>
+              
+              <rect x="385" y="100" width="150" height="20" rx="3" fill="#FFF"/>
+              <text x="460" y="114" text-anchor="middle" fill="#4B5563" font-family="Inter" font-size="10">Трекинг объектов (Калман)</text>
+              
+              <rect x="385" y="125" width="150" height="20" rx="3" fill="#FFF"/>
+              <text x="460" y="139" text-anchor="middle" fill="#4B5563" font-family="Inter" font-size="10">Анализ плоскости RANSAC</text>
+
+              <rect x="385" y="150" width="150" height="20" rx="3" fill="#FFF"/>
+              <text x="460" y="164" text-anchor="middle" fill="#4B5563" font-family="Inter" font-size="10">Колориметрия светофоров</text>
+
+              <rect x="385" y="175" width="150" height="20" rx="3" fill="#FFF"/>
+              <text x="460" y="189" text-anchor="middle" fill="#4B5563" font-family="Inter" font-size="10">Детектор периферии</text>
+
+              <!-- Arrow 3 -->
+              <path d="M555 135 H 580" stroke="#94A3B8" stroke-width="2" marker-end="url(#arrow)"/>
+
+              <!-- 4. Logic & UI -->
+              <rect x="590" y="80" width="175" height="110" rx="8" fill="#ECFDF5" stroke="#A7F3D0" stroke-width="1.5"/>
+              <text x="677.5" y="105" text-anchor="middle" fill="#047857" font-family="Inter" font-size="13" font-weight="700">Очередь сообщений</text>
+              
+              <rect x="600" y="120" width="155" height="26" rx="4" fill="#FFF" stroke="#D1FAE5"/>
+              <text x="677.5" y="137" text-anchor="middle" fill="#1E293B" font-family="Inter" font-size="11" font-weight="600">3-уровневый TTS</text>
+              
+              <rect x="600" y="152" width="155" height="26" rx="4" fill="#FFF" stroke="#D1FAE5"/>
+              <text x="677.5" y="169" text-anchor="middle" fill="#1E293B" font-family="Inter" font-size="11" font-weight="600">Спец. тактильный отклик</text>
+              
+              <!-- Markers for arrows -->
+              <defs>
+                <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#94A3B8"/>
+                </marker>
+              </defs>
+            </svg>
+          </div>
+          
+          <div style="margin-top: 15px; text-align: center; font-size: 15px; color: var(--text-muted);">
+            Все вычисления выполняются в C++ ядре NCNN и Flutter-сервисах локально на CPU/GPU мобильного телефона.
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <div class="slide-footer-logo">BAGDAR AI</div>
+          <div class="slide-footer-info">Слайд 6 из 13</div>
+        </div>
+      </section>
+
+      <!-- СЛАЙД 7: Инновации -->
+      <section>
+        <div>
+          <h2><span>Технические</span> <span class="highlight">инновации</span></h2>
+          <p>Мы решили проблему запуска ресурсоемких нейросетей на слабых телефонах.</p>
+
+          <div class="grid-2" style="margin-top: 20px;">
+            <div class="card">
+              <div class="card-title">
+                <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-4 6h-4v2h4v2h-4v2h4v2H9V7h6v2z"/></svg>
+                1. Оптимизация ИИ (ML Throttling)
+              </div>
+              <ul class="custom-list" style="font-size: 16px;">
+                <li><strong>4-ступенчатый каскад глубины:</strong> при перегреве отключается ресурсоемкая модель MiDaS, управление переходит к триангуляции по фокусному расстоянию.</li>
+                <li><strong>Квантование YOLOv8n (INT8):</strong> размер модели уменьшен до 3.2 МБ, скорость выросла в 4.5 раз.</li>
+                <li><strong>Фрейм-рейт:</strong> стабильные <strong>8-12 FPS</strong> на процессоре Snapdragon 680 (телефон за 55 000 тг).</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v4z"/></svg>
+                2. Опасности без нейросетей
+              </div>
+              <ul class="custom-list" style="font-size: 16px;">
+                <li><strong>Алгоритм RANSAC:</strong> математический анализ геометрии опорной плоскости находит ямы и выступы без тяжелых моделей сегментации.</li>
+                <li><strong>Цветовая гистограмма YUV:</strong> выделение фаз светофоров по доминирующим спектральным пикселям.</li>
+                <li><strong>Стеклянные двери:</strong> детектируются по дисперсии яркости отражений света.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <div class="slide-footer-logo">BAGDAR AI</div>
+          <div class="slide-footer-info">Слайд 7 из 13</div>
+        </div>
+      </section>
+
+      <!-- СЛАЙД 8: Система безопасности -->
+      <section>
+        <div>
+          <h2><span>Система</span> <span class="highlight">безопасности</span></h2>
+          <p>В экстренной ситуации секунды решают всё. Приложение способно вызвать помощь автоматически.</p>
+
+          <div class="grid-2" style="margin-top: 25px;">
+            <div class="card" style="border: 2px solid rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.02);">
+              <div class="card-title" style="color: var(--danger);">
+                <svg viewBox="0 0 24 24" style="stroke: var(--danger);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Детектор падений (SOS)
+              </div>
+              <ul class="custom-list" style="font-size: 16px;">
+                <li><strong>IMU-анализатор:</strong> отслеживает резкое изменение ускорения (G-force) с последующей неподвижностью.</li>
+                <li><strong>Локальная защита:</strong> отсекает ложные срабатывания (сели на стул, уронили телефон на кровать).</li>
+                <li><strong>Экстренный триггер:</strong> 10 секунд на отмену, затем отправка SMS близким с ссылкой на Google Карты.</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <div class="card-title">Специальные режимы защиты</div>
+              <ul class="custom-list" style="font-size: 16px;">
+                <li><strong>Зимний режим:</strong> калибровка порогов датчиков при температуре ниже 5°C (скользкая дорога, обледенение).</li>
+                <li><strong>Контроль положения:</strong> голосовое предупреждение, если незрячий держит камеру неровно или закрыл пальцем.</li>
+                <li><strong>Спящий экран:</strong> работа приложения при выключенной матрице экрана для экономии до 60% заряда батареи.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <div class="slide-footer-logo">BAGDAR AI</div>
+          <div class="slide-footer-info">Слайд 8 из 13</div>
+        </div>
+      </section>
+
+      <!-- СЛАЙД 9: ДЕМО: Интерфейс и навигация -->
+      <section>
+        <div>
+          <h2><span>Демо:</span> <span class="highlight">Интерфейс и навигация</span></h2>
+          <p style="margin-bottom: 20px;">Голосовое ведение по улицам Караганды и определение окружающих объектов.</p>
+
+          <div class="video-container">
+            <video src="videos/navigation_demo.mp4" controls muted autoplay loop></video>
+          </div>
+          
+          <div class="video-caption">
+            Приложение сообщает расстояние до пешеходов, препятствий и направляет по офлайн-карте.
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <div class="slide-footer-logo">BAGDAR AI</div>
+          <div class="slide-footer-info">Слайд 9 из 13</div>
+        </div>
+      </section>
+
+      <!-- СЛАЙД 10: ДЕМО: SOS-Alert -->
+      <section>
+        <div>
+          <h2><span>Демо:</span> <span class="highlight">Детектор падений и SOS</span></h2>
+          <p style="margin-bottom: 20px;">Демонстрация автоматического срабатывания системы экстренного оповещения близких.</p>
+
+          <div class="video-container" style="border-color: rgba(239, 68, 68, 0.4);">
+            <video src="videos/sos_demo.mp4" controls muted autoplay loop></video>
+          </div>
+          
+          <div class="video-caption" style="color: var(--danger); font-weight: 600;">
+            При падении запускается таймер безопасности, по истечении которого отправляется SOS SMS.
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <div class="slide-footer-logo">BAGDAR AI</div>
+          <div class="slide-footer-info">Слайд 10 из 13</div>
+        </div>
+      </section>
+
+      <!-- СЛАЙД 11: Статус проекта и аналоги -->
+      <section>
+        <div>
+          <h2><span>Статус</span> <span class="highlight">проекта и сравнение</span></h2>
+          
+          <div class="grid-4" style="margin-bottom: 20px;">
+            <div class="card" style="padding: 15px; text-align: center;">
+              <div style="font-size: 26px; font-weight: 800; color: var(--accent-start);">132</div>
+              <div style="font-size: 12px; color: var(--text-muted);">Dart файлов</div>
+            </div>
+            <div class="card" style="padding: 15px; text-align: center;">
+              <div style="font-size: 26px; font-weight: 800; color: var(--accent-start);">71</div>
+              <div style="font-size: 12px; color: var(--text-muted);">Сервисных модулей</div>
+            </div>
+            <div class="card" style="padding: 15px; text-align: center;">
+              <div style="font-size: 26px; font-weight: 800; color: var(--accent-start);">58</div>
+              <div style="font-size: 12px; color: var(--text-muted);">Тест-модулей</div>
+            </div>
+            <div class="card" style="padding: 15px; text-align: center;">
+              <div style="font-size: 26px; font-weight: 800; color: var(--success);">3</div>
+              <div style="font-size: 12px; color: var(--text-muted);">Языка (RU, KZ, EN)</div>
+            </div>
+          </div>
+
+          <table class="comp-table">
+            <thead>
+              <tr>
+                <th>Критерий сравнения</th>
+                <th style="background: rgba(59, 130, 246, 0.1); color: var(--accent-start); font-weight: 800;">BAGDAR AI</th>
+                <th>Seeing AI (MS)</th>
+                <th>Be My Eyes</th>
+                <th>Envision Glasses</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="highlight-row">
+                <td>Работа без сети (офлайн)</td>
+                <td class="check-yes">100% автономно</td>
+                <td class="check-no">Нет</td>
+                <td class="check-no">Нет</td>
+                <td class="check-no">Частично</td>
+              </tr>
+              <tr>
+                <td>Поддержка казахского языка</td>
+                <td class="check-yes">Да</td>
+                <td class="check-no">Нет</td>
+                <td class="check-no">Нет</td>
+                <td class="check-no">Нет</td>
+              </tr>
+              <tr>
+                <td>Детекция ям и выступов</td>
+                <td class="check-yes">Да (RANSAC)</td>
+                <td class="check-no">Нет</td>
+                <td class="check-no">Нет</td>
+                <td class="check-no">Нет</td>
+              </tr>
+              <tr>
+                <td>Обнаружение падений + SOS</td>
+                <td class="check-yes">Да</td>
+                <td class="check-no">Нет</td>
+                <td class="check-no">Нет</td>
+                <td class="check-no">Нет</td>
+              </tr>
+              <tr>
+                <td>Стоимость оборудования</td>
+                <td class="check-yes">Бесплатно ($100 тел.)</td>
+                <td>Бесплатно (нужен iOS)</td>
+                <td>Бесплатно</td>
+                <td class="check-no">Более $3500</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="slide-footer">
+          <div class="slide-footer-logo">BAGDAR AI</div>
+          <div class="slide-footer-info">Слайд 11 из 13</div>
+        </div>
+      </section>
+
+      <!-- СЛАЙД 12: Перспективы развития -->
+      <section>
+        <div>
+          <h2><span>Перспективы</span> <span class="highlight">развития</span></h2>
+          <p>Четкий план масштабирования проекта от локального прототипа до социального внедрения.</p>
+
+          <div class="timeline-container">
+            <div class="timeline-line"></div>
+            
+            <div class="timeline-step">
+              <div class="timeline-badge">1</div>
+              <div class="timeline-title">Апробация</div>
+              <div class="timeline-date">0 - 3 месяцев</div>
+              <div class="timeline-desc">
+                Тестирование с Карагандинским филиалом КОС. Доработка алгоритмов по отзывам незрячих.
+              </div>
+            </div>
+            
+            <div class="timeline-step">
+              <div class="timeline-badge">2</div>
+              <div class="timeline-title">Масштабирование</div>
+              <div class="timeline-date">3 - 9 месяцев</div>
+              <div class="timeline-desc">
+                Портирование на iOS (CoreML). Интеграция транспортных баз данных Астаны и Алматы.
+              </div>
+            </div>
+            
+            <div class="timeline-step">
+              <div class="timeline-badge">3</div>
+              <div class="timeline-title">Интеграция</div>
+              <div class="timeline-date">9 - 18 месяцев</div>
+              <div class="timeline-desc">
+                Выход на международный рынок (Турция, страны СНГ). Открытие исходного кода проекта.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <div class="slide-footer-logo">BAGDAR AI</div>
+          <div class="slide-footer-info">Слайд 12 из 13</div>
+        </div>
+      </section>
+
+      <!-- СЛАЙД 13: Заключение -->
+      <section>
+        <div>
+          <h2><span>Заключение:</span> <span class="highlight">Наш манифест</span></h2>
+          
+          <div class="grid-2" style="margin-top: 20px;">
+            <div>
+              <div class="accent-box" style="margin-top: 0; background: rgba(139, 92, 246, 0.05); border-color: var(--accent-end);">
+                <p style="font-size: 24px; font-weight: 700; line-height: 1.4;">
+                  «Помогать людям ориентироваться там, где полностью отсутствует доступная среда.»
+                </p>
+              </div>
+              <p style="font-size: 16px; margin-top: 15px;">
+                BAGDAR AI доказывает, что современные нейросети и системы помощи могут быть экономически доступными, не требовать дорогого оборудования и работать полностью автономно.
+              </p>
+            </div>
+
+            <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+              <!-- QR Code Placeholder (Rendered via clean SVG) -->
+              <svg width="120" height="120" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 15px;">
+                <rect width="100" height="100" rx="12" fill="white" stroke="#E2E8F0" stroke-width="2"/>
+                <!-- Outer Corners -->
+                <rect x="10" y="10" width="25" height="25" rx="4" stroke="url(#gradient-accent)" stroke-width="4"/>
+                <rect x="15" y="15" width="15" height="15" rx="2" fill="url(#gradient-accent)"/>
+                
+                <rect x="65" y="10" width="25" height="25" rx="4" stroke="url(#gradient-accent)" stroke-width="4"/>
+                <rect x="70" y="70" width="15" height="15" rx="2" fill="url(#gradient-accent)"/>
+                
+                <rect x="10" y="65" width="25" height="25" rx="4" stroke="url(#gradient-accent)" stroke-width="4"/>
+                
+                <!-- Random QR squares represented nicely -->
+                <rect x="42" y="15" width="8" height="8" rx="2" fill="#1E293B"/>
+                <rect x="42" y="30" width="8" height="8" rx="2" fill="#1E293B"/>
+                <rect x="75" y="42" width="8" height="8" rx="2" fill="#1E293B"/>
+                <rect x="15" y="42" width="8" height="8" rx="2" fill="#1E293B"/>
+                <rect x="30" y="42" width="8" height="8" rx="2" fill="#1E293B"/>
+                <rect x="42" y="55" width="8" height="8" rx="2" fill="#1E293B"/>
+                <rect x="55" y="42" width="8" height="8" rx="2" fill="#1E293B"/>
+                <rect x="55" y="55" width="8" height="8" rx="2" fill="#1E293B"/>
+                <rect x="75" y="55" width="8" height="8" rx="2" fill="#1E293B"/>
+                <rect x="55" y="75" width="8" height="8" rx="2" fill="#1E293B"/>
+                <rect x="42" y="75" width="8" height="8" rx="2" fill="#1E293B"/>
+              </svg>
+              <div style="font-size: 15px; font-weight: 700; color: var(--text-main);">Исходный код проекта</div>
+              <div style="font-size: 12px; color: var(--text-muted); margin-top: 3px;">github.com/thorfinn071/Bagdar-AI</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <div class="slide-footer-logo">BAGDAR AI</div>
+          <div class="slide-footer-info">Спасибо за внимание!</div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Reveal.js & Plugins -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      controls: true,
+      progress: true,
+      center: true,
+      slideNumber: false,
+      transition: 'slide', // none/fade/slide/convex/concave/zoom
+      width: 1100,
+      height: 700,
+      margin: 0.1,
+      minScale: 0.2,
+      maxScale: 2.0
+    });
+  </script>
+</body>
+</html>
