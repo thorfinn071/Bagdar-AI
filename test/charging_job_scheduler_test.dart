@@ -147,12 +147,19 @@ void main() {
 
       var workCalled = false;
       scheduler.schedule(
-        work: (isCancelled) async { workCalled = true; return true; },
+        work: (isCancelled) async {
+          workCalled = true;
+          return true;
+        },
       );
 
       await Future<void>.delayed(const Duration(milliseconds: 100));
-      expect(workCalled, isFalse,
-          reason: 'work must not run when providers are null — gates always false');
+      expect(
+        workCalled,
+        isFalse,
+        reason:
+            'work must not run when providers are null — gates always false',
+      );
       expect(scheduler.state, isNot(ChargingJobState.running));
       scheduler.cancel();
     });

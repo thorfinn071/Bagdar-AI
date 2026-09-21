@@ -54,15 +54,26 @@ class MisalignmentWatchdog {
   static const Duration kDetectionFreshness = Duration(seconds: 5);
   static const String kAnnounceKey = 'pitch_misaligned_blind';
 
+  /// Safety audit D-5: verbal trigger independent of [DepthPipelineStatus].
+  /// If the depth pipeline silently gets stuck reporting `ok` (e.g. an A-2 /
+  /// A-4-style silent failure), [isDepthBlindAt] never confirms and the
+  /// depth-gated warning/critical branches below never fire. This second
+  /// trigger only needs a long gap since the last YOLO detection while
+  /// moving with bad pitch — no depth signal required at all.
+  static const Duration kNoDetectionThreshold = Duration(seconds: 20);
+  static const Duration kNoDetectionReannounce = Duration(seconds: 60);
+  static const String kNoDetectionAnnounceKey = 'misalign_no_detections';
+
   DevicePitch _pitch = DevicePitch.optimal;
   MotionState _motion = MotionState.stationary;
   DepthPipelineStatus _depthStatus = DepthPipelineStatus.ok;
   DateTime? _depthLowSinceAt;
-  DateTime _lastDetectionAt = DateTime.fromMillisecondsSinceEpoch(0);
+  DateTime? _lastDetectionAt;
 
   DateTime? _sustainedSinceAt;
   DateTime? _lastHapticAt;
   DateTime? _lastCriticalAt;
+  DateTime? _lastNoDetectionAnnounceAt;
   bool _warningAnnouncedThisEpisode = false;
 
   void noteDetection({DateTime? now}) {
@@ -82,7 +93,10 @@ class MisalignmentWatchdog {
     _depthStatus = status;
     final t = now ?? DateTime.now();
     if (status == DepthPipelineStatus.lowConfidence ||
-        status == DepthPipelineStatus.planeFitFailed) {
+        status == DepthPipelineStatus.planeFitFailed ||
+        status == DepthPipelineStatus.unalignedStale ||
+        status == DepthPipelineStatus.providerUnavailable ||
+        status == DepthPipelineStatus.legacyOnlyDegraded) {
       _depthLowSinceAt = t;
     } else {
       _depthLowSinceAt = null;
@@ -107,16 +121,22 @@ class MisalignmentWatchdog {
   MisalignmentTickResult tick({DateTime? now}) {
     final t = now ?? DateTime.now();
     final misaligned = _pitch != DevicePitch.optimal;
-    final walking = _motion == MotionState.walking;
+    // D-5: a running user with a dangling phone is just as blind as a
+    // walking one — excluding `running` meant the watchdog never fired for
+    // the faster-moving, higher-risk case.
+    final moving =
+        _motion == MotionState.walking || _motion == MotionState.running;
     final noRecentDetections =
-        t.difference(_lastDetectionAt) >= kDetectionFreshness;
-    final sustainedNow = misaligned && walking && noRecentDetections;
+        _lastDetectionAt == null ||
+        t.difference(_lastDetectionAt!) >= kDetectionFreshness;
+    final sustainedNow = misaligned && moving && noRecentDetections;
 
     if (!sustainedNow) {
       _sustainedSinceAt = null;
       _lastHapticAt = null;
       _warningAnnouncedThisEpisode = false;
       _lastCriticalAt = null;
+      _lastNoDetectionAnnounceAt = null;
       return MisalignmentTickResult.idle;
     }
 
@@ -152,6 +172,23 @@ class MisalignmentWatchdog {
       }
     }
 
+    // D-5 fallback: used only when depth is not confirmed blind. Time without
+    // detections is measured from the last detection, or from episode start
+    // if none was seen — never from Unix epoch.
+    final noDetectionFor = _lastDetectionAt == null
+        ? sustainedFor
+        : t.difference(_lastDetectionAt!);
+    if (announcePriority == null &&
+        !isDepthBlindAt(t) &&
+        noDetectionFor >= kNoDetectionThreshold &&
+        (_lastNoDetectionAnnounceAt == null ||
+            t.difference(_lastNoDetectionAnnounceAt!) >=
+                kNoDetectionReannounce)) {
+      announcePriority = SpeechPriority.warning;
+      announceKey = kNoDetectionAnnounceKey;
+      _lastNoDetectionAnnounceAt = t;
+    }
+
     return MisalignmentTickResult(
       fireHaptic: fireHaptic,
       announcePriority: announcePriority,
@@ -163,8 +200,9 @@ class MisalignmentWatchdog {
     _sustainedSinceAt = null;
     _lastHapticAt = null;
     _lastCriticalAt = null;
+    _lastNoDetectionAnnounceAt = null;
     _warningAnnouncedThisEpisode = false;
     _depthLowSinceAt = null;
-    _lastDetectionAt = DateTime.fromMillisecondsSinceEpoch(0);
+    _lastDetectionAt = null;
   }
 }

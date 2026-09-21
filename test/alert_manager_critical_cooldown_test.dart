@@ -21,6 +21,9 @@ class _RecordingTts extends TtsService {
     SpeechPriority priority, {
     double pan = 0.0,
     int? trackId,
+    String? actionId,
+    String? hazardId,
+    DateTime? expiresAt,
     bool barge = false,
     bool skipHaptic = false,
   }) {
@@ -29,23 +32,24 @@ class _RecordingTts extends TtsService {
 }
 
 Track _veryCloseTrack({DateTime? lastSpoken}) {
-  final t = Track(
-    id: 1,
-    label: 'person',
-    cx: 320,
-    cy: 240,
-    x1: 220,
-    y1: 140,
-    x2: 420,
-    y2: 340,
-    dist: 'very close',
-    distM: 0.5,
-    initialConf: 0.9,
-  )
-    ..nearFrameCount = 5
-    ..reliableFrames = 5
-    ..avgConf = 0.9
-    ..fastTrack = true;
+  final t =
+      Track(
+          id: 1,
+          label: 'person',
+          cx: 320,
+          cy: 240,
+          x1: 220,
+          y1: 140,
+          x2: 420,
+          y2: 340,
+          dist: 'very close',
+          distM: 0.5,
+          initialConf: 0.9,
+        )
+        ..nearFrameCount = 5
+        ..reliableFrames = 5
+        ..avgConf = 0.9
+        ..fastTrack = true;
   if (lastSpoken != null) t.lastSpoken = lastSpoken;
   return t;
 }
@@ -86,7 +90,6 @@ void main() {
           reason: 'first very-close track must trigger critical immediately',
         );
 
-        
         final t1 = t0.add(const Duration(milliseconds: 1500));
         mgr.processFrame(
           tracks: [_veryCloseTrack(lastSpoken: t0)],
@@ -158,7 +161,7 @@ void main() {
           isCalibrated: true,
           frameCount: 1,
         );
-        
+
         mgr.processFrame(
           tracks: [_veryCloseTrack(lastSpoken: t0)],
           imgW: 640,

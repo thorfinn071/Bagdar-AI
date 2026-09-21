@@ -9,7 +9,6 @@ class AppStrings {
 
   static AppLanguage current = AppLanguage.ru;
 
-  
   static AppLanguage? _alertLang;
 
   static AppLanguage get alertLanguage => _alertLang ?? current;
@@ -22,7 +21,6 @@ class AppStrings {
     return 'ru-RU';
   }
 
-  
   static String get(String key, {Verbosity? verbosity}) {
     if (verbosity != null && verbosity != Verbosity.normal) {
       final suffix = verbosity == Verbosity.minimal ? '_minimal' : '_detailed';
@@ -33,7 +31,6 @@ class AppStrings {
     return _ui[current]?[key] ?? _ui[AppLanguage.ru]?[key] ?? key;
   }
 
-  
   static String alert(String key) =>
       _ui[alertLanguage]?[key] ?? _ui[AppLanguage.ru]?[key] ?? key;
 
@@ -67,9 +64,9 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'synth_event_stop_right': 'Стоп! Справа',
     'synth_event_stop_center': 'Стоп! Прямо',
     'sign': 'Знак',
-    'path_clear': 'Путь свободен.',
-    'path_clear_cane': 'Свободно.',
-    'path_clear_label': 'Путь свободен',
+    'path_clear': 'Анализ активен.',
+    'path_clear_cane': 'Анализ активен.',
+    'path_clear_label': 'Анализ активен',
     'no_change': 'Обстановка не изменилась.',
     'nothing_seen': 'Ничего не вижу.',
     'nothing_here': 'Ничего нет',
@@ -105,7 +102,26 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'corridor_blocked': 'Проход заблокирован.',
     'narrow': 'Узко.',
 
-    'status_no_obstacle': 'Препятствий нет',
+    'status_no_obstacle': 'Анализ активен',
+    'status_analysis_active': 'Анализ активен',
+    'spatial_analysis_limited':
+        'Анализ пространства ограничен. Используйте трость.',
+    'spatial_stop_sensing_unavailable':
+        'Стойте. Анализ пространства недоступен.',
+    'core_health_sound_unavailable':
+        'Звук недоступен. Предупреждения вибрацией остаются.',
+    'core_health_haptic_unavailable':
+        'Вибрация недоступна. Голосовые предупреждения остаются.',
+    'core_health_recovered': 'Система восстановилась.',
+    'core_health_status': 'Состояние системы',
+    'generic_obstacle_ahead': 'Препятствие впереди.',
+    'generic_obstacle_stop': 'Стоп. Препятствие впереди.',
+    'generic_obstacle_left': 'Препятствие слева.',
+    'generic_obstacle_right': 'Препятствие справа.',
+    'generic_obstacle_overhead': 'Стоп. Препятствие на уровне головы.',
+    'generic_vehicle_ahead': 'Машина впереди.',
+    'generic_vehicle_left': 'Машина слева.',
+    'generic_vehicle_right': 'Машина справа.',
     'status_scanning': 'Сканирование...',
     'status_waiting': 'ожидание',
     'dist_safe': 'безопасно',
@@ -123,7 +139,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'ocr_reading': 'Читаю...',
     'ocr_not_found': 'Текст не найден.',
     'ocr_camera_not_ready': 'Камера не готова.',
-    
+
     'ocr_low_memory':
         'Не хватает памяти для распознавания текста. Закройте другие приложения и попробуйте снова.',
     'ocr_paddle_init_failed':
@@ -133,8 +149,11 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'camera_not_found': 'Камера не найдена',
     'camera_started': 'Камера запущена',
     'system_ready': 'Система готова',
+    'core_feature_unavailable': 'Эта функция недоступна в текущей сборке.',
     'init_failed':
         'Не удалось запустить систему. Остановитесь. Перезапустите приложение.',
+    'camera_init_failed_critical':
+        'Ошибка камеры. Распознавание недоступно. Перезапустите приложение.',
     'mode_changed': 'Режим',
 
     'calib_aim': 'Наведите камеру на человека для калибровки.',
@@ -163,7 +182,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Bagdar предупреждает о препятствиях, но может их пропустить. '
         'Продолжайте использовать белую трость или собаку-поводыря. '
         'Bagdar — дополнительное средство.',
-    'onb_secondary_aid_check': 'Bagdar — дополнительное средство, не замена трости',
+    'onb_secondary_aid_check':
+        'Bagdar — дополнительное средство, не замена трости',
     'onb_blind_intro':
         'Bagdar для незрячих. Управление жестами. '
         'Один тап — повторить. Двойной тап — продолжить. '
@@ -246,24 +266,19 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'tut_tap_done':
         'Отлично. Одиночное касание — быстрый статус: режим и заряд.',
     'tut_double_tap': 'Теперь коснитесь дважды быстро.',
-    'tut_double_tap_done':
-        'Отлично. Двойное касание открывает настройки.',
+    'tut_double_tap_done': 'Отлично. Двойное касание открывает настройки.',
     'tut_long_press': 'Удерживайте палец на экране одну секунду.',
-    'tut_long_press_done':
-        'Отлично. Долгое нажатие — голосовая команда.',
+    'tut_long_press_done': 'Отлично. Долгое нажатие — голосовая команда.',
     'tut_swipe_horizontal': 'Проведите пальцем вправо или влево.',
     'tut_swipe_horizontal_done':
         'Отлично. Свайп по горизонтали переключает режим.',
     'tut_swipe_up': 'Теперь проведите пальцем вверх.',
-    'tut_swipe_up_done':
-        'Отлично. Свайп вверх вызывает справку.',
+    'tut_swipe_up_done': 'Отлично. Свайп вверх вызывает справку.',
     'tut_swipe_down_legacy': 'Теперь проведите пальцем вниз.',
-    'tut_swipe_down_legacy_done':
-        'Отлично. Свайп вниз вызывает справку.',
+    'tut_swipe_down_legacy_done': 'Отлично. Свайп вниз вызывает справку.',
     'tut_two_finger':
         'Приложите два пальца сразу и удерживайте полторы секунды.',
-    'tut_two_finger_done':
-        'Отлично. Два пальца полторы секунды вызывают SOS.',
+    'tut_two_finger_done': 'Отлично. Два пальца полторы секунды вызывают SOS.',
     'tut_finished':
         'Обучение завершено. Также доступны голосовые команды для SOS и справки.',
     'tut_skip': 'Пропустить',
@@ -313,7 +328,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'ok': 'ОК',
     'settings_a11y_title': 'Специальные возможности',
     'settings_classic_gestures': 'Классические жесты',
-    'settings_classic_gestures_desc': 'Свайп вверх — шторка, свайп вниз — справка',
+    'settings_classic_gestures_desc':
+        'Свайп вверх — шторка, свайп вниз — справка',
     'settings_speech_rate': 'Скорость речи',
     'settings_tts_volume': 'Громкость речи',
     'settings_earcon_volume': 'Громкость звуков',
@@ -344,7 +360,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'backup_scan_qr_subtitle': 'Считайте QR с другого устройства',
     'qr_dismiss': 'Закрыть',
     'qr_export_title': 'QR настроек',
-    'qr_export_ready': 'QR готов. Покажите близкому, чтобы перенести настройки.',
+    'qr_export_ready':
+        'QR готов. Покажите близкому, чтобы перенести настройки.',
     'qr_export_hint': 'Покажите этот QR близкому или другому устройству.',
     'qr_export_footer': 'Контакт SOS не передаётся.',
     'qr_export_semantics': 'QR-код с настройками доступности',
@@ -358,7 +375,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'qr_import_speech_rate': 'скорость речи',
     'qr_import_tts_volume': 'громкость речи',
     'qr_import_earcon_volume': 'громкость звуков',
-    'qr_import_hold_to_apply': 'Удерживайте кнопку 1,5 секунды, чтобы применить.',
+    'qr_import_hold_to_apply':
+        'Удерживайте кнопку 1,5 секунды, чтобы применить.',
     'qr_import_long_press': 'Удерживайте — Применить',
     'qr_import_applying': 'Применяю...',
     'qr_import_applied': 'Настройки применены.',
@@ -419,12 +437,9 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'thermal_warm_move_to_shade':
         'Устройство нагревается. Зайдите в тень, если возможно. '
         'При высокой температуре точность обнаружения снижается.',
-    'running_detected':
-        'Вы бежите. Пожалуйста, замедлитесь для безопасности.',
-    'battery_50_remaining':
-        'Заряд 50%. Работы осталось примерно на два часа.',
-    'battery_30_warning':
-        'Заряд 30%. Рекомендуем сократить прогулку.',
+    'running_detected': 'Вы бежите. Пожалуйста, замедлитесь для безопасности.',
+    'battery_50_remaining': 'Заряд 50%. Работы осталось примерно на два часа.',
+    'battery_30_warning': 'Заряд 30%. Рекомендуем сократить прогулку.',
     'battery_15_critical':
         'Заряд 15%. Обнаружение ям снижено. Используйте трость или запросите помощь.',
     'low_light_warning':
@@ -438,10 +453,11 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'audio_resumed': 'Звук восстановлен.',
     'tts_fallback_en':
         'Voice pack for your language is missing. Using English fallback.',
-    'tts_fallback_ru':
-        'Казахский голос недоступен. Используется русский язык.',
+    'tts_fallback_ru': 'Казахский голос недоступен. Используется русский язык.',
     'fall_detector_unavailable':
         'Датчик падения недоступен. Автоматический SOS отключён.',
+    'fall_detector_degraded':
+        'Точность определения падений снижена. Гироскоп недоступен.',
     'yolo_unavailable':
         'Распознавание объектов недоступно. Обнаружение опасностей отключено.',
     'yolo_detector_not_responding': 'Детектор объектов не отвечает.',
@@ -462,12 +478,10 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'weather_restored': 'Видимость восстановлена.',
     'indoor_mode_entered': 'Режим помещения.',
     'indoor_mode_exited': 'Режим улицы.',
-    'camera_partial_blocked':
-        'Камера частично перекрыта. Проверьте объектив.',
+    'camera_partial_blocked': 'Камера частично перекрыта. Проверьте объектив.',
     'group_ahead': 'Впереди группа: ',
     'camera_reinit': 'Камера перезапускается. Подождите.',
-    'camera_droplet':
-        'Возможно, капля на объективе. Протрите.',
+    'camera_droplet': 'Возможно, капля на объективе. Протрите.',
     'camera_smear': 'Объектив загрязнён. Протрите.',
 
     'waypoint_saved': 'Место сохранено',
@@ -480,8 +494,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sos_queued': 'SOS поставлен в очередь, ожидаю подтверждение.',
     'sos_sent_no_location':
         'SOS отправлен, но местоположение не удалось определить.',
-    'sos_indoor_warning':
-        'Вы в помещении. Координаты могут быть неточными.',
+    'sos_indoor_warning': 'Вы в помещении. Координаты могут быть неточными.',
     'sos_no_contact': 'Контакт для SOS не задан. Настройте в настройках.',
     'sos_no_location': 'Не удалось определить местоположение.',
     'sos_no_gps': 'местоположение недоступно',
@@ -498,16 +511,14 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sos_fall_seconds': 'секунд.',
     'sos_fall_cancelled': 'Отправка SOS отменена.',
     'sos_fall_sent': 'SOS отправлен после падения.',
-    'sos_user_fallen_again':
-        'Внимание: пользователь упал снова.',
+    'sos_user_fallen_again': 'Внимание: пользователь упал снова.',
     'sos_fall_cancel_hint':
         'Скажите "я в порядке" или "ложная тревога". Прикоснитесь к экрану для отмены.',
-    'sos_fall_voice_confirm_prompt':
-        'Подтвердите: скажите "я в порядке".',
+    'sos_fall_voice_confirm_prompt': 'Подтвердите: скажите "я в порядке".',
     'sos_fall_voice_cancel_rejected':
         'Отмена не подтверждена. Продолжаю отсчёт.',
-    'sos_fall_are_you_ok':
-        'Вы в порядке? Нажмите для подтверждения.',
+    'sos_fall_are_you_ok': 'Вы в порядке? Нажмите для подтверждения.',
+    'sos_cancel_confirm': 'Коснитесь ещё раз для отмены SOS.',
     'sos_112_fallback':
         'Контакт не задан. SOS будет отправлен на экстренный номер 112.',
     'sos_position_stale': 'Местоположение устарело на',
@@ -532,6 +543,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sos_dir_w': 'на запад',
     'sos_dir_nw': 'на северо-запад',
     'camera_blocked': 'Камера заблокирована. Проверьте объектив.',
+    'camera_ae_transition': 'Камера адаптируется к свету. Будьте осторожны.',
     'camera_frozen':
         'Внимание, изображение с камеры не меняется. Перезапустите приложение.',
     'camera_stalled': 'Камера замолчала. Остановитесь, проверьте приложение.',
@@ -541,12 +553,11 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'nav_maybe_off_route': 'Возможно, вы отклоняетесь от маршрута.',
     'pitch_too_high': 'Наклоните телефон ниже для сканирования земли.',
     'pitch_too_low': 'Поднимите телефон чуть выше.',
-    'pitch_misaligned_blind':
-        'Поднимите телефон — я не вижу дорогу.',
-    'phone_abandoned':
-        'Bagdar лежит — проверьте телефон.',
-    'winter_visibility_heartbeat':
-        'Плохая видимость — аккуратно.',
+    'pitch_misaligned_blind': 'Поднимите телефон — я не вижу дорогу.',
+    'misalign_no_detections':
+        'Давно нет распознавания объектов. Поднимите телефон вертикально.',
+    'phone_abandoned': 'Bagdar лежит — проверьте телефон.',
+    'winter_visibility_heartbeat': 'Плохая видимость — аккуратно.',
     'curtain_on': 'Экранная шторка включена. Экран скрыт.',
     'curtain_off': 'Экранная шторка выключена.',
     'help_summary':
@@ -601,8 +612,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'depth_session_disabled':
         'Обнаружение глубины отключено из-за ошибок. Лестницы и бордюры не объявляются до перезапуска. Идите осторожно.',
     'hazard_detection_resumed': 'Обнаружение препятствий возобновлено.',
-    'depth_paused_explicit':
-        'Обнаружение лестниц и бордюров приостановлено.',
+    'depth_paused_explicit': 'Обнаружение лестниц и бордюров приостановлено.',
     'weather_depth_off_walking':
         'Видимость плохая. Лестницы и бордюры могут не определяться. Ступайте медленно.',
     'depth_degraded':
@@ -807,14 +817,14 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'settings_earcon_test': 'Тест звуковых сигналов',
     'settings_sos_not_set': 'Не задан',
 
-    'path_clear_minimal': 'Свободно.',
+    'path_clear_minimal': 'Анализ активен.',
     'hazard_stairs_down_minimal': 'Лестница. Стоп.',
     'hazard_overhead_minimal': 'Препятствие. Стоп.',
     'camera_blocked_minimal': 'Камера закрыта.',
 
     'scene_see_count': 'Вижу {count} объектов.',
     'scene_see_one': 'Вижу один объект.',
-    'scene_see_none': 'Ничего не обнаружено. Путь кажется свободным.',
+    'scene_see_none': 'Ничего не распознано.',
     'scene_object_entry': '{label} {direction}',
     'scene_object_dist': ', примерно {dist}',
     'scene_object_approaching': ', приближается',
@@ -878,10 +888,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'settings_save_failed':
         'Не удалось сохранить настройку. Попробуйте ещё раз.',
     'theme_selected_dark': 'Тёмная тема, чёрный экран и жёлтый акцент.',
-    'theme_selected_light':
-        'Светлая тема, белый экран и тёмно-синий акцент.',
-    'theme_selected_high_contrast':
-        'Высокий контраст, только белое на чёрном.',
+    'theme_selected_light': 'Светлая тема, белый экран и тёмно-синий акцент.',
+    'theme_selected_high_contrast': 'Высокий контраст, только белое на чёрном.',
     'theme_selected_warm':
         'Тёплая тема, кремовый экран и тёмно-коричневый текст.',
     'voice_layer_listening': 'Слушаю команду.',
@@ -893,32 +901,27 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'lang_pack_downloading': 'Скачиваю казахский языковой пакет.',
     'lang_pack_install_complete': 'Казахский языковой пакет установлен.',
     'lang_pack_install_failed': 'Не удалось установить казахский пакет.',
-    'lang_pack_offline_skip':
-        'Нет сети. Запрошу при следующем подключении.',
+    'lang_pack_offline_skip': 'Нет сети. Запрошу при следующем подключении.',
     'vosk_kk_loading': 'Готовлю казахское распознавание.',
     'vosk_kk_load_failed':
         'Не удалось загрузить казахское распознавание. Использую запасной вариант.',
     'lang_packs_screen_title': 'Языковые пакеты',
-    'lang_packs_screen_intro':
-        'Управление языковыми пакетами для казахского.',
-    'lang_packs_v2_toggle_label':
-        'Улучшенное казахское распознавание',
+    'lang_packs_screen_intro': 'Управление языковыми пакетами для казахского.',
+    'lang_packs_v2_toggle_label': 'Улучшенное казахское распознавание',
     'lang_packs_v2_toggle_desc':
         'Использовать Vosk для распознавания казахской речи. Требуется языковой пакет.',
     'lang_packs_v2_enabled': 'Улучшенное распознавание включено.',
     'lang_packs_v2_disabled': 'Улучшенное распознавание выключено.',
     'lang_packs_refresh': 'Обновить список',
     'lang_packs_refresh_done': 'Список пакетов обновлён.',
-    'lang_packs_refresh_failed':
-        'Не удалось обновить список. Проверьте сеть.',
+    'lang_packs_refresh_failed': 'Не удалось обновить список. Проверьте сеть.',
     'lang_packs_install': 'Установить',
     'lang_packs_delete': 'Удалить',
     'lang_packs_update': 'Обновить',
     'lang_packs_installed': 'Установлен',
     'lang_packs_not_installed': 'Не установлен',
     'lang_packs_size_mb': '{size} МБ',
-    'lang_packs_no_packs':
-        'Языковые пакеты не найдены. Нажмите «Обновить».',
+    'lang_packs_no_packs': 'Языковые пакеты не найдены. Нажмите «Обновить».',
     'lang_packs_close': 'Закрыть',
     'lang_packs_delete_confirm': 'Удалить пакет {name}?',
     'voice_kk_v2_pack_missing':
@@ -933,7 +936,6 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'lang_pack_online_ready':
         'Сеть восстановлена. Пакет казахского распознавания готов к установке. Скажите «языковые пакеты».',
 
-    
     'tts_kk_engine_system': 'Системный казахский голос',
     'tts_kk_engine_rhvoice': 'RHVoice (Aigul)',
     'tts_kk_engine_espeak': 'espeak-ng (резервный)',
@@ -955,7 +957,6 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'lang_pack_rhvoice_online_ready':
         'Сеть восстановлена. Пакет казахского голоса готов к установке. Скажите «языковые пакеты».',
 
-    
     'trail_recording_started': 'Запись маршрута начата. Идите к цели.',
     'trail_recording_stopped': 'Маршрут сохранён.',
     'trail_recording_failed': 'Не удалось начать запись маршрута.',
@@ -974,7 +975,6 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'trail_slight_left': 'Немного влево.',
     'trail_slight_right': 'Немного вправо.',
 
-    
     'bazaar_mode_on': 'Режим базара включён.',
     'bazaar_mode_off': 'Режим базара выключен.',
     'livestock_mode_on': 'Режим животных включён.',
@@ -986,12 +986,11 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'livestock_cat': 'Кошка',
     'livestock_bird': 'Птица',
 
-    
-    'voice_adapt_on': 'Адаптация голоса включена. Данные остаются на устройстве.',
+    'voice_adapt_on':
+        'Адаптация голоса включена. Данные остаются на устройстве.',
     'voice_adapt_off': 'Адаптация голоса выключена.',
     'voice_adapt_samples_cleared': 'Данные адаптации удалены.',
 
-    
     'mesh_hazard_generic': 'Другой пользователь сообщил о препятствии рядом.',
     'mesh_hazard_pothole': 'Другой пользователь сообщил о яме рядом.',
     'mesh_hazard_construction': 'Другой пользователь сообщил о стройке рядом.',
@@ -999,44 +998,52 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'mesh_hazard_stairs': 'Другой пользователь сообщил о лестнице рядом.',
     'mesh_buddy_started': 'Сеть помощников включена.',
     'mesh_buddy_stopped': 'Сеть помощников выключена.',
-    'mesh_buddy_no_ble': 'Bluetooth не поддерживается. Сеть помощников недоступна.',
+    'mesh_buddy_no_ble':
+        'Bluetooth не поддерживается. Сеть помощников недоступна.',
 
-    
     'oscp_near_field': 'Трость: препятствие впереди',
     'oscp_connected': 'Трость подключена.',
     'oscp_disconnected': 'Трость отключена.',
     'oscp_battery_low': 'Низкий заряд трости.',
     'oscp_no_ble': 'Bluetooth не поддерживается. Трость недоступна.',
 
-    
     'near_miss_recorded': 'Опасная ситуация записана.',
     'near_miss_cleared': 'Записи опасных ситуаций удалены.',
 
-    
     'vlm_loading': 'Загружаю модель описания сцены.',
     'vlm_ready': 'Модель описания готова.',
-    'vlm_not_available': 'Описание сцены недоступно. Нужна зарядка и свободная память.',
+    'vlm_not_available':
+        'Описание сцены недоступно. Нужна зарядка и свободная память.',
     'vlm_thinking': 'Думаю...',
-    'vlm_answer_fallback': 'Модель не ответила. Использую стандартное описание.',
+    'vlm_answer_fallback':
+        'Модель не ответила. Использую стандартное описание.',
 
-    
     'sonar_near_field': 'Эхолот: объект впереди',
     'sonar_started': 'Эхолот включён.',
     'sonar_stopped': 'Эхолот выключен.',
     'sonar_calibrating': 'Калибрую эхолот.',
     'sonar_no_48k': 'Микрофон не поддерживает эхолот.',
-    'onb_mic_prime_tts': 'Для голосового управления мне нужен доступ к микрофону. Сейчас появится системный диалог.',
-    'onb_mic_denied_fallback_tts': 'Доступ к микрофону отклонён. Голосовое управление отключено. Пожалуйста, используйте жесты для настройки.',
-    'onb_mode_confirm_prompt': 'Режим выбран. Скажите да для продолжения или назовите другой режим.',
-    'sos_setup_prompt_tts': 'Пожалуйста, укажите телефон близкого человека для экстренной помощи SOS.',
-    'camera_perm_recovery_tts': 'Доступ к камере заблокирован. Пожалуйста, разрешите доступ в настройках телефона. Дважды коснитесь для настроек, один раз для повтора.',
-    'onb_help_prompt_lang': 'Выберите язык. Произнесите: Русский, Казахский или Английский.',
+    'onb_mic_prime_tts':
+        'Для голосового управления мне нужен доступ к микрофону. Сейчас появится системный диалог.',
+    'onb_mic_denied_fallback_tts':
+        'Доступ к микрофону отклонён. Голосовое управление отключено. Пожалуйста, используйте жесты для настройки.',
+    'onb_mode_confirm_prompt':
+        'Режим выбран. Скажите да для продолжения или назовите другой режим.',
+    'sos_setup_prompt_tts':
+        'Пожалуйста, укажите телефон близкого человека для экстренной помощи SOS.',
+    'camera_perm_recovery_tts':
+        'Доступ к камере заблокирован. Пожалуйста, разрешите доступ в настройках телефона. Дважды коснитесь для настроек, один раз для повтора.',
+    'onb_help_prompt_lang':
+        'Выберите язык. Произнесите: Русский, Казахский или Английский.',
     'onb_help_prompt_hand': 'Выберите ведущую руку. Скажите: Правая или Левая.',
-    'onb_help_prompt_mode': 'Выберите режим по умолчанию. Скажите: Улица, Трость или Сканирование.',
+    'onb_help_prompt_mode':
+        'Выберите режим по умолчанию. Скажите: Улица, Трость или Сканирование.',
     'onb_help_prompt_perm': 'Разрешите доступ к камере. Скажите: Разрешить.',
-    'onb_help_prompt_calib': 'Калибровка расстояния. Скажите: Да для продолжения.',
+    'onb_help_prompt_calib':
+        'Калибровка расстояния. Скажите: Да для продолжения.',
     'onb_help_prompt_ready': 'Все готово. Скажите: Да чтобы начать.',
-    'onb_emergency_skip_confirm': 'Вы хотите пропустить всю настройку приложения? Двойной тап подтвердит. Один тап отменит.',
+    'onb_emergency_skip_confirm':
+        'Вы хотите пропустить всю настройку приложения? Двойной тап подтвердит. Один тап отменит.',
   },
 
   AppLanguage.kk: {
@@ -1049,9 +1056,9 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'synth_event_stop_right': 'Тоқта! Оң жақтан',
     'synth_event_stop_center': 'Тоқта! Тура алдыңда',
     'sign': 'Белгі',
-    'path_clear': 'Жол бос.',
-    'path_clear_cane': 'Бос.',
-    'path_clear_label': 'Жол бос',
+    'path_clear': 'Талдау белсенді.',
+    'path_clear_cane': 'Талдау белсенді.',
+    'path_clear_label': 'Талдау белсенді',
     'no_change': 'Жағдай өзгерген жоқ.',
     'nothing_seen': 'Ештеңе көрінбейді.',
     'nothing_here': 'Ештеңе жоқ',
@@ -1087,7 +1094,26 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'corridor_blocked': 'Жол бөгелген.',
     'narrow': 'Тар.',
 
-    'status_no_obstacle': 'Кедергі жоқ',
+    'status_no_obstacle': 'Талдау белсенді',
+    'status_analysis_active': 'Талдау белсенді',
+    'spatial_analysis_limited':
+        'Кеңістікті талдау шектеулі. Таяқты пайдаланыңыз.',
+    'spatial_stop_sensing_unavailable':
+        'Тоқтаңыз. Кеңістікті талдау қолжетімсіз.',
+    'core_health_sound_unavailable':
+        'Дыбыс қолжетімсіз. Діріл ескертулері жұмыс істейді.',
+    'core_health_haptic_unavailable':
+        'Діріл қолжетімсіз. Дауыстық ескертулер қалады.',
+    'core_health_recovered': 'Жүйе қалпына келді.',
+    'core_health_status': 'Жүйе күйі',
+    'generic_obstacle_ahead': 'Алда кедергі.',
+    'generic_obstacle_stop': 'Тоқтаңыз. Алда кедергі.',
+    'generic_obstacle_left': 'Солда кедергі.',
+    'generic_obstacle_right': 'Оңда кедергі.',
+    'generic_obstacle_overhead': 'Тоқтаңыз. Бас деңгейінде кедергі.',
+    'generic_vehicle_ahead': 'Алда көлік.',
+    'generic_vehicle_left': 'Солда көлік.',
+    'generic_vehicle_right': 'Оңда көлік.',
     'status_scanning': 'Сканерлеу...',
     'status_waiting': 'күту',
     'dist_safe': 'қауіпсіз',
@@ -1105,7 +1131,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'ocr_reading': 'Оқып жатырмын...',
     'ocr_not_found': 'Мәтін табылмады.',
     'ocr_camera_not_ready': 'Камера дайын емес.',
-    
+
     'ocr_low_memory':
         'Мәтінді тану үшін жады жетпейді. Басқа қосымшаларды жауып, қайта көріңіз.',
     'ocr_paddle_init_failed':
@@ -1115,8 +1141,11 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'camera_not_found': 'Камера табылмады',
     'camera_started': 'Камера қосылды',
     'system_ready': 'Жүйе дайын',
+    'core_feature_unavailable': 'Бұл функция осы құрастырмада қолжетімсіз.',
     'init_failed':
         'Жүйені іске қосу сәтсіз. Тоқтаңыз. Қосымшаны қайта іске қосыңыз.',
+    'camera_init_failed_critical':
+        'Камера қатесі. Тану қолжетімсіз. Қосымшаны қайта іске қосыңыз.',
     'mode_changed': 'Режим',
 
     'calib_aim': 'Калибрлеу үшін камераны адамға бағыттаңыз.',
@@ -1172,7 +1201,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'onb_perm_title': 'Рұқсат қажет',
     'onb_perm_sub': 'Тек камера міндетті.\nҚалғандары — қалауыңыз бойынша.',
     'onb_calib_title': 'Қашықтық дәлдігі',
-    'onb_calib_sub': 'Калибрлеусіз қателік ~40%.\nКалибрлеуден кейін — ~10%. 10 секунд кетеді.',
+    'onb_calib_sub':
+        'Калибрлеусіз қателік ~40%.\nКалибрлеуден кейін — ~10%. 10 секунд кетеді.',
     'onb_calib_app_note':
         'Калибрлеуді іске қосқаннан кейін Баптауларда орындауға болады.',
     'onb_ready_title': 'Бәрі дайын!',
@@ -1225,25 +1255,18 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Дауыстық нұсқауларға еріңіз. '
         'Қалаған сәтте өткізіп жіберуге болады.',
     'tut_tap': 'Экранға бір рет түртіңіз.',
-    'tut_tap_done':
-        'Тамаша! Бір рет түрту — жылдам күй: режим және заряд.',
+    'tut_tap_done': 'Тамаша! Бір рет түрту — жылдам күй: режим және заряд.',
     'tut_double_tap': 'Енді жылдам екі рет түртіңіз.',
-    'tut_double_tap_done':
-        'Жарайсыз! Екі рет түрту баптауларды ашады.',
+    'tut_double_tap_done': 'Жарайсыз! Екі рет түрту баптауларды ашады.',
     'tut_long_press': 'Саусақты экранда бір секунд ұстаңыз.',
-    'tut_long_press_done':
-        'Керемет! Ұзақ басу — дауыстық команда.',
+    'tut_long_press_done': 'Керемет! Ұзақ басу — дауыстық команда.',
     'tut_swipe_horizontal': 'Саусақпен оңға не солға сырғытыңыз.',
-    'tut_swipe_horizontal_done':
-        'Дұрыс! Көлденең сырғыту режимді ауыстырады.',
+    'tut_swipe_horizontal_done': 'Дұрыс! Көлденең сырғыту режимді ауыстырады.',
     'tut_swipe_up': 'Енді саусақпен жоғары сырғытыңыз.',
-    'tut_swipe_up_done':
-        'Дұрыс! Жоғары сырғыту анықтаманы ашады.',
+    'tut_swipe_up_done': 'Дұрыс! Жоғары сырғыту анықтаманы ашады.',
     'tut_swipe_down_legacy': 'Енді саусақпен төмен сырғытыңыз.',
-    'tut_swipe_down_legacy_done':
-        'Дұрыс! Төмен сырғыту анықтаманы ашады.',
-    'tut_two_finger':
-        'Екі саусақты қатар қойып, бір жарым секунд ұстаңыз.',
+    'tut_swipe_down_legacy_done': 'Дұрыс! Төмен сырғыту анықтаманы ашады.',
+    'tut_two_finger': 'Екі саусақты қатар қойып, бір жарым секунд ұстаңыз.',
     'tut_two_finger_done':
         'Жарайсыз! Екі саусақпен бір жарым секунд ұстау SOS шақырады.',
     'tut_finished':
@@ -1292,7 +1315,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'settings': 'Баптаулар',
     'settings_a11y_title': 'Арнайы мүмкіндіктер',
     'settings_classic_gestures': 'Классикалық қимылдар',
-    'settings_classic_gestures_desc': 'Жоғары сырғыту — перде, төмен сырғыту — анықтама',
+    'settings_classic_gestures_desc':
+        'Жоғары сырғыту — перде, төмен сырғыту — анықтама',
     'settings_speech_rate': 'Сөйлеу жылдамдығы',
     'settings_tts_volume': 'Сөйлеу дауысы',
     'settings_earcon_volume': 'Дыбыс деңгейі',
@@ -1326,8 +1350,10 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'backup_scan_qr_subtitle': 'Басқа құрылғыдағы QR-ды оқыңыз',
     'qr_dismiss': 'Жабу',
     'qr_export_title': 'Баптаулар QR-ы',
-    'qr_export_ready': 'QR дайын. Баптауларды көшіру үшін жақыныңызға көрсетіңіз.',
-    'qr_export_hint': 'Бұл QR-ды жақыныңызға немесе басқа құрылғыға көрсетіңіз.',
+    'qr_export_ready':
+        'QR дайын. Баптауларды көшіру үшін жақыныңызға көрсетіңіз.',
+    'qr_export_hint':
+        'Бұл QR-ды жақыныңызға немесе басқа құрылғыға көрсетіңіз.',
     'qr_export_footer': 'SOS контактісі берілмейді.',
     'qr_export_semantics': 'Қолжетімділік баптауларының QR-коды',
     'qr_import_title': 'QR сканерлеу',
@@ -1340,7 +1366,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'qr_import_speech_rate': 'сөйлеу жылдамдығы',
     'qr_import_tts_volume': 'сөйлеу дауысы',
     'qr_import_earcon_volume': 'дыбыс деңгейі',
-    'qr_import_hold_to_apply': 'Қолдану үшін батырманы 1,5 секунд ұстап тұрыңыз.',
+    'qr_import_hold_to_apply':
+        'Қолдану үшін батырманы 1,5 секунд ұстап тұрыңыз.',
     'qr_import_long_press': 'Ұстап тұрыңыз — Қолдану',
     'qr_import_applying': 'Қолдануда...',
     'qr_import_applied': 'Баптаулар қолданылды.',
@@ -1375,7 +1402,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'obj_find_searching': '{name} іздеу жалғасуда...',
     'obj_forget_done': '{name} ұмытылды',
     'obj_forget_unknown': '{name} есімде жоқ.',
-    'obj_unknown_target': 'Мұндай зат есімде жоқ. {name} есте сақта деп айтыңыз.',
+    'obj_unknown_target':
+        'Мұндай зат есімде жоқ. {name} есте сақта деп айтыңыз.',
     'obj_busy_remembering': 'Қазір есте сақтап жатырмын, күтіңіз.',
 
     'fg_notification_title': 'Bagdar белсенді',
@@ -1402,10 +1430,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Жоғары температурада анықтау дәлдігі төмендейді.',
     'running_detected':
         'Сіз жүгіріп жатырсыз. Қауіпсіздік үшін баяуырақ жүріңіз.',
-    'battery_50_remaining':
-        'Заряд 50%. Жұмыс уақыты шамамен екі сағат.',
-    'battery_30_warning':
-        'Заряд 30%. Серуенді қысқартуды ұсынамыз.',
+    'battery_50_remaining': 'Заряд 50%. Жұмыс уақыты шамамен екі сағат.',
+    'battery_30_warning': 'Заряд 30%. Серуенді қысқартуды ұсынамыз.',
     'battery_15_critical':
         'Заряд 15%. Шұңқырларды анықтау төмендетілді. Таяқ пайдаланыңыз немесе көмек сұраңыз.',
     'low_light_warning':
@@ -1419,6 +1445,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'audio_resumed': 'Дыбыс қалпына келді.',
     'tts_fallback_en':
         'Voice pack for your language is missing. Using English fallback.',
+    'fall_detector_degraded':
+        'Құлауды анықтау дәлдігі төмендетілді. Гироскоп қолжетімсіз.',
     'test_alert_warning': 'Тест: назар аударыңыз, солда',
     'test_alert_critical': 'Тест: критикалық, алда',
     'lifecycle_background':
@@ -1436,12 +1464,10 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'weather_restored': 'Көріну қалпына келтірілді.',
     'indoor_mode_entered': 'Бөлме режимі.',
     'indoor_mode_exited': 'Көше режимі.',
-    'camera_partial_blocked':
-        'Камера ішінара жабық. Линзаны тексеріңіз.',
+    'camera_partial_blocked': 'Камера ішінара жабық. Линзаны тексеріңіз.',
     'group_ahead': 'Алда топ: ',
     'camera_reinit': 'Камера қайта қосылуда. Күтіңіз.',
-    'camera_droplet':
-        'Линзада тамшы болуы мүмкін. Сүртіңіз.',
+    'camera_droplet': 'Линзада тамшы болуы мүмкін. Сүртіңіз.',
     'camera_smear': 'Линза ластанған. Сүртіңіз.',
 
     'waypoint_saved': 'Орын сақталды',
@@ -1466,16 +1492,14 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sos_fall_seconds': 'секундтан кейін.',
     'sos_fall_cancelled': 'SOS жіберу болдырылмады.',
     'sos_fall_sent': 'Құлаудан кейін SOS жіберілді.',
-    'sos_user_fallen_again':
-        'Назар аударыңыз: пайдаланушы қайта құлады.',
+    'sos_user_fallen_again': 'Назар аударыңыз: пайдаланушы қайта құлады.',
     'sos_fall_cancel_hint':
         '"Мен жақсымын" немесе "жалған дабыл" деп айтыңыз. Болдырмау үшін экранды басыңыз.',
-    'sos_fall_voice_confirm_prompt':
-        'Растаңыз: "мен жақсымын" деп айтыңыз.',
+    'sos_fall_voice_confirm_prompt': 'Растаңыз: "мен жақсымын" деп айтыңыз.',
     'sos_fall_voice_cancel_rejected':
         'Болдырмау расталмады. Кері санақ жалғасуда.',
-    'sos_fall_are_you_ok':
-        'Жайсыз ба? Растау үшін басыңыз.',
+    'sos_fall_are_you_ok': 'Жайсыз ба? Растау үшін басыңыз.',
+    'sos_cancel_confirm': 'SOS-ты болдырмау үшін тағы бір рет түртіңіз.',
     'sos_112_fallback': 'Байланыс нөмірі жоқ. SOS 112 нөміріне жіберіледі.',
     'sos_position_stale': 'Орналасу ескі, жасы',
     'sos_position_unit_min': 'минут',
@@ -1484,7 +1508,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sos_delivered': 'SOS жеткізілді.',
     'sos_composer_opened':
         'Хабар жазу терезесі ашылды, «Жіберу» түймесі — төменгі оң жақта.',
-    'sos_dialer_opened': 'Теру тақтасы ашылды, жасыл қоңырау шалу түймесін басыңыз.',
+    'sos_dialer_opened':
+        'Теру тақтасы ашылды, жасыл қоңырау шалу түймесін басыңыз.',
     'sos_planned_destination': 'Бара жатқан жер:',
     'sos_near_wifi': 'Wi-Fi жанында:',
     'sos_near_cell': 'Ұялы байланыс мұнарасы жанында:',
@@ -1499,6 +1524,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sos_dir_w': 'батысқа',
     'sos_dir_nw': 'солтүстік-батысқа',
     'camera_blocked': 'Камера бұғатталған. Объективті тексеріңіз.',
+    'camera_ae_transition': 'Камера жарыққа бейімделуде. Сақ болыңыз.',
     'camera_frozen':
         'Назар аударыңыз, камера кескіні тұрып қалды. Қосымшаны қайта іске қосыңыз.',
     'camera_stalled': 'Камера тоқтады. Тоқтаңыз, қолданбаны тексеріңіз.',
@@ -1508,12 +1534,11 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'nav_maybe_off_route': 'Маршруттан ауытқып жатқан шығарсыз.',
     'pitch_too_high': 'Жерді сканерлеу үшін телефонды төмен еңкейтіңіз.',
     'pitch_too_low': 'Телефонды сәл жоғары көтеріңіз.',
-    'pitch_misaligned_blind':
-        'Телефонды көтеріңіз — мен жолды көрмеймін.',
-    'phone_abandoned':
-        'Bagdar жатыр — телефонды тексеріңіз.',
-    'winter_visibility_heartbeat':
-        'Көріну нашар — абайлаңыз.',
+    'pitch_misaligned_blind': 'Телефонды көтеріңіз — мен жолды көрмеймін.',
+    'misalign_no_detections':
+        'Ұзақ уақыт нысандар танылмай жатыр. Телефонды тіктеп ұстаңыз.',
+    'phone_abandoned': 'Bagdar жатыр — телефонды тексеріңіз.',
+    'winter_visibility_heartbeat': 'Көріну нашар — абайлаңыз.',
     'curtain_on': 'Экран пердесі қосулы. Экран жасырын.',
     'curtain_off': 'Экран пердесі өшірулі.',
     'help_summary':
@@ -1574,8 +1599,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'depth_session_disabled':
         'Қателерге байланысты тереңдікті анықтау өшірілді. Қайта іске қосылғанша саты мен бордюр хабарланбайды. Абай болыңыз.',
     'hazard_detection_resumed': 'Кедергілерді анықтау қайта қосылды.',
-    'depth_paused_explicit':
-        'Саты мен бордюрді анықтау уақытша тоқтатылды.',
+    'depth_paused_explicit': 'Саты мен бордюрді анықтау уақытша тоқтатылды.',
     'weather_depth_off_walking':
         'Көріну нашар. Саты мен бордюр анықталмауы мүмкін. Ақырын жүріңіз.',
     'depth_degraded':
@@ -1780,14 +1804,14 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'settings_earcon_test': 'Дыбыстық сигналдар тесті',
     'settings_sos_not_set': 'Белгіленбеген',
 
-    'path_clear_minimal': 'Бос.',
+    'path_clear_minimal': 'Талдау белсенді.',
     'hazard_stairs_down_minimal': 'Баспалдақ. Тоқта.',
     'hazard_overhead_minimal': 'Кедергі. Тоқта.',
     'camera_blocked_minimal': 'Камера жабық.',
 
     'scene_see_count': '{count} нысан көрінеді.',
     'scene_see_one': 'Бір нысан көрінеді.',
-    'scene_see_none': 'Ештеңе табылмады. Жол бос сияқты.',
+    'scene_see_none': 'Ештеңе танылмады.',
     'scene_object_entry': '{label} {direction}',
     'scene_object_dist': ', шамамен {dist}',
     'scene_object_approaching': ', жақындап келеді',
@@ -1837,8 +1861,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'shelf_read_hint': 'Қос түрту — оқуды бастау.',
     'shelf_navigate_label': 'Дауыспен бағыт салу.',
     'shelf_navigate_hint': 'Қос түрту — бару орнын таңдау.',
-    'shelf_read_started':
-        'Көрген нәрсемді оқимын. Телефонды тігінен ұстаңыз.',
+    'shelf_read_started': 'Көрген нәрсемді оқимын. Телефонды тігінен ұстаңыз.',
     'shelf_navigate_started': 'Қайда барамыз? Орынның атын айтыңыз.',
     'shelf_cane_confirm': 'Режимді ауыстыру үшін секунд ұстаңыз.',
     'ocr_aim_hint': 'Мәтінді жақынырақ ұстап, камераны тігінен ұстаңыз.',
@@ -1851,10 +1874,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Аймақ картасы жүктелмеген. "Картаны жүкте" деп айтыңыз.',
     'settings_save_failed': 'Параметр сақталмады. Қайталап көріңіз.',
     'theme_selected_dark': 'Қара тақырып, қара экран мен сары акцент.',
-    'theme_selected_light':
-        'Ашық тақырып, ақ экран мен қара-көк акцент.',
-    'theme_selected_high_contrast':
-        'Жоғары контраст, тек қара үстіндегі ақ.',
+    'theme_selected_light': 'Ашық тақырып, ақ экран мен қара-көк акцент.',
+    'theme_selected_high_contrast': 'Жоғары контраст, тек қара үстіндегі ақ.',
     'theme_selected_warm':
         'Жылы тақырып, кілегейлі экран мен қара-қоңыр мәтін.',
     'voice_layer_listening': 'Команданы тыңдап тұрмын.',
@@ -1866,14 +1887,12 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'lang_pack_downloading': 'Қазақ тіл пакетін жүктеп жатырмын.',
     'lang_pack_install_complete': 'Қазақ тіл пакеті орнатылды.',
     'lang_pack_install_failed': 'Қазақ пакетін орнату мүмкін болмады.',
-    'lang_pack_offline_skip':
-        'Желі жоқ. Келесі жалғану кезінде сұраймын.',
+    'lang_pack_offline_skip': 'Желі жоқ. Келесі жалғану кезінде сұраймын.',
     'vosk_kk_loading': 'Қазақша тануды дайындап жатырмын.',
     'vosk_kk_load_failed':
         'Қазақша тануды жүктеу мүмкін болмады. Қосымша нұсқаны қолданамын.',
     'lang_packs_screen_title': 'Тіл пакеттері',
-    'lang_packs_screen_intro':
-        'Қазақ тіліне арналған тіл пакеттерін басқару.',
+    'lang_packs_screen_intro': 'Қазақ тіліне арналған тіл пакеттерін басқару.',
     'lang_packs_v2_toggle_label': 'Жетілдірілген қазақша тану',
     'lang_packs_v2_toggle_desc':
         'Қазақша сөйлеуді тану үшін Vosk қолдану. Тіл пакеті қажет.',
@@ -1905,7 +1924,6 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'lang_pack_online_ready':
         'Желі қалпына келді. Қазақша тану пакетін орнатуға дайын. «Тіл пакеттері» деп айтыңыз.',
 
-    
     'tts_kk_engine_system': 'Жүйелік қазақша дауыс',
     'tts_kk_engine_rhvoice': 'RHVoice (Айгүл)',
     'tts_kk_engine_espeak': 'espeak-ng (қосалқы)',
@@ -1927,8 +1945,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'lang_pack_rhvoice_online_ready':
         'Желі қалпына келді. Қазақша дауыс пакетін орнатуға дайын. «Тіл пакеттері» деп айтыңыз.',
 
-    
-    'trail_recording_started': 'Маршрут жазуы басталды. Мақсатқа қарай жүріңіз.',
+    'trail_recording_started':
+        'Маршрут жазуы басталды. Мақсатқа қарай жүріңіз.',
     'trail_recording_stopped': 'Маршрут сақталды.',
     'trail_recording_failed': 'Маршрут жазуын бастау мүмкін болмады.',
     'trail_recording_empty': 'Маршрут бос, сақталмады.',
@@ -1946,7 +1964,6 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'trail_slight_left': 'Сәл солға.',
     'trail_slight_right': 'Сәл оңға.',
 
-    
     'bazaar_mode_on': 'Базар режимі қосылды.',
     'bazaar_mode_off': 'Базар режимі өшірілді.',
     'livestock_mode_on': 'Мал режимі қосылды.',
@@ -1958,59 +1975,69 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'livestock_cat': 'Мысық',
     'livestock_bird': 'Құс',
 
-    
     'voice_adapt_on': 'Дауыс бейімдеу қосылды. Деректер құрылғыда қалады.',
     'voice_adapt_off': 'Дауыс бейімдеу өшірілді.',
     'voice_adapt_samples_cleared': 'Бейімдеу деректері жойылды.',
 
-    
-    'mesh_hazard_generic': 'Басқа пайдаланушы жақын маңда кедергі туралы хабарлады.',
-    'mesh_hazard_pothole': 'Басқа пайдаланушы жақын маңда шұңқыр туралы хабарлады.',
-    'mesh_hazard_construction': 'Басқа пайдаланушы жақын маңда құрылыс туралы хабарлады.',
+    'mesh_hazard_generic':
+        'Басқа пайдаланушы жақын маңда кедергі туралы хабарлады.',
+    'mesh_hazard_pothole':
+        'Басқа пайдаланушы жақын маңда шұңқыр туралы хабарлады.',
+    'mesh_hazard_construction':
+        'Басқа пайдаланушы жақын маңда құрылыс туралы хабарлады.',
     'mesh_hazard_ice': 'Басқа пайдаланушы жақын маңда мұз туралы хабарлады.',
-    'mesh_hazard_stairs': 'Басқа пайдаланушы жақын маңда баспалдақ туралы хабарлады.',
+    'mesh_hazard_stairs':
+        'Басқа пайдаланушы жақын маңда баспалдақ туралы хабарлады.',
     'mesh_buddy_started': 'Көмекшілер желісі қосылды.',
     'mesh_buddy_stopped': 'Көмекшілер желісі өшірілді.',
-    'mesh_buddy_no_ble': 'Bluetooth қолдау көрсетілмейді. Көмекшілер желісі қол жетімсіз.',
+    'mesh_buddy_no_ble':
+        'Bluetooth қолдау көрсетілмейді. Көмекшілер желісі қол жетімсіз.',
 
-    
     'oscp_near_field': 'Таяқ: алда кедергі',
     'oscp_connected': 'Таяқ қосылды.',
     'oscp_disconnected': 'Таяқ ажыратылды.',
     'oscp_battery_low': 'Таяқтың заряды төмен.',
     'oscp_no_ble': 'Bluetooth қолдау көрсетілмейді. Таяқ қол жетімсіз.',
 
-    
     'near_miss_recorded': 'Қауіпті жағдай жазылды.',
     'near_miss_cleared': 'Қауіпті жағдай жазбалары жойылды.',
 
-    
     'vlm_loading': 'Сахна сипаттау моделін жүктеп жатырмын.',
     'vlm_ready': 'Сахна сипаттау моделі дайын.',
-    'vlm_not_available': 'Сахна сипаттау қол жетімсіз. Зарядтау және бос жад қажет.',
+    'vlm_not_available':
+        'Сахна сипаттау қол жетімсіз. Зарядтау және бос жад қажет.',
     'vlm_thinking': 'Ойланып жатырмын...',
-    'vlm_answer_fallback': 'Модель жауап бермеді. Стандартты сипаттама қолданылуда.',
+    'vlm_answer_fallback':
+        'Модель жауап бермеді. Стандартты сипаттама қолданылуда.',
 
-    
     'sonar_near_field': 'Эхолот: алда нысан',
     'sonar_started': 'Эхолот қосылды.',
     'sonar_stopped': 'Эхолот өшірілді.',
     'sonar_calibrating': 'Эхолотты калибрлеу.',
     'sonar_no_48k': 'Микрофон эхолотты қолдамайды.',
-    'onb_mic_prime_tts': 'Дауыспен басқару үшін маған микрофонға рұқсат қажет. Қазір жүйелік сұрау терезесі пайда болады.',
-    'onb_mic_denied_fallback_tts': 'Микрофонға рұқсат берілмеді. Дауыспен басқару өшірілген. Параметрлерді реттеу үшін қимылдарды пайдаланыңыз.',
-    'onb_mode_confirm_prompt': 'Режим таңдалды. Жалғастыру үшін иә деп айтыңыз немесе басқа режимді атаңыз.',
-    'sos_setup_prompt_tts': 'Шұғыл SOS көмегі үшін жақын адамыңыздың телефон нөмірін көрсетіңіз.',
-    'camera_perm_recovery_tts': 'Камераға рұқсат блокталған. Телефон баптауларында рұқсат беріңіз. Баптаулар үшін қос түртіңіз, қайталау үшін бір рет түртіңіз.',
-    'onb_help_prompt_lang': 'Тілді таңдаңыз. Орыс, Қазақ немесе Ағылшын деп айтыңыз.',
-    'onb_help_prompt_hand': 'Ведущий қолды таңдаңыз. Оң немесе Сол деп айтыңыз.',
-    'onb_help_prompt_mode': 'Әдепкі режимді таңдаңыз. Көше, Таяқ немесе Сканерлеу деп айтыңыз.',
+    'onb_mic_prime_tts':
+        'Дауыспен басқару үшін маған микрофонға рұқсат қажет. Қазір жүйелік сұрау терезесі пайда болады.',
+    'onb_mic_denied_fallback_tts':
+        'Микрофонға рұқсат берілмеді. Дауыспен басқару өшірілген. Параметрлерді реттеу үшін қимылдарды пайдаланыңыз.',
+    'onb_mode_confirm_prompt':
+        'Режим таңдалды. Жалғастыру үшін иә деп айтыңыз немесе басқа режимді атаңыз.',
+    'sos_setup_prompt_tts':
+        'Шұғыл SOS көмегі үшін жақын адамыңыздың телефон нөмірін көрсетіңіз.',
+    'camera_perm_recovery_tts':
+        'Камераға рұқсат блокталған. Телефон баптауларында рұқсат беріңіз. Баптаулар үшін қос түртіңіз, қайталау үшін бір рет түртіңіз.',
+    'onb_help_prompt_lang':
+        'Тілді таңдаңыз. Орыс, Қазақ немесе Ағылшын деп айтыңыз.',
+    'onb_help_prompt_hand':
+        'Ведущий қолды таңдаңыз. Оң немесе Сол деп айтыңыз.',
+    'onb_help_prompt_mode':
+        'Әдепкі режимді таңдаңыз. Көше, Таяқ немесе Сканерлеу деп айтыңыз.',
     'onb_help_prompt_perm': 'Камераға рұқсат беріңіз. Рұқсат деп айтыңыз.',
-    'onb_help_prompt_calib': 'Қашықтықты калибрлеу. Жалғастыру үшін Иә деп айтыңыз.',
+    'onb_help_prompt_calib':
+        'Қашықтықты калибрлеу. Жалғастыру үшін Иә деп айтыңыз.',
     'onb_help_prompt_ready': 'Бәрі дайын. Бастау үшін Иә деп айтыңыз.',
-    'onb_emergency_skip_confirm': 'Барлық қолданба реттеулерін өткізіп жіберу керек пе? Қос түртіңіз растайды. Бір түрту болдырмайды.',
-    'yolo_unavailable':
-        'Нысан тануы қолжетімсіз. Қауіп анықтау өшірілді.',
+    'onb_emergency_skip_confirm':
+        'Барлық қолданба реттеулерін өткізіп жіберу керек пе? Қос түртіңіз растайды. Бір түрту болдырмайды.',
+    'yolo_unavailable': 'Нысан тануы қолжетімсіз. Қауіп анықтау өшірілді.',
     'yolo_detector_not_responding': 'Нысан детекторы жауап бермейді.',
   },
   AppLanguage.en: {
@@ -2023,9 +2050,9 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'synth_event_stop_right': 'Stop! From the right',
     'synth_event_stop_center': 'Stop! Straight ahead',
     'sign': 'Sign',
-    'path_clear': 'Path clear.',
-    'path_clear_cane': 'Clear.',
-    'path_clear_label': 'Path clear',
+    'path_clear': 'Analysis active.',
+    'path_clear_cane': 'Analysis active.',
+    'path_clear_label': 'Analysis active',
     'no_change': 'No changes.',
     'nothing_seen': 'I see nothing.',
     'nothing_here': 'Nothing here',
@@ -2061,7 +2088,25 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'corridor_blocked': 'Passage blocked.',
     'narrow': 'Narrow.',
 
-    'status_no_obstacle': 'No obstacles',
+    'status_no_obstacle': 'Analysis active',
+    'status_analysis_active': 'Analysis active',
+    'spatial_analysis_limited': 'Spatial analysis is limited. Use your cane.',
+    'spatial_stop_sensing_unavailable':
+        'Stop. Spatial sensing is unavailable.',
+    'core_health_sound_unavailable':
+        'Sound unavailable. Vibration warnings remain active.',
+    'core_health_haptic_unavailable':
+        'Vibration unavailable. Spoken warnings remain active.',
+    'core_health_recovered': 'System recovered.',
+    'core_health_status': 'System status',
+    'generic_obstacle_ahead': 'Obstacle ahead.',
+    'generic_obstacle_stop': 'Stop. Obstacle ahead.',
+    'generic_obstacle_left': 'Obstacle on the left.',
+    'generic_obstacle_right': 'Obstacle on the right.',
+    'generic_obstacle_overhead': 'Stop. Obstacle at head height.',
+    'generic_vehicle_ahead': 'Car ahead.',
+    'generic_vehicle_left': 'Car on the left.',
+    'generic_vehicle_right': 'Car on the right.',
     'status_scanning': 'Scanning...',
     'status_waiting': 'waiting',
     'dist_safe': 'safe',
@@ -2079,7 +2124,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'ocr_reading': 'Reading...',
     'ocr_not_found': 'No text found.',
     'ocr_camera_not_ready': 'Camera not ready.',
-    
+
     'ocr_low_memory':
         'Not enough memory to recognize text. Close other apps and try again.',
     'ocr_paddle_init_failed':
@@ -2089,8 +2134,11 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'camera_not_found': 'Camera not found',
     'camera_started': 'Camera started',
     'system_ready': 'System ready',
+    'core_feature_unavailable': 'This feature is not available in this build.',
     'init_failed':
         'System start failed. Stop where you are. Please restart the app.',
+    'camera_init_failed_critical':
+        'Camera error. Recognition unavailable. Please restart the app.',
     'mode_changed': 'Mode',
 
     'calib_aim': 'Point the camera at a person for calibration.',
@@ -2119,7 +2167,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Bagdar warns about hazards but can miss them. '
         'Continue using your white cane or guide dog. '
         'Bagdar is a secondary aid.',
-    'onb_secondary_aid_check': 'Bagdar is a secondary aid, not a cane replacement',
+    'onb_secondary_aid_check':
+        'Bagdar is a secondary aid, not a cane replacement',
     'onb_blind_intro':
         'Bagdar for blind users. Gesture-based control. '
         'Single tap to repeat. Double tap to continue. '
@@ -2186,8 +2235,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'If a sighted helper is nearby, ask them for assistance. I will wait.',
     'onb_perm_camera_ok': 'Camera access granted.',
     'onb_perm_mic_ok': 'Microphone access granted.',
-    'onb_perm_all_granted':
-        'All permissions granted. Excellent! Moving on.',
+    'onb_perm_all_granted': 'All permissions granted. Excellent! Moving on.',
     'onb_perm_denied_retry':
         'Camera was not allowed. Without the camera, the app cannot detect obstacles. '
         'Say allow to try again, or skip to continue.',
@@ -2205,8 +2253,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'tut_long_press': 'Hold one finger on the screen for one second.',
     'tut_long_press_done': 'Great. A long press starts voice command.',
     'tut_swipe_horizontal': 'Swipe left or right across the screen.',
-    'tut_swipe_horizontal_done':
-        'Great. A horizontal swipe switches mode.',
+    'tut_swipe_horizontal_done': 'Great. A horizontal swipe switches mode.',
     'tut_swipe_up': 'Now swipe up.',
     'tut_swipe_up_done': 'Great. Swipe up opens help.',
     'tut_swipe_down_legacy': 'Now swipe down.',
@@ -2261,7 +2308,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'settings': 'Settings',
     'settings_a11y_title': 'Accessibility',
     'settings_classic_gestures': 'Classic gestures',
-    'settings_classic_gestures_desc': 'Swipe up for curtain, swipe down for help',
+    'settings_classic_gestures_desc':
+        'Swipe up for curtain, swipe down for help',
     'settings_speech_rate': 'Speech rate',
     'settings_tts_volume': 'Speech volume',
     'settings_earcon_volume': 'Earcon volume',
@@ -2367,12 +2415,10 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'thermal_warm_move_to_shade':
         'Device warming up. Move to shade if possible. '
         'Detection accuracy reduces at higher temperatures.',
-    'running_detected':
-        'You are running. Please slow down for safety.',
+    'running_detected': 'You are running. Please slow down for safety.',
     'battery_50_remaining':
         'Battery at 50%. Approximately two hours of active detection remaining.',
-    'battery_30_warning':
-        'Battery at 30%. Consider shortening your walk.',
+    'battery_30_warning': 'Battery at 30%. Consider shortening your walk.',
     'battery_15_critical':
         'Battery at 15%. Ground hazard detection is reduced. Please use a cane or seek assistance.',
     'low_light_warning':
@@ -2387,6 +2433,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Voice pack for your language is missing. Using English fallback.',
     'fall_detector_unavailable':
         'Fall detector unavailable. Automatic SOS disabled.',
+    'fall_detector_degraded':
+        'Fall detection accuracy reduced. Gyroscope unavailable.',
     'yolo_unavailable':
         'Object recognition unavailable. Hazard detection disabled.',
     'yolo_detector_not_responding': 'Object detector not responding.',
@@ -2422,8 +2470,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sos_sent': 'SOS sent.',
     'sos_queued': 'SOS queued, awaiting confirmation.',
     'sos_sent_no_location': 'SOS sent, but location could not be determined.',
-    'sos_indoor_warning':
-        'You are indoors. Coordinates may be inaccurate.',
+    'sos_indoor_warning': 'You are indoors. Coordinates may be inaccurate.',
     'sos_no_contact': 'No SOS contact specified. Set it up in settings.',
     'sos_no_location': 'Could not determine location.',
     'sos_no_gps': 'location unavailable',
@@ -2440,16 +2487,14 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sos_fall_seconds': 'seconds.',
     'sos_fall_cancelled': 'SOS cancelled.',
     'sos_fall_sent': 'SOS sent after fall.',
-    'sos_user_fallen_again':
-        'Alert: user has fallen again.',
+    'sos_user_fallen_again': 'Alert: user has fallen again.',
     'sos_fall_cancel_hint':
         'Say "I am fine" or "false alarm". Tap screen to cancel.',
-    'sos_fall_voice_confirm_prompt':
-        'Confirm: say "I am fine".',
+    'sos_fall_voice_confirm_prompt': 'Confirm: say "I am fine".',
     'sos_fall_voice_cancel_rejected':
         'Cancel not confirmed. Countdown continues.',
-    'sos_fall_are_you_ok':
-        'Are you ok? Tap to confirm.',
+    'sos_fall_are_you_ok': 'Are you ok? Tap to confirm.',
+    'sos_cancel_confirm': 'Tap again to cancel SOS.',
     'sos_112_fallback':
         'No contact specified. SOS will be sent to emergency 112.',
     'sos_position_stale': 'Location is stale by',
@@ -2474,6 +2519,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sos_dir_w': 'west',
     'sos_dir_nw': 'northwest',
     'camera_blocked': 'Camera blocked. Check the lens.',
+    'camera_ae_transition': 'Camera adjusting to light. Be careful.',
     'camera_frozen': 'Warning, camera image is frozen. Restart app.',
     'camera_stalled': 'Camera stalled. Stop and check the app.',
     'camera_resumed': 'Camera functioning again.',
@@ -2481,12 +2527,9 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'nav_maybe_off_route': 'You might be off route.',
     'pitch_too_high': 'Tilt phone downwards to scan the floor.',
     'pitch_too_low': 'Tilt phone slightly up.',
-    'pitch_misaligned_blind':
-        "Raise the phone — I can't see the road.",
-    'phone_abandoned':
-        'Bagdar is lying down — please check your phone.',
-    'winter_visibility_heartbeat':
-        'Low visibility — walk carefully.',
+    'pitch_misaligned_blind': "Raise the phone — I can't see the road.",
+    'phone_abandoned': 'Bagdar is lying down — please check your phone.',
+    'winter_visibility_heartbeat': 'Low visibility — walk carefully.',
     'curtain_on': 'Screen curtain on. Screen hidden.',
     'curtain_off': 'Screen curtain off.',
     'help_summary':
@@ -2541,8 +2584,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'depth_session_disabled':
         'Depth detection disabled due to repeated errors. Stairs and curbs will not be announced until you restart the app. Walk with care',
     'hazard_detection_resumed': 'Hazard detection resumed.',
-    'depth_paused_explicit':
-        'Stair and curb detection are paused.',
+    'depth_paused_explicit': 'Stair and curb detection are paused.',
     'weather_depth_off_walking':
         'Visibility is poor. Stairs and curbs may not be detected. Walk slowly.',
     'depth_degraded': 'Depth quality degraded. Pay extra attention.',
@@ -2742,14 +2784,14 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'settings_earcon_test': 'Earcon sound test',
     'settings_sos_not_set': 'Not set',
 
-    'path_clear_minimal': 'Clear.',
+    'path_clear_minimal': 'Analysis active.',
     'hazard_stairs_down_minimal': 'Stairs. Stop.',
     'hazard_overhead_minimal': 'Obstacle. Stop.',
     'camera_blocked_minimal': 'Camera blocked.',
 
     'scene_see_count': 'I see {count} objects.',
     'scene_see_one': 'I see one object.',
-    'scene_see_none': 'Nothing detected. Path appears clear.',
+    'scene_see_none': 'Nothing recognized.',
     'scene_object_entry': '{label} {direction}',
     'scene_object_dist': ', approximately {dist}',
     'scene_object_approaching': ', approaching',
@@ -2800,8 +2842,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'shelf_navigate_label': 'Set a route by voice.',
     'shelf_navigate_hint': 'Double-tap to choose destination.',
     'shelf_read_started': 'Reading what I see. Hold the phone steady.',
-    'shelf_navigate_started':
-        'Where shall I take you? Say the place name.',
+    'shelf_navigate_started': 'Where shall I take you? Say the place name.',
     'shelf_cane_confirm': 'Hold for one second to switch mode.',
     'ocr_aim_hint': 'Hold the text closer and keep the camera steady.',
     'ocr_timeout': 'Could not find text in eight seconds. Try again.',
@@ -2809,15 +2850,12 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'processing_heartbeat': 'Analyzing... please hold.',
     'pitch_black_heartbeat': '',
     'offline_banner_no_gps': 'No GPS. Position approximate.',
-    'offline_banner_no_map':
-        'Area map not loaded. Say "download map".',
+    'offline_banner_no_map': 'Area map not loaded. Say "download map".',
     'settings_save_failed': 'Could not save setting. Try again.',
     'theme_selected_dark': 'Dark theme, black screen with yellow accent.',
-    'theme_selected_light':
-        'Light theme, white screen with deep navy accent.',
+    'theme_selected_light': 'Light theme, white screen with deep navy accent.',
     'theme_selected_high_contrast': 'High contrast, white on black only.',
-    'theme_selected_warm':
-        'Warm theme, cream screen with dark brown text.',
+    'theme_selected_warm': 'Warm theme, cream screen with dark brown text.',
     'voice_layer_listening': 'Listening for a command.',
     'voice_layer_cancel': 'Cancel listening.',
     'restart_pipeline': 'Restart recognition.',
@@ -2829,8 +2867,7 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'lang_pack_install_failed': 'Failed to install Kazakh pack.',
     'lang_pack_offline_skip': 'Offline. Will ask next time online.',
     'vosk_kk_loading': 'Preparing Kazakh recognition.',
-    'vosk_kk_load_failed':
-        'Could not load Kazakh recognition. Using fallback.',
+    'vosk_kk_load_failed': 'Could not load Kazakh recognition. Using fallback.',
     'lang_packs_screen_title': 'Language packs',
     'lang_packs_screen_intro': 'Manage language packs for Kazakh.',
     'lang_packs_v2_toggle_label': 'Enhanced Kazakh recognition',
@@ -2863,7 +2900,6 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'You are online. The Kazakh recognition pack is ready to install. '
         'Say "language packs".',
 
-    
     'tts_kk_engine_system': 'System Kazakh voice',
     'tts_kk_engine_rhvoice': 'RHVoice (Aigul)',
     'tts_kk_engine_espeak': 'espeak-ng (fallback)',
@@ -2886,8 +2922,8 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'You are online. The Kazakh voice pack is ready to install. '
         'Say "language packs".',
 
-    
-    'trail_recording_started': 'Trail recording started. Walk to your destination.',
+    'trail_recording_started':
+        'Trail recording started. Walk to your destination.',
     'trail_recording_stopped': 'Trail saved.',
     'trail_recording_failed': 'Could not start trail recording.',
     'trail_recording_empty': 'Trail is empty, not saved.',
@@ -2905,7 +2941,6 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'trail_slight_left': 'Slightly left.',
     'trail_slight_right': 'Slightly right.',
 
-    
     'bazaar_mode_on': 'Bazaar mode on.',
     'bazaar_mode_off': 'Bazaar mode off.',
     'livestock_mode_on': 'Livestock mode on.',
@@ -2917,12 +2952,10 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'livestock_cat': 'Cat',
     'livestock_bird': 'Bird',
 
-    
     'voice_adapt_on': 'Voice adaptation enabled. Data stays on device.',
     'voice_adapt_off': 'Voice adaptation disabled.',
     'voice_adapt_samples_cleared': 'Adaptation data cleared.',
 
-    
     'mesh_hazard_generic': 'Another user reported an obstacle nearby.',
     'mesh_hazard_pothole': 'Another user reported a pothole nearby.',
     'mesh_hazard_construction': 'Another user reported construction nearby.',
@@ -2932,42 +2965,46 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'mesh_buddy_stopped': 'Buddy network disabled.',
     'mesh_buddy_no_ble': 'Bluetooth not supported. Buddy network unavailable.',
 
-    
     'oscp_near_field': 'Cane: obstacle ahead',
     'oscp_connected': 'Smart cane connected.',
     'oscp_disconnected': 'Smart cane disconnected.',
     'oscp_battery_low': 'Smart cane battery low.',
     'oscp_no_ble': 'Bluetooth not supported. Smart cane unavailable.',
 
-    
     'near_miss_recorded': 'Near-miss recorded.',
     'near_miss_cleared': 'Near-miss records cleared.',
 
-    
     'vlm_loading': 'Loading scene description model.',
     'vlm_ready': 'Scene description model ready.',
-    'vlm_not_available': 'Scene description not available. Charging and free memory required.',
+    'vlm_not_available':
+        'Scene description not available. Charging and free memory required.',
     'vlm_thinking': 'Thinking...',
     'vlm_answer_fallback': 'Model did not respond. Using standard description.',
 
-    
     'sonar_near_field': 'Sonar: object ahead',
     'sonar_started': 'Sonar enabled.',
     'sonar_stopped': 'Sonar disabled.',
     'sonar_calibrating': 'Calibrating sonar.',
     'sonar_no_48k': 'Microphone does not support sonar.',
-    'onb_mic_prime_tts': 'For voice control, I need access to your microphone. A system dialog will appear now.',
-    'onb_mic_denied_fallback_tts': 'Microphone access denied. Voice control is disabled. Please use gestures to configure.',
-    'onb_mode_confirm_prompt': 'Mode selected. Say yes to continue, or choose another mode.',
-    'sos_setup_prompt_tts': 'Please set a contact number for emergency SOS help.',
-    'camera_perm_recovery_tts': 'Camera permission is blocked. Please allow access in phone settings. Double tap for settings, single tap to retry.',
-    'onb_help_prompt_lang': 'Choose language. Say: Russian, Kazakh, or English.',
+    'onb_mic_prime_tts':
+        'For voice control, I need access to your microphone. A system dialog will appear now.',
+    'onb_mic_denied_fallback_tts':
+        'Microphone access denied. Voice control is disabled. Please use gestures to configure.',
+    'onb_mode_confirm_prompt':
+        'Mode selected. Say yes to continue, or choose another mode.',
+    'sos_setup_prompt_tts':
+        'Please set a contact number for emergency SOS help.',
+    'camera_perm_recovery_tts':
+        'Camera permission is blocked. Please allow access in phone settings. Double tap for settings, single tap to retry.',
+    'onb_help_prompt_lang':
+        'Choose language. Say: Russian, Kazakh, or English.',
     'onb_help_prompt_hand': 'Choose dominant hand. Say: Right or Left.',
     'onb_help_prompt_mode': 'Choose default mode. Say: Street, Cane, or Scan.',
     'onb_help_prompt_perm': 'Grant camera permission. Say: Allow.',
     'onb_help_prompt_calib': 'Distance calibration. Say: Yes to continue.',
     'onb_help_prompt_ready': 'Ready to start. Say: Yes to start.',
-    'onb_emergency_skip_confirm': 'Skip all setup? Double tap to confirm. Single tap to cancel.',
+    'onb_emergency_skip_confirm':
+        'Skip all setup? Double tap to confirm. Single tap to cancel.',
   },
 };
 

@@ -97,7 +97,8 @@ class SessionLease {
   bool _released = false;
 
   @override
-  String toString() => 'SessionLease(id=$id, res=$resource, '
+  String toString() =>
+      'SessionLease(id=$id, res=$resource, '
       'prio=$priority, owner=$owner)';
 }
 
@@ -106,12 +107,9 @@ class SessionGrant {
   final SessionDenyReason? denyReason;
   final String? denyDetail;
 
-  const SessionGrant.granted(this.lease)
-      : denyReason = null,
-        denyDetail = null;
+  const SessionGrant.granted(this.lease) : denyReason = null, denyDetail = null;
 
-  const SessionGrant.denied(this.denyReason, [this.denyDetail])
-      : lease = null;
+  const SessionGrant.denied(this.denyReason, [this.denyDetail]) : lease = null;
 
   bool get isGranted => lease != null;
 }
@@ -132,8 +130,7 @@ class SessionGrant {
 class SensorSessionCoordinator {
   SensorSessionCoordinator._();
 
-  static final SensorSessionCoordinator instance =
-      SensorSessionCoordinator._();
+  static final SensorSessionCoordinator instance = SensorSessionCoordinator._();
 
   int _nextLeaseId = 1;
   final Map<SensorResource, SessionLease> _active =
@@ -154,8 +151,7 @@ class SensorSessionCoordinator {
     return lease != null && lease.owner == owner;
   }
 
-  String? currentHolder(SensorResource resource) =>
-      _active[resource]?.owner;
+  String? currentHolder(SensorResource resource) => _active[resource]?.owner;
 
   SessionPriority? currentPriority(SensorResource resource) =>
       _active[resource]?.priority;
@@ -172,12 +168,9 @@ class SensorSessionCoordinator {
     final existing = _active[resource];
     if (existing != null) {
       if (existing.owner == owner) {
-        
-        
         return SessionGrant.granted(existing);
       }
-      
-      
+
       if (priority.index < existing.priority.index) {
         _preempt(existing);
       } else {
@@ -218,7 +211,6 @@ class SensorSessionCoordinator {
     if (lease == null) return;
     final current = _active[lease.resource];
     if (current == null || current.id != lease.id) {
-      
       lease._released = true;
       return;
     }

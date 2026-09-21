@@ -81,7 +81,7 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
   String get _doneKey => '${_stepKey}_done';
 
   int get _stepIndex => _TutStep.values.indexOf(_step) + 1;
-  int get _totalSteps => _TutStep.values.length - 1; 
+  int get _totalSteps => _TutStep.values.length - 1;
 
   @override
   void initState() {
@@ -352,12 +352,18 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
             _twoFingerSwipeStart = null;
           },
           child: GestureDetector(
-            behavior: accessible ? HitTestBehavior.deferToChild : HitTestBehavior.opaque,
+            behavior: accessible
+                ? HitTestBehavior.deferToChild
+                : HitTestBehavior.opaque,
             onTap: accessible ? null : _handleTap,
             onDoubleTap: accessible ? null : _handleDoubleTap,
             onLongPress: accessible ? null : _handleLongPress,
-            onHorizontalDragEnd: accessible ? null : (d) => _handleHorizontalSwipe(d.primaryVelocity),
-            onVerticalDragEnd: accessible ? null : (d) => _handleVerticalSwipe(d.primaryVelocity),
+            onHorizontalDragEnd: accessible
+                ? null
+                : (d) => _handleHorizontalSwipe(d.primaryVelocity),
+            onVerticalDragEnd: accessible
+                ? null
+                : (d) => _handleVerticalSwipe(d.primaryVelocity),
             child: Stack(
               fit: StackFit.expand,
               children: [
@@ -404,8 +410,9 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: colors.accentPrimary
-                                          .withValues(alpha: 0.12),
+                                      color: colors.accentPrimary.withValues(
+                                        alpha: 0.12,
+                                      ),
                                       border: Border.all(
                                         color: colors.accentPrimary,
                                         width: BagdarBorders.rule,
@@ -532,4 +539,3 @@ class _StepIndicator extends StatelessWidget {
     );
   }
 }
- 

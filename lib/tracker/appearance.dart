@@ -1,16 +1,11 @@
 import 'dart:math' as math;
 import 'dart:typed_data';
 
-
 class Appearance {
-  
-  
   static const int kBins = 16;
 
-  
   static const int kMaxSamplesPerAxis = 16;
 
-  
   static Float32List? extractFromYPlane({
     required Uint8List yPlane,
     required int rowStride,
@@ -30,11 +25,8 @@ class Appearance {
     final yHi = y2.clamp(0, imgH - 1).toInt();
     if (xHi - xLo < 2 || yHi - yLo < 2) return null;
 
-    
-    final strideX = math
-        .max(1, ((xHi - xLo) / kMaxSamplesPerAxis).ceil());
-    final strideY = math
-        .max(1, ((yHi - yLo) / kMaxSamplesPerAxis).ceil());
+    final strideX = math.max(1, ((xHi - xLo) / kMaxSamplesPerAxis).ceil());
+    final strideY = math.max(1, ((yHi - yLo) / kMaxSamplesPerAxis).ceil());
 
     final counts = List<int>.filled(kBins, 0);
     int total = 0;
@@ -44,8 +36,7 @@ class Appearance {
         final idx = rowStart + x;
         if (idx < 0 || idx >= yPlane.length) continue;
         final v = yPlane[idx];
-        
-        
+
         final bin = (v * kBins) >> 8;
         counts[bin >= kBins ? kBins - 1 : bin]++;
         total++;
@@ -61,7 +52,6 @@ class Appearance {
     return hist;
   }
 
-  
   static double similarity(Float32List? a, Float32List? b) {
     if (a == null || b == null) return 0.0;
     if (a.isEmpty || a.length != b.length) return 0.0;
@@ -70,13 +60,12 @@ class Appearance {
       final prod = a[i] * b[i];
       if (prod > 0.0) sum += math.sqrt(prod);
     }
-    
+
     if (sum < 0.0) return 0.0;
     if (sum > 1.0) return 1.0;
     return sum;
   }
 
-  
   static Float32List blend(
     Float32List current,
     Float32List update, {

@@ -17,16 +17,13 @@ import 'gesture_tutorial_screen.dart';
 import '../theme/bagdar_theme.dart';
 import '../theme/bagdar_tokens.dart';
 
-
 const String kOnboardingDoneKey = 'onboarding_done';
 const String kOnboardingModeKey = 'onboarding_mode';
-
 
 Future<Widget> resolveStartScreen() async {
   if (Settings.instance.onboardingDone) return const AiCameraScreen();
   return const OnboardingScreen();
 }
-
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -56,7 +53,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   final Set<int> _activePointers = {};
   Timer? _emergencyTimer;
-  static const Duration _kEmergencyHold = Duration(seconds: 4); // Increased to 4 seconds (F-05)
+  static const Duration _kEmergencyHold = Duration(
+    seconds: 4,
+  ); // Increased to 4 seconds (F-05)
 
   bool _micPermissionDenied = false;
   bool _startupFinished = false;
@@ -86,18 +85,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           _chosenHand = Settings.instance.dominantHand;
         });
       }
-      
+
       // Play soft welcome chime immediately
       await _earcon.play(Earcon.paymentReceived);
 
       // Enforce a 7-second start-up pause so the blind user can prepare
       _startupTimer = Timer(const Duration(seconds: 7), () async {
         if (!mounted) return;
-        _tts.say(
-          S.get('onb_blind_intro'),
-          SpeechPriority.warning,
-          pan: 0.0,
-        );
+        _tts.say(S.get('onb_blind_intro'), SpeechPriority.warning, pan: 0.0);
         await _tts.awaitIdle();
         if (!mounted || _startupFinished) return;
 
@@ -111,7 +106,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           );
           await _tts.awaitIdle();
           if (!mounted || _startupFinished) return;
-          
+
           await _earcon.play(Earcon.proximity);
           await Future.delayed(const Duration(milliseconds: 1000));
           if (!mounted || _startupFinished) return;
@@ -127,7 +122,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             await _tts.awaitIdle();
           }
         }
-        
+
         if (!mounted || _startupFinished) return;
         _startupFinished = true;
         await _speakAndListen(0);
@@ -208,11 +203,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     await _voice.stopListening();
     await _tts.stop();
     await _earcon.play(Earcon.success);
-    _tts.say(
-      _getStepHelpPrompt(_current),
-      SpeechPriority.warning,
-      barge: true,
-    );
+    _tts.say(_getStepHelpPrompt(_current), SpeechPriority.warning, barge: true);
     await _tts.awaitIdle();
     if (!mounted) return;
     unawaited(_doSpeakAndListen(_current));
@@ -236,11 +227,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     _pendingEmergencyExit = false;
     _emergencyExitConfirmTimer?.cancel();
     if (announce) {
-      _tts.say(
-        S.get('onb_skip_cancelled'),
-        SpeechPriority.info,
-        barge: true,
-      );
+      _tts.say(S.get('onb_skip_cancelled'), SpeechPriority.info, barge: true);
     }
   }
 
@@ -267,11 +254,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       speechText = '${S.get('onb_ready_tts')} ${S.get('help_summary')}';
     }
 
-    _tts.say(
-      speechText,
-      SpeechPriority.warning,
-      barge: true,
-    );
+    _tts.say(speechText, SpeechPriority.warning, barge: true);
 
     // Wait until the ENTIRE TTS queue is drained.
     await _tts.awaitIdle();
@@ -317,24 +300,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
     _retryCount++;
     if (_retryCount >= _maxRetries) {
-      _tts.say(
-        S.get('onb_mic_exhausted'),
-        SpeechPriority.warning,
-        barge: true,
-      );
+      _tts.say(S.get('onb_mic_exhausted'), SpeechPriority.warning, barge: true);
       return;
     }
 
     // Play distinct no-match earcon (F-02)
     await _earcon.play(Earcon.fail);
-    
+
     // Reprompt listing valid options for the current step (F-02)
-    final repromptText = '${S.get('voice_unknown')} ${_getStepHelpPrompt(index)}';
-    _tts.say(
-      repromptText,
-      SpeechPriority.warning,
-      barge: true,
-    );
+    final repromptText =
+        '${S.get('voice_unknown')} ${_getStepHelpPrompt(index)}';
+    _tts.say(repromptText, SpeechPriority.warning, barge: true);
     await _tts.awaitIdle();
     if (!mounted || _current != index) return;
 
@@ -348,7 +324,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void _handleVoiceCommand(VoiceCommand cmd) {
     if (!mounted) return;
     debugPrint('Onboarding voice command received: $cmd');
-    
+
     // Play mic closed tone for known commands (F-07)
     if (cmd != VoiceCommand.unknown) {
       _earcon.play(Earcon.indoorEntered);
@@ -477,10 +453,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
     switch (_current) {
       case 3: // Permissions: user said "no" to camera permission
-        _tts.say(S.get('onb_perm_denied_retry'), SpeechPriority.critical, barge: true);
+        _tts.say(
+          S.get('onb_perm_denied_retry'),
+          SpeechPriority.critical,
+          barge: true,
+        );
         break;
       case 4: // Calibration: user said "no" to calibration -> skip it
-        _tts.say(S.get('onb_calib_skip_tts'), SpeechPriority.warning, barge: true);
+        _tts.say(
+          S.get('onb_calib_skip_tts'),
+          SpeechPriority.warning,
+          barge: true,
+        );
         unawaited(_afterCalibration());
         break;
       default:
@@ -495,11 +479,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     _voice.setLocale(AppStrings.ttsLang);
     if (mounted) {
       setState(() {});
-      _tts.say(
-        S.get('onb_lang_switched'),
-        SpeechPriority.warning,
-        barge: true,
-      );
+      _tts.say(S.get('onb_lang_switched'), SpeechPriority.warning, barge: true);
       await _tts.awaitIdle();
       if (!mounted) return;
       _next();
@@ -511,13 +491,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     await Settings.instance.setDominantHand(hand);
     if (mounted) {
       setState(() {});
-      final handName = hand == DominantHand.right ? S.get('onb_hand_right') : S.get('onb_hand_left');
+      final handName = hand == DominantHand.right
+          ? S.get('onb_hand_right')
+          : S.get('onb_hand_left');
       final text = S.get('onb_hand_changed').replaceFirst('{hand}', handName);
-      _tts.say(
-        text,
-        SpeechPriority.warning,
-        barge: true,
-      );
+      _tts.say(text, SpeechPriority.warning, barge: true);
       await _tts.awaitIdle();
       if (!mounted) return;
       _next();
@@ -530,7 +508,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         .get('onb_mode_select_announce')
         .replaceFirst('{mode}', mode.label);
     _tts.say(text, SpeechPriority.warning, barge: true);
-    
+
     // F-01 & F-13: Wait for TTS idle, reset retry count, and speak re-arm confirmation prompt
     await _tts.awaitIdle();
     if (!mounted || _current != 2) return;
@@ -547,14 +525,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   void _cycleLanguage() {
     if (_current != 0) return;
-    final next = AppLanguage.values[
-        (AppStrings.current.index + 1) % AppLanguage.values.length];
+    final next = AppLanguage
+        .values[(AppStrings.current.index + 1) % AppLanguage.values.length];
     unawaited(_switchLanguage(next));
   }
 
   void _cycleHand(int dir) {
     if (_current != 1) return;
-    final next = _chosenHand == DominantHand.right ? DominantHand.left : DominantHand.right;
+    final next = _chosenHand == DominantHand.right
+        ? DominantHand.left
+        : DominantHand.right;
     unawaited(_setDominantHand(next));
   }
 
@@ -568,11 +548,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   void _requestSkipConfirm() {
     _pendingSkip = true;
-    _tts.say(
-      S.get('onb_skip_confirm'),
-      SpeechPriority.warning,
-      barge: true,
-    );
+    _tts.say(S.get('onb_skip_confirm'), SpeechPriority.warning, barge: true);
     _skipConfirmTimer?.cancel();
     _skipReplayTimer?.cancel();
 
@@ -582,11 +558,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     });
     _skipReplayTimer = Timer(const Duration(seconds: 5), () {
       if (!_pendingSkip) return;
-      _tts.say(
-        S.get('onb_skip_confirm'),
-        SpeechPriority.warning,
-        barge: true,
-      );
+      _tts.say(S.get('onb_skip_confirm'), SpeechPriority.warning, barge: true);
     });
   }
 
@@ -596,11 +568,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     _skipConfirmTimer?.cancel();
     _skipReplayTimer?.cancel();
     if (announce) {
-      _tts.say(
-        S.get('onb_skip_cancelled'),
-        SpeechPriority.info,
-        barge: true,
-      );
+      _tts.say(S.get('onb_skip_cancelled'), SpeechPriority.info, barge: true);
     }
   }
 
@@ -686,7 +654,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Future<void> _emergencyExit() async {
     _emergencyTimer?.cancel();
     await Settings.instance.setOnboardingDone(true);
-    await Settings.instance.setOnboardingMode((_chosenMode ?? AppMode.street).name);
+    await Settings.instance.setOnboardingMode(
+      (_chosenMode ?? AppMode.street).name,
+    );
     // Do NOT set tutorialSeen/audioTourSeen to true on emergency exit (F-05)
     if (!mounted) return;
     await Navigator.of(context).pushReplacement(
@@ -706,7 +676,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
     // Detect TalkBack for appropriate guidance
     final accessible = MediaQuery.of(context).accessibleNavigation;
-    final guideKey = accessible ? 'onb_perm_talkback_guide' : 'onb_perm_tap_guide';
+    final guideKey = accessible
+        ? 'onb_perm_talkback_guide'
+        : 'onb_perm_tap_guide';
     _tts.say(S.get(guideKey), SpeechPriority.critical, barge: true);
 
     // Play proximity earcon and wait briefly so the user hears the audio cue
@@ -736,7 +708,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
     if (camOk) {
       await _earcon.play(Earcon.success);
-      _tts.say(S.get('onb_perm_all_granted'), SpeechPriority.warning, barge: true);
+      _tts.say(
+        S.get('onb_perm_all_granted'),
+        SpeechPriority.warning,
+        barge: true,
+      );
       await _tts.awaitIdle();
       if (!mounted) return;
       _next();
@@ -807,8 +783,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             onPressed: () => Navigator.pop(ctx),
             child: Text(
               S.get('tts_lang_open'),
-              style:
-                  BagdarTypography.body.copyWith(color: colors.accentPrimary),
+              style: BagdarTypography.body.copyWith(
+                color: colors.accentPrimary,
+              ),
             ),
           ),
         ],
@@ -865,8 +842,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     await _ensureTutorialSeen();
     if (!mounted) return;
     await Settings.instance.setOnboardingDone(true);
-    await Settings.instance.setOnboardingMode((_chosenMode ?? AppMode.street).name);
-    await Settings.instance.setAudioTourSeen(true); // Marked seen because controls guide was read
+    await Settings.instance.setOnboardingMode(
+      (_chosenMode ?? AppMode.street).name,
+    );
+    await Settings.instance.setAudioTourSeen(
+      true,
+    ); // Marked seen because controls guide was read
     if (!mounted) return;
     await Navigator.of(context).pushReplacement(
       PageRouteBuilder(
@@ -894,7 +875,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             _emergencyTimer = null;
           },
           child: GestureDetector(
-            behavior: accessible ? HitTestBehavior.deferToChild : HitTestBehavior.opaque,
+            behavior: accessible
+                ? HitTestBehavior.deferToChild
+                : HitTestBehavior.opaque,
             onTap: accessible ? null : _handleTap,
             onDoubleTap: accessible ? null : _handleDoubleTap,
             onLongPress: accessible ? null : _cycleLanguage,
@@ -972,7 +955,10 @@ class _ProgressDots extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = BagdarTheme.colorsOf(context);
     return Semantics(
-      label: S.get('sem_step_of').replaceFirst('{step}', '${current + 1}').replaceFirst('{total}', '$total'),
+      label: S
+          .get('sem_step_of')
+          .replaceFirst('{step}', '${current + 1}')
+          .replaceFirst('{total}', '$total'),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: List.generate(total, (i) {
@@ -1019,9 +1005,7 @@ class _PageLanguage extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               S.get('onb_welcome_title'),
-              style: BagdarTypography.title.copyWith(
-                color: colors.textPrimary,
-              ),
+              style: BagdarTypography.title.copyWith(color: colors.textPrimary),
             ),
             const SizedBox(height: 10),
             Text(
@@ -1051,11 +1035,7 @@ class _PageLanguage extends StatelessWidget {
                   currentLang == AppLanguage.en,
                 ],
                 onPressed: (i) => onLang(AppLanguage.values[i]),
-                children: const [
-                  Text('RU'),
-                  Text('ҚЗ'),
-                  Text('EN'),
-                ],
+                children: const [Text('RU'), Text('ҚЗ'), Text('EN')],
               ),
             ),
             const Spacer(),
@@ -1091,9 +1071,7 @@ class _PageDominantHand extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               S.get('settings_dominant_hand'),
-              style: BagdarTypography.title.copyWith(
-                color: colors.textPrimary,
-              ),
+              style: BagdarTypography.title.copyWith(color: colors.textPrimary),
             ),
             const SizedBox(height: 10),
             Text(
@@ -1136,7 +1114,9 @@ class _HandCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final labelText = hand == DominantHand.right ? S.get('onb_hand_right') : S.get('onb_hand_left');
+    final labelText = hand == DominantHand.right
+        ? S.get('onb_hand_right')
+        : S.get('onb_hand_left');
     final colors = BagdarTheme.colorsOf(context);
     return Semantics(
       button: true,
@@ -1160,7 +1140,9 @@ class _HandCard extends StatelessWidget {
           child: Row(
             children: [
               Icon(
-                hand == DominantHand.right ? Icons.gesture : Icons.gesture_outlined,
+                hand == DominantHand.right
+                    ? Icons.gesture
+                    : Icons.gesture_outlined,
                 color: selected ? colors.accentPrimary : colors.textSecondary,
                 size: 28,
               ),
@@ -1173,11 +1155,7 @@ class _HandCard extends StatelessWidget {
               ),
               const Spacer(),
               if (selected)
-                Icon(
-                  Icons.check_circle,
-                  color: colors.accentPrimary,
-                  size: 24,
-                ),
+                Icon(Icons.check_circle, color: colors.accentPrimary, size: 24),
             ],
           ),
         ),
@@ -1210,9 +1188,7 @@ class _PageDefaultMode extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               S.get('onb_welcome_sub').split('\n').first,
-              style: BagdarTypography.title.copyWith(
-                color: colors.textPrimary,
-              ),
+              style: BagdarTypography.title.copyWith(color: colors.textPrimary),
             ),
             const SizedBox(height: 10),
             Text(
@@ -1299,7 +1275,9 @@ class _ModeCard extends StatelessWidget {
                     Text(
                       mode.label,
                       style: BagdarTypography.caption.copyWith(
-                        color: selected ? colors.accentPrimary : colors.textPrimary,
+                        color: selected
+                            ? colors.accentPrimary
+                            : colors.textPrimary,
                         fontWeight: BagdarTypography.weightBold,
                       ),
                     ),
@@ -1316,11 +1294,7 @@ class _ModeCard extends StatelessWidget {
                 ),
               ),
               if (selected)
-                Icon(
-                  Icons.check_circle,
-                  color: colors.accentPrimary,
-                  size: 24,
-                ),
+                Icon(Icons.check_circle, color: colors.accentPrimary, size: 24),
             ],
           ),
         ),
@@ -1414,13 +1388,17 @@ class _PermRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = BagdarTheme.colorsOf(context);
     return Semantics(
-      label: '$label. $reason. ${required ? S.get('sem_required') : S.get('sem_optional_perm')}',
+      label:
+          '$label. $reason. ${required ? S.get('sem_required') : S.get('sem_optional_perm')}',
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: colors.surfaceElevated,
           borderRadius: BorderRadius.circular(BagdarRadius.card),
-          border: Border.all(color: colors.divider, width: BagdarBorders.hairline),
+          border: Border.all(
+            color: colors.divider,
+            width: BagdarBorders.hairline,
+          ),
         ),
         child: Row(
           children: [
@@ -1517,7 +1495,10 @@ class _PageCalibration extends StatelessWidget {
               decoration: BoxDecoration(
                 color: colors.surfaceElevated,
                 borderRadius: BorderRadius.circular(BagdarRadius.card),
-                border: Border.all(color: colors.divider, width: BagdarBorders.hairline),
+                border: Border.all(
+                  color: colors.divider,
+                  width: BagdarBorders.hairline,
+                ),
               ),
               child: Column(
                 children: [
@@ -1751,7 +1732,8 @@ class _CheckItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = BagdarTheme.colorsOf(context);
     return Semantics(
-      label: '$text. ${done ? S.get('sem_done') : "${S.get('sem_not_done')}. ${hint ?? ""}"}',
+      label:
+          '$text. ${done ? S.get('sem_done') : "${S.get('sem_not_done')}. ${hint ?? ""}"}',
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1889,7 +1871,10 @@ class _SecondaryButton extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 18),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(BagdarRadius.card),
-              side: BorderSide(color: colors.divider, width: BagdarBorders.hairline),
+              side: BorderSide(
+                color: colors.divider,
+                width: BagdarBorders.hairline,
+              ),
             ),
           ),
           child: Text(
@@ -1907,10 +1892,7 @@ class _SecondaryButton extends StatelessWidget {
 class _PermDeniedDialog extends StatelessWidget {
   final VoidCallback onSettings;
   final VoidCallback onCancel;
-  const _PermDeniedDialog({
-    required this.onSettings,
-    required this.onCancel,
-  });
+  const _PermDeniedDialog({required this.onSettings, required this.onCancel});
 
   @override
   Widget build(BuildContext context) {
@@ -1958,10 +1940,7 @@ class _PermDeniedDialog extends StatelessWidget {
                     onPressed: onSettings,
                   ),
                   const SizedBox(height: 10),
-                  _SecondaryButton(
-                    label: S.get('cancel'),
-                    onPressed: onCancel,
-                  ),
+                  _SecondaryButton(label: S.get('cancel'), onPressed: onCancel),
                 ],
               ),
             ),

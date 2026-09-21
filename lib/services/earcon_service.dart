@@ -4,6 +4,8 @@ import 'dart:typed_data';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 
+import '../safety/alerts/feedback_command.dart';
+
 enum Earcon {
   objectAppeared,
   objectLeft,
@@ -33,9 +35,7 @@ class EarconService {
   static const Duration _kPerEarconCooldown = Duration(milliseconds: 800);
   static const Duration _kGlobalEarconCooldown = Duration(milliseconds: 350);
 
-  static const Set<Earcon> _kThrottleExempt = {
-    Earcon.cameraBlocked,
-  };
+  static const Set<Earcon> _kThrottleExempt = {Earcon.cameraBlocked};
 
   static const Set<Earcon> _kHighPriorityEarcons = {
     Earcon.criticalAlert,
@@ -54,7 +54,6 @@ class EarconService {
   bool _ready = false;
   double _volume = 0.85;
 
-  
   void Function()? onInitFailed;
 
   Future<void> init() async {
@@ -83,14 +82,13 @@ class EarconService {
     } catch (e) {
       debugPrint('EarconService init error: $e');
       _ready = false;
-      
+
       try {
         onInitFailed?.call();
       } catch (_) {}
     }
   }
 
-  
   bool get isReady => _ready;
 
   bool get isEnabled => _enabled;
@@ -118,7 +116,8 @@ class EarconService {
     final isHighPriority = _kHighPriorityEarcons.contains(earcon);
     if (!_kThrottleExempt.contains(earcon)) {
       if (isHighPriority) {
-        if (now.difference(_lastHighPriorityPlayedAt) < _kGlobalEarconCooldown) {
+        if (now.difference(_lastHighPriorityPlayedAt) <
+            _kGlobalEarconCooldown) {
           return;
         }
       } else {
@@ -140,8 +139,7 @@ class EarconService {
         final bytes = _generate(earcon);
         await player.setSourceBytes(bytes, mimeType: 'audio/wav');
       }
-      
-      
+
       final effectiveVolume = (volume ?? _volume).clamp(0.0, 1.0);
       await player.setVolume(effectiveVolume);
       await player.setBalance(pan.clamp(-1.0, 1.0));
@@ -152,7 +150,27 @@ class EarconService {
     }
   }
 
+  Future<bool> playFeedback(FeedbackEarcon feedback) async {
+    if (!_ready || !_enabled || feedback == FeedbackEarcon.none) return false;
+    final earcon = switch (feedback) {
+      FeedbackEarcon.stop => Earcon.criticalAlert,
+      FeedbackEarcon.degraded => Earcon.cameraBlocked,
+      FeedbackEarcon.confirmation => Earcon.success,
+      FeedbackEarcon.none => throw StateError('handled above'),
+    };
+    await play(earcon);
+    return true;
+  }
+
   void setEnabled(bool v) => _enabled = v;
+
+  Future<void> stopAll() async {
+    for (final player in _players.values) {
+      try {
+        await player.stop();
+      } catch (_) {}
+    }
+  }
 
   void dispose() {
     for (final p in _players.values) {
@@ -226,7 +244,9 @@ class EarconService {
   Int16List _tripleBeep(double freq, int beepMs, int gapMs, double amp) {
     final b = _singleTone(freq, beepMs, amp);
     final g = Int16List((_sampleRate * gapMs / 1000).round());
-    final result = Int16List(b.length + g.length + b.length + g.length + b.length);
+    final result = Int16List(
+      b.length + g.length + b.length + g.length + b.length,
+    );
     result.setAll(0, b);
     result.setAll(b.length, g);
     result.setAll(b.length + g.length, b);
@@ -258,11 +278,7 @@ class EarconService {
     return buf;
   }
 
-  Int16List _noiseClick(
-    int durationMs,
-    double amp, {
-    double lpAlpha = 0.20,
-  }) {
+  Int16List _noiseClick(int durationMs, double amp, {double lpAlpha = 0.20}) {
     final n = (_sampleRate * durationMs / 1000).round();
     final buf = Int16List(n);
     final rand = math.Random(0xC11C2);

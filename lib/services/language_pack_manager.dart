@@ -115,13 +115,19 @@ class LanguagePackManager {
       await _loadInstalledFromPrefs();
 
       // Auto-extract bundled packs from assets on first run / if not installed yet
-      await _extractBundledAssetPack(LanguagePackIds.voskKk, 'assets/lang_packs/vosk-kk.zip');
-      await _extractBundledAssetPack(LanguagePackIds.rhvoiceKkAigul, 'assets/lang_packs/rhvoice-kk-aigul.zip');
+      await _extractBundledAssetPack(
+        LanguagePackIds.voskKk,
+        'assets/lang_packs/vosk-kk.zip',
+      );
+      await _extractBundledAssetPack(
+        LanguagePackIds.rhvoiceKkAigul,
+        'assets/lang_packs/rhvoice-kk-aigul.zip',
+      );
 
       final prefs = await SharedPreferences.getInstance();
       final stored = prefs.getString(_prefsKeyManifestUrl) ?? '';
-      _manifestUrl = (overrideManifestUrl != null &&
-              overrideManifestUrl.isNotEmpty)
+      _manifestUrl =
+          (overrideManifestUrl != null && overrideManifestUrl.isNotEmpty)
           ? overrideManifestUrl
           : (stored.isNotEmpty ? stored : defaultManifestUrl);
       final fetchedMs = prefs.getInt(_prefsKeyManifestFetchedAtMs);
@@ -178,7 +184,9 @@ class LanguagePackManager {
 
       for (final remote in _available) {
         final local = getInstalled(remote.packId);
-        if (local != null && local.installed && remote.version > local.version) {
+        if (local != null &&
+            local.installed &&
+            remote.version > local.version) {
           onUpdateAvailable?.call(remote.packId);
         }
       }
@@ -247,7 +255,6 @@ class LanguagePackManager {
     });
 
     try {
-      
       final stale = File(zipPath);
       if (await stale.exists()) await stale.delete();
       final extractDirHandle = Directory(extractDir);
@@ -265,7 +272,6 @@ class LanguagePackManager {
         },
       );
 
-      
       if (remote.sha256.isNotEmpty) {
         final actual = await compute(_doSha256, (zipPath,));
         if (actual.toLowerCase() != remote.sha256.toLowerCase()) {
@@ -353,7 +359,6 @@ class LanguagePackManager {
     return total;
   }
 
-  
   Future<void> markPackSkipped(String packId) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(
@@ -380,7 +385,6 @@ class LanguagePackManager {
     return prefs.getBool(_prefsKeyPromptOnFirstOnline) ?? false;
   }
 
-  
   Future<void> _extractZip(String zipPath, String targetDir) async {
     await compute(_doExtractZip, (zipPath, targetDir));
   }
@@ -394,7 +398,9 @@ class LanguagePackManager {
     }
 
     try {
-      debugPrint('LanguagePackManager: extracting bundled asset $assetPath to $extractDir');
+      debugPrint(
+        'LanguagePackManager: extracting bundled asset $assetPath to $extractDir',
+      );
       final byteData = await rootBundle.load(assetPath);
       final bytes = byteData.buffer.asUint8List();
 
@@ -424,9 +430,13 @@ class LanguagePackManager {
       await _saveInstalledToPrefs();
 
       await Settings.instance.setEnableKazakhStackV2(true);
-      debugPrint('LanguagePackManager: Bundled pack $packId extracted and installed.');
+      debugPrint(
+        'LanguagePackManager: Bundled pack $packId extracted and installed.',
+      );
     } catch (e) {
-      debugPrint('LanguagePackManager: Failed to extract bundled asset pack $packId: $e');
+      debugPrint(
+        'LanguagePackManager: Failed to extract bundled asset pack $packId: $e',
+      );
     }
   }
 
@@ -464,7 +474,6 @@ class LanguagePackManager {
     _dio.close();
   }
 
-  
   @visibleForTesting
   void debugReset({
     String packsDir = '',

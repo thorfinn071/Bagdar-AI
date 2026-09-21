@@ -14,10 +14,7 @@ Widget _wrap(Widget child, {BagdarThemeName theme = BagdarThemeName.dark}) {
       name: theme,
       colors: BagdarColors.of(theme),
       child: Scaffold(
-        body: Align(
-          alignment: Alignment.bottomCenter,
-          child: child,
-        ),
+        body: Align(alignment: Alignment.bottomCenter, child: child),
       ),
     ),
   );
@@ -27,15 +24,11 @@ void main() {
   setUp(() => AppStrings.setLanguage(AppLanguage.ru));
 
   group('QuickShelf rendering', () {
-    testWidgets('renders three tabs with short visible labels (RU)',
-        (tester) async {
+    testWidgets('renders three tabs with short visible labels (RU)', (
+      tester,
+    ) async {
       await tester.pumpWidget(
-        _wrap(
-          QuickShelf(
-            activeTask: ShelfTask.camera,
-            onTaskSelected: (_) {},
-          ),
-        ),
+        _wrap(QuickShelf(activeTask: ShelfTask.camera, onTaskSelected: (_) {})),
       );
 
       expect(find.byType(BottomShelfTab), findsNWidgets(3));
@@ -45,39 +38,28 @@ void main() {
     });
 
     testWidgets(
-        'TalkBack semantic label is the long action-oriented sentence',
-        (tester) async {
-      AppStrings.setLanguage(AppLanguage.en);
-      await tester.pumpWidget(
-        _wrap(
-          QuickShelf(
-            activeTask: ShelfTask.camera,
-            onTaskSelected: (_) {},
+      'TalkBack semantic label is the long action-oriented sentence',
+      (tester) async {
+        AppStrings.setLanguage(AppLanguage.en);
+        await tester.pumpWidget(
+          _wrap(
+            QuickShelf(activeTask: ShelfTask.camera, onTaskSelected: (_) {}),
           ),
-        ),
-      );
+        );
 
-      
-      expect(
-        find.bySemanticsLabel('Read aloud what the camera sees.'),
-        findsOneWidget,
-      );
-      expect(
-        find.bySemanticsLabel('Set a route by voice.'),
-        findsOneWidget,
-      );
-      expect(find.bySemanticsLabel('Camera. Active.'), findsOneWidget);
-    });
+        expect(
+          find.bySemanticsLabel('Read aloud what the camera sees.'),
+          findsOneWidget,
+        );
+        expect(find.bySemanticsLabel('Set a route by voice.'), findsOneWidget);
+        expect(find.bySemanticsLabel('Camera. Active.'), findsOneWidget);
+      },
+    );
 
     testWidgets('reflects active tab via Semantics.selected', (tester) async {
       AppStrings.setLanguage(AppLanguage.en);
       await tester.pumpWidget(
-        _wrap(
-          QuickShelf(
-            activeTask: ShelfTask.read,
-            onTaskSelected: (_) {},
-          ),
-        ),
+        _wrap(QuickShelf(activeTask: ShelfTask.read, onTaskSelected: (_) {})),
       );
 
       expect(
@@ -96,12 +78,7 @@ void main() {
     testWidgets('inactive tabs are NOT marked selected', (tester) async {
       AppStrings.setLanguage(AppLanguage.en);
       await tester.pumpWidget(
-        _wrap(
-          QuickShelf(
-            activeTask: ShelfTask.camera,
-            onTaskSelected: (_) {},
-          ),
-        ),
+        _wrap(QuickShelf(activeTask: ShelfTask.camera, onTaskSelected: (_) {})),
       );
 
       expect(
@@ -119,8 +96,9 @@ void main() {
   });
 
   group('QuickShelf interaction', () {
-    testWidgets('tapping Read tab fires onTaskSelected(ShelfTask.read)',
-        (tester) async {
+    testWidgets('tapping Read tab fires onTaskSelected(ShelfTask.read)', (
+      tester,
+    ) async {
       ShelfTask? captured;
       await tester.pumpWidget(
         _wrap(
@@ -137,8 +115,9 @@ void main() {
       expect(captured, ShelfTask.read);
     });
 
-    testWidgets('tapping Navigate tab fires onTaskSelected(navigate)',
-        (tester) async {
+    testWidgets('tapping Navigate tab fires onTaskSelected(navigate)', (
+      tester,
+    ) async {
       ShelfTask? captured;
       await tester.pumpWidget(
         _wrap(
@@ -155,8 +134,9 @@ void main() {
       expect(captured, ShelfTask.navigate);
     });
 
-    testWidgets('tapping Camera tab fires onTaskSelected(camera)',
-        (tester) async {
+    testWidgets('tapping Camera tab fires onTaskSelected(camera)', (
+      tester,
+    ) async {
       ShelfTask? captured;
       await tester.pumpWidget(
         _wrap(
@@ -175,19 +155,15 @@ void main() {
   });
 
   group('QuickShelf size constraints', () {
-    testWidgets('shelf height equals BagdarSpacing.shelfHeight',
-        (tester) async {
+    testWidgets('shelf height equals BagdarSpacing.shelfHeight', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(1080, 1920);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
 
       await tester.pumpWidget(
-        _wrap(
-          QuickShelf(
-            activeTask: ShelfTask.camera,
-            onTaskSelected: (_) {},
-          ),
-        ),
+        _wrap(QuickShelf(activeTask: ShelfTask.camera, onTaskSelected: (_) {})),
       );
 
       final shelfFinder = find.byType(QuickShelf);
@@ -197,12 +173,7 @@ void main() {
 
     testWidgets('every tab has at least 64dp tap height', (tester) async {
       await tester.pumpWidget(
-        _wrap(
-          QuickShelf(
-            activeTask: ShelfTask.camera,
-            onTaskSelected: (_) {},
-          ),
-        ),
+        _wrap(QuickShelf(activeTask: ShelfTask.camera, onTaskSelected: (_) {})),
       );
 
       for (var i = 0; i < 3; i++) {
@@ -221,10 +192,7 @@ void main() {
       for (final theme in BagdarThemeName.values) {
         await tester.pumpWidget(
           _wrap(
-            QuickShelf(
-              activeTask: ShelfTask.camera,
-              onTaskSelected: (_) {},
-            ),
+            QuickShelf(activeTask: ShelfTask.camera, onTaskSelected: (_) {}),
             theme: theme,
           ),
         );

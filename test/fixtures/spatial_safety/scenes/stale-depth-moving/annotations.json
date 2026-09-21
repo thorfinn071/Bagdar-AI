@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "sceneId": "stale-depth-moving",
+  "annotationRevision": 3,
+  "initialFeedback": "none",
+  "timeline": [
+    {
+      "startOffsetMs": 1500,
+      "endOffsetMs": 2500,
+      "expectedActions": [
+        "stopNow"
+      ],
+      "forbiddenActions": [
+        "continueForward",
+        "adjustLeft",
+        "adjustRight"
+      ],
+      "expectedHealth": [
+        "stale"
+      ],
+      "expectedAlertEvents": [
+        "emitted"
+      ],
+      "expectedShadowDirections": [
+        "none"
+      ],
+      "interruptCurrent": false
+    }
+  ]
+}

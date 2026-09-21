@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "sceneId": "center-blocked-left-observed",
+  "annotationRevision": 3,
+  "initialFeedback": "none",
+  "timeline": [
+    {
+      "startOffsetMs": 0,
+      "endOffsetMs": 100,
+      "expectedActions": [
+        "stopNow"
+      ],
+      "forbiddenActions": [
+        "continueForward",
+        "adjustLeft",
+        "adjustRight"
+      ],
+      "expectedHealth": [
+        "healthy"
+      ],
+      "expectedAlertEvents": [
+        "emitted"
+      ],
+      "expectedShadowDirections": [
+        "none"
+      ],
+      "interruptCurrent": false
+    }
+  ]
+}

@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import '../camera/camera_session.dart';
+import '../core/core_feature_policy.dart';
+import '../core/core_health_coordinator.dart';
 import '../models/a11y_prefs.dart';
 import '../models/app_mode.dart';
 import '../models/speech_job.dart';
@@ -41,6 +44,12 @@ import '../services/indoor_gate.dart';
 import '../services/object_memory_service.dart';
 import '../services/acoustic_world_model.dart';
 import '../camera/object_finder_session.dart';
+import '../safety/runtime/spatial_safety_runtime.dart';
+import '../safety/runtime/safety_feedback_runtime.dart';
+import '../safety/alerts/bagdar_feedback_output.dart';
+import '../safety/alerts/feedback_command.dart';
+import '../safety/alerts/feedback_dispatcher.dart';
+import '../safety/planning/safety_action.dart';
 
 import '../services/orientation_service.dart';
 import '../services/step_service.dart';
@@ -57,6 +66,8 @@ import '../services/scene_question_service.dart';
 import '../services/sonar_service.dart';
 
 class CameraViewModel extends ChangeNotifier {
+  final CoreHealthCoordinator health = CoreHealthCoordinator();
+  final CameraSession cameraSession = CameraSession();
   final Tracker tracker = Tracker();
   final TtsService tts = TtsService.instance;
   final EarconService earcon = EarconService();
@@ -80,18 +91,19 @@ class CameraViewModel extends ChangeNotifier {
   final GtfsService gtfs = GtfsService();
   final VoiceCommandService voice = VoiceCommandService();
   final TrafficLightAnalyzer trafficLight = TrafficLightAnalyzer();
-  
-  
+
   late final OcrService ocr = OcrService(memoryMonitor: memory);
   final MotionPreAlert motionPreAlert = MotionPreAlert();
   final WeatherGate weatherGate = WeatherGate();
-  
-  
+
   final IndoorGate indoorGate = IndoorGate();
 
   final WinterModeService winterMode = WinterModeService();
 
   late final AlertManager alertMgr;
+  late final SpatialSafetyRuntime spatialSafety;
+  late final BagdarFeedbackOutput feedbackOutput;
+  late final SafetyFeedbackRuntime safetyFeedback;
   late final ProximityBeaconService proximityBeacon;
   late final NavigationService nav;
   late final PaymentSmsService paymentSms;
@@ -100,22 +112,22 @@ class CameraViewModel extends ChangeNotifier {
   late final ObjectFinderSession objectFinder;
   late final IndoorTrailRecorder trailRecorder;
   late final IndoorTrailReplay trailReplay;
-  final BazaarLivestockService bazaarLivestock = BazaarLivestockService.instance;
+  final BazaarLivestockService bazaarLivestock =
+      BazaarLivestockService.instance;
 
-  
   final MeshBuddyAlertService meshBuddy = MeshBuddyAlertService.instance;
-  
+
   final OscpService oscp = OscpService.instance;
-  
+
   final NearMissBuffer nearMissBuffer = NearMissBuffer.instance;
-  
+
   final ChargingJobScheduler chargingJobs = ChargingJobScheduler.instance;
-  
+
   final ModelPackManager modelPacks = ModelPackManager.instance;
-  
+
   final SceneQuestionService vlmCompanion = SceneQuestionService.instance;
-  
-  final SonarService sonar = SonarService.instance;
+
+  SonarService get sonar => SonarService.instance;
 
   AppMode mode = AppMode.street;
   String statusLine = 'Запуск Bagdar...';
@@ -125,16 +137,24 @@ class CameraViewModel extends ChangeNotifier {
   bool isPitchBlack = false;
   bool guideDogMode = false;
 
+  /// Source-camera geometry used to normalize depth/luma and to align YOLO
+  /// boxes with generic-obstacle observations.
+  int cameraSensorRotationDeg = 0;
+  bool cameraMirrored = false;
+
   /// V1.2: Notified whenever [FallDetector.motionState] changes so that
   /// camera_screen.dart can issue the "you are running" TTS cue.
   void Function(MotionState state)? onMotionStateChanged;
+
+  /// Service names passed to [_initService] during the last [init] call.
+  /// Visible for Core boot-policy tests.
+  List<String> debugBootServiceNames = const [];
 
   DateTime _lastRollWarnAt = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _lastOrientationWarnAt = DateTime.fromMillisecondsSinceEpoch(0);
 
   final ValueNotifier<List<Track>> tracksNotifier = ValueNotifier(const []);
 
-  
   bool get isIndoor => indoorGate.state == IndoorState.indoor;
 
   CameraViewModel() {
@@ -156,6 +176,16 @@ class CameraViewModel extends ChangeNotifier {
       isGuideDogMode: () => guideDogMode,
       isIndoorMode: () => isIndoor,
     );
+    feedbackOutput = BagdarFeedbackOutput(tts: tts, earcon: earcon);
+    safetyFeedback = SafetyFeedbackRuntime(
+      arbiter: alertMgr.spatialArbiter,
+      dispatcher: FeedbackDispatcher(healthCoordinator: health),
+      output: feedbackOutput,
+    );
+    spatialSafety = SpatialSafetyRuntime(
+      healthCoordinator: health,
+      arbiter: alertMgr.spatialArbiter,
+    );
     nav = NavigationService(compass: compass, stepService: steps);
     paymentSms = PaymentSmsService(tts: tts, earcon: earcon);
     objectFinder = ObjectFinderSession(
@@ -168,15 +198,15 @@ class CameraViewModel extends ChangeNotifier {
       steps: steps,
       indoorGate: indoorGate,
     );
-    trailReplay = IndoorTrailReplay(
-      compass: compass,
-      steps: steps,
-    );
-    
-    
-    winterMode.loadFromSettings();
-    thermal.setWinterMode(winterMode.active);
-    winterMode.addListener(_onWinterModeChanged);
+    trailReplay = IndoorTrailReplay(compass: compass, steps: steps);
+
+    if (CoreFeaturePolicy.current.mayInitialize(
+      CoreFeature.experimentalWinter,
+    )) {
+      winterMode.loadFromSettings();
+      thermal.setWinterMode(winterMode.active);
+      winterMode.addListener(_onWinterModeChanged);
+    }
   }
 
   void _onWinterModeChanged() {
@@ -185,28 +215,50 @@ class CameraViewModel extends ChangeNotifier {
   }
 
   Future<void> togglePaymentSms() async {
+    if (!CoreFeaturePolicy.current.mayInitialize(CoreFeature.paymentSms)) {
+      return;
+    }
     await paymentSms.toggle();
     notifyListeners();
   }
 
-  
   void applyIndoorTransition(IndoorTransition transition) {
     if (transition == IndoorTransition.none) return;
     throttler.setIndoorMode(isIndoor);
     if (transition == IndoorTransition.enteredIndoor) {
       earcon.play(Earcon.indoorEntered);
-      tts.say(
-        S.alert('indoor_mode_entered'),
-        SpeechPriority.info,
-        pan: 0.0,
-      );
+      tts.say(S.alert('indoor_mode_entered'), SpeechPriority.info, pan: 0.0);
     } else {
       earcon.play(Earcon.indoorExited);
-      tts.say(
-        S.alert('indoor_mode_exited'),
-        SpeechPriority.info,
-        pan: 0.0,
+      tts.say(S.alert('indoor_mode_exited'), SpeechPriority.info, pan: 0.0);
+    }
+    notifyListeners();
+  }
+
+  int beginCameraSession(DateTime now) {
+    final gen = cameraSession.beginNewSession();
+    tracker.clear();
+    unawaited(safetyFeedback.resetSession(now: now));
+    alertMgr.reset();
+    health.resetSession(now);
+    spatialSafety.beginSession(gen, now: now);
+    return gen;
+  }
+
+  void endCameraSession(DateTime now) {
+    spatialSafety.endSession(now: now);
+    cameraSession.endSession();
+    unawaited(safetyFeedback.resetSession(now: now));
+  }
+
+  void publishHealth(DateTime now) {
+    for (final a in health.drainAnnouncements()) {
+      safetyFeedback.submitHealth(
+        health.snapshot(now),
+        userMoving: fallDetector.motionState != MotionState.stationary,
+        now: now,
       );
+      setStatus(S.get(a.stringKey));
     }
     notifyListeners();
   }
@@ -225,13 +277,15 @@ class CameraViewModel extends ChangeNotifier {
     final oldMode = mode;
     mode = newMode;
     alertMgr.markModeSwitch(DateTime.now());
-    FeatureUsageTracker.instance.increment(
-      FeatureUsageKeys.mode(newMode.name),
-    );
+    // Safety audit C-2: markModeSwitch only resets the "path clear"
+    // announcement guard. Without a full reset(), per-track distance
+    // history, category suppression windows, and critical-alert cooldowns
+    // from the OLD mode leak into the new mode (e.g. switching cane -> street
+    // right after a critical alert could suppress a genuinely new hazard).
+    alertMgr.reset();
+    FeatureUsageTracker.instance.increment(FeatureUsageKeys.mode(newMode.name));
     FieldLogger.instance.logModeSwitch(newMode.name, from: oldMode.name);
     if (Settings.instance.modeAnnounce) {
-      
-      
       tts.say(
         '${S.get('mode_changed')} ${mode.label}',
         SpeechPriority.warning,
@@ -253,8 +307,7 @@ class CameraViewModel extends ChangeNotifier {
     isPitchBlack = !isPitchBlack;
     unawaited(Settings.instance.setPitchBlackUi(isPitchBlack));
     final msg = isPitchBlack ? S.get('curtain_on') : S.get('curtain_off');
-    
-    
+
     tts.say(msg, SpeechPriority.info, pan: 0.0);
     HapticService.vibrate([0, 150]);
     notifyListeners();
@@ -267,8 +320,7 @@ class CameraViewModel extends ChangeNotifier {
         ? S.alert('guide_dog_on')
         : S.alert('guide_dog_off');
     earcon.play(Earcon.success);
-    
-    
+
     tts.say(msg, SpeechPriority.info, pan: 0.0);
     HapticService.vibrate([0, 150]);
     notifyListeners();
@@ -278,8 +330,7 @@ class CameraViewModel extends ChangeNotifier {
     final key = Settings.instance.classicGestures
         ? 'help_summary_classic'
         : 'help_summary';
-    
-    
+
     tts.say(S.get(key), SpeechPriority.info, pan: 0.0);
   }
 
@@ -292,83 +343,87 @@ class CameraViewModel extends ChangeNotifier {
   }
 
   Future<void> init() async {
+    const policy = CoreFeaturePolicy.current;
+    debugBootServiceNames = CoreBootServices.namesFor(policy);
     final List<Future<void>> services = [
-      _initService('TTS', tts.init()),
-      _initService('Battery', battery.init()),
-      _initService('Thermal', thermal.init()),
-      _initService('Memory', memory.init()),
-      _initService('Earcon', earcon.init()),
-      _initService('Compass', compass.init()),
-      _initService('Orientation', orientation.init()),
-      _initService('Steps', steps.init()),
-      _initService('Waypoints', waypoints.init()),
-      _initService('SOS', sos.init()),
-      _initService('2GIS', twoGis.init()),
-      _initService('Voice', voice.init(locale: AppStrings.ttsLang)),
-      _initService('PaymentSMS', paymentSms.init()),
-      _initService(
-        'ObjectMemory',
-        objectMemory.init(tts: tts, earcon: earcon),
-      ),
-      _initService('AWM', awm.init()),
+      for (final name in debugBootServiceNames)
+        _initService(name, _bootFutureFor(name)),
     ];
 
     await Future.wait(services);
+    await feedbackOutput.refreshCapabilities();
+    // Keep construction side-effect free for tests and dormant screens.  The
+    // unified output path becomes authoritative only after its concrete
+    // services have completed boot.
+    alertMgr.attachSafetyFeedback(safetyFeedback);
 
-    awm.onAcousticEvent = (event) {
-      alertMgr.handleAcousticEvent(event);
-    };
-    awm.onReverbEstimate = (estimate) {
-      indoorGate.feedAcousticPrior(estimate);
-    };
+    if (policy.mayInitialize(CoreFeature.acousticWorldModel)) {
+      awm.onAcousticEvent = (event) {
+        alertMgr.handleAcousticEvent(event);
+      };
+      awm.onReverbEstimate = (estimate) {
+        indoorGate.feedAcousticPrior(estimate);
+      };
+    }
 
-    
-    trailReplay.onHazard = (event) {
-      alertMgr.handleExternalHazard(event);
-    };
-    trailReplay.onArrived = (trail) {
-      earcon.play(Earcon.success);
-    };
-    trailReplay.onLost = () {
-      earcon.play(Earcon.fail);
-    };
+    if (policy.mayInitialize(CoreFeature.indoorTrail)) {
+      trailReplay.onHazard = (event) {
+        alertMgr.handleExternalHazard(event);
+      };
+      trailReplay.onArrived = (trail) {
+        earcon.play(Earcon.success);
+      };
+      trailReplay.onLost = () {
+        earcon.play(Earcon.fail);
+      };
+    }
 
-    
-    bazaarLivestock.onHazard = (event) {
-      alertMgr.handleExternalHazard(event);
-    };
+    if (policy.mayInitialize(CoreFeature.bazaarLivestock)) {
+      bazaarLivestock.onHazard = (event) {
+        alertMgr.handleExternalHazard(event);
+      };
+    }
 
-    
-    meshBuddy.onHazard = (event) {
-      alertMgr.handleExternalHazard(event);
-    };
+    if (policy.mayInitialize(CoreFeature.bleMesh)) {
+      meshBuddy.onHazard = (event) {
+        alertMgr.handleExternalHazard(event);
+      };
+    }
 
-    
-    oscp.onHazard = (event) {
-      alertMgr.handleExternalHazard(event);
-    };
+    if (policy.mayInitialize(CoreFeature.smartCane)) {
+      oscp.onHazard = (event) {
+        alertMgr.handleExternalHazard(event);
+      };
+    }
 
-    
-    vlmCompanion.onAnswer = (event) {
-      alertMgr.handleExternalHazard(event);
-    };
+    if (policy.mayInitialize(CoreFeature.vlmSceneQa)) {
+      vlmCompanion.onAnswer = (event) {
+        alertMgr.handleExternalHazard(event);
+      };
+    }
 
-    
-    sonar.onHazard = (event) {
-      alertMgr.handleExternalHazard(event);
-    };
+    if (policy.mayInitialize(CoreFeature.sonar)) {
+      sonar.onShadowObservation = (observation) {
+        FieldLogger.instance.logSonarChirp(
+          'shadow_observation_received',
+          data: observation.toDiagnosticMap().cast<String, dynamic>(),
+        );
+      };
+    }
 
-    
-    paymentSms.onHazard = (event) {
-      alertMgr.handleExternalHazard(event);
-    };
+    if (policy.mayInitialize(CoreFeature.paymentSms)) {
+      paymentSms.onHazard = (event) {
+        alertMgr.handleExternalHazard(event);
+      };
+    }
 
-    
-    chargingJobs.isChargingProvider = () => battery.isCharging;
-    chargingJobs.isWifiProvider = () => battery.isWifi;
-    chargingJobs.batteryPctProvider = () => battery.batteryPct;
-    chargingJobs.thermalProvider = () => thermal.severity;
-    chargingJobs.memoryProvider = () => memory.level;
+    if (policy.mayInitialize(CoreFeature.chargingJobs)) {
+      chargingJobs.isChargingProvider = () => battery.isCharging;
+      chargingJobs.isWifiProvider = () => battery.isWifi;
+      chargingJobs.batteryPctProvider = () => battery.batteryPct;
+      chargingJobs.thermalProvider = () => thermal.severity;
+      chargingJobs.memoryProvider = () => memory.level;
+    }
 
     applyA11yPrefs();
 
@@ -386,7 +441,8 @@ class CameraViewModel extends ChangeNotifier {
 
     orientation.onPitchChanged = (state) {
       final now = DateTime.now();
-      if (now.difference(_lastOrientationWarnAt) < const Duration(seconds: 10)) {
+      if (now.difference(_lastOrientationWarnAt) <
+          const Duration(seconds: 10)) {
         return;
       }
 
@@ -434,8 +490,6 @@ class CameraViewModel extends ChangeNotifier {
     nav.onSoftOffRoute = () =>
         tts.say(S.get('nav_maybe_off_route'), SpeechPriority.info, pan: 0.0);
     nav.onArrived = () =>
-        
-        
         tts.say(S.get('nav_arrived_short'), SpeechPriority.warning, pan: 0.0);
 
     nav.onOffRouteBearing = (bearing, distanceMeters) {
@@ -478,8 +532,7 @@ class CameraViewModel extends ChangeNotifier {
         availMb: readings.isAvailable ? readings.availMB : null,
         totalMb: readings.isAvailable ? readings.totalMB : null,
       );
-      
-      
+
       if (readings.level == MemoryPressureLevel.critical &&
           VoskKkRecognizer.instance.isReady) {
         FieldLogger.instance.log('vosk_kk_unloaded_oom', {
@@ -500,6 +553,87 @@ class CameraViewModel extends ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  void submitCameraSafety({
+    required String speechKey,
+    required String replaceKey,
+    required DateTime now,
+    bool critical = false,
+    bool recovered = false,
+    double urgency = 0.7,
+  }) {
+    assert(!(critical && recovered));
+    safetyFeedback.submitCommand(
+      FeedbackCommand(
+        actionId: 'camera-${now.microsecondsSinceEpoch}-$replaceKey',
+        sceneRevision: -1,
+        speechKey: speechKey,
+        earcon: critical
+            ? FeedbackEarcon.stop
+            : recovered
+            ? FeedbackEarcon.confirmation
+            : FeedbackEarcon.degraded,
+        hapticPattern: critical
+            ? FeedbackHapticPattern.immediateStop
+            : recovered
+            ? FeedbackHapticPattern.confirmation
+            : FeedbackHapticPattern.sensingDegraded,
+        priority: critical
+            ? SafetyPriority.p0Emergency
+            : recovered
+            ? SafetyPriority.p3Information
+            : SafetyPriority.p2Degraded,
+        source: FeedbackCommandSource.cameraHealth,
+        actionKind: critical
+            ? SafetyActionKind.stopNow
+            : recovered
+            ? null
+            : SafetyActionKind.holdAndScan,
+        direction: null,
+        urgency: urgency.clamp(0.0, 1.0),
+        canInterrupt: critical,
+        replaceKey: 'camera:$replaceKey',
+        createdAt: now,
+        expiresAt: now.add(const Duration(seconds: 3)),
+        ruleId: critical
+            ? 'CAMERA-P0-UNAVAILABLE'
+            : recovered
+            ? 'CAMERA-P3-RECOVERED'
+            : 'CAMERA-P2-DEGRADED',
+        hazardIds: <String>['camera:$replaceKey'],
+      ),
+      now: now,
+    );
+  }
+
+  void submitEmergencySafety({
+    required String speechKey,
+    required String replaceKey,
+    required DateTime now,
+    double urgency = 1,
+  }) {
+    safetyFeedback.submitCommand(
+      FeedbackCommand(
+        actionId: 'emergency-${now.microsecondsSinceEpoch}-$replaceKey',
+        sceneRevision: -1,
+        speechKey: speechKey,
+        earcon: FeedbackEarcon.stop,
+        hapticPattern: FeedbackHapticPattern.immediateStop,
+        priority: SafetyPriority.p0Emergency,
+        source: FeedbackCommandSource.emergency,
+        actionKind: SafetyActionKind.stopNow,
+        direction: null,
+        urgency: urgency.clamp(0.0, 1.0),
+        canInterrupt: true,
+        replaceKey: 'emergency:$replaceKey',
+        createdAt: now,
+        expiresAt: now.add(const Duration(seconds: 5)),
+        ruleId: 'EMERGENCY-P0',
+        hazardIds: <String>['emergency:$replaceKey'],
+      ),
+      now: now,
+    );
   }
 
   Future<NavRoute?> _rerouteFromPosition(double fromLat, double fromLng) async {
@@ -572,32 +706,80 @@ class CameraViewModel extends ChangeNotifier {
     }
   }
 
-  void updateTracks(
-    List<Track> tracks, {
-    int imgW = 0,
-    int imgH = 0,
-  }) {
+  Future<void> _bootFutureFor(String name) {
+    switch (name) {
+      case 'TTS':
+        return tts.init();
+      case 'Battery':
+        return battery.init();
+      case 'Thermal':
+        return thermal.init();
+      case 'Memory':
+        return memory.init();
+      case 'Earcon':
+        return earcon.init();
+      case 'Compass':
+        return compass.init();
+      case 'Orientation':
+        return orientation.init();
+      case 'Steps':
+        return steps.init();
+      case 'Waypoints':
+        return waypoints.init();
+      case 'SOS':
+        return sos.init();
+      case '2GIS':
+        return twoGis.init();
+      case 'Voice':
+        return voice.init(locale: AppStrings.ttsLang);
+      case CoreBootServices.paymentSms:
+        return paymentSms.init();
+      case CoreBootServices.objectMemory:
+        return objectMemory.init(tts: tts, earcon: earcon);
+      case CoreBootServices.acousticWorldModel:
+        return awm.init();
+      default:
+        return Future<void>.value();
+    }
+  }
+
+  void updateTracks(List<Track> tracks, {int imgW = 0, int imgH = 0}) {
     tracksNotifier.value = tracks;
-    if (imgW > 0 && imgH > 0) {
+    if (imgW > 0 &&
+        imgH > 0 &&
+        CoreFeaturePolicy.current.mayInitialize(
+          CoreFeature.objectMemoryFinder,
+        )) {
       objectMemory.onTracks(tracks, imgW, imgH);
       objectFinder.onTracks(tracks, imgW, imgH);
     }
   }
 
   void objectMemoryFeed(CameraImage image, DateTime now) {
+    if (!CoreFeaturePolicy.current.mayInitialize(
+      CoreFeature.objectMemoryFinder,
+    )) {
+      return;
+    }
     if (objectMemory.rememberActive) objectMemory.feed(image, now);
     if (objectFinder.active) objectFinder.feed(image, now);
   }
 
   @override
   void dispose() {
-    winterMode.removeListener(_onWinterModeChanged);
+    if (CoreFeaturePolicy.current.mayInitialize(
+      CoreFeature.experimentalWinter,
+    )) {
+      winterMode.removeListener(_onWinterModeChanged);
+    }
     winterMode.dispose();
     bazaarLivestock.onHazard = null;
     meshBuddy.onHazard = null;
     oscp.onHazard = null;
     vlmCompanion.onAnswer = null;
-    sonar.onHazard = null;
+    if (CoreFeaturePolicy.current.mayInitialize(CoreFeature.sonar)) {
+      sonar.onShadowObservation = null;
+    }
     trailReplay.onHazard = null;
     paymentSms.onHazard = null;
     tts.dispose();
@@ -623,7 +805,9 @@ class CameraViewModel extends ChangeNotifier {
     oscp.dispose();
     chargingJobs.dispose();
     vlmCompanion.dispose();
-    sonar.dispose();
+    if (CoreFeaturePolicy.current.mayInitialize(CoreFeature.sonar)) {
+      sonar.dispose();
+    }
     modelPacks.dispose();
     voice.dispose();
     twoGis.dispose();

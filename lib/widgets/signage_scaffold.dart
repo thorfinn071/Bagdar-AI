@@ -49,8 +49,9 @@ class SignageScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = BagdarTheme.colorsOf(context);
 
-    final body =
-        scrollable ? SingleChildScrollView(padding: bodyPadding, child: child) : Padding(padding: bodyPadding, child: child);
+    final body = scrollable
+        ? SingleChildScrollView(padding: bodyPadding, child: child)
+        : Padding(padding: bodyPadding, child: child);
 
     return Scaffold(
       backgroundColor: colors.surfaceBg,
@@ -98,7 +99,8 @@ class _SignageHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final backLabel = backSemanticLabel ??
+    final backLabel =
+        backSemanticLabel ??
         MaterialLocalizations.of(context).backButtonTooltip;
 
     return Padding(
@@ -116,14 +118,12 @@ class _SignageHeader extends StatelessWidget {
             children: [
               if (showBack)
                 FocusRingDecorator(
-                  borderRadius:
-                      BorderRadius.circular(BagdarRadius.card),
+                  borderRadius: BorderRadius.circular(BagdarRadius.card),
                   child: Semantics(
                     button: true,
                     label: backLabel,
                     child: InkWell(
-                      borderRadius:
-                          BorderRadius.circular(BagdarRadius.card),
+                      borderRadius: BorderRadius.circular(BagdarRadius.card),
                       onTap: onBack ?? () => Navigator.of(context).maybePop(),
                       child: SizedBox(
                         width: BagdarSpacing.tapMinimum,

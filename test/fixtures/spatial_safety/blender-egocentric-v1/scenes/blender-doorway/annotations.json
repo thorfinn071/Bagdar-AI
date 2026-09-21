@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "sceneId": "blender-doorway",
+  "annotationRevision": 4,
+  "initialFeedback": "none",
+  "timeline": [
+    {
+      "startOffsetMs": 0,
+      "endOffsetMs": 100,
+      "expectedActions": [
+        "continueForward"
+      ],
+      "forbiddenActions": [
+        "adjustLeft",
+        "adjustRight"
+      ],
+      "expectedHealth": [
+        "healthy"
+      ],
+      "expectedAlertEvents": [
+        "suppressed"
+      ],
+      "expectedShadowDirections": [
+        "none"
+      ],
+      "interruptCurrent": false
+    }
+  ]
+}

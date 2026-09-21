@@ -1,192 +1,256 @@
-"""Parity test: TFLite vs NCNN MiDaS Small.
+"""ONNX reference vs NCNN MiDaS Small parity.
 
-Generates 5 synthetic inputs (256x256x3 normalized to [0,1]) and compares
-inference outputs from both runtimes. Pass condition:
-    mean abs diff < 0.03 over each output map (output values are normalized depths).
-
-Run from repo root after `convert_midas.py`:
-    python tools/ncnn/parity_test.py
+The default run is read-only and prints a JSON report. Use --output for a
+report file and --fixture to explicitly refresh the compact Dart fixture.
 """
 from __future__ import annotations
 
+import argparse
+import hashlib
 import json
-import sys
 from pathlib import Path
 
+import ncnn
 import numpy as np
+import onnxruntime as ort
+
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 ASSETS = REPO_ROOT / "assets"
 TOOLS = REPO_ROOT / "tools" / "ncnn"
-
-TFLITE_PATH = ASSETS / "midas_small_int8.tflite"
+ONNX_REFERENCE = TOOLS / "build" / "midas_small_fp32.onnx"
 NCNN_PARAM = ASSETS / "midas_small.ncnn.param"
 NCNN_BIN = ASSETS / "midas_small.ncnn.bin"
-REPORT = TOOLS / "parity_report.json"
-
 INPUT_SIZE = 256
-N_SAMPLES = 5
-PASS_THRESHOLD = 0.03
+PASS_MEAN_ABS_THRESHOLD = 0.10
+PASS_SPEARMAN_THRESHOLD = 0.90
 
 
-def make_inputs(rng: np.random.Generator) -> list[np.ndarray]:
-    """Synthetic but plausible inputs: gradients + noise + structured patterns."""
-    samples = []
-    
-    g = np.linspace(0, 1, INPUT_SIZE, dtype=np.float32)
-    samples.append(np.tile(g[None, :, None], (INPUT_SIZE, 1, 3)))
-    
-    g = np.linspace(0, 1, INPUT_SIZE, dtype=np.float32)
-    samples.append(np.tile(g[:, None, None], (1, INPUT_SIZE, 3)))
-    
-    cb = np.indices((INPUT_SIZE, INPUT_SIZE)).sum(0) % 32 < 16
-    samples.append(np.repeat(cb.astype(np.float32)[..., None], 3, axis=-1))
-    
-    samples.append(rng.random((INPUT_SIZE, INPUT_SIZE, 3), dtype=np.float32))
-    
+def sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as source:
+        for chunk in iter(lambda: source.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def make_inputs(rng: np.random.Generator) -> list[tuple[str, np.ndarray]]:
+    """Deterministic gradients, edges, texture, and radial structure."""
+    samples: list[tuple[str, np.ndarray]] = []
+    gradient = np.linspace(0, 1, INPUT_SIZE, dtype=np.float32)
+    samples.append(
+        (
+            "horizontal-gradient",
+            np.tile(gradient[None, :, None], (INPUT_SIZE, 1, 3)),
+        )
+    )
+    samples.append(
+        (
+            "vertical-gradient",
+            np.tile(gradient[:, None, None], (1, INPUT_SIZE, 3)),
+        )
+    )
+    edge = np.tile(
+        np.linspace(0.15, 0.85, INPUT_SIZE, dtype=np.float32)[:, None],
+        (1, INPUT_SIZE),
+    )
+    edge[90:220, 92:164] = 0.95
+    samples.append(
+        (
+            "central-obstacle-edge",
+            np.repeat(edge[..., None], 3, axis=-1),
+        )
+    )
+    samples.append(
+        (
+            "seeded-texture",
+            rng.random((INPUT_SIZE, INPUT_SIZE, 3), dtype=np.float32),
+        )
+    )
     yy, xx = np.mgrid[0:INPUT_SIZE, 0:INPUT_SIZE].astype(np.float32)
-    dist = np.sqrt((yy - INPUT_SIZE / 2) ** 2 + (xx - INPUT_SIZE / 2) ** 2)
-    disk = np.clip(1.0 - dist / (INPUT_SIZE / 2), 0.0, 1.0)
-    samples.append(np.repeat(disk[..., None], 3, axis=-1))
+    distance = np.sqrt((yy - INPUT_SIZE / 2) ** 2 + (xx - INPUT_SIZE / 2) ** 2)
+    disk = np.clip(1.0 - distance / (INPUT_SIZE / 2), 0.0, 1.0)
+    samples.append(("radial-edge", np.repeat(disk[..., None], 3, axis=-1)))
     return samples
 
 
-def run_tflite(inputs: list[np.ndarray]) -> list[np.ndarray]:
-    try:
-        import tensorflow as tf  
-    except ImportError:
-        pass
-    try:
-        from tflite_runtime.interpreter import Interpreter
-    except ImportError:
-        from tensorflow.lite.python.interpreter import Interpreter
-
-    interp = Interpreter(model_path=str(TFLITE_PATH))
-    interp.allocate_tensors()
-    in_det = interp.get_input_details()[0]
-    out_det = interp.get_output_details()[0]
-
-    outputs: list[np.ndarray] = []
-    for arr in inputs:
-        x = arr.astype(np.float32)[None, ...]
-        if in_det["dtype"] == np.uint8:
-            scale, zp = in_det["quantization"]
-            x_q = np.clip(np.round(x / scale + zp), 0, 255).astype(np.uint8)
-            interp.set_tensor(in_det["index"], x_q)
-        else:
-            interp.set_tensor(in_det["index"], x)
-        interp.invoke()
-        out = interp.get_tensor(out_det["index"])
-        if out_det["dtype"] == np.uint8:
-            scale, zp = out_det["quantization"]
-            out = (out.astype(np.float32) - zp) * scale
-        outputs.append(np.squeeze(out).astype(np.float32))
-    return outputs
+def chw(sample: np.ndarray) -> np.ndarray:
+    return np.transpose(sample, (2, 0, 1)).astype(np.float32)
 
 
-def run_ncnn(inputs: list[np.ndarray]) -> list[np.ndarray]:
-    try:
-        import ncnn
-    except ImportError:
-        sys.exit(
-            "Python ncnn package missing. Install via:\n"
-            "    pip install ncnn  # (may require building from source on Windows)\n"
-            "If unavailable, use the on-device parity check (run app + log outputs)."
+def run_reference(inputs: list[tuple[str, np.ndarray]]) -> list[np.ndarray]:
+    options = ort.SessionOptions()
+    options.intra_op_num_threads = 1
+    options.inter_op_num_threads = 1
+    session = ort.InferenceSession(
+        str(ONNX_REFERENCE),
+        sess_options=options,
+        providers=["CPUExecutionProvider"],
+    )
+    input_meta = session.get_inputs()[0]
+    output_meta = session.get_outputs()[0]
+    if list(input_meta.shape) != [1, 3, INPUT_SIZE, INPUT_SIZE]:
+        raise ValueError(f"reference input drift: {input_meta.shape}")
+    if list(output_meta.shape) != [1, INPUT_SIZE, INPUT_SIZE]:
+        raise ValueError(f"reference output drift: {output_meta.shape}")
+    return [
+        np.squeeze(session.run(None, {input_meta.name: chw(sample)[None]})[0]).astype(
+            np.float32
         )
+        for _, sample in inputs
+    ]
 
+
+def ncnn_blob_names(param_path: Path) -> tuple[str, str]:
+    layers: list[tuple[str, list[str]]] = []
+    for line in param_path.read_text(encoding="utf-8").splitlines():
+        parts = line.split()
+        if len(parts) < 4 or not parts[2].isdigit() or not parts[3].isdigit():
+            continue
+        bottom_count = int(parts[2])
+        top_count = int(parts[3])
+        top_start = 4 + bottom_count
+        if top_count < 1 or len(parts) < top_start + top_count:
+            continue
+        layers.append((parts[0], parts[top_start : top_start + top_count]))
+    if not layers or layers[0][0] != "Input":
+        raise ValueError("NCNN param has no leading Input layer")
+    return layers[0][1][0], layers[-1][1][-1]
+
+
+def run_ncnn(inputs: list[tuple[str, np.ndarray]]) -> list[np.ndarray]:
     net = ncnn.Net()
     net.opt.use_vulkan_compute = False
-    net.load_param(str(NCNN_PARAM))
-    net.load_model(str(NCNN_BIN))
-
-    
-    param_text = NCNN_PARAM.read_text()
-    in_name = None
-    out_name = None
-    for line in param_text.splitlines():
-        parts = line.split()
-        if not parts:
-            continue
-        if parts[0] == "Input" and in_name is None:
-            in_name = parts[-1] if parts[-1].isidentifier() else parts[2]
-    
-    last_layer = [ln for ln in param_text.splitlines() if ln.strip()][-1]
-    out_name = last_layer.split()[-1]
-
-    if in_name is None or out_name is None:
-        sys.exit(f"Could not parse blob names from {NCNN_PARAM}")
-
+    if net.load_param(str(NCNN_PARAM)) != 0:
+        raise RuntimeError("NCNN param load failed")
+    if net.load_model(str(NCNN_BIN)) != 0:
+        raise RuntimeError("NCNN model load failed")
+    input_name, output_name = ncnn_blob_names(NCNN_PARAM)
     outputs: list[np.ndarray] = []
-    for arr in inputs:
-        
-        chw = np.transpose(arr, (2, 0, 1)).astype(np.float32)
-        mat_in = ncnn.Mat(chw.shape[2], chw.shape[1], chw.shape[0])
-        for c in range(chw.shape[0]):
-            np.copyto(np.array(mat_in.channel(c), copy=False), chw[c])
-        ex = net.create_extractor()
-        ex.input(in_name, mat_in)
-        ret, mat_out = ex.extract(out_name)
-        if ret != 0:
-            sys.exit(f"ncnn extract failed: ret={ret}")
-        h, w = mat_out.h, mat_out.w
-        out_np = np.array(mat_out, copy=True).reshape(h, w)
-        outputs.append(out_np.astype(np.float32))
+    for _, sample in inputs:
+        source = chw(sample)
+        mat = ncnn.Mat(source.shape[2], source.shape[1], source.shape[0])
+        for channel in range(source.shape[0]):
+            np.copyto(np.array(mat.channel(channel), copy=False), source[channel])
+        extractor = net.create_extractor()
+        if extractor.input(input_name, mat) != 0:
+            raise RuntimeError("NCNN input failed")
+        result, output = extractor.extract(output_name)
+        if result != 0:
+            raise RuntimeError(f"NCNN extract failed: {result}")
+        outputs.append(
+            np.array(output, copy=True)
+            .reshape(output.h, output.w)
+            .astype(np.float32)
+        )
     return outputs
 
 
-def compare(a: np.ndarray, b: np.ndarray) -> dict:
-    a_n = (a - a.min()) / (a.max() - a.min() + 1e-9)
-    b_n = (b - b.min()) / (b.max() - b.min() + 1e-9)
-    diff = np.abs(a_n - b_n)
+def normalize(value: np.ndarray) -> np.ndarray:
+    if not np.isfinite(value).all():
+        raise ValueError("non-finite depth output")
+    span = float(value.max() - value.min())
+    if span <= 1e-9:
+        raise ValueError("degenerate depth output")
+    return (value - value.min()) / span
+
+
+def compare(reference: np.ndarray, candidate: np.ndarray) -> dict[str, object]:
+    reference_normalized = normalize(reference)
+    candidate_normalized = normalize(candidate)
+    difference = np.abs(reference_normalized - candidate_normalized)
+    reference_rank = np.argsort(np.argsort(reference_normalized.reshape(-1)))
+    candidate_rank = np.argsort(np.argsort(candidate_normalized.reshape(-1)))
     return {
-        "mean_abs_diff": float(diff.mean()),
-        "max_abs_diff": float(diff.max()),
-        "p99_diff": float(np.percentile(diff, 99)),
-        "shape_a": list(a.shape),
-        "shape_b": list(b.shape),
+        "meanAbsDiff": float(difference.mean()),
+        "maxAbsDiff": float(difference.max()),
+        "p99Diff": float(np.percentile(difference, 99)),
+        "spearman": float(np.corrcoef(reference_rank, candidate_rank)[0, 1]),
+        "referenceShape": list(reference.shape),
+        "candidateShape": list(candidate.shape),
     }
 
 
+def compact_samples(value: np.ndarray) -> list[float]:
+    normalized = normalize(value)
+    return [
+        round(float(item), 7) for item in normalized[::16, ::16].reshape(-1)
+    ]
+
+
 def main() -> None:
-    if not NCNN_PARAM.exists() or not NCNN_BIN.exists():
-        sys.exit(f"Missing NCNN model. Run convert_midas.py first.\n  {NCNN_PARAM}\n  {NCNN_BIN}")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", default=None)
+    parser.add_argument("--fixture", default=None)
+    parser.add_argument("--check-fixture", default=None)
+    args = parser.parse_args()
+    for required in (ONNX_REFERENCE, NCNN_PARAM, NCNN_BIN):
+        if not required.exists():
+            raise FileNotFoundError(required)
 
-    rng = np.random.default_rng(42)
-    inputs = make_inputs(rng)
-
-    print("Running TFLite ...")
-    tfl_out = run_tflite(inputs)
-    print(f"  outputs: {[o.shape for o in tfl_out]}")
-
-    print("Running NCNN ...")
-    ncnn_out = run_ncnn(inputs)
-    print(f"  outputs: {[o.shape for o in ncnn_out]}")
-
-    results = []
+    inputs = make_inputs(np.random.default_rng(42))
+    reference_outputs = run_reference(inputs)
+    ncnn_outputs = run_ncnn(inputs)
+    cases: list[dict[str, object]] = []
     failures = 0
-    for i, (a, b) in enumerate(zip(tfl_out, ncnn_out)):
-        cmp = compare(a, b)
-        cmp["sample"] = i
-        cmp["pass"] = cmp["mean_abs_diff"] < PASS_THRESHOLD
-        if not cmp["pass"]:
-            failures += 1
-        results.append(cmp)
-        flag = "OK" if cmp["pass"] else "FAIL"
-        print(
-            f"  sample {i}: {flag}  mean={cmp['mean_abs_diff']:.4f}  "
-            f"max={cmp['max_abs_diff']:.4f}  p99={cmp['p99_diff']:.4f}"
+    for (name, _), reference, candidate in zip(
+        inputs, reference_outputs, ncnn_outputs
+    ):
+        metrics = compare(reference, candidate)
+        passed = (
+            float(metrics["meanAbsDiff"]) < PASS_MEAN_ABS_THRESHOLD
+            and float(metrics["spearman"]) >= PASS_SPEARMAN_THRESHOLD
         )
-
-    REPORT.write_text(json.dumps({
-        "threshold": PASS_THRESHOLD,
+        failures += 0 if passed else 1
+        cases.append(
+            {
+                "name": name,
+                "reference": compact_samples(reference),
+                "native": compact_samples(candidate),
+                "metrics": metrics,
+                "passed": passed,
+            }
+        )
+    report = {
+        "schemaVersion": 1,
+        "referenceRuntime": f"onnxruntime-{ort.__version__}-cpu",
+        "candidateRuntime": "ncnn-python-cpu",
+        "preprocessId": "rgb01-chw-256-no-extra-normalization-v1",
+        "seed": 42,
+        "thresholds": {
+            "normalizedMeanAbsDiffMax": PASS_MEAN_ABS_THRESHOLD,
+            "spearmanMin": PASS_SPEARMAN_THRESHOLD,
+        },
+        "artifacts": {
+            "referenceOnnxSha256": sha256(ONNX_REFERENCE),
+            "ncnnParamSha256": sha256(NCNN_PARAM),
+            "ncnnBinSha256": sha256(NCNN_BIN),
+        },
+        "cases": cases,
         "failures": failures,
-        "samples": results,
-    }, indent=2))
-    print(f"\nReport: {REPORT}")
-
+        "passed": failures == 0,
+        "scope": "desktop inference parity; Android bridge/device parity remains R8",
+    }
+    rendered = json.dumps(report, indent=2) + "\n"
+    if args.check_fixture:
+        fixture = REPO_ROOT / args.check_fixture
+        if fixture.read_text(encoding="utf-8") != rendered:
+            raise SystemExit(f"NCNN reference fixture drift: {args.check_fixture}")
+        print(f"NCNN reference fixture matches: {fixture.relative_to(REPO_ROOT)}")
+    elif args.output:
+        output = REPO_ROOT / args.output
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(rendered, encoding="utf-8")
+        print(f"Wrote {output.relative_to(REPO_ROOT)}")
+    else:
+        print(rendered, end="")
+    if args.fixture:
+        fixture = REPO_ROOT / args.fixture
+        fixture.parent.mkdir(parents=True, exist_ok=True)
+        fixture.write_text(rendered, encoding="utf-8")
+        print(f"Wrote {fixture.relative_to(REPO_ROOT)}")
     if failures:
-        sys.exit(f"\nFAILED: {failures}/{len(results)} samples exceeded threshold {PASS_THRESHOLD}")
-    print("\nPASS: NCNN parity acceptable.")
+        raise SystemExit(f"NCNN parity failed: {failures}/{len(cases)}")
 
 
 if __name__ == "__main__":

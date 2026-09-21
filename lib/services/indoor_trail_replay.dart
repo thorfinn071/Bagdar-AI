@@ -37,9 +37,9 @@ class IndoorTrailReplay {
     IndoorTrailStore? store,
     ParticleTrailLocalizer? localizer,
     Duration pollInterval = const Duration(milliseconds: 250),
-  })  : _store = store ?? IndoorTrailStore.instance,
-        _localizer = localizer ?? ParticleTrailLocalizer(),
-        _pollInterval = pollInterval;
+  }) : _store = store ?? IndoorTrailStore.instance,
+       _localizer = localizer ?? ParticleTrailLocalizer(),
+       _pollInterval = pollInterval;
 
   final CompassService compass;
   final StepService steps;
@@ -99,9 +99,10 @@ class IndoorTrailReplay {
     }
     if (_state == IndoorTrailReplayState.replaying) return false;
     if (trail.samples.length < 2) {
-      FieldLogger.instance.logIndoorTrail('replay_blocked_short', data: {
-        'samples': trail.samples.length,
-      });
+      FieldLogger.instance.logIndoorTrail(
+        'replay_blocked_short',
+        data: {'samples': trail.samples.length},
+      );
       return false;
     }
 
@@ -119,10 +120,10 @@ class IndoorTrailReplay {
     _pollTimer = Timer.periodic(_pollInterval, (_) => _tick());
     _state = IndoorTrailReplayState.replaying;
 
-    FieldLogger.instance.logIndoorTrail('replay_start', data: {
-      'id': trail.id,
-      'samples': trail.samples.length,
-    });
+    FieldLogger.instance.logIndoorTrail(
+      'replay_start',
+      data: {'id': trail.id, 'samples': trail.samples.length},
+    );
 
     _emitLocalized(
       key: 'trail_replay_started',
@@ -139,9 +140,10 @@ class IndoorTrailReplay {
   Future<bool> startByName(String name) async {
     final t = await _store.findByName(name);
     if (t == null) {
-      FieldLogger.instance.logIndoorTrail('replay_not_found', data: {
-        'name': name,
-      });
+      FieldLogger.instance.logIndoorTrail(
+        'replay_not_found',
+        data: {'name': name},
+      );
       _emitLocalized(
         key: 'trail_not_found',
         fallback: 'Trail not found.',
@@ -172,18 +174,18 @@ class IndoorTrailReplay {
     _state = IndoorTrailReplayState.idle;
   }
 
-  
   void _attachSensors() {
     try {
-      _magSub = magnetometerEventStream(
-        samplingPeriod: const Duration(milliseconds: 120),
-      ).listen((event) {
-        final m = math.sqrt(event.x * event.x +
-            event.y * event.y +
-            event.z * event.z);
-        _magMagEma = _magMagEma == 0 ? m : _magMagEma * 0.6 + m * 0.4;
-        _hasMag = true;
-      }, onError: (_) {});
+      _magSub =
+          magnetometerEventStream(
+            samplingPeriod: const Duration(milliseconds: 120),
+          ).listen((event) {
+            final m = math.sqrt(
+              event.x * event.x + event.y * event.y + event.z * event.z,
+            );
+            _magMagEma = _magMagEma == 0 ? m : _magMagEma * 0.6 + m * 0.4;
+            _hasMag = true;
+          }, onError: (_) {});
     } catch (e) {
       debugPrint('IndoorTrailReplay: magnetometer attach failed: $e');
     }
@@ -202,7 +204,6 @@ class IndoorTrailReplay {
     final current = steps.steps;
     final delta = current - _lastSeenStepCount;
     if (delta < 0) {
-      
       _lastSeenStepCount = current;
       return;
     }
@@ -216,19 +217,19 @@ class IndoorTrailReplay {
       magMicroT: _magMagEma,
     );
 
-    final isLost = loc.stdIndex >= _kLostStdThreshold ||
-        loc.effectiveSampleSize <
-            _kLostEssFraction * _kParticleCountReference;
+    final isLost =
+        loc.stdIndex >= _kLostStdThreshold ||
+        loc.effectiveSampleSize < _kLostEssFraction * _kParticleCountReference;
 
     if (isLost) {
       _lostStreak++;
       if (_lostStreak >= _kLostFramesRequired && !_lostAnnounced) {
         _state = IndoorTrailReplayState.lost;
         _lostAnnounced = true;
-        FieldLogger.instance.logIndoorTrail('lost', data: {
-          'std': loc.stdIndex,
-          'ess': loc.effectiveSampleSize,
-        });
+        FieldLogger.instance.logIndoorTrail(
+          'lost',
+          data: {'std': loc.stdIndex, 'ess': loc.effectiveSampleSize},
+        );
         try {
           onLost?.call();
         } catch (_) {}
@@ -243,7 +244,6 @@ class IndoorTrailReplay {
       return;
     }
 
-    
     _lostStreak = 0;
     if (_state == IndoorTrailReplayState.lost) {
       _state = IndoorTrailReplayState.replaying;
@@ -278,8 +278,6 @@ class IndoorTrailReplay {
   }
 
   void _emitNextPrompt(IndoorTrail trail, int idx) {
-    
-    
     final lookahead = math.min(idx + 5, trail.sampleCount - 1);
     if (lookahead == idx) return;
 
@@ -322,16 +320,18 @@ class IndoorTrailReplay {
       text = '${current.landmark}. $text';
     }
 
-    onHazard?.call(ExternalHazardEvent(
-      source: ExternalHazardSource.indoorTrail,
-      text: text,
-      priority: SpeechPriority.info,
-      category: AlertCategory.navigationHint,
-      pan: 0.0,
-      urgency: urgency,
-      at: DateTime.now(),
-      correlationId: '${trail.id}#$idx',
-    ));
+    onHazard?.call(
+      ExternalHazardEvent(
+        source: ExternalHazardSource.indoorTrail,
+        text: text,
+        priority: SpeechPriority.info,
+        category: AlertCategory.navigationHint,
+        pan: 0.0,
+        urgency: urgency,
+        at: DateTime.now(),
+        correlationId: '${trail.id}#$idx',
+      ),
+    );
   }
 
   void _emitLocalized({
@@ -345,20 +345,23 @@ class IndoorTrailReplay {
     if (text == key || text.isEmpty) {
       text = fallback;
     }
-    onHazard?.call(ExternalHazardEvent(
-      source: ExternalHazardSource.indoorTrail,
-      text: text,
-      priority: priority,
-      category: category,
-      urgency: urgency,
-      at: DateTime.now(),
-    ));
+    onHazard?.call(
+      ExternalHazardEvent(
+        source: ExternalHazardSource.indoorTrail,
+        text: text,
+        priority: priority,
+        category: category,
+        urgency: urgency,
+        at: DateTime.now(),
+      ),
+    );
   }
 
   /// Particle-count reference for ESS threshold: shared with
   /// `ParticleTrailLocalizer` via `kIndoorTrailParticleCount` in
   /// `models/constants.dart` so both stay in sync.
-  static const double _kParticleCountReference = kIndoorTrailParticleCount * 1.0;
+  static const double _kParticleCountReference =
+      kIndoorTrailParticleCount * 1.0;
 
   static double _angleDiff(double a, double b) {
     var d = (a - b) % 360.0;
@@ -367,7 +370,6 @@ class IndoorTrailReplay {
     return d;
   }
 
-  
   @visibleForTesting
   void debugSetMag(double micros) {
     _magMagEma = micros;

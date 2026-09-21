@@ -68,28 +68,27 @@ const Map<String, double> kClassWeight = {
 /// carry items (which usually indicate a person), and a small set of indoor
 /// hazards (chair, potted plant, bottle).
 const Set<String> kAlertClassWhitelist = {
-  
   'person',
   'dog',
   'cat',
-  
+
   'bicycle',
   'car',
   'motorcycle',
   'bus',
   'truck',
-  
+
   'traffic light',
   'fire hydrant',
   'stop sign',
   'parking meter',
   'bench',
-  
+
   'backpack',
   'handbag',
   'suitcase',
   'umbrella',
-  
+
   'chair',
   'potted plant',
   'bottle',
@@ -104,25 +103,22 @@ const Set<String> kAlertClassWhitelist = {
 /// of YOLOv8 on COCO and the safety asymmetry: a missed pedestrian or
 /// vehicle is far worse than a missed bench.
 const Map<String, double> kClassMinConf = {
-  
-  
   'person': 0.40,
   'car': 0.40,
   'bus': 0.40,
   'truck': 0.40,
   'motorcycle': 0.40,
   'bicycle': 0.42,
-  
+
   'dog': 0.45,
   'cat': 0.50,
-  
-  
+
   'traffic light': 0.50,
   'stop sign': 0.55,
   'fire hydrant': 0.55,
   'parking meter': 0.55,
   'bench': 0.50,
-  
+
   'backpack': 0.55,
   'handbag': 0.60,
   'suitcase': 0.55,
@@ -138,8 +134,7 @@ const double kDefaultClassMinConf = 0.50;
 
 /// Returns the per-class confidence floor below which a YOLO detection
 /// must be discarded before it ever reaches the tracker.
-double minConfFor(String label) =>
-    kClassMinConf[label] ?? kDefaultClassMinConf;
+double minConfFor(String label) => kClassMinConf[label] ?? kDefaultClassMinConf;
 
 const int kZoneCount = 5;
 const int kTrackMaxAge = 6;
@@ -169,7 +164,6 @@ const double kVehBboxDangerAreaRatio = 0.35;
 
 const double kPedApproachAreaRateT = 0.08;
 const double kPedApproachHeightRateT = 0.06;
-
 
 const double kVehTurnAngVelThreshold = 0.3;
 const double kVehTurnDistThreshold = 5.0;
@@ -223,7 +217,6 @@ const double kSustainedHazardEscalationDistanceFraction = 0.70;
 const Duration kApproachCooldown = Duration(milliseconds: 2500);
 const double kApproachingLabelThreatMaxDistM = 15.0;
 
-
 const Duration kStaticObjectCooldown = Duration(seconds: 10);
 
 const Duration kClearAnnounceDuration = Duration(milliseconds: 1200);
@@ -275,7 +268,6 @@ const Duration kMidasInterval = Duration(milliseconds: 800);
 const double kMidasMinCoverage = 0.12;
 
 const double kMidasDropRatio = 0.30;
-
 
 const int kMidasStuckTimeoutMs = 3000;
 
@@ -331,7 +323,6 @@ const Duration kSosTwoFingerHold = Duration(milliseconds: 1500);
 const int kSosRetries = 3;
 const Duration kSosRetryDelay = Duration(seconds: 2);
 
-
 const Duration kSosCachedPositionMaxAge = Duration(minutes: 2);
 
 const double kVoiceSpeechRateStep = 0.15;
@@ -345,10 +336,8 @@ const double kBeaconMinHz = 0.5;
 const double kHardwareDepthMinConfidence = 0.30;
 const double kHardwareDepthMinMeanMeters = 0.30;
 
-
 const double kHardwareDepthMaxMeanMeters = 15.0;
 const int kHardwareDepthLowConfFrames = 5;
-
 
 const double kHardwareDepthHighConfThreshold = 0.7;
 const Duration kHardwareDepthHighConfStreakForDispose = Duration(seconds: 30);
@@ -359,14 +348,11 @@ const int kTargetFrameBudgetMs = 140;
 const int kSoftFrameBudgetMs = 200;
 const int kHardFrameBudgetMs = 280;
 
-
 const int kDetectIntervalSafetyCeilingMs = 500;
-
 
 const int kStationaryGateDetectMs = 300;
 const Duration kStationaryGateResumeWindow = Duration(seconds: 5);
 const Duration kStationaryGatePostCriticalBlock = Duration(seconds: 5);
-
 
 const Duration kStationaryGateMidasOff = Duration(hours: 1);
 
@@ -454,7 +440,6 @@ const double kEventCenterCorridorMinFrac = 0.25;
 const double kEventBaselineMultiplier = 4.0;
 const double kEventBaselineEmaAlpha = 0.05;
 
-
 const double kEventGlobalPanFrac = 0.60;
 const int kEventMinBlobArea = 4;
 const double kEventMaxBlobAreaFrac = 0.20;
@@ -497,24 +482,20 @@ const double kAwmTransientThresholdMultiplier = 3.0;
 const double kNavGpsAccuracyMaxM = 25.0;
 const int kNavGpsMaxAgeSec = 30;
 
-
 const double kSonarMinConfidence = 0.4;
 const Duration kSonarHazardCooldown = Duration(seconds: 4);
 const double kSonarMaxRangeM = 3.0;
 const double kSonarMinChirpHz = 18000;
-
 
 const double kOscpNearFieldThresholdM = 1.2;
 const double kOscpSweepGyroThreshold = 2.5;
 const Duration kOscpNearFieldCooldown = Duration(seconds: 3);
 const double kOscpRangeEmaAlpha = 0.35;
 
-
 const int kMeshMaxPayloadAgeMs = 60000;
 const int kMeshMaxAgeTtlMs = 120000;
 const Duration kMeshBuddyCooldown = Duration(seconds: 30);
 const double kMeshRelevanceRadiusM = 50.0;
-
 
 const int kNearMissMaxRecords = 100;
 
@@ -553,6 +534,5 @@ const int kRainBlobMaxPersistFrames = 2;
 /// V5.5: When rain is active, require more persistence frames before alerting,
 /// to filter transient rain-streak blobs while still catching real objects.
 const int kRainEventMinPersistFrames = 5;
-
 
 const int kIndoorTrailParticleCount = 200;

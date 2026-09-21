@@ -32,168 +32,185 @@ void main() {
       () {
         wd.notePitchState(DevicePitch.tooHigh);
         wd.noteMotionState(MotionState.walking);
-        wd.noteDepthStatus(
-          DepthPipelineStatus.lowConfidence,
-          now: t0,
-        );
+        wd.noteDepthStatus(DepthPipelineStatus.lowConfidence, now: t0);
         for (var i = 0; i < 9; i++) {
           final r = wd.tick(now: t0.add(Duration(seconds: i)));
           expect(r.fireHaptic, isFalse);
-          expect(r.shouldAnnounce, isFalse,
-              reason: 'no announce before 10 s threshold');
+          expect(
+            r.shouldAnnounce,
+            isFalse,
+            reason: 'no announce before 10 s threshold',
+          );
         }
       },
     );
 
     test(
-      'empty-scene path: 25 s sustained misalignment with depth OK fires '
-      'haptic but NOT verbal (audit point 2)',
+      'empty-scene (depth OK): haptic from 10 s; D-5 verbal only from 20 s',
       () {
         wd.notePitchState(DevicePitch.flat);
         wd.noteMotionState(MotionState.walking);
-        
+
         var hapticCount = 0;
-        var announceCount = 0;
+        final keys = <String>[];
         for (var i = 0; i < 30; i++) {
           final r = wd.tick(now: t0.add(Duration(seconds: i)));
           if (r.fireHaptic) hapticCount++;
-          if (r.shouldAnnounce) announceCount++;
-        }
-        expect(hapticCount, greaterThanOrEqualTo(1),
-            reason: 'haptic must fire once we are sustained');
-        expect(announceCount, 0,
-            reason: 'depth OK = empty scene, no verbal alert');
-      },
-    );
-
-    test(
-      'misaligned + walking + depth low \u226515 s + sustained \u226510 s '
-      'fires warning verbal alert exactly once',
-      () {
-        wd.notePitchState(DevicePitch.tooLow);
-        wd.noteMotionState(MotionState.walking);
-        
-        wd.noteDepthStatus(
-          DepthPipelineStatus.lowConfidence,
-          now: t0.subtract(const Duration(seconds: 16)),
-        );
-
-        var warnings = 0;
-        for (var i = 0; i < 20; i++) {
-          final r = wd.tick(now: t0.add(Duration(seconds: i)));
-          if (r.shouldAnnounce &&
-              r.announcePriority == SpeechPriority.warning) {
-            warnings++;
-            expect(r.announceKey, MisalignmentWatchdog.kAnnounceKey);
+          if (r.shouldAnnounce) {
+            expect(
+              i,
+              greaterThanOrEqualTo(20),
+              reason: 'no D-5 speech before 20 s of this episode',
+            );
+            keys.add(r.announceKey!);
           }
         }
-        expect(warnings, 1,
-            reason:
-                'warning should fire exactly once at ~10 s and not repeat');
+        expect(hapticCount, greaterThanOrEqualTo(1));
+        expect(keys, [MisalignmentWatchdog.kNoDetectionAnnounceKey]);
       },
     );
 
-    test(
-      'reaches critical priority at 35 s with depth-low confirmation',
-      () {
-        wd.notePitchState(DevicePitch.tooHigh);
-        wd.noteMotionState(MotionState.walking);
-        wd.noteDepthStatus(
-          DepthPipelineStatus.planeFitFailed,
-          now: t0.subtract(const Duration(seconds: 20)),
-        );
+    test('running user is in the same episode as walking (D-5)', () {
+      wd.notePitchState(DevicePitch.tooLow);
+      wd.noteMotionState(MotionState.running);
+      var haptic = false;
+      for (var i = 0; i <= 10; i++) {
+        final r = wd.tick(now: t0.add(Duration(seconds: i)));
+        if (r.fireHaptic) haptic = true;
+      }
+      expect(haptic, isTrue);
+    });
 
-        SpeechPriority? lastPriority;
-        for (var i = 0; i < 40; i++) {
-          final r = wd.tick(now: t0.add(Duration(seconds: i)));
-          if (r.shouldAnnounce) lastPriority = r.announcePriority;
-        }
-        expect(lastPriority, SpeechPriority.critical);
-      },
-    );
-
-    test('a detection arrival inside the window resets the sustained timer',
-        () {
-      wd.notePitchState(DevicePitch.flat);
+    test('misaligned + walking + depth low \u226515 s + sustained \u226510 s '
+        'fires warning verbal alert exactly once', () {
+      wd.notePitchState(DevicePitch.tooLow);
       wd.noteMotionState(MotionState.walking);
+
       wd.noteDepthStatus(
         DepthPipelineStatus.lowConfidence,
-        now: t0.subtract(const Duration(seconds: 30)),
+        now: t0.subtract(const Duration(seconds: 16)),
       );
 
-      // Warning threshold is now 10s. Send detection at 8s to prevent it.
-      for (var i = 0; i < 8; i++) {
-        wd.tick(now: t0.add(Duration(seconds: i)));
-      }
-      
-      wd.noteDetection(now: t0.add(const Duration(seconds: 8)));
-
-      
-      var announces = 0;
-      for (var i = 8; i < 16; i++) {
+      var warnings = 0;
+      for (var i = 0; i < 20; i++) {
         final r = wd.tick(now: t0.add(Duration(seconds: i)));
-        if (r.shouldAnnounce) announces++;
+        if (r.shouldAnnounce && r.announcePriority == SpeechPriority.warning) {
+          warnings++;
+          expect(r.announceKey, MisalignmentWatchdog.kAnnounceKey);
+        }
       }
-      expect(announces, 0,
-          reason: 'detection within sustained window must reset the clock '
-              'so we do not fire warning prematurely');
+      expect(
+        warnings,
+        1,
+        reason: 'warning should fire exactly once at ~10 s and not repeat',
+      );
     });
+
+    test('reaches critical priority at 35 s with depth-low confirmation', () {
+      wd.notePitchState(DevicePitch.tooHigh);
+      wd.noteMotionState(MotionState.walking);
+      wd.noteDepthStatus(
+        DepthPipelineStatus.planeFitFailed,
+        now: t0.subtract(const Duration(seconds: 20)),
+      );
+
+      SpeechPriority? lastPriority;
+      for (var i = 0; i < 40; i++) {
+        final r = wd.tick(now: t0.add(Duration(seconds: i)));
+        if (r.shouldAnnounce) lastPriority = r.announcePriority;
+      }
+      expect(lastPriority, SpeechPriority.critical);
+    });
+
+    test(
+      'a detection arrival inside the window resets the sustained timer',
+      () {
+        wd.notePitchState(DevicePitch.flat);
+        wd.noteMotionState(MotionState.walking);
+        wd.noteDepthStatus(
+          DepthPipelineStatus.lowConfidence,
+          now: t0.subtract(const Duration(seconds: 30)),
+        );
+
+        // Warning threshold is now 10s. Send detection at 8s to prevent it.
+        for (var i = 0; i < 8; i++) {
+          wd.tick(now: t0.add(Duration(seconds: i)));
+        }
+
+        wd.noteDetection(now: t0.add(const Duration(seconds: 8)));
+
+        var announces = 0;
+        for (var i = 8; i < 16; i++) {
+          final r = wd.tick(now: t0.add(Duration(seconds: i)));
+          if (r.shouldAnnounce) announces++;
+        }
+        expect(
+          announces,
+          0,
+          reason:
+              'detection within sustained window must reset the clock '
+              'so we do not fire warning prematurely',
+        );
+      },
+    );
 
     test('haptic re-fires every 15 s while sustained', () {
       wd.notePitchState(DevicePitch.tooHigh);
       wd.noteMotionState(MotionState.walking);
-      
+
       final hapticTicks = <int>[];
       for (var i = 0; i < 90; i++) {
         final r = wd.tick(now: t0.add(Duration(seconds: i)));
         if (r.fireHaptic) hapticTicks.add(i);
       }
-      
+
       expect(hapticTicks.first, 10);
       expect(hapticTicks.length, greaterThanOrEqualTo(4));
       for (var i = 1; i < hapticTicks.length; i++) {
         final delta = hapticTicks[i] - hapticTicks[i - 1];
-        expect(delta, inInclusiveRange(14, 16),
-            reason: 'haptic interval should be ~15 s');
+        expect(
+          delta,
+          inInclusiveRange(14, 16),
+          reason: 'haptic interval should be ~15 s',
+        );
       }
     });
 
-    test(
-      'returning to optimal pitch resets the watchdog and warning can '
-      're-announce on a fresh episode',
-      () {
-        wd.notePitchState(DevicePitch.tooHigh);
-        wd.noteMotionState(MotionState.walking);
-        wd.noteDepthStatus(
-          DepthPipelineStatus.lowConfidence,
-          now: t0.subtract(const Duration(seconds: 20)),
-        );
+    test('returning to optimal pitch resets the watchdog and warning can '
+        're-announce on a fresh episode', () {
+      wd.notePitchState(DevicePitch.tooHigh);
+      wd.noteMotionState(MotionState.walking);
+      wd.noteDepthStatus(
+        DepthPipelineStatus.lowConfidence,
+        now: t0.subtract(const Duration(seconds: 20)),
+      );
 
-        
-        for (var i = 0; i < 15; i++) {
-          wd.tick(now: t0.add(Duration(seconds: i)));
-        }
-        
-        wd.notePitchState(DevicePitch.optimal);
-        for (var i = 15; i < 20; i++) {
-          final r = wd.tick(now: t0.add(Duration(seconds: i)));
-          expect(r.shouldAnnounce, isFalse);
-        }
-        
-        wd.notePitchState(DevicePitch.tooLow);
+      for (var i = 0; i < 15; i++) {
+        wd.tick(now: t0.add(Duration(seconds: i)));
+      }
 
-        var warnings = 0;
-        for (var i = 20; i < 40; i++) {
-          final r = wd.tick(now: t0.add(Duration(seconds: i)));
-          if (r.shouldAnnounce &&
-              r.announcePriority == SpeechPriority.warning) {
-            warnings++;
-          }
+      wd.notePitchState(DevicePitch.optimal);
+      for (var i = 15; i < 20; i++) {
+        final r = wd.tick(now: t0.add(Duration(seconds: i)));
+        expect(r.shouldAnnounce, isFalse);
+      }
+
+      wd.notePitchState(DevicePitch.tooLow);
+
+      var warnings = 0;
+      for (var i = 20; i < 40; i++) {
+        final r = wd.tick(now: t0.add(Duration(seconds: i)));
+        if (r.shouldAnnounce && r.announcePriority == SpeechPriority.warning) {
+          warnings++;
         }
-        expect(warnings, 1,
-            reason: 'a fresh sustained episode should produce another '
-                'warning announcement');
-      },
-    );
+      }
+      expect(
+        warnings,
+        1,
+        reason:
+            'a fresh sustained episode should produce another '
+            'warning announcement',
+      );
+    });
   });
 }

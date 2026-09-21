@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../core/core_feature_policy.dart';
 import '../models/language_pack.dart';
 import '../models/speech_job.dart';
 import '../models/strings.dart';
@@ -83,8 +84,7 @@ class _LanguagePacksScreenState extends State<LanguagePacksScreen> {
         SpeechPriority.info,
         pan: 0.0,
       );
-      
-      
+
       if (_pm.manifestNeedsRefresh) {
         unawaited(_refreshManifest(announceSuccess: false));
       }
@@ -100,13 +100,14 @@ class _LanguagePacksScreenState extends State<LanguagePacksScreen> {
   }
 
   Future<void> _toggleV2(bool next) async {
+    if (!CoreFeaturePolicy.current.mayInitialize(CoreFeature.kazakhStackV2)) {
+      return;
+    }
     await Settings.instance.setEnableKazakhStackV2(next);
     if (!mounted) return;
     setState(() => _v2Enabled = next);
     widget.tts.say(
-      next
-          ? S.get('lang_packs_v2_enabled')
-          : S.get('lang_packs_v2_disabled'),
+      next ? S.get('lang_packs_v2_enabled') : S.get('lang_packs_v2_disabled'),
       SpeechPriority.info,
       pan: 0.0,
     );
@@ -149,29 +150,21 @@ class _LanguagePacksScreenState extends State<LanguagePacksScreen> {
     final ok = await _pm.downloadPack(pack.packId);
     if (!mounted) return;
     setState(() => _busy = false);
-    if (!ok) {
-      
-    }
+    if (!ok) {}
   }
 
   Future<void> _deletePack(LanguagePack pack) async {
     if (_busy) return;
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (ctx) => _DeleteConfirmDialog(
-        packName: _packDisplayName(pack),
-      ),
+      builder: (ctx) => _DeleteConfirmDialog(packName: _packDisplayName(pack)),
     );
     if (confirmed != true) return;
     setState(() => _busy = true);
     await _pm.deletePack(pack.packId);
     if (!mounted) return;
     setState(() => _busy = false);
-    widget.tts.say(
-      S.get('lang_packs_delete'),
-      SpeechPriority.info,
-      pan: 0.0,
-    );
+    widget.tts.say(S.get('lang_packs_delete'), SpeechPriority.info, pan: 0.0);
   }
 
   String _packDisplayName(LanguagePack pack) {
@@ -194,8 +187,7 @@ class _LanguagePacksScreenState extends State<LanguagePacksScreen> {
     };
     final merged = [
       ...available,
-      
-      
+
       ..._pm.installed.where(
         (p) => p.installed && !available.any((a) => a.packId == p.packId),
       ),
@@ -231,11 +223,12 @@ class _LanguagePacksScreenState extends State<LanguagePacksScreen> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            _V2ToggleCard(
-              enabled: _v2Enabled,
-              onChanged: _toggleV2,
-            ),
-            const SizedBox(height: 16),
+            if (CoreFeaturePolicy.current.mayShowInUi(
+              CoreFeature.kazakhStackV2,
+            )) ...[
+              _V2ToggleCard(enabled: _v2Enabled, onChanged: _toggleV2),
+              const SizedBox(height: 16),
+            ],
             if (merged.isEmpty)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 24),
@@ -358,8 +351,11 @@ class _PackTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final installedPack = LanguagePackManager.instance.getInstalled(pack.packId);
-    final hasUpdate = installed &&
+    final installedPack = LanguagePackManager.instance.getInstalled(
+      pack.packId,
+    );
+    final hasUpdate =
+        installed &&
         installedPack != null &&
         pack.version > installedPack.version;
     final sizeLabel = S

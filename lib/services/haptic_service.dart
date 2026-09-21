@@ -1,7 +1,11 @@
 import 'package:vibration/vibration.dart';
 
 import '../models/constants.dart'
-    show kHapticTtsStallPattern, kHapticCriticalCooldownPattern;
+    show
+        kHapticTtsStallPattern,
+        kHapticCriticalCooldownPattern,
+        kHapticCriticalAlertPattern;
+import '../safety/alerts/haptic_policy.dart';
 
 class HapticService {
   HapticService._();
@@ -10,7 +14,6 @@ class HapticService {
   static bool? _hasAmplitude;
   static double _strengthMultiplier = 1.0;
 
-  
   static const double _kCriticalFloorMultiplier = 1.0;
 
   static Future<void> init() async {
@@ -31,20 +34,42 @@ class HapticService {
 
   static double get strengthMultiplier => _strengthMultiplier;
 
+  static Future<HapticDeviceCapabilities> safetyCapabilities() async {
+    if (_hasVibrator == null) await init();
+    return HapticDeviceCapabilities(
+      hasVibrator: _hasVibrator ?? false,
+      hasAmplitudeControl: _hasAmplitude ?? false,
+    );
+  }
+
+  static Future<bool> emitSafetyCue(HapticCue cue) async {
+    if (_hasVibrator == null) await init();
+    if (!(_hasVibrator ?? false)) return false;
+    await vibrate(
+      cue.pattern,
+      intensities: cue.intensities,
+      isCritical: cue.critical,
+    );
+    return true;
+  }
+
   static Future<void> vibrate(
     List<int> pattern, {
     List<int>? intensities,
+    bool isCritical = false,
   }) async {
     if (_hasVibrator == null) await init();
     if (!(_hasVibrator ?? false)) return;
-    
-    
-    final isCriticalPattern = identical(pattern, kHapticTtsStallPattern) ||
-        identical(pattern, kHapticCriticalCooldownPattern);
+
+    final isCriticalPattern =
+        isCritical ||
+        identical(pattern, kHapticTtsStallPattern) ||
+        identical(pattern, kHapticCriticalCooldownPattern) ||
+        identical(pattern, kHapticCriticalAlertPattern);
     final effectiveMultiplier = isCriticalPattern
         ? (_strengthMultiplier < _kCriticalFloorMultiplier
-            ? _kCriticalFloorMultiplier
-            : _strengthMultiplier)
+              ? _kCriticalFloorMultiplier
+              : _strengthMultiplier)
         : _strengthMultiplier;
     if (!isCriticalPattern && effectiveMultiplier <= 0.05) return;
     try {
@@ -70,6 +95,12 @@ class HapticService {
       } else {
         await Vibration.vibrate(pattern: scaledPattern);
       }
+    } catch (_) {}
+  }
+
+  static Future<void> cancel() async {
+    try {
+      await Vibration.cancel();
     } catch (_) {}
   }
 }

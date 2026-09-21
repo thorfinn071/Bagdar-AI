@@ -11,7 +11,6 @@ class Track {
 
   KalmanBoxTracker kalman;
 
-  
   Float32List? appearance;
 
   int age = 0;
@@ -28,14 +27,11 @@ class Track {
 
   bool fastTrack = false;
 
-  
   final ListQueue<(DateTime, double, double)> centerHist =
       ListQueue<(DateTime, double, double)>();
 
-  
   double lastAngularVelocity = 0.0;
 
-  
   bool turning = false;
 
   double avgConf = 0.0;

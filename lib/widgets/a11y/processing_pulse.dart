@@ -39,19 +39,11 @@ class _ProcessingPulseState extends State<ProcessingPulse>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: widget.period,
-    );
-    _opacity = Tween<double>(
-      begin: widget.maxOpacity,
-      end: widget.minOpacity,
-    ).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Curves.easeInOutSine,
-      ),
-    );
+    _controller = AnimationController(vsync: this, duration: widget.period);
+    _opacity = Tween<double>(begin: widget.maxOpacity, end: widget.minOpacity)
+        .animate(
+          CurvedAnimation(parent: _controller, curve: Curves.easeInOutSine),
+        );
     _controller.repeat(reverse: true);
   }
 
@@ -81,8 +73,7 @@ class _ProcessingPulseState extends State<ProcessingPulse>
     }
     return AnimatedBuilder(
       animation: _opacity,
-      builder: (_, child) =>
-          Opacity(opacity: _opacity.value, child: child),
+      builder: (_, child) => Opacity(opacity: _opacity.value, child: child),
       child: widget.child,
     );
   }

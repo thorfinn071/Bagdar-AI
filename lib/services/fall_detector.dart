@@ -18,16 +18,19 @@ class FallDetector {
   StreamSubscription<AccelerometerEvent>? _sub;
   StreamSubscription<GyroscopeEvent>? _gyroSub;
   bool _ready = false;
+  bool _gyroAvailable = false;
+  DateTime? _lastGyroEventAt;
 
   void Function(FallClass fallClass)? onFallDetected;
   void Function()? onSecondFallDuringLockout;
   void Function(MotionState state)? onMotionStateChanged;
-  void Function(
-    String stage, {
-    double? accel,
-    double? gyro,
-    int? stillFrames,
-  })? onStageChange;
+
+  /// Fired once when the gyroscope becomes unavailable (init failure, stream
+  /// error, or staleness watchdog). Host should announce a degraded-accuracy
+  /// TTS warning. Not fired again until gyro recovers and fails anew.
+  void Function()? onGyroUnavailable;
+  void Function(String stage, {double? accel, double? gyro, int? stillFrames})?
+  onStageChange;
 
   DateTime _lastImpactAt = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _lastFreeFallAt = DateTime.fromMillisecondsSinceEpoch(0);
@@ -53,10 +56,20 @@ class FallDetector {
   static const double _impactThreshold = 30.0;
   static const double _stillThreshold = 3.5;
   static const int _stillFramesRequired = 40;
+
+  /// Compensates for the loss of the rotational-confirmation signal: without
+  /// gyro we demand 50 % more still frames before declaring a tumble, to keep
+  /// the false-positive rate roughly comparable.
+  static const int _stillFramesRequiredDegraded = 60;
   static const Duration _freeFallWindow = Duration(milliseconds: 500);
   static const Duration _impactWindow = Duration(seconds: 5);
   static const Duration _cooldownAfterDetection = Duration(seconds: 20);
   static const Duration _cooldownAfterCancel = Duration(seconds: 5);
+
+  /// If no gyroscope event arrives within this window while the accelerometer
+  /// is alive, the gyro stream is considered hung and Class A switches to the
+  /// degraded (accel-only) profile.
+  static const Duration _gyroStalenessTimeout = Duration(seconds: 2);
 
   static const double _stillGyroMaxRadPerSec = 0.50;
 
@@ -101,18 +114,38 @@ class FallDetector {
             _onGyro,
             onError: (e) {
               debugPrint('FallDetector: gyroscope error $e');
+              _markGyroUnavailable();
             },
           );
+      _gyroAvailable = true;
+      _lastGyroEventAt = DateTime.now();
     } catch (e) {
       debugPrint('FallDetector: gyroscope init failed: $e');
+      _markGyroUnavailable();
     }
 
     if (_ready) {
-      debugPrint('FallDetector: initialized');
+      debugPrint('FallDetector: initialized (gyroAvailable=$_gyroAvailable)');
     }
   }
 
   bool get isReady => _ready;
+
+  /// Whether the gyroscope stream is currently producing usable events.
+  /// When false, Class A fall detection runs in a degraded accel-only profile
+  /// (no rotational confirmation, raised still-frame requirement).
+  bool get isGyroAvailable => _gyroAvailable;
+
+  /// Marks the gyroscope as unavailable and fires [onGyroUnavailable] exactly
+  /// once per true→false transition. Idempotent: no-op if already unavailable.
+  void _markGyroUnavailable() {
+    if (!_gyroAvailable) return;
+    _gyroAvailable = false;
+    debugPrint(
+      'FallDetector: gyroscope unavailable — switching to degraded Class A profile',
+    );
+    onGyroUnavailable?.call();
+  }
 
   MotionState get motionState => _motionState;
 
@@ -130,19 +163,46 @@ class FallDetector {
   @visibleForTesting
   Duration get sosLockoutWindow => _sosLockoutWindow;
 
+  @visibleForTesting
+  void onAccelForTesting(AccelerometerEvent event) => _onAccel(event);
+
+  @visibleForTesting
+  void onGyroForTesting(GyroscopeEvent event) => _onGyro(event);
+
+  /// Forces the gyro-availability state for testing. When [available] is true,
+  /// [lastEventAt] defaults to now; pass an old timestamp to simulate a hung
+  /// stream and exercise the staleness watchdog.
+  @visibleForTesting
+  void setGyroAvailableForTesting(bool available, {DateTime? lastEventAt}) {
+    _gyroAvailable = available;
+    _lastGyroEventAt = available ? (lastEventAt ?? DateTime.now()) : null;
+  }
+
+  @visibleForTesting
+  void markGyroUnavailableForTesting() => _markGyroUnavailable();
+
   void _onAccel(AccelerometerEvent event) {
     final magnitude = math.sqrt(
       event.x * event.x + event.y * event.y + event.z * event.z,
     );
-    
+
     final accelWithoutGravity = (magnitude - 9.81).abs();
     _lastAccelDeviation = accelWithoutGravity;
     _updateMotionState();
 
     final now = DateTime.now();
 
-    final inPostCancelGrace = _postCancelGraceUntil != null &&
-        now.isBefore(_postCancelGraceUntil!);
+    // Staleness watchdog: if the gyro stream has not produced an event within
+    // the timeout while the accelerometer is alive, treat gyro as dead and
+    // switch Class A to the degraded accel-only profile.
+    if (_gyroAvailable &&
+        _lastGyroEventAt != null &&
+        now.difference(_lastGyroEventAt!) > _gyroStalenessTimeout) {
+      _markGyroUnavailable();
+    }
+
+    final inPostCancelGrace =
+        _postCancelGraceUntil != null && now.isBefore(_postCancelGraceUntil!);
     final inSosLockout =
         _sosLockoutEndAt != null && now.isBefore(_sosLockoutEndAt!);
     final cooldownActive =
@@ -154,8 +214,7 @@ class FallDetector {
 
     if (magnitude < _freeFallThreshold) {
       _lastFreeFallAt = now;
-      if (now.difference(_lastFreeFallLogAt) >
-          const Duration(seconds: 1)) {
+      if (now.difference(_lastFreeFallLogAt) > const Duration(seconds: 1)) {
         _lastFreeFallLogAt = now;
         onStageChange?.call(
           'freefall',
@@ -205,23 +264,28 @@ class FallDetector {
 
     final accelStill = accelWithoutGravity < _stillThreshold;
     final gyroStill = _lastGyroMagnitude < _stillGyroMaxRadPerSec;
-    if (accelStill && gyroStill) {
+    // Degraded profile (no gyro): stillness is accel-only.
+    final stillNow = _gyroAvailable ? (accelStill && gyroStill) : accelStill;
+    if (stillNow) {
       _stillFrames++;
     } else if (accelWithoutGravity > _impactThreshold * 0.5) {
       _stillFrames = 0;
-    } else if (!gyroStill) { 
+    } else if (_gyroAvailable && !gyroStill) {
       _stillFrames = 0;
     }
 
-    if (_stillFrames >= _stillFramesRequired) {
+    final stillFramesRequired = _gyroAvailable
+        ? _stillFramesRequired
+        : _stillFramesRequiredDegraded;
+    if (_stillFrames >= stillFramesRequired) {
       final hadRotationalImpact =
           _postImpactGyroPeak >= _fallGyroImpactRadPerSec;
       final peak = _postImpactGyroPeak;
       final hadRecentFreeFall =
           _lastImpactAt.difference(_lastFreeFallAt).abs() < _freeFallWindow;
 
-      final isPhoneDrop = peak < _phoneDropGyroMaxRadPerSec &&
-          !hadRecentFreeFall;
+      final isPhoneDrop =
+          peak < _phoneDropGyroMaxRadPerSec && !hadRecentFreeFall;
 
       onStageChange?.call(
         'stillness_reached',
@@ -233,7 +297,10 @@ class FallDetector {
       _stillFrames = 0;
       _postImpactGyroPeak = 0;
 
-      if (isPhoneDrop) {
+      // Phone-drop and rotational-impact checks rely on gyro data and are
+      // skipped in the degraded profile — without gyro they would always
+      // abort (peak stays 0), making Class A completely dead.
+      if (_gyroAvailable && isPhoneDrop) {
         debugPrint(
           'FallDetector: stillness reached but classified as phone drop '
           '(peak=${peak.toStringAsFixed(2)}, freeFall=$hadRecentFreeFall) — ignoring.',
@@ -245,7 +312,7 @@ class FallDetector {
         );
         return;
       }
-      if (!hadRotationalImpact) {
+      if (_gyroAvailable && !hadRotationalImpact) {
         debugPrint(
           'FallDetector: stillness reached but no rotational impact '
           '(peak=${peak.toStringAsFixed(2)}) — ignoring.',
@@ -284,11 +351,7 @@ class FallDetector {
       }
       _lastDetectionAt = now;
       debugPrint('FallDetector: FALL CONFIRMED — triggering callback');
-      onStageChange?.call(
-        'confirmed',
-        accel: accelWithoutGravity,
-        gyro: peak,
-      );
+      onStageChange?.call('confirmed', accel: accelWithoutGravity, gyro: peak);
       _resetClassB();
       onFallDetected?.call(FallClass.tumble);
     }
@@ -300,7 +363,8 @@ class FallDetector {
       if (!_classBSustainQualified &&
           now.difference(_classBAboveStartedAt!) >= _classBSustainMin) {
         _classBSustainQualified = true;
-        _classBWasWalking = _motionState == MotionState.walking ||
+        _classBWasWalking =
+            _motionState == MotionState.walking ||
             _motionState == MotionState.running;
         onStageChange?.call(
           'class_b_sustain',
@@ -388,6 +452,16 @@ class FallDetector {
   }
 
   void _onGyro(GyroscopeEvent event) {
+    _lastGyroEventAt = DateTime.now();
+    // Recovery: if gyro events resume after a staleness/error gap, exit the
+    // degraded profile so full rotational confirmation is restored.
+    if (!_gyroAvailable) {
+      _gyroAvailable = true;
+      debugPrint(
+        'FallDetector: gyroscope recovered — exiting degraded Class A profile',
+      );
+    }
+
     _lastGyroMagnitude = math.sqrt(
       event.x * event.x + event.y * event.y + event.z * event.z,
     );
@@ -439,11 +513,11 @@ class FallDetector {
     _resetClassB();
   }
 
-  
   void notifyCancelled() {
     final now = DateTime.now();
-    _lastDetectionAt =
-        now.subtract(_cooldownAfterDetection - _cooldownAfterCancel);
+    _lastDetectionAt = now.subtract(
+      _cooldownAfterDetection - _cooldownAfterCancel,
+    );
     _postCancelGraceUntil = now.add(_postCancelGraceWindow);
     _sosLockoutEndAt = null;
     _impactDetected = false;
@@ -475,5 +549,7 @@ class FallDetector {
     _gyroSub?.cancel();
     _gyroSub = null;
     _ready = false;
+    _gyroAvailable = false;
+    _lastGyroEventAt = null;
   }
 }

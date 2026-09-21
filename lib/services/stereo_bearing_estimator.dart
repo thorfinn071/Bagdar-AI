@@ -134,17 +134,16 @@ class StereoBearingEstimator {
       }
       windowEnergy /= (end - i);
 
-      if (count > 0 && windowEnergy > _baselineEnergy * _transientMultiplier &&
+      if (count > 0 &&
+          windowEnergy > _baselineEnergy * _transientMultiplier &&
           windowEnergy > 0.001) {
-        _baselineEnergy =
-            _baselineEnergy * 0.95 + windowEnergy * 0.05;
+        _baselineEnergy = _baselineEnergy * 0.95 + windowEnergy * 0.05;
         return i + _subWindowSamples ~/ 2;
       }
 
-      _baselineEnergy =
-          count == 0
-              ? windowEnergy
-              : _baselineEnergy * 0.95 + windowEnergy * 0.05;
+      _baselineEnergy = count == 0
+          ? windowEnergy
+          : _baselineEnergy * 0.95 + windowEnergy * 0.05;
       count++;
     }
     return -1;
@@ -167,12 +166,18 @@ class StereoBearingEstimator {
     int j = 0;
     for (int i = 0; i < n; i++) {
       if (i < j) {
-        final tr = real[j]; final ti = imag[j];
-        real[j] = real[i]; imag[j] = imag[i];
-        real[i] = tr; imag[i] = ti;
+        final tr = real[j];
+        final ti = imag[j];
+        real[j] = real[i];
+        imag[j] = imag[i];
+        real[i] = tr;
+        imag[i] = ti;
       }
       int m = n >> 1;
-      while (m >= 1 && j >= m) { j -= m; m >>= 1; }
+      while (m >= 1 && j >= m) {
+        j -= m;
+        m >>= 1;
+      }
       j += m;
     }
     for (int step = 2; step <= n; step <<= 1) {

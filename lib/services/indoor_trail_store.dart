@@ -83,7 +83,7 @@ class IndoorTrailStore {
     for (final t in all) {
       if (t.name.trim().toLowerCase() == needle) return t;
     }
-    
+
     for (final t in all) {
       if (t.name.trim().toLowerCase().contains(needle)) return t;
     }
@@ -98,7 +98,6 @@ class IndoorTrailStore {
       final file = File('${dir.path}/${trail.id}.json');
       await file.writeAsString(trail.encode(), flush: true);
 
-      
       final all = await list();
       if (all.length > kMaxTrails) {
         final excess = all.length - kMaxTrails;
@@ -108,17 +107,17 @@ class IndoorTrailStore {
         }
       }
 
-      FieldLogger.instance.logIndoorTrail('saved', data: {
-        'id': trail.id,
-        'samples': trail.sampleCount,
-      });
+      FieldLogger.instance.logIndoorTrail(
+        'saved',
+        data: {'id': trail.id, 'samples': trail.sampleCount},
+      );
       return trail;
     } catch (e) {
       debugPrint('IndoorTrailStore.save error: $e');
-      FieldLogger.instance.logIndoorTrail('save_failed', data: {
-        'id': trail.id,
-        'error': e.toString(),
-      });
+      FieldLogger.instance.logIndoorTrail(
+        'save_failed',
+        data: {'id': trail.id, 'error': e.toString()},
+      );
       return null;
     }
   }

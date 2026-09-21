@@ -112,16 +112,17 @@ class PhoneAbandonedDetector {
     bool fireCritical = false;
     List<int>? haptic;
     int hapticLevel = 0;
-    if (_cameraFrozen &&
-        _lumaNormal &&
-        stationaryFor >= kStationaryThreshold) {
-      final due = _lastCriticalAt == null ||
+    if (_cameraFrozen && _lumaNormal && stationaryFor >= kStationaryThreshold) {
+      final due =
+          _lastCriticalAt == null ||
           t.difference(_lastCriticalAt!) >= kCriticalReannounce;
       if (due) {
         fireCritical = true;
         _lastCriticalAt = t;
-        _hapticEscalation = (_hapticEscalation + 1)
-            .clamp(1, kMaxHapticEscalation);
+        _hapticEscalation = (_hapticEscalation + 1).clamp(
+          1,
+          kMaxHapticEscalation,
+        );
         haptic = _hapticForLevel(_hapticEscalation);
         hapticLevel = _hapticEscalation;
       }

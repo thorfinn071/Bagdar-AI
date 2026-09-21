@@ -36,12 +36,12 @@ class VoiceAdaptationSample {
   });
 
   Map<String, dynamic> toJson() => {
-        'l': locale,
-        't': transcript,
-        'c': commandId,
-        'ts': at.millisecondsSinceEpoch,
-        if (confidence != null) 'cf': confidence,
-      };
+    'l': locale,
+    't': transcript,
+    'c': commandId,
+    'ts': at.millisecondsSinceEpoch,
+    if (confidence != null) 'cf': confidence,
+  };
 
   factory VoiceAdaptationSample.fromJson(Map<String, dynamic> json) =>
       VoiceAdaptationSample(
@@ -49,8 +49,7 @@ class VoiceAdaptationSample {
         transcript: json['t'] as String,
         commandId: json['c'] as String,
         at: DateTime.fromMillisecondsSinceEpoch((json['ts'] as num).toInt()),
-        confidence:
-            json['cf'] == null ? null : (json['cf'] as num).toDouble(),
+        confidence: json['cf'] == null ? null : (json['cf'] as num).toDouble(),
       );
 }
 
@@ -100,15 +99,16 @@ class VoiceAdaptationStore {
 
     try {
       final samples = await _loadCache();
-      samples.add(VoiceAdaptationSample(
-        locale: locale,
-        transcript: transcript.trim(),
-        commandId: commandId,
-        at: DateTime.now(),
-        confidence: confidence,
-      ));
+      samples.add(
+        VoiceAdaptationSample(
+          locale: locale,
+          transcript: transcript.trim(),
+          commandId: commandId,
+          at: DateTime.now(),
+          confidence: confidence,
+        ),
+      );
 
-      
       while (samples.length > kMaxSamples) {
         samples.removeAt(0);
       }
@@ -152,7 +152,6 @@ class VoiceAdaptationStore {
     return samples.map((s) => s.toJson()).toList();
   }
 
-  
   Future<List<VoiceAdaptationSample>> _loadCache() async {
     if (_cache != null) return _cache!;
     try {

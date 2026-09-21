@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import 'core/core_feature_policy.dart';
 import 'onboarding_screen.dart';
 import 'services/feature_usage_tracker.dart';
 import 'services/field_logger.dart';
@@ -13,37 +14,39 @@ import 'theme/bagdar_theme.dart';
 import 'theme/bagdar_tokens.dart';
 
 void main() {
-  runZonedGuarded<Future<void>>(() async {
-    WidgetsFlutterBinding.ensureInitialized();
+  runZonedGuarded<Future<void>>(
+    () async {
+      WidgetsFlutterBinding.ensureInitialized();
 
-    FlutterError.onError = (FlutterErrorDetails details) {
-      FlutterError.presentError(details);
-      FieldLogger.instance.logError(
-        'flutter_error',
-        details.exceptionAsString(),
-      );
-    };
+      FlutterError.onError = (FlutterErrorDetails details) {
+        FlutterError.presentError(details);
+        FieldLogger.instance.logError(
+          'flutter_error',
+          details.exceptionAsString(),
+        );
+      };
 
-    await Settings.instance.init();
-    await FeatureUsageTracker.instance.init();
-    
-    
-    await LanguagePackManager.instance.init();
-    unawaited(LanguagePackManager.instance.fetchManifest());
-    
-    
-    unawaited(NativeTtsBridge.instance.init());
-    
-    
-    unawaited(PaddleOcrBridge.instance.init());
+      await Settings.instance.init();
+      await FeatureUsageTracker.instance.init();
 
-    bagdarThemeNotifier.value = Settings.instance.themeMode;
+      await LanguagePackManager.instance.init();
+      unawaited(LanguagePackManager.instance.fetchManifest());
 
-    final startScreen = await resolveStartScreen();
-    runApp(BagdarApp(home: startScreen));
-  }, (error, stack) {
-    FieldLogger.instance.logError('uncaught_zone', error.toString());
-  });
+      unawaited(NativeTtsBridge.instance.init());
+
+      if (CoreFeaturePolicy.current.mayInitialize(CoreFeature.paddleOcr)) {
+        unawaited(PaddleOcrBridge.instance.init());
+      }
+
+      bagdarThemeNotifier.value = Settings.instance.themeMode;
+
+      final startScreen = await resolveStartScreen();
+      runApp(BagdarApp(home: startScreen));
+    },
+    (error, stack) {
+      FieldLogger.instance.logError('uncaught_zone', error.toString());
+    },
+  );
 }
 
 class BagdarApp extends StatelessWidget {
@@ -60,11 +63,7 @@ class BagdarApp extends StatelessWidget {
           title: 'Bagdar AI',
           debugShowCheckedModeBanner: false,
           theme: BagdarTheme.buildMaterialTheme(themeName),
-          home: BagdarTheme(
-            name: themeName,
-            colors: colors,
-            child: home,
-          ),
+          home: BagdarTheme(name: themeName, colors: colors, child: home),
         );
       },
     );

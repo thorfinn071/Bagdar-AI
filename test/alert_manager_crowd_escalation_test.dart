@@ -21,6 +21,9 @@ class _RecordingTts extends TtsService {
     SpeechPriority priority, {
     double pan = 0.0,
     int? trackId,
+    String? actionId,
+    String? hazardId,
+    DateTime? expiresAt,
     bool barge = false,
     bool skipHaptic = false,
   }) {
@@ -28,24 +31,20 @@ class _RecordingTts extends TtsService {
   }
 }
 
-Track _personClose({
-  required int id,
-  required double cx,
-  double distM = 2.0,
-}) {
+Track _personClose({required int id, required double cx, double distM = 2.0}) {
   return Track(
-    id: id,
-    label: 'person',
-    cx: cx,
-    cy: 240,
-    x1: cx - 40,
-    y1: 200,
-    x2: cx + 40,
-    y2: 350,
-    dist: 'close',
-    distM: distM,
-    initialConf: 0.8,
-  )
+      id: id,
+      label: 'person',
+      cx: cx,
+      cy: 240,
+      x1: cx - 40,
+      y1: 200,
+      x2: cx + 40,
+      y2: 350,
+      dist: 'close',
+      distM: distM,
+      initialConf: 0.8,
+    )
     ..nearFrameCount = 5
     ..reliableFrames = 5
     ..avgConf = 0.8;
@@ -56,22 +55,23 @@ Track _carClose({
   required double distM,
   DateTime? lastSpoken,
 }) {
-  final t = Track(
-    id: id,
-    label: 'car',
-    cx: 320,
-    cy: 240,
-    x1: 245,
-    y1: 165,
-    x2: 395,
-    y2: 315,
-    dist: 'close',
-    distM: distM,
-    initialConf: 0.9,
-  )
-    ..nearFrameCount = 5
-    ..reliableFrames = 5
-    ..avgConf = 0.9;
+  final t =
+      Track(
+          id: id,
+          label: 'car',
+          cx: 320,
+          cy: 240,
+          x1: 245,
+          y1: 165,
+          x2: 395,
+          y2: 315,
+          dist: 'close',
+          distM: distM,
+          initialConf: 0.9,
+        )
+        ..nearFrameCount = 5
+        ..reliableFrames = 5
+        ..avgConf = 0.9;
   if (lastSpoken != null) t.lastSpoken = lastSpoken;
   return t;
 }
@@ -93,11 +93,7 @@ void main() {
       'person close warnings',
       () {
         final tts = _RecordingTts();
-        final mgr = AlertManager(
-          tts: tts,
-          earcon: EarconService(),
-
-        );
+        final mgr = AlertManager(tts: tts, earcon: EarconService());
 
         final tracks = [
           _personClose(id: 1, cx: 280),
@@ -123,15 +119,18 @@ void main() {
             .where((c) => c.text.contains(groupAheadPrefix))
             .toList();
         final closeWarnings = tts.calls
-            .where((c) =>
-                c.priority == SpeechPriority.warning &&
-                c.text.contains(S.alert('close')))
+            .where(
+              (c) =>
+                  c.priority == SpeechPriority.warning &&
+                  c.text.contains(S.alert('close')),
+            )
             .toList();
 
         expect(
           groupCalls.length,
           1,
-          reason: 'audit 2.4: outdoor crowd of ≥3 persons must emit one '
+          reason:
+              'audit 2.4: outdoor crowd of ≥3 persons must emit one '
               'grouped "group ahead" alert on the first frame',
         );
         expect(
@@ -142,7 +141,8 @@ void main() {
         expect(
           closeWarnings.length,
           0,
-          reason: 'audit 2.4: individual close-person warning alerts must be '
+          reason:
+              'audit 2.4: individual close-person warning alerts must be '
               'suppressed when the crowd threshold is met',
         );
       },
@@ -152,10 +152,7 @@ void main() {
       'crowd alert respects kCrowdAlertCooldown (~10 s) across repeated frames',
       () {
         final tts = _RecordingTts();
-        final mgr = AlertManager(
-          tts: tts,
-          earcon: EarconService(),
-        );
+        final mgr = AlertManager(tts: tts, earcon: EarconService());
 
         final tracks = [
           _personClose(id: 1, cx: 280),
@@ -188,12 +185,14 @@ void main() {
         );
 
         final groupAheadPrefix = S.alert('group_ahead');
-        final groupCallsAfter5s =
-            tts.calls.where((c) => c.text.contains(groupAheadPrefix)).length;
+        final groupCallsAfter5s = tts.calls
+            .where((c) => c.text.contains(groupAheadPrefix))
+            .length;
         expect(
           groupCallsAfter5s,
           1,
-          reason: 'crowd cooldown (10 s) must suppress a second crowd '
+          reason:
+              'crowd cooldown (10 s) must suppress a second crowd '
               'announcement at 5 s',
         );
 
@@ -207,54 +206,52 @@ void main() {
           frameCount: 3,
         );
 
-        final groupCallsAfter11s =
-            tts.calls.where((c) => c.text.contains(groupAheadPrefix)).length;
+        final groupCallsAfter11s = tts.calls
+            .where((c) => c.text.contains(groupAheadPrefix))
+            .length;
         expect(
           groupCallsAfter11s,
           2,
-          reason: 'once kCrowdAlertCooldown has elapsed, a second grouped '
+          reason:
+              'once kCrowdAlertCooldown has elapsed, a second grouped '
               'alert must be allowed to fire',
         );
       },
     );
 
-    test(
-      'two persons (< kIndoorCrowdPersonThreshold) do not trigger crowd '
-      'suppression — individual close warnings still fire',
-      () {
-        final tts = _RecordingTts();
-        final mgr = AlertManager(
-          tts: tts,
-          earcon: EarconService(),
-        );
+    test('two persons (< kIndoorCrowdPersonThreshold) do not trigger crowd '
+        'suppression — individual close warnings still fire', () {
+      final tts = _RecordingTts();
+      final mgr = AlertManager(tts: tts, earcon: EarconService());
 
-        final tracks = [
-          _personClose(id: 1, cx: 280),
-          _personClose(id: 2, cx: 360),
-        ];
+      final tracks = [
+        _personClose(id: 1, cx: 280),
+        _personClose(id: 2, cx: 360),
+      ];
 
-        final t0 = DateTime(2025, 1, 1, 12, 0, 0);
-        mgr.processFrame(
-          tracks: tracks,
-          imgW: 640,
-          imgH: 480,
-          now: t0,
-          mode: AppMode.street,
-          isCalibrated: true,
-          frameCount: 1,
-        );
+      final t0 = DateTime(2025, 1, 1, 12, 0, 0);
+      mgr.processFrame(
+        tracks: tracks,
+        imgW: 640,
+        imgH: 480,
+        now: t0,
+        mode: AppMode.street,
+        isCalibrated: true,
+        frameCount: 1,
+      );
 
-        final groupAheadPrefix = S.alert('group_ahead');
-        final groupCalls =
-            tts.calls.where((c) => c.text.contains(groupAheadPrefix)).length;
-        expect(
-          groupCalls,
-          0,
-          reason: '2 persons is below crowd threshold — no grouped alert '
-              'should fire',
-        );
-      },
-    );
+      final groupAheadPrefix = S.alert('group_ahead');
+      final groupCalls = tts.calls
+          .where((c) => c.text.contains(groupAheadPrefix))
+          .length;
+      expect(
+        groupCalls,
+        0,
+        reason:
+            '2 persons is below crowd threshold — no grouped alert '
+            'should fire',
+      );
+    });
   });
 
   group('AlertManager sustained-hazard escalation — Safety audit 6.1', () {
@@ -262,10 +259,7 @@ void main() {
       'close-warning track whose distM drops by ≥30 % is promoted to critical',
       () {
         final tts = _RecordingTts();
-        final mgr = AlertManager(
-          tts: tts,
-          earcon: EarconService(),
-        );
+        final mgr = AlertManager(tts: tts, earcon: EarconService());
 
         final t0 = DateTime(2025, 1, 1, 12, 0, 0);
 
@@ -312,114 +306,105 @@ void main() {
         expect(
           criticalsAfterFrame2,
           1,
-          reason: 'audit 6.1: 5 m → 3 m (40 % drop) must promote the next '
+          reason:
+              'audit 6.1: 5 m → 3 m (40 % drop) must promote the next '
               'close announcement to critical priority',
         );
       },
     );
 
-    test(
-      'close-warning track whose distM drops by <30 % stays at warning',
-      () {
-        final tts = _RecordingTts();
-        final mgr = AlertManager(
-          tts: tts,
-          earcon: EarconService(),
-        );
+    test('close-warning track whose distM drops by <30 % stays at warning', () {
+      final tts = _RecordingTts();
+      final mgr = AlertManager(tts: tts, earcon: EarconService());
 
-        final t0 = DateTime(2025, 1, 1, 12, 0, 0);
+      final t0 = DateTime(2025, 1, 1, 12, 0, 0);
 
-        mgr.processFrame(
-          tracks: [_carClose(id: 1, distM: 5.0)],
-          imgW: 640,
-          imgH: 480,
-          now: t0,
-          mode: AppMode.street,
-          isCalibrated: true,
-          frameCount: 1,
-        );
+      mgr.processFrame(
+        tracks: [_carClose(id: 1, distM: 5.0)],
+        imgW: 640,
+        imgH: 480,
+        now: t0,
+        mode: AppMode.street,
+        isCalibrated: true,
+        frameCount: 1,
+      );
 
-        mgr.processFrame(
-          tracks: [_carClose(id: 1, distM: 4.0, lastSpoken: t0)],
-          imgW: 640,
-          imgH: 480,
-          now: t0.add(const Duration(seconds: 4)),
-          mode: AppMode.street,
-          isCalibrated: true,
-          frameCount: 2,
-        );
+      mgr.processFrame(
+        tracks: [_carClose(id: 1, distM: 4.0, lastSpoken: t0)],
+        imgW: 640,
+        imgH: 480,
+        now: t0.add(const Duration(seconds: 4)),
+        mode: AppMode.street,
+        isCalibrated: true,
+        frameCount: 2,
+      );
 
-        final criticals = tts.calls
-            .where((c) => c.priority == SpeechPriority.critical)
-            .length;
-        expect(
-          criticals,
-          0,
-          reason: 'a 20 % approach (5 m → 4 m) is below the 30 % escalation '
-              'threshold; priority must remain warning',
-        );
-      },
-    );
+      final criticals = tts.calls
+          .where((c) => c.priority == SpeechPriority.critical)
+          .length;
+      expect(
+        criticals,
+        0,
+        reason:
+            'a 20 % approach (5 m → 4 m) is below the 30 % escalation '
+            'threshold; priority must remain warning',
+      );
+    });
 
-    test(
-      'escalation baseline advances with each announcement — successive '
-      '<30 % drops do not escalate even over long time',
-      () {
-        final tts = _RecordingTts();
-        final mgr = AlertManager(
-          tts: tts,
-          earcon: EarconService(),
-        );
+    test('escalation baseline advances with each announcement — successive '
+        '<30 % drops do not escalate even over long time', () {
+      final tts = _RecordingTts();
+      final mgr = AlertManager(tts: tts, earcon: EarconService());
 
-        final t0 = DateTime(2025, 1, 1, 12, 0, 0);
+      final t0 = DateTime(2025, 1, 1, 12, 0, 0);
 
-        mgr.processFrame(
-          tracks: [_carClose(id: 1, distM: 5.0)],
-          imgW: 640,
-          imgH: 480,
-          now: t0,
-          mode: AppMode.street,
-          isCalibrated: true,
-          frameCount: 1,
-        );
+      mgr.processFrame(
+        tracks: [_carClose(id: 1, distM: 5.0)],
+        imgW: 640,
+        imgH: 480,
+        now: t0,
+        mode: AppMode.street,
+        isCalibrated: true,
+        frameCount: 1,
+      );
 
-        mgr.processFrame(
-          tracks: [_carClose(id: 1, distM: 4.0, lastSpoken: t0)],
-          imgW: 640,
-          imgH: 480,
-          now: t0.add(const Duration(seconds: 4)),
-          mode: AppMode.street,
-          isCalibrated: true,
-          frameCount: 2,
-        );
+      mgr.processFrame(
+        tracks: [_carClose(id: 1, distM: 4.0, lastSpoken: t0)],
+        imgW: 640,
+        imgH: 480,
+        now: t0.add(const Duration(seconds: 4)),
+        mode: AppMode.street,
+        isCalibrated: true,
+        frameCount: 2,
+      );
 
-        mgr.processFrame(
-          tracks: [
-            _carClose(
-              id: 1,
-              distM: 3.0,
-              lastSpoken: t0.add(const Duration(seconds: 4)),
-            ),
-          ],
-          imgW: 640,
-          imgH: 480,
-          now: t0.add(const Duration(seconds: 8)),
-          mode: AppMode.street,
-          isCalibrated: true,
-          frameCount: 3,
-        );
+      mgr.processFrame(
+        tracks: [
+          _carClose(
+            id: 1,
+            distM: 3.0,
+            lastSpoken: t0.add(const Duration(seconds: 4)),
+          ),
+        ],
+        imgW: 640,
+        imgH: 480,
+        now: t0.add(const Duration(seconds: 8)),
+        mode: AppMode.street,
+        isCalibrated: true,
+        frameCount: 3,
+      );
 
-        final criticals = tts.calls
-            .where((c) => c.priority == SpeechPriority.critical)
-            .length;
-        expect(
-          criticals,
-          0,
-          reason: 'each successive step is <30 % of the previous announcement '
-              'baseline, so escalation must not fire — matches design intent '
-              'of promoting only *rapid* approaches',
-        );
-      },
-    );
+      final criticals = tts.calls
+          .where((c) => c.priority == SpeechPriority.critical)
+          .length;
+      expect(
+        criticals,
+        0,
+        reason:
+            'each successive step is <30 % of the previous announcement '
+            'baseline, so escalation must not fire — matches design intent '
+            'of promoting only *rapid* approaches',
+      );
+    });
   });
 }

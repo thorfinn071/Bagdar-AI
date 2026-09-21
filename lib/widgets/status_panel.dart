@@ -28,155 +28,161 @@ class StatusPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BagdarTheme.colorsOf(context);
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.all(BagdarSpacing.s),
-      padding: const EdgeInsets.all(BagdarSpacing.m),
-      decoration: BoxDecoration(
-        color: BagdarOverlay.scrim,
-        borderRadius: BorderRadius.circular(BagdarRadius.panel),
-        border: Border.all(
-          color: BagdarOverlay.foregroundMuted.withValues(alpha: 0.25),
-          width: BagdarBorders.hairline,
+    return Semantics(
+      container: true,
+      label: '${S.get('core_health_status')}. $statusLine',
+      child: Container(
+        width: double.infinity,
+        margin: const EdgeInsets.all(BagdarSpacing.s),
+        padding: const EdgeInsets.all(BagdarSpacing.m),
+        decoration: BoxDecoration(
+          color: BagdarOverlay.scrim,
+          borderRadius: BorderRadius.circular(BagdarRadius.panel),
+          border: Border.all(
+            color: BagdarOverlay.foregroundMuted.withValues(alpha: 0.25),
+            width: BagdarBorders.hairline,
+          ),
         ),
-      ),
-      child: ValueListenableBuilder<List<Track>>(
-        valueListenable: tracksNotifier,
-        builder: (_, tracks, __) {
-          final top = tracks.isEmpty
-              ? null
-              : tracks.reduce((a, b) => _sortKey(a) <= _sortKey(b) ? a : b);
+        child: ValueListenableBuilder<List<Track>>(
+          valueListenable: tracksNotifier,
+          builder: (_, tracks, __) {
+            final top = tracks.isEmpty
+                ? null
+                : tracks.reduce((a, b) => _sortKey(a) <= _sortKey(b) ? a : b);
 
-          String label = '—';
-          String distText = '—';
-          String dirText = '—';
-          String distM = '';
+            String label = '—';
+            String distText = '—';
+            String dirText = '—';
+            String distM = '';
 
-          if (top == null) {
-            switch (mode) {
-              case AppMode.street:
-                label = S.get('path_clear_label');
-                distText = S.get('dist_safe');
-                dirText = S.get('straight');
-              case AppMode.cane:
-                label = S.get('status_no_obstacle');
-                distText = S.get('dist_safe');
-                dirText = S.get('straight');
-              case AppMode.scan:
-                label = S.get('status_scanning');
-                distText = S.get('status_waiting');
-                dirText = '—';
+            if (top == null) {
+              switch (mode) {
+                case AppMode.street:
+                  label = S.get('status_analysis_active');
+                  distText = '—';
+                  dirText = S.get('straight');
+                case AppMode.cane:
+                  label = S.get('status_analysis_active');
+                  distText = '—';
+                  dirText = S.get('straight');
+                case AppMode.scan:
+                  label = S.get('status_scanning');
+                  distText = S.get('status_waiting');
+                  dirText = '—';
+              }
             }
-          }
 
-          if (top != null && imgH > 0 && imgW > 0) {
-            label = S.label(top.label);
-            distText = _distLabel(top.dist);
-            dirText = clockDir(
-              top.x1,
-              top.x2,
-              imgW.toDouble(),
-              imgH: imgH.toDouble(),
-              viewportAspect: viewportAspect,
-            );
-            distM = top.distM > 0
-                ? ' • ~${top.distM.toStringAsFixed(1)} ${S.get('approx_meters')}'
-                : '';
-          }
+            if (top != null && imgH > 0 && imgW > 0) {
+              label = S.label(top.label);
+              distText = _distLabel(top.dist);
+              dirText = clockDir(
+                top.x1,
+                top.x2,
+                imgW.toDouble(),
+                imgH: imgH.toDouble(),
+                viewportAspect: viewportAspect,
+              );
+              distM = top.distM > 0
+                  ? ' • ~${top.distM.toStringAsFixed(1)} ${S.get('approx_meters')}'
+                  : '';
+            }
 
-          final approaching = tracks.any((t) => t.approaching);
-          final modeStr = mode.label;
+            final approaching = tracks.any((t) => t.approaching);
+            final modeStr = mode.label;
 
-          final level = _distLevel(top?.dist);
+            final level = _distLevel(top?.dist);
 
-          final semanticsLabel =
-              '${S.get('lbl_object')}: $label$distM. '
-              '${S.get('lbl_status')}: $distText, $dirText'
-              '${approaching ? ", ${S.get('approaching')}" : ""}';
+            final semanticsLabel =
+                '${S.get('lbl_object')}: $label$distM. '
+                '${S.get('lbl_status')}: $distText, $dirText'
+                '${approaching ? ", ${S.get('approaching')}" : ""}';
 
-          return Semantics(
-            label: semanticsLabel,
-            container: true,
-            child: ExcludeSemantics(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
+            return Semantics(
+              label: semanticsLabel,
+              container: true,
+              child: ExcludeSemantics(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            statusLine,
+                            style: BagdarTypography.caption.copyWith(
+                              color: BagdarOverlay.foreground,
+                              shadows: BagdarOverlay.textShadows,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const SizedBox(width: BagdarSpacing.s),
+                        _ModeChip(label: modeStr, colors: colors),
+                      ],
+                    ),
+                    const SizedBox(height: BagdarSpacing.s),
+                    Text(
+                      '${S.get('lbl_object')}: $label$distM',
+                      style: BagdarTypography.body.copyWith(
+                        color: BagdarOverlay.foreground,
+                        fontWeight: BagdarTypography.weightBold,
+                        shadows: BagdarOverlay.textShadows,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: BagdarSpacing.s),
+                    Row(
+                      children: [
+                        SemanticStatusBadge(
+                          level: level,
+                          label: distText,
+                          onCamera: true,
+                          markSize: 26,
+                        ),
+                        const SizedBox(width: BagdarSpacing.s),
+                        Expanded(
+                          child: Text(
+                            approaching
+                                ? '$dirText  ⚠ ${S.get('approaching')}'
+                                : dirText,
+                            style: BagdarTypography.caption.copyWith(
+                              color: approaching
+                                  ? BagdarOverlay.statusFill(
+                                      BagdarStatusLevel.caution,
+                                      colors,
+                                    )
+                                  : BagdarOverlay.foreground,
+                              fontWeight: approaching
+                                  ? BagdarTypography.weightBold
+                                  : BagdarTypography.weightMedium,
+                              shadows: BagdarOverlay.textShadows,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (tracks.length > 1)
+                      Padding(
+                        padding: const EdgeInsets.only(top: BagdarSpacing.xs),
                         child: Text(
-                          statusLine,
+                          '${S.get('lbl_total_objects')}: ${tracks.length}',
                           style: BagdarTypography.caption.copyWith(
-                            color: BagdarOverlay.foreground,
+                            color: BagdarOverlay.foregroundMuted,
                             shadows: BagdarOverlay.textShadows,
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      const SizedBox(width: BagdarSpacing.s),
-                      _ModeChip(label: modeStr, colors: colors),
-                    ],
-                  ),
-                  const SizedBox(height: BagdarSpacing.s),
-                  Text(
-                    '${S.get('lbl_object')}: $label$distM',
-                    style: BagdarTypography.body.copyWith(
-                      color: BagdarOverlay.foreground,
-                      fontWeight: BagdarTypography.weightBold,
-                      shadows: BagdarOverlay.textShadows,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: BagdarSpacing.s),
-                  Row(
-                    children: [
-                      SemanticStatusBadge(
-                        level: level,
-                        label: distText,
-                        onCamera: true,
-                        markSize: 26,
-                      ),
-                      const SizedBox(width: BagdarSpacing.s),
-                      Expanded(
-                        child: Text(
-                          approaching
-                              ? '$dirText  ⚠ ${S.get('approaching')}'
-                              : dirText,
-                          style: BagdarTypography.caption.copyWith(
-                            color: approaching
-                                ? BagdarOverlay.statusFill(
-                                    BagdarStatusLevel.caution, colors)
-                                : BagdarOverlay.foreground,
-                            fontWeight: approaching
-                                ? BagdarTypography.weightBold
-                                : BagdarTypography.weightMedium,
-                            shadows: BagdarOverlay.textShadows,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                  if (tracks.length > 1)
-                    Padding(
-                      padding: const EdgeInsets.only(top: BagdarSpacing.xs),
-                      child: Text(
-                        '${S.get('lbl_total_objects')}: ${tracks.length}',
-                        style: BagdarTypography.caption.copyWith(
-                          color: BagdarOverlay.foregroundMuted,
-                          shadows: BagdarOverlay.textShadows,
-                        ),
-                      ),
-                    ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "sceneId": "blender-rain-noise",
+  "annotationRevision": 4,
+  "initialFeedback": "none",
+  "timeline": [
+    {
+      "startOffsetMs": 0,
+      "endOffsetMs": 100,
+      "expectedActions": [
+        "stopNow"
+      ],
+      "forbiddenActions": [
+        "adjustLeft",
+        "adjustRight",
+        "continueForward"
+      ],
+      "expectedHealth": [
+        "healthy"
+      ],
+      "expectedAlertEvents": [
+        "emitted"
+      ],
+      "expectedShadowDirections": [
+        "none"
+      ],
+      "interruptCurrent": false
+    }
+  ]
+}

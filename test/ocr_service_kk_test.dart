@@ -22,8 +22,7 @@ void main() {
       KkDictionary.instance.debugSeed(const ['қазақстан']);
       final svc = OcrService();
       const input = 'казакстан';
-      
-      
+
       expect(
         svc.debugApplyKkCorrection(input),
         input,
@@ -33,7 +32,6 @@ void main() {
     });
 
     test('returns input unchanged when the dictionary has not loaded', () {
-      
       final svc = OcrService();
       const input = 'казакстан';
       expect(svc.debugApplyKkCorrection(input), input);
@@ -41,7 +39,6 @@ void main() {
     });
 
     test('applies kk confusion-pair correction when dict is loaded', () {
-      
       KkDictionary.instance.debugSeed(const ['қазахстан']);
       final svc = OcrService();
       final corrected = svc.debugApplyKkCorrection('казахстан');
@@ -51,34 +48,38 @@ void main() {
   });
 
   group('OcrService — stabilizer semantics', () {
-    test(
-      'requires two identical consecutive reads before emitting',
-      () {
-        final svc = OcrService();
-        
-        final first = svc.debugFinalizeForTesting('exit', stabilize: true);
-        expect(first, isNull);
-        expect(svc.debugStabilizeBufferLength(), 1);
+    test('requires two identical consecutive reads before emitting', () {
+      final svc = OcrService();
 
-        
-        final second = svc.debugFinalizeForTesting('exit', stabilize: true);
-        expect(second, 'exit');
-        expect(svc.debugStabilizeBufferLength(), 0,
-            reason: 'buffer clears once stabilized output is emitted');
-        svc.dispose();
-      },
-    );
+      final first = svc.debugFinalizeForTesting('exit', stabilize: true);
+      expect(first, isNull);
+      expect(svc.debugStabilizeBufferLength(), 1);
+
+      final second = svc.debugFinalizeForTesting('exit', stabilize: true);
+      expect(second, 'exit');
+      expect(
+        svc.debugStabilizeBufferLength(),
+        0,
+        reason: 'buffer clears once stabilized output is emitted',
+      );
+      svc.dispose();
+    });
 
     test(
       'non-matching second read suppresses emission and rotates the buffer',
       () {
         final svc = OcrService();
         svc.debugFinalizeForTesting('exit', stabilize: true);
-        final divergent =
-            svc.debugFinalizeForTesting('entrance', stabilize: true);
-        expect(divergent, isNull,
-            reason: 'stabilizer must require two identical reads');
-        
+        final divergent = svc.debugFinalizeForTesting(
+          'entrance',
+          stabilize: true,
+        );
+        expect(
+          divergent,
+          isNull,
+          reason: 'stabilizer must require two identical reads',
+        );
+
         expect(svc.debugStabilizeBufferLength(), 2);
         svc.dispose();
       },
@@ -93,8 +94,11 @@ void main() {
 
         final direct = svc.debugFinalizeForTesting('two', stabilize: false);
         expect(direct, 'two');
-        expect(svc.debugStabilizeBufferLength(), 0,
-            reason: 'non-stabilized reads must reset the buffer');
+        expect(
+          svc.debugStabilizeBufferLength(),
+          0,
+          reason: 'non-stabilized reads must reset the buffer',
+        );
         svc.dispose();
       },
     );

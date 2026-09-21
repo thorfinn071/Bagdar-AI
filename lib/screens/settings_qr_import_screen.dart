@@ -82,9 +82,7 @@ class _SettingsQrImportScreenState extends State<SettingsQrImportScreen> {
       await _scanner.toggleTorch();
       await Future<void>.delayed(const Duration(milliseconds: 250));
       await _scanner.toggleTorch();
-    } catch (_) {
-      
-    }
+    } catch (_) {}
   }
 
   void _announcePreview(Map<String, dynamic> preview) {
@@ -102,9 +100,7 @@ class _SettingsQrImportScreenState extends State<SettingsQrImportScreen> {
     }
     final tv = preview['tts_volume'];
     if (tv is num) {
-      parts.add(
-        '${S.get('qr_import_tts_volume')} ${(tv * 100).round()}%',
-      );
+      parts.add('${S.get('qr_import_tts_volume')} ${(tv * 100).round()}%');
     }
     parts.add(S.get('qr_import_hold_to_apply'));
     widget.tts.say(parts.join('. '), SpeechPriority.info, pan: 0.0);
@@ -119,8 +115,6 @@ class _SettingsQrImportScreenState extends State<SettingsQrImportScreen> {
     final ok = await SettingsCodec.instance.importFromJson(raw);
     if (!mounted) return;
     if (ok) {
-      
-      
       widget.tts.say(
         S.get('qr_import_applied'),
         SpeechPriority.warning,
@@ -196,10 +190,7 @@ class _SettingsQrImportScreenState extends State<SettingsQrImportScreen> {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  MobileScanner(
-                    controller: _scanner,
-                    onDetect: _onDetect,
-                  ),
+                  MobileScanner(controller: _scanner, onDetect: _onDetect),
                   Positioned.fill(
                     child: IgnorePointer(
                       child: Center(
@@ -331,9 +322,7 @@ class _PreviewSheet extends StatelessWidget {
     }
     final sr = p['speech_rate'];
     if (sr is num) {
-      lines.add(
-        '${S.get('qr_import_speech_rate')}: ${sr.toStringAsFixed(2)}x',
-      );
+      lines.add('${S.get('qr_import_speech_rate')}: ${sr.toStringAsFixed(2)}x');
     }
     final tv = p['tts_volume'];
     if (tv is num) {
@@ -341,9 +330,7 @@ class _PreviewSheet extends StatelessWidget {
     }
     final ev = p['earcon_volume'];
     if (ev is num) {
-      lines.add(
-        '${S.get('qr_import_earcon_volume')}: ${(ev * 100).round()}%',
-      );
+      lines.add('${S.get('qr_import_earcon_volume')}: ${(ev * 100).round()}%');
     }
     return lines;
   }

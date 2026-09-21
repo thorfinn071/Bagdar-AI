@@ -41,14 +41,14 @@ class ScreenAnnouncer extends StatefulWidget {
     bool barge = false,
     TtsService? tts,
   }) : this(
-          key: key,
-          child: child,
-          textBuilder: (() => text),
-          priority: priority,
-          delay: delay,
-          barge: barge,
-          tts: tts,
-        );
+         key: key,
+         child: child,
+         textBuilder: (() => text),
+         priority: priority,
+         delay: delay,
+         barge: barge,
+         tts: tts,
+       );
 
   @override
   State<ScreenAnnouncer> createState() => _ScreenAnnouncerState();

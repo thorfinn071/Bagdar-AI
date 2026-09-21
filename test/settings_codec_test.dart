@@ -40,8 +40,6 @@ void main() {
     });
 
     test('payload fits comfortably under QR version 5 size limit', () {
-      
-      
       final json = SettingsCodec.instance.exportToJson();
       expect(json.length, lessThan(300));
     });
@@ -63,7 +61,6 @@ void main() {
 
       final json = SettingsCodec.instance.exportToJson();
 
-      
       SharedPreferences.setMockInitialValues({});
       await Settings.instance.init();
 
@@ -93,18 +90,9 @@ void main() {
     });
 
     test('rejects malformed JSON', () async {
-      expect(
-        await SettingsCodec.instance.importFromJson('not-json'),
-        isFalse,
-      );
-      expect(
-        await SettingsCodec.instance.importFromJson('[1,2,3]'),
-        isFalse,
-      );
-      expect(
-        await SettingsCodec.instance.importFromJson(''),
-        isFalse,
-      );
+      expect(await SettingsCodec.instance.importFromJson('not-json'), isFalse);
+      expect(await SettingsCodec.instance.importFromJson('[1,2,3]'), isFalse);
+      expect(await SettingsCodec.instance.importFromJson(''), isFalse);
     });
 
     test('clamps out-of-range numeric/enum fields', () async {
@@ -124,7 +112,7 @@ void main() {
       expect(ok, isTrue);
 
       final t = Settings.instance;
-      expect(t.language, 2); 
+      expect(t.language, 2);
       expect(t.speechRate, kSpeechRateMax);
       expect(t.ttsVolume, kTtsVolumeMin);
       expect(t.earconVolume, kEarconVolumeMax);
@@ -147,10 +135,7 @@ void main() {
     });
 
     test('peek returns parsed map for valid payload', () {
-      final json = jsonEncode({
-        'v': SettingsCodec.schemaVersion,
-        'lang': 0,
-      });
+      final json = jsonEncode({'v': SettingsCodec.schemaVersion, 'lang': 0});
       final preview = SettingsCodec.instance.peek(json);
       expect(preview, isNotNull);
       expect(preview!['lang'], 0);

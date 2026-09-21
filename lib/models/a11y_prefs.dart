@@ -8,12 +8,9 @@ enum SosTrigger { twoFingerHold, tripleTap, shake }
 
 enum DominantHand { right, left }
 
-
 enum TapSensitivity { normal, sensitive }
 
 extension TapSensitivityX on TapSensitivity {
-  
-  
   double get accelThresholdMps2 {
     switch (this) {
       case TapSensitivity.normal:

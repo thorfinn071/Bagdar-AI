@@ -1,0 +1,430 @@
+{
+  "schemaVersion": 1,
+  "corpusId": "blender-egocentric-v1",
+  "seed": 20260921,
+  "generatorId": "bagdar-blender-primitives-v1",
+  "timelineOriginUtc": "2026-09-21T00:00:00.000Z",
+  "source": {
+    "type": "blender",
+    "license": "project-generated-test-fixture",
+    "consentClass": "not_applicable"
+  },
+  "handling": "public",
+  "camera": {
+    "mount": "synthetic_chest_fixed",
+    "parameters": "96x72; lens=26mm; sensor=36mm",
+    "coordinateMode": "relative"
+  },
+  "modelContract": {
+    "modelId": "blender-ground-truth-relative-v1",
+    "modelHash": "becdc93c2024893982f8d4ccbd86cbce90b7be20435429c110fe1a5e0ff46450",
+    "preprocessId": "blender-raycast-sectors-v1"
+  },
+  "scenes": [
+    {
+      "id": "blender-thin-pole",
+      "kind": "blender",
+      "frames": "scenes/blender-thin-pole/frames.jsonl",
+      "annotations": "scenes/blender-thin-pole/annotations.json",
+      "sha256": {
+        "frames": "36d8d3a4a2a8adcdc86efc89189fb7bb46b59724a805f57c989358ef3a330e68",
+        "annotations": "f54262efe009533e434a9d957b223032f6d886be2519a8359c6cf024a985ce9d"
+      },
+      "tags": [
+        "thin",
+        "pole",
+        "obstacle",
+        "blender",
+        "ground-truth-derived"
+      ],
+      "annotationRevision": 4,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "blender-transparent-door",
+      "kind": "blender",
+      "frames": "scenes/blender-transparent-door/frames.jsonl",
+      "annotations": "scenes/blender-transparent-door/annotations.json",
+      "sha256": {
+        "frames": "307d7828ff99da7e054d9995859b730e9bd05b35c6cc8e6187cfc72711d7203a",
+        "annotations": "7194909fabcf0f411abe3105f6408b8ed0749dbca91663cd74396e2fe091141d"
+      },
+      "tags": [
+        "transparent",
+        "reflective",
+        "door",
+        "blender",
+        "ground-truth-derived"
+      ],
+      "annotationRevision": 4,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "blender-low-obstacle",
+      "kind": "blender",
+      "frames": "scenes/blender-low-obstacle/frames.jsonl",
+      "annotations": "scenes/blender-low-obstacle/annotations.json",
+      "sha256": {
+        "frames": "6e1f745d037642315c8f2f21e44aaac384e673c5dea104781b568be07e67b3b4",
+        "annotations": "07658e10e469c133085251d2a1c7f07d0b972b2d431c8be4b0dacce89b38031f"
+      },
+      "tags": [
+        "low",
+        "obstacle",
+        "blender",
+        "ground-truth-derived"
+      ],
+      "annotationRevision": 4,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "blender-overhead-obstacle",
+      "kind": "blender",
+      "frames": "scenes/blender-overhead-obstacle/frames.jsonl",
+      "annotations": "scenes/blender-overhead-obstacle/annotations.json",
+      "sha256": {
+        "frames": "c9c652be449aeefbaea27bfa74cd57bc79d2f34bc27bb23a01284fee4e2d869a",
+        "annotations": "cb617751106c836d70ddaba614275d4eacd54430c6b66f67a7bf80a74778982c"
+      },
+      "tags": [
+        "overhead",
+        "obstacle",
+        "blender",
+        "ground-truth-derived"
+      ],
+      "annotationRevision": 4,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "blender-curb-up",
+      "kind": "blender",
+      "frames": "scenes/blender-curb-up/frames.jsonl",
+      "annotations": "scenes/blender-curb-up/annotations.json",
+      "sha256": {
+        "frames": "42505a5a32f98da40de7c9a5092030da01267be38ee6d152ae978aeb26c7ed95",
+        "annotations": "cc927af0fcdc097ce017692fb8a0013f36a8c3a286a66f31430bf68b1e59b823"
+      },
+      "tags": [
+        "curb",
+        "up",
+        "blender",
+        "ground-truth-derived"
+      ],
+      "annotationRevision": 4,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "blender-curb-down",
+      "kind": "blender",
+      "frames": "scenes/blender-curb-down/frames.jsonl",
+      "annotations": "scenes/blender-curb-down/annotations.json",
+      "sha256": {
+        "frames": "36d396e48a0893c05c4d829fff6de709064cc7c089d01ffc4b2db925b4769f38",
+        "annotations": "927c2e960baec2cc2dc2f8ede5ce3d338ba8dbaa8d37f561c6a82fa52e60b8ad"
+      },
+      "tags": [
+        "curb",
+        "down",
+        "drop",
+        "blender",
+        "ground-truth-derived"
+      ],
+      "annotationRevision": 4,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "blender-pothole",
+      "kind": "blender",
+      "frames": "scenes/blender-pothole/frames.jsonl",
+      "annotations": "scenes/blender-pothole/annotations.json",
+      "sha256": {
+        "frames": "059600a178957a6b8db7204adf09a405565080d832681314ff90dd8411b82f26",
+        "annotations": "c14673b056af9e1b2a4d9f7f3aefe03c1e649c191db881e1a4d19bfe8c445022"
+      },
+      "tags": [
+        "pothole",
+        "drop",
+        "blender",
+        "ground-truth-derived"
+      ],
+      "annotationRevision": 4,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "blender-stairs-up",
+      "kind": "blender",
+      "frames": "scenes/blender-stairs-up/frames.jsonl",
+      "annotations": "scenes/blender-stairs-up/annotations.json",
+      "sha256": {
+        "frames": "b3fb748232fadb02394d11be6be89725c8c6953501624287f256e43431662d2e",
+        "annotations": "46d801f15ffee81aea8f096a62981635413e55fa2df041ea7e51877737fc6772"
+      },
+      "tags": [
+        "stairs",
+        "up",
+        "blender",
+        "ground-truth-derived"
+      ],
+      "annotationRevision": 4,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "blender-stairs-down",
+      "kind": "blender",
+      "frames": "scenes/blender-stairs-down/frames.jsonl",
+      "annotations": "scenes/blender-stairs-down/annotations.json",
+      "sha256": {
+        "frames": "35cfc58eefce9cfc93674309d5247b376e3841fcc75719a76aa7f22a6435006a",
+        "annotations": "456346553d280c79efb724d5eea4660a85e9b9ff5ec02aa71b14846f9479016d"
+      },
+      "tags": [
+        "stairs",
+        "down",
+        "drop",
+        "blender",
+        "ground-truth-derived"
+      ],
+      "annotationRevision": 4,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "blender-ramp",
+      "kind": "blender",
+      "frames": "scenes/blender-ramp/frames.jsonl",
+      "annotations": "scenes/blender-ramp/annotations.json",
+      "sha256": {
+        "frames": "2b9c0e5a2701470bd47b0e368e551c65bdfec7102f33270acf3843713ae8f0b7",
+        "annotations": "18d35e3df25b27934baafb0097a25b942462e38fc6c1e39fbe1c8659b61f724a"
+      },
+      "tags": [
+        "ramp",
+        "traversable",
+        "blender",
+        "ground-truth-derived"
+      ],
+      "annotationRevision": 4,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "blender-narrow-passage",
+      "kind": "blender",
+      "frames": "scenes/blender-narrow-passage/frames.jsonl",
+      "annotations": "scenes/blender-narrow-passage/annotations.json",
+      "sha256": {
+        "frames": "cff39c68823234ebfd687f95af236406a72595af7efc4b04e13b1ecb728852d5",
+        "annotations": "e4b637bf5946d5a4176d3fdb5c8030a4d2d0495e0982714887e480aa42f29ead"
+      },
+      "tags": [
+        "narrow",
+        "passage",
+        "blender",
+        "ground-truth-derived"
+      ],
+      "annotationRevision": 4,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "blender-doorway",
+      "kind": "blender",
+      "frames": "scenes/blender-doorway/frames.jsonl",
+      "annotations": "scenes/blender-doorway/annotations.json",
+      "sha256": {
+        "frames": "f07872858e8baab60d70155494f13dcf38c210017397d0a888781d5831515cab",
+        "annotations": "8c9494edf1bb82b62ef357a6ce41a14597cb997b0d00dfe80317709821e595f4"
+      },
+      "tags": [
+        "doorway",
+        "opening",
+        "blender",
+        "ground-truth-derived"
+      ],
+      "annotationRevision": 4,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "blender-dead-end",
+      "kind": "blender",
+      "frames": "scenes/blender-dead-end/frames.jsonl",
+      "annotations": "scenes/blender-dead-end/annotations.json",
+      "sha256": {
+        "frames": "1a7f7cf113e77a6984ce67f9fb4e4e69ee4aa2ffb5dd9c0fd6b4a5733107562f",
+        "annotations": "27c5fddd9649706435f1c832505bb4dd0a8f3da05769fdfb5c7a7507c37f2252"
+      },
+      "tags": [
+        "dead-end",
+        "obstacle",
+        "blender",
+        "ground-truth-derived"
+      ],
+      "annotationRevision": 4,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "blender-crowd-occlusion",
+      "kind": "blender",
+      "frames": "scenes/blender-crowd-occlusion/frames.jsonl",
+      "annotations": "scenes/blender-crowd-occlusion/annotations.json",
+      "sha256": {
+        "frames": "e683cfc81a9cfacbd976c5a3f148ca12d7b09895856cb32a1f0a8a9108433ccb",
+        "annotations": "044262b9c01245b841afc972fcb671cbe46b0b4925a258713f25aba3d134494b"
+      },
+      "tags": [
+        "crowd",
+        "occlusion",
+        "blender",
+        "ground-truth-derived"
+      ],
+      "annotationRevision": 4,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "blender-crossing-rider",
+      "kind": "blender",
+      "frames": "scenes/blender-crossing-rider/frames.jsonl",
+      "annotations": "scenes/blender-crossing-rider/annotations.json",
+      "sha256": {
+        "frames": "064ef7e75143c9fe5ef3fd4c260b7740087043ffaf55df198f045a67dfd9aed9",
+        "annotations": "c65cdf9c1c7bc36bb88d67293aed1a1603846784944ba43294d18df01084e0e5"
+      },
+      "tags": [
+        "bicycle",
+        "moving-threat",
+        "blender",
+        "ground-truth-derived"
+      ],
+      "annotationRevision": 4,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "blender-darkness",
+      "kind": "blender",
+      "frames": "scenes/blender-darkness/frames.jsonl",
+      "annotations": "scenes/blender-darkness/annotations.json",
+      "sha256": {
+        "frames": "c90da3fea6bf1f9f4d2ee65811e6f9e45f19620bedcf43ac9d36185716ebc745",
+        "annotations": "aaf59de9ea34dbe056ee556da20f0495e9eddbaa7e57ab1e8bdd2790cdc30b2d"
+      },
+      "tags": [
+        "darkness",
+        "degradation",
+        "blender",
+        "ground-truth-derived"
+      ],
+      "annotationRevision": 4,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "blender-defocus-blur",
+      "kind": "blender",
+      "frames": "scenes/blender-defocus-blur/frames.jsonl",
+      "annotations": "scenes/blender-defocus-blur/annotations.json",
+      "sha256": {
+        "frames": "d0a1ad53750bb53dbb1f6ec51b843d9c5c14b0977e5a51d653061cff5ce8ad74",
+        "annotations": "1f945cdda70f9baa13302cc7c7badef6e934a86e1663df165eb9cbe983c445ff"
+      },
+      "tags": [
+        "blur",
+        "degradation",
+        "blender",
+        "ground-truth-derived"
+      ],
+      "annotationRevision": 4,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "blender-rain-noise",
+      "kind": "blender",
+      "frames": "scenes/blender-rain-noise/frames.jsonl",
+      "annotations": "scenes/blender-rain-noise/annotations.json",
+      "sha256": {
+        "frames": "32459ac35698b0752237ac00a70e6d1c471bbd65cfe11e0bf45a3b2d10bb23b1",
+        "annotations": "94c364ab6cf99e4897a39e530c2f7c7ba59cdf4488a8856fe0881c3450f56b3c"
+      },
+      "tags": [
+        "rain",
+        "noise",
+        "degradation",
+        "blender",
+        "ground-truth-derived"
+      ],
+      "annotationRevision": 4,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "blender-excessive-roll",
+      "kind": "blender",
+      "frames": "scenes/blender-excessive-roll/frames.jsonl",
+      "annotations": "scenes/blender-excessive-roll/annotations.json",
+      "sha256": {
+        "frames": "5bca8325e9e8c20845efcfac653809e11915f1b56ceec6fc8a3cd7966b8c9dca",
+        "annotations": "b3d431dc0ba9739803110d303b17ce70fb7c77ab578b5868a837b85c764c530b"
+      },
+      "tags": [
+        "roll",
+        "orientation",
+        "blender",
+        "ground-truth-derived"
+      ],
+      "annotationRevision": 4,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "blender-excessive-pitch",
+      "kind": "blender",
+      "frames": "scenes/blender-excessive-pitch/frames.jsonl",
+      "annotations": "scenes/blender-excessive-pitch/annotations.json",
+      "sha256": {
+        "frames": "d8d22f03e392fd41523f536bacba90f780e38767029ad2baa7acba39f4f04910",
+        "annotations": "05ada6803f0e3480951237db8fb9c367164b5e6a5d7099fe198a0092cfa11609"
+      },
+      "tags": [
+        "pitch",
+        "orientation",
+        "blender",
+        "ground-truth-derived"
+      ],
+      "annotationRevision": 4,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "blender-camera-obstruction",
+      "kind": "blender",
+      "frames": "scenes/blender-camera-obstruction/frames.jsonl",
+      "annotations": "scenes/blender-camera-obstruction/annotations.json",
+      "sha256": {
+        "frames": "47aab781113b618e1106f301d86a703839cfaebeca952daf0acdebea5cc30cd4",
+        "annotations": "3755b8510bc89908e235e809fe428c1eac0c31ec86bf4b81f8f1a004489d4eed"
+      },
+      "tags": [
+        "camera",
+        "obstruction",
+        "blender",
+        "ground-truth-derived"
+      ],
+      "annotationRevision": 4,
+      "requiredForRc": true,
+      "coverage": "complete"
+    }
+  ],
+  "externalCorpora": []
+}

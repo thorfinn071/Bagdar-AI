@@ -143,8 +143,7 @@ class DeviceCapabilities {
 
   /// Convenience: true when the device satisfies the *minimum* feasibility
   /// gate for mesh-net buddy alerts (BLE central role + Android 8+).
-  bool get meshFeasible =>
-      hardware.bleCentral && androidSdkInt >= 26;
+  bool get meshFeasible => hardware.bleCentral && androidSdkInt >= 26;
 
   /// Convenience: true when the device satisfies the minimum gate for
   /// the FMCW sonar prototype (48 kHz mic). The Hi-freq speaker flag is
@@ -161,7 +160,6 @@ class DeviceCapabilities {
 class DeviceCapabilityProbe {
   DeviceCapabilityProbe._();
 
-  
   static const String _kTierKey = 'vg_depth_tier_v3';
   static const String _kSdkKey = 'vg_android_sdk_v3';
   static const MethodChannel _channel = MethodChannel('bagdar/device_info');

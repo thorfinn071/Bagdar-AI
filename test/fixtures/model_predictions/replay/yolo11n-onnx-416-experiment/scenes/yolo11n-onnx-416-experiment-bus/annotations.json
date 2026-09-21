@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "sceneId": "yolo11n-onnx-416-experiment-bus",
+  "annotationRevision": 1,
+  "initialFeedback": "none",
+  "timeline": [
+    {
+      "startOffsetMs": 0,
+      "endOffsetMs": 100,
+      "expectedActions": [
+        "stopNow"
+      ],
+      "forbiddenActions": [
+        "continueForward",
+        "adjustLeft",
+        "adjustRight"
+      ],
+      "expectedHealth": [
+        "healthy"
+      ],
+      "expectedAlertEvents": [
+        "emitted"
+      ],
+      "expectedShadowDirections": [
+        "none"
+      ],
+      "interruptCurrent": false
+    }
+  ],
+  "sourceImageSha256": "c02019c4979c191eb739ddd944445ef408dad5679acab6fd520ef9d434bfbc63",
+  "predictionsSha256": "87e1048f7856c5f6250e614dcfe3b22c85c35aa395ccd075921b0f2e40d99598"
+}

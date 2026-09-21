@@ -1,0 +1,211 @@
+{
+  "schemaVersion": 1,
+  "corpusId": "bagdar-spatial-canonical-v1",
+  "seed": 20260919,
+  "generatorId": "bagdar-procedural-relative-polar-v1",
+  "timelineOriginUtc": "2026-09-19T00:00:00.000Z",
+  "source": {
+    "type": "procedural",
+    "license": "project-generated-test-fixture",
+    "consentClass": "not_applicable"
+  },
+  "handling": "public",
+  "camera": {
+    "mount": "synthetic_chest_fixed",
+    "parameters": "normalized_fov_60deg",
+    "coordinateMode": "relative"
+  },
+  "modelContract": {
+    "modelId": "procedural-relative-polar-v1",
+    "modelHash": "3bc61ab56913bf7dda722db8150eee50f7f95618c4789a9f15ff456254a19f6b",
+    "preprocessId": "relative-polar-normalized-v1"
+  },
+  "scenes": [
+    {
+      "id": "center-obstacle",
+      "kind": "procedural",
+      "frames": "scenes/center-obstacle/frames.jsonl",
+      "annotations": "scenes/center-obstacle/annotations.json",
+      "sha256": {
+        "frames": "e3d0bf40db6253ea18f0d44b7a15918410ed96013749de401272c3069f98748c",
+        "annotations": "a5b73437e226486b4314748e45e82323b53dec5a9ad4cab7c97b327413255061"
+      },
+      "tags": [
+        "obstacle",
+        "center",
+        "procedural"
+      ],
+      "annotationRevision": 3,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "unknown-center-stopped",
+      "kind": "procedural",
+      "frames": "scenes/unknown-center-stopped/frames.jsonl",
+      "annotations": "scenes/unknown-center-stopped/annotations.json",
+      "sha256": {
+        "frames": "430a352127f460cc18318818b75443f6db26140a7de6db447eb6cff43005fc60",
+        "annotations": "ef73f4e4955956c59b4b3da7f68439877c7b6f41c352c8a6d7625d0228c8954d"
+      },
+      "tags": [
+        "unknown",
+        "center",
+        "stationary",
+        "procedural"
+      ],
+      "annotationRevision": 3,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "unknown-center-moving",
+      "kind": "procedural",
+      "frames": "scenes/unknown-center-moving/frames.jsonl",
+      "annotations": "scenes/unknown-center-moving/annotations.json",
+      "sha256": {
+        "frames": "f5f26e02283f52b47603bfd940c001bf68d15b05fc5d338d194fb9cfd6f71d55",
+        "annotations": "8557f273badef9c915addba913158b15fb7eefb10cb24702c506201fb358ff72"
+      },
+      "tags": [
+        "unknown",
+        "center",
+        "moving",
+        "procedural"
+      ],
+      "annotationRevision": 3,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "center-blocked-left-observed",
+      "kind": "procedural",
+      "frames": "scenes/center-blocked-left-observed/frames.jsonl",
+      "annotations": "scenes/center-blocked-left-observed/annotations.json",
+      "sha256": {
+        "frames": "b6301a628d32069389d972e8a88dc69cd7eceee002688be209954d46d9f5e0cd",
+        "annotations": "889afc089c4adaefaa9a0848fe933670da1bee7156301d11395f9a488699fe68"
+      },
+      "tags": [
+        "planner",
+        "shadow-left",
+        "procedural"
+      ],
+      "annotationRevision": 3,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "center-blocked-sides-unobserved",
+      "kind": "procedural",
+      "frames": "scenes/center-blocked-sides-unobserved/frames.jsonl",
+      "annotations": "scenes/center-blocked-sides-unobserved/annotations.json",
+      "sha256": {
+        "frames": "569fdef6a73ca89342459b8f3a742a460e783162a7cc428908e938687f97ea0e",
+        "annotations": "da761669f184d221679d4a8132e93b863945e1f21c061102562fdb04bab4cff6"
+      },
+      "tags": [
+        "planner",
+        "unknown-sides",
+        "procedural"
+      ],
+      "annotationRevision": 3,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "stable-left-shadow-correction",
+      "kind": "procedural",
+      "frames": "scenes/stable-left-shadow-correction/frames.jsonl",
+      "annotations": "scenes/stable-left-shadow-correction/annotations.json",
+      "sha256": {
+        "frames": "e97e9206e5c59204266bc0d6c50e3ffa7a2a30edb2bda02793d4e458e627ae1c",
+        "annotations": "0617746b70892c7843d81ea79c685d524b34270f07f9b50574b291989d3405db"
+      },
+      "tags": [
+        "planner",
+        "hysteresis",
+        "shadow-left",
+        "procedural"
+      ],
+      "annotationRevision": 3,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "stale-depth-moving",
+      "kind": "procedural",
+      "frames": "scenes/stale-depth-moving/frames.jsonl",
+      "annotations": "scenes/stale-depth-moving/annotations.json",
+      "sha256": {
+        "frames": "e047c4356ef1eb6b73c759230faaedb279d76758b53789c232190c72df6d17d8",
+        "annotations": "25005d01839c12cb49295473fb21822b29c5252476db28b37b9a89cf01ad8398"
+      },
+      "tags": [
+        "degradation",
+        "stale-depth",
+        "moving",
+        "procedural"
+      ],
+      "annotationRevision": 3,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "critical-during-information",
+      "kind": "procedural",
+      "frames": "scenes/critical-during-information/frames.jsonl",
+      "annotations": "scenes/critical-during-information/annotations.json",
+      "sha256": {
+        "frames": "1b2a809b591a1c9e72a8bc18d8a6ebd7c89ea2b6dd0520525bad9c7a44155ac0",
+        "annotations": "a7f83771e065e5d3d750524e5bca55fb4bb0cd1d233dd1c38ca8e87bfb7390d4"
+      },
+      "tags": [
+        "alert",
+        "preemption",
+        "procedural"
+      ],
+      "annotationRevision": 3,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "hazard-emerges-during-guidance",
+      "kind": "procedural",
+      "frames": "scenes/hazard-emerges-during-guidance/frames.jsonl",
+      "annotations": "scenes/hazard-emerges-during-guidance/annotations.json",
+      "sha256": {
+        "frames": "2ad35c1b484fb7db4b14d83eef187c147aaf067997f05684d7a155a8060dc667",
+        "annotations": "392c842cc396dbda226f213957803760fd1b6752c077b968dbec4e8227a4b881"
+      },
+      "tags": [
+        "temporal",
+        "emerging-hazard",
+        "procedural"
+      ],
+      "annotationRevision": 3,
+      "requiredForRc": true,
+      "coverage": "complete"
+    }
+  ],
+  "externalCorpora": [
+    {
+      "id": "blender-egocentric-v1",
+      "source": "blender",
+      "handling": "public",
+      "consentClass": "not_applicable",
+      "requiredForRc": true,
+      "availability": "available",
+      "manifestPath": "blender-egocentric-v1/corpus-manifest.json",
+      "manifestSha256": "5b32ec74680a38b025b576a3bba281e9cf32369ddac0c2a49e3c26816b858472"
+    },
+    {
+      "id": "controlled-camera-v1",
+      "source": "recorded",
+      "handling": "private",
+      "consentClass": "explicit_required",
+      "requiredForRc": false,
+      "availability": "missing"
+    }
+  ]
+}

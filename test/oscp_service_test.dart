@@ -8,10 +8,7 @@ void main() {
     });
 
     test('range stream UUID is stable', () {
-      expect(
-        OscpGatt.kRangeStreamUuid,
-        '00002a6e-0000-1000-8000-00805f9b34fb',
-      );
+      expect(OscpGatt.kRangeStreamUuid, '00002a6e-0000-1000-8000-00805f9b34fb');
     });
   });
 

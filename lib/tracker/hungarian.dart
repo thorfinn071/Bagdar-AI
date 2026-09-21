@@ -36,13 +36,11 @@ class Hungarian {
     final int cols = cost[0].length;
     if (cols == 0) return List<int>.filled(rows, -1);
 
-    
     final bool transposed = rows > cols;
     final int n = transposed ? cols : rows;
     final int m = transposed ? rows : cols;
     final src = transposed ? _transpose(cost, rows, cols) : cost;
 
-    
     final u = List<double>.filled(n + 1, 0.0);
     final v = List<double>.filled(m + 1, 0.0);
     final p = List<int>.filled(m + 1, 0);
@@ -72,7 +70,6 @@ class Hungarian {
           }
         }
 
-        
         if (j1 == -1) break;
 
         for (int j = 0; j <= m; j++) {
@@ -86,7 +83,6 @@ class Hungarian {
         j0 = j1;
       } while (p[j0] != 0);
 
-      
       while (j0 != 0) {
         final int j1 = way[j0];
         p[j0] = p[j1];
@@ -94,27 +90,23 @@ class Hungarian {
       }
     }
 
-    
     final internalAssign = List<int>.filled(n, -1);
     for (int j = 1; j <= m; j++) {
       if (p[j] > 0) internalAssign[p[j] - 1] = j - 1;
     }
 
-    
     final List<int> assignment = List<int>.filled(rows, -1);
     if (!transposed) {
       for (int i = 0; i < rows; i++) {
         assignment[i] = internalAssign[i];
       }
     } else {
-      
       for (int col = 0; col < n; col++) {
         final row = internalAssign[col];
         if (row >= 0) assignment[row] = col;
       }
     }
 
-    
     for (int i = 0; i < rows; i++) {
       final j = assignment[i];
       if (j < 0) continue;
@@ -157,7 +149,7 @@ class Hungarian {
       if (j < 0) continue;
       total += cost[i][j];
     }
-    
+
     return total.isNaN ? double.infinity : total;
   }
 
@@ -174,4 +166,3 @@ class Hungarian {
     return true;
   }
 }
-

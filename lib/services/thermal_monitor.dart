@@ -58,8 +58,9 @@ class ThermalReadings {
     var severity = ThermalSeverity.normal;
 
     if (batteryTempC != null) {
-      final criticalCeiling =
-          winterMode ? kWinterCriticalTempC : kThermalCriticalTempC;
+      final criticalCeiling = winterMode
+          ? kWinterCriticalTempC
+          : kThermalCriticalTempC;
       if (batteryTempC >= criticalCeiling) {
         severity = ThermalSeverity.critical;
       } else if (batteryTempC >= kThermalHotTempC) {

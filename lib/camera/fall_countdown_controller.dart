@@ -13,12 +13,23 @@ import '../services/sos_service.dart';
 import '../services/tts_service.dart';
 import '../services/voice_command_service.dart';
 
+typedef FallSafetyFeedback =
+    void Function(String speechKey, String replaceKey, DateTime now);
+
 class FallCountdownController extends ChangeNotifier {
+  /// Stable TTS replacement identity for one active fall countdown.
+  ///
+  /// Countdown ticks are state updates, not independent hazards. Keeping all
+  /// of them would both violate the bounded critical queue and allow stale
+  /// "10 seconds" speech after the countdown has reached 1 second.
+  static const int _fallCountdownSpeechTrackId = -10001;
+
   final TtsService tts;
   final SosService sos;
   final VoiceCommandService voice;
   final VoidCallback? onCancelled;
   final VoidCallback? onSosSent;
+  final FallSafetyFeedback? onSafetyFeedback;
 
   /// Optional probe for Winter Mode. When it returns true at the moment
   /// [start] is called, the countdown window is scaled by
@@ -39,13 +50,16 @@ class FallCountdownController extends ChangeNotifier {
 
   static const Duration kVoiceConfirmWindow = Duration(seconds: 4);
   static const Duration kCorroborationWindow = Duration(seconds: 3);
-  
-  
-  static const double kDeliberateTapThresholdMps2 = 14.7;
-  static const Duration kDeliberateTapMaxDuration =
-      Duration(milliseconds: 100);
 
-  
+  /// Safety audit C-3: a single accidental tap (phone sliding on asphalt,
+  /// user grabbing at it) must not instantly cancel a fall-detected SOS
+  /// countdown. The first tap only arms a confirmation window; a second tap
+  /// within [kCancelConfirmWindow] is required to actually cancel.
+  static const Duration kCancelConfirmWindow = Duration(seconds: 3);
+
+  static const double kDeliberateTapThresholdMps2 = 14.7;
+  static const Duration kDeliberateTapMaxDuration = Duration(milliseconds: 100);
+
   final double Function()? deliberateTapThresholdProvider;
 
   Timer? _timer;
@@ -60,6 +74,8 @@ class FallCountdownController extends ChangeNotifier {
   Timer? _voiceConfirmTimeout;
   DateTime? _lastTouchAt;
   DateTime? _lastDeliberateTapAt;
+  DateTime? _lastCancelTapAt;
+  Timer? _cancelConfirmTimer;
   DateTime? _userAccelAboveStartedAt;
   StreamSubscription<UserAccelerometerEvent>? _userAccelSub;
 
@@ -69,6 +85,7 @@ class FallCountdownController extends ChangeNotifier {
     required this.voice,
     this.onCancelled,
     this.onSosSent,
+    this.onSafetyFeedback,
     this.winterModeProvider,
     this.motionStateProvider,
     this.deliberateTapThresholdProvider,
@@ -96,6 +113,9 @@ class FallCountdownController extends ChangeNotifier {
   void start({FallClass fallClass = FallClass.tumble}) {
     if (_active) return;
     _active = true;
+    _lastCancelTapAt = null;
+    _cancelConfirmTimer?.cancel();
+    _cancelConfirmTimer = null;
     final baseDuration = fallClass == FallClass.collapse
         ? kCollapseDuration
         : kInitialDuration;
@@ -108,18 +128,20 @@ class FallCountdownController extends ChangeNotifier {
     final detectedKey = fallClass == FallClass.collapse
         ? 'sos_fall_classb_detected'
         : 'sos_fall_detected';
-    tts.say(
-      S.get(detectedKey),
-      SpeechPriority.critical,
-      pan: 0.0,
-      barge: true,
-    );
-    tts.say(
-      S.get('sos_fall_cancel_hint'),
-      SpeechPriority.warning,
-      pan: 0.0,
-    );
-    HapticService.vibrate([0, 300, 200, 300, 200, 300]);
+    final now = DateTime.now();
+    final safetyFeedback = onSafetyFeedback;
+    if (safetyFeedback != null) {
+      safetyFeedback(detectedKey, 'fall_detected', now);
+    } else {
+      tts.say(
+        S.get(detectedKey),
+        SpeechPriority.critical,
+        pan: 0.0,
+        barge: true,
+      );
+      HapticService.vibrate([0, 300, 200, 300, 200, 300]);
+    }
+    tts.say(S.get('sos_fall_cancel_hint'), SpeechPriority.warning, pan: 0.0);
 
     _startFallCancelListener();
     _startCorroborationSensor();
@@ -138,6 +160,9 @@ class FallCountdownController extends ChangeNotifier {
     _stopFallCancelListener();
     _stopCorroborationSensor();
     _resetVoiceConfirm();
+    _lastCancelTapAt = null;
+    _cancelConfirmTimer?.cancel();
+    _cancelConfirmTimer = null;
     tts.say(S.get('sos_fall_cancelled'), SpeechPriority.critical, pan: 0.0);
     HapticService.vibrate([0, 100]);
     onCancelled?.call();
@@ -145,8 +170,32 @@ class FallCountdownController extends ChangeNotifier {
   }
 
   void notifyTouch() {
-    _lastTouchAt = DateTime.now();
-    if (_active) cancel();
+    final now = DateTime.now();
+    _lastTouchAt = now;
+    if (!_active) return;
+    if (_lastCancelTapAt != null &&
+        now.difference(_lastCancelTapAt!) <= kCancelConfirmWindow) {
+      // Second deliberate tap within the confirmation window — cancel.
+      _lastCancelTapAt = null;
+      _cancelConfirmTimer?.cancel();
+      _cancelConfirmTimer = null;
+      cancel();
+      return;
+    }
+    // First tap — arm the confirmation window instead of cancelling
+    // immediately, so a single accidental tap cannot abort a real SOS.
+    _lastCancelTapAt = now;
+    tts.say(
+      S.get('sos_cancel_confirm'),
+      SpeechPriority.critical,
+      pan: 0.0,
+      barge: true,
+    );
+    _cancelConfirmTimer?.cancel();
+    _cancelConfirmTimer = Timer(kCancelConfirmWindow, () {
+      _lastCancelTapAt = null;
+      _cancelConfirmTimer = null;
+    });
   }
 
   void requestVoiceCancel() {
@@ -167,9 +216,11 @@ class FallCountdownController extends ChangeNotifier {
       });
       return;
     }
-    final touchOk = _lastTouchAt != null &&
+    final touchOk =
+        _lastTouchAt != null &&
         now.difference(_lastTouchAt!) <= kCorroborationWindow;
-    final tapOk = _lastDeliberateTapAt != null &&
+    final tapOk =
+        _lastDeliberateTapAt != null &&
         now.difference(_lastDeliberateTapAt!) <= kCorroborationWindow;
     if (!touchOk && !tapOk) {
       tts.say(
@@ -219,13 +270,16 @@ class FallCountdownController extends ChangeNotifier {
       return;
     }
 
-    if (_secondsLeft == 10 ||
-        _secondsLeft == 5 ||
-        _secondsLeft <= 3) {
+    if (_secondsLeft == 10 || _secondsLeft == 5 || _secondsLeft <= 3) {
+      // Promoted to critical + barge so the current countdown state survives
+      // hazard preemption. All ticks share a replacement identity: a newer
+      // second replaces an older one instead of accumulating stale speech.
       tts.say(
         '${S.get('sos_fall_countdown')} $_secondsLeft ${S.get('sos_fall_seconds')}',
-        SpeechPriority.warning,
+        _active ? SpeechPriority.critical : SpeechPriority.warning,
         pan: 0.0,
+        trackId: _active ? _fallCountdownSpeechTrackId : null,
+        barge: _active,
       );
       if (_secondsLeft == 10 || _secondsLeft == 5) {
         _restartFallCancelListener();
@@ -280,12 +334,18 @@ class FallCountdownController extends ChangeNotifier {
     if (!hasContact) {
       tts.say(S.get('sos_112_fallback'), SpeechPriority.critical, pan: 0.0);
     }
-    tts.say(S.get('sos_sending'), SpeechPriority.critical, pan: 0.0);
+    final sendingAt = DateTime.now();
+    final safetyFeedback = onSafetyFeedback;
+    if (safetyFeedback != null) {
+      safetyFeedback('sos_sending', 'fall_sos_delivery', sendingAt);
+    } else {
+      tts.say(S.get('sos_sending'), SpeechPriority.critical, pan: 0.0);
+    }
     final result = await sos.sendSos();
     if (_disposed) return;
-    
-    
-    final delivered = result == SosResult.sent ||
+
+    final delivered =
+        result == SosResult.sent ||
         result == SosResult.sentFallback ||
         result == SosResult.sentWithoutLocation;
     // E-2: composerOpened / dialerOpened mean the user still has to take
@@ -296,21 +356,25 @@ class FallCountdownController extends ChangeNotifier {
         result == SosResult.dialerOpened) {
       HapticService.vibrate(const [0, 200, 100, 200]);
     }
-    final msg = switch (result) {
-      SosResult.sent => S.get('sos_fall_sent'),
-      SosResult.sentFallback =>
-        '${S.get('sos_112_fallback')} ${S.get('sos_sent')}',
+    final resultKey = switch (result) {
+      SosResult.sent => 'sos_fall_sent',
+      SosResult.sentFallback => 'sos_sent',
       // E-1: native SMS unconfirmed; sms:// fallback was launched.
-      SosResult.pendingEnqueued => S.get('sos_queued'),
-      SosResult.sentWithoutLocation => S.get('sos_sent_no_location'),
-      SosResult.noLocation => S.get('sos_no_location'),
-      SosResult.launchFailed => S.get('sos_launch_failed'),
-      SosResult.noContact => S.get('sos_no_contact'),
-      SosResult.error => S.get('sos_error'),
-      SosResult.composerOpened => S.get('sos_composer_opened'),
-      SosResult.dialerOpened => S.get('sos_dialer_opened'),
+      SosResult.pendingEnqueued => 'sos_queued',
+      SosResult.sentWithoutLocation => 'sos_sent_no_location',
+      SosResult.noLocation => 'sos_no_location',
+      SosResult.launchFailed => 'sos_launch_failed',
+      SosResult.noContact => 'sos_no_contact',
+      SosResult.error => 'sos_error',
+      SosResult.composerOpened => 'sos_composer_opened',
+      SosResult.dialerOpened => 'sos_dialer_opened',
     };
-    tts.say(msg, SpeechPriority.critical, pan: 0.0);
+    final resultAt = DateTime.now();
+    if (safetyFeedback != null) {
+      safetyFeedback(resultKey, 'fall_sos_delivery', resultAt);
+    } else {
+      tts.say(S.get(resultKey), SpeechPriority.critical, pan: 0.0);
+    }
   }
 
   void _startFallCancelListener() {
@@ -327,8 +391,7 @@ class FallCountdownController extends ChangeNotifier {
 
   void _restartFallCancelListener() {
     if (!_cancelListenerActive) return;
-    
-    
+
     voice.extendContinuousDeadline(Duration(seconds: _secondsLeft + 1));
     if (voice.isListening) return;
     unawaited(
@@ -367,8 +430,7 @@ class FallCountdownController extends ChangeNotifier {
   void _onUserAccel(UserAccelerometerEvent e) {
     final mag = math.sqrt(e.x * e.x + e.y * e.y + e.z * e.z);
     final now = DateTime.now();
-    
-    
+
     final threshold =
         deliberateTapThresholdProvider?.call() ?? kDeliberateTapThresholdMps2;
     if (mag > threshold) {
@@ -402,6 +464,7 @@ class FallCountdownController extends ChangeNotifier {
     _disposed = true;
     _timer?.cancel();
     _voiceConfirmTimeout?.cancel();
+    _cancelConfirmTimer?.cancel();
     _userAccelSub?.cancel();
     super.dispose();
   }

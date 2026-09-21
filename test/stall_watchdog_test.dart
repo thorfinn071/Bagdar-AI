@@ -74,8 +74,11 @@ void main() {
 
       wd.notifyFrameArrived(now: t0.add(const Duration(milliseconds: 400)));
       wd.evaluate(t0.add(const Duration(milliseconds: 800)));
-      expect(stallCount, 0,
-          reason: 'gap from last frame (400ms) is below threshold');
+      expect(
+        stallCount,
+        0,
+        reason: 'gap from last frame (400ms) is below threshold',
+      );
     });
 
     test('stop() clears warning', () {

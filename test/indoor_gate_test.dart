@@ -33,7 +33,6 @@ IndoorTransition _feedStream(
 }
 
 void main() {
-
   group('OPT-13 IndoorGate — cold start & street', () {
     test('initial state is unknown with empty streaks', () {
       final gate = IndoorGate();
@@ -43,8 +42,7 @@ void main() {
       expect(gate.walkingStreak, 0);
     });
 
-    test('first good-GPS sample settles into street without a transition',
-        () {
+    test('first good-GPS sample settles into street without a transition', () {
       final gate = IndoorGate();
       final base = DateTime(2026, 1, 1, 12);
       final transition = gate.feed(
@@ -53,8 +51,11 @@ void main() {
         motion: MotionState.walking,
         now: base,
       );
-      expect(transition, IndoorTransition.none,
-          reason: 'unknown → street does NOT announce indoor state');
+      expect(
+        transition,
+        IndoorTransition.none,
+        reason: 'unknown → street does NOT announce indoor state',
+      );
       expect(gate.state, IndoorState.street);
     });
 
@@ -88,8 +89,7 @@ void main() {
       expect(gate.state, IndoorState.indoor);
     });
 
-    test('null GPS counts as poor — 15 null-accuracy samples enter indoor',
-        () {
+    test('null GPS counts as poor — 15 null-accuracy samples enter indoor', () {
       final gate = IndoorGate();
       final last = _feedStream(
         gate,
@@ -126,9 +126,13 @@ void main() {
         start: DateTime(2026, 1, 1, 12),
       );
       expect(last, IndoorTransition.none);
-      expect(gate.state, isNot(IndoorState.indoor),
-          reason: 'walking pedestrian under weak GPS = tunnel/cold-start, '
-              'must never classify as indoor');
+      expect(
+        gate.state,
+        isNot(IndoorState.indoor),
+        reason:
+            'walking pedestrian under weak GPS = tunnel/cold-start, '
+            'must never classify as indoor',
+      );
     });
 
     test('enter confirmation resets if motion briefly becomes walking', () {
@@ -154,7 +158,7 @@ void main() {
       expect(gate.state, IndoorState.unknown);
     });
   });
-      
+
   group('OPT-13 IndoorGate — exit indoor', () {
     IndoorGate enterIndoor() {
       final gate = IndoorGate();
@@ -201,31 +205,33 @@ void main() {
       expect(gate.state, IndoorState.street);
     });
 
-    test('exit confirmation resets if motion stops before reaching 5 frames',
-        () {
-      final gate = enterIndoor();
-      final base = DateTime(2026, 1, 1, 13);
+    test(
+      'exit confirmation resets if motion stops before reaching 5 frames',
+      () {
+        final gate = enterIndoor();
+        final base = DateTime(2026, 1, 1, 13);
 
-      _feedStream(
-        gate,
-        count: 3,
-        accuracyM: 45.0,
-        ageSec: 5,
-        motion: MotionState.walking,
-        start: base,
-      );
-      expect(gate.walkingStreak, 3);
-      expect(gate.state, IndoorState.indoor);
+        _feedStream(
+          gate,
+          count: 3,
+          accuracyM: 45.0,
+          ageSec: 5,
+          motion: MotionState.walking,
+          start: base,
+        );
+        expect(gate.walkingStreak, 3);
+        expect(gate.state, IndoorState.indoor);
 
-      gate.feed(
-        gpsAccuracyM: 45.0,
-        gpsAgeSec: 5,
-        motion: MotionState.stationary,
-        now: base.add(const Duration(seconds: 8)),
-      );
-      expect(gate.walkingStreak, 0);
-      expect(gate.state, IndoorState.indoor);
-    });
+        gate.feed(
+          gpsAccuracyM: 45.0,
+          gpsAgeSec: 5,
+          motion: MotionState.stationary,
+          now: base.add(const Duration(seconds: 8)),
+        );
+        expect(gate.walkingStreak, 0);
+        expect(gate.state, IndoorState.indoor);
+      },
+    );
   });
 
   group('OPT-13 IndoorGate — hysteresis & reset', () {
@@ -251,8 +257,11 @@ void main() {
         );
         expect(t, IndoorTransition.none);
       }
-      expect(gate.poorStreak, 10,
-          reason: 'middle zone must not advance the enter streak');
+      expect(
+        gate.poorStreak,
+        10,
+        reason: 'middle zone must not advance the enter streak',
+      );
       expect(gate.state, IndoorState.unknown);
     });
 

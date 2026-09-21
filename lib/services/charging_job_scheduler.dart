@@ -44,13 +44,7 @@ class ChargingJobGate {
 }
 
 /// State of the training job scheduler.
-enum ChargingJobState {
-  idle,
-  waitingForGates,
-  running,
-  completed,
-  failed,
-}
+enum ChargingJobState { idle, waitingForGates, running, completed, failed }
 
 /// Callback type for the actual training/adapter work. The scheduler
 /// calls this when all gates are open; it should return `true` on
@@ -91,12 +85,12 @@ class ChargingJobScheduler {
 
   /// Evaluate current gate conditions.
   ChargingJobGate readGates() => ChargingJobGate(
-        charging: isChargingProvider?.call() ?? false,
-        wifiAvailable: isWifiProvider?.call() ?? false,
-        batteryPct: batteryPctProvider?.call() ?? 0,
-        thermal: thermalProvider?.call() ?? ThermalSeverity.normal,
-        memory: memoryProvider?.call() ?? MemoryPressureLevel.normal,
-      );
+    charging: isChargingProvider?.call() ?? false,
+    wifiAvailable: isWifiProvider?.call() ?? false,
+    batteryPct: batteryPctProvider?.call() ?? 0,
+    thermal: thermalProvider?.call() ?? ThermalSeverity.normal,
+    memory: memoryProvider?.call() ?? MemoryPressureLevel.normal,
+  );
 
   /// Schedule a job. Begins polling gate conditions. When all gates
   /// open, acquires a `trainingJob` lease and runs [work]. Returns
@@ -176,17 +170,12 @@ class ChargingJobScheduler {
 
     try {
       final success = await work(() => _cancelRequested);
-      _state =
-          success ? ChargingJobState.completed : ChargingJobState.failed;
-      FieldLogger.instance.log('charging_job_finished', {
-        'success': success,
-      });
+      _state = success ? ChargingJobState.completed : ChargingJobState.failed;
+      FieldLogger.instance.log('charging_job_finished', {'success': success});
       onComplete?.call(success);
     } catch (e) {
       _state = ChargingJobState.failed;
-      FieldLogger.instance.log('charging_job_error', {
-        'error': e.toString(),
-      });
+      FieldLogger.instance.log('charging_job_error', {'error': e.toString()});
       onComplete?.call(false);
     } finally {
       SensorSessionCoordinator.instance.release(_trainingLease);

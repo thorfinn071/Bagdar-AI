@@ -35,9 +35,7 @@ Future<void> calibrateFocalLength(
   await Settings.instance.setFocalLength(newFocal);
 }
 
-
 const double _kPersonShoulderWidth = 0.48;
-
 
 double focalDistM(String label, double x1, double y1, double x2, double y2) {
   final bw = math.max(1.0, x2 - x1);
@@ -47,7 +45,7 @@ double focalDistM(String label, double x1, double y1, double x2, double y2) {
   if (label == 'person') {
     final distByHeight = (1.70 * fl) / bh;
     final distByWidth = (_kPersonShoulderWidth * fl) / bw;
-    if(distByWidth>distByHeight*3.0) return distByHeight;
+    if (distByWidth > distByHeight * 3.0) return distByHeight;
     return math.min(distByHeight, distByWidth);
   }
 
@@ -182,8 +180,7 @@ String clockDir(
     imgH: imgH,
     viewportAspect: viewportAspect,
   );
-  
-  
+
   if (n < 0.10) return d('9');
   if (n < 0.22) return d('10');
   if (n < 0.42) return d('11');
@@ -266,8 +263,8 @@ double _getObstacleWeight(String label) {
     case 'car':
     case 'bus':
     case 'truck':
-      return 1.5; 
-      
+      return 1.5;
+
     case 'bicycle':
     case 'motorcycle':
       return 1.3;
@@ -419,7 +416,7 @@ const double _kPolarShoulderHalfM = 0.25;
     final expand = 20.0 * weight;
     final x1 = visibleX((t.x1 - expand).clamp(0.0, imgW));
     final x2 = visibleX((t.x2 + expand).clamp(0.0, imgW));
-    
+
     segments.add((x1, x2));
   }
 

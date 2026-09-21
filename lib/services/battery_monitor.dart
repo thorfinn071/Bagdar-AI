@@ -113,8 +113,7 @@ class BatteryMonitor {
       _updateLevel();
 
       _stateSub = _battery.onBatteryStateChanged.listen((s) {
-        _isCharging =
-            s == BatteryState.charging || s == BatteryState.full;
+        _isCharging = s == BatteryState.charging || s == BatteryState.full;
         _checkLevel();
       });
 
@@ -129,9 +128,7 @@ class BatteryMonitor {
       final results = await Connectivity().checkConnectivity();
       _isWifi = results.contains(ConnectivityResult.wifi);
 
-      _connSub = Connectivity()
-          .onConnectivityChanged
-          .listen((results) {
+      _connSub = Connectivity().onConnectivityChanged.listen((results) {
         _isWifi = results.contains(ConnectivityResult.wifi);
       });
     } catch (e) {

@@ -39,7 +39,6 @@ class OcrService {
   /// monitor reports `MemoryPressureLevel.critical`.
   OcrService({MemoryMonitor? memoryMonitor}) : _memoryMonitor = memoryMonitor;
 
-  
   int sensorOrientationDeg = 90;
 
   Future<String?> recognizeFromFrame(
@@ -79,14 +78,11 @@ class OcrService {
   void resetStabilizer() => _stabilizeBuffer.clear();
 
   void dispose() {
-    
-    
     unawaited(_latinRecognizer.close().catchError((Object _) {}));
     unawaited(_defaultRecognizer.close().catchError((Object _) {}));
     unawaited(PaddleOcrBridge.instance.dispose());
   }
 
-  
   final TextRecognizer _latinRecognizer = TextRecognizer(
     script: TextRecognitionScript.latin,
   );
@@ -129,8 +125,9 @@ class OcrService {
       yuvBytes: concatenated,
       width: image.width,
       height: image.height,
-      bytesPerRow:
-          image.planes.isNotEmpty ? image.planes[0].bytesPerRow : image.width,
+      bytesPerRow: image.planes.isNotEmpty
+          ? image.planes[0].bytesPerRow
+          : image.width,
       rotationDeg: sensorOrientationDeg,
       languagePref: _languagePref(),
     );
@@ -188,10 +185,8 @@ class OcrService {
 
     final recognizers = switch (AppStrings.current) {
       AppLanguage.en => <TextRecognizer>[_latinRecognizer],
-      AppLanguage.ru || AppLanguage.kk => <TextRecognizer>[
-          _defaultRecognizer,
-          _latinRecognizer,
-        ],
+      AppLanguage.ru ||
+      AppLanguage.kk => <TextRecognizer>[_defaultRecognizer, _latinRecognizer],
     };
 
     final lines = <String>[];
@@ -226,8 +221,7 @@ class OcrService {
 
     if (_stabilizeBuffer.length < _kStableFrames) return null;
 
-    final allSame =
-        _stabilizeBuffer.every((r) => r == _stabilizeBuffer.first);
+    final allSame = _stabilizeBuffer.every((r) => r == _stabilizeBuffer.first);
     if (!allSame) return null;
 
     _stabilizeBuffer.clear();
@@ -237,8 +231,6 @@ class OcrService {
   String _applyKkCorrection(String text) {
     final dict = KkDictionary.instance;
     if (!dict.isLoaded) {
-      
-      
       unawaited(dict.load());
       return text;
     }
@@ -332,7 +324,6 @@ class OcrService {
     }
   }
 
-  
   /// Lower the confidence threshold from tests so canned mock lines
   /// reach the final string. Production code never calls this.
   @visibleForTesting
@@ -348,10 +339,7 @@ class OcrService {
   /// Drive only the [_finalize] pipeline. Used by stabilization tests so
   /// they don't have to build a real [CameraImage].
   @visibleForTesting
-  String? debugFinalizeForTesting(
-    String text, {
-    required bool stabilize,
-  }) =>
+  String? debugFinalizeForTesting(String text, {required bool stabilize}) =>
       _finalize(text, stabilize: stabilize);
 
   @visibleForTesting

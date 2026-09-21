@@ -30,11 +30,7 @@ class _SettingsQrExportScreenState extends State<SettingsQrExportScreen> {
     super.initState();
     _payload = SettingsCodec.instance.exportToJson();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      widget.tts.say(
-        S.get('qr_export_ready'),
-        SpeechPriority.info,
-        pan: 0.0,
-      );
+      widget.tts.say(S.get('qr_export_ready'), SpeechPriority.info, pan: 0.0);
       HapticService.vibrate(const [0, 80]);
     });
   }

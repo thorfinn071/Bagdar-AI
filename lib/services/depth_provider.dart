@@ -4,11 +4,23 @@ import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 
 import '../models/constants.dart';
+import '../models/depth_frame.dart';
+export '../models/depth_frame.dart';
 import '../utils/depth_hazard.dart';
 import '../utils/ground_plane_analyzer.dart';
 import 'device_capability.dart';
 import 'hardware_depth_bridge.dart';
 import 'ncnn_depth_provider.dart';
+
+DepthAnalysisResult wrapHazardsAsLegacy(List<DepthHazard> hazards) =>
+    DepthAnalysisResult(
+      frame: null,
+      legacyHazards: hazards,
+      health: DepthHealth.legacyOnly(
+        provider: DepthProviderKind.unavailable,
+        reason: 'stub',
+      ),
+    );
 
 abstract class DepthProvider {
   DepthTier get tier;
@@ -21,6 +33,36 @@ abstract class DepthProvider {
     bool weatherDegraded = false,
     bool winterMode = false,
   });
+
+  /// Canonical provider result. Default adapter wraps [analyze] so existing
+  /// callers keep working while the generic stack migrates.
+  Future<DepthAnalysisResult> analyzeDetailed(
+    CameraImage image, {
+    double cropTopFrac = 0.40,
+    bool userStationary = false,
+    bool weatherDegraded = false,
+    bool winterMode = false,
+    int sourceTimestampUs = 0,
+    int rotationDegrees = 0,
+    bool mirrored = false,
+  }) async {
+    final hazards = await analyze(
+      image,
+      cropTopFrac: cropTopFrac,
+      userStationary: userStationary,
+      weatherDegraded: weatherDegraded,
+      winterMode: winterMode,
+    );
+    return DepthAnalysisResult(
+      frame: null,
+      legacyHazards: hazards,
+      health: DepthHealth.legacyOnly(
+        provider: DepthProviderKind.unavailable,
+        reason: 'adapter_no_frame',
+      ),
+    );
+  }
+
   bool get nativeBridgeEnabled;
   bool get nativeBridgeAvailable;
   bool get lowConfidenceFallbackActive;
@@ -30,7 +72,6 @@ abstract class DepthProvider {
   double get lastAnalyzeMs;
   bool get lastUsedNativeBridge;
 
-  
   bool get lastPlaneFitOk;
 
   void setNativeBridgeEnabled(bool enabled);
@@ -55,10 +96,8 @@ class HardwareDepthProvider implements DepthProvider {
   bool _lastUsedNativeBridge = false;
 
   static const int _kLumaSize = GroundPlaneAnalyzer.kMapSize;
-  late final Uint8List _lumaBuffer =
-      Uint8List(_kLumaSize * _kLumaSize);
+  late final Uint8List _lumaBuffer = Uint8List(_kLumaSize * _kLumaSize);
 
-  
   DateTime? _highConfStreakStartedAt;
   bool _fallbackDisposedForBattery = false;
   bool _fallbackReinitInFlight = false;
@@ -115,7 +154,6 @@ class HardwareDepthProvider implements DepthProvider {
   @override
   bool get lastUsedNativeBridge => _lastUsedNativeBridge;
 
-  
   @override
   bool get lastPlaneFitOk =>
       _fallback?.lastPlaneFitOk ?? _analyzer.lastPlaneFitOk;
@@ -203,6 +241,27 @@ class HardwareDepthProvider implements DepthProvider {
     bool weatherDegraded = false,
     bool winterMode = false,
   }) async {
+    final result = await analyzeDetailed(
+      image,
+      cropTopFrac: cropTopFrac,
+      userStationary: userStationary,
+      weatherDegraded: weatherDegraded,
+      winterMode: winterMode,
+    );
+    return result.legacyHazards;
+  }
+
+  @override
+  Future<DepthAnalysisResult> analyzeDetailed(
+    CameraImage image, {
+    double cropTopFrac = 0.40,
+    bool userStationary = false,
+    bool weatherDegraded = false,
+    bool winterMode = false,
+    int sourceTimestampUs = 0,
+    int rotationDegrees = 0,
+    bool mirrored = false,
+  }) async {
     final analyzeSw = Stopwatch()..start();
     if (_hardwareStarted) {
       final depthMap = _bridge.latestDepthMap;
@@ -214,12 +273,15 @@ class HardwareDepthProvider implements DepthProvider {
         if (_lowConfidenceFallbackActive &&
             fallback != null &&
             fallback.isReady) {
-          final hazards = await fallback.analyze(
+          final result = await fallback.analyzeDetailed(
             image,
             cropTopFrac: cropTopFrac,
             userStationary: userStationary,
             weatherDegraded: weatherDegraded,
             winterMode: winterMode,
+            sourceTimestampUs: sourceTimestampUs,
+            rotationDegrees: rotationDegrees,
+            mirrored: mirrored,
           );
           _lastPreprocessMs = fallback.lastPreprocessMs;
           _lastInferenceMs = fallback.lastInferenceMs;
@@ -227,7 +289,7 @@ class HardwareDepthProvider implements DepthProvider {
           _effectiveTier = fallback.tier;
           analyzeSw.stop();
           _lastAnalyzeMs = fallback.lastAnalyzeMs;
-          return hazards;
+          return result;
         }
 
         _lastPreprocessMs = 0;
@@ -250,18 +312,67 @@ class HardwareDepthProvider implements DepthProvider {
         );
         analyzeSw.stop();
         _lastAnalyzeMs = analyzeSw.elapsedMicroseconds / 1000.0;
-        return hazards;
+        final conf = Float32List(depthMap.length);
+        var valid = 0;
+        for (int i = 0; i < depthMap.length; i++) {
+          final z = depthMap[i];
+          final ok = z.isFinite && z > 0;
+          conf[i] = ok ? 1.0 : 0.0;
+          if (ok) valid++;
+        }
+        const size = GroundPlaneAnalyzer.kMapSize;
+        final frame = DepthFrame(
+          values: depthMap,
+          confidence01: conf,
+          width: size,
+          height: size,
+          timestampUs: sourceTimestampUs > 0
+              ? sourceTimestampUs
+              : DateTime.now().microsecondsSinceEpoch,
+          provider: DepthProviderKind.arcoreMetric,
+          semantics: DepthValueSemantics.metricMeters,
+          modelId: 'arcore-raw-depth-platform',
+          modelHash: 'platform-provider-versioned-at-runtime',
+          preprocessId: 'arcore-depth-bridge-v1',
+          cropTopFraction: cropTopFrac,
+          frameQuality: _lastConfidenceScore,
+          alignedToImage: false,
+          rotationDegrees: rotationDegrees,
+          mirrored: mirrored,
+        );
+        final coverage = valid / depthMap.length;
+        return DepthAnalysisResult(
+          frame: frame,
+          legacyHazards: hazards,
+          planeFitQuality: _analyzer.lastPlaneFitQuality,
+          health: DepthHealth(
+            capability: DepthCapability.unalignedOrStale,
+            components: DepthHealthComponents(
+              validCoverage: coverage,
+              dynamicRange: 0.5,
+              temporalStability: 0.5,
+              blurLightGate: 1.0,
+              providerState: 0.5,
+            ),
+            genericObstacleAvailable: false,
+            provider: DepthProviderKind.arcoreMetric,
+            rejectionReason: 'arcore_not_single_owner',
+          ),
+        );
       }
     }
 
     final fallback = _fallback;
     if (fallback != null && fallback.isReady) {
-      final hazards = await fallback.analyze(
+      final result = await fallback.analyzeDetailed(
         image,
         cropTopFrac: cropTopFrac,
         userStationary: userStationary,
         weatherDegraded: weatherDegraded,
         winterMode: winterMode,
+        sourceTimestampUs: sourceTimestampUs,
+        rotationDegrees: rotationDegrees,
+        mirrored: mirrored,
       );
       _lastPreprocessMs = fallback.lastPreprocessMs;
       _lastInferenceMs = fallback.lastInferenceMs;
@@ -269,7 +380,7 @@ class HardwareDepthProvider implements DepthProvider {
       _effectiveTier = fallback.tier;
       analyzeSw.stop();
       _lastAnalyzeMs = fallback.lastAnalyzeMs;
-      return hazards;
+      return result;
     }
 
     analyzeSw.stop();
@@ -277,7 +388,14 @@ class HardwareDepthProvider implements DepthProvider {
     _lastInferenceMs = 0;
     _lastAnalyzeMs = analyzeSw.elapsedMicroseconds / 1000.0;
     _lastUsedNativeBridge = false;
-    return const [];
+    return DepthAnalysisResult(
+      frame: null,
+      legacyHazards: const <DepthHazard>[],
+      health: DepthHealth.unavailable(
+        provider: DepthProviderKind.unavailable,
+        reason: 'hardware_and_fallback_unready',
+      ),
+    );
   }
 
   void _extractLuma({
@@ -287,17 +405,16 @@ class HardwareDepthProvider implements DepthProvider {
     required int rowStride,
     required double cropTopFrac,
   }) {
-    final cropTop =
-        (srcHeight * cropTopFrac).toInt().clamp(0, srcHeight - 1);
+    final cropTop = (srcHeight * cropTopFrac).toInt().clamp(0, srcHeight - 1);
     final cropH = (srcHeight - cropTop).clamp(1, srcHeight);
     int outIdx = 0;
     for (int dy = 0; dy < _kLumaSize; dy++) {
-      final sy =
-          ((dy * cropH) ~/ _kLumaSize).clamp(0, cropH - 1) + cropTop;
+      final sy = ((dy * cropH) ~/ _kLumaSize).clamp(0, cropH - 1) + cropTop;
       final rowStart = sy * rowStride;
       for (int dx = 0; dx < _kLumaSize; dx++) {
         final sx = ((dx * srcWidth) ~/ _kLumaSize).clamp(0, srcWidth - 1);
-        _lumaBuffer[outIdx++] = yBytes[rowStart + sx];
+        final idx = rowStart + sx;
+        _lumaBuffer[outIdx++] = idx < yBytes.length ? yBytes[idx] : 0;
       }
     }
   }
@@ -360,8 +477,7 @@ class HardwareDepthProvider implements DepthProvider {
       if (_lowConfidenceFrameCount >= kHardwareDepthLowConfFrames) {
         _lowConfidenceFallbackActive = true;
       }
-      
-      
+
       _maybeReinitFallback();
       return;
     }
@@ -378,7 +494,6 @@ class HardwareDepthProvider implements DepthProvider {
       _recoveredConfidenceFrameCount = 0;
     }
 
-    
     if (score >= kHardwareDepthHighConfThreshold) {
       _highConfStreakStartedAt ??= t;
       if (!_fallbackDisposedForBattery &&
@@ -474,7 +589,6 @@ class FocalLengthDepthProvider implements DepthProvider {
   @override
   bool get lastUsedNativeBridge => false;
 
-  
   @override
   bool get lastPlaneFitOk => true;
 
@@ -492,6 +606,25 @@ class FocalLengthDepthProvider implements DepthProvider {
     bool weatherDegraded = false,
     bool winterMode = false,
   }) async => const [];
+
+  @override
+  Future<DepthAnalysisResult> analyzeDetailed(
+    CameraImage image, {
+    double cropTopFrac = 0.40,
+    bool userStationary = false,
+    bool weatherDegraded = false,
+    bool winterMode = false,
+    int sourceTimestampUs = 0,
+    int rotationDegrees = 0,
+    bool mirrored = false,
+  }) async => DepthAnalysisResult(
+    frame: null,
+    legacyHazards: const <DepthHazard>[],
+    health: DepthHealth.legacyOnly(
+      provider: DepthProviderKind.unavailable,
+      reason: 'genericObstacleUnavailable',
+    ),
+  );
 
   @override
   void setNativeBridgeEnabled(bool enabled) {}
@@ -545,12 +678,16 @@ class DepthProviderFactory {
   static Future<DepthProvider> createAndInit(
     DeviceCapabilities caps, {
     int threads = 2,
+    bool allowIndependentHardwareCamera = false,
   }) async {
-    if (caps.bestDepthTier == DepthTier.hardware) {
+    if (caps.bestDepthTier == DepthTier.hardware &&
+        allowIndependentHardwareCamera) {
       final hw = HardwareDepthProvider();
       try {
         if (await hw.init(threads: threads)) {
-          debugPrint('DepthProviderFactory: activated Hardware (NCNN fallback inside)');
+          debugPrint(
+            'DepthProviderFactory: activated Hardware (NCNN fallback inside)',
+          );
           return hw;
         }
         debugPrint('DepthProviderFactory: Hardware init failed, trying NCNN');
@@ -560,6 +697,11 @@ class DepthProviderFactory {
       try {
         hw.dispose();
       } catch (_) {}
+    } else if (caps.bestDepthTier == DepthTier.hardware) {
+      debugPrint(
+        'DepthProviderFactory: standalone ARCore camera blocked by '
+        'single-owner policy; using aligned NCNN from the Flutter frame',
+      );
     }
 
     final ncnn = await NcnnDepthProvider.tryCreate();
@@ -571,9 +713,13 @@ class DepthProviderFactory {
           );
           return ncnn;
         }
-        debugPrint('DepthProviderFactory: NCNN init failed, falling back to focal');
+        debugPrint(
+          'DepthProviderFactory: NCNN init failed, falling back to focal',
+        );
       } catch (e) {
-        debugPrint('DepthProviderFactory: NCNN threw $e, falling back to focal');
+        debugPrint(
+          'DepthProviderFactory: NCNN threw $e, falling back to focal',
+        );
       }
       try {
         ncnn.dispose();

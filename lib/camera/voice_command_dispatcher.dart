@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 
+import '../core/core_feature_policy.dart';
 import '../models/app_mode.dart';
 import '../models/a11y_prefs.dart';
 import '../models/constants.dart';
@@ -29,6 +30,7 @@ class VoiceCommandDispatcher {
   final VoidCallback onReadTextRequested;
   final VoidCallback onSosRequested;
   final void Function({SceneFilter filter}) onDescribeSceneRequested;
+
   /// Pushes the Language Packs settings screen. Required because the
   /// dispatcher has no BuildContext of its own and Navigator pushes must
   /// originate from the camera screen which owns the navigator stack.
@@ -84,15 +86,19 @@ class VoiceCommandDispatcher {
         }
         break;
       case VoiceCommand.scanAll:
+        if (_refuseIfExcluded(CoreFeature.sceneNarration)) break;
         onDescribeSceneRequested(filter: SceneFilter.all);
         break;
       case VoiceCommand.scanLeft:
+        if (_refuseIfExcluded(CoreFeature.sceneNarration)) break;
         onDescribeSceneRequested(filter: SceneFilter.left);
         break;
       case VoiceCommand.scanRight:
+        if (_refuseIfExcluded(CoreFeature.sceneNarration)) break;
         onDescribeSceneRequested(filter: SceneFilter.right);
         break;
       case VoiceCommand.scanForward:
+        if (_refuseIfExcluded(CoreFeature.sceneNarration)) break;
         onDescribeSceneRequested(filter: SceneFilter.forward);
         break;
       case VoiceCommand.readText:
@@ -100,8 +106,7 @@ class VoiceCommandDispatcher {
         break;
       case VoiceCommand.modeStreet:
         vm.setMode(AppMode.street);
-        
-        
+
         vm.tts.say(S.get('mode_street'), SpeechPriority.warning, pan: 0.0);
         break;
       case VoiceCommand.modeCane:
@@ -226,11 +231,7 @@ class VoiceCommandDispatcher {
         vm.tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
         break;
       case VoiceCommand.restartPipeline:
-        vm.tts.say(
-          S.get('restart_pipeline'),
-          SpeechPriority.warning,
-          pan: 0.0,
-        );
+        vm.tts.say(S.get('restart_pipeline'), SpeechPriority.warning, pan: 0.0);
         break;
       case VoiceCommand.themeDark:
         _switchTheme(BagdarThemeName.dark, 'theme_selected_dark');
@@ -256,13 +257,14 @@ class VoiceCommandDispatcher {
         onShowLanguagePacks?.call();
         break;
       case VoiceCommand.enableKkV2:
+        if (_refuseIfExcluded(CoreFeature.kazakhStackV2)) break;
         _toggleKkV2(true);
         break;
       case VoiceCommand.disableKkV2:
+        if (_refuseIfExcluded(CoreFeature.kazakhStackV2)) break;
         _toggleKkV2(false);
         break;
-      
-      
+
       case VoiceCommand.stopTrailRecord:
         _stopTrailRecord();
         break;
@@ -272,30 +274,36 @@ class VoiceCommandDispatcher {
       case VoiceCommand.deleteTrail:
         vm.tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
         break;
-      
+
       case VoiceCommand.toggleBazaarMode:
+        if (_refuseIfExcluded(CoreFeature.bazaarLivestock)) break;
         _toggleBazaarMode();
         break;
       case VoiceCommand.toggleLivestockMode:
+        if (_refuseIfExcluded(CoreFeature.bazaarLivestock)) break;
         _toggleLivestockMode();
         break;
-      
+
       case VoiceCommand.toggleVoiceAdaptation:
+        if (_refuseIfExcluded(CoreFeature.localAsrAdaptation)) break;
         _toggleVoiceAdaptation();
         break;
       case VoiceCommand.clearAdaptationData:
+        if (_refuseIfExcluded(CoreFeature.localAsrAdaptation)) break;
         _clearAdaptationData();
         break;
-      
+
       case VoiceCommand.toggleMeshBuddy:
+        if (_refuseIfExcluded(CoreFeature.bleMesh)) break;
         _toggleMeshBuddy();
         break;
-      
+
       case VoiceCommand.recordNearMiss:
         _recordNearMiss();
         break;
-      
+
       case VoiceCommand.toggleSonar:
+        if (_refuseIfExcluded(CoreFeature.sonar)) break;
         _toggleSonar();
         break;
       case VoiceCommand.dominantHandRight:
@@ -308,10 +316,19 @@ class VoiceCommandDispatcher {
     }
   }
 
+  bool _refuseIfExcluded(CoreFeature feature) {
+    if (CoreFeaturePolicy.current.mayInitialize(feature)) return false;
+    vm.tts.say(
+      S.get('core_feature_unavailable'),
+      SpeechPriority.info,
+      pan: 0.0,
+    );
+    return true;
+  }
+
   Future<void> _toggleKkV2(bool enable) async {
     await Settings.instance.setEnableKazakhStackV2(enable);
-    
-    
+
     vm.voice.setLocale(AppStrings.ttsLang);
     final packInstalled = LanguagePackManager.instance.isInstalled(
       LanguagePackIds.voskKk,
@@ -348,6 +365,7 @@ class VoiceCommandDispatcher {
         unawaited(_startNavigateTo(destination));
         break;
       case VoiceCommand.transitTo:
+        if (_refuseIfExcluded(CoreFeature.publicTransit)) break;
         vm.tts.say(
           '${S.get('nav_searching')} $destination',
           SpeechPriority.info,
@@ -361,22 +379,28 @@ class VoiceCommandDispatcher {
         vm.tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
         break;
       case VoiceCommand.rememberObject:
+        if (_refuseIfExcluded(CoreFeature.objectMemoryFinder)) break;
         unawaited(vm.objectMemory.startRemember(destination));
         break;
       case VoiceCommand.findObject:
+        if (_refuseIfExcluded(CoreFeature.objectMemoryFinder)) break;
         vm.objectFinder.start(destination);
         break;
       case VoiceCommand.forgetObject:
+        if (_refuseIfExcluded(CoreFeature.objectMemoryFinder)) break;
         unawaited(vm.objectMemory.forget(destination));
         break;
-      
+
       case VoiceCommand.recordTrail:
+        if (_refuseIfExcluded(CoreFeature.indoorTrail)) break;
         _startTrailRecord(destination);
         break;
       case VoiceCommand.replayTrail:
+        if (_refuseIfExcluded(CoreFeature.indoorTrail)) break;
         _replayTrail(destination);
         break;
       case VoiceCommand.addTrailLandmark:
+        if (_refuseIfExcluded(CoreFeature.indoorTrail)) break;
         vm.trailRecorder.addLandmark(destination);
         vm.tts.say(
           S.alert('trail_landmark_added'),
@@ -432,11 +456,7 @@ class VoiceCommandDispatcher {
               destinationName: target.name,
             );
       if (route == null) {
-        vm.tts.say(
-          S.get('nav_route_failed'),
-          SpeechPriority.warning,
-          pan: 0.0,
-        );
+        vm.tts.say(S.get('nav_route_failed'), SpeechPriority.warning, pan: 0.0);
         return;
       }
       vm.nav.startWalkNavigation(route);
@@ -476,11 +496,7 @@ class VoiceCommandDispatcher {
         destinationName: target.name,
       );
       if (route == null) {
-        vm.tts.say(
-          S.get('nav_route_failed'),
-          SpeechPriority.warning,
-          pan: 0.0,
-        );
+        vm.tts.say(S.get('nav_route_failed'), SpeechPriority.warning, pan: 0.0);
         return;
       }
       vm.nav.startTransitNavigation(route);
@@ -523,7 +539,10 @@ class VoiceCommandDispatcher {
 
   void _increaseSpeechRate() {
     final cur = Settings.instance.speechRate;
-    final next = (cur + kVoiceSpeechRateStep).clamp(kSpeechRateMin, kSpeechRateMax);
+    final next = (cur + kVoiceSpeechRateStep).clamp(
+      kSpeechRateMin,
+      kSpeechRateMax,
+    );
     unawaited(Settings.instance.setSpeechRate(next));
     unawaited(vm.tts.setUserRate(next));
     vm.tts.say(S.get('vc_speed_up'), SpeechPriority.info, pan: 0.0);
@@ -531,7 +550,10 @@ class VoiceCommandDispatcher {
 
   void _decreaseSpeechRate() {
     final cur = Settings.instance.speechRate;
-    final next = (cur - kVoiceSpeechRateStep).clamp(kSpeechRateMin, kSpeechRateMax);
+    final next = (cur - kVoiceSpeechRateStep).clamp(
+      kSpeechRateMin,
+      kSpeechRateMax,
+    );
     unawaited(Settings.instance.setSpeechRate(next));
     unawaited(vm.tts.setUserRate(next));
     vm.tts.say(S.get('vc_speed_down'), SpeechPriority.info, pan: 0.0);
@@ -558,8 +580,7 @@ class VoiceCommandDispatcher {
     await Settings.instance.setLanguage(lang.index);
     await vm.tts.setLanguage(AppStrings.ttsLang);
     vm.voice.setLocale(AppStrings.ttsLang);
-    
-    
+
     vm.tts.say(S.get('lang_switched'), SpeechPriority.warning, pan: 0.0);
   }
 
@@ -597,7 +618,11 @@ class VoiceCommandDispatcher {
       SosTrigger.tripleTap => S.get('sos_trigger_triple_tap'),
       SosTrigger.shake => S.get('sos_trigger_shake'),
     };
-    vm.tts.say('${S.get('settings_sos_trigger')}: $label', SpeechPriority.info, pan: 0.0);
+    vm.tts.say(
+      '${S.get('settings_sos_trigger')}: $label',
+      SpeechPriority.info,
+      pan: 0.0,
+    );
   }
 
   void _setHapticStrength(HapticStrength v) {
@@ -610,33 +635,33 @@ class VoiceCommandDispatcher {
     );
   }
 
-  
   void _startTrailRecord(String name) {
     final langCode = Settings.instance.language == 1
         ? 'kk'
         : Settings.instance.language == 2
-            ? 'en'
-            : 'ru';
-    unawaited(vm.trailRecorder.start(name: name, langCode: langCode).then((ok) {
-      if (ok) {
-        vm.tts.say(
-          S.alert('trail_recording_started'),
-          SpeechPriority.info,
-          pan: 0.0,
-        );
-      } else {
-        vm.tts.say(
-          S.alert('trail_recording_failed'),
-          SpeechPriority.info,
-          pan: 0.0,
-        );
-      }
-    }));
+        ? 'en'
+        : 'ru';
+    unawaited(
+      vm.trailRecorder.start(name: name, langCode: langCode).then((ok) {
+        if (ok) {
+          vm.tts.say(
+            S.alert('trail_recording_started'),
+            SpeechPriority.info,
+            pan: 0.0,
+          );
+        } else {
+          vm.tts.say(
+            S.alert('trail_recording_failed'),
+            SpeechPriority.info,
+            pan: 0.0,
+          );
+        }
+      }),
+    );
   }
 
   void _stopTrailRecord() {
     if (!vm.trailRecorder.isActive) {
-      
       if (vm.trailReplay.state != IndoorTrailReplayState.idle) {
         unawaited(vm.trailReplay.stop());
         vm.tts.say(
@@ -649,21 +674,23 @@ class VoiceCommandDispatcher {
       vm.tts.say(S.get('voice_unknown'), SpeechPriority.info, pan: 0.0);
       return;
     }
-    unawaited(vm.trailRecorder.stop().then((trail) {
-      if (trail != null) {
-        vm.tts.say(
-          S.alert('trail_recording_stopped'),
-          SpeechPriority.info,
-          pan: 0.0,
-        );
-      } else {
-        vm.tts.say(
-          S.alert('trail_recording_empty'),
-          SpeechPriority.info,
-          pan: 0.0,
-        );
-      }
-    }));
+    unawaited(
+      vm.trailRecorder.stop().then((trail) {
+        if (trail != null) {
+          vm.tts.say(
+            S.alert('trail_recording_stopped'),
+            SpeechPriority.info,
+            pan: 0.0,
+          );
+        } else {
+          vm.tts.say(
+            S.alert('trail_recording_empty'),
+            SpeechPriority.info,
+            pan: 0.0,
+          );
+        }
+      }),
+    );
   }
 
   void _replayTrail(String name) {
@@ -671,30 +698,22 @@ class VoiceCommandDispatcher {
   }
 
   void _deleteTrail(String name) {
-    unawaited(IndoorTrailStore.instance.findByName(name).then((trail) async {
-      if (trail == null) {
-        vm.tts.say(
-          S.alert('trail_not_found'),
-          SpeechPriority.info,
-          pan: 0.0,
-        );
-        return;
-      }
-      await IndoorTrailStore.instance.delete(trail.id);
-      vm.tts.say(
-        S.alert('trail_deleted'),
-        SpeechPriority.info,
-        pan: 0.0,
-      );
-    }));
+    unawaited(
+      IndoorTrailStore.instance.findByName(name).then((trail) async {
+        if (trail == null) {
+          vm.tts.say(S.alert('trail_not_found'), SpeechPriority.info, pan: 0.0);
+          return;
+        }
+        await IndoorTrailStore.instance.delete(trail.id);
+        vm.tts.say(S.alert('trail_deleted'), SpeechPriority.info, pan: 0.0);
+      }),
+    );
   }
 
-  
   void _toggleBazaarMode() {
     final current = Settings.instance.bazaarMode;
     unawaited(Settings.instance.setBazaarMode(!current));
     if (!current) {
-      
       unawaited(Settings.instance.setLivestockAwareness(false));
     }
     vm.bazaarLivestock.reset();
@@ -707,7 +726,6 @@ class VoiceCommandDispatcher {
     final current = Settings.instance.livestockAwareness;
     unawaited(Settings.instance.setLivestockAwareness(!current));
     if (!current) {
-      
       unawaited(Settings.instance.setBazaarMode(false));
     }
     vm.bazaarLivestock.reset();
@@ -716,7 +734,6 @@ class VoiceCommandDispatcher {
     vm.earcon.play(Earcon.success);
   }
 
-  
   void _toggleVoiceAdaptation() {
     final current = Settings.instance.localAsrAdaptation;
     unawaited(Settings.instance.setLocalAsrAdaptation(!current));
@@ -733,7 +750,6 @@ class VoiceCommandDispatcher {
     );
   }
 
-  
   void _toggleMeshBuddy() {
     final current = Settings.instance.meshBuddyAlerts;
     unawaited(Settings.instance.setMeshBuddyAlerts(!current));
@@ -747,27 +763,36 @@ class VoiceCommandDispatcher {
     vm.earcon.play(Earcon.success);
   }
 
-  
   void _recordNearMiss() {
-    unawaited(vm.nearMissBuffer.record(
-      triggerSource: 'voice',
-      labels: const [],
-    ));
+    unawaited(
+      vm.nearMissBuffer.record(triggerSource: 'voice', labels: const []),
+    );
     vm.tts.say(S.alert('near_miss_recorded'), SpeechPriority.info, pan: 0.0);
     vm.earcon.play(Earcon.success);
   }
 
-  
   void _toggleSonar() {
-    final current = Settings.instance.sonarDepth;
-    unawaited(Settings.instance.setSonarDepth(!current));
-    if (!current) {
-      unawaited(vm.sonar.start());
-      vm.tts.say(S.alert('sonar_started'), SpeechPriority.info, pan: 0.0);
-    } else {
-      unawaited(vm.sonar.stop());
+    unawaited(_toggleSonarAsync());
+  }
+
+  Future<void> _toggleSonarAsync() async {
+    final enable = !Settings.instance.sonarDepth;
+    await Settings.instance.setSonarDepth(enable);
+    if (!enable) {
+      await vm.sonar.stop();
       vm.tts.say(S.alert('sonar_stopped'), SpeechPriority.info, pan: 0.0);
+      vm.earcon.play(Earcon.success);
+      return;
     }
+
+    final started = await vm.sonar.start();
+    if (!started) {
+      await Settings.instance.setSonarDepth(false);
+      vm.tts.say(S.alert('sonar_no_48k'), SpeechPriority.info, pan: 0.0);
+      vm.earcon.play(Earcon.fail);
+      return;
+    }
+    vm.tts.say(S.alert('sonar_calibrating'), SpeechPriority.info, pan: 0.0);
     vm.earcon.play(Earcon.success);
   }
 }

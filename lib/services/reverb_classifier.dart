@@ -47,8 +47,7 @@ class ReverbClassifier {
       if (flatness < 0.3) confidence += 0.1;
     } else if (rt60 < kAwmReverbOutdoorThreshold && centroid > 1500.0) {
       env = ReverbEnvironment.outdoor;
-      confidence =
-          ((kAwmReverbOutdoorThreshold - rt60) / 0.15).clamp(0.3, 0.9);
+      confidence = ((kAwmReverbOutdoorThreshold - rt60) / 0.15).clamp(0.3, 0.9);
       if (flatness > 0.5) confidence += 0.1;
     } else {
       env = ReverbEnvironment.uncertain;

@@ -30,11 +30,9 @@ class PaymentSmsService {
   /// `AlertManager.handleExternalHazard` in `CameraViewModel.init()`.
   void Function(ExternalHazardEvent event)? onHazard;
 
-  PaymentSmsService({
-    required TtsService tts,
-    required EarconService earcon,
-  })  : _tts = tts,
-        _earcon = earcon;
+  PaymentSmsService({required TtsService tts, required EarconService earcon})
+    : _tts = tts,
+      _earcon = earcon;
 
   bool get isEnabled => _enabled;
   bool get isPermissionGranted => _permissionGranted;
@@ -186,15 +184,17 @@ class PaymentSmsService {
       trackId: null,
     );
     _earcon.play(Earcon.paymentReceived);
-    onHazard?.call(ExternalHazardEvent(
-      source: ExternalHazardSource.paymentSms,
-      text: text,
-      priority: SpeechPriority.warning,
-      category: AlertCategory.acousticEvent,
-      urgency: 0.5,
-      at: DateTime.now(),
-      correlationId: 'payment_sms',
-    ));
+    onHazard?.call(
+      ExternalHazardEvent(
+        source: ExternalHazardSource.paymentSms,
+        text: text,
+        priority: SpeechPriority.warning,
+        category: AlertCategory.acousticEvent,
+        urgency: 0.5,
+        at: DateTime.now(),
+        correlationId: 'payment_sms',
+      ),
+    );
     if (onHazard == null) {
       FieldLogger.instance.log('payment_sms_no_handler', {
         'event': event.direction.name,

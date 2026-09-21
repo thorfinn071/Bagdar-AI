@@ -56,46 +56,82 @@ void main() {
       expect(thr.midasInterval(500).inMilliseconds, greaterThanOrEqualTo(1500));
     });
 
-    test(
-      'Safety audit 9.2: critical memory pressure returns a long sentinel '
-      'interval that effectively DISABLES MiDaS, not Duration.zero (which '
-      'made shouldRun(now) trivially true and ran MiDaS every frame)',
-      () {
-        final t0 = DateTime(2025, 1, 1, 10, 0, 0);
-        final thr = PerformanceThrottler();
-        thr.setThermal(_readings(ThermalSeverity.normal), now: t0);
-        thr.setMemoryPressure(MemoryPressureLevel.critical);
+    test('Safety audit 9.2: critical memory pressure returns a long sentinel '
+        'interval that effectively DISABLES MiDaS, not Duration.zero (which '
+        'made shouldRun(now) trivially true and ran MiDaS every frame)', () {
+      final t0 = DateTime(2025, 1, 1, 10, 0, 0);
+      final thr = PerformanceThrottler();
+      thr.setThermal(_readings(ThermalSeverity.normal), now: t0);
+      thr.setMemoryPressure(MemoryPressureLevel.critical);
 
-        final interval = thr.midasInterval(500);
-        expect(
-          interval,
-          kStationaryGateMidasOff,
-          reason:
-              'Safety audit 9.2: a "disabled" semantic must be a large '
-              'sentinel duration so DepthPipelineController.shouldRun() '
-              'returns false. Returning Duration.zero made shouldRun fire '
-              'every frame, the inversion of the intended throttle.',
-        );
-        expect(
-          interval.inSeconds,
-          greaterThan(60),
-          reason: 'sentinel must be far larger than any frame interval',
-        );
-      },
-    );
+      final interval = thr.midasInterval(500);
+      expect(
+        interval,
+        kStationaryGateMidasOff,
+        reason:
+            'Safety audit 9.2: a "disabled" semantic must be a large '
+            'sentinel duration so DepthPipelineController.shouldRun() '
+            'returns false. Returning Duration.zero made shouldRun fire '
+            'every frame, the inversion of the intended throttle.',
+      );
+      expect(
+        interval.inSeconds,
+        greaterThan(60),
+        reason: 'sentinel must be far larger than any frame interval',
+      );
+    });
 
-    test(
-      'Safety audit 9.2: a non-positive battery hint also returns the '
-      '"disabled" sentinel rather than Duration.zero',
-      () {
-        final t0 = DateTime(2025, 1, 1, 10, 0, 0);
-        final thr = PerformanceThrottler();
-        thr.setThermal(_readings(ThermalSeverity.normal), now: t0);
+    test('Safety audit 9.2: a non-positive battery hint also returns the '
+        '"disabled" sentinel rather than Duration.zero', () {
+      final t0 = DateTime(2025, 1, 1, 10, 0, 0);
+      final thr = PerformanceThrottler();
+      thr.setThermal(_readings(ThermalSeverity.normal), now: t0);
 
-        expect(thr.midasInterval(0), kStationaryGateMidasOff);
-        expect(thr.midasInterval(-100), kStationaryGateMidasOff);
-      },
-    );
+      expect(thr.midasInterval(0), kStationaryGateMidasOff);
+      expect(thr.midasInterval(-100), kStationaryGateMidasOff);
+    });
+
+    test('Safety audit B-2: MotionState.running halves midasInterval so depth '
+        'confirmation keeps pace with the faster gait (previously only YOLO '
+        'sped up while MiDaS/fusion stayed at the walking cadence)', () {
+      final t0 = DateTime(2025, 1, 1, 10, 0, 0);
+      final thr = PerformanceThrottler();
+      thr.setThermal(_readings(ThermalSeverity.normal), now: t0);
+
+      thr.setMotionState(MotionState.walking, now: t0);
+      expect(thr.midasInterval(500).inMilliseconds, 500);
+
+      thr.setMotionState(MotionState.running, now: t0);
+      expect(thr.midasInterval(500).inMilliseconds, lessThanOrEqualTo(400));
+    });
+
+    test('Safety audit B-2: running never drives midasInterval below the '
+        '200 ms safety floor', () {
+      final t0 = DateTime(2025, 1, 1, 10, 0, 0);
+      final thr = PerformanceThrottler();
+      thr.setThermal(_readings(ThermalSeverity.normal), now: t0);
+      thr.setMotionState(MotionState.running, now: t0);
+
+      expect(thr.midasInterval(300).inMilliseconds, greaterThanOrEqualTo(200));
+    });
+
+    test('Safety audit B-2: thermal hot + running still halves relative to '
+        'thermal hot + walking, without weakening the thermal multiplier', () {
+      final t0 = DateTime(2025, 1, 1, 10, 0, 0);
+      final walkingThr = PerformanceThrottler();
+      walkingThr.setThermal(_readings(ThermalSeverity.hot), now: t0);
+      walkingThr.setMotionState(MotionState.walking, now: t0);
+      final walkingHotMs = walkingThr.midasInterval(500).inMilliseconds;
+
+      final runningThr = PerformanceThrottler();
+      runningThr.setThermal(_readings(ThermalSeverity.hot), now: t0);
+      runningThr.setMotionState(MotionState.running, now: t0);
+      final runningHotMs = runningThr.midasInterval(500).inMilliseconds;
+
+      expect(walkingHotMs, greaterThanOrEqualTo(1500));
+      expect(runningHotMs, lessThanOrEqualTo(walkingHotMs ~/ 2));
+      expect(runningHotMs, greaterThanOrEqualTo(200));
+    });
   });
 
   group('PerformanceThrottler thermal commit hysteresis', () {
@@ -162,8 +198,7 @@ void main() {
       'never exceeds kDetectIntervalSafetyCeilingMs across all combinations',
       () {
         final t0 = DateTime(2025, 1, 1, 10, 0, 0);
-        
-        
+
         const batteryCases = [140, 220, 320, 450];
         const motionCases = [
           MotionState.stationary,
@@ -188,10 +223,9 @@ void main() {
                       ..setMemoryPressure(mem)
                       ..setLowPowerMode(lp)
                       ..setIndoorMode(indoor);
-                    
+
                     thr.update(kInfTimeCriticalMs + 50, t0);
-                    
-                    
+
                     for (int i = 0; i < 5; i++) {
                       final ms = thr.detectInterval(batt).inMilliseconds;
                       expect(
@@ -210,48 +244,39 @@ void main() {
             }
           }
         }
-        expect(probedCombos, batteryCases.length *
-            motionCases.length *
-            memCases.length *
-            thermCases.length *
-            lowPowerCases.length *
-            indoorCases.length);
-      },
-    );
-
-    test(
-      'still honors lower-bound batteryMs when below the ceiling',
-      () {
-        final t0 = DateTime(2025, 1, 1, 10, 0, 0);
-        final thr = PerformanceThrottler()
-          ..setThermal(_readings(ThermalSeverity.normal), now: t0);
-        
-        
         expect(
-          thr.detectInterval(320).inMilliseconds,
-          greaterThanOrEqualTo(320),
+          probedCombos,
+          batteryCases.length *
+              motionCases.length *
+              memCases.length *
+              thermCases.length *
+              lowPowerCases.length *
+              indoorCases.length,
         );
       },
     );
+
+    test('still honors lower-bound batteryMs when below the ceiling', () {
+      final t0 = DateTime(2025, 1, 1, 10, 0, 0);
+      final thr = PerformanceThrottler()
+        ..setThermal(_readings(ThermalSeverity.normal), now: t0);
+
+      expect(thr.detectInterval(320).inMilliseconds, greaterThanOrEqualTo(320));
+    });
   });
 
   group('PerformanceThrottler stationary gate — B-2', () {
-    test(
-      'stationary outdoor activates gate: detect 300ms, midas off',
-      () {
-        final t0 = DateTime(2025, 1, 1, 10, 0, 0);
-        final thr = PerformanceThrottler()
-          ..setThermal(_readings(ThermalSeverity.normal), now: t0)
-          
-          
-          ..setIndoorMode(false);
-        thr.setMotionState(MotionState.stationary);
+    test('stationary outdoor activates gate: detect 300ms, midas off', () {
+      final t0 = DateTime(2025, 1, 1, 10, 0, 0);
+      final thr = PerformanceThrottler()
+        ..setThermal(_readings(ThermalSeverity.normal), now: t0)
+        ..setIndoorMode(false);
+      thr.setMotionState(MotionState.stationary);
 
-        expect(thr.isStationaryGateActive(now: t0), isTrue);
-        expect(thr.detectInterval(140).inMilliseconds, kStationaryGateDetectMs);
-        expect(thr.midasInterval(500), kStationaryGateMidasOff);
-      },
-    );
+      expect(thr.isStationaryGateActive(now: t0), isTrue);
+      expect(thr.detectInterval(140).inMilliseconds, kStationaryGateDetectMs);
+      expect(thr.midasInterval(500), kStationaryGateMidasOff);
+    });
 
     test('walking does NOT activate gate', () {
       final t0 = DateTime(2025, 1, 1, 10, 0, 0);
@@ -261,7 +286,7 @@ void main() {
       thr.setMotionState(MotionState.walking);
 
       expect(thr.isStationaryGateActive(now: t0), isFalse);
-      
+
       expect(
         thr.detectInterval(140).inMilliseconds,
         lessThan(kStationaryGateDetectMs),
@@ -278,29 +303,25 @@ void main() {
       expect(thr.isStationaryGateActive(now: t0), isFalse);
     });
 
-    test(
-      'transition stationary→walking auto-opens 5s resume window',
-      () {
-        final t0 = DateTime(2025, 1, 1, 10, 0, 0);
-        final thr = PerformanceThrottler()
-          ..setThermal(_readings(ThermalSeverity.normal), now: t0)
-          ..setIndoorMode(false);
-        thr.setMotionState(MotionState.stationary);
-        expect(thr.isStationaryGateActive(now: t0), isTrue);
+    test('transition stationary→walking auto-opens 5s resume window', () {
+      final t0 = DateTime(2025, 1, 1, 10, 0, 0);
+      final thr = PerformanceThrottler()
+        ..setThermal(_readings(ThermalSeverity.normal), now: t0)
+        ..setIndoorMode(false);
+      thr.setMotionState(MotionState.stationary);
+      expect(thr.isStationaryGateActive(now: t0), isTrue);
 
-        
-        thr.setMotionState(MotionState.walking, now: t0);
-        thr.setMotionState(MotionState.stationary, now: t0);
-        expect(thr.isStationaryGateActive(now: t0), isFalse);
-        
-        expect(
-          thr.isStationaryGateActive(
-            now: t0.add(kStationaryGateResumeWindow + const Duration(seconds: 1)),
-          ),
-          isTrue,
-        );
-      },
-    );
+      thr.setMotionState(MotionState.walking, now: t0);
+      thr.setMotionState(MotionState.stationary, now: t0);
+      expect(thr.isStationaryGateActive(now: t0), isFalse);
+
+      expect(
+        thr.isStationaryGateActive(
+          now: t0.add(kStationaryGateResumeWindow + const Duration(seconds: 1)),
+        ),
+        isTrue,
+      );
+    });
 
     test(
       'noteCriticalAlert blocks gate for kStationaryGatePostCriticalBlock',
@@ -315,14 +336,14 @@ void main() {
         thr.noteCriticalAlert(now: t0);
         expect(thr.isStationaryGateActive(now: t0), isFalse);
         expect(
-          thr.isStationaryGateActive(
-            now: t0.add(const Duration(seconds: 4)),
-          ),
+          thr.isStationaryGateActive(now: t0.add(const Duration(seconds: 4))),
           isFalse,
         );
         expect(
           thr.isStationaryGateActive(
-            now: t0.add(kStationaryGatePostCriticalBlock + const Duration(seconds: 1)),
+            now: t0.add(
+              kStationaryGatePostCriticalBlock + const Duration(seconds: 1),
+            ),
           ),
           isTrue,
         );
@@ -348,7 +369,9 @@ void main() {
       final t0 = DateTime(2025, 1, 1, 10, 0, 0);
       final thr = PerformanceThrottler();
       thr.setThermal(_readings(ThermalSeverity.normal), now: t0);
-      final probe = t0.add(kThermalTransitionSilence + const Duration(seconds: 5));
+      final probe = t0.add(
+        kThermalTransitionSilence + const Duration(seconds: 5),
+      );
       expect(
         thr.stallWatchdogThreshold(now: probe),
         kStallWatchdogThresholdNormal,
@@ -359,7 +382,9 @@ void main() {
       final t0 = DateTime(2025, 1, 1, 10, 0, 0);
       final thr = PerformanceThrottler();
       thr.setThermal(_readings(ThermalSeverity.hot), now: t0);
-      final probe = t0.add(kThermalTransitionSilence + const Duration(seconds: 1));
+      final probe = t0.add(
+        kThermalTransitionSilence + const Duration(seconds: 1),
+      );
       expect(
         thr.stallWatchdogThreshold(now: probe),
         kStallWatchdogThresholdHot,

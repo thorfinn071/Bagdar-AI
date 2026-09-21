@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:bagdar/core/core_feature_policy.dart';
 import 'package:bagdar/models/tts_engine.dart';
 import 'package:bagdar/services/native_tts_bridge.dart';
 import 'package:bagdar/services/settings_service.dart';
@@ -17,6 +18,7 @@ void main() {
 
   tearDown(() {
     NativeTtsBridge.debugResetInstance();
+    Settings.instance.debugResetPolicy();
   });
 
   /// Builds a `TtsService.forTesting()` and wires up the engine probe
@@ -40,8 +42,14 @@ void main() {
         available: espeakAvailable,
       ),
     });
-    
-    
+
+    if (v2Enabled) {
+      Settings.instance.debugSetPolicy(
+        const CoreFeaturePolicy(BuildProfile.research),
+      );
+    } else {
+      Settings.instance.debugResetPolicy();
+    }
     Settings.instance.setEnableKazakhStackV2(v2Enabled);
     return svc;
   }
@@ -62,36 +70,30 @@ void main() {
       },
     );
 
-    test(
-      'RHVoice wins over espeak when both natives are available '
-      '(v2 flag on, no system voice)',
-      () async {
-        final svc = configureService(
-          kkSystemTtsAvailable: false,
-          v2Enabled: true,
-          rhvoiceAvailable: true,
-          espeakAvailable: true,
-        );
-        final engine = await svc.debugResolveKkEngine();
-        expect(engine, KkTtsEngine.rhvoice);
-        expect(svc.activeKkEngine, KkTtsEngine.rhvoice);
-      },
-    );
+    test('RHVoice wins over espeak when both natives are available '
+        '(v2 flag on, no system voice)', () async {
+      final svc = configureService(
+        kkSystemTtsAvailable: false,
+        v2Enabled: true,
+        rhvoiceAvailable: true,
+        espeakAvailable: true,
+      );
+      final engine = await svc.debugResolveKkEngine();
+      expect(engine, KkTtsEngine.rhvoice);
+      expect(svc.activeKkEngine, KkTtsEngine.rhvoice);
+    });
 
-    test(
-      'espeak is picked when RHVoice is missing but v2 is on',
-      () async {
-        final svc = configureService(
-          kkSystemTtsAvailable: false,
-          v2Enabled: true,
-          rhvoiceAvailable: false,
-          espeakAvailable: true,
-        );
-        final engine = await svc.debugResolveKkEngine();
-        expect(engine, KkTtsEngine.espeak);
-        expect(svc.activeKkEngine, KkTtsEngine.espeak);
-      },
-    );
+    test('espeak is picked when RHVoice is missing but v2 is on', () async {
+      final svc = configureService(
+        kkSystemTtsAvailable: false,
+        v2Enabled: true,
+        rhvoiceAvailable: false,
+        espeakAvailable: true,
+      );
+      final engine = await svc.debugResolveKkEngine();
+      expect(engine, KkTtsEngine.espeak);
+      expect(svc.activeKkEngine, KkTtsEngine.espeak);
+    });
 
     test(
       'russianFallback is the last resort when no native engines are available',
@@ -118,9 +120,13 @@ void main() {
           espeakAvailable: true,
         );
         final engine = await svc.debugResolveKkEngine();
-        expect(engine, KkTtsEngine.russianFallback,
-            reason: 'native engines must stay gated behind '
-                'Settings.enableKazakhStackV2 until acceptance criteria pass');
+        expect(
+          engine,
+          KkTtsEngine.russianFallback,
+          reason:
+              'native engines must stay gated behind '
+              'Settings.enableKazakhStackV2 until acceptance criteria pass',
+        );
         expect(svc.activeKkEngine, KkTtsEngine.russianFallback);
       },
     );
@@ -137,20 +143,17 @@ void main() {
       },
     );
 
-    test(
-      'onKazakhEngineResolved fires exactly once per resolution',
-      () async {
-        final svc = configureService(
-          kkSystemTtsAvailable: false,
-          v2Enabled: true,
-          rhvoiceAvailable: true,
-        );
-        final fired = <KkTtsEngine>[];
-        svc.onKazakhEngineResolved = fired.add;
-        await svc.debugResolveKkEngine();
-        expect(fired, [KkTtsEngine.rhvoice]);
-      },
-    );
+    test('onKazakhEngineResolved fires exactly once per resolution', () async {
+      final svc = configureService(
+        kkSystemTtsAvailable: false,
+        v2Enabled: true,
+        rhvoiceAvailable: true,
+      );
+      final fired = <KkTtsEngine>[];
+      svc.onKazakhEngineResolved = fired.add;
+      await svc.debugResolveKkEngine();
+      expect(fired, [KkTtsEngine.rhvoice]);
+    });
 
     test(
       'onKazakhVoiceMissing fires only on the russianFallback branch',
@@ -164,7 +167,6 @@ void main() {
         await svc.debugResolveKkEngine();
         expect(voiceMissingHits, 1);
 
-        
         voiceMissingHits = 0;
         final svc2 = configureService(
           kkSystemTtsAvailable: false,

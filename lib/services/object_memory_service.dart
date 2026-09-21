@@ -63,9 +63,11 @@ class RememberedObject {
         name: name,
         embedding: emb,
         sampleCount: (j['sampleCount'] as int?) ?? 1,
-        createdAt: DateTime.tryParse(j['createdAt'] as String? ?? '') ??
+        createdAt:
+            DateTime.tryParse(j['createdAt'] as String? ?? '') ??
             DateTime.now(),
-        updatedAt: DateTime.tryParse(j['updatedAt'] as String? ?? '') ??
+        updatedAt:
+            DateTime.tryParse(j['updatedAt'] as String? ?? '') ??
             DateTime.now(),
         backendId: (j['backendId'] as String?) ?? '',
       );
@@ -142,8 +144,7 @@ class YHistogramBackend implements EmbeddingBackend {
     Float32List existing,
     Float32List update, {
     double alpha = kObjectMemoryBlendAlpha,
-  }) =>
-      Appearance.blend(existing, update, alpha: alpha);
+  }) => Appearance.blend(existing, update, alpha: alpha);
 }
 
 class _RememberState {
@@ -243,16 +244,14 @@ class ObjectMemoryService {
     return s;
   }
 
-  bool contains(String rawName) =>
-      _items.containsKey(normalizeName(rawName));
+  bool contains(String rawName) => _items.containsKey(normalizeName(rawName));
 
   RememberedObject? get(String rawName) => _items[normalizeName(rawName)];
 
   Future<bool> startRemember(String rawName) async {
     final name = normalizeName(rawName);
     if (name.isEmpty) return false;
-    if (!_items.containsKey(name) &&
-        _items.length >= kObjectMemoryMaxItems) {
+    if (!_items.containsKey(name) && _items.length >= kObjectMemoryMaxItems) {
       _tts?.say(
         S.get('obj_remember_capacity'),
         SpeechPriority.warning,
@@ -301,11 +300,7 @@ class ObjectMemoryService {
         kObjectMemoryRememberTimeoutMs;
   }
 
-  Float32List? _bestTrackEmbedding(
-    List<Track> tracks,
-    int imgW,
-    int imgH,
-  ) {
+  Float32List? _bestTrackEmbedding(List<Track> tracks, int imgW, int imgH) {
     final w = imgW.toDouble();
     final h = imgH.toDouble();
     final marginX = w * (1 - kObjectMemoryRememberCentralityRatio) / 2;
@@ -416,11 +411,7 @@ class ObjectMemoryService {
 
   void _failRemember() {
     _remember = null;
-    _tts?.say(
-      S.get('obj_remember_failed'),
-      SpeechPriority.info,
-      pan: 0.0,
-    );
+    _tts?.say(S.get('obj_remember_failed'), SpeechPriority.info, pan: 0.0);
     _earcon?.play(Earcon.fail);
   }
 

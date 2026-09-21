@@ -71,23 +71,23 @@ enum VoiceCommand {
   manageLanguagePacks,
   enableKkV2,
   disableKkV2,
-  
+
   recordTrail,
   replayTrail,
   stopTrailRecord,
   addTrailLandmark,
   deleteTrail,
-  
+
   toggleBazaarMode,
   toggleLivestockMode,
-  
+
   toggleVoiceAdaptation,
   clearAdaptationData,
-  
+
   toggleMeshBuddy,
-  
+
   recordNearMiss,
-  
+
   toggleSonar,
   dominantHandRight,
   dominantHandLeft,
@@ -226,41 +226,37 @@ class VoiceCommandService {
     'управление пакетами': VoiceCommand.manageLanguagePacks,
     'управление языками': VoiceCommand.manageLanguagePacks,
     'настройки языков': VoiceCommand.manageLanguagePacks,
-    'включи улучшенное распознавание':
-        VoiceCommand.enableKkV2,
+    'включи улучшенное распознавание': VoiceCommand.enableKkV2,
     'улучшенное распознавание': VoiceCommand.enableKkV2,
-    'новое казахское распознавание':
-        VoiceCommand.enableKkV2,
-    'выключи улучшенное распознавание':
-        VoiceCommand.disableKkV2,
-    'обычное казахское распознавание':
-        VoiceCommand.disableKkV2,
+    'новое казахское распознавание': VoiceCommand.enableKkV2,
+    'выключи улучшенное распознавание': VoiceCommand.disableKkV2,
+    'обычное казахское распознавание': VoiceCommand.disableKkV2,
     'старое распознавание': VoiceCommand.disableKkV2,
-    
+
     'стоп маршрут': VoiceCommand.stopTrailRecord,
     'остановить маршрут': VoiceCommand.stopTrailRecord,
     'стоп запись маршрута': VoiceCommand.stopTrailRecord,
-    
+
     'режим базар': VoiceCommand.toggleBazaarMode,
     'базарный режим': VoiceCommand.toggleBazaarMode,
     'режим рынок': VoiceCommand.toggleBazaarMode,
     'режим животные': VoiceCommand.toggleLivestockMode,
     'режим скот': VoiceCommand.toggleLivestockMode,
-    
+
     'адаптация голоса': VoiceCommand.toggleVoiceAdaptation,
     'включи адаптацию': VoiceCommand.toggleVoiceAdaptation,
     'выключи адаптацию': VoiceCommand.toggleVoiceAdaptation,
     'удалить данные адаптации': VoiceCommand.clearAdaptationData,
     'очистить адаптацию': VoiceCommand.clearAdaptationData,
-    
+
     'сеть помощников': VoiceCommand.toggleMeshBuddy,
     'режим помощников': VoiceCommand.toggleMeshBuddy,
     'меш сеть': VoiceCommand.toggleMeshBuddy,
-    
+
     'опасная ситуация': VoiceCommand.recordNearMiss,
     'записать опасность': VoiceCommand.recordNearMiss,
     'было опасно': VoiceCommand.recordNearMiss,
-    
+
     'эхолот': VoiceCommand.toggleSonar,
     'режим эхолота': VoiceCommand.toggleSonar,
     'сонар': VoiceCommand.toggleSonar,
@@ -306,7 +302,6 @@ class VoiceCommandService {
     'звони 112',
   };
 
-  
   static const Set<String> _ruCancelFallExact = {
     'я в порядке',
     'всё хорошо',
@@ -346,7 +341,6 @@ class VoiceCommandService {
     'на автобусе в ',
   ];
 
-  
   static const List<String> _ruRecordTrailPrefixes = [
     'запиши маршрут до ',
     'запиши маршрут в ',
@@ -529,24 +523,24 @@ class VoiceCommandService {
     'жаңа қазақша тану': VoiceCommand.enableKkV2,
     'қарапайым қазақша тану': VoiceCommand.disableKkV2,
     'ескі тану': VoiceCommand.disableKkV2,
-    
+
     'маршрутты тоқтат': VoiceCommand.stopTrailRecord,
     'жазуды тоқтат': VoiceCommand.stopTrailRecord,
-    
+
     'базар режимі': VoiceCommand.toggleBazaarMode,
     'нарық режимі': VoiceCommand.toggleBazaarMode,
     'мал режимі': VoiceCommand.toggleLivestockMode,
     'жануарлар режимі': VoiceCommand.toggleLivestockMode,
-    
+
     'дауыс бейімдеу': VoiceCommand.toggleVoiceAdaptation,
     'бейімдеу деректерін жою': VoiceCommand.clearAdaptationData,
-    
+
     'көмекшілер желісі': VoiceCommand.toggleMeshBuddy,
     'көмекшілер режимі': VoiceCommand.toggleMeshBuddy,
-    
+
     'қауіпті жағдай': VoiceCommand.recordNearMiss,
     'қауіпті жаз': VoiceCommand.recordNearMiss,
-    
+
     'эхолот': VoiceCommand.toggleSonar,
     'эхолот режимі': VoiceCommand.toggleSonar,
     'сонар': VoiceCommand.toggleSonar,
@@ -584,7 +578,6 @@ class VoiceCommandService {
     'жәрдем шұғыл',
   };
 
-  
   static const Set<String> _kkCancelFallExact = {
     'мен жақсымын',
     'мен дұрыспын',
@@ -621,7 +614,6 @@ class VoiceCommandService {
     'автобус қашан ',
   ];
 
-  
   static const List<String> _kkRecordTrailPrefixes = [
     'маршрутты жаз ',
     'жолды жаз ',
@@ -634,10 +626,7 @@ class VoiceCommandService {
     'ішкі маршрут ',
   ];
 
-  static const List<String> _kkLandmarkPrefixes = [
-    'белгі ',
-    'нүкте ',
-  ];
+  static const List<String> _kkLandmarkPrefixes = ['белгі ', 'нүкте '];
 
   static const List<String> _kkDeleteTrailPrefixes = [
     'маршрутты жой ',
@@ -657,11 +646,7 @@ class VoiceCommandService {
     'тап ',
   ];
 
-  static const List<String> _kkForgetPrefixes = [
-    'ұмыт ',
-    'жой ',
-    'өшір ',
-  ];
+  static const List<String> _kkForgetPrefixes = ['ұмыт ', 'жой ', 'өшір '];
 
   static const Set<String> _kkCancelFindExact = {
     'іздеуді тоқтат',
@@ -769,30 +754,30 @@ class VoiceCommandService {
     'new kazakh recognition': VoiceCommand.enableKkV2,
     'standard kazakh': VoiceCommand.disableKkV2,
     'legacy kazakh recognition': VoiceCommand.disableKkV2,
-    
+
     'stop trail': VoiceCommand.stopTrailRecord,
     'stop recording trail': VoiceCommand.stopTrailRecord,
     'stop trail recording': VoiceCommand.stopTrailRecord,
-    
+
     'bazaar mode': VoiceCommand.toggleBazaarMode,
     'market mode': VoiceCommand.toggleBazaarMode,
     'livestock mode': VoiceCommand.toggleLivestockMode,
     'animal mode': VoiceCommand.toggleLivestockMode,
-    
+
     'voice adaptation': VoiceCommand.toggleVoiceAdaptation,
     'toggle adaptation': VoiceCommand.toggleVoiceAdaptation,
     'clear adaptation data': VoiceCommand.clearAdaptationData,
     'delete adaptation data': VoiceCommand.clearAdaptationData,
-    
+
     'buddy network': VoiceCommand.toggleMeshBuddy,
     'mesh network': VoiceCommand.toggleMeshBuddy,
     'toggle buddy': VoiceCommand.toggleMeshBuddy,
-    
+
     'near miss': VoiceCommand.recordNearMiss,
     'record hazard': VoiceCommand.recordNearMiss,
     'record near miss': VoiceCommand.recordNearMiss,
     'it was dangerous': VoiceCommand.recordNearMiss,
-    
+
     'sonar': VoiceCommand.toggleSonar,
     'sonar mode': VoiceCommand.toggleSonar,
     'echolocation': VoiceCommand.toggleSonar,
@@ -823,7 +808,6 @@ class VoiceCommandService {
     'call 112',
   };
 
-  
   static const Set<String> _enCancelFallExact = {
     'i am fine',
     "i'm fine",
@@ -870,7 +854,6 @@ class VoiceCommandService {
     'when is bus ',
   ];
 
-  
   static const List<String> _enRecordTrailPrefixes = [
     'record trail to ',
     'record path to ',
@@ -887,10 +870,7 @@ class VoiceCommandService {
     'follow trail ',
   ];
 
-  static const List<String> _enLandmarkPrefixes = [
-    'landmark ',
-    'mark ',
-  ];
+  static const List<String> _enLandmarkPrefixes = ['landmark ', 'mark '];
 
   static const List<String> _enDeleteTrailPrefixes = [
     'delete trail ',
@@ -939,7 +919,6 @@ class VoiceCommandService {
     'end search',
   };
 
-  
   bool _continuous = false;
   DateTime _continuousDeadline = DateTime.fromMillisecondsSinceEpoch(0);
 
@@ -967,8 +946,7 @@ class VoiceCommandService {
     } catch (e) {
       _available = false;
     }
-    
-    
+
     unawaited(_reconcileVoskRouting());
     return _available;
   }
@@ -989,8 +967,7 @@ class VoiceCommandService {
   void setLocale(String bcp47) {
     if (_locale == bcp47) return;
     _locale = bcp47;
-    
-    
+
     unawaited(_reconcileVoskRouting());
   }
 
@@ -1033,8 +1010,6 @@ class VoiceCommandService {
   }
 
   Future<void> _reconcileVoskRouting() async {
-    
-    
     final pending = _reconcileFuture;
     if (pending != null) {
       await pending;
@@ -1085,11 +1060,9 @@ class VoiceCommandService {
   void _onVoskResult(String text) {
     final cleaned = text.trim();
     debugPrint('VoiceCommandService(vosk-kk) recognized: "$cleaned"');
-    
-    
+
     _processResult(cleaned);
-    
-    
+
     if (!_continuous && _vosk.isListening) {
       unawaited(_vosk.stop());
       _setListening(false);
@@ -1156,8 +1129,6 @@ class VoiceCommandService {
     if (!_vosk.isReady) {
       final ok = await _initVoskIfNeeded();
       if (!ok) {
-        
-        
         _useVoskForKk = false;
         return _listenInternal(listenFor: listenFor);
       }
@@ -1169,8 +1140,6 @@ class VoiceCommandService {
     }
     _setListening(true);
     if (!_continuous) {
-      
-      
       Future<void>.delayed(listenFor, () async {
         if (_continuous) return;
         if (_vosk.isListening) {
@@ -1192,30 +1161,24 @@ class VoiceCommandService {
     return startListening(listenFor: listenFor, pauseFor: pauseFor);
   }
 
-  
   void extendContinuousDeadline(Duration newSessionDuration) {
     if (!_continuous) return;
     final newDeadline = DateTime.now().add(newSessionDuration);
     if (newDeadline.isAfter(_continuousDeadline)) {
       _continuousDeadline = newDeadline;
     } else {
-      
-      
       _continuousDeadline = newDeadline;
     }
   }
 
-  
   DateTime get continuousDeadline => _continuousDeadline;
 
-  
   bool get isContinuousActive =>
       _continuous && DateTime.now().isBefore(_continuousDeadline);
 
   Future<void> stopListening() async {
     _continuous = false;
-    
-    
+
     _continuousDeadline = DateTime.fromMillisecondsSinceEpoch(0);
     if (_useVoskForKk && _vosk.isListening) {
       await _vosk.stop();
@@ -1323,8 +1286,8 @@ class VoiceCommandService {
       sorted = _ruSorted;
     }
 
-    
-    if (cancelSet.contains(lower) || _matchesFallCancelKeyword(lower, isKk: isKk, isEn: isEn)) {
+    if (cancelSet.contains(lower) ||
+        _matchesFallCancelKeyword(lower, isKk: isKk, isEn: isEn)) {
       onCommand?.call(VoiceCommand.cancelFall);
       return;
     }
@@ -1358,7 +1321,6 @@ class VoiceCommandService {
       }
     }
 
-    
     for (final prefix in recordTrailPrefixes) {
       if (lower.startsWith(prefix)) {
         final name = lower.substring(prefix.length).trim();
@@ -1468,11 +1430,13 @@ class VoiceCommandService {
   /// Fire-and-forget: record successful voice command for future
   /// on-device ASR adaptation (Phase 1 / Direction 12).
   void _recordAdaptation(String transcript, String commandId) {
-    unawaited(VoiceAdaptationStore.instance.record(
-      locale: _locale,
-      transcript: transcript,
-      commandId: commandId,
-    ));
+    unawaited(
+      VoiceAdaptationStore.instance.record(
+        locale: _locale,
+        transcript: transcript,
+        commandId: commandId,
+      ),
+    );
   }
 
   @visibleForTesting
@@ -1486,15 +1450,14 @@ class VoiceCommandService {
     }
   }
 
-  
   static const List<String> _ruCancelFallKeywords = <String>[
-    'порядк', 
-    'норм', 
-    'хорош', 
-    'ложн', 
-    'не пада', 
-    'не упа', 
-    'не упал', 
+    'порядк',
+    'норм',
+    'хорош',
+    'ложн',
+    'не пада',
+    'не упа',
+    'не упал',
     'ничего не случил',
     'это не паден',
     'нет проблем',
@@ -1506,15 +1469,13 @@ class VoiceCommandService {
   ];
 
   static const List<String> _kkCancelFallKeywords = <String>[
-    'жақсы', 
-    'дұрыс', 
-    'жалған', 
-    'құлама', 
+    'жақсы',
+    'дұрыс',
+    'жалған',
+    'құлама',
     'құлаған жоқ',
     'мәселе жоқ',
     'еш нәрсе',
-    
-    
   ];
 
   static const List<String> _enCancelFallKeywords = <String>[
@@ -1529,14 +1490,12 @@ class VoiceCommandService {
     'no problem',
     'no problems',
     'false alarm',
-    
-    
+
     'nothing happened',
     'all good',
     'i am good',
   ];
 
-  
   static bool _matchesFallCancelKeyword(
     String lower, {
     required bool isKk,
@@ -1545,8 +1504,8 @@ class VoiceCommandService {
     final keywords = isEn
         ? _enCancelFallKeywords
         : isKk
-            ? _kkCancelFallKeywords
-            : _ruCancelFallKeywords;
+        ? _kkCancelFallKeywords
+        : _ruCancelFallKeywords;
     for (final kw in keywords) {
       if (lower.contains(kw)) return true;
     }

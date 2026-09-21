@@ -33,8 +33,8 @@ class IndoorTrailRecorder {
     required this.indoorGate,
     IndoorTrailStore? store,
     Duration pollInterval = const Duration(milliseconds: 250),
-  })  : _store = store ?? IndoorTrailStore.instance,
-        _pollInterval = pollInterval;
+  }) : _store = store ?? IndoorTrailStore.instance,
+       _pollInterval = pollInterval;
 
   final CompassService compass;
   final StepService steps;
@@ -89,8 +89,7 @@ class IndoorTrailRecorder {
       return false;
     }
     if (!Settings.instance.indoorTrailMemory) {
-      FieldLogger.instance
-          .logIndoorTrail('start_blocked_flag_off');
+      FieldLogger.instance.logIndoorTrail('start_blocked_flag_off');
       return false;
     }
     if (!allowOutdoor && indoorGate.state == IndoorState.street) {
@@ -120,10 +119,10 @@ class IndoorTrailRecorder {
     _attachSensors();
     _pollTimer = Timer.periodic(_pollInterval, (_) => _tick());
 
-    FieldLogger.instance.logIndoorTrail('start', data: {
-      'lang': langCode,
-      'indoor': indoorGate.state.name,
-    });
+    FieldLogger.instance.logIndoorTrail(
+      'start',
+      data: {'lang': langCode, 'indoor': indoorGate.state.name},
+    );
     return true;
   }
 
@@ -199,42 +198,44 @@ class IndoorTrailRecorder {
     _state = IndoorTrailRecorderState.idle;
   }
 
-  
   void _attachSensors() {
     try {
-      _accelSub = accelerometerEventStream(
-        samplingPeriod: const Duration(milliseconds: 80),
-      ).listen((event) {
-        final m = math.sqrt(event.x * event.x +
-            event.y * event.y +
-            event.z * event.z);
-        _accelMagEma = _accelMagEma == 0 ? m : _accelMagEma * 0.7 + m * 0.3;
-      }, onError: (_) {});
+      _accelSub =
+          accelerometerEventStream(
+            samplingPeriod: const Duration(milliseconds: 80),
+          ).listen((event) {
+            final m = math.sqrt(
+              event.x * event.x + event.y * event.y + event.z * event.z,
+            );
+            _accelMagEma = _accelMagEma == 0 ? m : _accelMagEma * 0.7 + m * 0.3;
+          }, onError: (_) {});
     } catch (e) {
       debugPrint('IndoorTrailRecorder: accel attach failed: $e');
     }
     try {
-      _gyroSub = gyroscopeEventStream(
-        samplingPeriod: const Duration(milliseconds: 80),
-      ).listen((event) {
-        final m = math.sqrt(event.x * event.x +
-            event.y * event.y +
-            event.z * event.z);
-        _gyroMagEma = _gyroMagEma == 0 ? m : _gyroMagEma * 0.7 + m * 0.3;
-      }, onError: (_) {});
+      _gyroSub =
+          gyroscopeEventStream(
+            samplingPeriod: const Duration(milliseconds: 80),
+          ).listen((event) {
+            final m = math.sqrt(
+              event.x * event.x + event.y * event.y + event.z * event.z,
+            );
+            _gyroMagEma = _gyroMagEma == 0 ? m : _gyroMagEma * 0.7 + m * 0.3;
+          }, onError: (_) {});
     } catch (e) {
       debugPrint('IndoorTrailRecorder: gyro attach failed: $e');
     }
     try {
-      _magSub = magnetometerEventStream(
-        samplingPeriod: const Duration(milliseconds: 120),
-      ).listen((event) {
-        final m = math.sqrt(event.x * event.x +
-            event.y * event.y +
-            event.z * event.z);
-        _magMagEma = _magMagEma == 0 ? m : _magMagEma * 0.6 + m * 0.4;
-        _hasMag = true;
-      }, onError: (_) {});
+      _magSub =
+          magnetometerEventStream(
+            samplingPeriod: const Duration(milliseconds: 120),
+          ).listen((event) {
+            final m = math.sqrt(
+              event.x * event.x + event.y * event.y + event.z * event.z,
+            );
+            _magMagEma = _magMagEma == 0 ? m : _magMagEma * 0.6 + m * 0.4;
+            _hasMag = true;
+          }, onError: (_) {});
     } catch (e) {
       debugPrint('IndoorTrailRecorder: magnetometer attach failed: $e');
     }
@@ -257,8 +258,6 @@ class IndoorTrailRecorder {
     _lastSeenStepCount = current;
     if (deltaSteps <= 0) return;
     if (!_hasMag) {
-      
-      
       return;
     }
     final stepIndex = current - _baseStepCount;
@@ -276,7 +275,6 @@ class IndoorTrailRecorder {
     _pendingLandmark = null;
   }
 
-  
   @visibleForTesting
   void debugInjectSample(IndoorTrailSample s) {
     _samples.add(s);

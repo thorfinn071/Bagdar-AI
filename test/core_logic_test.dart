@@ -77,6 +77,18 @@ class _StubDepthProvider implements DepthProvider {
   }) async => const [];
 
   @override
+  Future<DepthAnalysisResult> analyzeDetailed(
+    CameraImage image, {
+    double cropTopFrac = 0.40,
+    bool userStationary = false,
+    bool weatherDegraded = false,
+    bool winterMode = false,
+    int sourceTimestampUs = 0,
+    int rotationDegrees = 0,
+    bool mirrored = false,
+  }) async => wrapHazardsAsLegacy(const <DepthHazard>[]);
+
+  @override
   bool get nativeBridgeEnabled => _nativeBridgeEnabled;
 
   @override
@@ -119,7 +131,6 @@ void main() {
     AppStrings.setLanguage(AppLanguage.ru);
   });
 
-  
   group('posFromCx', () {
     const w = 640.0;
 
@@ -145,7 +156,6 @@ void main() {
     });
   });
 
-  
   group('clockDir', () {
     const w = 640.0;
 
@@ -184,31 +194,33 @@ void main() {
     });
   });
 
-  
   group('threatScore', () {
     test('very-close object scores higher than close', () {
       final scoreVc = threatScore('person', 'center', 'very close', 0.20);
-      final scoreC  = threatScore('person', 'center', 'close',      0.20);
+      final scoreC = threatScore('person', 'center', 'close', 0.20);
       expect(scoreVc, greaterThan(scoreC));
     });
 
     test('close scores higher than far', () {
       final scoreC = threatScore('car', 'center', 'close', 0.10);
-      final scoreF = threatScore('car', 'center', 'far',   0.10);
+      final scoreF = threatScore('car', 'center', 'far', 0.10);
       expect(scoreC, greaterThan(scoreF));
     });
 
     test('centre position scores higher than side (equal dist)', () {
       final scoreCenter = threatScore('car', 'center', 'close', 0.15);
-      final scoreLeft   = threatScore('car', 'left',   'close', 0.15);
+      final scoreLeft = threatScore('car', 'left', 'close', 0.15);
       expect(scoreCenter, greaterThan(scoreLeft));
     });
 
-    test('high-weight class (car) > low-weight class (backpack) at same dist', () {
-      final scoreCar  = threatScore('car',     'center', 'close', 0.10);
-      final scoreBack = threatScore('backpack', 'center', 'close', 0.10);
-      expect(scoreCar, greaterThan(scoreBack));
-    });
+    test(
+      'high-weight class (car) > low-weight class (backpack) at same dist',
+      () {
+        final scoreCar = threatScore('car', 'center', 'close', 0.10);
+        final scoreBack = threatScore('backpack', 'center', 'close', 0.10);
+        expect(scoreCar, greaterThan(scoreBack));
+      },
+    );
 
     test('larger area ratio increases score', () {
       final scoreSmall = threatScore('person', 'center', 'close', 0.05);
@@ -217,12 +229,13 @@ void main() {
     });
 
     test('score is always non-negative', () {
-      expect(threatScore('unknown_label', 'left', 'far', 0.0),
-          greaterThanOrEqualTo(0.0));
+      expect(
+        threatScore('unknown_label', 'left', 'far', 0.0),
+        greaterThanOrEqualTo(0.0),
+      );
     });
   });
 
-  
   group('SOS phone number validation (digit count)', () {
     bool isValidPhone(String phone) {
       final digits = phone.replaceAll(RegExp(r'\D'), '');
@@ -254,12 +267,10 @@ void main() {
     });
   });
 
-  
   group('GroundPlaneAnalyzer', () {
     final analyzer = GroundPlaneAnalyzer();
-    const size = GroundPlaneAnalyzer.kMapSize; 
+    const size = GroundPlaneAnalyzer.kMapSize;
 
-    
     setUp(analyzer.resetTemporalFilter);
 
     Float32List makeFlat(double value) {
@@ -305,7 +316,10 @@ void main() {
       analyzer.analyze(map);
       final result = analyzer.analyze(map);
       expect(
-        result.any((h) => h.zone == HazardZone.center && h.type == DepthHazardType.deadZone),
+        result.any(
+          (h) =>
+              h.zone == HazardZone.center && h.type == DepthHazardType.deadZone,
+        ),
         isTrue,
       );
     });
@@ -324,7 +338,6 @@ void main() {
     });
   });
 
-  
   group('BatteryMonitor', () {
     test('battery level thresholds map to the intended throttle tiers', () {
       expect(BatteryMonitor.levelForBatteryLevel(100), ThrottleLevel.normal);
@@ -337,7 +350,6 @@ void main() {
     });
   });
 
-  
   group('AlertFilter', () {
     late AlertFilter filter;
     final t0 = DateTime(2025, 1, 1, 12, 0, 0);
@@ -350,14 +362,13 @@ void main() {
       AlertCategory category = AlertCategory.obstacleFar,
       double urgency = 0.5,
       double pan = 0.0,
-    }) =>
-        AlertCandidate(
-          text: text,
-          priority: priority,
-          pan: pan,
-          category: category,
-          urgency: urgency,
-        );
+    }) => AlertCandidate(
+      text: text,
+      priority: priority,
+      pan: pan,
+      category: category,
+      urgency: urgency,
+    );
 
     test('empty filter returns null', () {
       expect(filter.flush(0, t0), isNull);
@@ -372,26 +383,48 @@ void main() {
 
     test('highest priority wins', () {
       filter
-        ..add(makeCandidate(priority: SpeechPriority.info,     text: 'info'))
+        ..add(makeCandidate(priority: SpeechPriority.info, text: 'info'))
         ..add(makeCandidate(priority: SpeechPriority.critical, text: 'crit'))
-        ..add(makeCandidate(priority: SpeechPriority.warning,  text: 'warn'));
+        ..add(makeCandidate(priority: SpeechPriority.warning, text: 'warn'));
       final result = filter.flush(1, t0);
       expect(result!.text, 'crit');
     });
 
     test('same priority — higher urgency wins', () {
       filter
-        ..add(makeCandidate(priority: SpeechPriority.warning, urgency: 0.3, text: 'low'))
-        ..add(makeCandidate(priority: SpeechPriority.warning, urgency: 0.9, text: 'high'));
+        ..add(
+          makeCandidate(
+            priority: SpeechPriority.warning,
+            urgency: 0.3,
+            text: 'low',
+          ),
+        )
+        ..add(
+          makeCandidate(
+            priority: SpeechPriority.warning,
+            urgency: 0.9,
+            text: 'high',
+          ),
+        );
       final result = filter.flush(1, t0);
       expect(result!.text, 'high');
     });
 
     test('critical alerts bypass cooldown and suppression', () {
-      filter.add(makeCandidate(priority: SpeechPriority.critical, category: AlertCategory.obstacleFar));
-      filter.flush(1, t0); 
-      filter.add(makeCandidate(priority: SpeechPriority.critical, category: AlertCategory.obstacleClose));
-      
+      filter.add(
+        makeCandidate(
+          priority: SpeechPriority.critical,
+          category: AlertCategory.obstacleFar,
+        ),
+      );
+      filter.flush(1, t0);
+      filter.add(
+        makeCandidate(
+          priority: SpeechPriority.critical,
+          category: AlertCategory.obstacleClose,
+        ),
+      );
+
       final result = filter.flush(1, t0.add(const Duration(milliseconds: 500)));
       expect(result, isNotNull);
       expect(result!.priority, SpeechPriority.critical);
@@ -399,9 +432,9 @@ void main() {
 
     test('after critical, warning suppressed for 2 s', () {
       filter.add(makeCandidate(priority: SpeechPriority.critical));
-      filter.flush(1, t0); 
+      filter.flush(1, t0);
       filter.add(makeCandidate(priority: SpeechPriority.warning));
-      
+
       final result = filter.flush(1, t0.add(const Duration(seconds: 1)));
       expect(result, isNull);
     });
@@ -409,8 +442,13 @@ void main() {
     test('after critical, warning passes after 2 s suppression', () {
       filter.add(makeCandidate(priority: SpeechPriority.critical));
       filter.flush(1, t0);
-      
-      filter.add(makeCandidate(priority: SpeechPriority.warning, category: AlertCategory.navigationHint));
+
+      filter.add(
+        makeCandidate(
+          priority: SpeechPriority.warning,
+          category: AlertCategory.navigationHint,
+        ),
+      );
       final result = filter.flush(1, t0.add(const Duration(seconds: 3)));
       expect(result, isNotNull);
     });
@@ -434,139 +472,157 @@ void main() {
     });
 
     test('navigationHint suppressed when 3+ tracks', () {
-      filter.add(makeCandidate(
-        priority: SpeechPriority.info,
-        category: AlertCategory.navigationHint,
-      ));
+      filter.add(
+        makeCandidate(
+          priority: SpeechPriority.info,
+          category: AlertCategory.navigationHint,
+        ),
+      );
       final result = filter.flush(3, t0);
       expect(result, isNull);
     });
 
     test('reset clears state — candidate fires immediately after reset', () {
       filter.add(makeCandidate(priority: SpeechPriority.warning));
-      filter.flush(1, t0); 
+      filter.flush(1, t0);
       filter.reset();
-      
+
       filter.add(makeCandidate(priority: SpeechPriority.warning));
       final result = filter.flush(1, t0);
       expect(result, isNotNull);
     });
 
-    
     test('per-category cooldown: same category blocked, different category '
         'passes', () {
-      filter.add(makeCandidate(
-        priority: SpeechPriority.warning,
-        category: AlertCategory.obstacleClose,
-        text: 'pedestrian1',
-      ));
+      filter.add(
+        makeCandidate(
+          priority: SpeechPriority.warning,
+          category: AlertCategory.obstacleClose,
+          text: 'pedestrian1',
+        ),
+      );
       final first = filter.flush(1, t0);
       expect(first!.text, 'pedestrian1');
 
-      
-      filter.add(makeCandidate(
-        priority: SpeechPriority.warning,
-        category: AlertCategory.obstacleClose,
-        text: 'pedestrian2',
-      ));
-      filter.add(makeCandidate(
-        priority: SpeechPriority.warning,
-        category: AlertCategory.approachingVehicle,
-        text: 'cyclist',
-      ));
+      filter.add(
+        makeCandidate(
+          priority: SpeechPriority.warning,
+          category: AlertCategory.obstacleClose,
+          text: 'pedestrian2',
+        ),
+      );
+      filter.add(
+        makeCandidate(
+          priority: SpeechPriority.warning,
+          category: AlertCategory.approachingVehicle,
+          text: 'cyclist',
+        ),
+      );
       final second = filter.flush(
-        1, t0.add(const Duration(milliseconds: 1600)));
+        1,
+        t0.add(const Duration(milliseconds: 1600)),
+      );
       expect(second, isNotNull);
-      
-      
+
       expect(second!.category, AlertCategory.approachingVehicle);
       expect(second.text, 'cyclist');
     });
 
     test('per-category cooldown: crowd scene does not silence an '
         'approaching vehicle', () {
-      
       var now = t0;
       for (var i = 0; i < 5; i++) {
-        filter.add(makeCandidate(
-          priority: SpeechPriority.warning,
-          category: AlertCategory.obstacleClose,
-          text: 'pedestrian$i',
-        ));
+        filter.add(
+          makeCandidate(
+            priority: SpeechPriority.warning,
+            category: AlertCategory.obstacleClose,
+            text: 'pedestrian$i',
+          ),
+        );
         filter.flush(5, now);
         now = now.add(const Duration(milliseconds: 400));
       }
-      
-      
-      filter.add(makeCandidate(
-        priority: SpeechPriority.warning,
-        category: AlertCategory.approachingVehicle,
-        text: 'cyclist',
-      ));
+
+      filter.add(
+        makeCandidate(
+          priority: SpeechPriority.warning,
+          category: AlertCategory.approachingVehicle,
+          text: 'cyclist',
+        ),
+      );
       final result = filter.flush(5, now);
       expect(result, isNotNull);
       expect(result!.category, AlertCategory.approachingVehicle);
     });
 
     test('critical bypasses per-category cooldown', () {
-      filter.add(makeCandidate(
-        priority: SpeechPriority.warning,
-        category: AlertCategory.obstacleClose,
-      ));
+      filter.add(
+        makeCandidate(
+          priority: SpeechPriority.warning,
+          category: AlertCategory.obstacleClose,
+        ),
+      );
       filter.flush(1, t0);
 
-      
-      filter.add(makeCandidate(
-        priority: SpeechPriority.critical,
-        category: AlertCategory.obstacleClose,
-        text: 'critical obstacle',
-      ));
-      final result = filter.flush(
-        1, t0.add(const Duration(milliseconds: 100)));
+      filter.add(
+        makeCandidate(
+          priority: SpeechPriority.critical,
+          category: AlertCategory.obstacleClose,
+          text: 'critical obstacle',
+        ),
+      );
+      final result = filter.flush(1, t0.add(const Duration(milliseconds: 100)));
       expect(result, isNotNull);
       expect(result!.text, 'critical obstacle');
     });
 
     test('when top-priority candidate is on cooldown, lower-priority '
         'candidate in a different category is picked', () {
-      
-      filter.add(makeCandidate(
-        priority: SpeechPriority.warning,
-        category: AlertCategory.obstacleClose,
-      ));
+      filter.add(
+        makeCandidate(
+          priority: SpeechPriority.warning,
+          category: AlertCategory.obstacleClose,
+        ),
+      );
       filter.flush(1, t0);
 
-      
-      filter.add(makeCandidate(
-        priority: SpeechPriority.warning,
-        category: AlertCategory.obstacleClose,
-        text: 'blocked',
-      ));
-      filter.add(makeCandidate(
-        priority: SpeechPriority.info,
-        category: AlertCategory.obstacleFar,
-        text: 'info',
-        urgency: 0.6,
-      ));
+      filter.add(
+        makeCandidate(
+          priority: SpeechPriority.warning,
+          category: AlertCategory.obstacleClose,
+          text: 'blocked',
+        ),
+      );
+      filter.add(
+        makeCandidate(
+          priority: SpeechPriority.info,
+          category: AlertCategory.obstacleFar,
+          text: 'info',
+          urgency: 0.6,
+        ),
+      );
       final result = filter.flush(
-        1, t0.add(const Duration(milliseconds: 1600)));
+        1,
+        t0.add(const Duration(milliseconds: 1600)),
+      );
       expect(result, isNotNull);
       expect(result!.text, 'info');
     });
   });
 
-  
   group('FusionEngine', () {
     late FusionEngine engine;
     final t0 = DateTime(2025, 1, 1, 12, 0, 0);
 
-    DepthHazard makeHazard(double score, [HazardZone zone = HazardZone.center]) =>
-        DepthHazard(
-          midasScore: score,
-          type:       DepthHazardType.stepDown,
-          zone:       zone,
-          coverage:   0.5,
-        );
+    DepthHazard makeHazard(
+      double score, [
+      HazardZone zone = HazardZone.center,
+    ]) => DepthHazard(
+      midasScore: score,
+      type: DepthHazardType.stepDown,
+      zone: zone,
+      coverage: 0.5,
+    );
 
     setUp(() => engine = FusionEngine());
 
@@ -584,29 +640,34 @@ void main() {
       expect(result!.level, AlertLevel.warning);
     });
 
-    test('score at critical threshold but only 1 frame → warning (not critical)', () {
-      final result = engine.evaluate(
-        hazard: makeHazard(FusionEngine.kCriticalThreshold),
-        now: t0,
-      );
-      
-      expect(result!.level, AlertLevel.warning);
-    });
-
-    test('score at critical for kTemporalFrames consecutive frames → critical', () {
-      
-      var t = t0;
-      AlertLevel? lastLevel;
-      for (int i = 0; i < kFusionTemporalFrames; i++) {
-        final r = engine.evaluate(
+    test(
+      'score at critical threshold but only 1 frame → warning (not critical)',
+      () {
+        final result = engine.evaluate(
           hazard: makeHazard(FusionEngine.kCriticalThreshold),
-          now: t,
+          now: t0,
         );
-        lastLevel = r?.level;
-        t = t.add(const Duration(seconds: 4));
-      }
-      expect(lastLevel, AlertLevel.critical);
-    });
+
+        expect(result!.level, AlertLevel.warning);
+      },
+    );
+
+    test(
+      'score at critical for kTemporalFrames consecutive frames → critical',
+      () {
+        var t = t0;
+        AlertLevel? lastLevel;
+        for (int i = 0; i < kFusionTemporalFrames; i++) {
+          final r = engine.evaluate(
+            hazard: makeHazard(FusionEngine.kCriticalThreshold),
+            now: t,
+          );
+          lastLevel = r?.level;
+          t = t.add(const Duration(seconds: 4));
+        }
+        expect(lastLevel, AlertLevel.critical);
+      },
+    );
 
     test('cooldown: second call within 3 s returns null', () {
       engine.evaluate(hazard: makeHazard(0.40), now: t0);
@@ -618,13 +679,18 @@ void main() {
     });
 
     test('zone change clears history — critical resets to 1 frame', () {
-      
-      engine.evaluate(hazard: makeHazard(FusionEngine.kCriticalThreshold, HazardZone.center), now: t0);
+      engine.evaluate(
+        hazard: makeHazard(FusionEngine.kCriticalThreshold, HazardZone.center),
+        now: t0,
+      );
       final t1 = t0.add(const Duration(seconds: 4));
-      
-      engine.evaluate(hazard: makeHazard(FusionEngine.kCriticalThreshold, HazardZone.left), now: t1);
+
+      engine.evaluate(
+        hazard: makeHazard(FusionEngine.kCriticalThreshold, HazardZone.left),
+        now: t1,
+      );
       final t2 = t1.add(const Duration(seconds: 4));
-      
+
       final result = engine.evaluate(
         hazard: makeHazard(FusionEngine.kCriticalThreshold, HazardZone.center),
         now: t2,
@@ -633,14 +699,17 @@ void main() {
     });
 
     test('reset clears history — critical no longer fires', () {
-      engine.evaluate(hazard: makeHazard(FusionEngine.kCriticalThreshold), now: t0);
+      engine.evaluate(
+        hazard: makeHazard(FusionEngine.kCriticalThreshold),
+        now: t0,
+      );
       engine.reset();
       final t1 = t0.add(const Duration(seconds: 4));
       final result = engine.evaluate(
         hazard: makeHazard(FusionEngine.kCriticalThreshold),
         now: t1,
       );
-      expect(result!.level, AlertLevel.warning); 
+      expect(result!.level, AlertLevel.warning);
     });
 
     test('fusionScore clamped to 1.0', () {
@@ -649,7 +718,6 @@ void main() {
     });
   });
 
-  
   group('DeviceCapabilities', () {
     test('hardware tier is preserved', () {
       const caps = DeviceCapabilities(
@@ -694,7 +762,6 @@ void main() {
     });
   });
 
-  
   group('DepthProviderFactory', () {
     test('hardware caps → HardwareDepthProvider', () {
       const caps = DeviceCapabilities(
@@ -729,33 +796,39 @@ void main() {
       expect(p, isA<HardwareDepthProvider>());
     });
 
-    test('hardware provider keeps hardware tier when native bridge starts', () async {
-      final bridge = _FakeHardwareDepthBridge(supported: true);
-      final fallback = _StubDepthProvider(DepthTier.ncnnCpu);
-      final provider = HardwareDepthProvider(
-        bridge: bridge,
-        fallbackProvider: fallback,
-      );
+    test(
+      'hardware provider keeps hardware tier when native bridge starts',
+      () async {
+        final bridge = _FakeHardwareDepthBridge(supported: true);
+        final fallback = _StubDepthProvider(DepthTier.ncnnCpu);
+        final provider = HardwareDepthProvider(
+          bridge: bridge,
+          fallbackProvider: fallback,
+        );
 
-      final ok = await provider.init();
-      expect(ok, isTrue);
-      expect(provider.tier, DepthTier.hardware);
-      expect(bridge.started, isTrue);
-    });
+        final ok = await provider.init();
+        expect(ok, isTrue);
+        expect(provider.tier, DepthTier.hardware);
+        expect(bridge.started, isTrue);
+      },
+    );
 
-    test('hardware provider falls back to NCNN when native bridge is unavailable', () async {
-      final bridge = _FakeHardwareDepthBridge(supported: false);
-      final fallback = _StubDepthProvider(DepthTier.ncnnVulkan);
-      final provider = HardwareDepthProvider(
-        bridge: bridge,
-        fallbackProvider: fallback,
-      );
+    test(
+      'hardware provider falls back to NCNN when native bridge is unavailable',
+      () async {
+        final bridge = _FakeHardwareDepthBridge(supported: false);
+        final fallback = _StubDepthProvider(DepthTier.ncnnVulkan);
+        final provider = HardwareDepthProvider(
+          bridge: bridge,
+          fallbackProvider: fallback,
+        );
 
-      final ok = await provider.init();
-      expect(ok, isTrue);
-      expect(provider.tier, DepthTier.ncnnVulkan);
-      expect(bridge.started, isFalse);
-    });
+        final ok = await provider.init();
+        expect(ok, isTrue);
+        expect(provider.tier, DepthTier.ncnnVulkan);
+        expect(bridge.started, isFalse);
+      },
+    );
 
     test('FocalLengthDepthProvider.init returns true immediately', () async {
       final provider = FocalLengthDepthProvider();
@@ -765,12 +838,15 @@ void main() {
       expect(provider.isReady, isTrue);
     });
 
-    test('FocalLengthDepthProvider.analyze always returns empty list', () async {
-      final provider = FocalLengthDepthProvider();
-      await provider.init();
-      
-      expect(provider.isReady, isTrue);
-    });
+    test(
+      'FocalLengthDepthProvider.analyze always returns empty list',
+      () async {
+        final provider = FocalLengthDepthProvider();
+        await provider.init();
+
+        expect(provider.isReady, isTrue);
+      },
+    );
 
     test('createWithTier(focalLength) → FocalLengthDepthProvider', () {
       final p = DepthProviderFactory.createWithTier(DepthTier.focalLength);
@@ -863,20 +939,12 @@ void main() {
     });
 
     test('sizeMb formats correctly', () {
-      const pkg = MapPackage(
-        cityId: 'test',
-        name: 'Test',
-        sizeBytes: 20971520,
-      );
+      const pkg = MapPackage(cityId: 'test', name: 'Test', sizeBytes: 20971520);
       expect(pkg.sizeMb, '20.0');
     });
 
     test('copyWith preserves unmodified fields', () {
-      const pkg = MapPackage(
-        cityId: 'almaty',
-        name: 'Алматы',
-        version: 1,
-      );
+      const pkg = MapPackage(cityId: 'almaty', name: 'Алматы', version: 1);
       final updated = pkg.copyWith(version: 3, installed: true);
       expect(updated.cityId, 'almaty');
       expect(updated.name, 'Алматы');
@@ -911,7 +979,13 @@ void main() {
       final old = now.subtract(const Duration(days: 91));
 
       expect(GtfsService.isTimestampStale(old, now), isTrue);
-      expect(GtfsService.isTimestampStale(now.subtract(const Duration(days: 30)), now), isFalse);
+      expect(
+        GtfsService.isTimestampStale(
+          now.subtract(const Duration(days: 30)),
+          now,
+        ),
+        isFalse,
+      );
     });
   });
 

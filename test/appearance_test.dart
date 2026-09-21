@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:bagdar/tracker/appearance.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-
 Uint8List _uniformY(int w, int h, int value) {
   final bytes = Uint8List(w * h);
   for (int i = 0; i < bytes.length; i++) {
@@ -11,7 +10,6 @@ Uint8List _uniformY(int w, int h, int value) {
   }
   return bytes;
 }
-
 
 Uint8List _checkerY(int w, int h, int lo, int hi, {int tile = 4}) {
   final bytes = Uint8List(w * h);
@@ -42,12 +40,12 @@ void main() {
         y2: h.toDouble() - 1,
       )!;
       expect(hist.length, Appearance.kBins);
-      
+
       expect(hist[8], closeTo(1.0, 1e-6));
       for (int i = 0; i < Appearance.kBins; i++) {
         if (i != 8) expect(hist[i], closeTo(0.0, 1e-6));
       }
-      
+
       final sum = hist.fold<double>(0.0, (s, v) => s + v);
       expect(sum, closeTo(1.0, 1e-5));
     });
@@ -84,7 +82,7 @@ void main() {
       expect(hist, isNotNull);
       final sum = hist!.fold<double>(0.0, (s, v) => s + v);
       expect(sum, closeTo(1.0, 1e-5));
-      
+
       expect(hist[12], greaterThan(0.9));
     });
 
@@ -169,7 +167,7 @@ void main() {
         x2: w.toDouble() - 1,
         y2: h.toDouble() - 1,
       )!;
-      
+
       expect(Appearance.similarity(hA, hB), greaterThan(0.95));
     });
 
@@ -188,7 +186,7 @@ void main() {
       final update = Float32List.fromList([0.0, 0.0, 1.0, 0.0]);
       final out = Appearance.blend(current, update, alpha: 0.0);
       expect(out, orderedEquals([0.5, 0.5, 0.0, 0.0]));
-      
+
       expect(identical(out, current), isFalse);
     });
 
@@ -205,7 +203,7 @@ void main() {
       final out = Appearance.blend(current, update);
       expect(out[0], lessThan(1.0));
       expect(out[3], greaterThan(0.0));
-      
+
       final sum = out.fold<double>(0.0, (s, v) => s + v);
       expect(sum, closeTo(1.0, 1e-6));
     });

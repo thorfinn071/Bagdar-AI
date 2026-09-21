@@ -11,7 +11,6 @@ void main() {
 
   group('KkDictionary — confusion-pair correction', () {
     test('returns input unchanged when the dictionary is not loaded', () {
-      
       const input = 'қазахстан астанасы';
       expect(KkDictionary.instance.correctSentence(input), input);
     });
@@ -23,62 +22,39 @@ void main() {
     });
 
     test('fixes К→Қ confusion when only the Kazakh variant is in dict', () {
-      
-      
       KkDictionary.instance.debugSeed(const ['қазахстан']);
-      expect(
-        KkDictionary.instance.correctSentence('казахстан'),
-        'қазахстан',
-      );
+      expect(KkDictionary.instance.correctSentence('казахстан'), 'қазахстан');
     });
 
     test('fixes Н→Ң confusion at the end of a word', () {
       KkDictionary.instance.debugSeed(const ['жоғарың']);
-      expect(
-        KkDictionary.instance.correctSentence('жоғарын'),
-        'жоғарың',
-      );
+      expect(KkDictionary.instance.correctSentence('жоғарын'), 'жоғарың');
     });
 
     test('preserves Russian loanwords that have no Kazakh variant', () {
-      
-      
       KkDictionary.instance.debugSeed(const ['қазақстан']);
       const loan = 'телефон';
       expect(KkDictionary.instance.correctSentence(loan), loan);
     });
 
     test('preserves digits and punctuation between words', () {
-      
       KkDictionary.instance.debugSeed(const ['қазахстан']);
       const input = 'казахстан, 2024 жыл.';
       final corrected = KkDictionary.instance.correctSentence(input);
       expect(corrected, 'қазахстан, 2024 жыл.');
     });
 
-    test(
-      'returns first matching candidate deterministically when multiple '
-      'variants exist',
-      () {
-        
-        
-        KkDictionary.instance.debugSeed(const ['суы', 'сүй']);
-        
-        
-        expect(
-          KkDictionary.instance.correctWordForTesting('суй'),
-          'сүй',
-        );
-      },
-    );
+    test('returns first matching candidate deterministically when multiple '
+        'variants exist', () {
+      KkDictionary.instance.debugSeed(const ['суы', 'сүй']);
+
+      expect(KkDictionary.instance.correctWordForTesting('суй'), 'сүй');
+    });
 
     test('lower / upper case handling is symmetric', () {
       KkDictionary.instance.debugSeed(const ['ұлы']);
-      
-      expect(
-        KkDictionary.instance.correctWordForTesting('Улы'),
-        'Ұлы',
-      );
+
+      expect(KkDictionary.instance.correctWordForTesting('Улы'), 'Ұлы');
     });
   });
 
@@ -100,8 +76,9 @@ void main() {
           'ұлы',
           'сүрет',
         ]);
-        
-        const input = 'казахстан астанасы мемлекеттік '
+
+        const input =
+            'казахстан астанасы мемлекеттік '
             'университеті ұлттық кітапханасы жоғары '
             'мектеп өмір әке ұлы сүрет казахстан астанасы '
             'мемлекеттік университеті ұлттық кітапханасы';
@@ -113,7 +90,8 @@ void main() {
         expect(
           sw.elapsedMilliseconds,
           lessThan(50),
-          reason: 'Phase 3 acceptance: post-correction must stay under '
+          reason:
+              'Phase 3 acceptance: post-correction must stay under '
               '50 ms for a 200-char input on the test host',
         );
       },

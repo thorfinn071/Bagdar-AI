@@ -141,8 +141,9 @@ class StepperField extends StatelessWidget {
                   value: _normalized,
                   minHeight: 4,
                   backgroundColor: colors.surfaceElevated,
-                  valueColor:
-                      AlwaysStoppedAnimation<Color>(colors.accentPrimary),
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    colors.accentPrimary,
+                  ),
                 ),
               ),
             ),
@@ -187,9 +188,7 @@ class _StepperButton extends StatelessWidget {
             child: SizedBox(
               width: BagdarSpacing.tapMinimum,
               height: BagdarSpacing.tapMinimum,
-              child: ExcludeSemantics(
-                child: Icon(icon, color: fg, size: 28),
-              ),
+              child: ExcludeSemantics(child: Icon(icon, color: fg, size: 28)),
             ),
           ),
         ),

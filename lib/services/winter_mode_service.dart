@@ -60,7 +60,7 @@ class WinterModeService extends ChangeNotifier {
   int _coldReadingStreak = 0;
 
   WinterModeService({SettingsService? settings})
-      : _settings = settings ?? SettingsService.instance;
+    : _settings = settings ?? SettingsService.instance;
 
   /// Load the persisted manual setting. Must be called after
   /// `SettingsService.instance.init()`.
@@ -91,7 +91,6 @@ class WinterModeService extends ChangeNotifier {
   void noteThermalReading(ThermalReadings readings) {
     final temp = readings.batteryTempC;
     if (temp == null) {
-      
       _coldReadingStreak = 0;
       if (_autoEnabled) {
         _autoEnabled = false;

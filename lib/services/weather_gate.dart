@@ -1,42 +1,25 @@
-
-
-enum WeatherTransition {
-  none,
-
-  
-  degraded,
-
-  
-  recovered,
-}
-
+enum WeatherTransition { none, degraded, recovered }
 
 class WeatherGate {
-  
-  
   static const double _kVarLow = 200.0;
 
-  
   static const double _kVarHigh = 400.0;
 
-  
   static const double _kAvgHigh = 150.0;
 
-  
   static const int _kConfirmIn = 10;
 
-  
   static const int _kConfirmOut = 15;
 
   int _degradedStreak = 0;
   int _recoveredStreak = 0;
   bool _degraded = false;
 
-  
   bool get degraded => _degraded;
 
-  
-  WeatherTransition feed(double variance, double avgLuminosity, {
+  WeatherTransition feed(
+    double variance,
+    double avgLuminosity, {
     bool indoorHint = false,
   }) {
     final isLowVis = variance < _kVarLow && avgLuminosity > _kAvgHigh;
@@ -74,7 +57,6 @@ class WeatherGate {
     return WeatherTransition.none;
   }
 
-  
   void reset() {
     _degradedStreak = 0;
     _recoveredStreak = 0;

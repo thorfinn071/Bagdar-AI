@@ -74,24 +74,30 @@ void main() {
       final seen = <MemoryPressureLevel>[];
       mon.onChanged = (r) => seen.add(r.level);
 
-      mon.debugSet(const MemoryReadings(
-        availMB: 500,
-        totalMB: 4096,
-        lowMemory: false,
-        level: MemoryPressureLevel.normal,
-      ));
-      mon.debugSet(const MemoryReadings(
-        availMB: 480,
-        totalMB: 4096,
-        lowMemory: false,
-        level: MemoryPressureLevel.normal,
-      ));
-      mon.debugSet(const MemoryReadings(
-        availMB: 200,
-        totalMB: 4096,
-        lowMemory: false,
-        level: MemoryPressureLevel.critical,
-      ));
+      mon.debugSet(
+        const MemoryReadings(
+          availMB: 500,
+          totalMB: 4096,
+          lowMemory: false,
+          level: MemoryPressureLevel.normal,
+        ),
+      );
+      mon.debugSet(
+        const MemoryReadings(
+          availMB: 480,
+          totalMB: 4096,
+          lowMemory: false,
+          level: MemoryPressureLevel.normal,
+        ),
+      );
+      mon.debugSet(
+        const MemoryReadings(
+          availMB: 200,
+          totalMB: 4096,
+          lowMemory: false,
+          level: MemoryPressureLevel.critical,
+        ),
+      );
 
       expect(seen, [MemoryPressureLevel.critical]);
     });

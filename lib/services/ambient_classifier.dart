@@ -141,8 +141,9 @@ class AmbientClassifier {
         for (int k = 0; k < specBins; k++) {
           sum += _melFilterbank[m * specBins + k] * powerSpec[k];
         }
-        melSpec[f * _melBins + m] =
-            sum > 1e-10 ? (math.log(sum) / math.ln10) * 10.0 : -100.0;
+        melSpec[f * _melBins + m] = sum > 1e-10
+            ? (math.log(sum) / math.ln10) * 10.0
+            : -100.0;
       }
     }
     return melSpec;
@@ -264,8 +265,10 @@ class AmbientClassifier {
     }
     final binPoints = Int32List(_melBins + 2);
     for (int i = 0; i < _melBins + 2; i++) {
-      binPoints[i] =
-          (freqPoints[i] * _fftSize / _sampleRate).floor().clamp(0, specBins - 1);
+      binPoints[i] = (freqPoints[i] * _fftSize / _sampleRate).floor().clamp(
+        0,
+        specBins - 1,
+      );
     }
 
     for (int m = 0; m < _melBins; m++) {
@@ -284,8 +287,10 @@ class AmbientClassifier {
     }
   }
 
-  static double _hzToMel(double hz) => 2595.0 * math.log(1.0 + hz / 700.0) / math.ln10;
-  static double _melToHz(double mel) => 700.0 * (math.pow(10.0, mel / 2595.0) - 1.0);
+  static double _hzToMel(double hz) =>
+      2595.0 * math.log(1.0 + hz / 700.0) / math.ln10;
+  static double _melToHz(double mel) =>
+      700.0 * (math.pow(10.0, mel / 2595.0) - 1.0);
 
   void _fft(Float32List real, Float32List imag, int n) {
     int j = 0;

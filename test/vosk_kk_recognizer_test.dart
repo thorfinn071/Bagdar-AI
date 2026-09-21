@@ -21,10 +21,7 @@ void main() {
     });
 
     test('returns empty string for empty final result', () {
-      final result = VoskKkRecognizer.testExtractText(
-        '{"text": ""}',
-        'text',
-      );
+      final result = VoskKkRecognizer.testExtractText('{"text": ""}', 'text');
       expect(result, '');
     });
 
@@ -41,12 +38,7 @@ void main() {
     });
 
     test('falls through to bare-string mode for non-JSON payloads', () {
-      
-      
-      expect(
-        VoskKkRecognizer.testExtractText('тура', 'text'),
-        'тура',
-      );
+      expect(VoskKkRecognizer.testExtractText('тура', 'text'), 'тура');
     });
 
     test('trims whitespace from extracted text', () {
@@ -60,25 +52,18 @@ void main() {
     });
 
     test('malformed JSON does not throw, returns empty', () {
-      expect(
-        VoskKkRecognizer.testExtractText('{"text": ', 'text'),
-        '',
-      );
+      expect(VoskKkRecognizer.testExtractText('{"text": ', 'text'), '');
     });
   });
 
   group('VoskKkRecognizer.unknownToken', () {
     test('matches Vosk\'s [unk] sentinel verbatim', () {
-      
-      
       expect(VoskKkRecognizer.unknownToken, '[unk]');
     });
   });
 
   group('VoskKkRecognizer.sampleRateHz', () {
     test('vosk-kk small model expects 16 kHz', () {
-      
-      
       expect(VoskKkRecognizer.sampleRateHz, 16000);
     });
   });

@@ -30,46 +30,46 @@ class FrameQualityEvent {
   });
 
   const FrameQualityEvent.aeStarted()
-      : this._(type: FrameQualityEventType.aeTransitionStarted);
+    : this._(type: FrameQualityEventType.aeTransitionStarted);
 
   const FrameQualityEvent.aeEnded(int frames)
-      : this._(type: FrameQualityEventType.aeTransitionEnded, frames: frames);
+    : this._(type: FrameQualityEventType.aeTransitionEnded, frames: frames);
 
   const FrameQualityEvent.weatherDegraded({
     required double variance,
     required double avgLuma,
   }) : this._(
-          type: FrameQualityEventType.weatherDegraded,
-          variance: variance,
-          avgLuminosity: avgLuma,
-        );
+         type: FrameQualityEventType.weatherDegraded,
+         variance: variance,
+         avgLuminosity: avgLuma,
+       );
 
   const FrameQualityEvent.weatherRecovered({
     required double variance,
     required double avgLuma,
   }) : this._(
-          type: FrameQualityEventType.weatherRecovered,
-          variance: variance,
-          avgLuminosity: avgLuma,
-        );
+         type: FrameQualityEventType.weatherRecovered,
+         variance: variance,
+         avgLuminosity: avgLuma,
+       );
 
   const FrameQualityEvent.cameraBlocked()
-      : this._(type: FrameQualityEventType.cameraBlocked);
+    : this._(type: FrameQualityEventType.cameraBlocked);
 
   const FrameQualityEvent.partiallyBlocked()
-      : this._(type: FrameQualityEventType.cameraPartiallyBlocked);
+    : this._(type: FrameQualityEventType.cameraPartiallyBlocked);
 
   const FrameQualityEvent.frozen()
-      : this._(type: FrameQualityEventType.cameraFrozen);
+    : this._(type: FrameQualityEventType.cameraFrozen);
 
   const FrameQualityEvent.droplet(int dirtyRegions)
-      : this._(
-          type: FrameQualityEventType.dropletDetected,
-          dirtyRegions: dirtyRegions,
-        );
+    : this._(
+        type: FrameQualityEventType.dropletDetected,
+        dirtyRegions: dirtyRegions,
+      );
 
   const FrameQualityEvent.lensSmear()
-      : this._(type: FrameQualityEventType.lensSmearDetected);
+    : this._(type: FrameQualityEventType.lensSmearDetected);
 }
 
 class FrameQualityReport {
@@ -105,21 +105,18 @@ class FrameQualityGuard {
   static const int kDropletMinStreak = 30;
   static const int kSmearMinStreak = 45;
 
-  
   static const Duration kFrozenFrameThreshold = Duration(seconds: 2);
 
-  
   static const Duration kFrozenFrameThresholdScan = Duration(seconds: 5);
 
   final WeatherGate weatherGate;
 
-  
   Duration _frozenThreshold = kFrozenFrameThreshold;
 
-  
   void setMode({required bool scanModeActive}) {
-    _frozenThreshold =
-        scanModeActive ? kFrozenFrameThresholdScan : kFrozenFrameThreshold;
+    _frozenThreshold = scanModeActive
+        ? kFrozenFrameThresholdScan
+        : kFrozenFrameThreshold;
   }
 
   int _lowLuminosityFrames = 0;
@@ -131,8 +128,7 @@ class FrameQualityGuard {
   int _aeTransitionFrames = 0;
   DateTime? _aeTransitionEndedAt;
 
-  final List<int> _dropletLowVarStreak =
-      List<int>.filled(kDropletGridCount, 0);
+  final List<int> _dropletLowVarStreak = List<int>.filled(kDropletGridCount, 0);
   bool _dropletSuspected = false;
   bool _dropletWarned = false;
   bool _smearWarned = false;
@@ -142,7 +138,7 @@ class FrameQualityGuard {
   bool _cameraFrozenWarned = false;
 
   FrameQualityGuard({required this.weatherGate, DateTime? initialTime})
-      : _lastImageChangeAt = initialTime ?? DateTime.now();
+    : _lastImageChangeAt = initialTime ?? DateTime.now();
 
   bool get aeTransitioning =>
       _aeTransitionFrames >= kAeTransitionMinFrames &&
@@ -235,7 +231,8 @@ class FrameQualityGuard {
     final avgLuminosity = sum / count;
     final variance = (sumSq / count) - (avgLuminosity * avgLuminosity);
 
-    final isAeTransition = variance < kAeVarianceThreshold &&
+    final isAeTransition =
+        variance < kAeVarianceThreshold &&
         (avgLuminosity > kAeAvgBrightThreshold ||
             avgLuminosity < kAeAvgDarkThreshold);
     if (isAeTransition) {
@@ -254,21 +251,26 @@ class FrameQualityGuard {
 
     if (!isAeTransition) {
       final transition = weatherGate.feed(
-        variance, avgLuminosity,
+        variance,
+        avgLuminosity,
         indoorHint: indoorHint,
       );
       switch (transition) {
         case WeatherTransition.degraded:
-          events.add(FrameQualityEvent.weatherDegraded(
-            variance: variance,
-            avgLuma: avgLuminosity,
-          ));
+          events.add(
+            FrameQualityEvent.weatherDegraded(
+              variance: variance,
+              avgLuma: avgLuminosity,
+            ),
+          );
           break;
         case WeatherTransition.recovered:
-          events.add(FrameQualityEvent.weatherRecovered(
-            variance: variance,
-            avgLuma: avgLuminosity,
-          ));
+          events.add(
+            FrameQualityEvent.weatherRecovered(
+              variance: variance,
+              avgLuma: avgLuminosity,
+            ),
+          );
           break;
         case WeatherTransition.none:
           break;
@@ -283,9 +285,8 @@ class FrameQualityGuard {
         events.add(const FrameQualityEvent.cameraBlocked());
       }
     } else {
-      _lowLuminosityFrames =
-          (_lowLuminosityFrames - kLowLuminosityLeakyDecay)
-              .clamp(0, 1 << 30);
+      _lowLuminosityFrames = (_lowLuminosityFrames - kLowLuminosityLeakyDecay)
+          .clamp(0, 1 << 30);
       if (_cameraBlockedWarned && _lowLuminosityFrames == 0) {
         _cameraBlockedWarned = false;
       }
@@ -297,7 +298,8 @@ class FrameQualityGuard {
       final avg = quadSum[q] / quadCount[q];
       if (avg < kPartialOcclusionLuminosity) deadQuads++;
     }
-    final isPartial = deadQuads >= 1 &&
+    final isPartial =
+        deadQuads >= 1 &&
         deadQuads <= 2 &&
         avgLuminosity >= kLuminosityMinValue;
     if (isPartial) {
@@ -376,8 +378,7 @@ class FrameQualityGuard {
       _dropletWarned = false;
     }
 
-    final allLowVar = _dropletLowVarStreak
-        .every((s) => s >= kSmearMinStreak);
+    final allLowVar = _dropletLowVarStreak.every((s) => s >= kSmearMinStreak);
     if (allLowVar && !_smearWarned) {
       _smearWarned = true;
       events.add(const FrameQualityEvent.lensSmear());

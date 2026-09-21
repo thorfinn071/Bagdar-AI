@@ -7,8 +7,7 @@ class RawDet {
   final double conf;
   final String dist;
   final double distM;
-  
-  
+
   final Float32List? appearance;
 
   const RawDet({

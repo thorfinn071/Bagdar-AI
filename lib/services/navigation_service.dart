@@ -70,8 +70,7 @@ class NavigationService {
   static const int _driftMinStepsRequired = 5;
 
   static const Duration _offRouteCooldown = Duration(seconds: 30);
-  
-  
+
   static const Duration _softOffRouteCooldown = Duration(seconds: 4);
   static const Duration _rerouteCooldown = Duration(seconds: 60);
   DateTime _lastOffRouteAt = DateTime.fromMillisecondsSinceEpoch(0);
@@ -249,7 +248,6 @@ class NavigationService {
   void _onPositionUpdate(Position pos) {
     final now = DateTime.now();
 
-    
     final gpsBad = isGpsBad(pos.accuracy, pos.timestamp, now);
 
     if (gpsBad && !_navMuted) {
@@ -431,7 +429,6 @@ class NavigationService {
       onInstruction?.call(S.get('nav_reroute_ok'));
       _announceCurrentStep();
     } catch (e) {
-      
       debugPrint('NavigationService: reroute failed: $e');
       onInstruction?.call(S.get('nav_reroute_failed'));
     } finally {
@@ -487,7 +484,6 @@ class NavigationService {
     final dir = _maneuverToText(step.maneuver);
     final dist = step.distanceMeters;
 
-    
     final useImmediateForm = dist < 3;
     String msg;
     if (step.instruction.isNotEmpty) {
@@ -505,12 +501,9 @@ class NavigationService {
   }
 
   void _announceApproach(Position pos, RouteStep step, int distToEnd) {
-    
-    
     if (!compass.isAvailable) {
       onInstruction?.call('$distToEnd ${S.get('meters')}.');
-      
-      
+
       return;
     }
 

@@ -48,22 +48,14 @@ void main() {
   });
 
   group('NativeTtsBridge — channel plumbing', () {
-    test(
-      'availableEngines round-trips the capability list from the platform '
-      'method channel',
-      () async {
-        const channel = MethodChannel('bagdar/native_tts');
-        TestDefaultBinaryMessengerBinding
-            .instance.defaultBinaryMessenger.setMockMethodCallHandler(
-          channel,
-          (call) async {
+    test('availableEngines round-trips the capability list from the platform '
+        'method channel', () async {
+      const channel = MethodChannel('bagdar/native_tts');
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, (call) async {
             if (call.method == 'availableEngines') {
               return [
-                {
-                  'engine': 'rhvoice',
-                  'available': true,
-                  'version': '1.0.0',
-                },
+                {'engine': 'rhvoice', 'available': true, 'version': '1.0.0'},
                 {
                   'engine': 'espeak',
                   'available': false,
@@ -72,44 +64,36 @@ void main() {
               ];
             }
             return null;
-          },
-        );
+          });
 
-        final bridge = NativeTtsBridge.forTesting(methodChannel: channel);
-        await bridge.refresh();
+      final bridge = NativeTtsBridge.forTesting(methodChannel: channel);
+      await bridge.refresh();
 
-        expect(bridge.hasRhvoiceKk(), isTrue);
-        expect(bridge.hasEspeakKk(), isFalse);
-        expect(
-          bridge.capabilityFor(KkTtsEngine.espeak)?.unavailableReason,
-          'voice_data_missing',
-        );
+      expect(bridge.hasRhvoiceKk(), isTrue);
+      expect(bridge.hasEspeakKk(), isFalse);
+      expect(
+        bridge.capabilityFor(KkTtsEngine.espeak)?.unavailableReason,
+        'voice_data_missing',
+      );
 
-        TestDefaultBinaryMessengerBinding
-            .instance.defaultBinaryMessenger.setMockMethodCallHandler(
-          channel,
-          null,
-        );
-      },
-    );
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, null);
+    });
 
     test(
       'setEngine forwards the engine id to the channel and updates activeEngine',
       () async {
         const channel = MethodChannel('bagdar/native_tts');
         String? lastEngineArg;
-        TestDefaultBinaryMessengerBinding
-            .instance.defaultBinaryMessenger.setMockMethodCallHandler(
-          channel,
-          (call) async {
-            if (call.method == 'setEngine') {
-              final args = call.arguments as Map?;
-              lastEngineArg = args?['engine'] as String?;
-              return true;
-            }
-            return null;
-          },
-        );
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(channel, (call) async {
+              if (call.method == 'setEngine') {
+                final args = call.arguments as Map?;
+                lastEngineArg = args?['engine'] as String?;
+                return true;
+              }
+              return null;
+            });
 
         final bridge = NativeTtsBridge.forTesting(methodChannel: channel);
         bridge.debugSetCapabilities({
@@ -124,11 +108,8 @@ void main() {
         expect(lastEngineArg, 'rhvoice');
         expect(bridge.activeEngine, KkTtsEngine.rhvoice);
 
-        TestDefaultBinaryMessengerBinding
-            .instance.defaultBinaryMessenger.setMockMethodCallHandler(
-          channel,
-          null,
-        );
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(channel, null);
       },
     );
 
@@ -137,14 +118,11 @@ void main() {
       () async {
         const channel = MethodChannel('bagdar/native_tts');
         var channelHits = 0;
-        TestDefaultBinaryMessengerBinding
-            .instance.defaultBinaryMessenger.setMockMethodCallHandler(
-          channel,
-          (call) async {
-            channelHits++;
-            return null;
-          },
-        );
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(channel, (call) async {
+              channelHits++;
+              return null;
+            });
 
         final bridge = NativeTtsBridge.forTesting(methodChannel: channel);
         bridge.debugSetCapabilities({
@@ -157,15 +135,15 @@ void main() {
 
         final ok = await bridge.setEngine(KkTtsEngine.rhvoice);
         expect(ok, isFalse);
-        expect(channelHits, 0,
-            reason: 'unavailable engines must not round-trip to native');
+        expect(
+          channelHits,
+          0,
+          reason: 'unavailable engines must not round-trip to native',
+        );
         expect(bridge.activeEngine, isNull);
 
-        TestDefaultBinaryMessengerBinding
-            .instance.defaultBinaryMessenger.setMockMethodCallHandler(
-          channel,
-          null,
-        );
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(channel, null);
       },
     );
 
@@ -173,24 +151,15 @@ void main() {
       'speak returns false when no engine is active (defensive guard)',
       () async {
         const channel = MethodChannel('bagdar/native_tts');
-        TestDefaultBinaryMessengerBinding
-            .instance.defaultBinaryMessenger.setMockMethodCallHandler(
-          channel,
-          (_) async => true,
-        );
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(channel, (_) async => true);
 
         final bridge = NativeTtsBridge.forTesting(methodChannel: channel);
-        final ok = await bridge.speak(
-          text: 'hello',
-          priority: 'info',
-        );
+        final ok = await bridge.speak(text: 'hello', priority: 'info');
         expect(ok, isFalse);
 
-        TestDefaultBinaryMessengerBinding
-            .instance.defaultBinaryMessenger.setMockMethodCallHandler(
-          channel,
-          null,
-        );
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(channel, null);
       },
     );
 

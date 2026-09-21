@@ -91,7 +91,7 @@ class PaddleOcrCapability {
 /// without an actual PaddleLite predictor.
 class PaddleOcrBridge {
   PaddleOcrBridge._({MethodChannel? methodChannel})
-      : _method = methodChannel ?? const MethodChannel(_methodChannelName);
+    : _method = methodChannel ?? const MethodChannel(_methodChannelName);
 
   static const String _methodChannelName = 'bagdar/paddle_ocr';
 
@@ -234,7 +234,6 @@ class PaddleOcrBridge {
     }
   }
 
-  
   @visibleForTesting
   void debugSetCapability(PaddleOcrCapability cap) {
     _capability = cap;

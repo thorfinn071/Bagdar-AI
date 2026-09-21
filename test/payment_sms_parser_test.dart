@@ -4,10 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('PaymentSmsParser.parse — admission guard', () {
     test('drops empty body', () {
-      expect(
-        PaymentSmsParser.parse(sender: 'Kaspi', body: ''),
-        isNull,
-      );
+      expect(PaymentSmsParser.parse(sender: 'Kaspi', body: ''), isNull);
     });
 
     test('drops balance-only SMS (regression for direction-keyword guard)', () {
@@ -47,7 +44,8 @@ void main() {
     test('Kaspi Gold in Russian with counterparty and balance', () {
       final e = PaymentSmsParser.parse(
         sender: 'Kaspi',
-        body: 'Kaspi Gold: Вам поступило 15 000 ₸ от Айжан К. '
+        body:
+            'Kaspi Gold: Вам поступило 15 000 ₸ от Айжан К. '
             'Баланс: 125 430 ₸. 12:34',
       );
       expect(e, isNotNull);
@@ -62,7 +60,8 @@ void main() {
     test('Halyk in Russian with decimal amount', () {
       final e = PaymentSmsParser.parse(
         sender: 'HALYK',
-        body: 'HALYK: Зачислено 50 000,00 тг от Иванов И. '
+        body:
+            'HALYK: Зачислено 50 000,00 тг от Иванов И. '
             'Баланс: 250 000,00 тг',
       );
       expect(e, isNotNull);
@@ -99,7 +98,8 @@ void main() {
     test('Beeline with phone-number sender → no counterparty', () {
       final e = PaymentSmsParser.parse(
         sender: 'Beeline',
-        body: 'Beeline: Вам поступило 2 000 тенге от +77012345678. '
+        body:
+            'Beeline: Вам поступило 2 000 тенге от +77012345678. '
             'Баланс: 5 000 тенге.',
       );
       expect(e, isNotNull);
@@ -113,7 +113,8 @@ void main() {
     test('Kaspi purchase (оплата) is outgoing', () {
       final e = PaymentSmsParser.parse(
         sender: 'Kaspi',
-        body: 'Kaspi Gold: Оплата 1 250 ₸ в MAGNUM. '
+        body:
+            'Kaspi Gold: Оплата 1 250 ₸ в MAGNUM. '
             'Баланс: 124 180 ₸. 14:22',
       );
       expect(e, isNotNull);
@@ -125,7 +126,8 @@ void main() {
     test('Halyk withdrawal (списано) is outgoing', () {
       final e = PaymentSmsParser.parse(
         sender: 'HALYK',
-        body: 'HALYK: Списано 3500 тг. Покупка RAMSTORE. '
+        body:
+            'HALYK: Списано 3500 тг. Покупка RAMSTORE. '
             'Баланс 246 500 тг',
       );
       expect(e, isNotNull);

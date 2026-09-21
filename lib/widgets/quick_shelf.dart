@@ -41,9 +41,7 @@ class QuickShelf extends StatelessWidget {
         height: BagdarSpacing.shelfHeight,
         decoration: BoxDecoration(
           color: colors.surfaceBg,
-          border: Border(
-            top: BorderSide(color: colors.divider, width: 1),
-          ),
+          border: Border(top: BorderSide(color: colors.divider, width: 1)),
         ),
         child: Row(
           children: [

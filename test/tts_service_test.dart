@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:bagdar/services/tts_service.dart';
 import 'package:bagdar/models/speech_job.dart';
 
-
 void main() {
   group('TtsService queue — OPT-07 critical preservation', () {
     test('two distinct critical alerts coexist in the queue', () {
@@ -15,10 +14,10 @@ void main() {
         svc.queueSnapshot.every((j) => j.priority == SpeechPriority.critical),
         isTrue,
       );
-      expect(
-        svc.queueSnapshot.map((j) => j.text).toSet(),
-        {'stop, car left', 'stop, cyclist right'},
-      );
+      expect(svc.queueSnapshot.map((j) => j.text).toSet(), {
+        'stop, car left',
+        'stop, cyclist right',
+      });
     });
 
     test('critical drops pending warning and info jobs', () {
@@ -44,8 +43,16 @@ void main() {
       expect(svc.queueSnapshot.single.text, 'stop, car left');
     });
 
-    test(
-        'critical preserves older critical even when warnings arrive between '
+    test('same critical text for independent tracks is preserved', () {
+      final svc = TtsService.forTesting();
+      svc.say('stop, obstacle ahead', SpeechPriority.critical, trackId: 11);
+      svc.say('stop, obstacle ahead', SpeechPriority.critical, trackId: 12);
+
+      expect(svc.queueSnapshot, hasLength(2));
+      expect(svc.queueSnapshot.map((job) => job.trackId).toSet(), {11, 12});
+    });
+
+    test('critical preserves older critical even when warnings arrive between '
         'them', () {
       final svc = TtsService.forTesting();
       svc.say('stop, car left', SpeechPriority.critical);
@@ -60,6 +67,37 @@ void main() {
         svc.queueSnapshot.every((j) => j.priority == SpeechPriority.critical),
         isTrue,
       );
+    });
+
+    test('critical queue is bounded even when every message is distinct', () {
+      final svc = TtsService.forTesting();
+      for (var i = 0; i < 12; i++) {
+        svc.say(
+          'stop, independent hazard $i',
+          SpeechPriority.critical,
+          trackId: i,
+        );
+      }
+
+      expect(svc.queueSnapshot, hasLength(4));
+      expect(
+        svc.queueSnapshot.map((job) => job.trackId),
+        orderedEquals([8, 9, 10, 11]),
+      );
+    });
+
+    test('new critical state replaces the pending job for the same track', () {
+      final svc = TtsService.forTesting();
+      svc.say('stop, obstacle ahead', SpeechPriority.critical, trackId: 17);
+      svc.say(
+        'stop, obstacle now on the left',
+        SpeechPriority.critical,
+        trackId: 17,
+      );
+
+      expect(svc.queueSnapshot, hasLength(1));
+      expect(svc.queueSnapshot.single.trackId, 17);
+      expect(svc.queueSnapshot.single.text, contains('left'));
     });
   });
 
@@ -100,20 +138,17 @@ void main() {
       for (int i = 0; i < 10; i++) {
         svc.say('info $i', SpeechPriority.info);
       }
-      
-      
+
       expect(svc.queueSnapshot.length, lessThanOrEqualTo(4));
     });
   });
 
   group('TtsService queue — OPT-07 follow-up stale eviction', () {
-    test(
-        'pruneStaleCriticals drops only the critical that has outlived the '
+    test('pruneStaleCriticals drops only the critical that has outlived the '
         'supplied freshness window', () async {
       final svc = TtsService.forTesting();
       svc.say('stale warning', SpeechPriority.critical);
 
-      
       await Future<void>.delayed(const Duration(milliseconds: 120));
       svc.say('fresh warning', SpeechPriority.critical);
       expect(svc.queueSnapshot, hasLength(2));
@@ -129,8 +164,7 @@ void main() {
 
     test('pruneStaleCriticals never removes non-critical jobs', () {
       final svc = TtsService.forTesting();
-      
-      
+
       svc.say('first warning', SpeechPriority.warning);
       svc.say('second warning', SpeechPriority.warning);
       expect(svc.queueSnapshot, hasLength(2));
@@ -139,7 +173,6 @@ void main() {
         DateTime.now().add(const Duration(seconds: 60)),
       );
 
-      
       expect(svc.queueSnapshot, hasLength(2));
       expect(
         svc.queueSnapshot.every((j) => j.priority != SpeechPriority.critical),
@@ -151,14 +184,11 @@ void main() {
       'Safety audit 1.2: pruneStaleCriticals without an explicit maxAge is a '
       'no-op — life-threatening alerts are never silently dropped',
       () {
-        
-        
         final svc = TtsService.forTesting();
         svc.say('Stop! car approaching', SpeechPriority.critical);
         svc.say('Stop! pothole ahead', SpeechPriority.critical);
         expect(svc.queueSnapshot, hasLength(2));
 
-        
         svc.pruneStaleCriticalsForTesting(
           DateTime.now().add(const Duration(hours: 1)),
         );
@@ -172,10 +202,10 @@ void main() {
               'discard a queued "Stop!" while a long info utterance was '
               'mid-speech.',
         );
-        expect(
-          svc.queueSnapshot.map((j) => j.text).toSet(),
-          {'Stop! car approaching', 'Stop! pothole ahead'},
-        );
+        expect(svc.queueSnapshot.map((j) => j.text).toSet(), {
+          'Stop! car approaching',
+          'Stop! pothole ahead',
+        });
       },
     );
   });
@@ -200,6 +230,64 @@ void main() {
 
       expect(svc.queueSnapshot, hasLength(1));
       expect(svc.queueSnapshot.single.priority, SpeechPriority.critical);
+    });
+  });
+
+  group('TtsService queue — Stage 5 identity and TTL', () {
+    test('expired incoming job is rejected before enqueue', () {
+      final svc = TtsService.forTesting();
+      svc.say(
+        'expired stop',
+        SpeechPriority.critical,
+        actionId: 'expired-action',
+        expiresAt: DateTime.now().subtract(const Duration(milliseconds: 1)),
+      );
+
+      expect(svc.queueSnapshot, isEmpty);
+    });
+
+    test('new critical state replaces pending state with same actionId', () {
+      final svc = TtsService.forTesting();
+      svc.say('hold', SpeechPriority.critical, actionId: 'same-action');
+      svc.say('stop now', SpeechPriority.critical, actionId: 'same-action');
+
+      expect(svc.queueSnapshot, hasLength(1));
+      expect(svc.queueSnapshot.single.text, 'stop now');
+      expect(svc.queueSnapshot.single.actionId, 'same-action');
+    });
+
+    test('new critical state replaces pending state with same hazardId', () {
+      final svc = TtsService.forTesting();
+      svc.say('obstacle ahead', SpeechPriority.critical, hazardId: 'hazard-7');
+      svc.say(
+        'stop, obstacle ahead',
+        SpeechPriority.critical,
+        hazardId: 'hazard-7',
+      );
+
+      expect(svc.queueSnapshot, hasLength(1));
+      expect(svc.queueSnapshot.single.text, startsWith('stop'));
+      expect(svc.queueSnapshot.single.hazardId, 'hazard-7');
+    });
+
+    test('SpeechJob assigns an explicit finite default TTL', () {
+      final enqueuedAt = DateTime.utc(2026, 9, 20);
+      final critical = SpeechJob(
+        'stop',
+        SpeechPriority.critical,
+        enqueuedAt: enqueuedAt,
+      );
+      final info = SpeechJob(
+        'status',
+        SpeechPriority.info,
+        enqueuedAt: enqueuedAt,
+      );
+
+      expect(
+        critical.expiresAt.difference(enqueuedAt),
+        const Duration(seconds: 4),
+      );
+      expect(info.expiresAt.difference(enqueuedAt), const Duration(seconds: 5));
     });
   });
 }

@@ -36,15 +36,7 @@ void main() {
       final now = DateTime(2025, 1, 1, 12);
 
       final first = tracker.update(
-        [
-          makeDet(
-            x1: 100,
-            y1: 100,
-            x2: 150,
-            y2: 220,
-            label: 'person',
-          ),
-        ],
+        [makeDet(x1: 100, y1: 100, x2: 150, y2: 220, label: 'person')],
         640,
         480,
         now,
@@ -52,15 +44,7 @@ void main() {
       expect(first, isEmpty);
 
       final second = tracker.update(
-        [
-          makeDet(
-            x1: 150,
-            y1: 100,
-            x2: 200,
-            y2: 220,
-            label: 'person',
-          ),
-        ],
+        [makeDet(x1: 150, y1: 100, x2: 200, y2: 220, label: 'person')],
         640,
         480,
         now.add(const Duration(milliseconds: 120)),
@@ -76,30 +60,14 @@ void main() {
       final now = DateTime(2025, 1, 1, 12);
 
       tracker.update(
-        [
-          makeDet(
-            x1: 100,
-            y1: 100,
-            x2: 150,
-            y2: 220,
-            label: 'person',
-          ),
-        ],
+        [makeDet(x1: 100, y1: 100, x2: 150, y2: 220, label: 'person')],
         640,
         480,
         now,
       );
 
       final second = tracker.update(
-        [
-          makeDet(
-            x1: 320,
-            y1: 100,
-            x2: 370,
-            y2: 220,
-            label: 'person',
-          ),
-        ],
+        [makeDet(x1: 320, y1: 100, x2: 370, y2: 220, label: 'person')],
         640,
         480,
         now.add(const Duration(milliseconds: 120)),
@@ -110,68 +78,64 @@ void main() {
   });
 
   group('Tracker fast-track', () {
-    test(
-      'safety audit 2.6: a single-frame very-close high-conf detection is '
-      'released only when the acoustic model corroborates with a recent '
-      'vehicleApproaching event — vision-only single-frame critical is '
-      'too dangerous',
-      () {
-        final now = DateTime(2025, 1, 1, 12);
+    test('safety audit 2.6: a single-frame very-close high-conf detection is '
+        'released only when the acoustic model corroborates with a recent '
+        'vehicleApproaching event — vision-only single-frame critical is '
+        'too dangerous', () {
+      final now = DateTime(2025, 1, 1, 12);
 
-        
-        final solo = Tracker();
-        final soloOut = solo.update(
-          [
-            makeDet(
-              x1: 100,
-              y1: 100,
-              x2: 200,
-              y2: 380,
-              label: 'person',
-              conf: 0.75,
-              dist: 'very close',
-              distM: 0.9,
-            ),
-          ],
-          640,
-          480,
-          now,
-        );
-        expect(
-          soloOut,
-          isEmpty,
-          reason:
-              'audit 2.6: without audio corroboration, a single-frame '
-              'critical (conf 0.75, very close, 0.9 m) is suppressed — '
-              'we wait for a 2nd-frame confirmation instead.',
-        );
+      final solo = Tracker();
+      final soloOut = solo.update(
+        [
+          makeDet(
+            x1: 100,
+            y1: 100,
+            x2: 200,
+            y2: 380,
+            label: 'person',
+            conf: 0.75,
+            dist: 'very close',
+            distM: 0.9,
+          ),
+        ],
+        640,
+        480,
+        now,
+      );
+      expect(
+        soloOut,
+        isEmpty,
+        reason:
+            'audit 2.6: without audio corroboration, a single-frame '
+            'critical (conf 0.75, very close, 0.9 m) is suppressed — '
+            'we wait for a 2nd-frame confirmation instead.',
+      );
 
-        
-        final corroborated = Tracker()
-          ..lastVehicleApproachingAcousticAt =
-              now.subtract(const Duration(milliseconds: 500));
-        final corroboratedOut = corroborated.update(
-          [
-            makeDet(
-              x1: 100,
-              y1: 100,
-              x2: 200,
-              y2: 380,
-              label: 'person',
-              conf: 0.75,
-              dist: 'very close',
-              distM: 0.9,
-            ),
-          ],
-          640,
-          480,
-          now,
+      final corroborated = Tracker()
+        ..lastVehicleApproachingAcousticAt = now.subtract(
+          const Duration(milliseconds: 500),
         );
-        expect(corroboratedOut, hasLength(1));
-        expect(corroboratedOut.single.fastTrack, isTrue);
-        expect(corroboratedOut.single.nearFrameCount, greaterThanOrEqualTo(1));
-      },
-    );
+      final corroboratedOut = corroborated.update(
+        [
+          makeDet(
+            x1: 100,
+            y1: 100,
+            x2: 200,
+            y2: 380,
+            label: 'person',
+            conf: 0.75,
+            dist: 'very close',
+            distM: 0.9,
+          ),
+        ],
+        640,
+        480,
+        now,
+      );
+      expect(corroboratedOut, hasLength(1));
+      expect(corroboratedOut.single.fastTrack, isTrue);
+      expect(corroboratedOut.single.nearFrameCount, greaterThanOrEqualTo(1));
+    });
 
     test('ignores fast-track when confidence is below the 0.60 gate', () {
       final tracker = Tracker();
@@ -248,58 +212,57 @@ void main() {
       expect(first, isEmpty);
     });
 
-    test('fastTrack flag clears once the track reaches normal confirmation',
-        () {
-      final tracker = Tracker();
-      final now = DateTime(2025, 1, 1, 12);
+    test(
+      'fastTrack flag clears once the track reaches normal confirmation',
+      () {
+        final tracker = Tracker();
+        final now = DateTime(2025, 1, 1, 12);
 
-      tracker.update(
-        [
-          makeDet(
-            x1: 100,
-            y1: 100,
-            x2: 200,
-            y2: 380,
-            label: 'person',
-            conf: 0.80,
-            dist: 'very close',
-            distM: 0.9,
-          ),
-        ],
-        640,
-        480,
-        now,
-      );
+        tracker.update(
+          [
+            makeDet(
+              x1: 100,
+              y1: 100,
+              x2: 200,
+              y2: 380,
+              label: 'person',
+              conf: 0.80,
+              dist: 'very close',
+              distM: 0.9,
+            ),
+          ],
+          640,
+          480,
+          now,
+        );
 
-      final second = tracker.update(
-        [
-          makeDet(
-            x1: 102,
-            y1: 102,
-            x2: 202,
-            y2: 382,
-            label: 'person',
-            conf: 0.80,
-            dist: 'very close',
-            distM: 0.9,
-          ),
-        ],
-        640,
-        480,
-        now.add(const Duration(milliseconds: 120)),
-      );
+        final second = tracker.update(
+          [
+            makeDet(
+              x1: 102,
+              y1: 102,
+              x2: 202,
+              y2: 382,
+              label: 'person',
+              conf: 0.80,
+              dist: 'very close',
+              distM: 0.9,
+            ),
+          ],
+          640,
+          480,
+          now.add(const Duration(milliseconds: 120)),
+        );
 
-      expect(second, hasLength(1));
-      expect(second.single.fastTrack, isFalse);
-      expect(second.single.seenCount, 2);
-    });
+        expect(second, hasLength(1));
+        expect(second.single.fastTrack, isFalse);
+        expect(second.single.seenCount, 2);
+      },
+    );
   });
 
   group('Tracker dynamicThreat (label-agnostic kinematic threat)', () {
-    
-    
-    test('sets dynamicThreat on a non-vehicle label growing fast in frame',
-        () {
+    test('sets dynamicThreat on a non-vehicle label growing fast in frame', () {
       final tracker = Tracker();
       var now = DateTime(2025, 1, 1, 12);
 
@@ -356,7 +319,7 @@ void main() {
       expect(third, hasLength(1));
       final t = third.single;
       expect(t.dynamicThreat, isTrue);
-      
+
       expect(t.approaching, isFalse);
     });
 
@@ -480,128 +443,76 @@ void main() {
   });
 
   group('Tracker weatherDegraded (OPT-15)', () {
-    test(
-      'weatherDegraded=true lifts the pedestrian approach threshold so '
-      "borderline area-rate signals don't flip approaching=true",
-      () {
-        
-        
-        RawDet narrowBox() => makeDet(
-              x1: 100,
-              y1: 190,
-              x2: 140,
-              y2: 290,
-              label: 'person',
-            );
-        RawDet wideBox() => makeDet(
-              x1: 100,
-              y1: 190,
-              x2: 270,
-              y2: 290,
-              label: 'person',
-            );
+    test('weatherDegraded=true lifts the pedestrian approach threshold so '
+        "borderline area-rate signals don't flip approaching=true", () {
+      RawDet narrowBox() =>
+          makeDet(x1: 100, y1: 190, x2: 140, y2: 290, label: 'person');
+      RawDet wideBox() =>
+          makeDet(x1: 100, y1: 190, x2: 270, y2: 290, label: 'person');
 
-        final base = DateTime(2025, 1, 1, 12);
-        final t0 = base;
-        final t1 = base.add(const Duration(milliseconds: 200));
-        final t2 = base.add(const Duration(milliseconds: 700));
+      final base = DateTime(2025, 1, 1, 12);
+      final t0 = base;
+      final t1 = base.add(const Duration(milliseconds: 200));
+      final t2 = base.add(const Duration(milliseconds: 700));
 
-        
-        final clear = Tracker();
-        clear.update([narrowBox()], 640, 480, t0);
-        clear.update([narrowBox()], 640, 480, t1);
-        final clearTracks = clear.update([wideBox()], 640, 480, t2);
-        expect(clearTracks, hasLength(1));
-        expect(clearTracks.single.approaching, isTrue);
+      final clear = Tracker();
+      clear.update([narrowBox()], 640, 480, t0);
+      clear.update([narrowBox()], 640, 480, t1);
+      final clearTracks = clear.update([wideBox()], 640, 480, t2);
+      expect(clearTracks, hasLength(1));
+      expect(clearTracks.single.approaching, isTrue);
 
-        
-        final degraded = Tracker()..weatherDegraded = true;
-        degraded.update([narrowBox()], 640, 480, t0);
-        degraded.update([narrowBox()], 640, 480, t1);
-        final degradedTracks = degraded.update([wideBox()], 640, 480, t2);
-        expect(degradedTracks, hasLength(1));
-        expect(degradedTracks.single.approaching, isFalse);
-      },
-    );
+      final degraded = Tracker()..weatherDegraded = true;
+      degraded.update([narrowBox()], 640, 480, t0);
+      degraded.update([narrowBox()], 640, 480, t1);
+      final degradedTracks = degraded.update([wideBox()], 640, 480, t2);
+      expect(degradedTracks, hasLength(1));
+      expect(degradedTracks.single.approaching, isFalse);
+    });
 
-    test(
-      'weatherDegraded does not affect vehicle approach — OPT-19 owns '
-      'the vehicle close-range path',
-      () {
-        
-        
-        RawDet f0() => makeDet(
-              x1: 200,
-              y1: 200,
-              x2: 260,
-              y2: 260,
-              label: 'car',
-            );
-        RawDet f1() => makeDet(
-              x1: 195,
-              y1: 193,
-              x2: 280,
-              y2: 285,
-              label: 'car',
-            );
-        RawDet f2() => makeDet(
-              x1: 190,
-              y1: 185,
-              x2: 330,
-              y2: 330,
-              label: 'car',
-            );
+    test('weatherDegraded does not affect vehicle approach — OPT-19 owns '
+        'the vehicle close-range path', () {
+      RawDet f0() => makeDet(x1: 200, y1: 200, x2: 260, y2: 260, label: 'car');
+      RawDet f1() => makeDet(x1: 195, y1: 193, x2: 280, y2: 285, label: 'car');
+      RawDet f2() => makeDet(x1: 190, y1: 185, x2: 330, y2: 330, label: 'car');
 
-        final base = DateTime(2025, 1, 1, 12);
-        for (final wd in const [false, true]) {
-          final tr = Tracker()..weatherDegraded = wd;
-          tr.update([f0()], 640, 480, base);
-          tr.update(
-            [f1()],
-            640,
-            480,
-            base.add(const Duration(milliseconds: 200)),
-          );
-          final out = tr.update(
-            [f2()],
-            640,
-            480,
-            base.add(const Duration(milliseconds: 700)),
-          );
-          expect(out, hasLength(1));
-          expect(
-            out.single.approaching,
-            isTrue,
-            reason: 'vehicle approach must fire irrespective of '
-                'weatherDegraded=$wd',
-          );
-        }
-      },
-    );
+      final base = DateTime(2025, 1, 1, 12);
+      for (final wd in const [false, true]) {
+        final tr = Tracker()..weatherDegraded = wd;
+        tr.update([f0()], 640, 480, base);
+        tr.update(
+          [f1()],
+          640,
+          480,
+          base.add(const Duration(milliseconds: 200)),
+        );
+        final out = tr.update(
+          [f2()],
+          640,
+          480,
+          base.add(const Duration(milliseconds: 700)),
+        );
+        expect(out, hasLength(1));
+        expect(
+          out.single.approaching,
+          isTrue,
+          reason:
+              'vehicle approach must fire irrespective of '
+              'weatherDegraded=$wd',
+        );
+      }
+    });
   });
 
   group('KalmanBoxTracker', () {
     test('keeps finite positive predicted boxes', () {
       final kalman = KalmanBoxTracker(
-        makeDet(
-          x1: 40,
-          y1: 50,
-          x2: 80,
-          y2: 130,
-          label: 'person',
-        ),
+        makeDet(x1: 40, y1: 50, x2: 80, y2: 130, label: 'person'),
       );
 
       kalman.predict();
       kalman.update(
-        makeDet(
-          x1: 140,
-          y1: 60,
-          x2: 180,
-          y2: 140,
-          label: 'person',
-          conf: 0.6,
-        ),
+        makeDet(x1: 140, y1: 60, x2: 180, y2: 140, label: 'person', conf: 0.6),
       );
 
       final box = kalman.getPredictedBox();

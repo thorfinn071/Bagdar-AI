@@ -4,22 +4,21 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:audio_session/audio_session.dart';
 import '../../models/constants.dart'
-    show
-        kTtsStallTimeout,
-        kHapticTtsStallPattern,
-        kHapticTtsStallIntensities;
+    show kTtsStallTimeout, kHapticTtsStallPattern, kHapticTtsStallIntensities;
 import '../../models/speech_job.dart';
 import '../../models/strings.dart';
 import '../../models/tts_engine.dart';
+import '../safety/alerts/feedback_command.dart';
+import '../safety/planning/safety_action.dart';
 import 'haptic_service.dart';
 import 'field_logger.dart';
 import 'native_tts_bridge.dart';
 import 'settings_service.dart';
 
 class TtsService {
-  
   static const Duration _kCriticalStaleAfter = Duration(seconds: 4);
-  
+  static const int _kMaxCriticalQueueLength = 4;
+
   FlutterTts? _ttsImpl;
   FlutterTts get _tts => _ttsImpl ??= FlutterTts();
   AudioSession? _session;
@@ -29,17 +28,16 @@ class TtsService {
   bool _ready = false;
   bool _speaking = false;
   bool get speaking => _speaking;
+  bool get isReady => _ready;
   bool _languageAvailable = true;
   bool _usingEnglishFallback = false;
   bool _testMode = false;
   String _requestedLang = 'ru-RU';
   final List<SpeechJob> _queue = [];
 
-  
   KkTtsEngine? _activeKkEngine;
   bool _bridgeListenersAttached = false;
 
-  
   bool? _kkSystemTtsAvailableOverride;
 
   bool _initStarted = false;
@@ -50,7 +48,6 @@ class TtsService {
   DateTime _lastSpeechEndedAt = DateTime.fromMillisecondsSinceEpoch(0);
   Completer<void>? _currentSpeechCompleter;
 
-  
   String? _currentText;
   SpeechPriority? _currentPriority;
 
@@ -75,8 +72,19 @@ class TtsService {
   void pruneStaleCriticalsForTesting(DateTime now, {Duration? maxAge}) =>
       _pruneStaleCriticals(now, maxAge: maxAge);
 
+  /// Safety audit 2026-06 test hook: puts the *singleton* [instance] into the
+  /// same ready/test-mode state as [TtsService.forTesting]. Production code
+  /// (e.g. CameraViewModel) always wires to [instance], which is never ready
+  /// in a unit-test process (no real platform channel), so [say] would
+  /// otherwise no-op before ever reaching [queueSnapshot]. Does not touch any
+  /// platform channel.
+  @visibleForTesting
+  void debugForceTestReady() {
+    _ready = true;
+    _testMode = true;
+  }
+
   void _pruneStaleCriticals(DateTime now, {Duration? maxAge}) {
-    
     if (maxAge == null) return;
     _queue.removeWhere(
       (j) =>
@@ -85,11 +93,25 @@ class TtsService {
     );
   }
 
+  void _purgeExpiredJobs(DateTime now) {
+    final expired = _queue
+        .where((job) => job.isExpiredAt(now))
+        .toList(growable: false);
+    _queue.removeWhere((job) => job.isExpiredAt(now));
+    for (final job in expired) {
+      FieldLogger.instance.log('tts_queue_drop', {
+        'reason': 'job_ttl_expired',
+        'action_id': job.actionId,
+        'hazard_id': job.hazardId,
+        'priority': job.priority.name,
+      });
+    }
+  }
+
   void Function()? onAudioRouteInterrupted;
   void Function()? onAudioRouteResumed;
   void Function()? onTtsStall;
-  
-  
+
   void Function()? onTtsUnavailable;
 
   DateTime _lastAudioRouteAlertAt = DateTime.fromMillisecondsSinceEpoch(0);
@@ -125,7 +147,7 @@ class TtsService {
     final clamped = multiplier.clamp(0.5, 2.0);
     if ((clamped - _userRateMultiplier).abs() < 0.01) return;
     _userRateMultiplier = clamped;
-    
+
     _currentRate = -1;
   }
 
@@ -177,8 +199,7 @@ class TtsService {
             usage: AndroidAudioUsage.assistanceAccessibility,
             contentType: AndroidAudioContentType.speech,
           ),
-          androidAudioFocusGainType:
-              AndroidAudioFocusGainType.gainTransient,
+          androidAudioFocusGainType: AndroidAudioFocusGainType.gainTransient,
           androidWillPauseWhenDucked: true,
         ),
       );
@@ -205,8 +226,7 @@ class TtsService {
       _tts.setStartHandler(() {
         _speaking = true;
         _currentSpeakStartedAt = DateTime.now();
-        
-        
+
         _armStallTimer(_currentText, _currentPriority);
       });
       _tts.setCompletionHandler(() {
@@ -231,7 +251,6 @@ class TtsService {
 
       _ready = true;
 
-      
       try {
         await _tts.setVolume(0.0);
         unawaited(_tts.speak('.'));
@@ -355,14 +374,18 @@ class TtsService {
 
         // For English: strongly penalize Indian accent, prefer US/GB/AU
         if (primary == 'en') {
-          if (voiceLocale.contains('en-in') || voiceLocale.contains('en_in') ||
-              name.contains('india') || name.contains('hindi')) {
+          if (voiceLocale.contains('en-in') ||
+              voiceLocale.contains('en_in') ||
+              name.contains('india') ||
+              name.contains('hindi')) {
             score -= 5;
           }
           if (voiceLocale.contains('en-us') || voiceLocale.contains('en_us')) {
             score += 2;
-          } else if (voiceLocale.contains('en-gb') || voiceLocale.contains('en_gb') ||
-                     voiceLocale.contains('en-au') || voiceLocale.contains('en_au')) {
+          } else if (voiceLocale.contains('en-gb') ||
+              voiceLocale.contains('en_gb') ||
+              voiceLocale.contains('en-au') ||
+              voiceLocale.contains('en_au')) {
             score += 1;
           }
         }
@@ -391,7 +414,6 @@ class TtsService {
     } catch (_) {}
   }
 
-
   Future<void> _applyLanguage(String bcp47Tag) async {
     if (bcp47Tag == 'kk-KZ') {
       await _resolveKkEngine();
@@ -399,7 +421,6 @@ class TtsService {
       return;
     }
 
-    
     _activeKkEngine = null;
 
     try {
@@ -435,7 +456,6 @@ class TtsService {
   /// true. The resolver is safe to call from any state and is the only
   /// path that mutates [_activeKkEngine].
   Future<KkTtsEngine> _resolveKkEngine() async {
-    
     if (await _systemHasKkVoice()) {
       try {
         if (!_testMode) {
@@ -454,7 +474,6 @@ class TtsService {
       return KkTtsEngine.system;
     }
 
-    
     if (_isKazakhStackV2Enabled()) {
       final engine = await _resolveNativeKkEngine();
       if (engine != null) {
@@ -467,7 +486,6 @@ class TtsService {
       }
     }
 
-    
     debugPrint(
       'TtsService: no kk voice — falling back to ru-RU for Kazakh text',
     );
@@ -477,10 +495,9 @@ class TtsService {
     AppStrings.setAlertLanguage(null);
     onKazakhVoiceMissing?.call();
     _activeKkEngine = KkTtsEngine.russianFallback;
-    FieldLogger.instance.log(
-      'tts_kk_engine_used',
-      {'engine': 'russianFallback'},
-    );
+    FieldLogger.instance.log('tts_kk_engine_used', {
+      'engine': 'russianFallback',
+    });
     onKazakhEngineResolved?.call(KkTtsEngine.russianFallback);
     return KkTtsEngine.russianFallback;
   }
@@ -515,15 +532,13 @@ class TtsService {
   Future<KkTtsEngine?> _resolveNativeKkEngine() async {
     final bridge = NativeTtsBridge.instance;
     if (!bridge.isInitialized) {
-      
-      
       try {
         await bridge.init();
       } catch (_) {}
     }
 
     Future<bool> activate(KkTtsEngine engine) async {
-      if (_testMode) return true; 
+      if (_testMode) return true;
       return bridge.setEngine(engine);
     }
 
@@ -540,7 +555,6 @@ class TtsService {
     try {
       return Settings.instance.enableKazakhStackV2;
     } catch (_) {
-      
       return false;
     }
   }
@@ -619,7 +633,6 @@ class TtsService {
     onAudioRouteResumed?.call();
   }
 
-  
   void _armStallTimer([String? text, SpeechPriority? priority]) {
     _stallTimer?.cancel();
     final timeout = _computeStallTimeout(text: text, priority: priority);
@@ -638,13 +651,11 @@ class TtsService {
     });
   }
 
-  
   Duration _computeStallTimeout({String? text, SpeechPriority? priority}) {
     if (text == null) return kTtsStallTimeout;
-    
+
     if (priority == SpeechPriority.critical) return kTtsStallTimeout;
-    
-    
+
     final scaledMs = 4000 + text.length * 70;
     final cappedMs = scaledMs.clamp(kTtsStallTimeout.inMilliseconds, 30000);
     return Duration(milliseconds: cappedMs);
@@ -670,7 +681,6 @@ class TtsService {
     }
   }
 
-  
   // Safety audit 2026-06 fix A-5: align with kCriticalRepeatCooldownSafety
   static const Duration _kCriticalDedupWindow = Duration(seconds: 2);
   static const Duration _kWarningDedupWindow = Duration(seconds: 5);
@@ -683,11 +693,22 @@ class TtsService {
     SpeechPriority priority, {
     double pan = 0.0,
     int? trackId,
+    String? actionId,
+    String? hazardId,
+    DateTime? expiresAt,
     bool barge = false,
     bool skipHaptic = false,
   }) {
-    
-    
+    final now = DateTime.now();
+    if (expiresAt != null && now.isAfter(expiresAt)) {
+      FieldLogger.instance.log('tts_queue_drop', {
+        'reason': 'incoming_job_ttl_expired',
+        'action_id': actionId,
+        'hazard_id': hazardId,
+        'priority': priority.name,
+      });
+      return;
+    }
     if (!_ready) {
       if (priority == SpeechPriority.critical && text.isNotEmpty) {
         debugPrint(
@@ -712,7 +733,7 @@ class TtsService {
     }
     if (text.isEmpty) return;
     _currentSpeechCompleter ??= Completer<void>();
-    final now = DateTime.now();
+    _purgeExpiredJobs(now);
     final rate = _rateFor(priority);
 
     final dedupWindow = switch (priority) {
@@ -721,7 +742,8 @@ class TtsService {
       SpeechPriority.info => _kInfoDedupWindow,
     };
     final lastSameTextAt = _lastSpokenByText[text];
-    if (lastSameTextAt != null &&
+    if (priority != SpeechPriority.critical &&
+        lastSameTextAt != null &&
         now.difference(lastSameTextAt) < dedupWindow) {
       return;
     }
@@ -734,14 +756,56 @@ class TtsService {
     }
 
     if (priority == SpeechPriority.critical) {
-      
-      
+      _pruneStaleCriticals(now, maxAge: _kCriticalStaleAfter);
       _queue.removeWhere((j) => j.priority != SpeechPriority.critical);
-      if (_queue.any((j) => j.text == text)) {
+      if (trackId != null || actionId != null || hazardId != null) {
+        final replaced = _queue
+            .where(
+              (j) =>
+                  j.priority == SpeechPriority.critical &&
+                  ((trackId != null && j.trackId == trackId) ||
+                      (actionId != null && j.actionId == actionId) ||
+                      (hazardId != null && j.hazardId == hazardId)),
+            )
+            .toList(growable: false);
+        _queue.removeWhere(
+          (j) =>
+              j.priority == SpeechPriority.critical &&
+              ((trackId != null && j.trackId == trackId) ||
+                  (actionId != null && j.actionId == actionId) ||
+                  (hazardId != null && j.hazardId == hazardId)),
+        );
+        for (final job in replaced) {
+          FieldLogger.instance.log('tts_queue_replace', {
+            'reason': 'replace_critical_identity',
+            'evicted_text': job.text,
+            'track_id': trackId,
+            'action_id': actionId,
+            'hazard_id': hazardId,
+            'incoming_text': text,
+          });
+        }
+      }
+      if (_queue.any(
+        (j) =>
+            j.text == text &&
+            (trackId == null || j.trackId == null || j.trackId == trackId) &&
+            (hazardId == null || j.hazardId == null || j.hazardId == hazardId),
+      )) {
         _lastText = text;
         _lastTrackId = trackId;
         _lastTime = now;
         return;
+      }
+      while (_queue.length >= _kMaxCriticalQueueLength) {
+        final evicted = _queue.removeAt(0);
+        FieldLogger.instance.log('tts_queue_drop', {
+          'reason': 'critical_queue_bounded_evict_oldest',
+          'evicted_text': evicted.text,
+          'evicted_track_id': evicted.trackId,
+          'incoming_text': text,
+          'incoming_track_id': trackId,
+        });
       }
       _queue.add(
         SpeechJob(
@@ -750,6 +814,10 @@ class TtsService {
           pan: pan,
           rate: rate,
           trackId: trackId,
+          actionId: actionId,
+          hazardId: hazardId,
+          enqueuedAt: now,
+          expiresAt: expiresAt,
           skipHaptic: skipHaptic,
         ),
       );
@@ -798,8 +866,6 @@ class TtsService {
         evictIdx = oldestInfoIdx;
         evictReason = 'queue_full_evict_oldest_info';
       } else if (priority == SpeechPriority.warning && oldestWarnIdx >= 0) {
-        
-        
         evictIdx = oldestWarnIdx;
         evictReason = 'queue_full_evict_oldest_warning';
       }
@@ -831,6 +897,10 @@ class TtsService {
         pan: pan,
         rate: rate,
         trackId: trackId,
+        actionId: actionId,
+        hazardId: hazardId,
+        enqueuedAt: now,
+        expiresAt: expiresAt,
         skipHaptic: skipHaptic,
       ),
     );
@@ -847,6 +917,32 @@ class TtsService {
       trackId: trackId,
     );
     _pump();
+  }
+
+  bool submitFeedbackCommand(
+    FeedbackCommand command, {
+    required String localizedText,
+    DateTime? now,
+  }) {
+    final dispatchAt = now ?? DateTime.now();
+    if (command.isExpiredAt(dispatchAt) || localizedText.isEmpty) return false;
+    final priority = switch (command.priority) {
+      SafetyPriority.p0Emergency => SpeechPriority.critical,
+      SafetyPriority.p1Correction ||
+      SafetyPriority.p2Degraded => SpeechPriority.warning,
+      SafetyPriority.p3Information => SpeechPriority.info,
+    };
+    say(
+      localizedText,
+      priority,
+      actionId: command.actionId,
+      hazardId: command.hazardIds.firstOrNull,
+      expiresAt: command.expiresAt,
+      barge: command.canInterrupt,
+      skipHaptic: true,
+      pan: command.pan,
+    );
+    return _ready;
   }
 
   void _gcSpokenTextMap(DateTime now) {
@@ -911,9 +1007,7 @@ class TtsService {
   void replayLastCritical() {
     final text = _currentText;
     final priority = _currentPriority;
-    if (text == null ||
-        text.isEmpty ||
-        priority != SpeechPriority.critical) {
+    if (text == null || text.isEmpty || priority != SpeechPriority.critical) {
       return;
     }
     debugPrint('TtsService: replaying last critical after audio route change');
@@ -963,10 +1057,10 @@ class TtsService {
 
   Future<void> _pump() async {
     if (_testMode) return;
-    
-    
-    _pruneStaleCriticals(DateTime.now(), maxAge: _kCriticalStaleAfter);
+
     final now = DateTime.now();
+    _purgeExpiredJobs(now);
+    _pruneStaleCriticals(now, maxAge: _kCriticalStaleAfter);
     _queue.removeWhere(
       (j) =>
           j.priority != SpeechPriority.critical &&
@@ -994,11 +1088,10 @@ class TtsService {
       _speaking = true;
       _currentIsCritical = job.priority == SpeechPriority.critical;
       _currentSpeakStartedAt = DateTime.now();
-      
+
       _currentText = job.text;
       _currentPriority = job.priority;
-      if (_reverseVehicleSuspected &&
-          job.priority != SpeechPriority.critical) {
+      if (_reverseVehicleSuspected && job.priority != SpeechPriority.critical) {
         try {
           _session?.setActive(false);
         } catch (_) {}
@@ -1018,7 +1111,6 @@ class TtsService {
         } catch (_) {}
       }
 
-      
       if (job.priority == SpeechPriority.critical && !job.skipHaptic) {
         unawaited(HapticService.vibrate(const [0, 80]));
       }
@@ -1032,8 +1124,6 @@ class TtsService {
           pan: job.pan,
         );
         if (!ok) {
-          
-          
           debugPrint(
             'TtsService: native bridge speak() returned false — '
             'demoting kk to russianFallback for this session',
@@ -1092,7 +1182,6 @@ class TtsService {
     }
   }
 
-  
   /// Drive [_resolveKkEngine] directly from tests so engine-selection logic
   /// can be exercised without standing up a real `flutter_tts` instance.
   @visibleForTesting
@@ -1108,6 +1197,5 @@ class TtsService {
       _kkSystemTtsAvailableOverride = v;
 
   @visibleForTesting
-  void debugSetActiveKkEngine(KkTtsEngine? engine) =>
-      _activeKkEngine = engine;
+  void debugSetActiveKkEngine(KkTtsEngine? engine) => _activeKkEngine = engine;
 }

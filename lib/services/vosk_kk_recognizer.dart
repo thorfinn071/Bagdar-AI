@@ -110,7 +110,6 @@ class VoskKkRecognizer {
     final completer = _initCompleter!;
 
     try {
-      
       if (_ready) {
         await _teardownNative();
       }
@@ -176,8 +175,6 @@ class VoskKkRecognizer {
     if (wasListening) await stop();
 
     try {
-      
-      
       await _detachStreams();
       try {
         await _speech?.dispose();
@@ -251,8 +248,6 @@ class VoskKkRecognizer {
     if (_disposed || _recognizer == null) return;
     try {
       await _recognizer!.setMaxAlternatives(0);
-      
-      
     } catch (_) {}
   }
 
@@ -264,7 +259,6 @@ class VoskKkRecognizer {
     await _teardownNative();
   }
 
-  
   void _attachStreams() {
     if (_speech == null) return;
     _resultSub = _speech!.onResult().listen(
@@ -329,7 +323,6 @@ class VoskKkRecognizer {
     return '';
   }
 
-  
   @visibleForTesting
   void debugInjectFinalResult(String raw) {
     final text = _extractTextField(raw, key: 'text');
@@ -340,8 +333,7 @@ class VoskKkRecognizer {
   @visibleForTesting
   void debugInjectPartial(String raw) {
     final text = _extractTextField(raw, key: 'partial');
-    
-    
+
     if (text.isNotEmpty) onPartial?.call(text);
   }
 

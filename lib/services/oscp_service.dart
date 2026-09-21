@@ -138,9 +138,10 @@ class OscpService {
       owner: 'OscpService',
     );
     if (!grant.isGranted) {
-      FieldLogger.instance.logOscpPod('connect_blocked_ble_busy', data: {
-        'reason': grant.denyReason?.name ?? 'unknown',
-      });
+      FieldLogger.instance.logOscpPod(
+        'connect_blocked_ble_busy',
+        data: {'reason': grant.denyReason?.name ?? 'unknown'},
+      );
       return false;
     }
     _bleLease = grant.lease;
@@ -164,9 +165,10 @@ class OscpService {
       return false;
     } catch (e) {
       _releaseAndDisconnect();
-      FieldLogger.instance.logOscpPod('connect_error', data: {
-        'error': e.toString(),
-      });
+      FieldLogger.instance.logOscpPod(
+        'connect_error',
+        data: {'error': e.toString()},
+      );
       return false;
     }
   }
@@ -215,23 +217,28 @@ class OscpService {
       final text =
           '${S.alert('oscp_near_field')}, ~${_smoothedRangeM.toStringAsFixed(1)} ${S.alert('approx_meters')}';
       try {
-        onHazard?.call(ExternalHazardEvent(
-          source: ExternalHazardSource.oscpPod,
-          text: text,
-          priority: _smoothedRangeM < 0.5
-              ? SpeechPriority.critical
-              : SpeechPriority.warning,
-          category: AlertCategory.obstacleClose,
-          urgency: (1.0 - _smoothedRangeM / kOscpNearFieldThresholdM)
-              .clamp(0.3, 0.9),
-          distanceM: _smoothedRangeM,
-          at: now,
-          correlationId: 'oscp_range',
-        ));
+        onHazard?.call(
+          ExternalHazardEvent(
+            source: ExternalHazardSource.oscpPod,
+            text: text,
+            priority: _smoothedRangeM < 0.5
+                ? SpeechPriority.critical
+                : SpeechPriority.warning,
+            category: AlertCategory.obstacleClose,
+            urgency: (1.0 - _smoothedRangeM / kOscpNearFieldThresholdM).clamp(
+              0.3,
+              0.9,
+            ),
+            distanceM: _smoothedRangeM,
+            at: now,
+            correlationId: 'oscp_range',
+          ),
+        );
       } catch (e) {
-        FieldLogger.instance.logOscpPod('emit_error', data: {
-          'error': e.toString(),
-        });
+        FieldLogger.instance.logOscpPod(
+          'emit_error',
+          data: {'error': e.toString()},
+        );
       }
     }
   }
@@ -253,9 +260,10 @@ class OscpService {
         _state = OscpConnectionState.connected;
         _firmwareVersion =
             (call.arguments as Map?)?['firmware'] as String? ?? '';
-        FieldLogger.instance.logOscpPod('connected', data: {
-          'firmware': _firmwareVersion,
-        });
+        FieldLogger.instance.logOscpPod(
+          'connected',
+          data: {'firmware': _firmwareVersion},
+        );
         break;
       case 'onOscpDisconnected':
         _releaseAndDisconnect();
@@ -284,9 +292,10 @@ class OscpService {
         break;
       case 'onOscpError':
         _state = OscpConnectionState.error;
-        FieldLogger.instance.logOscpPod('native_error', data: {
-          'error': call.arguments?.toString() ?? 'unknown',
-        });
+        FieldLogger.instance.logOscpPod(
+          'native_error',
+          data: {'error': call.arguments?.toString() ?? 'unknown'},
+        );
         break;
     }
   }

@@ -32,6 +32,22 @@ const List<String> _newKeysFromDesignPlan = [
   'voice_layer_cancel',
   'restart_pipeline',
   'restart_pipeline_done',
+  'status_analysis_active',
+  'core_feature_unavailable',
+  'core_health_sound_unavailable',
+  'core_health_haptic_unavailable',
+  'core_health_recovered',
+  'core_health_status',
+  'spatial_analysis_limited',
+  'spatial_stop_sensing_unavailable',
+  'generic_obstacle_ahead',
+  'generic_obstacle_stop',
+  'generic_obstacle_left',
+  'generic_obstacle_right',
+  'generic_obstacle_overhead',
+  'generic_vehicle_ahead',
+  'generic_vehicle_left',
+  'generic_vehicle_right',
   'trail_continue_straight',
   'trail_turn_left',
   'trail_turn_right',
@@ -39,10 +55,7 @@ const List<String> _newKeysFromDesignPlan = [
   'trail_slight_right',
 ];
 
-const Set<String> _allowedEmpty = {
-  
-  'pitch_black_heartbeat',
-};
+const Set<String> _allowedEmpty = {'pitch_black_heartbeat'};
 
 VoiceCommand _commandFor(
   VoiceCommandService svc,
@@ -93,6 +106,36 @@ void main() {
     });
   });
 
+  // Safety audit 2026-06: camera HAL failure must produce a critical TTS
+  // message in every supported language. A blind user walking with dead
+  // detection needs to hear that recognition is unavailable.
+  group('Camera init failure critical string — all 3 languages', () {
+    const key = 'camera_init_failed_critical';
+
+    for (final lang in AppLanguage.values) {
+      test('"$key" resolves under ${lang.name}', () {
+        AppStrings.setLanguage(lang);
+        final value = AppStrings.get(key);
+        expect(
+          value.isNotEmpty,
+          isTrue,
+          reason: 'key="$key" lang=${lang.name} resolved to empty',
+        );
+        expect(
+          value,
+          isNot(equals(key)),
+          reason:
+              'key="$key" lang=${lang.name} fell through to key fallback '
+              '— string missing in this language',
+        );
+      });
+    }
+
+    tearDown(() {
+      AppStrings.setLanguage(AppLanguage.ru);
+    });
+  });
+
   group('VoiceCommand.restartPipeline triggers', () {
     test('Russian phrases', () {
       final svc = VoiceCommandService();
@@ -111,11 +154,7 @@ void main() {
 
     test('Kazakh phrases', () {
       final svc = VoiceCommandService();
-      for (final phrase in [
-        'қайта қосу',
-        'тануды қайта қос',
-        'қайта бастау',
-      ]) {
+      for (final phrase in ['қайта қосу', 'тануды қайта қос', 'қайта бастау']) {
         expect(
           _commandFor(svc, phrase, locale: 'kk-KZ'),
           VoiceCommand.restartPipeline,
@@ -126,11 +165,7 @@ void main() {
 
     test('English phrases', () {
       final svc = VoiceCommandService();
-      for (final phrase in [
-        'restart',
-        'restart recognition',
-        'reset',
-      ]) {
+      for (final phrase in ['restart', 'restart recognition', 'reset']) {
         expect(
           _commandFor(svc, phrase, locale: 'en-US'),
           VoiceCommand.restartPipeline,
@@ -141,7 +176,7 @@ void main() {
 
     test('restart command does not collide with existing commands', () {
       final svc = VoiceCommandService();
-      
+
       for (final phrase in ['reset', 'restart']) {
         final cmd = _commandFor(svc, phrase, locale: 'en-US');
         expect(cmd, isNot(VoiceCommand.sos));
@@ -170,10 +205,7 @@ void main() {
     for (final (phrase, locale, expected) in cases) {
       test('"$phrase" ($locale) -> ${expected.name}', () {
         final svc = VoiceCommandService();
-        expect(
-          _commandFor(svc, phrase, locale: locale),
-          expected,
-        );
+        expect(_commandFor(svc, phrase, locale: locale), expected);
       });
     }
   });

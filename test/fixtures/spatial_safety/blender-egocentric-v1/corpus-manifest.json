@@ -1,0 +1,825 @@
+{
+  "schemaVersion": 1,
+  "corpusId": "blender-egocentric-v1",
+  "generator": "tool/blender/generate_spatial_corpus.py",
+  "generatorSha256": "231ae63ab6802070c98abd23c27b16ec63fa028a06b81f3e58a1504843ba0692",
+  "blender": {
+    "version": "5.2.1 LTS",
+    "versionTuple": [
+      5,
+      2,
+      1
+    ]
+  },
+  "seed": 20260921,
+  "license": "project-generated-test-fixture",
+  "consentClass": "not_applicable",
+  "handling": "public",
+  "containsRecordedMedia": false,
+  "scene": {
+    "path": "scene.blend",
+    "sha256": "61e419aae6d83b4cd828f2695e520d6cd861d4327727f929ed01deff93192816"
+  },
+  "replayManifest": {
+    "path": "replay-manifest.json",
+    "sha256": "1ef8bd75852338cec3ef97526a07c7a66a2944439c5c5c6cb9de4192c20cb44b"
+  },
+  "semanticClasses": {
+    "0": "unobserved",
+    "1": "ground",
+    "2": "obstacle",
+    "3": "transparent",
+    "4": "low",
+    "5": "overhead",
+    "6": "drop",
+    "7": "stairs",
+    "8": "traversable",
+    "9": "crowd",
+    "10": "moving",
+    "11": "obstruction"
+  },
+  "assets": [
+    {
+      "sceneId": "blender-thin-pole",
+      "tags": [
+        "thin",
+        "pole",
+        "obstacle"
+      ],
+      "state": "blocked",
+      "cameraPose": {
+        "locationMetres": [
+          0.0,
+          0.0,
+          1.45
+        ],
+        "rotationEulerRadians": [
+          1.570796,
+          0.0,
+          0.0
+        ],
+        "horizontalFovRadians": 1.21108937,
+        "verticalFovRadians": 0.86481553
+      },
+      "rgb": {
+        "path": "renders/thin-pole_rgb.png",
+        "sha256": "6918fce827c527a4ff98af39319300e02bdaddb6044ab5719a8c1eb43789f3c3"
+      },
+      "depth": {
+        "path": "renders/thin-pole_depth_mm.pgm",
+        "sha256": "6c26c2432179b77134082e4f1601e6903f6add6fea1dfe8580d70a86d654d217",
+        "encoding": "P5 uint16 big-endian millimetres; 0=unobserved",
+        "maxMetres": 20.0
+      },
+      "semantic": {
+        "path": "renders/thin-pole_semantic.pgm",
+        "sha256": "b3a647726c8eb00efe7169f889b68093d5151175e8405b077780983632230c48",
+        "encoding": "P5 uint8 class id"
+      }
+    },
+    {
+      "sceneId": "blender-transparent-door",
+      "tags": [
+        "transparent",
+        "reflective",
+        "door"
+      ],
+      "state": "blocked",
+      "cameraPose": {
+        "locationMetres": [
+          30.0,
+          0.0,
+          1.45
+        ],
+        "rotationEulerRadians": [
+          1.570796,
+          0.0,
+          0.0
+        ],
+        "horizontalFovRadians": 1.21108937,
+        "verticalFovRadians": 0.86481553
+      },
+      "rgb": {
+        "path": "renders/transparent-door_rgb.png",
+        "sha256": "3f2c10a523a68d56bb8ac5d1fab1d8a7d06f05a50e16293e204d1f810363742f"
+      },
+      "depth": {
+        "path": "renders/transparent-door_depth_mm.pgm",
+        "sha256": "4c645a115b99bbc1667bbeccf819452865f7a00f67b6d080c940e5d544dac231",
+        "encoding": "P5 uint16 big-endian millimetres; 0=unobserved",
+        "maxMetres": 20.0
+      },
+      "semantic": {
+        "path": "renders/transparent-door_semantic.pgm",
+        "sha256": "16ad416feba07c7a730cbb76d84b7f46734bd1a7ab43dc044d74b7380f00d3cc",
+        "encoding": "P5 uint8 class id"
+      }
+    },
+    {
+      "sceneId": "blender-low-obstacle",
+      "tags": [
+        "low",
+        "obstacle"
+      ],
+      "state": "blocked",
+      "cameraPose": {
+        "locationMetres": [
+          60.0,
+          0.0,
+          1.45
+        ],
+        "rotationEulerRadians": [
+          1.570796,
+          0.0,
+          0.0
+        ],
+        "horizontalFovRadians": 1.21108937,
+        "verticalFovRadians": 0.86481553
+      },
+      "rgb": {
+        "path": "renders/low-obstacle_rgb.png",
+        "sha256": "4a03e4c9b3219c5b03137a81a6a1c35ff81b52d885a7aa78ae435031693f2180"
+      },
+      "depth": {
+        "path": "renders/low-obstacle_depth_mm.pgm",
+        "sha256": "8ff94ffd3ea98e02fcac020ae43abd9157d85120aaa0b6d72a7fc8b583d0dfc2",
+        "encoding": "P5 uint16 big-endian millimetres; 0=unobserved",
+        "maxMetres": 20.0
+      },
+      "semantic": {
+        "path": "renders/low-obstacle_semantic.pgm",
+        "sha256": "149ccdaf0d89176013bbb45c8baba4f75121472ed0077a33ac64e49bafe80e21",
+        "encoding": "P5 uint8 class id"
+      }
+    },
+    {
+      "sceneId": "blender-overhead-obstacle",
+      "tags": [
+        "overhead",
+        "obstacle"
+      ],
+      "state": "blocked",
+      "cameraPose": {
+        "locationMetres": [
+          90.0,
+          0.0,
+          1.45
+        ],
+        "rotationEulerRadians": [
+          1.570796,
+          0.0,
+          0.0
+        ],
+        "horizontalFovRadians": 1.21108937,
+        "verticalFovRadians": 0.86481553
+      },
+      "rgb": {
+        "path": "renders/overhead-obstacle_rgb.png",
+        "sha256": "87df7fa66ffaa1337741c1e6ac3ccc42d78efea548b0a3039a66e473d03b4d6e"
+      },
+      "depth": {
+        "path": "renders/overhead-obstacle_depth_mm.pgm",
+        "sha256": "20a9d7cbfc3e7aaf59729401824f5fc68d094b900082cadc1f7677f2e365275b",
+        "encoding": "P5 uint16 big-endian millimetres; 0=unobserved",
+        "maxMetres": 20.0
+      },
+      "semantic": {
+        "path": "renders/overhead-obstacle_semantic.pgm",
+        "sha256": "3bbb6c3c41aece380ec71a3c0a4a7da3ef84a1abc2d0eaf09a2c9ab81c3dfd1f",
+        "encoding": "P5 uint8 class id"
+      }
+    },
+    {
+      "sceneId": "blender-curb-up",
+      "tags": [
+        "curb",
+        "up"
+      ],
+      "state": "blocked",
+      "cameraPose": {
+        "locationMetres": [
+          120.0,
+          0.0,
+          1.45
+        ],
+        "rotationEulerRadians": [
+          1.570796,
+          0.0,
+          0.0
+        ],
+        "horizontalFovRadians": 1.21108937,
+        "verticalFovRadians": 0.86481553
+      },
+      "rgb": {
+        "path": "renders/curb-up_rgb.png",
+        "sha256": "7f44a8d79b378b9694ebb97a9226f783b25948540c7fe34e618a4ffb361700d7"
+      },
+      "depth": {
+        "path": "renders/curb-up_depth_mm.pgm",
+        "sha256": "e63bae7882d62b566fd637f5218400dfb796f3c03d2b3f0aa7f0e5170d35b7a5",
+        "encoding": "P5 uint16 big-endian millimetres; 0=unobserved",
+        "maxMetres": 20.0
+      },
+      "semantic": {
+        "path": "renders/curb-up_semantic.pgm",
+        "sha256": "e77c79e14e5a40f0e9f4b9185b303f6555ed181d2108e4350507b3c5be0d43d1",
+        "encoding": "P5 uint8 class id"
+      }
+    },
+    {
+      "sceneId": "blender-curb-down",
+      "tags": [
+        "curb",
+        "down",
+        "drop"
+      ],
+      "state": "drop",
+      "cameraPose": {
+        "locationMetres": [
+          150.0,
+          0.0,
+          1.45
+        ],
+        "rotationEulerRadians": [
+          1.570796,
+          0.0,
+          0.0
+        ],
+        "horizontalFovRadians": 1.21108937,
+        "verticalFovRadians": 0.86481553
+      },
+      "rgb": {
+        "path": "renders/curb-down_rgb.png",
+        "sha256": "e7d7fde5f3f78b0cffac42940d2a491812646bf67e9b1d7910b090b1736a1b69"
+      },
+      "depth": {
+        "path": "renders/curb-down_depth_mm.pgm",
+        "sha256": "64b3f2a03489bfae0a7aa5b523d370ce37461bdca2a1e362fd25e9bb5db17206",
+        "encoding": "P5 uint16 big-endian millimetres; 0=unobserved",
+        "maxMetres": 20.0
+      },
+      "semantic": {
+        "path": "renders/curb-down_semantic.pgm",
+        "sha256": "149ccdaf0d89176013bbb45c8baba4f75121472ed0077a33ac64e49bafe80e21",
+        "encoding": "P5 uint8 class id"
+      }
+    },
+    {
+      "sceneId": "blender-pothole",
+      "tags": [
+        "pothole",
+        "drop"
+      ],
+      "state": "drop",
+      "cameraPose": {
+        "locationMetres": [
+          180.0,
+          0.0,
+          1.45
+        ],
+        "rotationEulerRadians": [
+          1.570796,
+          0.0,
+          0.0
+        ],
+        "horizontalFovRadians": 1.21108937,
+        "verticalFovRadians": 0.86481553
+      },
+      "rgb": {
+        "path": "renders/pothole_rgb.png",
+        "sha256": "39e914185b015f8d26509b284a8c8ac8dca0d20af625f09cb4ce3521a23a6b05"
+      },
+      "depth": {
+        "path": "renders/pothole_depth_mm.pgm",
+        "sha256": "64b3f2a03489bfae0a7aa5b523d370ce37461bdca2a1e362fd25e9bb5db17206",
+        "encoding": "P5 uint16 big-endian millimetres; 0=unobserved",
+        "maxMetres": 20.0
+      },
+      "semantic": {
+        "path": "renders/pothole_semantic.pgm",
+        "sha256": "149ccdaf0d89176013bbb45c8baba4f75121472ed0077a33ac64e49bafe80e21",
+        "encoding": "P5 uint8 class id"
+      }
+    },
+    {
+      "sceneId": "blender-stairs-up",
+      "tags": [
+        "stairs",
+        "up"
+      ],
+      "state": "blocked",
+      "cameraPose": {
+        "locationMetres": [
+          210.0,
+          0.0,
+          1.45
+        ],
+        "rotationEulerRadians": [
+          1.570796,
+          0.0,
+          0.0
+        ],
+        "horizontalFovRadians": 1.21108937,
+        "verticalFovRadians": 0.86481553
+      },
+      "rgb": {
+        "path": "renders/stairs-up_rgb.png",
+        "sha256": "d7a190e85f796788f259ac5127aee20a1cc656a1c944e2cc8494bcfc2e6c537d"
+      },
+      "depth": {
+        "path": "renders/stairs-up_depth_mm.pgm",
+        "sha256": "337837814018e9659d91b79783db6bb3784f6488be53b26078d992ec5b97cba5",
+        "encoding": "P5 uint16 big-endian millimetres; 0=unobserved",
+        "maxMetres": 20.0
+      },
+      "semantic": {
+        "path": "renders/stairs-up_semantic.pgm",
+        "sha256": "0ac90d080a81a886e92f37c5504bfae6c730f609d1c6003e4081ff4d7c96513b",
+        "encoding": "P5 uint8 class id"
+      }
+    },
+    {
+      "sceneId": "blender-stairs-down",
+      "tags": [
+        "stairs",
+        "down",
+        "drop"
+      ],
+      "state": "drop",
+      "cameraPose": {
+        "locationMetres": [
+          240.0,
+          0.0,
+          1.45
+        ],
+        "rotationEulerRadians": [
+          1.570796,
+          0.0,
+          0.0
+        ],
+        "horizontalFovRadians": 1.21108937,
+        "verticalFovRadians": 0.86481553
+      },
+      "rgb": {
+        "path": "renders/stairs-down_rgb.png",
+        "sha256": "2015694c2ce1ba139ac1e4c346e9d7c4485cb677ff99404333c5d1d71249c76b"
+      },
+      "depth": {
+        "path": "renders/stairs-down_depth_mm.pgm",
+        "sha256": "64b3f2a03489bfae0a7aa5b523d370ce37461bdca2a1e362fd25e9bb5db17206",
+        "encoding": "P5 uint16 big-endian millimetres; 0=unobserved",
+        "maxMetres": 20.0
+      },
+      "semantic": {
+        "path": "renders/stairs-down_semantic.pgm",
+        "sha256": "149ccdaf0d89176013bbb45c8baba4f75121472ed0077a33ac64e49bafe80e21",
+        "encoding": "P5 uint8 class id"
+      }
+    },
+    {
+      "sceneId": "blender-ramp",
+      "tags": [
+        "ramp",
+        "traversable"
+      ],
+      "state": "safe",
+      "cameraPose": {
+        "locationMetres": [
+          270.0,
+          0.0,
+          1.45
+        ],
+        "rotationEulerRadians": [
+          1.570796,
+          0.0,
+          0.0
+        ],
+        "horizontalFovRadians": 1.21108937,
+        "verticalFovRadians": 0.86481553
+      },
+      "rgb": {
+        "path": "renders/ramp_rgb.png",
+        "sha256": "cc06ff8d292ecd76554639e12438dd9fd2e53f072c45ffed7648169ebc0ba72b"
+      },
+      "depth": {
+        "path": "renders/ramp_depth_mm.pgm",
+        "sha256": "d5584f633a3b2870e0ae381fb8d918a6ff4330af5e50416b1c2ec40f3f761d01",
+        "encoding": "P5 uint16 big-endian millimetres; 0=unobserved",
+        "maxMetres": 20.0
+      },
+      "semantic": {
+        "path": "renders/ramp_semantic.pgm",
+        "sha256": "8f00e72a9da37c88247c5381a6a90d0ab58481b0b0de88de09e0232064863d16",
+        "encoding": "P5 uint8 class id"
+      }
+    },
+    {
+      "sceneId": "blender-narrow-passage",
+      "tags": [
+        "narrow",
+        "passage"
+      ],
+      "state": "blocked",
+      "cameraPose": {
+        "locationMetres": [
+          300.0,
+          0.0,
+          1.45
+        ],
+        "rotationEulerRadians": [
+          1.570796,
+          0.0,
+          0.0
+        ],
+        "horizontalFovRadians": 1.21108937,
+        "verticalFovRadians": 0.86481553
+      },
+      "rgb": {
+        "path": "renders/narrow-passage_rgb.png",
+        "sha256": "5c3b39b71e41bcf3d25da6b9aa7ea59d12327bc84ce4a46642fef84ec04014a7"
+      },
+      "depth": {
+        "path": "renders/narrow-passage_depth_mm.pgm",
+        "sha256": "784e9d9dcbc4e311be32936aa273ee27ac3dd04317a4d6b6a636c2881e97495e",
+        "encoding": "P5 uint16 big-endian millimetres; 0=unobserved",
+        "maxMetres": 20.0
+      },
+      "semantic": {
+        "path": "renders/narrow-passage_semantic.pgm",
+        "sha256": "63e270bee616a833bfc27572accede078bf619f6518965fa104ca819696d0cbb",
+        "encoding": "P5 uint8 class id"
+      }
+    },
+    {
+      "sceneId": "blender-doorway",
+      "tags": [
+        "doorway",
+        "opening"
+      ],
+      "state": "safe",
+      "cameraPose": {
+        "locationMetres": [
+          330.0,
+          0.0,
+          1.45
+        ],
+        "rotationEulerRadians": [
+          1.570796,
+          0.0,
+          0.0
+        ],
+        "horizontalFovRadians": 1.21108937,
+        "verticalFovRadians": 0.86481553
+      },
+      "rgb": {
+        "path": "renders/doorway_rgb.png",
+        "sha256": "ef82f495811a646a964003acd696ee09f546820823f9787267ab16398d96c5cd"
+      },
+      "depth": {
+        "path": "renders/doorway_depth_mm.pgm",
+        "sha256": "7065d87d324455897c81ec0c1447302f1ea008bf99e7ea2079c10f34573e77e2",
+        "encoding": "P5 uint16 big-endian millimetres; 0=unobserved",
+        "maxMetres": 20.0
+      },
+      "semantic": {
+        "path": "renders/doorway_semantic.pgm",
+        "sha256": "f87391be8f065a449ad4232860026d4ee013276aeba5ba9380de72100f6384c4",
+        "encoding": "P5 uint8 class id"
+      }
+    },
+    {
+      "sceneId": "blender-dead-end",
+      "tags": [
+        "dead-end",
+        "obstacle"
+      ],
+      "state": "blocked",
+      "cameraPose": {
+        "locationMetres": [
+          360.0,
+          0.0,
+          1.45
+        ],
+        "rotationEulerRadians": [
+          1.570796,
+          0.0,
+          0.0
+        ],
+        "horizontalFovRadians": 1.21108937,
+        "verticalFovRadians": 0.86481553
+      },
+      "rgb": {
+        "path": "renders/dead-end_rgb.png",
+        "sha256": "4df12875396088625612afdc3375d924abf868e12099943299b6586f828e8752"
+      },
+      "depth": {
+        "path": "renders/dead-end_depth_mm.pgm",
+        "sha256": "9133e5e4178c941feca1ac88eb8b60d23943b086ed65213e602ad53c301e5842",
+        "encoding": "P5 uint16 big-endian millimetres; 0=unobserved",
+        "maxMetres": 20.0
+      },
+      "semantic": {
+        "path": "renders/dead-end_semantic.pgm",
+        "sha256": "ff21dfa737c206bdfe1987a1abf02066c266000aabfac11508f2f355d40403c5",
+        "encoding": "P5 uint8 class id"
+      }
+    },
+    {
+      "sceneId": "blender-crowd-occlusion",
+      "tags": [
+        "crowd",
+        "occlusion"
+      ],
+      "state": "blocked",
+      "cameraPose": {
+        "locationMetres": [
+          390.0,
+          0.0,
+          1.45
+        ],
+        "rotationEulerRadians": [
+          1.570796,
+          0.0,
+          0.0
+        ],
+        "horizontalFovRadians": 1.21108937,
+        "verticalFovRadians": 0.86481553
+      },
+      "rgb": {
+        "path": "renders/crowd-occlusion_rgb.png",
+        "sha256": "6e5400029df1c586188dd79c258404ed046ea6d69355ee4eee3f4b347e6c4fc7"
+      },
+      "depth": {
+        "path": "renders/crowd-occlusion_depth_mm.pgm",
+        "sha256": "842e81427192a5963d7d44f979db7a810ad4b6a515e369b767b3910523c65e9f",
+        "encoding": "P5 uint16 big-endian millimetres; 0=unobserved",
+        "maxMetres": 20.0
+      },
+      "semantic": {
+        "path": "renders/crowd-occlusion_semantic.pgm",
+        "sha256": "92a57d37d9b35a3ad3821c03c2b7e1877bad00e2dbb962ce2012aef7fce6835f",
+        "encoding": "P5 uint8 class id"
+      }
+    },
+    {
+      "sceneId": "blender-crossing-rider",
+      "tags": [
+        "bicycle",
+        "moving-threat"
+      ],
+      "state": "moving",
+      "cameraPose": {
+        "locationMetres": [
+          420.0,
+          0.0,
+          1.45
+        ],
+        "rotationEulerRadians": [
+          1.570796,
+          0.0,
+          0.0
+        ],
+        "horizontalFovRadians": 1.21108937,
+        "verticalFovRadians": 0.86481553
+      },
+      "rgb": {
+        "path": "renders/crossing-rider_rgb.png",
+        "sha256": "b6d1ed8733888310167ba5a82da794036c5e09cc69870924d3a519c4d81d838e"
+      },
+      "depth": {
+        "path": "renders/crossing-rider_depth_mm.pgm",
+        "sha256": "6f03c829eef0ce1c8262bc8938ea76650a1ad1f42d15a578a89da0fdee6ab8ae",
+        "encoding": "P5 uint16 big-endian millimetres; 0=unobserved",
+        "maxMetres": 20.0
+      },
+      "semantic": {
+        "path": "renders/crossing-rider_semantic.pgm",
+        "sha256": "b3ba780782de398479b216629a209d881904b12737e87b91317bfbca83941780",
+        "encoding": "P5 uint8 class id"
+      }
+    },
+    {
+      "sceneId": "blender-darkness",
+      "tags": [
+        "darkness",
+        "degradation"
+      ],
+      "state": "unknown",
+      "cameraPose": {
+        "locationMetres": [
+          450.0,
+          0.0,
+          1.45
+        ],
+        "rotationEulerRadians": [
+          1.570796,
+          0.0,
+          0.0
+        ],
+        "horizontalFovRadians": 1.21108937,
+        "verticalFovRadians": 0.86481553
+      },
+      "rgb": {
+        "path": "renders/darkness_rgb.png",
+        "sha256": "11290b85f957f3e2e850d1d4b563e241b290373b0ee8290d25f18141f21a6628"
+      },
+      "depth": {
+        "path": "renders/darkness_depth_mm.pgm",
+        "sha256": "104add563ff3bf0eed6c74b22ca6fc7ca964a29ad37ca595c506844c891578fd",
+        "encoding": "P5 uint16 big-endian millimetres; 0=unobserved",
+        "maxMetres": 20.0
+      },
+      "semantic": {
+        "path": "renders/darkness_semantic.pgm",
+        "sha256": "b3a647726c8eb00efe7169f889b68093d5151175e8405b077780983632230c48",
+        "encoding": "P5 uint8 class id"
+      }
+    },
+    {
+      "sceneId": "blender-defocus-blur",
+      "tags": [
+        "blur",
+        "degradation"
+      ],
+      "state": "unknown",
+      "cameraPose": {
+        "locationMetres": [
+          480.0,
+          0.0,
+          1.45
+        ],
+        "rotationEulerRadians": [
+          1.570796,
+          0.0,
+          0.0
+        ],
+        "horizontalFovRadians": 1.21108937,
+        "verticalFovRadians": 0.86481553
+      },
+      "rgb": {
+        "path": "renders/defocus-blur_rgb.png",
+        "sha256": "ef96a948fc2b590b148d0f3218398303aba5aa769ae384c91ea7a7ecd414ac71"
+      },
+      "depth": {
+        "path": "renders/defocus-blur_depth_mm.pgm",
+        "sha256": "104add563ff3bf0eed6c74b22ca6fc7ca964a29ad37ca595c506844c891578fd",
+        "encoding": "P5 uint16 big-endian millimetres; 0=unobserved",
+        "maxMetres": 20.0
+      },
+      "semantic": {
+        "path": "renders/defocus-blur_semantic.pgm",
+        "sha256": "b3a647726c8eb00efe7169f889b68093d5151175e8405b077780983632230c48",
+        "encoding": "P5 uint8 class id"
+      }
+    },
+    {
+      "sceneId": "blender-rain-noise",
+      "tags": [
+        "rain",
+        "noise",
+        "degradation"
+      ],
+      "state": "unknown",
+      "cameraPose": {
+        "locationMetres": [
+          510.0,
+          0.0,
+          1.45
+        ],
+        "rotationEulerRadians": [
+          1.570796,
+          0.0,
+          0.0
+        ],
+        "horizontalFovRadians": 1.21108937,
+        "verticalFovRadians": 0.86481553
+      },
+      "rgb": {
+        "path": "renders/rain-noise_rgb.png",
+        "sha256": "d49271741f68909e36e38c2bea3d7783c95ea29e7926b33220f8d6d276ab8773"
+      },
+      "depth": {
+        "path": "renders/rain-noise_depth_mm.pgm",
+        "sha256": "33d3fab49aa7c6a3d4fbc69c754b7a9e6b7402813623bb6184514cc6956415d0",
+        "encoding": "P5 uint16 big-endian millimetres; 0=unobserved",
+        "maxMetres": 20.0
+      },
+      "semantic": {
+        "path": "renders/rain-noise_semantic.pgm",
+        "sha256": "5cf70d38b283da91cadcd260f6bfdd6e0c2d5c8d81b90d1dc8a9ef38201a7c9f",
+        "encoding": "P5 uint8 class id"
+      }
+    },
+    {
+      "sceneId": "blender-excessive-roll",
+      "tags": [
+        "roll",
+        "orientation"
+      ],
+      "state": "invalid_orientation",
+      "cameraPose": {
+        "locationMetres": [
+          540.0,
+          0.0,
+          1.45
+        ],
+        "rotationEulerRadians": [
+          1.570796,
+          0.0,
+          0.663225
+        ],
+        "horizontalFovRadians": 1.21108937,
+        "verticalFovRadians": 0.86481553
+      },
+      "rgb": {
+        "path": "renders/excessive-roll_rgb.png",
+        "sha256": "1d60d797da07f96e45f64566ab7140178b222cf2be5ecfaa5bcd19181dd98094"
+      },
+      "depth": {
+        "path": "renders/excessive-roll_depth_mm.pgm",
+        "sha256": "ac58eced1061486c7427805743a2912662490519f8b9a972c9f7b8de1f1aefbf",
+        "encoding": "P5 uint16 big-endian millimetres; 0=unobserved",
+        "maxMetres": 20.0
+      },
+      "semantic": {
+        "path": "renders/excessive-roll_semantic.pgm",
+        "sha256": "aa42af7a4c1229081bfbcdc96db2fdc0f5c3a85b91de1f80892db66b19b4532f",
+        "encoding": "P5 uint8 class id"
+      }
+    },
+    {
+      "sceneId": "blender-excessive-pitch",
+      "tags": [
+        "pitch",
+        "orientation"
+      ],
+      "state": "invalid_orientation",
+      "cameraPose": {
+        "locationMetres": [
+          570.0,
+          0.0,
+          1.45
+        ],
+        "rotationEulerRadians": [
+          2.129302,
+          0.0,
+          0.0
+        ],
+        "horizontalFovRadians": 1.21108937,
+        "verticalFovRadians": 0.86481553
+      },
+      "rgb": {
+        "path": "renders/excessive-pitch_rgb.png",
+        "sha256": "6898e28dc3b5d145026cc2e45ccd0b43073c50a26c675dc6818c63b05c6e3184"
+      },
+      "depth": {
+        "path": "renders/excessive-pitch_depth_mm.pgm",
+        "sha256": "0202b151f3cc917dc00cf0af47ee772218626000805c18c470fcfb1fb3b3519e",
+        "encoding": "P5 uint16 big-endian millimetres; 0=unobserved",
+        "maxMetres": 20.0
+      },
+      "semantic": {
+        "path": "renders/excessive-pitch_semantic.pgm",
+        "sha256": "60fe3b4183e40f62cae50c9941549808ef4f8782c75eabd4d08f204a756a04bf",
+        "encoding": "P5 uint8 class id"
+      }
+    },
+    {
+      "sceneId": "blender-camera-obstruction",
+      "tags": [
+        "camera",
+        "obstruction"
+      ],
+      "state": "unavailable",
+      "cameraPose": {
+        "locationMetres": [
+          600.0,
+          0.0,
+          1.45
+        ],
+        "rotationEulerRadians": [
+          1.570796,
+          0.0,
+          0.0
+        ],
+        "horizontalFovRadians": 1.21108937,
+        "verticalFovRadians": 0.86481553
+      },
+      "rgb": {
+        "path": "renders/camera-obstruction_rgb.png",
+        "sha256": "903138db79aa686d20a8a1f5a99e7038c5489d20e01700b3228bcee656e3a4f3"
+      },
+      "depth": {
+        "path": "renders/camera-obstruction_depth_mm.pgm",
+        "sha256": "580bb5a3de01d0e5c5a9dccf347f852f45d83e77353e4dbf8905d9ea60c2290e",
+        "encoding": "P5 uint16 big-endian millimetres; 0=unobserved",
+        "maxMetres": 20.0
+      },
+      "semantic": {
+        "path": "renders/camera-obstruction_semantic.pgm",
+        "sha256": "feed6128d469c017d90bf8e8b79f65d68522d6fff4221b87f19413b0fe8e90d2",
+        "encoding": "P5 uint8 class id"
+      }
+    }
+  ]
+}

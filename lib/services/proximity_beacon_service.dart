@@ -123,9 +123,10 @@ class ProximityBeaconService {
         for (int i = 0; i < _kBaseHapticPattern.length; i++)
           i == 0
               ? _kBaseHapticPattern[i]
-              : (_kBaseHapticPattern[i] * _kWeatherDegradedBoost)
-                    .round()
-                    .clamp(0, 5000),
+              : (_kBaseHapticPattern[i] * _kWeatherDegradedBoost).round().clamp(
+                  0,
+                  5000,
+                ),
       ],
       [
         for (int i = 0; i < _kBaseHapticIntensities.length; i++)

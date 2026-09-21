@@ -2,8 +2,10 @@ import 'dart:ui';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../core/core_feature_policy.dart';
 import '../models/a11y_prefs.dart';
 import '../models/context_mode.dart';
+import '../models/generic_obstacle_mode.dart';
 import '../models/strings.dart';
 import '../theme/bagdar_tokens.dart';
 import 'device_capability.dart';
@@ -15,6 +17,20 @@ class SettingsService {
   SettingsService._();
 
   SharedPreferences? _prefs;
+
+  /// Production uses [CoreFeaturePolicy.current]. Tests that exercise
+  /// research-only code paths may swap this; they must reset it.
+  CoreFeaturePolicy _policy = CoreFeaturePolicy.current;
+
+  CoreFeaturePolicy get featurePolicy => _policy;
+
+  void debugSetPolicy(CoreFeaturePolicy policy) {
+    _policy = policy;
+  }
+
+  void debugResetPolicy() {
+    _policy = CoreFeaturePolicy.current;
+  }
 
   static const _kOnboardingDone = 'onboarding_done';
   static const _kOnboardingMode = 'onboarding_mode';
@@ -55,13 +71,11 @@ class SettingsService {
   static const _kWinterModeManual = 'winter_mode_manual';
   static const _kThemeMode = 'theme_mode';
   static const _kSosContactPrompted = 'sos_contact_prompted';
-  
-  
+
   static const _kEnableKazakhStackV2 = 'enable_kazakh_stack_v2';
   static const _kPreferredRuVoice = 'preferred_ru_voice';
   static const _kPreferredKkVoice = 'preferred_kk_voice';
 
-  
   static const _kIndoorTrailMemory = 'feature_indoor_trail_memory';
   static const _kMeshBuddyAlerts = 'feature_mesh_buddy_alerts';
   static const _kBazaarMode = 'feature_bazaar_mode';
@@ -70,11 +84,13 @@ class SettingsService {
   static const _kLocalAsrAdaptation = 'feature_local_asr_adaptation';
   static const _kVlmCompanion = 'feature_vlm_companion';
   static const _kSonarDepth = 'feature_sonar_depth';
+  static const _kGenericObstacleMode = 'generic_obstacle_mode';
 
   Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
     if (!_prefs!.containsKey(_kLanguage)) {
-      final code = PlatformDispatcher.instance.locale.languageCode.toLowerCase();
+      final code = PlatformDispatcher.instance.locale.languageCode
+          .toLowerCase();
       final detected = switch (code) {
         'kk' => AppLanguage.kk.index,
         'en' => AppLanguage.en.index,
@@ -106,13 +122,13 @@ class SettingsService {
 
   bool get isReady => _prefs != null;
 
+  bool _deferredAllowed(CoreFeature feature) => _policy.mayInitialize(feature);
+
   bool get onboardingDone => _prefs!.getBool(_kOnboardingDone) ?? false;
   String get onboardingMode => _prefs!.getString(_kOnboardingMode) ?? 'street';
   int get language => _prefs!.getInt(_kLanguage) ?? 0;
   bool get useGpu => _prefs!.getBool(_kUseGpu) ?? false;
   bool get useNativeDepthBridge =>
-      
-      
       _prefs!.getBool(_kUseNativeDepthBridge) ?? false;
   bool get useHardwareDepthMode =>
       _prefs!.getBool(_kUseHardwareDepthMode) ?? false;
@@ -135,14 +151,17 @@ class SettingsService {
   int get ncnnBackoffUntilMs => _prefs?.getInt(_kNcnnBackoffUntilMs) ?? 0;
 
   double get speechRate =>
-      (_prefs!.getDouble(_kSpeechRate) ?? kSpeechRateDefault)
-          .clamp(kSpeechRateMin, kSpeechRateMax);
-  double get ttsVolume =>
-      (_prefs!.getDouble(_kTtsVolume) ?? kTtsVolumeDefault)
-          .clamp(kTtsVolumeMin, kTtsVolumeMax);
+      (_prefs!.getDouble(_kSpeechRate) ?? kSpeechRateDefault).clamp(
+        kSpeechRateMin,
+        kSpeechRateMax,
+      );
+  double get ttsVolume => (_prefs!.getDouble(_kTtsVolume) ?? kTtsVolumeDefault)
+      .clamp(kTtsVolumeMin, kTtsVolumeMax);
   double get earconVolume =>
-      (_prefs!.getDouble(_kEarconVolume) ?? kEarconVolumeDefault)
-          .clamp(kEarconVolumeMin, kEarconVolumeMax);
+      (_prefs!.getDouble(_kEarconVolume) ?? kEarconVolumeDefault).clamp(
+        kEarconVolumeMin,
+        kEarconVolumeMax,
+      );
 
   Verbosity get verbosity {
     final i = _prefs!.getInt(_kVerbosity) ?? Verbosity.normal.index;
@@ -169,11 +188,9 @@ class SettingsService {
     return DominantHand.values[i.clamp(0, DominantHand.values.length - 1)];
   }
 
-  
   TapSensitivity get tapSensitivity {
     final i = _prefs?.getInt(_kTapSensitivity) ?? TapSensitivity.normal.index;
-    return TapSensitivity.values[
-        i.clamp(0, TapSensitivity.values.length - 1)];
+    return TapSensitivity.values[i.clamp(0, TapSensitivity.values.length - 1)];
   }
 
   Future<void> setTapSensitivity(TapSensitivity v) async =>
@@ -252,8 +269,7 @@ class SettingsService {
 
   // V5.3: Persist exponential backoff state.
   Future<void> setNcnnBackoff(int level, int untilMs) async {
-    await (_prefs?.setInt(_kNcnnBackoffLevel, level) ??
-        Future<void>.value());
+    await (_prefs?.setInt(_kNcnnBackoffLevel, level) ?? Future<void>.value());
     await (_prefs?.setInt(_kNcnnBackoffUntilMs, untilMs) ??
         Future<void>.value());
   }
@@ -265,35 +281,37 @@ class SettingsService {
     await (_prefs?.remove(_kNcnnBackoffUntilMs) ?? Future<void>.value());
   }
 
-  bool get clearPathAnnounce =>
-      _prefs?.getBool(_kClearPathAnnounce) ?? true;
+  bool get clearPathAnnounce => _prefs?.getBool(_kClearPathAnnounce) ?? false;
   Future<void> setClearPathAnnounce(bool v) async =>
       _prefs!.setBool(_kClearPathAnnounce, v);
 
-  bool get batteryAnnounce =>
-      _prefs?.getBool(_kBatteryAnnounce) ?? true;
+  bool get batteryAnnounce => _prefs?.getBool(_kBatteryAnnounce) ?? true;
   Future<void> setBatteryAnnounce(bool v) async =>
       _prefs!.setBool(_kBatteryAnnounce, v);
 
-  bool get modeAnnounce =>
-      _prefs?.getBool(_kModeAnnounce) ?? true;
+  bool get modeAnnounce => _prefs?.getBool(_kModeAnnounce) ?? true;
   Future<void> setModeAnnounce(bool v) async =>
       _prefs!.setBool(_kModeAnnounce, v);
 
-  bool get audioTourSeen =>
-      _prefs?.getBool(_kAudioTourSeen) ?? false;
+  bool get audioTourSeen => _prefs?.getBool(_kAudioTourSeen) ?? false;
   Future<void> setAudioTourSeen(bool v) async =>
       _prefs!.setBool(_kAudioTourSeen, v);
 
   bool get sceneNarrationEnabled =>
-      _prefs?.getBool(_kSceneNarrationEnabled) ?? true;
-  Future<void> setSceneNarrationEnabled(bool v) async =>
-      _prefs!.setBool(_kSceneNarrationEnabled, v);
+      _deferredAllowed(CoreFeature.sceneNarration) &&
+      (_prefs?.getBool(_kSceneNarrationEnabled) ?? true);
+  Future<void> setSceneNarrationEnabled(bool v) async {
+    if (!_deferredAllowed(CoreFeature.sceneNarration)) return;
+    await _prefs!.setBool(_kSceneNarrationEnabled, v);
+  }
 
   bool get paymentSmsEnabled =>
-      _prefs?.getBool(_kPaymentSmsEnabled) ?? false;
-  Future<void> setPaymentSmsEnabled(bool v) async =>
-      _prefs!.setBool(_kPaymentSmsEnabled, v);
+      _deferredAllowed(CoreFeature.paymentSms) &&
+      (_prefs?.getBool(_kPaymentSmsEnabled) ?? false);
+  Future<void> setPaymentSmsEnabled(bool v) async {
+    if (!_deferredAllowed(CoreFeature.paymentSms)) return;
+    await _prefs!.setBool(_kPaymentSmsEnabled, v);
+  }
 
   bool get calibrationDeclined =>
       _prefs?.getBool(_kCalibrationDeclined) ?? false;
@@ -312,14 +330,12 @@ class SettingsService {
     }
   }
 
-  
   DateTime? get disclaimerAcknowledgedAt {
     final ms = _prefs?.getInt(_kDisclaimerAcknowledgedAt);
     if (ms == null || ms == 0) return null;
     return DateTime.fromMillisecondsSinceEpoch(ms);
   }
 
-  
   bool get disclaimerNeedsReprompt {
     if (!disclaimerAcknowledged) return true;
     final at = disclaimerAcknowledgedAt;
@@ -331,9 +347,12 @@ class SettingsService {
   /// active state can also be auto-driven by [WinterModeService] based on
   /// battery temperature; this getter exposes only the user-set bit.
   bool get winterModeManual =>
-      _prefs?.getBool(_kWinterModeManual) ?? false;
-  Future<void> setWinterModeManual(bool v) async =>
-      _prefs!.setBool(_kWinterModeManual, v);
+      _deferredAllowed(CoreFeature.experimentalWinter) &&
+      (_prefs?.getBool(_kWinterModeManual) ?? false);
+  Future<void> setWinterModeManual(bool v) async {
+    if (!_deferredAllowed(CoreFeature.experimentalWinter)) return;
+    await _prefs!.setBool(_kWinterModeManual, v);
+  }
 
   /// Visual theme. Default: dark/OLED with electric-yellow accent — chosen
   /// because the majority of target users either run pitch-black mode (so
@@ -348,94 +367,134 @@ class SettingsService {
   Future<void> setThemeMode(BagdarThemeName v) async =>
       _prefs?.setString(_kThemeMode, v.id) ?? Future<void>.value();
 
-  /// Enable the next-generation Kazakh language stack (Vosk STT in Phase 1,
-  /// RHVoice/espeak-ng TTS in Phase 2, PaddleOCR in Phase 3). Default false:
-  /// new code paths must be opted in until acceptance criteria are met for
-  /// each phase. Toggleable from the dev/settings menu.
-  bool get enableKazakhStackV2 =>
-      _prefs?.getBool(_kEnableKazakhStackV2) ?? false;
+  /// Developer rollout flag. Default [GenericObstacleMode.shadow].
+  /// [GenericObstacleMode.assistive] is rejected until a signed validation
+  /// report authorizes a specific build.
+  GenericObstacleMode get genericObstacleMode {
+    final i =
+        _prefs?.getInt(_kGenericObstacleMode) ??
+        GenericObstacleMode.shadow.index;
+    if (i < 0 || i >= GenericObstacleMode.values.length) {
+      return GenericObstacleMode.shadow;
+    }
+    return sanitizeGenericObstacleMode(GenericObstacleMode.values[i]);
+  }
 
-  Future<void> setEnableKazakhStackV2(bool v) async =>
-      _prefs?.setBool(_kEnableKazakhStackV2, v) ?? Future<void>.value();
+  Future<void> setGenericObstacleMode(GenericObstacleMode v) async =>
+      _prefs?.setInt(
+        _kGenericObstacleMode,
+        sanitizeGenericObstacleMode(v).index,
+      ) ??
+      Future<void>.value();
+
+  bool get enableKazakhStackV2 =>
+      _deferredAllowed(CoreFeature.kazakhStackV2) &&
+      (_prefs?.getBool(_kEnableKazakhStackV2) ?? false);
+
+  Future<void> setEnableKazakhStackV2(bool v) async {
+    if (!_deferredAllowed(CoreFeature.kazakhStackV2)) return;
+    await (_prefs?.setBool(_kEnableKazakhStackV2, v) ?? Future<void>.value());
+  }
 
   /// User-selected TTS voice name for Russian. Empty string means auto.
-  String get preferredRuVoice =>
-      _prefs?.getString(_kPreferredRuVoice) ?? '';
+  String get preferredRuVoice => _prefs?.getString(_kPreferredRuVoice) ?? '';
   Future<void> setPreferredRuVoice(String v) async =>
       _prefs?.setString(_kPreferredRuVoice, v) ?? Future<void>.value();
 
   /// User-selected TTS voice name for Kazakh. Empty string means auto.
-  String get preferredKkVoice =>
-      _prefs?.getString(_kPreferredKkVoice) ?? '';
+  String get preferredKkVoice => _prefs?.getString(_kPreferredKkVoice) ?? '';
   Future<void> setPreferredKkVoice(String v) async =>
       _prefs?.setString(_kPreferredKkVoice, v) ?? Future<void>.value();
 
-  
   /// Geomagnetic indoor trail memory (Phase 1 — Direction 6). When on,
   /// `IndoorTrailRecorder` is allowed to capture step+heading+magnetic
   /// signatures and `IndoorTrailReplay` may emit nav prompts.
   bool get indoorTrailMemory =>
-      _prefs?.getBool(_kIndoorTrailMemory) ?? false;
-  Future<void> setIndoorTrailMemory(bool v) async =>
-      _prefs?.setBool(_kIndoorTrailMemory, v) ?? Future<void>.value();
+      _deferredAllowed(CoreFeature.indoorTrail) &&
+      (_prefs?.getBool(_kIndoorTrailMemory) ?? false);
+  Future<void> setIndoorTrailMemory(bool v) async {
+    if (!_deferredAllowed(CoreFeature.indoorTrail)) return;
+    await (_prefs?.setBool(_kIndoorTrailMemory, v) ?? Future<void>.value());
+  }
 
   /// Mesh-net buddy alerts (Phase 2 — Direction 3). When on, the BLE
   /// peer-network plugin starts advertising/scanning. Disabled by
   /// default until the `BleBuddyPlugin` ships and battery/permission
   /// UX is validated.
   bool get meshBuddyAlerts =>
-      _prefs?.getBool(_kMeshBuddyAlerts) ?? false;
-  Future<void> setMeshBuddyAlerts(bool v) async =>
-      _prefs?.setBool(_kMeshBuddyAlerts, v) ?? Future<void>.value();
+      _deferredAllowed(CoreFeature.bleMesh) &&
+      (_prefs?.getBool(_kMeshBuddyAlerts) ?? false);
+  Future<void> setMeshBuddyAlerts(bool v) async {
+    if (!_deferredAllowed(CoreFeature.bleMesh)) return;
+    await (_prefs?.setBool(_kMeshBuddyAlerts, v) ?? Future<void>.value());
+  }
 
   /// Bazaar mode (Phase 1 — Direction 9 sub-mode). Adjusts crowd
   /// suppression / hanging-obstacle priority via threshold tuning;
   /// does not bundle new ML assets.
   bool get bazaarMode =>
-      _prefs?.getBool(_kBazaarMode) ?? false;
-  Future<void> setBazaarMode(bool v) async =>
-      _prefs?.setBool(_kBazaarMode, v) ?? Future<void>.value();
+      _deferredAllowed(CoreFeature.bazaarLivestock) &&
+      (_prefs?.getBool(_kBazaarMode) ?? false);
+  Future<void> setBazaarMode(bool v) async {
+    if (!_deferredAllowed(CoreFeature.bazaarLivestock)) return;
+    await (_prefs?.setBool(_kBazaarMode, v) ?? Future<void>.value());
+  }
 
   /// Livestock awareness (Phase 1 — Direction 9 sub-mode). Enables
   /// localized announcements for cow/sheep/goat/horse/chicken/stray dog
   /// when corresponding labels enter the YOLO label set. Never
   /// reduces vehicle/pedestrian sensitivity.
   bool get livestockAwareness =>
-      _prefs?.getBool(_kLivestockAwareness) ?? false;
-  Future<void> setLivestockAwareness(bool v) async =>
-      _prefs?.setBool(_kLivestockAwareness, v) ?? Future<void>.value();
+      _deferredAllowed(CoreFeature.bazaarLivestock) &&
+      (_prefs?.getBool(_kLivestockAwareness) ?? false);
+  Future<void> setLivestockAwareness(bool v) async {
+    if (!_deferredAllowed(CoreFeature.bazaarLivestock)) return;
+    await (_prefs?.setBool(_kLivestockAwareness, v) ?? Future<void>.value());
+  }
 
   /// Open Smart-Cane Sensor Pod (Phase 2 — Direction 7). When on, the
   /// app attempts to scan for a paired OSCP cane via BLE. The app
   /// remains fully usable when the pod is absent.
   bool get oscpPod =>
-      _prefs?.getBool(_kOscpPod) ?? false;
-  Future<void> setOscpPod(bool v) async =>
-      _prefs?.setBool(_kOscpPod, v) ?? Future<void>.value();
+      _deferredAllowed(CoreFeature.smartCane) &&
+      (_prefs?.getBool(_kOscpPod) ?? false);
+  Future<void> setOscpPod(bool v) async {
+    if (!_deferredAllowed(CoreFeature.smartCane)) return;
+    await (_prefs?.setBool(_kOscpPod, v) ?? Future<void>.value());
+  }
 
   /// Local ASR adaptation (Phase 1 — Direction 12 foundations). When
   /// on, `VoiceAdaptationStore` retains transcripts of successful
   /// commands and (later) audio features for a user-controlled on-device
   /// LoRA adapter. No data leaves the device.
   bool get localAsrAdaptation =>
-      _prefs?.getBool(_kLocalAsrAdaptation) ?? false;
-  Future<void> setLocalAsrAdaptation(bool v) async =>
-      _prefs?.setBool(_kLocalAsrAdaptation, v) ?? Future<void>.value();
+      _deferredAllowed(CoreFeature.localAsrAdaptation) &&
+      (_prefs?.getBool(_kLocalAsrAdaptation) ?? false);
+  Future<void> setLocalAsrAdaptation(bool v) async {
+    if (!_deferredAllowed(CoreFeature.localAsrAdaptation)) return;
+    await (_prefs?.setBool(_kLocalAsrAdaptation, v) ?? Future<void>.value());
+  }
 
   /// On-device VLM companion (Phase 4 — Direction 11). Gated by
   /// charging + thermal + memory; never preempts hazard detection.
   bool get vlmCompanion =>
-      _prefs?.getBool(_kVlmCompanion) ?? false;
-  Future<void> setVlmCompanion(bool v) async =>
-      _prefs?.setBool(_kVlmCompanion, v) ?? Future<void>.value();
+      _deferredAllowed(CoreFeature.vlmSceneQa) &&
+      (_prefs?.getBool(_kVlmCompanion) ?? false);
+  Future<void> setVlmCompanion(bool v) async {
+    if (!_deferredAllowed(CoreFeature.vlmSceneQa)) return;
+    await (_prefs?.setBool(_kVlmCompanion, v) ?? Future<void>.value());
+  }
 
   /// FMCW chirp echolocation depth (Phase 5 — Direction 1).
   /// Experimental; disabled when headphones / call audio / AWM / ASR
   /// own the mic.
   bool get sonarDepth =>
-      _prefs?.getBool(_kSonarDepth) ?? false;
-  Future<void> setSonarDepth(bool v) async =>
-      _prefs?.setBool(_kSonarDepth, v) ?? Future<void>.value();
+      _deferredAllowed(CoreFeature.sonar) &&
+      (_prefs?.getBool(_kSonarDepth) ?? false);
+  Future<void> setSonarDepth(bool v) async {
+    if (!_deferredAllowed(CoreFeature.sonar)) return;
+    await (_prefs?.setBool(_kSonarDepth, v) ?? Future<void>.value());
+  }
 
   /// Effective `ContextMode` derived from the bazaar/livestock feature
   /// flags. Bazaar takes precedence over livestock when both are on
@@ -449,4 +508,3 @@ class SettingsService {
 
   Future<void> resetAll() async => _prefs!.clear();
 }
-

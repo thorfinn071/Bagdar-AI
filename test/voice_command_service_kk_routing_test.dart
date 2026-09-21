@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:bagdar/core/core_feature_policy.dart';
 import 'package:bagdar/models/language_pack.dart';
 import 'package:bagdar/services/language_pack_manager.dart';
 import 'package:bagdar/services/settings_service.dart';
@@ -12,8 +13,13 @@ void main() {
 
   setUp(() async {
     SharedPreferences.setMockInitialValues({});
+    Settings.instance.debugResetPolicy();
     await Settings.instance.init();
     LanguagePackManager.instance.debugReset(packsDir: '/tmp/test_lang_packs');
+  });
+
+  tearDown(() {
+    Settings.instance.debugResetPolicy();
   });
 
   group('VoiceCommandService.buildKkClosedGrammar', () {
@@ -24,7 +30,7 @@ void main() {
 
     test('includes every closed-class kk command phrase', () {
       final grammar = VoiceCommandService.buildKkClosedGrammar();
-      
+
       const samples = <String>[
         'айналада не бар',
         'солда не бар',
@@ -52,30 +58,38 @@ void main() {
 
     test('includes kk cancel-fall acknowledgments', () {
       final grammar = VoiceCommandService.buildKkClosedGrammar();
-      
-      
-      final anyCancel = grammar.any((p) =>
-          p.contains('жақсы') ||
-          p.contains('дұрыс') ||
-          p.contains('жалған'));
-      expect(anyCancel, true,
-          reason:
-              'cancel-fall acknowledgments must appear in the closed grammar '
-              'so Vosk can recognize them in safety-critical fall flows');
+
+      final anyCancel = grammar.any(
+        (p) =>
+            p.contains('жақсы') || p.contains('дұрыс') || p.contains('жалған'),
+      );
+      expect(
+        anyCancel,
+        true,
+        reason:
+            'cancel-fall acknowledgments must appear in the closed grammar '
+            'so Vosk can recognize them in safety-critical fall flows',
+      );
     });
 
     test('rejects empty phrases', () {
       final grammar = VoiceCommandService.buildKkClosedGrammar();
       for (final phrase in grammar) {
-        expect(phrase.trim().isNotEmpty, true,
-            reason: 'grammar contains an empty/whitespace phrase: "$phrase"');
+        expect(
+          phrase.trim().isNotEmpty,
+          true,
+          reason: 'grammar contains an empty/whitespace phrase: "$phrase"',
+        );
       }
     });
 
     test('produces no duplicates', () {
       final grammar = VoiceCommandService.buildKkClosedGrammar();
-      expect(grammar.length, grammar.toSet().length,
-          reason: 'duplicates waste Vosk grammar slots');
+      expect(
+        grammar.length,
+        grammar.toSet().length,
+        reason: 'duplicates waste Vosk grammar slots',
+      );
     });
   });
 
@@ -86,19 +100,25 @@ void main() {
       expect(svc.useVoskForKk, false);
     });
 
-    test('flag on but pack not installed → Vosk routing still inactive',
-        () async {
-      await Settings.instance.setEnableKazakhStackV2(true);
-      
-      final svc = VoiceCommandService();
-      
-      
-      svc.setLocale('kk-KZ');
-      expect(svc.useVoskForKk, false);
-    });
+    test(
+      'flag on but pack not installed → Vosk routing still inactive',
+      () async {
+        Settings.instance.debugSetPolicy(
+          const CoreFeaturePolicy(BuildProfile.research),
+        );
+        await Settings.instance.setEnableKazakhStackV2(true);
 
-    test('locale switch back to ru-RU clears Vosk routing intent',
-        () async {
+        final svc = VoiceCommandService();
+
+        svc.setLocale('kk-KZ');
+        expect(svc.useVoskForKk, false);
+      },
+    );
+
+    test('locale switch back to ru-RU clears Vosk routing intent', () async {
+      Settings.instance.debugSetPolicy(
+        const CoreFeaturePolicy(BuildProfile.research),
+      );
       await Settings.instance.setEnableKazakhStackV2(true);
       LanguagePackManager.instance.debugReset(
         packsDir: '/tmp/test_lang_packs',
@@ -114,17 +134,16 @@ void main() {
       final svc = VoiceCommandService();
       svc.setLocale('kk-KZ');
       svc.setLocale('ru-RU');
-      
-      
+
       expect(svc.useVoskForKk, false);
     });
   });
 
   group('VoiceCommandService parser still works for kk under v2 flag', () {
-    
-    
-    test('kk scan command parses correctly when fed via Vosk path',
-        () async {
+    test('kk scan command parses correctly when fed via Vosk path', () async {
+      Settings.instance.debugSetPolicy(
+        const CoreFeaturePolicy(BuildProfile.research),
+      );
       await Settings.instance.setEnableKazakhStackV2(true);
       final svc = VoiceCommandService();
       VoiceCommand? captured;
@@ -134,6 +153,9 @@ void main() {
     });
 
     test('kk SOS exact phrase still fires sos command', () async {
+      Settings.instance.debugSetPolicy(
+        const CoreFeaturePolicy(BuildProfile.research),
+      );
       await Settings.instance.setEnableKazakhStackV2(true);
       final svc = VoiceCommandService();
       VoiceCommand? captured;
@@ -173,17 +195,11 @@ void main() {
       expect(captured, VoiceCommand.enableKkV2);
 
       captured = null;
-      svc.processWordsForTesting(
-        'жетілдірілген тану',
-        localeOverride: 'kk-KZ',
-      );
+      svc.processWordsForTesting('жетілдірілген тану', localeOverride: 'kk-KZ');
       expect(captured, VoiceCommand.enableKkV2);
 
       captured = null;
-      svc.processWordsForTesting(
-        'enhanced kazakh',
-        localeOverride: 'en-US',
-      );
+      svc.processWordsForTesting('enhanced kazakh', localeOverride: 'en-US');
       expect(captured, VoiceCommand.enableKkV2);
     });
 
@@ -206,21 +222,18 @@ void main() {
       expect(captured, VoiceCommand.disableKkV2);
 
       captured = null;
-      svc.processWordsForTesting(
-        'standard kazakh',
-        localeOverride: 'en-US',
-      );
+      svc.processWordsForTesting('standard kazakh', localeOverride: 'en-US');
       expect(captured, VoiceCommand.disableKkV2);
     });
 
-    test('kk closed grammar includes the new manage/enable/disable phrases',
-        () {
-      
-      
-      final grammar = VoiceCommandService.buildKkClosedGrammar();
-      expect(grammar.contains('тіл пакеттері'), true);
-      expect(grammar.contains('жетілдірілген тану'), true);
-      expect(grammar.contains('қарапайым қазақша тану'), true);
-    });
+    test(
+      'kk closed grammar includes the new manage/enable/disable phrases',
+      () {
+        final grammar = VoiceCommandService.buildKkClosedGrammar();
+        expect(grammar.contains('тіл пакеттері'), true);
+        expect(grammar.contains('жетілдірілген тану'), true);
+        expect(grammar.contains('қарапайым қазақша тану'), true);
+      },
+    );
   });
 }

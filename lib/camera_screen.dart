@@ -10,6 +10,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:flutter_native_contact_picker/flutter_native_contact_picker.dart';
 
+import 'core/core_feature_policy.dart';
+import 'core/core_health_coordinator.dart';
 import 'models/app_mode.dart';
 import 'models/strings.dart';
 import 'models/speech_job.dart';
@@ -48,6 +50,7 @@ import 'models/tts_engine.dart' show KkTtsEngine;
 import 'services/feature_usage_tracker.dart';
 import 'services/field_logger.dart';
 import 'services/indoor_gate.dart';
+import 'services/orientation_service.dart' show DevicePitch;
 import 'services/misalignment_watchdog.dart';
 import 'services/phone_abandoned_detector.dart';
 import 'camera/frame_quality_guard.dart';
@@ -56,6 +59,7 @@ import 'camera/stall_watchdog.dart';
 import 'camera/fall_countdown_controller.dart';
 import 'camera/voice_command_dispatcher.dart';
 import 'camera/camera_lifecycle_controller.dart';
+import 'safety/world/local_scene_snapshot.dart';
 import 'services/scene_narrator.dart';
 import 'gesture_tutorial_screen.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -116,15 +120,15 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   int _lowFpsStreak = 0;
   DateTime _fpsWindowStart = DateTime.now();
   Timer? _resourceLogTimer;
+  Timer? _spatialSafetyTickTimer;
+  static const Duration _kSpatialSafetyTickPeriod = Duration(milliseconds: 250);
 
   Timer? _twoFingerSosTimer;
   bool _twoFingerSosArmed = false;
 
-  
   final List<DateTime> _recentTaps = [];
   static const Duration _tripleTapWindow = Duration(milliseconds: 800);
 
-  
   StreamSubscription<AccelerometerEvent>? _shakeSub;
 
   /// Connectivity listener for the onboarding "remind me when online" path.
@@ -154,11 +158,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   late final DepthPipelineController _depthController;
   late final StallWatchdog _stallWatchdog;
 
-  
   Timer? _indoorPollTimer;
   static const Duration _kIndoorPollPeriod = Duration(seconds: 5);
 
-  
   final List<RawDet> _rawDetBuffer = <RawDet>[];
 
   final List<Uint8List> _planeBytesBuffer = List<Uint8List>.filled(
@@ -172,7 +174,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   static const int _kShakeWarnStreak = 15;
   static const Duration _kShakeWarnCooldown = Duration(seconds: 6);
 
-  
   DateTime _lastStallWarnTtsAt = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _stallStartedAt = DateTime.fromMillisecondsSinceEpoch(0);
   static const Duration _kStallTtsCooldown = Duration(seconds: 60);
@@ -184,13 +185,21 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   /// replayed after the route stabilises.
   DateTime? _routeChangeAt;
 
-  
   AppMode? _lastObservedMode;
 
   final Map<FrameQualityEventType, DateTime> _lastQualityTtsAt = {};
   static const Duration _kQualityEventCooldown = Duration(seconds: 30);
 
-  
+  /// Safety audit D-1: AE transitions blind the motion-prealert safety net
+  /// entirely (MotionPreAlert.feed returns null while aeTransitioning), so
+  /// unlike the other quality events, an AE start must be surfaced far more
+  /// often than the shared 30 s [_kQualityEventCooldown] — a second doorway
+  /// transition inside 30 s must not be silent.
+  DateTime _lastAeTransitionEarconAt = DateTime.fromMillisecondsSinceEpoch(0);
+  DateTime _lastAeTransitionTtsAt = DateTime.fromMillisecondsSinceEpoch(0);
+  static const Duration _kAeTransitionEarconCooldown = Duration(seconds: 5);
+  static const Duration _kAeTransitionTtsCooldown = Duration(seconds: 10);
+
   DateTime _lastMidasModeAnnounceAt = DateTime.fromMillisecondsSinceEpoch(0);
   static const Duration _kMidasModeAnnounceCooldown = Duration(seconds: 30);
 
@@ -203,11 +212,10 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   DateTime _lastWinterHeartbeatAt = DateTime.fromMillisecondsSinceEpoch(0);
   static const Duration _kWinterHeartbeatInterval = Duration(seconds: 60);
 
-  
-  DateTime _lastWeatherDepthHeartbeatAt =
-      DateTime.fromMillisecondsSinceEpoch(0);
-  static const Duration _kWeatherDepthHeartbeatInterval =
-      Duration(seconds: 60);
+  DateTime _lastWeatherDepthHeartbeatAt = DateTime.fromMillisecondsSinceEpoch(
+    0,
+  );
+  static const Duration _kWeatherDepthHeartbeatInterval = Duration(seconds: 60);
 
   // Safety audit 2026-06 fix A-1: YOLO unavailability tracking
   Timer? _yoloRetryTimer;
@@ -217,8 +225,12 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   static const Duration _kYoloRetryInterval = Duration(seconds: 30);
   static const Duration _kYoloDetectorWarnCooldown = Duration(seconds: 30);
 
+  DateTime _lastGyroDegradedAnnounceAt = DateTime.fromMillisecondsSinceEpoch(0);
+  static const Duration _kGyroDegradedAnnounceCooldown = Duration(seconds: 60);
+
   bool _cameraPermissionDenied = false;
   Timer? _cameraPermissionTimer;
+  Timer? _cameraInitRetryTimer;
 
   @override
   void initState() {
@@ -226,8 +238,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _vm = CameraViewModel();
     _qualityGuard = FrameQualityGuard(weatherGate: _vm.weatherGate);
     _depthController = DepthPipelineController(vm: _vm, models: _models);
-    
-    
+
     _depthController.onStatusChanged = _onDepthStatusChanged;
     // Safety audit 2026-06 fix A-1: subscribe to YOLO unavailability
     _models.onYoloUnavailable = _onYoloUnavailable;
@@ -242,13 +253,12 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     );
     _stallWatchdog = StallWatchdog(
       thresholdProvider: () => _vm.throttler.stallWatchdogThreshold(),
-      isActive: () =>
-          mounted && !_lifecycle.backgroundWarned && _isCameraReady,
+      isActive: () => mounted && !_lifecycle.backgroundWarned && _isCameraReady,
       onStall: () {
         final now = DateTime.now();
         _stallStartedAt = now;
         final threshold = _vm.throttler.stallWatchdogThreshold();
-        
+
         debugPrint(
           '[BAGDAR_STALL] onStall fired @ ${now.toIso8601String()} '
           'threshold=${threshold.inMilliseconds}ms '
@@ -259,22 +269,22 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           stalled: true,
           thresholdMs: threshold.inMilliseconds,
         );
-        
-        
+
         final stallCooldown =
             (_vm.mode == AppMode.street || _vm.mode == AppMode.cane)
-                ? const Duration(seconds: 15)
-                : _kStallTtsCooldown;
+            ? const Duration(seconds: 15)
+            : _kStallTtsCooldown;
         if (now.difference(_lastStallWarnTtsAt) < stallCooldown) {
           return;
         }
         _vm.alertMgr.markCameraStall(now);
         _lastStallWarnTtsAt = now;
-        _vm.earcon.play(Earcon.cameraBlocked);
-        _vm.tts.say(
-          S.get('camera_stalled'),
-          SpeechPriority.warning,
-          pan: 0.0,
+        _vm.submitCameraSafety(
+          speechKey: 'camera_stalled',
+          replaceKey: 'camera_stall',
+          now: now,
+          critical: _vm.fallDetector.motionState != MotionState.stationary,
+          urgency: 0.9,
         );
       },
     );
@@ -287,6 +297,13 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         _vm.sos.cancelQueuedFollowUp();
       },
       onSosSent: () => _vm.fallDetector.notifyFallSosSent(),
+      onSafetyFeedback: (speechKey, replaceKey, now) {
+        _vm.submitEmergencySafety(
+          speechKey: speechKey,
+          replaceKey: replaceKey,
+          now: now,
+        );
+      },
       winterModeProvider: () => _vm.winterMode.active,
       motionStateProvider: () => _vm.fallDetector.motionState,
       deliberateTapThresholdProvider: () =>
@@ -318,18 +335,16 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _vm.addListener(() {
       if (mounted) setState(() {});
       _managePitchBlackHeartbeat();
-      
-      
+
       _qualityGuard.setMode(scanModeActive: _vm.mode == AppMode.scan);
-      
-      
+
       final newMode = _vm.mode;
       if (newMode != _lastObservedMode) {
         final transitioningIntoSafetyMode =
             (newMode == AppMode.street || newMode == AppMode.cane) &&
-                (_lastObservedMode == null ||
-                    !(_lastObservedMode == AppMode.street ||
-                        _lastObservedMode == AppMode.cane));
+            (_lastObservedMode == null ||
+                !(_lastObservedMode == AppMode.street ||
+                    _lastObservedMode == AppMode.cane));
         if (transitioningIntoSafetyMode &&
             _initCompletedAt.millisecondsSinceEpoch != 0 &&
             !_depthController.providerReady) {
@@ -339,8 +354,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
             pan: 0.0,
           );
         }
-        
-        
+
         if (transitioningIntoSafetyMode &&
             _initCompletedAt.millisecondsSinceEpoch != 0 &&
             Settings.instance.disclaimerNeedsReprompt) {
@@ -350,9 +364,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
             pan: 0.0,
           );
           unawaited(Settings.instance.setDisclaimerAcknowledged(true));
-          _fieldLog.log('disclaimer_reprompted', {
-            'mode': newMode.name,
-          });
+          _fieldLog.log('disclaimer_reprompted', {'mode': newMode.name});
         }
         _lastObservedMode = newMode;
       }
@@ -388,14 +400,18 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _misalignmentWatchdog.notePitchState(_vm.orientation.state);
     _misalignmentWatchdog.noteMotionState(_vm.fallDetector.motionState);
     final result = _misalignmentWatchdog.tick();
-    if (result.fireHaptic) {
+    if (result.fireHaptic && !result.shouldAnnounce) {
       HapticService.vibrate(const [0, 60, 60, 60]);
     }
     if (result.shouldAnnounce) {
-      _vm.tts.say(
-        S.get(result.announceKey!),
-        result.announcePriority!,
-        pan: 0.0,
+      _vm.submitCameraSafety(
+        speechKey: result.announceKey!,
+        replaceKey: 'misalignment',
+        now: DateTime.now(),
+        critical: result.announcePriority == SpeechPriority.critical,
+        urgency: result.announcePriority == SpeechPriority.critical
+            ? 0.95
+            : 0.7,
       );
       _fieldLog.log('misalignment_announced', {
         'priority': result.announcePriority!.name,
@@ -403,17 +419,18 @@ class _AiCameraScreenState extends State<AiCameraScreen>
             ?.toIso8601String(),
       });
     }
-    _phoneAbandonedTick();
+    if (CoreFeaturePolicy.current.mayInitialize(CoreFeature.phoneAbandoned)) {
+      _phoneAbandonedTick();
+    }
     _winterHeartbeatTick();
     _weatherDepthHeartbeatTick();
   }
 
-  
   void _weatherDepthHeartbeatTick() {
     if (!_vm.weatherGate.degraded) return;
-    
+
     if (_vm.fallDetector.motionState != MotionState.walking) return;
-    
+
     if (_vm.mode != AppMode.street && _vm.mode != AppMode.cane) return;
     final now = DateTime.now();
     if (now.difference(_lastWeatherDepthHeartbeatAt) <
@@ -455,10 +472,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   void _phoneAbandonedTick() {
     _phoneAbandoned.noteMotionState(_vm.fallDetector.motionState);
     _phoneAbandoned.noteCameraFrozen(_qualityGuard.cameraFrozenWarned);
-    
-    
-    final lumaNormal = !_qualityGuard.cameraBlockedWarned &&
-        !_qualityGuard.aeTransitioning;
+
+    final lumaNormal =
+        !_qualityGuard.cameraBlockedWarned && !_qualityGuard.aeTransitioning;
     _phoneAbandoned.noteLumaNormal(lumaNormal);
 
     final result = _phoneAbandoned.tick();
@@ -492,9 +508,11 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _stopNativeWatchdog();
     WidgetsBinding.instance.removeObserver(this);
     _cameraPermissionTimer?.cancel();
+    _cameraInitRetryTimer?.cancel();
     _heartbeatTimer?.cancel();
     _pitchBlackHeartbeatTimer?.cancel();
     _resourceLogTimer?.cancel();
+    _stopSpatialSafetyCadence();
     _twoFingerSosTimer?.cancel();
     _tripleTapStatusTimer?.cancel();
     _shakeSub?.cancel();
@@ -551,6 +569,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
   @override
   void onBackgroundEntered() {
+    _stopSpatialSafetyCadence();
+    _vm.endCameraSession(DateTime.now());
     _stallWatchdog.stop();
     _stopNativeWatchdog();
     _indoorPollTimer?.cancel();
@@ -558,10 +578,17 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   }
 
   @override
+  void onCameraSessionStarting() {
+    final sessionGeneration = _vm.beginCameraSession(DateTime.now());
+    _depthController.beginSession(sessionGeneration);
+  }
+
+  @override
   void onForegroundResumed() {
     _stallWatchdog.start();
     if (_isCameraReady) {
       _startNativeWatchdog();
+      _startSpatialSafetyCadence();
     }
   }
 
@@ -580,7 +607,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         _recomputeCadence();
         _fieldLog.logBatteryThrottle(level.name, _vm.battery.batteryLevel);
         if (mounted) setState(() {});
-        if (Settings.instance.batteryAnnounce && level != ThrottleLevel.normal) {
+        if (Settings.instance.batteryAnnounce &&
+            level != ThrottleLevel.normal) {
           final msg = switch (level) {
             ThrottleLevel.moderate => S.get('battery_moderate'),
             ThrottleLevel.aggressive => S.get('battery_low_depth_degraded'),
@@ -748,26 +776,53 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           stillFrames: stillFrames,
         );
       };
+      _vm.fallDetector.onGyroUnavailable = _announceGyroDegraded;
       await _vm.fallDetector.init();
+      _vm.health.note(
+        component: CoreComponent.accelerometer,
+        state: _vm.fallDetector.isReady
+            ? ComponentState.available
+            : ComponentState.unavailable,
+        reasonCode: _vm.fallDetector.isReady ? 'accel_ok' : 'accel_missing',
+        now: DateTime.now(),
+        announce: false,
+      );
+      _vm.health.note(
+        component: CoreComponent.gyroscope,
+        state: _vm.fallDetector.isGyroAvailable
+            ? ComponentState.available
+            : ComponentState.degraded,
+        reasonCode: _vm.fallDetector.isGyroAvailable
+            ? 'gyro_ok'
+            : 'gyro_unavailable',
+        now: DateTime.now(),
+        announce: false,
+      );
       if (!_vm.fallDetector.isReady) {
         _vm.tts.say(
           S.get('fall_detector_unavailable'),
           SpeechPriority.warning,
           pan: 0.0,
         );
+      } else if (!_vm.fallDetector.isGyroAvailable) {
+        // Accelerometer alive but gyroscope never started — announce the
+        // degraded-accuracy profile immediately so the user knows rotational
+        // confirmation is off.
+        _announceGyroDegraded();
       }
 
       _vm.tts.onKazakhVoiceMissing = () {
-        _vm.tts.say(
-          S.get('tts_fallback_ru'),
-          SpeechPriority.warning,
-          pan: 0.0,
-        );
+        _vm.tts.say(S.get('tts_fallback_ru'), SpeechPriority.warning, pan: 0.0);
       };
 
       _vm.tts.onAudioRouteInterrupted = () {
         final elapsed = DateTime.now().difference(_initCompletedAt);
         if (elapsed < const Duration(seconds: 15)) return;
+        if (CoreFeaturePolicy.current.mayInitialize(CoreFeature.sonar)) {
+          unawaited(
+            _vm.sonar.pauseForAudioInterruption('tts_audio_route_interrupted'),
+          );
+        }
         _fieldLog.logTtsEvent('audio_interrupted');
         _vm.earcon.play(Earcon.cameraBlocked);
         _routeChangeAt = DateTime.now();
@@ -783,22 +838,16 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           final interrupted = _routeChangeAt;
           final lastCritical = _vm.alertMgr.lastCriticalAt;
           if (interrupted != null &&
-              lastCritical.isAfter(interrupted.subtract(
-                const Duration(milliseconds: 300),
-              ))) {
+              lastCritical.isAfter(
+                interrupted.subtract(const Duration(milliseconds: 300)),
+              )) {
             _vm.tts.replayLastCritical();
           }
-          _vm.tts.say(
-            S.get('audio_resumed'),
-            SpeechPriority.info,
-            pan: 0.0,
-          );
+          _vm.tts.say(S.get('audio_resumed'), SpeechPriority.info, pan: 0.0);
         });
         _routeChangeAt = null;
       };
       _vm.tts.onTtsStall = () {
-        
-        
         _vm.earcon.play(Earcon.cameraBlocked);
         HapticService.vibrate(
           kHapticTtsStallPattern,
@@ -809,15 +858,13 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           const MethodChannel('bagdar/watchdog').invokeMethod('ping');
         } catch (_) {}
       };
-      
-      
+
       _vm.tts.onTtsUnavailable = () {
         try {
           _vm.earcon.play(Earcon.cameraBlocked);
         } catch (_) {}
         _fieldLog.logTtsEvent('tts_unavailable');
-        
-        
+
         unawaited(_vm.tts.init());
       };
 
@@ -862,14 +909,72 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         _vm.tts.say(S.get('tts_fallback_ru'), SpeechPriority.warning, pan: 0.0);
       }
 
-      _vm.setStatus(S.get('system_ready'));
-      _vm.tts.say(S.get('system_ready'), SpeechPriority.info, pan: 0.0);
-      _initCompletedAt = DateTime.now();
+      // Capability health owns the ready announcement. Camera-init failure
+      // already spoke critical TTS; we still record component state so UI
+      // and tests never infer a second "ready" from YOLO or TTS alone.
+      final healthNow = DateTime.now();
+      _vm.health.note(
+        component: CoreComponent.cameraPermission,
+        state: _cameraPermissionDenied
+            ? ComponentState.unavailable
+            : ComponentState.available,
+        reasonCode: _cameraPermissionDenied ? 'denied' : 'granted',
+        now: healthNow,
+      );
+      _vm.health.note(
+        component: CoreComponent.cameraSession,
+        state: _isCameraReady
+            ? ComponentState.available
+            : ComponentState.unavailable,
+        reasonCode: _isCameraReady ? 'session_ok' : 'session_failed',
+        now: healthNow,
+      );
+      _vm.health.note(
+        component: CoreComponent.imageStream,
+        state: _isCameraReady
+            ? ComponentState.available
+            : ComponentState.unavailable,
+        reasonCode: _isCameraReady ? 'stream_ok' : 'stream_failed',
+        now: healthNow,
+      );
+      _vm.health.note(
+        component: CoreComponent.alertAudio,
+        state: ComponentState.available,
+        reasonCode: 'tts_init',
+        now: healthNow,
+      );
+      _vm.health.note(
+        component: CoreComponent.haptics,
+        state: ComponentState.available,
+        reasonCode: 'haptic_init',
+        now: healthNow,
+      );
+      _vm.health.note(
+        component: CoreComponent.semanticObjects,
+        state: _models.yoloLoaded
+            ? ComponentState.available
+            : ComponentState.degraded,
+        reasonCode: _models.yoloLoaded ? 'yolo_ok' : 'yolo_not_loaded',
+        now: healthNow,
+        announce: false,
+      );
+      _vm.health.note(
+        component: CoreComponent.genericGeometry,
+        state: _depthController.providerReady
+            ? ComponentState.available
+            : ComponentState.degraded,
+        reasonCode: _depthController.providerReady
+            ? 'depth_ok'
+            : 'depth_not_ready',
+        now: healthNow,
+        announce: false,
+      );
+      _vm.publishHealth(healthNow);
+      _initCompletedAt = healthNow;
     } catch (e) {
       _fieldLog.logError('initAll', e.toString());
       _vm.setStatus('Сбой: $e');
-      
-      
+
       try {
         _vm.tts.say(
           S.get('init_failed'),
@@ -903,12 +1008,13 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     final now = DateTime.now();
     final lastCriticalAt = _vm.alertMgr.lastCriticalAt;
     final lastSpokenAt = _vm.tts.lastSpokenAt;
-    final recentCritical = lastCriticalAt.millisecondsSinceEpoch != 0 &&
+    final recentCritical =
+        lastCriticalAt.millisecondsSinceEpoch != 0 &&
         now.difference(lastCriticalAt) < const Duration(seconds: 10);
-    final recentAnyAlert = lastSpokenAt.millisecondsSinceEpoch != 0 &&
+    final recentAnyAlert =
+        lastSpokenAt.millisecondsSinceEpoch != 0 &&
         now.difference(lastSpokenAt) < const Duration(seconds: 15);
-    if (!recentAnyAlert) {
-    }
+    if (!recentAnyAlert) {}
     if (!recentCritical) {
       _vm.earcon.play(Earcon.heartbeat);
     }
@@ -925,17 +1031,12 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       'completions': _detectionCompletions,
     });
 
-    final isSafetyMode =
-        _vm.mode == AppMode.street || _vm.mode == AppMode.cane;
+    final isSafetyMode = _vm.mode == AppMode.street || _vm.mode == AppMode.cane;
     final notThermalCritical = _vm.thermal.severity != ThermalSeverity.critical;
     if (effFps < 3.0 && isSafetyMode && notThermalCritical) {
       _lowFpsStreak++;
       if (_lowFpsStreak >= 2) {
-        _vm.tts.say(
-          S.get('camera_stalled'),
-          SpeechPriority.warning,
-          pan: 0.0,
-        );
+        _vm.tts.say(S.get('camera_stalled'), SpeechPriority.warning, pan: 0.0);
         _lowFpsStreak = 0;
       }
     } else {
@@ -962,9 +1063,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     }
     if (Settings.instance.sosTrigger == SosTrigger.tripleTap) {
       final now = DateTime.now();
-      _recentTaps.removeWhere(
-        (t) => now.difference(t) > _tripleTapWindow,
-      );
+      _recentTaps.removeWhere((t) => now.difference(t) > _tripleTapWindow);
       _recentTaps.add(now);
       if (_recentTaps.length >= 3) {
         _recentTaps.clear();
@@ -977,8 +1076,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         _triggerSos();
         return;
       }
-      
-      
+
       _tripleTapStatusTimer?.cancel();
       _tripleTapStatusTimer = Timer(_tripleTapWindow, () {
         if (!mounted) return;
@@ -1021,9 +1119,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     if (_shakeSpikes.length >= 3) {
       _shakeSpikes.clear();
       _lastShakeSosAt = now;
-      FeatureUsageTracker.instance.increment(
-        FeatureUsageKeys.gesture('shake'),
-      );
+      FeatureUsageTracker.instance.increment(FeatureUsageKeys.gesture('shake'));
       HapticService.vibrate(const [0, 300, 100, 300]);
       _triggerSos();
     }
@@ -1032,36 +1128,46 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   void _triggerSos({String source = 'manual'}) async {
     FeatureUsageTracker.instance.increment(FeatureUsageKeys.sosTriggered);
     _fieldLog.logSosTrigger(source);
-    HapticService.vibrate([0, 200, 100, 200, 100, 200]);
-    _vm.tts.say('SOS', SpeechPriority.critical, pan: 0.0);
+    _vm.submitEmergencySafety(
+      speechKey: 'sos_sending',
+      replaceKey: 'manual_sos_delivery',
+      now: DateTime.now(),
+    );
     final hasContact = (_vm.sos.contactNumber ?? '').isNotEmpty;
     if (!hasContact) {
       _vm.tts.say(S.get('sos_112_fallback'), SpeechPriority.critical, pan: 0.0);
     }
     if (_vm.isIndoor) {
-      _vm.tts.say(S.get('sos_indoor_warning'), SpeechPriority.warning, pan: 0.0);
+      _vm.tts.say(
+        S.get('sos_indoor_warning'),
+        SpeechPriority.warning,
+        pan: 0.0,
+      );
     }
 
     final result = await _vm.sos.sendSos();
     if (!mounted) return;
 
-    final msg = switch (result) {
-      SosResult.sent => S.get('sos_sent'),
-      SosResult.sentFallback =>
-        '${S.get('sos_112_fallback')} ${S.get('sos_sent')}',
+    final resultKey = switch (result) {
+      SosResult.sent => 'sos_sent',
+      SosResult.sentFallback => 'sos_sent',
       // E-1: native SMS unconfirmed; sms:// fallback was launched.
-      SosResult.pendingEnqueued => S.get('sos_queued'),
-      SosResult.sentWithoutLocation => S.get('sos_sent_no_location'),
-      SosResult.noContact => S.get('sos_no_contact'),
-      SosResult.noLocation => S.get('sos_no_location'),
-      SosResult.launchFailed => S.get('sos_launch_failed'),
-      SosResult.error => S.get('sos_error'),
+      SosResult.pendingEnqueued => 'sos_queued',
+      SosResult.sentWithoutLocation => 'sos_sent_no_location',
+      SosResult.noContact => 'sos_no_contact',
+      SosResult.noLocation => 'sos_no_location',
+      SosResult.launchFailed => 'sos_launch_failed',
+      SosResult.error => 'sos_error',
       // E-2: guide the user to complete the action manually; no lockout.
-      SosResult.composerOpened => S.get('sos_composer_opened'),
-      SosResult.dialerOpened => S.get('sos_dialer_opened'),
+      SosResult.composerOpened => 'sos_composer_opened',
+      SosResult.dialerOpened => 'sos_dialer_opened',
     };
     _fieldLog.logSosTrigger(source, result: result.name);
-    _vm.tts.say(msg, SpeechPriority.critical, pan: 0.0);
+    _vm.submitEmergencySafety(
+      speechKey: resultKey,
+      replaceKey: 'manual_sos_delivery',
+      now: DateTime.now(),
+    );
     // E-2: additional haptic cue to draw attention to the manual step.
     if (result == SosResult.composerOpened ||
         result == SosResult.dialerOpened) {
@@ -1074,8 +1180,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       FeatureUsageKeys.gesture('long_press'),
     );
     HapticService.vibrate([0, 100, 50, 100]);
-    
-    
+
     _vm.tts.say(S.get('voice_listening'), SpeechPriority.info, pan: 0.0);
     try {
       await _vm.voice.startListening();
@@ -1134,11 +1239,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       case ShelfTask.read:
         _wantOcr = true;
         _ocrStartedAt = DateTime.now();
-        _vm.tts.say(
-          S.get('shelf_read_started'),
-          SpeechPriority.info,
-          pan: 0.0,
-        );
+        _vm.tts.say(S.get('shelf_read_started'), SpeechPriority.info, pan: 0.0);
         break;
       case ShelfTask.navigate:
         _vm.tts.say(
@@ -1152,7 +1253,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     }
   }
 
-  
   Future<void> _pollIndoorState() async {
     if (!mounted) return;
     Position? pos;
@@ -1164,9 +1264,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     if (!mounted) return;
     final now = DateTime.now();
     final accuracyM = pos?.accuracy;
-    final ageSec = pos == null
-        ? null
-        : now.difference(pos.timestamp).inSeconds;
+    final ageSec = pos == null ? null : now.difference(pos.timestamp).inSeconds;
     final transition = _vm.indoorGate.feed(
       gpsAccuracyM: accuracyM,
       gpsAgeSec: ageSec,
@@ -1174,10 +1272,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       now: now,
     );
     if (transition != IndoorTransition.none) {
-      _fieldLog.logIndoorGate(
-        transition.name,
-        gpsAccuracy: accuracyM,
-      );
+      _fieldLog.logIndoorGate(transition.name, gpsAccuracy: accuracyM);
     }
     _vm.applyIndoorTransition(transition);
   }
@@ -1199,14 +1294,55 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     return true;
   }
 
+  /// Announces the degraded-accuracy fall-detection profile (gyroscope
+  /// unavailable) with a 60 s cooldown so a flaky gyro stream does not spam
+  /// the user. Critical: without this the user believes full fall detection
+  /// is active when rotational confirmation is actually off.
+  void _announceGyroDegraded() {
+    final now = DateTime.now();
+    if (now.difference(_lastGyroDegradedAnnounceAt) <
+        _kGyroDegradedAnnounceCooldown) {
+      return;
+    }
+    _lastGyroDegradedAnnounceAt = now;
+    _vm.health.note(
+      component: CoreComponent.gyroscope,
+      state: ComponentState.degraded,
+      reasonCode: 'gyro_unavailable',
+      now: now,
+      announce: false,
+    );
+    _fieldLog.log('gyro_unavailable', {'degraded': true});
+    _vm.tts.say(
+      S.get('fall_detector_degraded'),
+      SpeechPriority.warning,
+      pan: 0.0,
+    );
+  }
+
   void _handleQualityEvents(List<FrameQualityEvent> events) {
     final now = DateTime.now();
     for (final e in events) {
       switch (e.type) {
         case FrameQualityEventType.aeTransitionStarted:
           _fieldLog.logAeTransition(started: true);
-          if (_qualityCooldownOk(e.type, now)) {
+          // D-1: dedicated, much shorter cooldowns than the generic quality
+          // events above — the motion-prealert fallback is fully dark for
+          // the duration of every AE transition, so the user must be told
+          // every time, not just once per 30 s.
+          if (now.difference(_lastAeTransitionEarconAt) >=
+              _kAeTransitionEarconCooldown) {
+            _lastAeTransitionEarconAt = now;
             _vm.earcon.play(Earcon.cameraBlocked);
+          }
+          if (now.difference(_lastAeTransitionTtsAt) >=
+              _kAeTransitionTtsCooldown) {
+            _lastAeTransitionTtsAt = now;
+            _vm.tts.say(
+              S.alert('camera_ae_transition'),
+              SpeechPriority.warning,
+              pan: 0.0,
+            );
           }
           break;
         case FrameQualityEventType.aeTransitionEnded:
@@ -1262,10 +1398,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           }
           break;
         case FrameQualityEventType.dropletDetected:
-          _fieldLog.logDroplet(
-            dirtyRegions: e.dirtyRegions ?? 0,
-            warned: true,
-          );
+          _fieldLog.logDroplet(dirtyRegions: e.dirtyRegions ?? 0, warned: true);
           if (_qualityCooldownOk(e.type, now)) {
             _vm.tts.say(
               S.alert('camera_droplet'),
@@ -1357,7 +1490,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       }
       final back = backCameras.first;
 
-      
       final ctrl = CameraController(
         back,
         ResolutionPreset.low,
@@ -1366,12 +1498,16 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       );
       await ctrl.initialize();
       _controller = ctrl;
-      
-      
+
       _vm.ocr.sensorOrientationDeg = back.sensorOrientation;
+      _vm.cameraSensorRotationDeg = back.sensorOrientation;
+      _vm.cameraMirrored = back.lensDirection == CameraLensDirection.front;
+      // Establish the generation before the callback can deliver its first
+      // frame. Results from a provider call owned by an older camera are then
+      // rejected before they can reach fusion or alerts.
+      onCameraSessionStarting();
       await ctrl.startImageStream(_onFrame);
 
-      
       unawaited(_vm.tts.preClaimAudioFocus());
 
       if (mounted) {
@@ -1381,6 +1517,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         });
       }
       _stallWatchdog.start();
+      _startSpatialSafetyCadence();
       _startIndoorPoll();
       initSw.stop();
       final preview = ctrl.value.previewSize;
@@ -1399,6 +1536,28 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         error: e.toString(),
       );
       _vm.setStatus('Ошибка камеры: $e');
+      // Safety audit 2026-06 fix: camera HAL failure must NOT be silent.
+      // A blind user walking with dead detection AND hearing "system ready"
+      // is a physical-harm scenario. Mirror the _initAll catch pattern:
+      // critical TTS (barge) + haptic + earcon, then keep reminding.
+      try {
+        _vm.tts.say(
+          S.get('camera_init_failed_critical'),
+          SpeechPriority.critical,
+          barge: true,
+          pan: 0.0,
+        );
+      } catch (_) {}
+      try {
+        HapticService.vibrate(
+          kHapticTtsStallPattern,
+          intensities: kHapticTtsStallIntensities,
+        );
+      } catch (_) {}
+      try {
+        _vm.earcon.play(Earcon.cameraBlocked);
+      } catch (_) {}
+      if (mounted) _speakCameraInitFailedLoop();
     }
   }
 
@@ -1410,24 +1569,16 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     if (_stallWatchdog.isWarned) {
       _stallWatchdog.clearWarning();
       final stallFor = now.difference(_stallStartedAt);
-      
-      debugPrint(
-        '[BAGDAR_STALL] resumed after ${stallFor.inMilliseconds}ms',
-      );
+
+      debugPrint('[BAGDAR_STALL] resumed after ${stallFor.inMilliseconds}ms');
       _fieldLog.logCameraStall(
         stalled: false,
         durationMs: stallFor.inMilliseconds,
       );
       if (stallFor >= _kStallTtsMinDuration &&
           _stallStartedAt.millisecondsSinceEpoch != 0) {
-        
-        
         _vm.earcon.play(Earcon.success);
-        _vm.tts.say(
-          S.get('camera_resumed'),
-          SpeechPriority.warning,
-          pan: 0.0,
-        );
+        _vm.tts.say(S.get('camera_resumed'), SpeechPriority.warning, pan: 0.0);
       }
       _stallStartedAt = DateTime.fromMillisecondsSinceEpoch(0);
     }
@@ -1452,19 +1603,13 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _vm.tracker.weatherDegraded = qualityReport.weatherDegraded;
 
     if (qualityReport.aePipelineFrozen) {
-      if (_vm.mode == AppMode.street || _vm.mode == AppMode.cane) {
-        final aeMotionEvent = _vm.motionPreAlert.feed(
-          image,
-          now,
-          weatherDegraded: _vm.weatherGate.degraded,
-          aeTransitioning: true,
-          indoor: _vm.isIndoor,
-          lowLight: _vm.weatherGate.degraded,
-        );
-        if (aeMotionEvent != null) {
-          _handleMotionIntrusion(aeMotionEvent);
-        }
-      }
+      // D-1: MotionPreAlert.feed() short-circuits to null the instant
+      // aeTransitioning is true (motion_prealert.dart), so calling it here
+      // was dead code that gave the false impression of a motion-intrusion
+      // safety net during AE blindness. The FrameQualityEventType
+      // .aeTransitionStarted branch in _handleQualityEvents (above) now
+      // carries the user notification instead. Do not run YOLO/depth on an
+      // AE-blind frame (unchanged from before).
       _finalizeFramePerf(now: now, frameSw: frameSw);
       return;
     }
@@ -1496,7 +1641,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     }
     _blurryStreak = 0;
 
-    
     if (_vm.mode == AppMode.street || _vm.mode == AppMode.cane) {
       final event = _vm.motionPreAlert.feed(
         image,
@@ -1569,13 +1713,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           _wantOcr = false;
           _vm.tts.say(S.get('ocr_timeout'), SpeechPriority.info, pan: 0.0);
         } else if (_vm.fallDetector.motionState == MotionState.walking) {
-          
-          
         } else {
           final text = await _vm.ocr.recognizeFromFrame(image, stabilize: true);
           if (text != null && text.isNotEmpty) {
-            
-            
             _vm.tts.say(text, SpeechPriority.info, pan: 0.0);
             _wantOcr = false;
           }
@@ -1583,8 +1723,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       }
 
       final planeBytes = _reusePlaneBytes(image);
-      
-      
+
       final raw = await _models.vision.yoloOnFrame(
         bytesList: planeBytes,
         imageHeight: image.height,
@@ -1604,10 +1743,10 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       await Future<void>.delayed(Duration.zero);
       if (!mounted) return;
 
-      
       final yPlaneBytes = planeBytes.isNotEmpty ? planeBytes[0] : null;
-      final yStride =
-          image.planes.isNotEmpty ? image.planes[0].bytesPerRow : null;
+      final yStride = image.planes.isNotEmpty
+          ? image.planes[0].bytesPerRow
+          : null;
       final dets = _buildRawDets(
         raw,
         _imgW,
@@ -1624,25 +1763,27 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         if (personDet != null) {
           _isCalibrating = false;
           _calibrationTimeoutTimer?.cancel();
-          unawaited(calibrateFocalLength(
-            'person',
-            personDet.x1,
-            personDet.y1,
-            personDet.x2,
-            personDet.y2,
-            2.0,
-          ).then((_) async {
-            await Settings.instance.setIsCalibrated(true);
-            _isCalibrated = true;
-            _vm.tracker.isCalibrated = true;
-            await _vm.earcon.play(Earcon.success);
-            _vm.tts.say(
-              S.get('calib_saved'),
-              SpeechPriority.warning,
-              barge: true,
-            );
-            if (mounted) setState(() {});
-          }));
+          unawaited(
+            calibrateFocalLength(
+              'person',
+              personDet.x1,
+              personDet.y1,
+              personDet.x2,
+              personDet.y2,
+              2.0,
+            ).then((_) async {
+              await Settings.instance.setIsCalibrated(true);
+              _isCalibrated = true;
+              _vm.tracker.isCalibrated = true;
+              await _vm.earcon.play(Earcon.success);
+              _vm.tts.say(
+                S.get('calib_saved'),
+                SpeechPriority.warning,
+                barge: true,
+              );
+              if (mounted) setState(() {});
+            }),
+          );
         }
       }
 
@@ -1658,7 +1799,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         frameCount: _frameCount,
         trackCount: tracks.length,
         inferenceMs: inferenceMs,
-        maxConf: dets.isEmpty ? null : dets.map((d) => d.conf).reduce((a, b) => a > b ? a : b),
+        maxConf: dets.isEmpty
+            ? null
+            : dets.map((d) => d.conf).reduce((a, b) => a > b ? a : b),
       );
 
       final uiNow = DateTime.now();
@@ -1678,8 +1821,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         isCalibrated: _isCalibrated,
         frameCount: _frameCount,
       );
-      
-      
+
       final criticalAtAfter = _vm.alertMgr.lastCriticalAt;
       if (criticalAtAfter.isAfter(criticalAtBefore)) {
         _vm.throttler.noteCriticalAlert(now: criticalAtAfter);
@@ -1742,7 +1884,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         _lastAnnouncedLight = null;
       }
 
-      
       _depthController.updateYoloTracks(tracks, imgW: _imgW);
 
       if (_depthController.shouldRun(now) && !_stallWatchdog.isWarned) {
@@ -1775,6 +1916,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         analyzeMs: provider.lastAnalyzeMs.round(),
       );
     }
+    _runSpatialSafetyRuntime(DateTime.now());
     if (!mounted || alerts.isEmpty) return;
     for (final alert in alerts) {
       final hazard = alert.hazard;
@@ -1786,9 +1928,10 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       final priority = alert.isCritical
           ? SpeechPriority.critical
           : SpeechPriority.warning;
-      
+
       _vm.alertMgr.handleDepthHazard(
         text: S.alert(hazardKey),
+        speechKey: hazardKey,
         priority: priority,
         pan: hazard.pan,
         category: AlertCategory.obstacleClose,
@@ -1802,16 +1945,87 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     }
   }
 
-  
-  void _onDepthStatusChanged(
-    DepthPipelineStatus from,
-    DepthPipelineStatus to,
-  ) {
-    
+  void _runSpatialSafetyRuntime(DateTime now) {
+    final header = _depthController.lastAcceptedObservationHeader;
+    final detection = _depthController.lastGenericDetection;
+    final orientationValid =
+        !_vm.orientation.isRollExcessive &&
+        _vm.orientation.state == DevicePitch.optimal;
+    final userMoving = _vm.fallDetector.motionState != MotionState.stationary;
+
+    final result = header != null && detection != null
+        ? _vm.spatialSafety.ingestGenericGeometry(
+            header: header,
+            detection: detection,
+            tracks: _depthController.lastGenericTracks,
+            now: now,
+            orientationValid: orientationValid,
+            userMoving: userMoving,
+            poseQuality: orientationValid ? header.confidence : 0,
+          )
+        : _vm.spatialSafety.noteMissingObservation(
+            providerId:
+                _models.depthProvider?.runtimeType.toString() ??
+                'depth-provider',
+            providerState: switch (_depthController.status) {
+              DepthPipelineStatus.providerUnavailable =>
+                SceneSensorState.unavailable,
+              DepthPipelineStatus.unalignedStale => SceneSensorState.stale,
+              _ => SceneSensorState.degraded,
+            },
+            reason:
+                _depthController.lastFrameRejectionReason ??
+                'no_accepted_spatial_observation',
+            now: now,
+            orientationValid: orientationValid,
+            userMoving: userMoving,
+          );
+
+    _fieldLog.log('spatial_runtime_trace', <String, dynamic>{
+      ...result.trace.toDiagnosticMap(),
+      'scene': result.snapshot.toDiagnosticMap(),
+      'shadowCorrection': result.decision?.shadowCorrection?.name,
+    });
+  }
+
+  void _startSpatialSafetyCadence() {
+    _spatialSafetyTickTimer?.cancel();
+    _spatialSafetyTickTimer = Timer.periodic(
+      _kSpatialSafetyTickPeriod,
+      (_) => _runSpatialSafetyTick(),
+    );
+  }
+
+  void _stopSpatialSafetyCadence() {
+    _spatialSafetyTickTimer?.cancel();
+    _spatialSafetyTickTimer = null;
+  }
+
+  void _runSpatialSafetyTick() {
+    if (!mounted ||
+        !_isCameraReady ||
+        _vm.spatialSafety.activeSessionGeneration < 0) {
+      return;
+    }
+    final orientationValid =
+        !_vm.orientation.isRollExcessive &&
+        _vm.orientation.state == DevicePitch.optimal;
+    final result = _vm.spatialSafety.tick(
+      now: DateTime.now(),
+      userMoving: _vm.fallDetector.motionState != MotionState.stationary,
+      orientationValid: orientationValid,
+    );
+    _fieldLog.log('spatial_runtime_trace', <String, dynamic>{
+      ...result.trace.toDiagnosticMap(),
+      'scene': result.snapshot.toDiagnosticMap(),
+      'cadence': true,
+    });
+  }
+
+  void _onDepthStatusChanged(DepthPipelineStatus from, DepthPipelineStatus to) {
     if (!mounted) return;
     _misalignmentWatchdog.noteDepthStatus(to);
 
-    
     String? key;
     SpeechPriority priority = SpeechPriority.warning;
     switch (to) {
@@ -1820,31 +2034,76 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         key = 'depth_degraded';
         priority = SpeechPriority.warning;
         break;
+      case DepthPipelineStatus.unalignedStale:
+      case DepthPipelineStatus.providerUnavailable:
+      case DepthPipelineStatus.legacyOnlyDegraded:
+        key = 'spatial_analysis_limited';
+        priority = SpeechPriority.warning;
+        break;
       case DepthPipelineStatus.ok:
-        if (from != DepthPipelineStatus.ok) {
+      case DepthPipelineStatus.healthyMetric:
+      case DepthPipelineStatus.healthyRelative:
+        if (from.isDegraded) {
           key = 'depth_recovered';
           priority = SpeechPriority.info;
         }
         break;
     }
 
-    _fieldLog.log('depth_pipeline_status', {
-      'from': from.name,
-      'to': to.name,
-    });
+    final geomState = to.isHealthy
+        ? ComponentState.available
+        : (to == DepthPipelineStatus.providerUnavailable
+              ? ComponentState.unavailable
+              : ComponentState.degraded);
+    _vm.health.note(
+      component: CoreComponent.genericGeometry,
+      state: geomState,
+      reasonCode: 'depth_${to.name}',
+      now: DateTime.now(),
+      announce: false,
+    );
+
+    _fieldLog.log('depth_pipeline_status', {'from': from.name, 'to': to.name});
 
     if (key != null) {
-      _vm.tts.say(S.alert(key), priority, pan: 0.0);
+      final recovered = priority == SpeechPriority.info;
+      _vm.submitCameraSafety(
+        speechKey: key,
+        replaceKey: 'depth_pipeline',
+        now: DateTime.now(),
+        recovered: recovered,
+        urgency: recovered ? 0.2 : 0.75,
+      );
     }
   }
 
-  
   // Safety audit 2026-06 fix A-1: handle permanent YOLO failure
   void _onYoloUnavailable() {
     if (!mounted) return;
     _yoloDownSince = DateTime.now();
+    _vm.health.note(
+      component: CoreComponent.semanticObjects,
+      state: ComponentState.unavailable,
+      reasonCode: 'yolo_reload_failed',
+      now: _yoloDownSince,
+      sessionTerminal: true,
+      announce: false,
+    );
+    _vm.health.note(
+      component: CoreComponent.movingThreats,
+      state: ComponentState.unavailable,
+      reasonCode: 'yolo_reload_failed',
+      now: _yoloDownSince,
+      announce: false,
+    );
     _lastYoloUnavailWarnAt = DateTime.now();
-    _vm.tts.say(S.get('yolo_unavailable'), SpeechPriority.critical, pan: 0.0);
+    _vm.submitCameraSafety(
+      speechKey: 'yolo_unavailable',
+      replaceKey: 'yolo_unavailable',
+      now: _lastYoloUnavailWarnAt,
+      critical: true,
+      urgency: 0.95,
+    );
     _yoloRetryTimer?.cancel();
     _yoloRetryTimer = Timer.periodic(_kYoloRetryInterval, (_) {
       if (!mounted || _models.yoloLoaded) {
@@ -1852,7 +2111,13 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         _yoloRetryTimer = null;
         return;
       }
-      _vm.tts.say(S.get('yolo_unavailable'), SpeechPriority.critical, pan: 0.0);
+      _vm.submitCameraSafety(
+        speechKey: 'yolo_unavailable',
+        replaceKey: 'yolo_unavailable',
+        now: DateTime.now(),
+        critical: true,
+        urgency: 0.95,
+      );
     });
   }
 
@@ -1868,13 +2133,17 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       return;
     }
     _lastMidasModeAnnounceAt = now;
-    
-    
+
     final key = paused ? 'depth_paused_explicit' : 'hazard_detection_resumed';
-    final priority =
-        paused ? SpeechPriority.warning : SpeechPriority.info;
+    final priority = paused ? SpeechPriority.warning : SpeechPriority.info;
     _fieldLog.log('midas_pause_changed', {'paused': paused});
-    _vm.tts.say(S.alert(key), priority, pan: 0.0);
+    _vm.submitCameraSafety(
+      speechKey: key,
+      replaceKey: 'depth_pause',
+      now: now,
+      recovered: priority == SpeechPriority.info,
+      urgency: paused ? 0.7 : 0.2,
+    );
   }
 
   void _handleMotionIntrusion(MotionIntrusionEvent event) {
@@ -1889,23 +2158,24 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         MotionIntrusionSide.right => 'synth_event_stop_right',
         MotionIntrusionSide.center => 'synth_event_stop_center',
       };
-      
-      
+
       final winner = _vm.alertMgr.handleMotionIntrusion(
         event,
         text: S.alert(key),
       );
       if (winner != null) {
-        _vm.tts.say(
-          winner.text,
-          winner.priority,
-          pan: winner.pan,
-          barge: true,
-        );
-        HapticService.vibrate(
-          kHapticCriticalCooldownPattern,
-          intensities: kHapticCriticalCooldownIntensities,
-        );
+        if (!_vm.alertMgr.submitFilteredObjectAlert(winner, now: event.at)) {
+          _vm.tts.say(
+            winner.text,
+            winner.priority,
+            pan: winner.pan,
+            barge: true,
+          );
+          HapticService.vibrate(
+            kHapticCriticalCooldownPattern,
+            intensities: kHapticCriticalCooldownIntensities,
+          );
+        }
         final now = DateTime.now();
         _vm.alertMgr.updateLastCriticalAt(now);
         _vm.throttler.noteCriticalAlert(now: now);
@@ -1916,8 +2186,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           'strength': event.strength,
         });
       } else {
-        
-        
         _fieldLog.log('synth_event_suppressed', {
           'side': event.side.name,
           'reason': 'cross_system_dedup',
@@ -1929,14 +2197,12 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     HapticService.vibrate(const [0, 80, 40, 120]);
   }
 
-  
   bool _hasCloseOrApproachingVehicle(List<Track> tracks) {
     for (final t in tracks) {
       if (!isVehicle(t.label)) continue;
-      
+
       if (t.approaching) return true;
-      
-      
+
       if (t.dist == 'very close' || t.dist == 'close') return true;
     }
     return false;
@@ -1954,20 +2220,19 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       if (t.approaching) continue;
       if (t.distM > 0 && t.distM > 12.0) continue;
 
-      final atEdge = t.x1 < edgeX ||
+      final atEdge =
+          t.x1 < edgeX ||
           t.x2 > imgW - edgeX ||
           t.y1 < edgeY ||
           t.y2 > imgH - edgeY;
       if (!atEdge) continue;
 
       if (t.areaHist.length >= 2) {
-        final dt = t.areaHist.last.$1
-                .difference(t.areaHist.first.$1)
-                .inMilliseconds /
+        final dt =
+            t.areaHist.last.$1.difference(t.areaHist.first.$1).inMilliseconds /
             1000.0;
         if (dt > 0.1) {
-          final areaRate =
-              (t.areaHist.last.$2 - t.areaHist.first.$2) / dt;
+          final areaRate = (t.areaHist.last.$2 - t.areaHist.first.$2) / dt;
           if (areaRate.abs() < _kReverseMaxAreaRate) return true;
         }
       } else {
@@ -1984,29 +2249,23 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     Uint8List? yPlane,
     int? yRowStride,
   }) {
-    
-    
     final out = _rawDetBuffer..clear();
     final frameArea = (imgW * imgH).toDouble();
     final canExtractAppearance =
         yPlane != null && yRowStride != null && yRowStride > 0;
     for (final r in raw) {
       final label = (r['tag'] ?? '').toString();
-      
-      
+
       if (!kAlertClassWhitelist.contains(label)) continue;
       final conf = (r['confidence'] as num?)?.toDouble() ?? 0.0;
-      
+
       // V5.2: In low-light conditions, lower the confidence floor for
       // safety-critical classes (vehicles, pedestrians) to reduce missed
       // detections at the cost of slightly more false positives.
       final isLowLight = _vm.weatherGate.degraded;
       final isSafetyCriticalClass = isVehicle(label) || label == 'person';
       final confFloor = (isLowLight && isSafetyCriticalClass)
-          ? math.max(
-              0.20,
-              minConfFor(label) - kLowLightClassMinConfReduction,
-            )
+          ? math.max(0.20, minConfFor(label) - kLowLightClassMinConfReduction)
           : minConfFor(label);
       if (conf < confFloor) continue;
       final box = r['box'] as List<dynamic>?;
@@ -2023,8 +2282,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       final distM = focalDistM(label, x1, y1, x2, y2);
       final boxCat = distByBox(areaRatio, heightRatio, bottomRatio);
       final dist = distMToCategory(distM, boxCat);
-      
-      
+
       if (label == 'person' && dist == 'far' && conf < 0.50) {
         continue;
       }
@@ -2102,8 +2360,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _detectInterval = _vm.throttler.detectInterval(
       _vm.battery.detectIntervalMs,
     );
-    _depthController.interval =
-        _vm.throttler.midasInterval(_vm.battery.midasIntervalMs);
+    _depthController.interval = _vm.throttler.midasInterval(
+      _vm.battery.midasIntervalMs,
+    );
     _fieldLog.logThrottler(
       detectMs: _detectInterval.inMilliseconds,
       midasMs: _depthController.interval.inMilliseconds,
@@ -2168,6 +2427,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           useNativeDepthBridge:
               _models.depthProvider?.nativeBridgeEnabled ?? false,
           useHardwareDepthMode: _useHardwareDepthMode,
+          showIndependentHardwareDepth: BuildProfile.current.isResearch,
           numThreads: _numThreads,
           showDebugHud: _vm.showDebugHud,
           earconEnabled: _vm.earcon.isEnabled,
@@ -2312,7 +2572,11 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       if (mounted && _isCalibrating) {
         setState(() => _isCalibrating = false);
         _vm.earcon.play(Earcon.fail);
-        _vm.tts.say(S.get('calib_no_person'), SpeechPriority.warning, barge: true);
+        _vm.tts.say(
+          S.get('calib_no_person'),
+          SpeechPriority.warning,
+          barge: true,
+        );
       }
     });
   }
@@ -2320,18 +2584,14 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   void _openSettingsQrExport() {
     if (!mounted) return;
     Navigator.of(context).push<void>(
-      MaterialPageRoute(
-        builder: (_) => SettingsQrExportScreen(tts: _vm.tts),
-      ),
+      MaterialPageRoute(builder: (_) => SettingsQrExportScreen(tts: _vm.tts)),
     );
   }
 
   void _openLanguagePacks() {
     if (!mounted) return;
     Navigator.of(context).push<void>(
-      MaterialPageRoute(
-        builder: (_) => LanguagePacksScreen(tts: _vm.tts),
-      ),
+      MaterialPageRoute(builder: (_) => LanguagePacksScreen(tts: _vm.tts)),
     );
   }
 
@@ -2368,34 +2628,26 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     if (!wants) return;
     _onlineKkPromptDone = true;
     await pm.setPromptOnFirstOnline(false);
-    
+
     unawaited(pm.fetchManifest());
     if (!mounted) return;
-    _vm.tts.say(
-      S.get('lang_pack_online_ready'),
-      SpeechPriority.info,
-      pan: 0.0,
-    );
+    _vm.tts.say(S.get('lang_pack_online_ready'), SpeechPriority.info, pan: 0.0);
     FieldLogger.instance.log('lang_pack_online_prompt', {});
   }
 
   Future<void> _openSettingsQrImport() async {
     if (!mounted) return;
-    
-    
+
     await _releaseCameraForExternalScanner();
     if (!mounted) {
       unawaited(_initCamera());
       return;
     }
     final applied = await Navigator.of(context).push<bool>(
-      MaterialPageRoute(
-        builder: (_) => SettingsQrImportScreen(tts: _vm.tts),
-      ),
+      MaterialPageRoute(builder: (_) => SettingsQrImportScreen(tts: _vm.tts)),
     );
     if (!mounted) return;
-    
-    
+
     if (applied == true) {
       _vm.applyA11yPrefs();
       AppStrings.setLanguage(AppLanguage.values[Settings.instance.language]);
@@ -2468,8 +2720,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
               child: TextField(
                 controller: controller,
                 keyboardType: TextInputType.phone,
-                style:
-                    BagdarTypography.body.copyWith(color: colors.textPrimary),
+                style: BagdarTypography.body.copyWith(
+                  color: colors.textPrimary,
+                ),
                 decoration: InputDecoration(
                   hintText: '+7 XXX XXX XX XX',
                   hintStyle: BagdarTypography.body.copyWith(
@@ -2510,8 +2763,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
             onPressed: () => Navigator.pop(ctx),
             child: Text(
               S.get('cancel'),
-              style:
-                  BagdarTypography.body.copyWith(color: colors.textSecondary),
+              style: BagdarTypography.body.copyWith(
+                color: colors.textSecondary,
+              ),
             ),
           ),
           TextButton(
@@ -2539,7 +2793,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     );
   }
 
-
   void _speakCameraPermissionDeniedLoop() {
     _cameraPermissionTimer?.cancel();
     _vm.tts.say(
@@ -2547,7 +2800,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       SpeechPriority.critical,
       pan: 0.0,
     );
-    _cameraPermissionTimer = Timer.periodic(const Duration(seconds: 15), (timer) {
+    _cameraPermissionTimer = Timer.periodic(const Duration(seconds: 15), (
+      timer,
+    ) {
       if (mounted && _cameraPermissionDenied) {
         _vm.tts.say(
           S.get('camera_perm_recovery_tts'),
@@ -2573,6 +2828,40 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     } else {
       _speakCameraPermissionDeniedLoop();
     }
+  }
+
+  /// Safety audit 2026-06 fix: when the camera HAL fails to initialize
+  /// (HAL crash, camera busy, sensor unavailable), keep reminding the blind
+  /// user that recognition is dead until they restart. Mirrors the
+  /// permission-denied loop pattern.
+  void _speakCameraInitFailedLoop() {
+    _cameraInitRetryTimer?.cancel();
+    _vm.tts.say(
+      S.get('camera_init_failed_critical'),
+      SpeechPriority.critical,
+      barge: true,
+      pan: 0.0,
+    );
+    _cameraInitRetryTimer = Timer.periodic(const Duration(seconds: 15), (
+      timer,
+    ) {
+      if (mounted && !_isCameraReady) {
+        _vm.tts.say(
+          S.get('camera_init_failed_critical'),
+          SpeechPriority.critical,
+          barge: true,
+          pan: 0.0,
+        );
+        try {
+          HapticService.vibrate(
+            kHapticTtsStallPattern,
+            intensities: kHapticTtsStallIntensities,
+          );
+        } catch (_) {}
+      } else {
+        timer.cancel();
+      }
+    });
   }
 
   Widget _buildPermissionDeniedView() {
@@ -2618,8 +2907,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
                     style: ElevatedButton.styleFrom(
                       backgroundColor: colors.accentPrimary,
                       foregroundColor: colors.accentOnPrimary,
-                      minimumSize:
-                          const Size.fromHeight(BagdarSpacing.tapMinimum),
+                      minimumSize: const Size.fromHeight(
+                        BagdarSpacing.tapMinimum,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(BagdarRadius.card),
                       ),
@@ -2636,8 +2926,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
                     onPressed: _retryCameraPermission,
                     style: TextButton.styleFrom(
                       foregroundColor: colors.textSecondary,
-                      minimumSize:
-                          const Size.fromHeight(BagdarSpacing.tapMinimum),
+                      minimumSize: const Size.fromHeight(
+                        BagdarSpacing.tapMinimum,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(BagdarRadius.card),
                         side: BorderSide(
@@ -2823,8 +3114,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
                           tracksNotifier: _vm.tracksNotifier,
                           imgW: _imgW,
                           imgH: _imgH,
-                          viewportAspect:
-                              MediaQuery.sizeOf(context).aspectRatio,
+                          viewportAspect: MediaQuery.sizeOf(
+                            context,
+                          ).aspectRatio,
                           mode: _vm.mode,
                         ),
                       ),
@@ -2929,7 +3221,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
   void _describeScene({SceneFilter filter = SceneFilter.all}) {
     if (!Settings.instance.sceneNarrationEnabled) return;
-    
+
     final now = DateTime.now();
     if (now.difference(_lastNarrationAt) < _kNarrationCooldown) {
       _vm.tts.say(S.get('scene_cooldown'), SpeechPriority.info, pan: 0.0);
@@ -2940,19 +3232,26 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _vm.tts.say(S.get('scene_narrating'), SpeechPriority.info, pan: 0.0);
 
     final snapshot = SceneSnapshot(
-      objects: _vm.tracksNotifier.value.map((t) => SceneObject(
-        label: t.label,
-        direction: S.dir(clockDir(t.x1, t.x2, _imgW.toDouble())),
-        distance: t.dist,
-        distM: t.distM > 0 ? t.distM : null,
-        approaching: t.approaching,
-        threatScore: t.dist == 'very close' ? 3.0 : t.dist == 'close' ? 2.0 : 1.0,
-      )).toList(),
+      objects: _vm.tracksNotifier.value
+          .map(
+            (t) => SceneObject(
+              label: t.label,
+              direction: S.dir(clockDir(t.x1, t.x2, _imgW.toDouble())),
+              distance: t.dist,
+              distM: t.distM > 0 ? t.distM : null,
+              approaching: t.approaching,
+              threatScore: t.dist == 'very close'
+                  ? 3.0
+                  : t.dist == 'close'
+                  ? 2.0
+                  : 1.0,
+            ),
+          )
+          .toList(),
       hazards: _lastDepthHazards,
       trafficLight: _vm.trafficLight.confirmedColor,
       trafficLightKind: _vm.trafficLight.lastKind,
-      
-      
+
       ocrText: null,
       isIndoor: _vm.indoorGate.state == IndoorState.indoor,
       mode: _vm.mode,
@@ -2966,7 +3265,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       objectCount: snapshot.objects.length,
       hazardCount: snapshot.hazards.length,
       hasOcr: snapshot.ocrText != null,
-      hasTrafficLight: snapshot.trafficLight != null && snapshot.trafficLight != TrafficLightColor.unknown,
+      hasTrafficLight:
+          snapshot.trafficLight != null &&
+          snapshot.trafficLight != TrafficLightColor.unknown,
       narrateLengthChars: text.length,
     );
   }
@@ -2995,8 +3296,6 @@ class _FieldMarkerButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      
-      
       onLongPress: onActivate,
       child: Container(
         padding: const EdgeInsets.symmetric(

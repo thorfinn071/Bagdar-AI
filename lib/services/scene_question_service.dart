@@ -84,12 +84,15 @@ class SceneQuestionService {
       thermal: thermal,
       memory: memory,
     )) {
-      FieldLogger.instance.logVlmCompanion('load_blocked_gates', data: {
-        'charging': charging,
-        'battery': batteryPct,
-        'thermal': thermal.name,
-        'memory': memory.name,
-      });
+      FieldLogger.instance.logVlmCompanion(
+        'load_blocked_gates',
+        data: {
+          'charging': charging,
+          'battery': batteryPct,
+          'thermal': thermal.name,
+          'memory': memory.name,
+        },
+      );
       return false;
     }
 
@@ -124,9 +127,10 @@ class SceneQuestionService {
       return false;
     } catch (e) {
       _releaseModel();
-      FieldLogger.instance.logVlmCompanion('load_error', data: {
-        'error': e.toString(),
-      });
+      FieldLogger.instance.logVlmCompanion(
+        'load_error',
+        data: {'error': e.toString()},
+      );
       return false;
     }
   }
@@ -148,30 +152,32 @@ class SceneQuestionService {
 
     _state = VlmState.inferring;
     try {
-      final result = await _channel.invokeMethod<String>(
-        'inferVlm',
-        {
-          'question': question,
-          if (imageBytes != null) 'image': imageBytes,
-        },
-      ).timeout(const Duration(seconds: 30));
+      final result = await _channel
+          .invokeMethod<String>('inferVlm', {
+            'question': question,
+            if (imageBytes != null) 'image': imageBytes,
+          })
+          .timeout(const Duration(seconds: 30));
 
       if (result != null && result.isNotEmpty) {
         _state = VlmState.answering;
         try {
-          onAnswer?.call(ExternalHazardEvent(
-            source: ExternalHazardSource.vlmCompanion,
-            text: result,
-            priority: SpeechPriority.info,
-            category: AlertCategory.acousticEvent,
-            urgency: 0.3,
-            at: DateTime.now(),
-            correlationId: 'vlm_answer',
-          ));
+          onAnswer?.call(
+            ExternalHazardEvent(
+              source: ExternalHazardSource.vlmCompanion,
+              text: result,
+              priority: SpeechPriority.info,
+              category: AlertCategory.acousticEvent,
+              urgency: 0.3,
+              at: DateTime.now(),
+              correlationId: 'vlm_answer',
+            ),
+          );
         } catch (_) {}
-        FieldLogger.instance.logVlmCompanion('answer', data: {
-          'len': result.length,
-        });
+        FieldLogger.instance.logVlmCompanion(
+          'answer',
+          data: {'len': result.length},
+        );
       } else if (fallbackNarration != null) {
         _emitFallback(fallbackNarration);
       }
@@ -182,9 +188,10 @@ class SceneQuestionService {
       }
     } catch (e) {
       _state = VlmState.error;
-      FieldLogger.instance.logVlmCompanion('infer_error', data: {
-        'error': e.toString(),
-      });
+      FieldLogger.instance.logVlmCompanion(
+        'infer_error',
+        data: {'error': e.toString()},
+      );
       if (fallbackNarration != null) {
         _emitFallback(fallbackNarration);
       }
@@ -220,19 +227,22 @@ class SceneQuestionService {
 
   void _emitFallback(String text) {
     if (onAnswer != null) {
-      onAnswer!.call(ExternalHazardEvent(
-        source: ExternalHazardSource.vlmCompanion,
-        text: text,
-        priority: SpeechPriority.info,
-        category: AlertCategory.acousticEvent,
-        urgency: 0.2,
-        at: DateTime.now(),
-        correlationId: 'vlm_fallback',
-      ));
+      onAnswer!.call(
+        ExternalHazardEvent(
+          source: ExternalHazardSource.vlmCompanion,
+          text: text,
+          priority: SpeechPriority.info,
+          category: AlertCategory.acousticEvent,
+          urgency: 0.2,
+          at: DateTime.now(),
+          correlationId: 'vlm_fallback',
+        ),
+      );
     } else {
-      FieldLogger.instance.logVlmCompanion('fallback_no_handler', data: {
-        'text_len': text.length,
-      });
+      FieldLogger.instance.logVlmCompanion(
+        'fallback_no_handler',
+        data: {'text_len': text.length},
+      );
     }
   }
 

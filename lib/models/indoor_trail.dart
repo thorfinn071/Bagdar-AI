@@ -45,15 +45,15 @@ class IndoorTrailSample {
   });
 
   Map<String, dynamic> toJson() => {
-        'i': stepIndex,
-        'h': _round(headingDeg, 1),
-        'm': _round(magMicroT, 2),
-        'a': _round(accelMag, 2),
-        'g': _round(gyroMag, 2),
-        if (pressureHpa != null) 'p': _round(pressureHpa!, 1),
-        if (landmark != null && landmark!.isNotEmpty) 'l': landmark,
-        't': at.millisecondsSinceEpoch,
-      };
+    'i': stepIndex,
+    'h': _round(headingDeg, 1),
+    'm': _round(magMicroT, 2),
+    'a': _round(accelMag, 2),
+    'g': _round(gyroMag, 2),
+    if (pressureHpa != null) 'p': _round(pressureHpa!, 1),
+    if (landmark != null && landmark!.isNotEmpty) 'l': landmark,
+    't': at.millisecondsSinceEpoch,
+  };
 
   factory IndoorTrailSample.fromJson(Map<String, dynamic> json) =>
       IndoorTrailSample(
@@ -64,9 +64,7 @@ class IndoorTrailSample {
         gyroMag: (json['g'] as num).toDouble(),
         pressureHpa: json['p'] == null ? null : (json['p'] as num).toDouble(),
         landmark: json['l'] as String?,
-        at: DateTime.fromMillisecondsSinceEpoch(
-          (json['t'] as num).toInt(),
-        ),
+        at: DateTime.fromMillisecondsSinceEpoch((json['t'] as num).toInt()),
       );
 
   static double _round(double v, int places) {
@@ -117,13 +115,13 @@ class IndoorTrail {
   }) : sampleCount = samples.length;
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'lang': langCode,
-        'createdAt': createdAt.millisecondsSinceEpoch,
-        'samples': samples.map((s) => s.toJson()).toList(),
-        'v': 1,
-      };
+    'id': id,
+    'name': name,
+    'lang': langCode,
+    'createdAt': createdAt.millisecondsSinceEpoch,
+    'samples': samples.map((s) => s.toJson()).toList(),
+    'v': 1,
+  };
 
   factory IndoorTrail.fromJson(Map<String, dynamic> json) {
     final raw = json['samples'];

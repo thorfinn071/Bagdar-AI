@@ -13,7 +13,6 @@ class TrafficLightAnalyzer {
   static const int _fastStableFramesRequired = 2;
   static const int _uncertainFramesRequired = 2;
 
-  
   static const int _greenFastStableFramesFloor = 3;
   static const double _wideAspectPenaltyStart = 1.2;
   static const double _wideAspectPenaltyScale = 0.08;
@@ -85,8 +84,7 @@ class TrafficLightAnalyzer {
     required int bboxWidth,
     required int bboxHeight,
     double? confidence,
-    
-    
+
     TrafficLightColor candidateColor = TrafficLightColor.unknown,
   }) {
     if (bboxWidth <= 0 || bboxHeight <= 0) {
@@ -113,7 +111,6 @@ class TrafficLightAnalyzer {
       }
     }
 
-    
     if (candidateColor == TrafficLightColor.green) {
       frames = max(frames, _greenFastStableFramesFloor);
     }
@@ -145,8 +142,7 @@ class TrafficLightAnalyzer {
     _lastConfidence = observation.confidence;
     _lastLowVisibility = observation.lowVisibility;
     final raw = observation.color;
-    
-    
+
     final requiredFrames = stableFramesRequiredForBox(
       bboxWidth: bboxW,
       bboxHeight: bboxH,
@@ -339,7 +335,6 @@ class TrafficLightAnalyzer {
           : midBrightYellow;
     }
 
-    
     if (color == TrafficLightColor.red && topBrightRed < _kMinRedFraction) {
       color = TrafficLightColor.unknown;
     } else if (color == TrafficLightColor.green &&
@@ -350,8 +345,7 @@ class TrafficLightAnalyzer {
       color = TrafficLightColor.unknown;
     }
 
-    if (color == TrafficLightColor.green ||
-        color == TrafficLightColor.yellow) {
+    if (color == TrafficLightColor.green || color == TrafficLightColor.yellow) {
       final pickedScore = color == TrafficLightColor.green
           ? botBrightGreen
           : midBrightYellow;
@@ -360,7 +354,6 @@ class TrafficLightAnalyzer {
       }
     }
 
-    
     if (color != TrafficLightColor.unknown) {
       final brightFraction = _brightPixelFraction(
         yPlane,
@@ -398,7 +391,6 @@ class TrafficLightAnalyzer {
     return _TrafficLightObservation(color, confidence, lowVisibility);
   }
 
-  
   static const double _kGoColorMatchFloor = 0.30;
   static const double _kMinRedFraction = 0.40;
   static const double _kMinGreenFraction = 0.40;
@@ -406,7 +398,6 @@ class TrafficLightAnalyzer {
   static const double _kMinBrightPixelFraction = 0.20;
   static const int _kBrightPixelThreshold = 80;
 
-  
   static const double _kMinBrightLedFraction = 0.04;
 
   bool _hasBrightLedZone(
@@ -533,12 +524,8 @@ class TrafficLightAnalyzer {
   bool _matchesTarget(int yVal, int u, int v, _ColorTarget target) {
     switch (target) {
       case _ColorTarget.red:
-        
-        
         return yVal > 80 && yVal <= 200 && v >= 175 && u < 120 && (v - u) > 50;
       case _ColorTarget.yellow:
-        
-        
         return yVal >= 180 && v > 135 && u >= 90 && u < 115 && (v - u) > 30;
       case _ColorTarget.green:
         return yVal > 60 && u > 140 && v < 130 && (u - v) > 20;

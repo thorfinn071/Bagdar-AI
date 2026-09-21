@@ -138,6 +138,21 @@ class _RecordingFallbackProvider implements DepthProvider {
   }
 
   @override
+  Future<DepthAnalysisResult> analyzeDetailed(
+    CameraImage image, {
+    double cropTopFrac = 0.40,
+    bool userStationary = false,
+    bool weatherDegraded = false,
+    bool winterMode = false,
+    int sourceTimestampUs = 0,
+    int rotationDegrees = 0,
+    bool mirrored = false,
+  }) async {
+    analyzeCalls++;
+    return wrapHazardsAsLegacy(const <DepthHazard>[]);
+  }
+
+  @override
   void setNativeBridgeEnabled(bool enabled) {}
 
   @override
@@ -176,45 +191,46 @@ void main() {
     expect(second.level, AlertLevel.warning);
   });
 
-  test('ProximityBeaconService schedules proximity earcons at near range', () async {
-    final earcon = _RecordingEarconService();
-    final beacon = ProximityBeaconService(earcon: earcon);
-    addTearDown(beacon.dispose);
+  test(
+    'ProximityBeaconService schedules proximity earcons at near range',
+    () async {
+      final earcon = _RecordingEarconService();
+      final beacon = ProximityBeaconService(earcon: earcon);
+      addTearDown(beacon.dispose);
 
-    beacon.update(kBeaconNearDistM, 0.25);
-    await Future.delayed(const Duration(milliseconds: 180));
+      beacon.update(kBeaconNearDistM, 0.25);
+      await Future.delayed(const Duration(milliseconds: 180));
 
-    expect(earcon.calls, greaterThan(0));
-    expect(earcon.played.last, Earcon.proximity);
-    expect(earcon.pans.last, closeTo(0.25, 0.001));
-  });
+      expect(earcon.calls, greaterThan(0));
+      expect(earcon.played.last, Earcon.proximity);
+      expect(earcon.pans.last, closeTo(0.25, 0.001));
+    },
+  );
 
   group('ProximityBeaconService weather-degraded haptic boost (M10)', () {
     test('clear weather returns base pattern unchanged', () {
-      final (pattern, intensities) =
-          ProximityBeaconService.resolveHapticPulse(false);
+      final (pattern, intensities) = ProximityBeaconService.resolveHapticPulse(
+        false,
+      );
       expect(pattern, equals([0, 25]));
       expect(intensities, equals([0, 140]));
     });
 
     test('degraded weather scales the active pulse +30 % '
         '(both duration and amplitude)', () {
-      final (pattern, intensities) =
-          ProximityBeaconService.resolveHapticPulse(true);
-      
-      
+      final (pattern, intensities) = ProximityBeaconService.resolveHapticPulse(
+        true,
+      );
+
       expect(pattern[0], 0);
       expect(pattern[1], (25 * 1.3).round());
-      
+
       expect(intensities[0], 0);
       expect(intensities[1], (140 * 1.3).round());
     });
 
     test('degraded amplitude never exceeds the 255 device ceiling', () {
-      
-      
-      final (_, intensities) =
-          ProximityBeaconService.resolveHapticPulse(true);
+      final (_, intensities) = ProximityBeaconService.resolveHapticPulse(true);
       for (final v in intensities) {
         expect(v, lessThanOrEqualTo(255));
       }
@@ -243,36 +259,49 @@ void main() {
       beacon.update(kBeaconNearDistM, 0.0, weatherDegraded: false);
       expect(beacon.isWeatherDegraded, isFalse);
 
-      
       beacon.setWeatherDegraded(true);
       beacon.update(kBeaconNearDistM, 0.0);
       expect(beacon.isWeatherDegraded, isTrue);
     });
   });
 
-  test('HardwareDepthProvider falls back to NCNN on repeated low-confidence depth', () async {
-    final depthMap = Float32List(GroundPlaneAnalyzer.kMapSize * GroundPlaneAnalyzer.kMapSize)
-      ..fillRange(0, GroundPlaneAnalyzer.kMapSize * GroundPlaneAnalyzer.kMapSize, 0.0);
-    final bridge = _FakeHardwareDepthBridge(supported: true, depthMap: depthMap);
-    final fallback = _RecordingFallbackProvider(DepthTier.ncnnCpu);
-    final provider = HardwareDepthProvider(
-      bridge: bridge,
-      fallbackProvider: fallback,
-    );
-    addTearDown(provider.dispose);
+  test(
+    'HardwareDepthProvider falls back to NCNN on repeated low-confidence depth',
+    () async {
+      final depthMap =
+          Float32List(
+            GroundPlaneAnalyzer.kMapSize * GroundPlaneAnalyzer.kMapSize,
+          )..fillRange(
+            0,
+            GroundPlaneAnalyzer.kMapSize * GroundPlaneAnalyzer.kMapSize,
+            0.0,
+          );
+      final bridge = _FakeHardwareDepthBridge(
+        supported: true,
+        depthMap: depthMap,
+      );
+      final fallback = _RecordingFallbackProvider(DepthTier.ncnnCpu);
+      final provider = HardwareDepthProvider(
+        bridge: bridge,
+        fallbackProvider: fallback,
+      );
+      addTearDown(provider.dispose);
 
-    final ok = await provider.init();
-    expect(ok, isTrue);
-    expect(provider.tier, DepthTier.hardware);
+      final ok = await provider.init();
+      expect(ok, isTrue);
+      expect(provider.tier, DepthTier.hardware);
 
-    for (var i = 0; i < kHardwareDepthLowConfFrames; i++) {
-      await provider.analyze(_FakeCameraImage());
-    }
+      for (var i = 0; i < kHardwareDepthLowConfFrames; i++) {
+        await provider.analyze(_FakeCameraImage());
+      }
 
-    expect(provider.lowConfidenceFallbackActive, isTrue);
-    expect(provider.lastConfidenceScore, lessThan(kHardwareDepthMinConfidence));
-    expect(fallback.analyzeCalls, greaterThan(0));
-    expect(provider.tier, DepthTier.ncnnCpu);
-
-  });
+      expect(provider.lowConfidenceFallbackActive, isTrue);
+      expect(
+        provider.lastConfidenceScore,
+        lessThan(kHardwareDepthMinConfidence),
+      );
+      expect(fallback.analyzeCalls, greaterThan(0));
+      expect(provider.tier, DepthTier.ncnnCpu);
+    },
+  );
 }

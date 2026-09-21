@@ -42,36 +42,34 @@ class NearMissRecord {
   });
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'at': at.millisecondsSinceEpoch,
-        'src': triggerSource,
-        'labels': labels,
-        if (closestDistM != null) 'distM': closestDistM,
-        if (hazardType != null) 'hazType': hazardType,
-        if (depthScore != null) 'depth': depthScore,
-        if (acousticClass != null) 'acoustic': acousticClass,
-        if (lat != null) 'lat': lat,
-        if (lng != null) 'lng': lng,
-        if (userNote != null) 'note': userNote,
-      };
+    'id': id,
+    'at': at.millisecondsSinceEpoch,
+    'src': triggerSource,
+    'labels': labels,
+    if (closestDistM != null) 'distM': closestDistM,
+    if (hazardType != null) 'hazType': hazardType,
+    if (depthScore != null) 'depth': depthScore,
+    if (acousticClass != null) 'acoustic': acousticClass,
+    if (lat != null) 'lat': lat,
+    if (lng != null) 'lng': lng,
+    if (userNote != null) 'note': userNote,
+  };
 
   factory NearMissRecord.fromJson(Map<String, dynamic> json) => NearMissRecord(
-        id: json['id'] as String,
-        at: DateTime.fromMillisecondsSinceEpoch(
-            (json['at'] as num).toInt()),
-        triggerSource: json['src'] as String? ?? 'unknown',
-        labels: (json['labels'] as List<dynamic>?)
-                ?.map((e) => e.toString())
-                .toList() ??
-            const [],
-        closestDistM: (json['distM'] as num?)?.toDouble(),
-        hazardType: json['hazType'] as String?,
-        depthScore: (json['depth'] as num?)?.toDouble(),
-        acousticClass: json['acoustic'] as String?,
-        lat: (json['lat'] as num?)?.toDouble(),
-        lng: (json['lng'] as num?)?.toDouble(),
-        userNote: json['note'] as String?,
-      );
+    id: json['id'] as String,
+    at: DateTime.fromMillisecondsSinceEpoch((json['at'] as num).toInt()),
+    triggerSource: json['src'] as String? ?? 'unknown',
+    labels:
+        (json['labels'] as List<dynamic>?)?.map((e) => e.toString()).toList() ??
+        const [],
+    closestDistM: (json['distM'] as num?)?.toDouble(),
+    hazardType: json['hazType'] as String?,
+    depthScore: (json['depth'] as num?)?.toDouble(),
+    acousticClass: json['acoustic'] as String?,
+    lat: (json['lat'] as num?)?.toDouble(),
+    lng: (json['lng'] as num?)?.toDouble(),
+    userNote: json['note'] as String?,
+  );
 }
 
 /// Quota-bounded, deletable local buffer for near-miss events.
@@ -122,19 +120,21 @@ class NearMissBuffer {
     try {
       final records = await _loadCache();
       final now = DateTime.now();
-      records.add(NearMissRecord(
-        id: 'nm_${now.millisecondsSinceEpoch.toRadixString(36)}',
-        at: now,
-        triggerSource: triggerSource,
-        labels: labels,
-        closestDistM: closestDistM,
-        hazardType: hazardType,
-        depthScore: depthScore,
-        acousticClass: acousticClass,
-        lat: lat,
-        lng: lng,
-        userNote: userNote,
-      ));
+      records.add(
+        NearMissRecord(
+          id: 'nm_${now.millisecondsSinceEpoch.toRadixString(36)}',
+          at: now,
+          triggerSource: triggerSource,
+          labels: labels,
+          closestDistM: closestDistM,
+          hazardType: hazardType,
+          depthScore: depthScore,
+          acousticClass: acousticClass,
+          lat: lat,
+          lng: lng,
+          userNote: userNote,
+        ),
+      );
 
       while (records.length > kNearMissMaxRecords) {
         records.removeAt(0);

@@ -54,8 +54,7 @@ void main() {
         expect(
           _contrast(c.accentOnPrimary, c.accentPrimary),
           greaterThanOrEqualTo(7.0),
-          reason:
-              'Theme $name fails AAA for accentOnPrimary on accentPrimary',
+          reason: 'Theme $name fails AAA for accentOnPrimary on accentPrimary',
         );
       }
     });
@@ -95,8 +94,9 @@ void main() {
       );
     });
 
-    testWidgets('exposes BagdarColors via BagdarTheme.of(context)',
-        (tester) async {
+    testWidgets('exposes BagdarColors via BagdarTheme.of(context)', (
+      tester,
+    ) async {
       late BagdarColors captured;
       await tester.pumpWidget(
         MaterialApp(
@@ -133,7 +133,5 @@ double _relativeLuminance(Color c) {
         : math.pow((v + 0.055) / 1.055, 2.4).toDouble();
   }
 
-  return 0.2126 * channel(c.r) +
-      0.7152 * channel(c.g) +
-      0.0722 * channel(c.b);
+  return 0.2126 * channel(c.r) + 0.7152 * channel(c.g) + 0.0722 * channel(c.b);
 }

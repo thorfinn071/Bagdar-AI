@@ -43,8 +43,6 @@ void main() {
     });
 
     test('fromJson accepts manifest-style aliases (id, url, size)', () {
-      
-      
       final manifestStyle = {
         'id': LanguagePackIds.voskKk,
         'name': 'Vosk KK',
@@ -109,11 +107,7 @@ void main() {
     });
 
     test('sizeMb formats human-readable size', () {
-      const pack = LanguagePack(
-        packId: 'x',
-        name: 'X',
-        sizeBytes: 52428800, 
-      );
+      const pack = LanguagePack(packId: 'x', name: 'X', sizeBytes: 52428800);
       expect(pack.sizeMb, '50.0');
     });
   });
@@ -163,8 +157,6 @@ void main() {
 
   group('LanguagePackIds', () {
     test('exposes the IDs referenced in voice_command_service routing', () {
-      
-      
       expect(LanguagePackIds.voskKk, 'vosk-kk');
       expect(LanguagePackIds.rhvoiceKkAigul, 'rhvoice-kk-aigul');
     });

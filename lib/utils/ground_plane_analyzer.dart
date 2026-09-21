@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:math' as math;
 import 'dart:typed_data';
 
+import '../models/plane_fit_quality.dart';
 import 'depth_hazard.dart';
 
 class GroundPlaneAnalyzer {
@@ -22,11 +23,9 @@ class GroundPlaneAnalyzer {
   static const double kReflectiveInlierRatioMin = 0.88;
   static const double kReflectiveLumaVarianceMax = 60.0;
 
-  
   static const int _kMaxPoints = 2048;
 
-  static double scanZoneLumaVariance(Uint8List lumaMap)
-  {
+  static double scanZoneLumaVariance(Uint8List lumaMap) {
     if (lumaMap.length != kMapSize * kMapSize) return 0.0;
     double sum = 0;
     double sqSum = 0;
@@ -55,27 +54,24 @@ class GroundPlaneAnalyzer {
         lumaVariance <= kReflectiveLumaVarianceMax;
   }
 
-  final math.Random _rng = math.Random();
-
   final Float64List _xs = Float64List(_kMaxPoints);
   final Float64List _ys = Float64List(_kMaxPoints);
   final Float64List _zs = Float64List(_kMaxPoints);
   int _pointCount = 0;
 
-  
   bool _userStationaryHint = false;
 
-  
   bool _weatherDegradedHint = false;
 
-  
-  bool _lastPlaneFitOk = true;
+  bool _lastPlaneFitOk = false;
+  PlaneFitQuality _lastPlaneFitQuality = PlaneFitQuality.notAnalyzed;
+  _Plane? _lastAcceptedPlane;
 
-  
   bool get debugLastPlaneFitOk => _lastPlaneFitOk;
 
-  
   bool get lastPlaneFitOk => _lastPlaneFitOk;
+
+  PlaneFitQuality get lastPlaneFitQuality => _lastPlaneFitQuality;
 
   bool _passesWarningGate(double coverage) {
     if (_weatherDegradedHint) {
@@ -100,9 +96,13 @@ class GroundPlaneAnalyzer {
     assert(depthMap.length == kMapSize * kMapSize);
     assert(lumaMap == null || lumaMap.length == kMapSize * kMapSize);
 
+    // Fail closed for every frame. No early return may inherit the previous
+    // frame's plane state.
+    _lastPlaneFitOk = false;
+    _lastPlaneFitQuality = PlaneFitQuality.notAnalyzed;
+
     _userStationaryHint = userStationary;
-    
-    
+
     _weatherDegradedHint = weatherDegraded;
     _winterModeHint = winterMode;
 
@@ -121,15 +121,35 @@ class GroundPlaneAnalyzer {
       if (_pointCount >= _kMaxPoints) break;
     }
 
-    if (_pointCount < 10) return const [];
+    final validPointFraction = (_pointCount / _kMaxPoints).clamp(0.0, 1.0);
+    if (_pointCount < 10) {
+      _lastPlaneFitQuality = PlaneFitQuality(
+        validPointFraction: validPointFraction,
+        inlierFraction: 0,
+        medianNormalizedResidual: double.infinity,
+        p90NormalizedResidual: double.infinity,
+        inlierRowCoverage: 0,
+        inlierColumnCoverage: 0,
+        degenerate: false,
+        temporalConsistencyScore: null,
+        accepted: false,
+        rejectionReason: PlaneFitRejectionReason.insufficientValidPoints,
+      );
+      return const [];
+    }
 
     _Plane? bestPlane;
     int maxInliers = -1;
+    double bestMedianResidual = double.infinity;
+    var sawDegenerateCandidate = false;
+    // A per-frame seed makes admission reproducible regardless of corpus order
+    // or how many frames another test processed first.
+    final rng = math.Random(_deterministicSeed());
 
     for (int i = 0; i < kRansacIters; i++) {
-      final i1 = _rng.nextInt(_pointCount);
-      final i2 = _rng.nextInt(_pointCount);
-      final i3 = _rng.nextInt(_pointCount);
+      final i1 = rng.nextInt(_pointCount);
+      final i2 = rng.nextInt(_pointCount);
+      final i3 = rng.nextInt(_pointCount);
 
       final plane = _Plane.fromCoords(
         _xs[i1],
@@ -142,31 +162,104 @@ class GroundPlaneAnalyzer {
         _ys[i3],
         _zs[i3],
       );
-      if (plane == null) continue;
-
-      int inliers=0;
-      for(int j=0; j<_pointCount; j++) {
-        final expectedZ=plane.getZ(_xs[j],_ys[j]);
-        if(expectedZ<=0) continue;
-        final error=(_zs[j]-expectedZ).abs()/expectedZ;
-        if(error<kInlierThresh) inliers++;
+      if (plane == null) {
+        sawDegenerateCandidate = true;
+        continue;
       }
 
-      if (inliers > maxInliers) {
+      int inliers = 0;
+      final candidateResiduals = <double>[];
+      for (int j = 0; j < _pointCount; j++) {
+        final expectedZ = plane.getZ(_xs[j], _ys[j]);
+        if (!expectedZ.isFinite || expectedZ <= 0) continue;
+        final error = (_zs[j] - expectedZ).abs() / expectedZ;
+        if (error < kInlierThresh) {
+          inliers++;
+          candidateResiduals.add(error);
+        }
+      }
+
+      candidateResiduals.sort();
+      final medianResidual = candidateResiduals.isEmpty
+          ? double.infinity
+          : _percentile(candidateResiduals, 0.5);
+      if (inliers > maxInliers ||
+          (inliers == maxInliers && medianResidual < bestMedianResidual)) {
         maxInliers = inliers;
         bestPlane = plane;
+        bestMedianResidual = medianResidual;
       }
     }
 
     final results = <DepthHazard>[];
-    final planeOk = bestPlane != null && maxInliers >= _pointCount * 0.2;
-    
+    final residuals = <double>[];
+    final inlierRows = <int>{};
+    final inlierColumns = <int>{};
+    var positiveExpected = 0;
+    if (bestPlane != null) {
+      for (int j = 0; j < _pointCount; j++) {
+        final expectedZ = bestPlane.getZ(_xs[j], _ys[j]);
+        if (!expectedZ.isFinite || expectedZ <= 0) continue;
+        positiveExpected++;
+        final error = (_zs[j] - expectedZ).abs() / expectedZ;
+        if (error < kInlierThresh) {
+          residuals.add(error);
+          inlierRows.add(((_ys[j] - kZoneStartRow) / 4).round());
+          inlierColumns.add((_xs[j] / 4).round());
+        }
+      }
+    }
+    residuals.sort();
+    final inlierFraction = _pointCount == 0
+        ? 0.0
+        : residuals.length / _pointCount;
+    final rowCoverage = (inlierRows.length / 32).clamp(0.0, 1.0);
+    final columnCoverage = (inlierColumns.length / 64).clamp(0.0, 1.0);
+    final medianResidual = residuals.isEmpty
+        ? double.infinity
+        : _percentile(residuals, 0.5);
+    final p90Residual = residuals.isEmpty
+        ? double.infinity
+        : _percentile(residuals, 0.9);
+    final degenerate =
+        bestPlane == null ||
+        positiveExpected < (_pointCount * 0.8).ceil() ||
+        !bestPlane.isFinite;
+    final temporalConsistency = bestPlane == null
+        ? null
+        : _temporalConsistency(bestPlane, _lastAcceptedPlane);
+    final rejectionReason = _qualityRejection(
+      hasPlane: bestPlane != null,
+      degenerate: degenerate,
+      inlierFraction: inlierFraction,
+      medianResidual: medianResidual,
+      p90Residual: p90Residual,
+      rowCoverage: rowCoverage,
+      columnCoverage: columnCoverage,
+      temporalConsistency: temporalConsistency,
+      sawDegenerateCandidate: sawDegenerateCandidate,
+    );
+    final planeOk = rejectionReason == PlaneFitRejectionReason.none;
+    _lastPlaneFitQuality = PlaneFitQuality(
+      validPointFraction: validPointFraction,
+      inlierFraction: inlierFraction.clamp(0.0, 1.0),
+      medianNormalizedResidual: medianResidual,
+      p90NormalizedResidual: p90Residual,
+      inlierRowCoverage: rowCoverage,
+      inlierColumnCoverage: columnCoverage,
+      degenerate: degenerate,
+      temporalConsistencyScore: temporalConsistency,
+      accepted: planeOk,
+      rejectionReason: rejectionReason,
+    );
     _lastPlaneFitOk = planeOk;
+    if (planeOk) _lastAcceptedPlane = bestPlane;
 
     const zoneCount = 5;
     const zoneWidth = kMapSize ~/ zoneCount;
 
-    if (!planeOk) {
+    final acceptedPlane = bestPlane;
+    if (!planeOk || acceptedPlane == null) {
       _appendPlaneIndependentHazards(depthMap, results, lumaMap: lumaMap);
       results.sort((a, b) => b.midasScore.compareTo(a.midasScore));
       return results;
@@ -174,8 +267,7 @@ class GroundPlaneAnalyzer {
 
     final inlierRatio = maxInliers / _pointCount;
     final lumaVar = lumaMap != null ? scanZoneLumaVariance(lumaMap) : null;
-    
-    
+
     if (isSuspiciousReflectiveSurface(
       inlierRatio: inlierRatio,
       lumaVariance: lumaVar,
@@ -205,8 +297,7 @@ class GroundPlaneAnalyzer {
       double dropSum = 0.0;
       double dropSqSum = 0.0;
       double dropLumaSum = 0.0;
-      
-      
+
       double dropLumaSqSum = 0.0;
       int dropLumaCount = 0;
       double flatLumaSum = 0.0;
@@ -215,7 +306,7 @@ class GroundPlaneAnalyzer {
       for (int y = kZoneStartRow; y < kMapSize; y += 2) {
         for (int x = colStart; x < colEnd; x += 2) {
           final z = depthMap[y * kMapSize + x];
-          final expectedZ = bestPlane.getZ(x.toDouble(), y.toDouble());
+          final expectedZ = acceptedPlane.getZ(x.toDouble(), y.toDouble());
 
           if (expectedZ > 0.1) {
             validPixels++;
@@ -231,8 +322,7 @@ class GroundPlaneAnalyzer {
               if (lumaMap != null) {
                 final luma = lumaMap[y * kMapSize + x];
                 dropLumaSum += luma;
-                
-                
+
                 dropLumaSqSum += luma * luma;
                 dropLumaCount++;
               }
@@ -253,8 +343,7 @@ class GroundPlaneAnalyzer {
       final dropCoverage = dropCount / validPixels;
       final riseCoverage = riseCount / validPixels;
 
-      if (dropCoverage >= kMinCoverage &&
-          _passesWarningGate(dropCoverage)) {
+      if (dropCoverage >= kMinCoverage && _passesWarningGate(dropCoverage)) {
         final suppress = _isLikelyShadowArtifact(
           dropCount: dropCount,
           dropSum: dropSum,
@@ -282,8 +371,7 @@ class GroundPlaneAnalyzer {
         }
       }
 
-      if (riseCoverage >= kMinCoverage &&
-          _passesWarningGate(riseCoverage)) {
+      if (riseCoverage >= kMinCoverage && _passesWarningGate(riseCoverage)) {
         final score = (riseCoverage * 0.5 + maxRise.clamp(0.0, 1.0) * 0.5)
             .clamp(0.0, 1.0);
         final zone = HazardZone.values[zi];
@@ -300,7 +388,9 @@ class GroundPlaneAnalyzer {
     }
 
     final overheadHazard = _detectOverheadObstacle(
-      depthMap, bestPlane, lumaMap: lumaMap,
+      depthMap,
+      acceptedPlane,
+      lumaMap: lumaMap,
     );
     if (overheadHazard != null) {
       results.add(overheadHazard);
@@ -313,7 +403,6 @@ class GroundPlaneAnalyzer {
       }
     }
 
-    
     _appendPlaneIndependentHazards(depthMap, results, lumaMap: lumaMap);
 
     // Good plane fit with high inlier ratio means the foot zone is flat and
@@ -324,14 +413,87 @@ class GroundPlaneAnalyzer {
       results.removeWhere((h) => h.type == DepthHazardType.deadZone);
     }
 
-    
     final emitted = _applyTemporalConfirmation(results);
 
     emitted.sort((a, b) => b.midasScore.compareTo(a.midasScore));
     return emitted;
   }
 
-  
+  int _deterministicSeed() {
+    var hash = 0x1fffffff;
+    final stride = math.max(1, _pointCount ~/ 64);
+    for (int i = 0; i < _pointCount; i += stride) {
+      hash = 0x1fffffff & (hash * 31 + (_xs[i] * 17).round());
+      hash = 0x1fffffff & (hash * 31 + (_ys[i] * 13).round());
+      hash = 0x1fffffff & (hash * 31 + (_zs[i] * 10000).round());
+    }
+    return hash;
+  }
+
+  static double _percentile(List<double> sorted, double fraction) {
+    if (sorted.isEmpty) return double.infinity;
+    final index = ((sorted.length - 1) * fraction).round();
+    return sorted[index.clamp(0, sorted.length - 1)];
+  }
+
+  static PlaneFitRejectionReason _qualityRejection({
+    required bool hasPlane,
+    required bool degenerate,
+    required double inlierFraction,
+    required double medianResidual,
+    required double p90Residual,
+    required double rowCoverage,
+    required double columnCoverage,
+    required double? temporalConsistency,
+    required bool sawDegenerateCandidate,
+  }) {
+    if (!hasPlane) {
+      return sawDegenerateCandidate
+          ? PlaneFitRejectionReason.degenerate
+          : PlaneFitRejectionReason.noCandidatePlane;
+    }
+    if (degenerate) return PlaneFitRejectionReason.degenerate;
+    if (inlierFraction < 0.55) {
+      return PlaneFitRejectionReason.lowInlierFraction;
+    }
+    if (medianResidual > 0.075 || p90Residual > 0.135) {
+      return PlaneFitRejectionReason.residualTooHigh;
+    }
+    if (rowCoverage < 0.55 || columnCoverage < 0.65) {
+      return PlaneFitRejectionReason.insufficientSpatialCoverage;
+    }
+    if (temporalConsistency != null &&
+        temporalConsistency < 0.10 &&
+        inlierFraction < 0.75) {
+      return PlaneFitRejectionReason.temporalInconsistency;
+    }
+    return PlaneFitRejectionReason.none;
+  }
+
+  static double? _temporalConsistency(_Plane current, _Plane? previous) {
+    if (previous == null) return null;
+    const anchors = <(double, double)>[
+      (0, 128),
+      (255, 128),
+      (128, 192),
+      (0, 255),
+      (255, 255),
+    ];
+    final deltas = <double>[];
+    for (final anchor in anchors) {
+      final oldZ = previous.getZ(anchor.$1, anchor.$2);
+      final newZ = current.getZ(anchor.$1, anchor.$2);
+      if (!oldZ.isFinite || !newZ.isFinite || oldZ <= 0 || newZ <= 0) {
+        continue;
+      }
+      deltas.add((newZ - oldZ).abs() / math.max(oldZ, newZ));
+    }
+    if (deltas.isEmpty) return 0;
+    deltas.sort();
+    final medianDelta = _percentile(deltas, 0.5);
+    return (1.0 - medianDelta / 0.35).clamp(0.0, 1.0);
+  }
+
   DepthHazard? debugDetectStairsDown(
     Float32List depthMap, {
     bool userStationary = false,
@@ -340,18 +502,15 @@ class GroundPlaneAnalyzer {
     return _detectStairsDown(depthMap);
   }
 
-  
   void resetTemporalFilter() {
     _recentHazardFrames.clear();
     _lowCurbStreak = 0;
     _deadZoneStreak = 0;
-    
-    
+
     _lastStairSignal = null;
     _lastStairSignalAt = _kStairSignalEpoch;
     _escalatorStreak = 0;
-    
-    
+
     _nearFieldBaseline.clear();
     _nearFieldStreak = 0;
   }
@@ -361,8 +520,7 @@ class GroundPlaneAnalyzer {
     while (_recentHazardFrames.length > _kTemporalWindow) {
       _recentHazardFrames.removeFirst();
     }
-    
-    
+
     if (_recentHazardFrames.length < _kTemporalWindow) {
       return List<DepthHazard>.of(candidates);
     }
@@ -396,12 +554,10 @@ class GroundPlaneAnalyzer {
       results.add(footZoneHazard);
     }
 
-    
     final stairsHazard = _detectStairsDown(depthMap);
     if (stairsHazard != null) {
       const double weatherDegradedStairsScoreFloor = 0.715;
-      
-      
+
       if (_winterModeHint ||
           !_weatherDegradedHint ||
           stairsHazard.midasScore >= weatherDegradedStairsScoreFloor) {
@@ -409,11 +565,8 @@ class GroundPlaneAnalyzer {
       }
     }
 
-    
     final nearFieldHazard = _detectNearFieldIntrusion(depthMap);
     if (nearFieldHazard != null) {
-      
-      
       const double weatherDegradedScoreFloor = 0.55;
       if (!_weatherDegradedHint ||
           nearFieldHazard.midasScore >= weatherDegradedScoreFloor) {
@@ -427,8 +580,7 @@ class GroundPlaneAnalyzer {
           (h.type == DepthHazardType.pothole ||
               h.type == DepthHazardType.stepDown),
     );
-    
-    
+
     if (!hasCenterDrop && !_weatherDegradedHint) {
       final pitHazard = detectPitGradientFromMap(depthMap);
       if (pitHazard != null) {
@@ -437,26 +589,20 @@ class GroundPlaneAnalyzer {
     }
 
     if (lumaMap != null) {
-      final glassHazard = detectGlassDoor(
-        lumaMap,
-        depthMap: depthMap,
-      );
+      final glassHazard = detectGlassDoor(lumaMap, depthMap: depthMap);
       if (glassHazard != null) {
         results.add(glassHazard);
       }
     }
   }
 
-  
   static const double _kLowCurbMinDelta = 0.05;
   static const double _kLowCurbMaxDelta = 0.20;
   static const double _kLowCurbCoverage = 0.18;
-  
-  
+
   static const int _kLowCurbConfirmFrames = 2;
   int _lowCurbStreak = 0;
 
-  
   static const int _kTemporalWindow = 5;
   static const int _kTemporalMinMatches = 4;
   final ListQueue<List<DepthHazard>> _recentHazardFrames =
@@ -533,7 +679,8 @@ class GroundPlaneAnalyzer {
     }
 
     final lowCurbCoverage = lowCurbPairs / pairCount;
-    final lowCurbMatchesThisFrame = lowCurbCoverage >= _kLowCurbCoverage &&
+    final lowCurbMatchesThisFrame =
+        lowCurbCoverage >= _kLowCurbCoverage &&
         lowCurbMaxDelta >= _kLowCurbMinDelta + 0.01;
     if (!lowCurbMatchesThisFrame) {
       _lowCurbStreak = 0;
@@ -670,9 +817,7 @@ class GroundPlaneAnalyzer {
           if (x > rowXmax) rowXmax = x;
         }
       }
-      final span = rowXmax > rowXmin
-          ? (rowXmax - rowXmin) / kMapSize
-          : 0.0;
+      final span = rowXmax > rowXmin ? (rowXmax - rowXmin) / kMapSize : 0.0;
       if (span >= _kEdgeMinSpanFrac && edgePixels >= 6) {
         runRows++;
         if (runRows > bestRunRows) {
@@ -689,19 +834,34 @@ class GroundPlaneAnalyzer {
     if (bestRunRows < _kEdgeMinRowRun) return null;
     if (bestRowY < 0) return null;
 
-    final aboveY = (bestRowY - bestRunRows - 3).clamp(_kOverheadRowLo, _kOverheadRowHi - 1);
+    final aboveY = (bestRowY - bestRunRows - 3).clamp(
+      _kOverheadRowLo,
+      _kOverheadRowHi - 1,
+    );
     final belowY = (bestRowY + 3).clamp(_kOverheadRowLo, _kOverheadRowHi - 1);
-    final edgeY = (bestRowY - bestRunRows ~/ 2).clamp(_kOverheadRowLo, _kOverheadRowHi - 1);
+    final edgeY = (bestRowY - bestRunRows ~/ 2).clamp(
+      _kOverheadRowLo,
+      _kOverheadRowHi - 1,
+    );
 
     double aboveSum = 0, edgeSum = 0, belowSum = 0;
     int aboveN = 0, edgeN = 0, belowN = 0;
     for (int x = bestRowXmin; x <= bestRowXmax; x += 2) {
       final za = depthMap[aboveY * kMapSize + x];
-      if (za > 0.05) { aboveSum += za; aboveN++; }
+      if (za > 0.05) {
+        aboveSum += za;
+        aboveN++;
+      }
       final ze = depthMap[edgeY * kMapSize + x];
-      if (ze > 0.05) { edgeSum += ze; edgeN++; }
+      if (ze > 0.05) {
+        edgeSum += ze;
+        edgeN++;
+      }
       final zb = depthMap[belowY * kMapSize + x];
-      if (zb > 0.05) { belowSum += zb; belowN++; }
+      if (zb > 0.05) {
+        belowSum += zb;
+        belowN++;
+      }
     }
 
     if (aboveN < 3 || edgeN < 3 || belowN < 3) return null;
@@ -857,8 +1017,7 @@ class GroundPlaneAnalyzer {
   static const double _kShadowMaxDropMagnitude = 0.55;
   static const double _kShadowMinLumaDelta = 28.0;
   static const int _kShadowMinSamples = 8;
-  
-  
+
   static const double _kReflectiveDropLumaVariance = 500.0;
 
   static bool isLikelyShadowArtifact({
@@ -885,11 +1044,9 @@ class GroundPlaneAnalyzer {
     final dropLumaMean = dropLumaSum / dropLumaCount;
     final flatLumaMean = flatLumaSum / flatLumaCount;
 
-    
     final lumaDelta = (flatLumaMean - dropLumaMean).abs();
     if (lumaDelta >= _kShadowMinLumaDelta) return true;
 
-    
     final sqSum = dropLumaSqSum;
     if (sqSum != null && dropLumaCount > 1) {
       final dropLumaVar = (sqSum / dropLumaCount) - dropLumaMean * dropLumaMean;
@@ -899,15 +1056,12 @@ class GroundPlaneAnalyzer {
     return false;
   }
 
-  
   Float64List? _lastStairSignal;
   DateTime _lastStairSignalAt = _kStairSignalEpoch;
-  
-  
+
   int _escalatorStreak = 0;
   static const int _kEscalatorConfirmFrames = 2;
-  
-  
+
   static const int _kStairsPhaseSearchPx = 10;
   static const int _kStairsPhaseShiftPx = 4;
   static const Duration _kStairsSignalStale = Duration(milliseconds: 1500);
@@ -917,8 +1071,6 @@ class GroundPlaneAnalyzer {
   DepthHazard? _detectStairsDown(Float32List depthMap) {
     final signal = _computeStairsSignal(depthMap);
     if (signal == null) {
-      
-      
       return null;
     }
 
@@ -931,13 +1083,10 @@ class GroundPlaneAnalyzer {
     _lastStairSignalAt = now;
 
     if (hazard == null) {
-      
-      
       _escalatorStreak = 0;
       return null;
     }
 
-    
     if (!_userStationaryHint) {
       _escalatorStreak = 0;
       return hazard;
@@ -946,8 +1095,6 @@ class GroundPlaneAnalyzer {
     if (prev == null ||
         prev.length != signal.length ||
         prevAge > _kStairsSignalStale) {
-      
-      
       _escalatorStreak = 0;
       return hazard;
     }
@@ -958,15 +1105,12 @@ class GroundPlaneAnalyzer {
       return hazard;
     }
 
-    
     _escalatorStreak++;
     if (_escalatorStreak < _kEscalatorConfirmFrames) {
       return null;
     }
 
     return DepthHazard(
-      
-      
       midasScore: (hazard.midasScore * 0.6).clamp(0.0, 1.0),
       type: DepthHazardType.escalatorRiding,
       zone: hazard.zone,
@@ -974,7 +1118,6 @@ class GroundPlaneAnalyzer {
     );
   }
 
-  
   static const int _kNearFieldRowStart = kFootZoneStartRow;
   static const double _kNearFieldMinValidZ = 0.05;
   static const int _kNearFieldMinSamples = 512;
@@ -1005,15 +1148,13 @@ class GroundPlaneAnalyzer {
         }
       }
     }
-    
-    
+
     if (count < _kNearFieldMinSamples) {
       _nearFieldStreak = 0;
       return null;
     }
     final currentMean = sum / count;
 
-    
     if (_nearFieldBaseline.length < _kNearFieldBaselineMin) {
       _nearFieldBaseline.addLast(currentMean);
       _nearFieldStreak = 0;
@@ -1024,8 +1165,6 @@ class GroundPlaneAnalyzer {
     final delta = currentMean - medianBaseline;
 
     if (delta > _kNearFieldJumpThreshold) {
-      
-      
       _nearFieldStreak++;
       final confirmThreshold = _userStationaryHint
           ? stationaryConfirmFrames
@@ -1033,8 +1172,7 @@ class GroundPlaneAnalyzer {
       if (_nearFieldStreak < confirmThreshold) {
         return null;
       }
-      
-      
+
       final coverage = (delta / 0.25).clamp(0.0, 1.0);
       final score = (0.45 + 0.30 * coverage).clamp(0.0, 0.85);
       return DepthHazard(
@@ -1045,7 +1183,6 @@ class GroundPlaneAnalyzer {
       );
     }
 
-    
     _nearFieldBaseline.addLast(currentMean);
     while (_nearFieldBaseline.length > _kNearFieldBaselineMax) {
       _nearFieldBaseline.removeFirst();
@@ -1061,7 +1198,6 @@ class GroundPlaneAnalyzer {
     return (sorted[n ~/ 2 - 1] + sorted[n ~/ 2]) / 2.0;
   }
 
-  
   DepthHazard? debugDetectNearFieldIntrusion(
     Float32List depthMap, {
     bool userStationary = false,
@@ -1071,8 +1207,6 @@ class GroundPlaneAnalyzer {
   }
 
   static int _findStairsPhaseShift(Float64List prev, Float64List curr) {
-    
-    
     const stride = 4;
     final prevDiff = _differencedSignal(prev, stride);
     final currDiff = _differencedSignal(curr, stride);
@@ -1105,8 +1239,7 @@ class GroundPlaneAnalyzer {
         corr += (prevDiff[i] - prevMean) * (currDiff[j] - currMean);
         count++;
       }
-      
-      
+
       if (count < (n * 0.6).floor()) continue;
       final normalized = corr / count;
       if (normalized > bestCorr) {
@@ -1114,8 +1247,7 @@ class GroundPlaneAnalyzer {
         bestLag = lag;
       }
     }
-    
-    
+
     if (bestCorr <= 0) return 0;
     return bestLag;
   }
@@ -1140,7 +1272,6 @@ class GroundPlaneAnalyzer {
   static const double _kStairsMinEnergy = 1e-4;
   static const double _kStairsMinDirectionality = 0.58;
 
-  
   static Float64List? _computeStairsSignal(Float32List depthMap) {
     if (depthMap.length != kMapSize * kMapSize) return null;
     const colCount = _kStairsColHi - _kStairsColLo;
@@ -1244,7 +1375,6 @@ class GroundPlaneAnalyzer {
     );
   }
 
-  
   static DepthHazard? detectStairsDownFromMap(Float32List depthMap) {
     final signal = _computeStairsSignal(depthMap);
     if (signal == null) return null;
@@ -1291,11 +1421,10 @@ class GroundPlaneAnalyzer {
     return DepthHazardType.curb;
   }
 
-  
   static const int _kGlassRowHi = 153;
   static const double _kGlassSymmetryThreshold = 0.70;
   static const double _kGlassMinWidthFrac = 0.20;
-  static const double _kGlassMaxContrast = 76.0; 
+  static const double _kGlassMaxContrast = 76.0;
 
   static DepthHazard? detectGlassDoor(
     Uint8List lumaMap, {
@@ -1388,7 +1517,6 @@ class GroundPlaneAnalyzer {
 
     final colEdgeCount = Int32List(kMapSize);
     for (int y = 10; y < _kGlassRowHi - 1; y += 2) {
-
       for (int x = 1; x < kMapSize - 1; x++) {
         final above = lumaMap[(y - 1) * kMapSize + x];
         final below = lumaMap[(y + 1) * kMapSize + x];
@@ -1417,8 +1545,7 @@ class GroundPlaneAnalyzer {
 
     if (bestLeftX < 0 || bestRightX < 0) return null;
     final gapFrac = (bestRightX - bestLeftX) / kMapSize.toDouble();
-    if (gapFrac < _kGlassEdgeMinGapFrac ||
-        gapFrac > _kGlassEdgeMaxGapFrac) {
+    if (gapFrac < _kGlassEdgeMinGapFrac || gapFrac > _kGlassEdgeMaxGapFrac) {
       return null;
     }
 
@@ -1428,15 +1555,24 @@ class GroundPlaneAnalyzer {
       final row = y * kMapSize;
       for (int x = bestLeftX + 2; x < bestRightX - 2; x += 2) {
         final z = depthMap[row + x];
-        if (z > 0.05) { innerSum += z; innerN++; }
+        if (z > 0.05) {
+          innerSum += z;
+          innerN++;
+        }
       }
       for (int x = 0; x < bestLeftX - 2; x += 4) {
         final z = depthMap[row + x];
-        if (z > 0.05) { outerSum += z; outerN++; }
+        if (z > 0.05) {
+          outerSum += z;
+          outerN++;
+        }
       }
       for (int x = bestRightX + 2; x < kMapSize; x += 4) {
         final z = depthMap[row + x];
-        if (z > 0.05) { outerSum += z; outerN++; }
+        if (z > 0.05) {
+          outerSum += z;
+          outerN++;
+        }
       }
     }
 
@@ -1457,7 +1593,6 @@ class GroundPlaneAnalyzer {
     );
   }
 
-  
   static const double _kSlipperyAnisotropyThreshold = 5.0;
   static const double _kSlipperyMinLumaVariance = 800.0;
   // Wet surfaces reflect light → high mean luma. Dry crosswalk stripes,
@@ -1560,4 +1695,6 @@ class _Plane {
   }
 
   double getZ(double x, double y) => a * x + b * y + c;
+
+  bool get isFinite => a.isFinite && b.isFinite && c.isFinite;
 }

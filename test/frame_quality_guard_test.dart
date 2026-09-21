@@ -45,122 +45,134 @@ Uint8List _makeGridPlane(int w, int h, List<bool> dirtyMask) {
 
 void main() {
   group('FrameQualityGuard AE transition', () {
-    test('emits aeStarted on first bright uniform frame, aeTransitioning after 2', () {
-      final guard = FrameQualityGuard(
-        weatherGate: WeatherGate(),
-        initialTime: DateTime(2024),
-      );
-      final plane = _makeUniform(64, 64, 220);
+    test(
+      'emits aeStarted on first bright uniform frame, aeTransitioning after 2',
+      () {
+        final guard = FrameQualityGuard(
+          weatherGate: WeatherGate(),
+          initialTime: DateTime(2024),
+        );
+        final plane = _makeUniform(64, 64, 220);
 
-      final rep1 = guard.evaluate(
-        yPlane: plane,
-        bytesPerRow: 64,
-        width: 64,
-        height: 64,
-        now: DateTime(2024),
-      );
-      expect(
-        rep1.events.any((e) =>
-            e.type == FrameQualityEventType.aeTransitionStarted),
-        isTrue,
-      );
-      expect(guard.aeTransitionFrames, 1);
-      expect(guard.aeTransitioning, isFalse);
-      expect(rep1.aePipelineFrozen, isFalse);
-
-      final rep2 = guard.evaluate(
-        yPlane: plane,
-        bytesPerRow: 64,
-        width: 64,
-        height: 64,
-        now: DateTime(2024).add(const Duration(milliseconds: 50)),
-      );
-      expect(guard.aeTransitionFrames, 2);
-      expect(guard.aeTransitioning, isTrue);
-      expect(rep2.aePipelineFrozen, isTrue);
-      expect(
-        rep2.events.any((e) =>
-            e.type == FrameQualityEventType.aeTransitionStarted),
-        isFalse,
-      );
-    });
-
-    test('emits aeEnded event and stays frozen within 3-second guard window', () {
-      final guard = FrameQualityGuard(
-        weatherGate: WeatherGate(),
-        initialTime: DateTime(2024),
-      );
-      final bright = _makeUniform(64, 64, 220);
-      final varied = _makeVaried(64, 64, 42);
-
-      for (int i = 0; i < 5; i++) {
-        guard.evaluate(
-          yPlane: bright,
+        final rep1 = guard.evaluate(
+          yPlane: plane,
           bytesPerRow: 64,
           width: 64,
           height: 64,
-          now: DateTime(2024).add(Duration(milliseconds: i * 30)),
+          now: DateTime(2024),
         );
-      }
-      expect(guard.aeTransitionFrames, 5);
+        expect(
+          rep1.events.any(
+            (e) => e.type == FrameQualityEventType.aeTransitionStarted,
+          ),
+          isTrue,
+        );
+        expect(guard.aeTransitionFrames, 1);
+        expect(guard.aeTransitioning, isFalse);
+        expect(rep1.aePipelineFrozen, isFalse);
 
-      final endTime = DateTime(2024).add(const Duration(milliseconds: 200));
-      final rep = guard.evaluate(
-        yPlane: varied,
-        bytesPerRow: 64,
-        width: 64,
-        height: 64,
-        now: endTime,
-      );
-      final ended = rep.events.firstWhere(
-        (e) => e.type == FrameQualityEventType.aeTransitionEnded,
-        orElse: () => fail('no aeEnded event'),
-      );
-      expect(ended.frames, 5);
-      expect(guard.aeTransitionFrames, 0);
-      expect(rep.aePipelineFrozen, isTrue);
+        final rep2 = guard.evaluate(
+          yPlane: plane,
+          bytesPerRow: 64,
+          width: 64,
+          height: 64,
+          now: DateTime(2024).add(const Duration(milliseconds: 50)),
+        );
+        expect(guard.aeTransitionFrames, 2);
+        expect(guard.aeTransitioning, isTrue);
+        expect(rep2.aePipelineFrozen, isTrue);
+        expect(
+          rep2.events.any(
+            (e) => e.type == FrameQualityEventType.aeTransitionStarted,
+          ),
+          isFalse,
+        );
+      },
+    );
 
-      expect(
-        guard.aePipelineFrozen(endTime.add(const Duration(seconds: 1))),
-        isTrue,
-      );
-      expect(
-        guard.aePipelineFrozen(endTime.add(const Duration(seconds: 2))),
-        isFalse,
-      );
-    });
+    test(
+      'emits aeEnded event and stays frozen within 3-second guard window',
+      () {
+        final guard = FrameQualityGuard(
+          weatherGate: WeatherGate(),
+          initialTime: DateTime(2024),
+        );
+        final bright = _makeUniform(64, 64, 220);
+        final varied = _makeVaried(64, 64, 42);
+
+        for (int i = 0; i < 5; i++) {
+          guard.evaluate(
+            yPlane: bright,
+            bytesPerRow: 64,
+            width: 64,
+            height: 64,
+            now: DateTime(2024).add(Duration(milliseconds: i * 30)),
+          );
+        }
+        expect(guard.aeTransitionFrames, 5);
+
+        final endTime = DateTime(2024).add(const Duration(milliseconds: 200));
+        final rep = guard.evaluate(
+          yPlane: varied,
+          bytesPerRow: 64,
+          width: 64,
+          height: 64,
+          now: endTime,
+        );
+        final ended = rep.events.firstWhere(
+          (e) => e.type == FrameQualityEventType.aeTransitionEnded,
+          orElse: () => fail('no aeEnded event'),
+        );
+        expect(ended.frames, 5);
+        expect(guard.aeTransitionFrames, 0);
+        expect(rep.aePipelineFrozen, isTrue);
+
+        expect(
+          guard.aePipelineFrozen(endTime.add(const Duration(seconds: 1))),
+          isTrue,
+        );
+        expect(
+          guard.aePipelineFrozen(endTime.add(const Duration(seconds: 2))),
+          isFalse,
+        );
+      },
+    );
   });
 
   group('FrameQualityGuard camera blocked', () {
-    test('emits cameraBlocked after kLowLuminosityStreak consecutive dark frames', () {
-      final guard = FrameQualityGuard(
-        weatherGate: WeatherGate(),
-        initialTime: DateTime(2024),
-      );
-      final dark = _makeUniform(64, 64, 5);
-
-      FrameQualityReport? rep;
-      bool emitted = false;
-      for (int i = 0; i < FrameQualityGuard.kLowLuminosityStreak; i++) {
-        rep = guard.evaluate(
-          yPlane: dark,
-          bytesPerRow: 64,
-          width: 64,
-          height: 64,
-          now: DateTime(2024).add(Duration(milliseconds: i)),
+    test(
+      'emits cameraBlocked after kLowLuminosityStreak consecutive dark frames',
+      () {
+        final guard = FrameQualityGuard(
+          weatherGate: WeatherGate(),
+          initialTime: DateTime(2024),
         );
-        if (rep.events
-            .any((e) => e.type == FrameQualityEventType.cameraBlocked)) {
-          emitted = true;
+        final dark = _makeUniform(64, 64, 5);
+
+        FrameQualityReport? rep;
+        bool emitted = false;
+        for (int i = 0; i < FrameQualityGuard.kLowLuminosityStreak; i++) {
+          rep = guard.evaluate(
+            yPlane: dark,
+            bytesPerRow: 64,
+            width: 64,
+            height: 64,
+            now: DateTime(2024).add(Duration(milliseconds: i)),
+          );
+          if (rep.events.any(
+            (e) => e.type == FrameQualityEventType.cameraBlocked,
+          )) {
+            emitted = true;
+          }
         }
-      }
-      expect(emitted, isTrue);
-      expect(guard.cameraBlockedWarned, isTrue);
-      expect(
-        guard.lowLuminosityFrames,
-        FrameQualityGuard.kLowLuminosityStreak,
-      );
-    });
+        expect(emitted, isTrue);
+        expect(guard.cameraBlockedWarned, isTrue);
+        expect(
+          guard.lowLuminosityFrames,
+          FrameQualityGuard.kLowLuminosityStreak,
+        );
+      },
+    );
 
     test('leaky integrator: single bright frame does not clear warning', () {
       final guard = FrameQualityGuard(
@@ -219,9 +231,10 @@ void main() {
       }
       expect(guard.cameraBlockedWarned, isTrue);
 
-      final framesToDrain = (FrameQualityGuard.kLowLuminosityStreak /
-              FrameQualityGuard.kLowLuminosityLeakyDecay)
-          .ceil();
+      final framesToDrain =
+          (FrameQualityGuard.kLowLuminosityStreak /
+                  FrameQualityGuard.kLowLuminosityLeakyDecay)
+              .ceil();
       for (int i = 0; i < framesToDrain; i++) {
         guard.evaluate(
           yPlane: bright,
@@ -241,9 +254,15 @@ void main() {
       const w = 96;
       const h = 96;
       final plane = _makeGridPlane(w, h, const [
-        true, true, false,
-        false, false, false,
-        false, false, false,
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
       ]);
 
       final guard = FrameQualityGuard(
@@ -259,8 +278,9 @@ void main() {
           height: h,
           now: DateTime(2024).add(Duration(milliseconds: i * 50)),
         );
-        if (rep.events
-            .any((e) => e.type == FrameQualityEventType.dropletDetected)) {
+        if (rep.events.any(
+          (e) => e.type == FrameQualityEventType.dropletDetected,
+        )) {
           dropletEmitted = true;
         }
       }

@@ -32,7 +32,6 @@ class MotionPreAlert {
   static const double _triggerMultiplier = 6.0;
   static const double _absMin = 3.5;
 
-  
   static const int _weatherDegradedMinPersistFrames = 4;
   static const int _weatherDegradedPersonMinPersistFrames = 5;
 
@@ -52,10 +51,14 @@ class MotionPreAlert {
   late final Int32List _accMaxX = Int32List(kEventMaxLabels);
   late final Int32List _accMaxY = Int32List(kEventMaxLabels);
 
-  List<_Blob> _blobsCur =
-      List<_Blob>.generate(kEventMaxBlobsPerFrame, (_) => _Blob());
-  List<_Blob> _blobsPrev =
-      List<_Blob>.generate(kEventMaxBlobsPerFrame, (_) => _Blob());
+  List<_Blob> _blobsCur = List<_Blob>.generate(
+    kEventMaxBlobsPerFrame,
+    (_) => _Blob(),
+  );
+  List<_Blob> _blobsPrev = List<_Blob>.generate(
+    kEventMaxBlobsPerFrame,
+    (_) => _Blob(),
+  );
   int _blobsCurCount = 0;
   int _blobsPrevCount = 0;
 
@@ -140,7 +143,6 @@ class MotionPreAlert {
       return null;
     }
 
-    
     final indoorScale = _indoorHint ? 1.4 : 1.0;
     // V5.2: Lower the diff threshold in low-light conditions so that small
     // luma changes in dark scenes still register as events.
@@ -158,16 +160,14 @@ class MotionPreAlert {
     for (int i = 0; i < n; i++) {
       final d = (_grid[i] - _prev[i]).abs();
       final base = _base[i];
-      final newBase = base * (1.0 - kEventBaselineEmaAlpha) +
-          d * kEventBaselineEmaAlpha;
+      final newBase =
+          base * (1.0 - kEventBaselineEmaAlpha) + d * kEventBaselineEmaAlpha;
       _base[i] = newBase;
-      final fired =
-          (d > diffThreshold && d > newBase * baselineMult) ? 1 : 0;
+      final fired = (d > diffThreshold && d > newBase * baselineMult) ? 1 : 0;
       _events[i] = fired;
       eventTotal += fired;
     }
 
-    
     if (eventTotal > n * kEventGlobalPanFrac) {
       _blobsCurCount = 0;
       _swapGrid();
@@ -341,11 +341,13 @@ class MotionPreAlert {
       }
     }
 
-    final maxAreaPx =
-        (kEventMaxBlobAreaFrac * kEventGridW * kEventGridH).toInt();
-    for (int r = 1;
-        r < labelCount && _blobsCurCount < kEventMaxBlobsPerFrame;
-        r++) {
+    final maxAreaPx = (kEventMaxBlobAreaFrac * kEventGridW * kEventGridH)
+        .toInt();
+    for (
+      int r = 1;
+      r < labelCount && _blobsCurCount < kEventMaxBlobsPerFrame;
+      r++
+    ) {
       final c = _accCount[r];
       if (c < kEventMinBlobArea) continue;
       if (c > maxAreaPx) continue;
@@ -479,15 +481,15 @@ class MotionPreAlert {
     }
     final strength = (v / kEventCriticalVxPxS).clamp(0.0, 1.0);
 
-    final isCritical = cls == MotionEventClass.vehicleLike &&
+    final isCritical =
+        cls == MotionEventClass.vehicleLike &&
         v >= kEventCriticalVxPxS &&
         cxFrac >= kEventCriticalCenterFracLo &&
         cxFrac <= kEventCriticalCenterFracHi &&
         b.areaGrowRate > 0 &&
         now.difference(_lastCriticalAt) >= kEventCriticalCooldown;
 
-    if (!isCritical &&
-        now.difference(_lastSoftAt) < kEventSoftCooldown) {
+    if (!isCritical && now.difference(_lastSoftAt) < kEventSoftCooldown) {
       return null;
     }
 

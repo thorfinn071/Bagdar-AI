@@ -44,8 +44,7 @@ class LivestockTaxonomy {
   };
 
   /// Fast membership check: is this YOLO label a livestock label?
-  static bool isLivestock(String label) =>
-      labelToStringKey.containsKey(label);
+  static bool isLivestock(String label) => labelToStringKey.containsKey(label);
 
   /// All YOLO labels the livestock mode cares about, as a set for
   /// fast intersection with the per-frame label list.
@@ -87,7 +86,6 @@ class BazaarLivestockService {
   /// Whether livestock announcements are active right now.
   bool get isLivestock => contextMode.isLivestock;
 
-  
   /// Crowd-alert cooldown multiplier for the current context. Returns
   /// 1.0 when bazaar mode is off (no change).
   double get crowdCooldownMultiplier =>
@@ -103,7 +101,6 @@ class BazaarLivestockService {
   double get lowObstacleBoost =>
       isBazaar ? BazaarThresholds.lowObstaclePriorityBoost : 0.0;
 
-  
   /// Call every frame from `AlertManager.processFrame` with the
   /// current set of YOLO labels. When livestock mode is active and
   /// livestock labels appear, emits localised announcements through
@@ -113,17 +110,13 @@ class BazaarLivestockService {
   /// [trackDistances] maps label → approximate distance in meters
   /// (may be null when no depth is available). The announcement
   /// includes distance when known.
-  void feedLabels(
-    List<String> labels, {
-    Map<String, double>? trackDistances,
-  }) {
+  void feedLabels(List<String> labels, {Map<String, double>? trackDistances}) {
     if (!isLivestock) return;
 
     final now = DateTime.now();
     for (final label in labels) {
       if (!LivestockTaxonomy.isLivestock(label)) continue;
 
-      
       final last = _lastAnnounced[label];
       if (last != null && now.difference(last) < _kLivestockCooldown) {
         continue;
@@ -133,7 +126,6 @@ class BazaarLivestockService {
       final stringKey = LivestockTaxonomy.labelToStringKey[label]!;
       var text = S.alert(stringKey);
       if (text == stringKey || text.isEmpty) {
-        
         text = label;
       }
 
@@ -143,16 +135,18 @@ class BazaarLivestockService {
       }
 
       try {
-        onHazard?.call(ExternalHazardEvent(
-          source: ExternalHazardSource.contextMode,
-          text: text,
-          priority: SpeechPriority.info,
-          category: AlertCategory.acousticEvent,
-          urgency: dist != null && dist < 1.0 ? 0.70 : 0.45,
-          distanceM: dist,
-          at: now,
-          correlationId: 'livestock_$label',
-        ));
+        onHazard?.call(
+          ExternalHazardEvent(
+            source: ExternalHazardSource.contextMode,
+            text: text,
+            priority: SpeechPriority.info,
+            category: AlertCategory.acousticEvent,
+            urgency: dist != null && dist < 1.0 ? 0.70 : 0.45,
+            distanceM: dist,
+            at: now,
+            correlationId: 'livestock_$label',
+          ),
+        );
       } catch (e) {
         FieldLogger.instance.log('livestock_emit_error', {
           'label': label,
@@ -167,7 +161,6 @@ class BazaarLivestockService {
     _lastAnnounced.clear();
   }
 
-  
   /// COCO-80 labels that represent hanging or overhead obstacles
   /// relevant in bazaar environments. Used by `AlertManager` to
   /// apply the bazaar priority boost.

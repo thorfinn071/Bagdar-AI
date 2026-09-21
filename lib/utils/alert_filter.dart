@@ -11,6 +11,7 @@ enum AlertCategory {
   corridorBlocked,
   corridorNarrow,
   acousticEvent,
+  genericObstacle,
 }
 
 class AlertCandidate {
@@ -23,7 +24,6 @@ class AlertCandidate {
   final int? trackId;
   final bool isGroupAlert;
 
-  
   final double? distanceM;
 
   const AlertCandidate({
@@ -43,17 +43,15 @@ class AlertFilter {
 
   final Map<AlertCategory, DateTime> _lastByCat = {};
   final Map<AlertCategory, DateTime> _lastCriticalByCat = {};
+  final Map<int, DateTime> _lastCriticalByTrack = {};
 
-  
   final Map<AlertCategory, double> _lastCriticalDistMByCat = {};
 
   DateTime _lastSpokenAt = DateTime.fromMillisecondsSinceEpoch(0);
   AlertCategory? _lastCategory;
 
-  
   final Map<AlertCategory, DateTime> _suppressUntilByCategory = {};
 
-  
   static const double kEscalationDistanceFraction = 0.70;
 
   List<AlertCandidate> _lastRejected = const [];
@@ -81,16 +79,13 @@ class AlertFilter {
       for (final entry in counts.entries) {
         if (entry.value >= 3) {
           final label = entry.key;
-          final alreadyHaveGroup = _candidates.any(
-            (c) => c.isGroupAlert,
-          );
+          final alreadyHaveGroup = _candidates.any((c) => c.isGroupAlert);
           if (!alreadyHaveGroup) {
             final pluralLabel = S.alertLabel(label);
 
             _candidates.add(
               AlertCandidate(
-                text:
-                    '${S.alert('group_ahead')}${entry.value} $pluralLabel',
+                text: '${S.alert('group_ahead')}${entry.value} $pluralLabel',
                 priority: SpeechPriority.info,
                 pan: 0.0,
                 category: AlertCategory.obstacleFar,
@@ -111,8 +106,14 @@ class AlertFilter {
     AlertCandidate? picked;
     final rejected = <AlertCandidate>[];
     for (final cand in _candidates) {
-      if (_isAllowed(cand, trackCount, now, reliableTrackIds,
-          verbosity: verbosity, alertFrequency: alertFrequency)) {
+      if (_isAllowed(
+        cand,
+        trackCount,
+        now,
+        reliableTrackIds,
+        verbosity: verbosity,
+        alertFrequency: alertFrequency,
+      )) {
         picked = cand;
         break;
       } else {
@@ -130,6 +131,7 @@ class AlertFilter {
       now,
       isCritical: picked.priority == SpeechPriority.critical,
       distanceM: picked.distanceM,
+      trackId: picked.trackId,
     );
     return picked;
   }
@@ -154,21 +156,39 @@ class AlertFilter {
     }
 
     if (cand.priority == SpeechPriority.critical) {
-      final lastSameAt = _lastCriticalByCat[cand.category];
-      
-      
       final repeatCooldown =
           cand.category == AlertCategory.obstacleClose ||
               cand.category == AlertCategory.corridorBlocked ||
-              cand.category == AlertCategory.approachingVehicle
+              cand.category == AlertCategory.approachingVehicle ||
+              cand.category == AlertCategory.genericObstacle
           ? kCriticalRepeatCooldownSafety
           : kCriticalRepeatCooldownDefault;
-      if (lastSameAt == null ||
-          now.difference(lastSameAt) >= repeatCooldown) {
+
+      // Stable track IDs: a genuinely new obstacle is not hidden by a
+      // global category cooldown.
+      if (cand.trackId != null) {
+        final lastTrackAt = _lastCriticalByTrack[cand.trackId];
+        if (lastTrackAt == null) return true;
+        if (now.difference(lastTrackAt) >= repeatCooldown) return true;
+        final lastDistM = _lastCriticalDistMByCat[cand.category];
+        final candDistM = cand.distanceM;
+        if (lastDistM != null &&
+            lastDistM > 0 &&
+            candDistM != null &&
+            candDistM > 0 &&
+            candDistM <= lastDistM * kEscalationDistanceFraction) {
+          if (now.difference(lastTrackAt) >= kCriticalRepeatCooldownSafety) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+      final lastSameAt = _lastCriticalByCat[cand.category];
+      if (lastSameAt == null || now.difference(lastSameAt) >= repeatCooldown) {
         return true;
       }
-      
-      
+
       final lastDistM = _lastCriticalDistMByCat[cand.category];
       final candDistM = cand.distanceM;
       if (lastDistM != null &&
@@ -238,10 +258,15 @@ class AlertFilter {
     _lastCategory = category;
   }
 
-  /// Like [flush] but returns up to 2 winners from *different* categories:
-  /// the highest-urgency allowed candidate, then the highest-urgency allowed
-  /// candidate from a different category. This lets a simultaneously-approaching
-  /// vehicle and a nearby obstacle both be announced in the same frame.
+  /// Like [flush] but returns up to 2 winners: the highest-urgency allowed
+  /// candidate, then the highest-urgency allowed candidate from a different
+  /// category. This lets a simultaneously-approaching vehicle and a nearby
+  /// obstacle both be announced in the same frame. D-2: as an exception, two
+  /// CRITICAL candidates of the SAME category are also both allowed when
+  /// they are on opposite sides (opposite-sign `pan`) — e.g. vehicles
+  /// approaching from the left and right at a crossing — since dropping the
+  /// second one loses directional safety information for
+  /// [kCriticalRepeatCooldownSafety].
   List<AlertCandidate> flushMulti(
     int trackCount,
     DateTime now, {
@@ -286,13 +311,34 @@ class AlertFilter {
     AlertCandidate? second;
     final rejected = <AlertCandidate>[];
     for (final cand in _candidates) {
-      if (_isAllowed(cand, trackCount, now, reliableTrackIds,
-          verbosity: verbosity, alertFrequency: alertFrequency)) {
+      if (_isAllowed(
+        cand,
+        trackCount,
+        now,
+        reliableTrackIds,
+        verbosity: verbosity,
+        alertFrequency: alertFrequency,
+      )) {
         if (first == null) {
           first = cand;
-        } else if (second == null && cand.category != first.category) {
-          second = cand;
-          break;
+        } else if (second == null) {
+          // D-2: two simultaneous critical hazards in the SAME category but
+          // on opposite sides (e.g. a vehicle approaching from the left and
+          // another from the right at a crossing) must both be announced.
+          // Without this, the second one is silently dropped and its
+          // directional cooldown (_lastCriticalByCat) then blocks its own
+          // repeat for kCriticalRepeatCooldownSafety, losing "right" for
+          // 2-4 s. Non-critical candidates keep the original same-category
+          // exclusion (only one non-critical wins per flush).
+          final sameCatOppositeSideCritical =
+              cand.category == first.category &&
+              cand.priority == SpeechPriority.critical &&
+              first.priority == SpeechPriority.critical &&
+              (cand.pan * first.pan < 0);
+          if (cand.category != first.category || sameCatOppositeSideCritical) {
+            second = cand;
+            break;
+          }
         }
       } else {
         rejected.add(cand);
@@ -312,6 +358,7 @@ class AlertFilter {
         now,
         isCritical: w.priority == SpeechPriority.critical,
         distanceM: w.distanceM,
+        trackId: w.trackId,
       );
     }
     return winners;
@@ -324,6 +371,7 @@ class AlertFilter {
     _suppressUntilByCategory.clear();
     _lastByCat.clear();
     _lastCriticalByCat.clear();
+    _lastCriticalByTrack.clear();
     _lastCriticalDistMByCat.clear();
     _lastRejected = const [];
   }
@@ -350,6 +398,8 @@ class AlertFilter {
         return scaled(1200);
       case AlertCategory.obstacleClose:
         return scaled(3000);
+      case AlertCategory.genericObstacle:
+        return scaled(3000);
       case AlertCategory.obstacleFar:
         return scaled(4000);
       case AlertCategory.navigationHint:
@@ -368,19 +418,25 @@ class AlertFilter {
     DateTime now, {
     bool isCritical = false,
     double? distanceM,
+    int? trackId,
   }) {
+    if (isCritical && trackId != null) {
+      _lastCriticalByTrack[trackId] = now;
+    }
     final categoriesToUpdate =
-        (category == AlertCategory.approachingVehicle ||
+        !isCritical &&
+            (category == AlertCategory.approachingVehicle ||
                 category == AlertCategory.obstacleClose)
-            ? [AlertCategory.approachingVehicle, AlertCategory.obstacleClose]
-            : [category];
+        ? [AlertCategory.approachingVehicle, AlertCategory.obstacleClose]
+        : [category];
 
     for (final cat in categoriesToUpdate) {
       _lastByCat[cat] = now;
       if (isCritical) {
         _lastCriticalByCat[cat] = now;
-        _suppressUntilByCategory[cat] =
-            now.add(const Duration(milliseconds: 2000));
+        _suppressUntilByCategory[cat] = now.add(
+          const Duration(milliseconds: 2000),
+        );
         if (distanceM != null && distanceM > 0) {
           _lastCriticalDistMByCat[cat] = distanceM;
         }

@@ -13,8 +13,9 @@ class CameraSettingsSheet extends StatefulWidget {
   final bool useGpu;
   final bool useNativeDepthBridge;
   final bool useHardwareDepthMode;
+  final bool showIndependentHardwareDepth;
   final int numThreads;
-  
+
   final bool showDebugHud;
   final bool earconEnabled;
   final bool pitchBlackUiEnabled;
@@ -71,6 +72,7 @@ class CameraSettingsSheet extends StatefulWidget {
     required this.useGpu,
     required this.useNativeDepthBridge,
     required this.useHardwareDepthMode,
+    this.showIndependentHardwareDepth = false,
     required this.numThreads,
     required this.showDebugHud,
     required this.earconEnabled,
@@ -226,7 +228,7 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
               label: S.get('settings_lang_label'),
               child: Row(
                 children: [
-                    Text(
+                  Text(
                     S.get('settings_lang_label'),
                     style: const TextStyle(color: Colors.white),
                   ),
@@ -273,8 +275,7 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
             ),
             const SizedBox(height: 8),
             Semantics(
-              label:
-                  'GPU: ${_useGpu ? S.get('sem_on') : S.get('sem_off')}',
+              label: 'GPU: ${_useGpu ? S.get('sem_on') : S.get('sem_off')}',
               child: SwitchListTile(
                 title: const Text('GPU', style: TextStyle(color: Colors.white)),
                 value: _useGpu,
@@ -303,25 +304,26 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
                 },
               ),
             ),
-            Semantics(
-              label:
-                  'Hardware depth mode: ${_useHardwareDepthMode ? S.get('sem_on') : S.get('sem_off')}',
-              child: SwitchListTile(
-                title: const Text(
-                  'Hardware depth mode',
-                  style: TextStyle(color: Colors.white),
+            if (widget.showIndependentHardwareDepth)
+              Semantics(
+                label:
+                    'Hardware depth research mode: ${_useHardwareDepthMode ? S.get('sem_on') : S.get('sem_off')}',
+                child: SwitchListTile(
+                  title: const Text(
+                    'Hardware depth (research)',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  subtitle: const Text(
+                    'Uses an independent ARCore camera; not a Core path',
+                    style: TextStyle(color: Colors.white38, fontSize: 11),
+                  ),
+                  value: _useHardwareDepthMode,
+                  onChanged: (v) {
+                    setState(() => _useHardwareDepthMode = v);
+                    widget.onHardwareDepthModeChanged(v);
+                  },
                 ),
-                subtitle: const Text(
-                  'Pauses Flutter camera and starts ARCore / ARKit depth',
-                  style: TextStyle(color: Colors.white38, fontSize: 11),
-                ),
-                value: _useHardwareDepthMode,
-                onChanged: (v) {
-                  setState(() => _useHardwareDepthMode = v);
-                  widget.onHardwareDepthModeChanged(v);
-                },
               ),
-            ),
             Semantics(
               label:
                   '${_depthTierText(widget.depthTier)}. ${_depthTierSubtitle(widget.depthTier)}',
@@ -341,7 +343,10 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
             ),
             Row(
               children: [
-                Text(S.get('settings_cpu_threads'), style: const TextStyle(color: Colors.white)),
+                Text(
+                  S.get('settings_cpu_threads'),
+                  style: const TextStyle(color: Colors.white),
+                ),
                 const Spacer(),
                 DropdownButton<int>(
                   dropdownColor: Colors.grey[850],
@@ -359,7 +364,8 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
               ],
             ),
             Semantics(
-              label: 'Debug HUD: ${_showDebugHud ? S.get('sem_on') : S.get('sem_off')}',
+              label:
+                  'Debug HUD: ${_showDebugHud ? S.get('sem_on') : S.get('sem_off')}',
               child: SwitchListTile(
                 title: const Text(
                   'Debug HUD',
@@ -402,7 +408,8 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
               },
             ),
             Semantics(
-              label: '${S.get('settings_earcon_title')}: ${_earconEnabled ? S.get('sem_on') : S.get('sem_off')}',
+              label:
+                  '${S.get('settings_earcon_title')}: ${_earconEnabled ? S.get('sem_on') : S.get('sem_off')}',
               child: SwitchListTile(
                 title: Text(
                   S.get('settings_earcon_title'),
@@ -565,9 +572,7 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
               label: S.get('settings_verbosity'),
               value: _verbosity,
               values: Verbosity.values,
-              labelFor: (v) => S.get(
-                'verbosity_${v.name.toLowerCase()}',
-              ),
+              labelFor: (v) => S.get('verbosity_${v.name.toLowerCase()}'),
               onChanged: (v) {
                 if (v == null) return;
                 setState(() => _verbosity = v);
@@ -633,8 +638,9 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
                   : S.get('settings_depth_not_ready'),
               child: ListTile(
                 textColor: Colors.white,
-                iconColor:
-                    widget.midasReady ? Colors.cyanAccent : Colors.white38,
+                iconColor: widget.midasReady
+                    ? Colors.cyanAccent
+                    : Colors.white38,
                 leading: Icon(
                   widget.midasReady ? Icons.layers : Icons.layers_outlined,
                   color: widget.midasReady ? Colors.cyanAccent : Colors.white38,
@@ -660,7 +666,10 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
               child: ListTile(
                 textColor: Colors.white,
                 iconColor: Colors.cyanAccent,
-                leading: const Icon(Icons.text_fields, color: Colors.cyanAccent),
+                leading: const Icon(
+                  Icons.text_fields,
+                  color: Colors.cyanAccent,
+                ),
                 title: Text(S.get('settings_read_text')),
                 subtitle: Text(
                   S.get('settings_read_text_desc'),
@@ -725,10 +734,7 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     S.get('backup_section_title'),
-                    style: const TextStyle(
-                      color: Colors.white54,
-                      fontSize: 12,
-                    ),
+                    style: const TextStyle(color: Colors.white54, fontSize: 12),
                   ),
                 ),
               ),
@@ -737,50 +743,50 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
                   label: S.get('backup_show_qr'),
                   button: true,
                   child: ListTile(
-                  textColor: Colors.white,
-                  iconColor: Colors.cyanAccent,
-                  leading: const Icon(
-                    Icons.qr_code_2,
-                    color: Colors.cyanAccent,
-                  ),
-                  title: Text(S.get('backup_show_qr')),
-                  subtitle: Text(
-                    S.get('backup_show_qr_subtitle'),
-                    style: const TextStyle(
-                      color: Colors.white38,
-                      fontSize: 11,
+                    textColor: Colors.white,
+                    iconColor: Colors.cyanAccent,
+                    leading: const Icon(
+                      Icons.qr_code_2,
+                      color: Colors.cyanAccent,
                     ),
+                    title: Text(S.get('backup_show_qr')),
+                    subtitle: Text(
+                      S.get('backup_show_qr_subtitle'),
+                      style: const TextStyle(
+                        color: Colors.white38,
+                        fontSize: 11,
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                      widget.onShowSettingsQr!();
+                    },
                   ),
-                  onTap: () {
-                    Navigator.pop(context);
-                    widget.onShowSettingsQr!();
-                  },
-                ),
                 ),
               if (widget.onScanSettingsQr != null)
                 Semantics(
                   label: S.get('backup_scan_qr'),
                   button: true,
                   child: ListTile(
-                  textColor: Colors.white,
-                  iconColor: Colors.cyanAccent,
-                  leading: const Icon(
-                    Icons.qr_code_scanner,
-                    color: Colors.cyanAccent,
-                  ),
-                  title: Text(S.get('backup_scan_qr')),
-                  subtitle: Text(
-                    S.get('backup_scan_qr_subtitle'),
-                    style: const TextStyle(
-                      color: Colors.white38,
-                      fontSize: 11,
+                    textColor: Colors.white,
+                    iconColor: Colors.cyanAccent,
+                    leading: const Icon(
+                      Icons.qr_code_scanner,
+                      color: Colors.cyanAccent,
                     ),
+                    title: Text(S.get('backup_scan_qr')),
+                    subtitle: Text(
+                      S.get('backup_scan_qr_subtitle'),
+                      style: const TextStyle(
+                        color: Colors.white38,
+                        fontSize: 11,
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                      widget.onScanSettingsQr!();
+                    },
                   ),
-                  onTap: () {
-                    Navigator.pop(context);
-                    widget.onScanSettingsQr!();
-                  },
-                ),
                 ),
             ],
             const Divider(color: Colors.white24, height: 20),
@@ -919,7 +925,7 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
                   onPlay: widget.onPlayEarcon,
                 ),
                 _EarconTestButton(
-                  label: 'Путь свободен',
+                  label: 'Анализ активен',
                   earcon: Earcon.pathClear,
                   onPlay: widget.onPlayEarcon,
                 ),
@@ -1258,10 +1264,8 @@ class _EnumDropdownRow<T> extends StatelessWidget {
               underline: Container(height: 1, color: Colors.white24),
               items: values
                   .map(
-                    (v) => DropdownMenuItem<T>(
-                      value: v,
-                      child: Text(labelFor(v)),
-                    ),
+                    (v) =>
+                        DropdownMenuItem<T>(value: v, child: Text(labelFor(v))),
                   )
                   .toList(),
               onChanged: onChanged,

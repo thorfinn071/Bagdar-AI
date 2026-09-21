@@ -187,7 +187,7 @@ class CHRouter {
         wheelchair: (accessFlags & 0x08) != 0,
       ),
       isShortcut: isShortcut,
-      
+
       shortcutMiddleNode: shortcutMiddle,
     );
   }
@@ -259,7 +259,6 @@ class CHRouter {
     double bestDist = double.infinity;
     int meetNode = -1;
 
-    
     while (fwdPQ.isNotEmpty || bwdPQ.isNotEmpty) {
       if (fwdPQ.isNotEmpty) {
         final cur = fwdPQ.first;
@@ -458,7 +457,6 @@ class CHRouter {
           maneuver = _computeManeuver(g, edges[segStart - 1], firstEdge);
         }
 
-        
         if (i == edges.length && segDist < 20) {
           maneuver = Maneuver.arrive;
         }

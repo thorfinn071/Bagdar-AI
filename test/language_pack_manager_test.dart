@@ -9,8 +9,7 @@ void main() {
 
   setUp(() {
     SharedPreferences.setMockInitialValues({});
-    
-    
+
     LanguagePackManager.instance.debugReset(packsDir: '/tmp/test_lang_packs');
   });
 
@@ -37,18 +36,23 @@ void main() {
     });
 
     test('manifest with empty packs array yields empty list', () async {
-      await LanguagePackManager.instance
-          .debugIngestManifestJson('{"manifestVersion": 1, "packs": []}');
+      await LanguagePackManager.instance.debugIngestManifestJson(
+        '{"manifestVersion": 1, "packs": []}',
+      );
       expect(LanguagePackManager.instance.available, isEmpty);
     });
   });
 
   group('LanguagePackManager.isInstalled / getInstalled', () {
     test('returns false / null when no packs are installed', () {
-      expect(LanguagePackManager.instance.isInstalled(LanguagePackIds.voskKk),
-          false);
-      expect(LanguagePackManager.instance.getInstalled(LanguagePackIds.voskKk),
-          isNull);
+      expect(
+        LanguagePackManager.instance.isInstalled(LanguagePackIds.voskKk),
+        false,
+      );
+      expect(
+        LanguagePackManager.instance.getInstalled(LanguagePackIds.voskKk),
+        isNull,
+      );
     });
 
     test('reflects packs injected via debugReset', () {
@@ -63,35 +67,37 @@ void main() {
           ),
         ],
       );
-      expect(LanguagePackManager.instance.isInstalled(LanguagePackIds.voskKk),
-          true);
-      final pack =
-          LanguagePackManager.instance.getInstalled(LanguagePackIds.voskKk);
+      expect(
+        LanguagePackManager.instance.isInstalled(LanguagePackIds.voskKk),
+        true,
+      );
+      final pack = LanguagePackManager.instance.getInstalled(
+        LanguagePackIds.voskKk,
+      );
       expect(pack, isNotNull);
       expect(pack!.localPath, '/tmp/test_lang_packs/vosk-kk');
     });
 
-    test('isInstalled returns false for an injected-but-not-installed pack',
-        () {
-      LanguagePackManager.instance.debugReset(
-        packsDir: '/tmp/test_lang_packs',
-        installed: const [
-          LanguagePack(
-            packId: 'vosk-kk',
-            name: 'Vosk KK',
-            
-          ),
-        ],
-      );
-      expect(LanguagePackManager.instance.isInstalled(LanguagePackIds.voskKk),
-          false);
-    });
+    test(
+      'isInstalled returns false for an injected-but-not-installed pack',
+      () {
+        LanguagePackManager.instance.debugReset(
+          packsDir: '/tmp/test_lang_packs',
+          installed: const [LanguagePack(packId: 'vosk-kk', name: 'Vosk KK')],
+        );
+        expect(
+          LanguagePackManager.instance.isInstalled(LanguagePackIds.voskKk),
+          false,
+        );
+      },
+    );
   });
 
   group('LanguagePackManager.pathFor', () {
     test('returns the predictable subdirectory layout', () {
-      LanguagePackManager.instance
-          .debugReset(packsDir: '/data/user/0/com.example/files/lang_packs');
+      LanguagePackManager.instance.debugReset(
+        packsDir: '/data/user/0/com.example/files/lang_packs',
+      );
       expect(
         LanguagePackManager.instance.pathFor(LanguagePackIds.voskKk),
         '/data/user/0/com.example/files/lang_packs/vosk-kk',
@@ -103,23 +109,28 @@ void main() {
     test('wasPackSkippedRecently returns false when never skipped', () async {
       LanguagePackManager.instance.debugReset(packsDir: '/tmp');
       expect(
-        await LanguagePackManager.instance
-            .wasPackSkippedRecently(LanguagePackIds.voskKk),
+        await LanguagePackManager.instance.wasPackSkippedRecently(
+          LanguagePackIds.voskKk,
+        ),
         false,
       );
     });
 
-    test('wasPackSkippedRecently returns true immediately after skip',
-        () async {
-      LanguagePackManager.instance.debugReset(packsDir: '/tmp');
-      await LanguagePackManager.instance
-          .markPackSkipped(LanguagePackIds.voskKk);
-      expect(
-        await LanguagePackManager.instance
-            .wasPackSkippedRecently(LanguagePackIds.voskKk),
-        true,
-      );
-    });
+    test(
+      'wasPackSkippedRecently returns true immediately after skip',
+      () async {
+        LanguagePackManager.instance.debugReset(packsDir: '/tmp');
+        await LanguagePackManager.instance.markPackSkipped(
+          LanguagePackIds.voskKk,
+        );
+        expect(
+          await LanguagePackManager.instance.wasPackSkippedRecently(
+            LanguagePackIds.voskKk,
+          ),
+          true,
+        );
+      },
+    );
 
     test('shouldPromptOnFirstOnline default false, toggleable', () async {
       LanguagePackManager.instance.debugReset(packsDir: '/tmp');

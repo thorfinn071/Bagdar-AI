@@ -87,7 +87,9 @@ class SettingsCodec {
       await s.setEarconVolume(ev.clamp(kEarconVolumeMin, kEarconVolumeMax));
     }
     if (map['verbosity'] is int) {
-      await s.setVerbosity(_clampEnum(map['verbosity'] as int, Verbosity.values));
+      await s.setVerbosity(
+        _clampEnum(map['verbosity'] as int, Verbosity.values),
+      );
     }
     if (map['alert_freq'] is int) {
       await s.setAlertFrequency(

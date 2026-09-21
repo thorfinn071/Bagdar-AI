@@ -29,7 +29,6 @@ void main() {
       expect(tracker.count('mode_used_street'), 2);
       expect(tracker.count('gesture_used_swipe_up'), 1);
 
-      
       await tracker.init();
       expect(tracker.count('mode_used_street'), 2);
       expect(tracker.count('gesture_used_swipe_up'), 1);

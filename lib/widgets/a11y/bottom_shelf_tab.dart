@@ -69,17 +69,14 @@ class BottomShelfTab extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ExcludeSemantics(
-                    child: Icon(icon, color: fg, size: 24),
-                  ),
+                  ExcludeSemantics(child: Icon(icon, color: fg, size: 24)),
                   const SizedBox(height: 2),
                   ExcludeSemantics(
                     child: Text(
                       label,
                       style: BagdarTypography.caption.copyWith(
                         color: fg,
-                        fontWeight:
-                            active ? FontWeight.w700 : FontWeight.w500,
+                        fontWeight: active ? FontWeight.w700 : FontWeight.w500,
                         height: 1.1,
                       ),
                       textAlign: TextAlign.center,

@@ -24,8 +24,7 @@ class PerformanceThrottler {
   /// camera_screen.dart to announce "reduced mode" / "depth restored" via
   /// TTS — same one-shot pattern as DepthPipelineController.onStatusChanged.
   void Function(bool midasPaused)? onMidasPauseChanged;
-  
-  
+
   bool _indoorMode = false;
   MotionState _motionState = MotionState.walking;
   MemoryPressureLevel _memory = MemoryPressureLevel.normal;
@@ -43,7 +42,6 @@ class PerformanceThrottler {
   /// critical thermal (once per [kCriticalThermalGroundSafetyIntervalMs]).
   DateTime _groundSafetyMidasNextAt = DateTime.fromMillisecondsSinceEpoch(0);
 
-  
   DateTime _gateResumeUntil = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _lastCriticalAlertAt = DateTime.fromMillisecondsSinceEpoch(0);
 
@@ -107,8 +105,6 @@ class PerformanceThrottler {
   }
 
   void setMotionState(MotionState state, {DateTime? now}) {
-    
-    
     if (_motionState == MotionState.stationary &&
         state != MotionState.stationary) {
       signalActivity(now: now);
@@ -116,32 +112,25 @@ class PerformanceThrottler {
     _motionState = state;
   }
 
-  
   void noteCriticalAlert({DateTime? now}) {
     _lastCriticalAlertAt = now ?? DateTime.now();
   }
 
-  
   void signalActivity({DateTime? now}) {
-    _gateResumeUntil = (now ?? DateTime.now()).add(
-      kStationaryGateResumeWindow,
-    );
+    _gateResumeUntil = (now ?? DateTime.now()).add(kStationaryGateResumeWindow);
   }
 
-  
   bool isStationaryGateActive({DateTime? now}) {
     if (_motionState != MotionState.stationary) return false;
     if (_indoorMode) return false;
     final t = now ?? DateTime.now();
     if (t.isBefore(_gateResumeUntil)) return false;
-    if (t.difference(_lastCriticalAlertAt) <
-        kStationaryGatePostCriticalBlock) {
+    if (t.difference(_lastCriticalAlertAt) < kStationaryGatePostCriticalBlock) {
       return false;
     }
     return true;
   }
 
-  
   void setIndoorMode(bool enabled) {
     _indoorMode = enabled;
   }
@@ -167,9 +156,13 @@ class PerformanceThrottler {
         _memory == MemoryPressureLevel.critical;
 
     if (isOverheating || _avgInfMs > kInfTimeCriticalMs) {
-      _midasPausedUntil = now.add(Duration(
-        seconds: _isLowPowerMode ? 10 : (severity == ThermalSeverity.critical ? 8 : 5),
-      ));
+      _midasPausedUntil = now.add(
+        Duration(
+          seconds: _isLowPowerMode
+              ? 10
+              : (severity == ThermalSeverity.critical ? 8 : 5),
+        ),
+      );
     } else if (_avgInfMs > kInfTimeSlowMs || severity == ThermalSeverity.hot) {
       _midasPausedUntil = now.add(const Duration(seconds: 3));
     } else if (_avgInfMs < kInfTimeFastMs + 20 &&
@@ -177,7 +170,6 @@ class PerformanceThrottler {
       _midasPausedUntil = DateTime.fromMillisecondsSinceEpoch(0);
     }
 
-    
     final pausedNow = now.isBefore(_midasPausedUntil);
     if (pausedNow != _midasPaused) {
       _midasPaused = pausedNow;
@@ -197,8 +189,6 @@ class PerformanceThrottler {
   bool isMidasPaused(DateTime now) => now.isBefore(_midasPausedUntil);
 
   Duration detectInterval(int batteryMs) {
-    
-    
     if (isStationaryGateActive()) {
       final gatedMs = math.max(batteryMs, kStationaryGateDetectMs);
       return Duration(
@@ -227,7 +217,6 @@ class PerformanceThrottler {
         ? 130
         : kTargetFrameBudgetMs;
 
-    
     final stationaryBias = _indoorMode ? 0 : 150;
     final motionBias = switch (_motionState) {
       MotionState.stationary => stationaryBias,
@@ -244,10 +233,7 @@ class PerformanceThrottler {
       MemoryPressureLevel.critical => 200,
     };
 
-    final base = math.max(
-      0,
-      perfMs + thermalPenalty + motionBias + memoryBias,
-    );
+    final base = math.max(0, perfMs + thermalPenalty + motionBias + memoryBias);
 
     int requestedMs;
     if (severity == ThermalSeverity.critical && !_isLowPowerMode) {
@@ -256,8 +242,7 @@ class PerformanceThrottler {
         requestedMs = math.max(batteryMs, (perfMs + thermalPenalty ~/ 2));
       } else {
         _thermalBurstCount = 0;
-        
-        
+
         requestedMs = math.min(
           math.max(batteryMs, _kThermalIdleMs + base),
           kDetectIntervalSafetyCeilingMs,
@@ -281,14 +266,11 @@ class PerformanceThrottler {
   }
 
   Duration midasInterval(int batteryMs) {
-    
-    
     if (batteryMs <= 0) return kStationaryGateMidasOff;
     if (_memory == MemoryPressureLevel.critical) {
       return kStationaryGateMidasOff;
     }
-    
-    
+
     if (isStationaryGateActive()) return kStationaryGateMidasOff;
     final severity = _committedSeverity;
     int thermalMultiplier = 1;
@@ -304,7 +286,18 @@ class PerformanceThrottler {
         ? 2
         : 1;
     final multiplier = math.max(thermalMultiplier, loadMultiplier);
-    return Duration(milliseconds: math.max(batteryMs * multiplier, batteryMs));
+    final baseMs = math.max(batteryMs * multiplier, batteryMs);
+
+    // Safety audit B-2: at running speed, YOLO's detect interval is already
+    // halved (see detectInterval above), but MiDaS/fusion previously stayed
+    // at the walking cadence — e.g. 800 ms x 3 fusion frames = 2.4 s to
+    // confirm a ground hazard, which is 7.2 m of blind travel at 3 m/s.
+    // Halve MiDaS cadence too (floor 200 ms) so depth confirmation keeps
+    // pace with the faster gait. kFusionTemporalFrames is untouched.
+    if (_motionState == MotionState.running) {
+      return Duration(milliseconds: math.max(200, baseMs ~/ 2));
+    }
+    return Duration(milliseconds: baseMs);
   }
 
   Duration uiInterval() {

@@ -133,10 +133,7 @@ void main() {
         _feed(svc, 'read text', locale: 'en-US').cmd,
         VoiceCommand.readText,
       );
-      expect(
-        _feed(svc, 'read', locale: 'en-US').cmd,
-        VoiceCommand.readText,
-      );
+      expect(_feed(svc, 'read', locale: 'en-US').cmd, VoiceCommand.readText);
     });
 
     test('unknown phrase returns VoiceCommand.unknown', () {
@@ -148,8 +145,11 @@ void main() {
     test('english locale does not leak into russian phrases', () {
       final svc = VoiceCommandService();
       final r = _feed(svc, 'что вокруг', locale: 'en-US');
-      expect(r.cmd, VoiceCommand.unknown,
-          reason: 'Russian phrase must not match under en-US');
+      expect(
+        r.cmd,
+        VoiceCommand.unknown,
+        reason: 'Russian phrase must not match under en-US',
+      );
     });
   });
 

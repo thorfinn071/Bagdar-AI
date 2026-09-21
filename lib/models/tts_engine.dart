@@ -35,11 +35,11 @@ enum KkTtsEngine {
 extension KkTtsEngineX on KkTtsEngine {
   /// Stable identifier persisted in logs and used on the native channel.
   String get id => switch (this) {
-        KkTtsEngine.system => 'system',
-        KkTtsEngine.rhvoice => 'rhvoice',
-        KkTtsEngine.espeak => 'espeak',
-        KkTtsEngine.russianFallback => 'russianFallback',
-      };
+    KkTtsEngine.system => 'system',
+    KkTtsEngine.rhvoice => 'rhvoice',
+    KkTtsEngine.espeak => 'espeak',
+    KkTtsEngine.russianFallback => 'russianFallback',
+  };
 
   /// Whether speech for this engine is rendered through the
   /// `bagdar/native_tts` MethodChannel (Kotlin + JNI). For `system` and
@@ -56,11 +56,11 @@ extension KkTtsEngineX on KkTtsEngine {
   /// Translation key for the engine's display label (looked up via
   /// `AppStrings.get`).
   String get labelKey => switch (this) {
-        KkTtsEngine.system => 'tts_kk_engine_system',
-        KkTtsEngine.rhvoice => 'tts_kk_engine_rhvoice',
-        KkTtsEngine.espeak => 'tts_kk_engine_espeak',
-        KkTtsEngine.russianFallback => 'tts_kk_engine_fallback_ru',
-      };
+    KkTtsEngine.system => 'tts_kk_engine_system',
+    KkTtsEngine.rhvoice => 'tts_kk_engine_rhvoice',
+    KkTtsEngine.espeak => 'tts_kk_engine_espeak',
+    KkTtsEngine.russianFallback => 'tts_kk_engine_fallback_ru',
+  };
 }
 
 KkTtsEngine? kkTtsEngineFromId(String? id) {
@@ -107,13 +107,12 @@ class KkTtsEngineCapability {
   });
 
   Map<String, dynamic> toJson() => {
-        'engine': engine.id,
-        'available': available,
-        'version': version,
-        'supportedLanguages': supportedLanguages,
-        if (unavailableReason.isNotEmpty)
-          'unavailableReason': unavailableReason,
-      };
+    'engine': engine.id,
+    'available': available,
+    'version': version,
+    'supportedLanguages': supportedLanguages,
+    if (unavailableReason.isNotEmpty) 'unavailableReason': unavailableReason,
+  };
 
   factory KkTtsEngineCapability.fromMap(Map<dynamic, dynamic> map) {
     final id = map['engine']?.toString();

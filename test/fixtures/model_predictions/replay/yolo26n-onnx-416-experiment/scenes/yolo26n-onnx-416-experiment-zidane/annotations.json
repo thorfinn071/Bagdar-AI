@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "sceneId": "yolo26n-onnx-416-experiment-zidane",
+  "annotationRevision": 1,
+  "initialFeedback": "none",
+  "timeline": [
+    {
+      "startOffsetMs": 0,
+      "endOffsetMs": 100,
+      "expectedActions": [
+        "stopNow"
+      ],
+      "forbiddenActions": [
+        "continueForward",
+        "adjustLeft",
+        "adjustRight"
+      ],
+      "expectedHealth": [
+        "healthy"
+      ],
+      "expectedAlertEvents": [
+        "emitted"
+      ],
+      "expectedShadowDirections": [
+        "none"
+      ],
+      "interruptCurrent": false
+    }
+  ],
+  "sourceImageSha256": "16d73869e3267a7d4ed00de8e860833bd1657c1b252e94c0c348277adc7b6edb",
+  "predictionsSha256": "87e1048f7856c5f6250e614dcfe3b22c85c35aa395ccd075921b0f2e40d99598"
+}

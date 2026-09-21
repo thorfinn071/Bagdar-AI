@@ -29,7 +29,7 @@ import kotlin.math.sqrt
 /// runs natively; Dart receives only compact range estimates.
 ///
 /// Channel: bagdar/sonar
-/// Methods in  → startSonar() → Bool, stopSonar()
+/// Methods in  → getCapabilities(), startSonar() → Bool, stopSonar()
 /// Callbacks out → onSonarCalibrated, onSonarRange({range, conf}),
 ///                 onSonarError(String), onSonarHeadphones, onSonarCallActive
 class SonarPlugin(private val context: Context) {
@@ -45,7 +45,18 @@ class SonarPlugin(private val context: Context) {
         private const val SPEED_OF_SOUND = 343.0
         private const val MAX_RANGE_M = 3.0
         private const val CHIRP_INTERVAL_MS = 250L
-        private const val CALIBRATION_CHIRPS = 3
+        private const val CALIBRATION_CHIRPS = 8
+        private const val PROPERTY_SUPPORT_MIC_NEAR_ULTRASOUND =
+            "android.media.property.SUPPORT_MIC_NEAR_ULTRASOUND"
+        private const val PROPERTY_SUPPORT_SPEAKER_NEAR_ULTRASOUND =
+            "android.media.property.SUPPORT_SPEAKER_NEAR_ULTRASOUND"
+        private const val PROPERTY_SUPPORT_AUDIO_SOURCE_UNPROCESSED =
+            "android.media.property.SUPPORT_AUDIO_SOURCE_UNPROCESSED"
+
+        // The existing single-peak prototype has not implemented the DSP and
+        // acoustic-safety requirements below. Keep all physical chirp output
+        // fail-closed until those claims are backed by a named-device report.
+        private const val DSP_SAFETY_IMPLEMENTED = false
     }
 
     private var methodChannel: MethodChannel? = null
@@ -65,6 +76,7 @@ class SonarPlugin(private val context: Context) {
         methodChannel = channel
         channel.setMethodCallHandler { call, result ->
             when (call.method) {
+                "getCapabilities" -> result.success(readCapabilityReport())
                 "startSonar" -> result.success(startSonar())
                 "stopSonar" -> {
                     stopSonar()
@@ -78,6 +90,48 @@ class SonarPlugin(private val context: Context) {
     private fun hasMicPermission(): Boolean =
         ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) ==
             PackageManager.PERMISSION_GRANTED
+
+    private fun propertyIsTrue(audioManager: AudioManager, name: String): Boolean =
+        audioManager.getProperty(name)?.equals("true", ignoreCase = true) == true
+
+    private fun routeFingerprint(audioManager: AudioManager, inputs: Boolean): String {
+        val flag = if (inputs) AudioManager.GET_DEVICES_INPUTS else AudioManager.GET_DEVICES_OUTPUTS
+        val types = try {
+            audioManager.getDevices(flag)
+                .map { it.type }
+                .distinct()
+                .sorted()
+        } catch (_: Exception) {
+            emptyList()
+        }
+        return if (types.isEmpty()) "unknown" else types.joinToString(prefix = "types:", separator = ",")
+    }
+
+    private fun readCapabilityReport(): Map<String, Any?> {
+        val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        val minBuffer = AudioRecord.getMinBufferSize(
+            SAMPLE_RATE,
+            AudioFormat.CHANNEL_IN_MONO,
+            AudioFormat.ENCODING_PCM_16BIT,
+        )
+        return mapOf(
+            "micNearUltrasound" to propertyIsTrue(
+                audioManager,
+                PROPERTY_SUPPORT_MIC_NEAR_ULTRASOUND,
+            ),
+            "speakerNearUltrasound" to propertyIsTrue(
+                audioManager,
+                PROPERTY_SUPPORT_SPEAKER_NEAR_ULTRASOUND,
+            ),
+            "unprocessedInput" to propertyIsTrue(
+                audioManager,
+                PROPERTY_SUPPORT_AUDIO_SOURCE_UNPROCESSED,
+            ),
+            "sampleRateHz" to if (minBuffer > 0) SAMPLE_RATE else 0,
+            "inputRoute" to routeFingerprint(audioManager, inputs = true),
+            "outputRoute" to routeFingerprint(audioManager, inputs = false),
+        )
+    }
 
     private fun isHeadphonesPlugged(): Boolean {
         val am = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -156,6 +210,21 @@ class SonarPlugin(private val context: Context) {
             sendCallback("onSonarError", "call_active")
             return false
         }
+        val capabilities = readCapabilityReport()
+        if (capabilities["micNearUltrasound"] != true ||
+            capabilities["speakerNearUltrasound"] != true ||
+            capabilities["unprocessedInput"] != true ||
+            (capabilities["sampleRateHz"] as? Int ?: 0) < SAMPLE_RATE ||
+            capabilities["inputRoute"] == "unknown" ||
+            capabilities["outputRoute"] == "unknown"
+        ) {
+            sendCallback("onSonarError", "capability_gate_closed")
+            return false
+        }
+        if (!DSP_SAFETY_IMPLEMENTED) {
+            sendCallback("onSonarError", "dsp_safety_gate_closed")
+            return false
+        }
         val minBuf = AudioRecord.getMinBufferSize(
             SAMPLE_RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT
         )
@@ -191,7 +260,7 @@ class SonarPlugin(private val context: Context) {
         @Suppress("MissingPermission")
         val recorder = try {
             AudioRecord(
-                MediaRecorder.AudioSource.MIC,
+                MediaRecorder.AudioSource.UNPROCESSED,
                 SAMPLE_RATE,
                 AudioFormat.CHANNEL_IN_MONO,
                 AudioFormat.ENCODING_PCM_16BIT,
@@ -270,7 +339,21 @@ class SonarPlugin(private val context: Context) {
                     calibrationCount++
                     if (calibrationCount >= CALIBRATION_CHIRPS) {
                         calibrated = true
-                        sendCallback("onSonarCalibrated", null)
+                        val capabilities = readCapabilityReport()
+                        sendCallbackMap(
+                            "onSonarCalibrated",
+                            mapOf(
+                                "schemaVersion" to 1,
+                                "chirpCount" to calibrationCount,
+                                "sampleRateHz" to recorder.sampleRate,
+                                "directPathCancellationApplied" to false,
+                                "multipathPeakSelectionApplied" to false,
+                                "acousticLevelValidated" to false,
+                                "repeatabilityMadM" to -1.0,
+                                "routeFingerprint" to
+                                    "${capabilities["inputRoute"]}|${capabilities["outputRoute"]}",
+                            ),
+                        )
                     }
                 } else if (rangeM in 0.05..MAX_RANGE_M) {
                     sendCallbackMap("onSonarRange", mapOf("range" to rangeM, "conf" to confidence.toDouble()))
@@ -281,6 +364,7 @@ class SonarPlugin(private val context: Context) {
         } catch (e: Exception) {
             sendCallback("onSonarError", e.message ?: "unknown")
         } finally {
+            running = false
             try { recorder.stop() } catch (_: Exception) {}
             recorder.release()
             try { player.stop() } catch (_: Exception) {}

@@ -64,20 +64,14 @@ class ObjectFinderSession {
 
   bool start(String rawName) {
     if (memory.rememberActive) {
-      tts.say(
-        S.get('obj_busy_remembering'),
-        SpeechPriority.info,
-        pan: 0.0,
-      );
+      tts.say(S.get('obj_busy_remembering'), SpeechPriority.info, pan: 0.0);
       return false;
     }
     final target = memory.get(rawName);
     if (target == null) {
       final normalized = ObjectMemoryService.normalizeName(rawName);
       tts.say(
-        S
-            .get('obj_unknown_target')
-            .replaceAll('{name}', normalized),
+        S.get('obj_unknown_target').replaceAll('{name}', normalized),
         SpeechPriority.info,
         pan: 0.0,
       );
@@ -96,9 +90,7 @@ class ObjectFinderSession {
     _steadyCloseFrames = 0;
     if (!wasActive) {
       tts.say(
-        S
-            .get('obj_find_started')
-            .replaceAll('{name}', target.name),
+        S.get('obj_find_started').replaceAll('{name}', target.name),
         SpeechPriority.info,
         pan: 0.0,
       );
@@ -112,11 +104,7 @@ class ObjectFinderSession {
     _targetName = null;
     _lastTracks = const [];
     if (announce) {
-      tts.say(
-        S.get('obj_find_stopped'),
-        SpeechPriority.info,
-        pan: 0.0,
-      );
+      tts.say(S.get('obj_find_stopped'), SpeechPriority.info, pan: 0.0);
     }
   }
 
@@ -130,8 +118,7 @@ class ObjectFinderSession {
   void feed(CameraImage image, DateTime now) {
     final target = _targetEmbedding;
     if (target == null) return;
-    if (now.difference(_startedAt).inMilliseconds >
-        kObjectFinderMaxSessionMs) {
+    if (now.difference(_startedAt).inMilliseconds > kObjectFinderMaxSessionMs) {
       stop();
       return;
     }
@@ -223,7 +210,8 @@ class ObjectFinderSession {
 
     final tau = memory.backend.matchThreshold;
     final foundScoreT = (tau + (1.0 - tau) * 0.55).clamp(tau, 0.99);
-    final isClose = (best.distM != null && best.distM! <= kObjectFinderFoundDistM) ||
+    final isClose =
+        (best.distM != null && best.distM! <= kObjectFinderFoundDistM) ||
         (best.isCenterCrop && best.score >= foundScoreT);
     if (best.score >= foundScoreT && isClose) {
       _steadyCloseFrames++;
@@ -280,7 +268,9 @@ class ObjectFinderSession {
   }
 
   void _checkHeartbeat(DateTime now) {
-    if (now.difference(_lastHeartbeatAt) < kObjectFinderHeartbeatInterval) return;
+    if (now.difference(_lastHeartbeatAt) < kObjectFinderHeartbeatInterval) {
+      return;
+    }
     _lastHeartbeatAt = now;
     final name = _targetName ?? '';
     tts.say(

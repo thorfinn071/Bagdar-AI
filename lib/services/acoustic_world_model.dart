@@ -136,14 +136,12 @@ class AcousticWorldModel {
     double maxConfidence = 0.0;
 
     counts.forEach((cls, count) {
-      if (cls == BagdarAudioClass.unknown ||
-          cls == BagdarAudioClass.silence) {
+      if (cls == BagdarAudioClass.unknown || cls == BagdarAudioClass.silence) {
         return;
       }
-      
-      
-      final requiredCount = (cls == BagdarAudioClass.horn ||
-              cls == BagdarAudioClass.siren)
+
+      final requiredCount =
+          (cls == BagdarAudioClass.horn || cls == BagdarAudioClass.siren)
           ? 3
           : 2;
       if (count >= requiredCount && count > dominantCount) {
@@ -177,13 +175,15 @@ class AcousticWorldModel {
     final priority = _priorityFor(eventType);
 
     _lastEmitAt[eventType] = now;
-    onAcousticEvent?.call(AcousticEvent(
-      type: eventType,
-      bearing: bearing,
-      confidence: maxConfidence,
-      suggestedPriority: priority,
-      at: now,
-    ));
+    onAcousticEvent?.call(
+      AcousticEvent(
+        type: eventType,
+        bearing: bearing,
+        confidence: maxConfidence,
+        suggestedPriority: priority,
+        at: now,
+      ),
+    );
   }
 
   static AcousticEventType? _classToEventType(BagdarAudioClass cls) {

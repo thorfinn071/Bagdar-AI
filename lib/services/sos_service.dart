@@ -11,25 +11,22 @@ import '../models/constants.dart';
 import '../../models/strings.dart';
 
 enum SosResult {
-  
   sent,
-  
+
   sentFallback,
 
   /// Native SMS channel returned false (OS rejected or timed out after 10 s);
   /// the sms:// URI fallback was launched but actual delivery is unconfirmed.
   pendingEnqueued,
-  
-  
+
   sentWithoutLocation,
-  
+
   noContact,
-  
-  
+
   noLocation,
-  
+
   launchFailed,
-  
+
   error,
 
   /// SMS composer app was opened via [sms:] URI but the message has NOT been
@@ -135,11 +132,14 @@ class SosService {
   }
 
   @visibleForTesting
-  Map<String, String>? get cachedNetworkContextForTesting => _lastNetworkContext;
+  Map<String, String>? get cachedNetworkContextForTesting =>
+      _lastNetworkContext;
 
   @visibleForTesting
   void setCachedNetworkContextForTesting(Map<String, String>? ctx) {
-    _lastNetworkContext = ctx == null ? null : Map<String, String>.unmodifiable(ctx);
+    _lastNetworkContext = ctx == null
+        ? null
+        : Map<String, String>.unmodifiable(ctx);
     _lastNetworkContextAt = ctx == null ? null : DateTime.now();
   }
 
@@ -180,7 +180,6 @@ class SosService {
       headingFromLastFix: fallback.headingFromLastFix,
     );
 
-    
     SosResult last = SosResult.error;
     for (var attempt = 0; attempt <= retries; attempt++) {
       for (var i = 0; i < attemptTargets.length; i++) {
@@ -193,8 +192,6 @@ class SosService {
         // E-1: native SMS unconfirmed; sms:// fallback was launched.
         if (last == SosResult.pendingEnqueued) return last;
         if (last == SosResult.sent || last == SosResult.sentFallback) {
-          
-          
           final gpsMissing = position == null;
           if (gpsMissing) return SosResult.sentWithoutLocation;
           return last;

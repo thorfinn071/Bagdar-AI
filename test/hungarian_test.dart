@@ -1,7 +1,6 @@
 import 'package:bagdar/tracker/hungarian.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-
 double _bruteForceMin(List<List<double>> cost) {
   final n = cost.length;
   final m = cost[0].length;
@@ -78,7 +77,7 @@ void main() {
       expect(result.length, 2);
       expect(Hungarian.isValid(result, 4), isTrue);
       expect(result.every((j) => j >= 0), isTrue);
-      
+
       expect(Hungarian.totalCost(cost, result), closeTo(2.0, 1e-9));
     });
 
@@ -92,16 +91,13 @@ void main() {
       expect(result.length, 3);
       expect(Hungarian.isValid(result, 2), isTrue);
       expect(result.where((j) => j >= 0).length, 2);
-      
-      
+
       expect(result[2], -1);
     });
   });
 
   group('Hungarian.solveMinCost — anti-greedy scenarios', () {
     test('track-stealing is avoided (OPT-01 motivation)', () {
-      
-      
       final cost = <List<double>>[
         [0.40, 0.10],
         [0.05, 0.60],
@@ -156,42 +152,33 @@ void main() {
         [Hungarian.kForbidden, Hungarian.kForbidden],
       ];
       final result = Hungarian.solveMinCost(cost);
-      
+
       expect(result[1], -1);
       expect(result[0], anyOf(0, 1));
     });
 
-    test(
-        'maxAssignableCost drops assignments whose original cost exceeds the '
+    test('maxAssignableCost drops assignments whose original cost exceeds the '
         'threshold', () {
       final cost = <List<double>>[
         [0.10, 0.90],
         [0.95, 0.05],
       ];
       final result = Hungarian.solveMinCost(cost, maxAssignableCost: 0.50);
-      
-      
+
       expect(result, [0, 1]);
 
-      final tighter = Hungarian.solveMinCost(
-        <List<double>>[
-          [0.10, 0.95],
-          [0.95, 0.12],
-        ],
-        maxAssignableCost: 0.20,
-      );
-      
-      
+      final tighter = Hungarian.solveMinCost(<List<double>>[
+        [0.10, 0.95],
+        [0.95, 0.12],
+      ], maxAssignableCost: 0.20);
+
       expect(tighter, [0, 1]);
 
-      final strict = Hungarian.solveMinCost(
-        <List<double>>[
-          [0.10, 0.95],
-          [0.95, 0.12],
-        ],
-        maxAssignableCost: 0.11,
-      );
-      
+      final strict = Hungarian.solveMinCost(<List<double>>[
+        [0.10, 0.95],
+        [0.95, 0.12],
+      ], maxAssignableCost: 0.11);
+
       expect(strict[0], 0);
       expect(strict[1], -1);
     });

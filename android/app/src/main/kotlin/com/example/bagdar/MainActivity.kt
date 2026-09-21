@@ -39,6 +39,9 @@ import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
+    private fun isResearchBuild(): Boolean =
+        BuildConfig.FLAVOR.equals("research", ignoreCase = true)
+
     private var hardwareDepthSession: HardwareDepthSession? = null
     private var hardwareDepthEventSink: EventChannel.EventSink? = null
 
@@ -156,49 +159,51 @@ class MainActivity : FlutterActivity() {
             audioCapturePlugin = plugin
         }
 
-        // Phase 2 — BLE mesh-net buddy alerts (Direction 3).
-        run {
-            val plugin = BleBuddyPlugin(applicationContext)
-            val channel = MethodChannel(
-                flutterEngine.dartExecutor.binaryMessenger,
-                "bagdar/ble_buddy",
-            )
-            plugin.register(channel)
-            bleBuddyPlugin = plugin
-        }
+        if (isResearchBuild()) {
+            // Phase 2 — BLE mesh-net buddy alerts (Direction 3).
+            run {
+                val plugin = BleBuddyPlugin(applicationContext)
+                val channel = MethodChannel(
+                    flutterEngine.dartExecutor.binaryMessenger,
+                    "bagdar/ble_buddy",
+                )
+                plugin.register(channel)
+                bleBuddyPlugin = plugin
+            }
 
-        // Phase 2 — Open Smart-Cane Sensor Pod GATT bridge (Direction 7).
-        run {
-            val plugin = OscpPlugin(applicationContext)
-            val channel = MethodChannel(
-                flutterEngine.dartExecutor.binaryMessenger,
-                "bagdar/oscp_pod",
-            )
-            plugin.register(channel)
-            oscpPlugin = plugin
-        }
+            // Phase 2 — Open Smart-Cane Sensor Pod GATT bridge (Direction 7).
+            run {
+                val plugin = OscpPlugin(applicationContext)
+                val channel = MethodChannel(
+                    flutterEngine.dartExecutor.binaryMessenger,
+                    "bagdar/oscp_pod",
+                )
+                plugin.register(channel)
+                oscpPlugin = plugin
+            }
 
-        // Phase 5 — FMCW sonar chirp echolocation (Direction 1).
-        run {
-            val plugin = SonarPlugin(applicationContext)
-            val channel = MethodChannel(
-                flutterEngine.dartExecutor.binaryMessenger,
-                "bagdar/sonar",
-            )
-            plugin.register(channel)
-            sonarPlugin = plugin
-        }
+            // Phase 5 — FMCW sonar chirp echolocation (Direction 1).
+            run {
+                val plugin = SonarPlugin(applicationContext)
+                val channel = MethodChannel(
+                    flutterEngine.dartExecutor.binaryMessenger,
+                    "bagdar/sonar",
+                )
+                plugin.register(channel)
+                sonarPlugin = plugin
+            }
 
-        // Phase 4 — On-device VLM companion stub (Direction 11).
-        // Returns false for loadVlmModel until a model pack is installed.
-        run {
-            val plugin = OnDeviceModelPlugin(applicationContext)
-            val channel = MethodChannel(
-                flutterEngine.dartExecutor.binaryMessenger,
-                "bagdar/vlm_engine",
-            )
-            plugin.register(channel)
-            onDeviceModelPlugin = plugin
+            // Phase 4 — On-device VLM companion stub (Direction 11).
+            // Returns false for loadVlmModel until a model pack is installed.
+            run {
+                val plugin = OnDeviceModelPlugin(applicationContext)
+                val channel = MethodChannel(
+                    flutterEngine.dartExecutor.binaryMessenger,
+                    "bagdar/vlm_engine",
+                )
+                plugin.register(channel)
+                onDeviceModelPlugin = plugin
+            }
         }
 
         MethodChannel(
@@ -391,20 +396,22 @@ class MainActivity : FlutterActivity() {
             }
         })
 
-        EventChannel(
-            flutterEngine.dartExecutor.binaryMessenger,
-            "bagdar/incoming_sms",
-        ).setStreamHandler(object : EventChannel.StreamHandler {
-            override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
-                incomingSmsSink = events
-                registerIncomingSmsReceiver()
-            }
+        if (isResearchBuild()) {
+            EventChannel(
+                flutterEngine.dartExecutor.binaryMessenger,
+                "bagdar/incoming_sms",
+            ).setStreamHandler(object : EventChannel.StreamHandler {
+                override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
+                    incomingSmsSink = events
+                    registerIncomingSmsReceiver()
+                }
 
-            override fun onCancel(arguments: Any?) {
-                unregisterIncomingSmsReceiver()
-                incomingSmsSink = null
-            }
-        })
+                override fun onCancel(arguments: Any?) {
+                    unregisterIncomingSmsReceiver()
+                    incomingSmsSink = null
+                }
+            })
+        }
     }
 
     private fun registerIncomingSmsReceiver() {

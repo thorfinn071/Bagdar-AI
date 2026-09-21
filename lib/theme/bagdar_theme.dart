@@ -50,8 +50,8 @@ class BagdarTheme extends InheritedWidget {
 
   static ThemeData buildMaterialTheme(BagdarThemeName name) {
     final c = BagdarColors.of(name);
-    final isDarkSurface = name == BagdarThemeName.dark ||
-        name == BagdarThemeName.highContrast;
+    final isDarkSurface =
+        name == BagdarThemeName.dark || name == BagdarThemeName.highContrast;
 
     final colorScheme = isDarkSurface
         ? ColorScheme.dark(
@@ -100,8 +100,7 @@ class BagdarTheme extends InheritedWidget {
         foregroundColor: c.textPrimary,
         elevation: 0,
         centerTitle: false,
-        titleTextStyle:
-            BagdarTypography.title.copyWith(color: c.textPrimary),
+        titleTextStyle: BagdarTypography.title.copyWith(color: c.textPrimary),
       ),
       bottomSheetTheme: BottomSheetThemeData(
         backgroundColor: c.surfaceElevated,
@@ -110,15 +109,12 @@ class BagdarTheme extends InheritedWidget {
       ),
       dialogTheme: DialogThemeData(
         backgroundColor: c.surfaceElevated,
-        titleTextStyle:
-            BagdarTypography.title.copyWith(color: c.textPrimary),
-        contentTextStyle:
-            BagdarTypography.body.copyWith(color: c.textPrimary),
+        titleTextStyle: BagdarTypography.title.copyWith(color: c.textPrimary),
+        contentTextStyle: BagdarTypography.body.copyWith(color: c.textPrimary),
       ),
       snackBarTheme: SnackBarThemeData(
         backgroundColor: c.surfaceElevated,
-        contentTextStyle:
-            BagdarTypography.body.copyWith(color: c.textPrimary),
+        contentTextStyle: BagdarTypography.body.copyWith(color: c.textPrimary),
       ),
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStatePropertyAll(c.accentPrimary),
@@ -138,18 +134,24 @@ class BagdarTheme extends InheritedWidget {
         style: FilledButton.styleFrom(
           backgroundColor: c.accentPrimary,
           foregroundColor: c.accentOnPrimary,
-          minimumSize: const Size(BagdarSpacing.tapMinimum,
-              BagdarSpacing.tapMinimum),
+          minimumSize: const Size(
+            BagdarSpacing.tapMinimum,
+            BagdarSpacing.tapMinimum,
+          ),
           padding: const EdgeInsets.symmetric(
-              horizontal: BagdarSpacing.l, vertical: BagdarSpacing.m),
+            horizontal: BagdarSpacing.l,
+            vertical: BagdarSpacing.m,
+          ),
           textStyle: BagdarTypography.body,
         ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: c.accentPrimary,
-          minimumSize: const Size(BagdarSpacing.tapMinimum,
-              BagdarSpacing.tapMinimum),
+          minimumSize: const Size(
+            BagdarSpacing.tapMinimum,
+            BagdarSpacing.tapMinimum,
+          ),
           textStyle: BagdarTypography.body,
         ),
       ),
@@ -157,8 +159,10 @@ class BagdarTheme extends InheritedWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: c.accentPrimary,
           foregroundColor: c.accentOnPrimary,
-          minimumSize: const Size(BagdarSpacing.tapMinimum,
-              BagdarSpacing.tapMinimum),
+          minimumSize: const Size(
+            BagdarSpacing.tapMinimum,
+            BagdarSpacing.tapMinimum,
+          ),
           textStyle: BagdarTypography.body,
         ),
       ),

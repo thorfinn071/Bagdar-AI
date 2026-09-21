@@ -74,8 +74,7 @@ void main() {
     test('handlePayload drops expired payloads', () {
       final events = <ExternalHazardEvent>[];
       service.onHazard = (e) => events.add(e);
-      
-      
+
       final payload = MeshBuddyPayload(
         hazardType: 'pothole',
         severity: 0.7,
@@ -90,7 +89,6 @@ void main() {
     });
 
     test('handlePayload deduplicates by hash', () {
-      
       service.resetForTesting();
       expect(service.isActive, false);
     });

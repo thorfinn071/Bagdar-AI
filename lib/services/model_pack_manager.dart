@@ -38,33 +38,34 @@ class ModelPack {
   });
 
   factory ModelPack.fromJson(Map<String, dynamic> json) => ModelPack(
-        id: json['id'] as String,
-        name: json['name'] as String,
-        region: json['region'] as String? ?? '',
-        modelFileName: json['modelFile'] as String,
-        labelsFileName: json['labelsFile'] as String,
-        downloadUrl: json['url'] as String,
-        sha256: json['sha256'] as String,
-        sizeBytes: (json['size'] as num?)?.toInt() ?? 0,
-        version: (json['version'] as num?)?.toInt() ?? 1,
-        classes: (json['classes'] as List<dynamic>?)
-                ?.map((e) => e.toString())
-                .toList() ??
-            const [],
-      );
+    id: json['id'] as String,
+    name: json['name'] as String,
+    region: json['region'] as String? ?? '',
+    modelFileName: json['modelFile'] as String,
+    labelsFileName: json['labelsFile'] as String,
+    downloadUrl: json['url'] as String,
+    sha256: json['sha256'] as String,
+    sizeBytes: (json['size'] as num?)?.toInt() ?? 0,
+    version: (json['version'] as num?)?.toInt() ?? 1,
+    classes:
+        (json['classes'] as List<dynamic>?)
+            ?.map((e) => e.toString())
+            .toList() ??
+        const [],
+  );
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'region': region,
-        'modelFile': modelFileName,
-        'labelsFile': labelsFileName,
-        'url': downloadUrl,
-        'sha256': sha256,
-        'size': sizeBytes,
-        'version': version,
-        'classes': classes,
-      };
+    'id': id,
+    'name': name,
+    'region': region,
+    'modelFile': modelFileName,
+    'labelsFile': labelsFileName,
+    'url': downloadUrl,
+    'sha256': sha256,
+    'size': sizeBytes,
+    'version': version,
+    'classes': classes,
+  };
 }
 
 /// Installation state of a model pack on disk.
@@ -109,10 +110,12 @@ class ModelPackManager {
   static const String _kInstalledFileName = 'model_packs_installed.json';
   static const int _kMinFreeSpaceMb = 100;
 
-  final Dio _dio = Dio(BaseOptions(
-    connectTimeout: const Duration(seconds: 15),
-    receiveTimeout: const Duration(seconds: 120),
-  ));
+  final Dio _dio = Dio(
+    BaseOptions(
+      connectTimeout: const Duration(seconds: 15),
+      receiveTimeout: const Duration(seconds: 120),
+    ),
+  );
 
   List<ModelPack>? _manifest;
   final Map<String, InstalledModelPack> _installed = {};
@@ -139,7 +142,8 @@ class ModelPackManager {
         for (final entry in list) {
           if (entry is Map<String, dynamic>) {
             final pack = ModelPack.fromJson(
-                entry['pack'] as Map<String, dynamic>);
+              entry['pack'] as Map<String, dynamic>,
+            );
             final localModel = entry['localModel'] as String? ?? '';
             final localLabels = entry['localLabels'] as String? ?? '';
             _installed[pack.id] = InstalledModelPack(
@@ -198,7 +202,6 @@ class ModelPackManager {
       final modelFile = File('${dir.path}/${pack.modelFileName}');
       final labelsFile = File('${dir.path}/${pack.labelsFileName}');
 
-      
       await _dio.download(
         pack.downloadUrl,
         modelFile.path,
@@ -207,7 +210,6 @@ class ModelPackManager {
         },
       );
 
-      
       if (pack.sha256.isNotEmpty) {
         final bytes = await modelFile.readAsBytes();
         final hash = sha256.convert(bytes).toString();
@@ -224,7 +226,6 @@ class ModelPackManager {
         }
       }
 
-      
       await labelsFile.writeAsString(pack.classes.join('\n'), flush: true);
 
       final installed = InstalledModelPack(
@@ -318,11 +319,15 @@ class ModelPackManager {
   Future<void> _saveInstalled() async {
     try {
       final file = await _getInstalledFile();
-      final list = _installed.values.map((ip) => {
-            'pack': ip.pack.toJson(),
-            'localModel': ip.localModelPath,
-            'localLabels': ip.localLabelsPath,
-          }).toList();
+      final list = _installed.values
+          .map(
+            (ip) => {
+              'pack': ip.pack.toJson(),
+              'localModel': ip.localModelPath,
+              'localLabels': ip.localLabelsPath,
+            },
+          )
+          .toList();
       await file.writeAsString(jsonEncode(list), flush: true);
     } catch (e) {
       debugPrint('ModelPackManager._saveInstalled error: $e');

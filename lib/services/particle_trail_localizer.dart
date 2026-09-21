@@ -63,15 +63,15 @@ class ParticleTrailLocalizer {
     double magSigmaMicroT = 8.0,
     double stepDriftSigma = 0.4,
     int? seed,
-  })  : assert(particleCount >= 16),
-        _particles = List<TrailParticle>.generate(
-          particleCount,
-          (_) => TrailParticle(index: 0),
-        ),
-        _headingSigma = headingSigmaDeg,
-        _magSigma = magSigmaMicroT,
-        _stepDriftSigma = stepDriftSigma,
-        _rng = math.Random(seed);
+  }) : assert(particleCount >= 16),
+       _particles = List<TrailParticle>.generate(
+         particleCount,
+         (_) => TrailParticle(index: 0),
+       ),
+       _headingSigma = headingSigmaDeg,
+       _magSigma = magSigmaMicroT,
+       _stepDriftSigma = stepDriftSigma,
+       _rng = math.Random(seed);
 
   final List<TrailParticle> _particles;
   final double _headingSigma;
@@ -85,8 +85,6 @@ class ParticleTrailLocalizer {
   /// Recompute everything at the start of a new replay session.
   void reset({int initialSpread = 4}) {
     for (final p in _particles) {
-      
-      
       p.index = (_rng.nextDouble() * initialSpread).clamp(0.0, double.infinity);
       p.weight = 1.0;
     }
@@ -112,19 +110,20 @@ class ParticleTrailLocalizer {
 
     final maxIdx = (trail.sampleCount - 1).toDouble();
 
-    
     for (final p in _particles) {
-      p.index = (p.index + stepDelta + _gaussian() * _stepDriftSigma)
-          .clamp(0.0, maxIdx);
+      p.index = (p.index + stepDelta + _gaussian() * _stepDriftSigma).clamp(
+        0.0,
+        maxIdx,
+      );
     }
 
-    
     double sumW = 0;
     for (final p in _particles) {
       final s = _sampleAt(trail, p.index);
       final headingDiff = _angleDiff(headingDeg, s.headingDeg);
       final magDiff = magMicroT - s.magMicroT;
-      final w = _gaussianPdf(headingDiff, _headingSigma) *
+      final w =
+          _gaussianPdf(headingDiff, _headingSigma) *
           _gaussianPdf(magDiff, _magSigma);
       p.weight = w;
       sumW += w;
@@ -134,7 +133,6 @@ class ParticleTrailLocalizer {
         p.weight /= sumW;
       }
     } else {
-      
       final uniform = 1.0 / _particles.length;
       for (final p in _particles) {
         p.weight = uniform;
@@ -178,7 +176,8 @@ class ParticleTrailLocalizer {
     }
     final stdIdx = math.sqrt(varIdx.clamp(0, double.infinity));
     final ess = _effectiveSampleSize();
-    final atDest = (maxIdx - meanIdx).abs() <= _kDestinationTolerance &&
+    final atDest =
+        (maxIdx - meanIdx).abs() <= _kDestinationTolerance &&
         stdIdx <= _kDestinationTolerance;
     return TrailLocalization(
       meanIndex: meanIdx,
@@ -222,7 +221,6 @@ class ParticleTrailLocalizer {
     }
   }
 
-  
   static double _angleDiff(double a, double b) {
     var d = (a - b) % 360.0;
     if (d > 180) d -= 360;
@@ -241,7 +239,6 @@ class ParticleTrailLocalizer {
   }
 
   double _gaussian() {
-    
     final u1 = math.max(1e-9, _rng.nextDouble());
     final u2 = _rng.nextDouble();
     return math.sqrt(-2.0 * math.log(u1)) * math.cos(2 * math.pi * u2);

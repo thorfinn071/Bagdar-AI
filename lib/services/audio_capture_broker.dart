@@ -106,12 +106,14 @@ class AudioCaptureBroker {
       data.lengthInBytes ~/ 2,
     );
 
-    _controller.add(AudioFrame(
-      samples: samples,
-      sampleRate: sr,
-      channels: ch,
-      timestamp: DateTime.fromMillisecondsSinceEpoch(ts),
-    ));
+    _controller.add(
+      AudioFrame(
+        samples: samples,
+        sampleRate: sr,
+        channels: ch,
+        timestamp: DateTime.fromMillisecondsSinceEpoch(ts),
+      ),
+    );
   }
 
   void dispose() {

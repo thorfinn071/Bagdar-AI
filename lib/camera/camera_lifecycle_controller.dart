@@ -22,6 +22,7 @@ abstract class CameraLifecycleHost {
   void onFrame(CameraImage image);
 
   void onBackgroundEntered();
+  void onCameraSessionStarting();
   void onForegroundResumed();
 }
 
@@ -43,6 +44,7 @@ class CameraLifecycleController {
   bool _streamPaused = false;
   Timer? _reinitHeartbeat;
   bool _backgroundWarned = false;
+  int sessionGeneration = 0;
   Timer? _pausedRepeatTimer;
   Timer? _pausedEarconTimer;
   int _pausedRepeatCount = 0;
@@ -93,11 +95,7 @@ class CameraLifecycleController {
 
     if (!_backgroundWarned) {
       _backgroundWarned = true;
-      tts.say(
-        S.get('lifecycle_background'),
-        SpeechPriority.critical,
-        pan: 0.0,
-      );
+      tts.say(S.get('lifecycle_background'), SpeechPriority.critical, pan: 0.0);
       HapticService.vibrate(const [0, 200, 100, 200, 100, 200]);
       onBackgroundVibrate?.call();
       _startPausedWalkingTimers();
@@ -133,11 +131,7 @@ class CameraLifecycleController {
     if (motion == MotionState.stationary || motion == null) return;
     _pausedRepeatCount++;
     final (pattern, intensities) = _escalatedPausedPattern(_pausedRepeatCount);
-    tts.say(
-      S.get('lifecycle_background'),
-      SpeechPriority.critical,
-      pan: 0.0,
-    );
+    tts.say(S.get('lifecycle_background'), SpeechPriority.critical, pan: 0.0);
     HapticService.vibrate(pattern, intensities: intensities);
     fieldLog.log('lifecycle_paused_walking_repeat', {
       'count': _pausedRepeatCount,
@@ -186,9 +180,12 @@ class CameraLifecycleController {
     if (ctrl != null && ctrl.value.isInitialized && _streamPaused) {
       _streamPaused = false;
       try {
+        // Establish the new generation before the first resumed callback.
+        host.onCameraSessionStarting();
         // Safety audit 2026-06 fix A-7: await the Future to catch async errors
         await ctrl.startImageStream(host.onFrame);
         host.isCameraReady = true;
+        sessionGeneration += 1;
       } catch (_) {
         // Async or sync error — fall back to cold restart
         host.cameraController?.dispose();

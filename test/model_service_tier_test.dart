@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:bagdar/core/build_profile.dart';
 import 'package:bagdar/services/device_capability.dart';
 import 'package:bagdar/services/model_service.dart';
 import 'package:bagdar/services/thermal_monitor.dart';
@@ -10,6 +11,35 @@ void main() {
   tearDown(() {
     ModelService.instance.debugInjectAvailableAssets(<String>{});
     DeviceCapabilityProbe.resetCacheForTesting();
+  });
+
+  group('single camera owner policy', () {
+    test('Core never starts the independent ARCore camera', () {
+      expect(
+        ModelService.independentHardwareCameraAllowed(
+          profile: BuildProfile.core,
+          userRequested: true,
+        ),
+        isFalse,
+      );
+    });
+
+    test('research requires explicit hardware-camera opt-in', () {
+      expect(
+        ModelService.independentHardwareCameraAllowed(
+          profile: BuildProfile.research,
+          userRequested: false,
+        ),
+        isFalse,
+      );
+      expect(
+        ModelService.independentHardwareCameraAllowed(
+          profile: BuildProfile.research,
+          userRequested: true,
+        ),
+        isTrue,
+      );
+    });
   });
 
   group('DeviceCapabilities.isLowEnd', () {
@@ -76,26 +106,16 @@ void main() {
   });
 
   group('ModelService B-1 — adaptive YOLO tier on thermal severity', () {
-    test(
-      'thermal hot/critical wants small tier when asset is bundled',
-      () {
-        final svc = ModelService.instance;
-        for (final sev in [
-          ThermalSeverity.hot,
-          ThermalSeverity.critical,
-        ]) {
-          expect(
-            svc.debugDesiredTierForThermal(
-              sev,
-              hasSmall: true,
-              isLowEnd: false,
-            ),
-            YoloInputTier.small,
-            reason: 'severity=$sev with small-asset bundled must swap to small',
-          );
-        }
-      },
-    );
+    test('thermal hot/critical wants small tier when asset is bundled', () {
+      final svc = ModelService.instance;
+      for (final sev in [ThermalSeverity.hot, ThermalSeverity.critical]) {
+        expect(
+          svc.debugDesiredTierForThermal(sev, hasSmall: true, isLowEnd: false),
+          YoloInputTier.small,
+          reason: 'severity=$sev with small-asset bundled must swap to small',
+        );
+      }
+    });
 
     test(
       'thermal hot/critical falls back to no-op when small asset missing',
@@ -117,10 +137,7 @@ void main() {
       'thermal warm/normal returns standard for mid-range, small for low-end',
       () {
         final svc = ModelService.instance;
-        for (final sev in [
-          ThermalSeverity.normal,
-          ThermalSeverity.warm,
-        ]) {
+        for (final sev in [ThermalSeverity.normal, ThermalSeverity.warm]) {
           expect(
             svc.debugDesiredTierForThermal(
               sev,
@@ -130,11 +147,7 @@ void main() {
             YoloInputTier.standard,
           );
           expect(
-            svc.debugDesiredTierForThermal(
-              sev,
-              hasSmall: true,
-              isLowEnd: true,
-            ),
+            svc.debugDesiredTierForThermal(sev, hasSmall: true, isLowEnd: true),
             YoloInputTier.small,
           );
         }

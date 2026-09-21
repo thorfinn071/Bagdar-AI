@@ -137,9 +137,10 @@ class MeshBuddyAlertService {
       owner: 'MeshBuddyAlertService',
     );
     if (!grant.isGranted) {
-      FieldLogger.instance.logMeshBuddy('start_blocked_ble_busy', data: {
-        'reason': grant.denyReason?.name ?? 'unknown',
-      });
+      FieldLogger.instance.logMeshBuddy(
+        'start_blocked_ble_busy',
+        data: {'reason': grant.denyReason?.name ?? 'unknown'},
+      );
       return false;
     }
     _bleLease = grant.lease;
@@ -168,9 +169,10 @@ class MeshBuddyAlertService {
     } catch (e) {
       SensorSessionCoordinator.instance.release(_bleLease);
       _bleLease = null;
-      FieldLogger.instance.logMeshBuddy('start_error', data: {
-        'error': e.toString(),
-      });
+      FieldLogger.instance.logMeshBuddy(
+        'start_error',
+        data: {'error': e.toString()},
+      );
       return false;
     }
   }
@@ -196,10 +198,10 @@ class MeshBuddyAlertService {
   void handlePayload(MeshBuddyPayload payload) {
     if (!_active) return;
     if (payload.isExpired || payload.isTooOld) {
-      FieldLogger.instance.logMeshBuddy('payload_expired', data: {
-        'hash': payload.dedupeHash,
-        'ageMs': payload.ageMs,
-      });
+      FieldLogger.instance.logMeshBuddy(
+        'payload_expired',
+        data: {'hash': payload.dedupeHash, 'ageMs': payload.ageMs},
+      );
       return;
     }
 
@@ -219,19 +221,22 @@ class MeshBuddyAlertService {
     if (text.isEmpty) return;
 
     try {
-      onHazard?.call(ExternalHazardEvent(
-        source: ExternalHazardSource.meshBuddy,
-        text: text,
-        priority: SpeechPriority.info,
-        category: AlertCategory.acousticEvent,
-        urgency: (payload.severity * 0.6).clamp(0.0, 0.7),
-        at: now,
-        correlationId: 'mesh_${payload.dedupeHash}',
-      ));
+      onHazard?.call(
+        ExternalHazardEvent(
+          source: ExternalHazardSource.meshBuddy,
+          text: text,
+          priority: SpeechPriority.info,
+          category: AlertCategory.acousticEvent,
+          urgency: (payload.severity * 0.6).clamp(0.0, 0.7),
+          at: now,
+          correlationId: 'mesh_${payload.dedupeHash}',
+        ),
+      );
     } catch (e) {
-      FieldLogger.instance.logMeshBuddy('emit_error', data: {
-        'error': e.toString(),
-      });
+      FieldLogger.instance.logMeshBuddy(
+        'emit_error',
+        data: {'error': e.toString()},
+      );
     }
   }
 
@@ -248,9 +253,10 @@ class MeshBuddyAlertService {
     switch (call.method) {
       case 'onBuddyPayload':
         try {
-          
-          assert(call.arguments is Uint8List,
-              'onBuddyPayload must be Uint8List — do not refactor native side to List<Byte>');
+          assert(
+            call.arguments is Uint8List,
+            'onBuddyPayload must be Uint8List — do not refactor native side to List<Byte>',
+          );
           final data = call.arguments as Uint8List;
           final payload = MeshBuddyPayload.fromBytes(data);
           handlePayload(payload);
@@ -260,9 +266,7 @@ class MeshBuddyAlertService {
         break;
       case 'onBuddyError':
         final msg = call.arguments as String? ?? 'unknown';
-        FieldLogger.instance.logMeshBuddy('native_error', data: {
-          'error': msg,
-        });
+        FieldLogger.instance.logMeshBuddy('native_error', data: {'error': msg});
         if (msg.contains('battery') || msg.contains('throttle')) {
           await stop();
         }

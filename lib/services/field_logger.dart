@@ -35,7 +35,10 @@ class FieldLogger {
       if (!logDir.existsSync()) {
         logDir.createSync(recursive: true);
       }
-      final ts = DateTime.now().toIso8601String().replaceAll(':', '-').substring(0, 19);
+      final ts = DateTime.now()
+          .toIso8601String()
+          .replaceAll(':', '-')
+          .substring(0, 19);
       final file = File('${logDir.path}/session_$ts.jsonl');
       _sink = file.openWrite(mode: FileMode.append);
       _sessionPath = file.path;
@@ -153,10 +156,7 @@ class FieldLogger {
   void logFrozenFrame() => log('frozen_frame');
 
   void logDroplet({required int dirtyRegions, required bool warned}) {
-    log('droplet', {
-      'dirty': dirtyRegions,
-      'warned': warned,
-    });
+    log('droplet', {'dirty': dirtyRegions, 'warned': warned});
   }
 
   void logFpMarker([String? note]) {
@@ -264,10 +264,7 @@ class FieldLogger {
   }
 
   void logBatteryThrottle(String level, int batteryPct) {
-    log('battery_throttle', {
-      'level': level,
-      'batteryPct': batteryPct,
-    });
+    log('battery_throttle', {'level': level, 'batteryPct': batteryPct});
   }
 
   void logMemoryPressure(String level, {int? availMb, int? totalMb}) {
@@ -278,7 +275,11 @@ class FieldLogger {
     });
   }
 
-  void logCameraStall({required bool stalled, int? durationMs, int? thresholdMs}) {
+  void logCameraStall({
+    required bool stalled,
+    int? durationMs,
+    int? thresholdMs,
+  }) {
     log('camera_stall', {
       'stalled': stalled,
       if (durationMs != null) 'durationMs': durationMs,
@@ -287,24 +288,15 @@ class FieldLogger {
   }
 
   void logModeSwitch(String mode, {String? from}) {
-    log('mode_switch', {
-      'mode': mode,
-      if (from != null) 'from': from,
-    });
+    log('mode_switch', {'mode': mode, if (from != null) 'from': from});
   }
 
   void logTtsEvent(String event, {String? detail}) {
-    log('tts_event', {
-      'event': event,
-      if (detail != null) 'detail': detail,
-    });
+    log('tts_event', {'event': event, if (detail != null) 'detail': detail});
   }
 
   void logCameraQuality(String type, {int? streak}) {
-    log('camera_quality', {
-      'type': type,
-      if (streak != null) 'streak': streak,
-    });
+    log('camera_quality', {'type': type, if (streak != null) 'streak': streak});
   }
 
   void logError(String location, String error) {
@@ -337,54 +329,32 @@ class FieldLogger {
     });
   }
 
-  
   void logIndoorTrail(String event, {Map<String, dynamic>? data}) {
-    log('indoor_trail', {
-      'event': event,
-      if (data != null) ...data,
-    });
+    log('indoor_trail', {'event': event, if (data != null) ...data});
   }
 
   void logMeshBuddy(String event, {Map<String, dynamic>? data}) {
-    log('mesh_buddy', {
-      'event': event,
-      if (data != null) ...data,
-    });
+    log('mesh_buddy', {'event': event, if (data != null) ...data});
   }
 
   void logOscpPod(String event, {Map<String, dynamic>? data}) {
-    log('oscp_pod', {
-      'event': event,
-      if (data != null) ...data,
-    });
+    log('oscp_pod', {'event': event, if (data != null) ...data});
   }
 
   void logSonarChirp(String event, {Map<String, dynamic>? data}) {
-    log('sonar_chirp', {
-      'event': event,
-      if (data != null) ...data,
-    });
+    log('sonar_chirp', {'event': event, if (data != null) ...data});
   }
 
   void logAsrAdaptation(String event, {Map<String, dynamic>? data}) {
-    log('asr_adapt', {
-      'event': event,
-      if (data != null) ...data,
-    });
+    log('asr_adapt', {'event': event, if (data != null) ...data});
   }
 
   void logVlmCompanion(String event, {Map<String, dynamic>? data}) {
-    log('vlm_companion', {
-      'event': event,
-      if (data != null) ...data,
-    });
+    log('vlm_companion', {'event': event, if (data != null) ...data});
   }
 
   void logContextMode(String mode, {String? from}) {
-    log('context_mode', {
-      'mode': mode,
-      if (from != null) 'from': from,
-    });
+    log('context_mode', {'mode': mode, if (from != null) 'from': from});
   }
 
   Future<void> stopSession() async {
@@ -398,7 +368,9 @@ class FieldLogger {
     await _sink?.flush();
     await _sink?.close();
     _sink = null;
-    debugPrint('FieldLogger: session saved to $_sessionPath '
-        '($_eventCount events, ${_sessionSw.elapsedMilliseconds ~/ 1000}s)');
+    debugPrint(
+      'FieldLogger: session saved to $_sessionPath '
+      '($_eventCount events, ${_sessionSw.elapsedMilliseconds ~/ 1000}s)',
+    );
   }
 }

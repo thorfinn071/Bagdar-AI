@@ -83,8 +83,8 @@ class _FocusRingDecoratorState extends State<FocusRingDecorator> {
 
   @override
   Widget build(BuildContext context) {
-    final ringColor = widget.overrideColor ??
-        BagdarTheme.colorsOf(context).focusRing;
+    final ringColor =
+        widget.overrideColor ?? BagdarTheme.colorsOf(context).focusRing;
     final hasFocus = _node.hasFocus;
     return Focus(
       focusNode: _node,

@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "corpusId": "bagdar-model-replay-yolo11n-onnx-320-experiment-v1",
+  "seed": 20260921,
+  "generatorId": "bagdar-real-model-output-adapter-v1",
+  "timelineOriginUtc": "2026-09-21T00:00:00.000Z",
+  "source": {
+    "type": "derived-real-model-output",
+    "license": "blocked_pending_asset_provenance_review",
+    "consentClass": "not_applicable"
+  },
+  "handling": "derived-only",
+  "camera": {
+    "mount": "installed-package-fixture",
+    "parameters": "source-image-coordinate-space",
+    "coordinateMode": "relative"
+  },
+  "modelContract": {
+    "modelId": "yolo11n-onnx-320-experiment",
+    "modelHash": "b9152829ad8ff26a0b2bd2b4a1482910c91c549d1cdcc4587fecf4444741dbe4",
+    "preprocessId": "ultralytics-letterbox-rgb01-320-v1"
+  },
+  "scenes": [
+    {
+      "id": "yolo11n-onnx-320-experiment-bus",
+      "kind": "real-model-output",
+      "frames": "scenes/yolo11n-onnx-320-experiment-bus/frames.jsonl",
+      "annotations": "scenes/yolo11n-onnx-320-experiment-bus/annotations.json",
+      "sha256": {
+        "frames": "77631507ec75a4a97a2ecf454c58ef44f55dc1db40be6a1aae72a9be4b19e8f8",
+        "annotations": "60de73ec64c10869b37866a860307cf2a1a06f4383119dc67d1660e77ee8fc4b"
+      },
+      "tags": [
+        "real-output",
+        "bus",
+        "derived-no-rgb"
+      ],
+      "annotationRevision": 1,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "yolo11n-onnx-320-experiment-zidane",
+      "kind": "real-model-output",
+      "frames": "scenes/yolo11n-onnx-320-experiment-zidane/frames.jsonl",
+      "annotations": "scenes/yolo11n-onnx-320-experiment-zidane/annotations.json",
+      "sha256": {
+        "frames": "90893ce22a495dfc0941c37bb5b40144ec191379aa708619dc98c5918830d9d3",
+        "annotations": "4deb6fbc512b9d1dd4eb91ae4bd9a25c30ae1ec1ecfe502b958d6e3a77fe8c27"
+      },
+      "tags": [
+        "real-output",
+        "zidane",
+        "derived-no-rgb"
+      ],
+      "annotationRevision": 1,
+      "requiredForRc": true,
+      "coverage": "complete"
+    }
+  ],
+  "externalCorpora": [],
+  "predictionsSha256": "87e1048f7856c5f6250e614dcfe3b22c85c35aa395ccd075921b0f2e40d99598"
+}

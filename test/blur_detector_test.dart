@@ -23,8 +23,6 @@ void main() {
 
     test('sharp random noise scores strictly higher than its 3x3 box-'
         'blurred version', () {
-      
-      
       const w = 128;
       const h = 96;
       final rng = math.Random(11);
@@ -45,9 +43,19 @@ void main() {
         }
       }
       final sharpScore = BlurDetector.sharpnessScore(
-        sharp, width: w, height: h, rowStride: w, stride: 2);
+        sharp,
+        width: w,
+        height: h,
+        rowStride: w,
+        stride: 2,
+      );
       final blurredScore = BlurDetector.sharpnessScore(
-        blurred, width: w, height: h, rowStride: w, stride: 2);
+        blurred,
+        width: w,
+        height: h,
+        rowStride: w,
+        stride: 2,
+      );
       expect(sharpScore, greaterThan(blurredScore * 2));
       expect(BlurDetector.isBlurry(sharpScore), isFalse);
     });
@@ -61,7 +69,12 @@ void main() {
         buf[i] = rng.nextInt(256);
       }
       final score = BlurDetector.sharpnessScore(
-        buf, width: w, height: h, rowStride: w, stride: 4);
+        buf,
+        width: w,
+        height: h,
+        rowStride: w,
+        stride: 4,
+      );
       expect(score, greaterThan(BlurDetector.kBlurThreshold));
       expect(BlurDetector.isBlurry(score), isFalse);
     });
@@ -69,21 +82,33 @@ void main() {
     test('tiny frame returns 0 without crashing', () {
       final buf = Uint8List(3 * 3)..fillRange(0, 9, 128);
       final score = BlurDetector.sharpnessScore(
-        buf, width: 3, height: 3, rowStride: 3);
+        buf,
+        width: 3,
+        height: 3,
+        rowStride: 3,
+      );
       expect(score, 0.0);
     });
 
     test('buffer shorter than rowStride*height returns 0 defensively', () {
       final buf = Uint8List(10);
       final score = BlurDetector.sharpnessScore(
-        buf, width: 64, height: 48, rowStride: 64);
+        buf,
+        width: 64,
+        height: 48,
+        rowStride: 64,
+      );
       expect(score, 0.0);
     });
 
     test('rowStride smaller than width is rejected', () {
       final buf = Uint8List(64 * 48)..fillRange(0, 64 * 48, 128);
       final score = BlurDetector.sharpnessScore(
-        buf, width: 64, height: 48, rowStride: 32);
+        buf,
+        width: 64,
+        height: 48,
+        rowStride: 32,
+      );
       expect(score, 0.0);
     });
 
@@ -97,7 +122,12 @@ void main() {
         }
       }
       final score = BlurDetector.sharpnessScore(
-        buf, width: w, height: h, rowStride: w, stride: 0);
+        buf,
+        width: w,
+        height: h,
+        rowStride: w,
+        stride: 0,
+      );
       expect(score, greaterThan(0));
     });
   });

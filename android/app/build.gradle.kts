@@ -9,6 +9,21 @@ android {
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
+    buildFeatures {
+        buildConfig = true
+    }
+
+    flavorDimensions += "bagdar"
+    productFlavors {
+        create("core") {
+            dimension = "bagdar"
+            isDefault = true
+        }
+        create("research") {
+            dimension = "bagdar"
+        }
+    }
+
     externalNativeBuild {
         cmake {
             path = file("src/main/cpp/CMakeLists.txt")

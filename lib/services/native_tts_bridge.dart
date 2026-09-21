@@ -32,8 +32,8 @@ import 'language_pack_manager.dart';
 /// attributes) is honored exactly the way `flutter_tts` honors it.
 class NativeTtsBridge {
   NativeTtsBridge._({MethodChannel? methodChannel, EventChannel? eventChannel})
-      : _method = methodChannel ?? const MethodChannel(_methodChannelName),
-        _events = eventChannel ?? const EventChannel(_eventChannelName);
+    : _method = methodChannel ?? const MethodChannel(_methodChannelName),
+      _events = eventChannel ?? const EventChannel(_eventChannelName);
 
   static const String _methodChannelName = 'bagdar/native_tts';
   static const String _eventChannelName = 'bagdar/native_tts_events';
@@ -65,11 +65,10 @@ class NativeTtsBridge {
   factory NativeTtsBridge.forTesting({
     required MethodChannel methodChannel,
     EventChannel? eventChannel,
-  }) =>
-      NativeTtsBridge._(
-        methodChannel: methodChannel,
-        eventChannel: eventChannel,
-      );
+  }) => NativeTtsBridge._(
+    methodChannel: methodChannel,
+    eventChannel: eventChannel,
+  );
 
   final MethodChannel _method;
   final EventChannel _events;
@@ -128,7 +127,6 @@ class NativeTtsBridge {
     } catch (e, st) {
       debugPrint('NativeTtsBridge.init failed: $e\n$st');
       _capabilities = const {};
-      
     } finally {
       _initStarted = false;
     }
@@ -160,7 +158,6 @@ class NativeTtsBridge {
   /// `rhvoice` / `espeak`. Idempotent.
   Future<bool> setEngine(KkTtsEngine engine) async {
     if (!engine.usesNativeBridge) {
-      
       _activeEngine = null;
       return false;
     }
@@ -287,7 +284,6 @@ class NativeTtsBridge {
     onSpeechError = null;
   }
 
-  
   Future<void> _attachEvents() async {
     if (_eventsAttached) return;
     try {
@@ -299,8 +295,6 @@ class NativeTtsBridge {
       );
       _eventsAttached = true;
     } catch (e) {
-      
-      
       debugPrint('NativeTtsBridge: events unavailable: $e');
     }
   }
@@ -320,7 +314,6 @@ class NativeTtsBridge {
         onSpeechError?.call(reason);
         break;
       default:
-        
         break;
     }
   }
@@ -328,10 +321,9 @@ class NativeTtsBridge {
   Future<void> _probeCapabilities({String? rhvoicePackPath}) async {
     try {
       final rhvocPath = rhvoicePackPath ?? await _rhvoicePackPath();
-      final raw = await _method.invokeMethod<dynamic>(
-        'availableEngines',
-        {if (rhvocPath.isNotEmpty) 'rhvoicePackPath': rhvocPath},
-      );
+      final raw = await _method.invokeMethod<dynamic>('availableEngines', {
+        if (rhvocPath.isNotEmpty) 'rhvoicePackPath': rhvocPath,
+      });
       if (raw is List) {
         final out = <KkTtsEngine, KkTtsEngineCapability>{};
         for (final entry in raw) {
@@ -345,8 +337,6 @@ class NativeTtsBridge {
       }
       _capabilities = const {};
     } on MissingPluginException {
-      
-      
       _capabilities = const {};
     } on PlatformException catch (e) {
       debugPrint('NativeTtsBridge.availableEngines failed: $e');
@@ -368,7 +358,6 @@ class NativeTtsBridge {
     }
   }
 
-  
   /// Inject a capability map directly. Used by tests that want to drive
   /// `TtsService._resolveKkEngine()` through specific scenarios without a
   /// real native bridge.

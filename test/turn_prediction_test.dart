@@ -38,42 +38,42 @@ RawDet _approachF1(String label, double distM) =>
 RawDet _approachF2Turning(String label, double distM) =>
     _box(cx: 210, cy: 280, w: 400, h: 80, label: label, distM: distM);
 RawDet _approachF2Straight(String label, double distM) =>
-
     _box(cx: 260, cy: 260, w: 400, h: 80, label: label, distM: distM);
 
 void main() {
-
   group('OPT-17 Turn classification', () {
-    test('straight-line motion leaves turning=false and angular velocity ≈ 0',
-        () {
-      final tr = Tracker();
-      final base = DateTime(2025, 1, 1, 12);
-      tr.update(
-        [_box(cx: 220, cy: 220, w: 40, h: 40, label: 'car')],
-        640,
-        480,
-        base,
-      );
-      tr.update(
-        [_box(cx: 240, cy: 240, w: 60, h: 60, label: 'car')],
-        640,
-        480,
-        base.add(const Duration(milliseconds: 200)),
-      );
-      final out = tr.update(
-        [_box(cx: 260, cy: 260, w: 80, h: 80, label: 'car')],
-        640,
-        480,
-        base.add(const Duration(milliseconds: 700)),
-      );
+    test(
+      'straight-line motion leaves turning=false and angular velocity ≈ 0',
+      () {
+        final tr = Tracker();
+        final base = DateTime(2025, 1, 1, 12);
+        tr.update(
+          [_box(cx: 220, cy: 220, w: 40, h: 40, label: 'car')],
+          640,
+          480,
+          base,
+        );
+        tr.update(
+          [_box(cx: 240, cy: 240, w: 60, h: 60, label: 'car')],
+          640,
+          480,
+          base.add(const Duration(milliseconds: 200)),
+        );
+        final out = tr.update(
+          [_box(cx: 260, cy: 260, w: 80, h: 80, label: 'car')],
+          640,
+          480,
+          base.add(const Duration(milliseconds: 700)),
+        );
 
-      expect(out, hasLength(1));
-      expect(out.single.turning, isFalse);
-      expect(
-        out.single.lastAngularVelocity.abs(),
-        lessThan(kVehTurnAngVelThreshold),
-      );
-    });
+        expect(out, hasLength(1));
+        expect(out.single.turning, isFalse);
+        expect(
+          out.single.lastAngularVelocity.abs(),
+          lessThan(kVehTurnAngVelThreshold),
+        );
+      },
+    );
 
     test('sharp counter-clockwise turn sets turning=true with positive '
         'angular velocity (image coords, y-down)', () {
@@ -187,7 +187,8 @@ void main() {
       expect(
         out.single.approaching,
         isTrue,
-        reason: 'turning vehicle at 4.5 m — OPT-17 must drop the gate to '
+        reason:
+            'turning vehicle at 4.5 m — OPT-17 must drop the gate to '
             'pedestrian thresholds',
       );
     });
@@ -215,7 +216,8 @@ void main() {
       expect(
         out.single.approaching,
         isFalse,
-        reason: 'baseline: straight trajectory at 4.5 m keeps the vehicle '
+        reason:
+            'baseline: straight trajectory at 4.5 m keeps the vehicle '
             'gate at the default 0.22',
       );
     });
@@ -278,7 +280,8 @@ void main() {
       expect(
         out.single.approaching,
         isFalse,
-        reason: 'skateboard is neither vehicle nor pedestrian — neither '
+        reason:
+            'skateboard is neither vehicle nor pedestrian — neither '
             'branch of the approach gate runs',
       );
     });

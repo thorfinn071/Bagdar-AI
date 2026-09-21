@@ -4,11 +4,12 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_vision/flutter_vision.dart';
 
+import '../core/build_profile.dart';
+import '../models/model_bakeoff_contract.dart';
 import 'settings_service.dart';
 import 'depth_provider.dart';
 import 'device_capability.dart';
 import 'thermal_monitor.dart';
-
 
 enum YoloInputTier { small, standard }
 
@@ -42,6 +43,18 @@ class ModelService {
 
   bool get yoloLoaded => _yoloLoaded;
   bool get midasLoaded => _midasLoaded;
+  ProductionModelSelection get productionSelection =>
+      BagdarModelCatalog.productionSelection;
+  List<ModelArtifactContract> get detectorExperiments =>
+      BagdarModelCatalog.detectorExperiments;
+
+  /// ARCore currently owns a second camera session and cannot be aligned to
+  /// the Flutter image stream. Core therefore always keeps it disabled.
+  /// Research builds require both a compile-time profile and explicit opt-in.
+  static bool independentHardwareCameraAllowed({
+    required BuildProfile profile,
+    required bool userRequested,
+  }) => profile.isResearch && userRequested;
 
   Future<void> init() async {}
 
@@ -139,14 +152,14 @@ class ModelService {
   /// model (~30-40% inference time reduction) so the burst-frame mechanism
   /// in `PerformanceThrottler` stays effective even under sustained heat.
   ///
-  /// Safety: at 320×320 a 0.5 m obstacle still occupies ~30% of the frame —
-  /// recall on safety-critical classes (person/car/bicycle) is preserved
-  /// per design.
+  /// This thermal path remains on the pinned YOLOv8 family. Stage 6 does not
+  /// infer candidate recall from resolution; promotion requires recorded-scene
+  /// and named-device evidence.
   ///
   /// Asset requirement: `assets/yolov8n_320_int8.tflite` must be bundled
   /// (export via `yolo export model=yolov8n.pt format=tflite imgsz=320
   /// int8=True`). When the asset is absent, this method is a no-op and the
-  /// pipeline continues with the standard 640×640 model — degraded perf
+  /// pipeline continues with the standard 416×416 model — degraded perf
   /// but no functional regression.
   ///
   /// Hysteresis: `severity` here is already committed via `PerformanceThrottler`'s
@@ -213,6 +226,10 @@ class ModelService {
     final provider = await DepthProviderFactory.createAndInit(
       caps,
       threads: threads,
+      allowIndependentHardwareCamera: independentHardwareCameraAllowed(
+        profile: BuildProfile.current,
+        userRequested: Settings.instance.useHardwareDepthMode,
+      ),
     );
     _depthProvider = provider;
     _midasLoaded = provider.isReady;
@@ -233,5 +250,13 @@ class ModelService {
   @visibleForTesting
   void debugInjectAvailableAssets(Set<String> assets) {
     _availableAssets = assets;
+  }
+
+  /// Safety audit 2026-06 test hook: inject (or clear with null) the depth
+  /// provider so unit tests can exercise DepthPipelineController without a
+  /// real NCNN/hardware stack. Does not dispose any existing provider.
+  @visibleForTesting
+  void debugInjectDepthProvider(DepthProvider? provider) {
+    _depthProvider = provider;
   }
 }

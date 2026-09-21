@@ -42,6 +42,19 @@ class _StubFallback implements DepthProvider {
     bool weatherDegraded = false,
     bool winterMode = false,
   }) async => const [];
+
+  @override
+  Future<DepthAnalysisResult> analyzeDetailed(
+    CameraImage image, {
+    double cropTopFrac = 0.40,
+    bool userStationary = false,
+    bool weatherDegraded = false,
+    bool winterMode = false,
+    int sourceTimestampUs = 0,
+    int rotationDegrees = 0,
+    bool mirrored = false,
+  }) async => wrapHazardsAsLegacy(const <DepthHazard>[]);
+
   @override
   void setNativeBridgeEnabled(bool enabled) {}
   @override
@@ -60,40 +73,29 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('HardwareDepthProvider B-3 — aggressive fallback close', () {
-    test(
-      'high-confidence streak >= 30s disposes the NCNN fallback',
-      () {
-        final stub = _StubFallback();
-        final hp = HardwareDepthProvider(
-          bridge: _StubBridge(),
-          fallbackProvider: stub,
-        );
+    test('high-confidence streak >= 30s disposes the NCNN fallback', () {
+      final stub = _StubFallback();
+      final hp = HardwareDepthProvider(
+        bridge: _StubBridge(),
+        fallbackProvider: stub,
+      );
 
-        final t0 = DateTime(2025, 1, 1, 12, 0, 0);
-        
-        hp.debugUpdateConfidence(0.85, now: t0);
-        expect(hp.debugFallbackDisposedForBattery, isFalse);
-        expect(hp.debugHighConfStreakStartedAt, isNotNull);
-        expect(stub.disposed, isFalse);
+      final t0 = DateTime(2025, 1, 1, 12, 0, 0);
 
-        
-        hp.debugUpdateConfidence(
-          0.85,
-          now: t0.add(const Duration(seconds: 25)),
-        );
-        expect(hp.debugFallbackDisposedForBattery, isFalse);
-        expect(stub.disposed, isFalse);
+      hp.debugUpdateConfidence(0.85, now: t0);
+      expect(hp.debugFallbackDisposedForBattery, isFalse);
+      expect(hp.debugHighConfStreakStartedAt, isNotNull);
+      expect(stub.disposed, isFalse);
 
-        
-        hp.debugUpdateConfidence(
-          0.85,
-          now: t0.add(const Duration(seconds: 31)),
-        );
-        expect(hp.debugFallbackDisposedForBattery, isTrue);
-        expect(stub.disposed, isTrue);
-        expect(hp.debugFallback, isNull);
-      },
-    );
+      hp.debugUpdateConfidence(0.85, now: t0.add(const Duration(seconds: 25)));
+      expect(hp.debugFallbackDisposedForBattery, isFalse);
+      expect(stub.disposed, isFalse);
+
+      hp.debugUpdateConfidence(0.85, now: t0.add(const Duration(seconds: 31)));
+      expect(hp.debugFallbackDisposedForBattery, isTrue);
+      expect(stub.disposed, isTrue);
+      expect(hp.debugFallback, isNull);
+    });
 
     test('confidence drop resets the streak', () {
       final stub = _StubFallback();
@@ -106,11 +108,9 @@ void main() {
       hp.debugUpdateConfidence(0.85, now: t0);
       expect(hp.debugHighConfStreakStartedAt, isNotNull);
 
-      
       hp.debugUpdateConfidence(0.5, now: t0.add(const Duration(seconds: 5)));
       expect(hp.debugHighConfStreakStartedAt, isNull);
 
-      
       hp.debugUpdateConfidence(0.85, now: t0.add(const Duration(seconds: 6)));
       expect(hp.debugHighConfStreakStartedAt, isNotNull);
       expect(hp.debugFallbackDisposedForBattery, isFalse);
@@ -126,7 +126,7 @@ void main() {
         );
 
         final t0 = DateTime(2025, 1, 1, 12, 0, 0);
-        
+
         hp.debugUpdateConfidence(0.85, now: t0);
         hp.debugUpdateConfidence(
           0.85,
@@ -135,16 +135,13 @@ void main() {
         expect(hp.debugFallbackDisposedForBattery, isTrue);
         expect(hp.debugFallback, isNull);
 
-        
         hp.debugUpdateConfidence(
           0.10,
           now: t0.add(const Duration(seconds: 32)),
         );
 
-        
         await Future<void>.delayed(const Duration(milliseconds: 500));
-        
-        
+
         expect(
           hp.debugFallbackDisposedForBattery,
           isTrue,
@@ -161,13 +158,10 @@ void main() {
       );
 
       final t0 = DateTime(2025, 1, 1, 12, 0, 0);
-      
+
       hp.debugUpdateConfidence(0.65, now: t0);
       expect(hp.debugHighConfStreakStartedAt, isNull);
-      hp.debugUpdateConfidence(
-        0.65,
-        now: t0.add(const Duration(seconds: 60)),
-      );
+      hp.debugUpdateConfidence(0.65, now: t0.add(const Duration(seconds: 60)));
       expect(hp.debugFallbackDisposedForBattery, isFalse);
       expect(stub.disposed, isFalse);
     });

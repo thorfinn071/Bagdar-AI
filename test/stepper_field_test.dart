@@ -11,9 +11,7 @@ Widget _wrap(Widget child) {
     home: BagdarTheme(
       name: BagdarThemeName.dark,
       colors: BagdarColors.dark,
-      child: Scaffold(
-        body: SingleChildScrollView(child: child),
-      ),
+      child: Scaffold(body: SingleChildScrollView(child: child)),
     ),
   );
 }
@@ -127,7 +125,6 @@ void main() {
         ),
       );
 
-      
       await tester.tap(find.byIcon(Icons.add), warnIfMissed: false);
       await tester.pump();
 
@@ -158,8 +155,9 @@ void main() {
   });
 
   group('StepperField semantics', () {
-    testWidgets('renders human-readable label and formatted value',
-        (tester) async {
+    testWidgets('renders human-readable label and formatted value', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         _wrap(
           StepperField(
@@ -174,13 +172,13 @@ void main() {
         ),
       );
 
-      
       expect(find.text('Speech rate'), findsOneWidget);
       expect(find.text('1.2x'), findsOneWidget);
     });
 
-    testWidgets('+/- buttons expose accessibility-friendly button semantics',
-        (tester) async {
+    testWidgets('+/- buttons expose accessibility-friendly button semantics', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         _wrap(
           StepperField(

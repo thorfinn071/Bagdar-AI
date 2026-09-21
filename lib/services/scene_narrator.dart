@@ -63,7 +63,8 @@ class SceneNarrator {
 
     if (objects.isEmpty &&
         hazards.isEmpty &&
-        (snapshot.trafficLight == null || snapshot.trafficLight == TrafficLightColor.unknown) &&
+        (snapshot.trafficLight == null ||
+            snapshot.trafficLight == TrafficLightColor.unknown) &&
         (snapshot.ocrText == null || snapshot.ocrText!.isEmpty)) {
       return S.get('scene_see_none');
     }
@@ -81,12 +82,16 @@ class SceneNarrator {
         buffer.writeln(S.get('scene_see_one'));
       } else if (objects.length > 1) {
         buffer.writeln(
-            S.get('scene_see_count').replaceAll('{count}', objects.length.toString()));
+          S
+              .get('scene_see_count')
+              .replaceAll('{count}', objects.length.toString()),
+        );
       }
     }
 
     for (final obj in objects) {
-      final entry = S.get('scene_object_entry')
+      final entry = S
+          .get('scene_object_entry')
           .replaceAll('{label}', S.label(obj.label))
           .replaceAll('{direction}', obj.direction);
       buffer.write(entry);
@@ -97,7 +102,9 @@ class SceneNarrator {
           if (distStr.endsWith('.0')) {
             distStr = distStr.substring(0, distStr.length - 2);
           }
-          buffer.write(S.get('scene_object_dist').replaceAll('{dist}', distStr));
+          buffer.write(
+            S.get('scene_object_dist').replaceAll('{dist}', distStr),
+          );
         } else if (verbosity == Verbosity.detailed) {
           buffer.write(', ${S.get(obj.distance)}');
         }
@@ -126,19 +133,23 @@ class SceneNarrator {
         snapshot.trafficLight != TrafficLightColor.unknown) {
       final colorStr = _trafficLightColorStr(snapshot.trafficLight!);
       buffer.writeln(
-          S.get('scene_traffic_light').replaceAll('{color}', colorStr));
+        S.get('scene_traffic_light').replaceAll('{color}', colorStr),
+      );
     }
 
     if (snapshot.ocrText != null && snapshot.ocrText!.isNotEmpty) {
       buffer.writeln(
-          S.get('scene_ocr_read').replaceAll('{text}', snapshot.ocrText!));
+        S.get('scene_ocr_read').replaceAll('{text}', snapshot.ocrText!),
+      );
     }
 
     return buffer.toString().trim();
   }
 
   List<SceneObject> _filterObjects(
-      List<SceneObject> objects, SceneFilter filter) {
+    List<SceneObject> objects,
+    SceneFilter filter,
+  ) {
     if (filter == SceneFilter.all) return List.of(objects);
     return objects.where((o) {
       if (filter == SceneFilter.left) {
@@ -156,7 +167,9 @@ class SceneNarrator {
   }
 
   List<DepthHazard> _filterHazards(
-      List<DepthHazard> hazards, SceneFilter filter) {
+    List<DepthHazard> hazards,
+    SceneFilter filter,
+  ) {
     if (filter == SceneFilter.all) return List.of(hazards);
     return hazards.where((h) {
       if (filter == SceneFilter.left) {

@@ -5,11 +5,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:bagdar/utils/depth_hazard.dart';
 import 'package:bagdar/utils/ground_plane_analyzer.dart';
 
-
 void main() {
   const size = GroundPlaneAnalyzer.kMapSize;
 
-  
   Float32List makeStaircase({
     double baseZ = 0.4,
     double treadStep = 0.08,
@@ -28,19 +26,16 @@ void main() {
   }
 
   group('GroundPlaneAnalyzer.debugDetectStairsDown', () {
-    test(
-      'walking user on a staircase always sees the stairsDown critical',
-      () {
-        final analyzer = GroundPlaneAnalyzer();
-        final frame = makeStaircase();
-        final hazard = analyzer.debugDetectStairsDown(
-          frame,
-          userStationary: false,
-        );
-        expect(hazard, isNotNull);
-        expect(hazard!.type, DepthHazardType.stairsDown);
-      },
-    );
+    test('walking user on a staircase always sees the stairsDown critical', () {
+      final analyzer = GroundPlaneAnalyzer();
+      final frame = makeStaircase();
+      final hazard = analyzer.debugDetectStairsDown(
+        frame,
+        userStationary: false,
+      );
+      expect(hazard, isNotNull);
+      expect(hazard!.type, DepthHazardType.stairsDown);
+    });
 
     test(
       'stationary user seeing a stable pattern keeps the stairsDown critical',
@@ -48,7 +43,6 @@ void main() {
         final analyzer = GroundPlaneAnalyzer();
         final frame = makeStaircase();
 
-        
         final first = analyzer.debugDetectStairsDown(
           frame,
           userStationary: true,
@@ -56,7 +50,6 @@ void main() {
         expect(first, isNotNull);
         expect(first!.type, DepthHazardType.stairsDown);
 
-        
         final second = analyzer.debugDetectStairsDown(
           frame,
           userStationary: true,
@@ -66,172 +59,134 @@ void main() {
       },
     );
 
-    test(
-      'stationary user on a drifting pattern suppresses critical, then '
-      'emits escalatorRiding after the confirmation streak',
-      () {
-        final analyzer = GroundPlaneAnalyzer();
+    test('stationary user on a drifting pattern suppresses critical, then '
+        'emits escalatorRiding after the confirmation streak', () {
+      final analyzer = GroundPlaneAnalyzer();
 
-        
-        final baseFrame = makeStaircase();
-        final prime = analyzer.debugDetectStairsDown(
-          baseFrame,
-          userStationary: true,
-        );
-        expect(prime, isNotNull);
-        expect(prime!.type, DepthHazardType.stairsDown);
+      final baseFrame = makeStaircase();
+      final prime = analyzer.debugDetectStairsDown(
+        baseFrame,
+        userStationary: true,
+      );
+      expect(prime, isNotNull);
+      expect(prime!.type, DepthHazardType.stairsDown);
 
-        
-        final shifted1 = makeStaircase(rowShift: 6);
-        final draft = analyzer.debugDetectStairsDown(
-          shifted1,
-          userStationary: true,
-        );
-        expect(draft, isNull);
+      final shifted1 = makeStaircase(rowShift: 6);
+      final draft = analyzer.debugDetectStairsDown(
+        shifted1,
+        userStationary: true,
+      );
+      expect(draft, isNull);
 
-        
-        final shifted2 = makeStaircase(rowShift: 12);
-        final escalator = analyzer.debugDetectStairsDown(
-          shifted2,
-          userStationary: true,
-        );
-        expect(escalator, isNotNull);
-        expect(escalator!.type, DepthHazardType.escalatorRiding);
-        expect(escalator.zone, HazardZone.center);
-        
-        
-        expect(escalator.midasScore, lessThan(prime.midasScore));
-      },
-    );
+      final shifted2 = makeStaircase(rowShift: 12);
+      final escalator = analyzer.debugDetectStairsDown(
+        shifted2,
+        userStationary: true,
+      );
+      expect(escalator, isNotNull);
+      expect(escalator!.type, DepthHazardType.escalatorRiding);
+      expect(escalator.zone, HazardZone.center);
 
-    test(
-      'walking user on a drifting pattern still gets the stairsDown '
-      'critical — conservative parallax branch',
-      () {
-        final analyzer = GroundPlaneAnalyzer();
+      expect(escalator.midasScore, lessThan(prime.midasScore));
+    });
 
-        
-        analyzer.debugDetectStairsDown(makeStaircase(), userStationary: false);
+    test('walking user on a drifting pattern still gets the stairsDown '
+        'critical — conservative parallax branch', () {
+      final analyzer = GroundPlaneAnalyzer();
 
-        final drifted = makeStaircase(rowShift: 10);
-        final hazard = analyzer.debugDetectStairsDown(
-          drifted,
-          userStationary: false,
-        );
-        expect(hazard, isNotNull);
-        expect(hazard!.type, DepthHazardType.stairsDown);
-      },
-    );
+      analyzer.debugDetectStairsDown(makeStaircase(), userStationary: false);
 
-    test(
-      'resetTemporalFilter clears the phase-shift buffer so the next '
-      'drifting frame re-enters the cold-start critical path',
-      () {
-        final analyzer = GroundPlaneAnalyzer();
+      final drifted = makeStaircase(rowShift: 10);
+      final hazard = analyzer.debugDetectStairsDown(
+        drifted,
+        userStationary: false,
+      );
+      expect(hazard, isNotNull);
+      expect(hazard!.type, DepthHazardType.stairsDown);
+    });
 
-        analyzer.debugDetectStairsDown(
-          makeStaircase(),
-          userStationary: true,
-        );
-        analyzer.debugDetectStairsDown(
-          makeStaircase(rowShift: 6),
-          userStationary: true,
-        );
+    test('resetTemporalFilter clears the phase-shift buffer so the next '
+        'drifting frame re-enters the cold-start critical path', () {
+      final analyzer = GroundPlaneAnalyzer();
 
-        analyzer.resetTemporalFilter();
+      analyzer.debugDetectStairsDown(makeStaircase(), userStationary: true);
+      analyzer.debugDetectStairsDown(
+        makeStaircase(rowShift: 6),
+        userStationary: true,
+      );
 
-        
-        final afterReset = analyzer.debugDetectStairsDown(
-          makeStaircase(rowShift: 6),
-          userStationary: true,
-        );
-        expect(afterReset, isNotNull);
-        expect(afterReset!.type, DepthHazardType.stairsDown);
-      },
-    );
+      analyzer.resetTemporalFilter();
 
-    test(
-      'flat depth map produces no hazard regardless of motion state',
-      () {
-        final analyzer = GroundPlaneAnalyzer();
-        final flat = Float32List(size * size)..fillRange(0, size * size, 0.5);
+      final afterReset = analyzer.debugDetectStairsDown(
+        makeStaircase(rowShift: 6),
+        userStationary: true,
+      );
+      expect(afterReset, isNotNull);
+      expect(afterReset!.type, DepthHazardType.stairsDown);
+    });
 
-        expect(
-          analyzer.debugDetectStairsDown(flat, userStationary: false),
-          isNull,
-        );
-        expect(
-          analyzer.debugDetectStairsDown(flat, userStationary: true),
-          isNull,
-        );
-      },
-    );
+    test('flat depth map produces no hazard regardless of motion state', () {
+      final analyzer = GroundPlaneAnalyzer();
+      final flat = Float32List(size * size)..fillRange(0, size * size, 0.5);
 
-    test(
-      'escalator streak resets when the periodic pattern disappears so a '
-      'later drift must re-confirm before emitting the info hazard',
-      () {
-        final analyzer = GroundPlaneAnalyzer();
+      expect(
+        analyzer.debugDetectStairsDown(flat, userStationary: false),
+        isNull,
+      );
+      expect(
+        analyzer.debugDetectStairsDown(flat, userStationary: true),
+        isNull,
+      );
+    });
 
-        
-        analyzer.debugDetectStairsDown(
-          makeStaircase(),
-          userStationary: true,
-        );
-        analyzer.debugDetectStairsDown(
-          makeStaircase(rowShift: 6),
-          userStationary: true,
-        );
+    test('escalator streak resets when the periodic pattern disappears so a '
+        'later drift must re-confirm before emitting the info hazard', () {
+      final analyzer = GroundPlaneAnalyzer();
 
-        
-        final flat = Float32List(size * size)..fillRange(0, size * size, 0.5);
-        expect(
-          analyzer.debugDetectStairsDown(flat, userStationary: true),
-          isNull,
-        );
+      analyzer.debugDetectStairsDown(makeStaircase(), userStationary: true);
+      analyzer.debugDetectStairsDown(
+        makeStaircase(rowShift: 6),
+        userStationary: true,
+      );
 
-        
-        final revived = analyzer.debugDetectStairsDown(
-          makeStaircase(rowShift: 8),
-          userStationary: true,
-        );
-        expect(revived, isNotNull);
-        expect(revived!.type, DepthHazardType.stairsDown);
+      final flat = Float32List(size * size)..fillRange(0, size * size, 0.5);
+      expect(
+        analyzer.debugDetectStairsDown(flat, userStationary: true),
+        isNull,
+      );
 
-        
-        final followUp = analyzer.debugDetectStairsDown(
-          makeStaircase(rowShift: 14),
-          userStationary: true,
-        );
-        expect(followUp, isNull);
-      },
-    );
+      final revived = analyzer.debugDetectStairsDown(
+        makeStaircase(rowShift: 8),
+        userStationary: true,
+      );
+      expect(revived, isNotNull);
+      expect(revived!.type, DepthHazardType.stairsDown);
 
-    test(
-      'stationary → walking mid-sequence immediately falls back to the '
-      'conservative stairsDown critical even if a drift is ongoing',
-      () {
-        final analyzer = GroundPlaneAnalyzer();
+      final followUp = analyzer.debugDetectStairsDown(
+        makeStaircase(rowShift: 14),
+        userStationary: true,
+      );
+      expect(followUp, isNull);
+    });
 
-        analyzer.debugDetectStairsDown(
-          makeStaircase(),
-          userStationary: true,
-        );
-        final streakFrame = analyzer.debugDetectStairsDown(
-          makeStaircase(rowShift: 6),
-          userStationary: true,
-        );
-        expect(streakFrame, isNull);
+    test('stationary → walking mid-sequence immediately falls back to the '
+        'conservative stairsDown critical even if a drift is ongoing', () {
+      final analyzer = GroundPlaneAnalyzer();
 
-        
-        final walkingFrame = analyzer.debugDetectStairsDown(
-          makeStaircase(rowShift: 12),
-          userStationary: false,
-        );
-        expect(walkingFrame, isNotNull);
-        expect(walkingFrame!.type, DepthHazardType.stairsDown);
-      },
-    );
+      analyzer.debugDetectStairsDown(makeStaircase(), userStationary: true);
+      final streakFrame = analyzer.debugDetectStairsDown(
+        makeStaircase(rowShift: 6),
+        userStationary: true,
+      );
+      expect(streakFrame, isNull);
+
+      final walkingFrame = analyzer.debugDetectStairsDown(
+        makeStaircase(rowShift: 12),
+        userStationary: false,
+      );
+      expect(walkingFrame, isNotNull);
+      expect(walkingFrame!.type, DepthHazardType.stairsDown);
+    });
   });
 
   group('GroundPlaneAnalyzer.detectStairsDownFromMap backward compat', () {

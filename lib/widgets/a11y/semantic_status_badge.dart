@@ -50,11 +50,12 @@ class _SignalShapePainter extends CustomPainter {
       case BagdarSignalShape.circle:
         return Path()..addOval(Rect.fromLTWH(0, 0, w, h));
       case BagdarSignalShape.bar:
-        return Path()
-          ..addRRect(RRect.fromRectAndRadius(
+        return Path()..addRRect(
+          RRect.fromRectAndRadius(
             Rect.fromLTWH(0, h * 0.18, w, h * 0.64),
             const Radius.circular(BagdarRadius.sharp),
-          ));
+          ),
+        );
     }
   }
 
@@ -84,8 +85,9 @@ class SignalMark extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = BagdarTheme.colorsOf(context);
     final style = bagdarStatusStyle(level, colors);
-    final fill =
-        onCamera ? BagdarOverlay.statusFill(level, colors) : style.fill;
+    final fill = onCamera
+        ? BagdarOverlay.statusFill(level, colors)
+        : style.fill;
     final onFill = BagdarColors.readableOn(fill);
     // The triangle's visual mass sits low, so nudge + shrink its glyph.
     final isTriangle = style.shape == BagdarSignalShape.triangle;
@@ -184,7 +186,8 @@ class SemanticStatusBadge extends StatelessWidget {
       container: true,
       label: semanticLabel ?? label,
       child: Container(
-        padding: padding ??
+        padding:
+            padding ??
             const EdgeInsets.symmetric(
               horizontal: BagdarSpacing.s,
               vertical: BagdarSpacing.xs,

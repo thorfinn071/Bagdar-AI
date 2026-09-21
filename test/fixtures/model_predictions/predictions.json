@@ -1,0 +1,361 @@
+{
+  "schemaVersion": 1,
+  "corpusId": "ultralytics-installed-assets-derived-v1",
+  "scope": "real-onnx-output-correctness-and-downstream-shadow-replay",
+  "sourceHandling": "derived-boxes-only-no-rgb-committed",
+  "sourcePackage": {
+    "name": "ultralytics",
+    "version": "8.4.41",
+    "assetDirectory": "C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\venv\\Lib\\site-packages\\ultralytics\\assets",
+    "licenseStatus": "blocked_pending_asset_provenance_review"
+  },
+  "environment": {
+    "runtime": "ultralytics-onnxruntime-cpu",
+    "manifestSha256": "85192b3e676f410310847cd23e6ab6c4cf2ebb225194d342863251a9e96d7493"
+  },
+  "models": [
+    {
+      "modelId": "yolo11n-onnx-320-experiment",
+      "artifactSha256": "b9152829ad8ff26a0b2bd2b4a1482910c91c549d1cdcc4587fecf4444741dbe4",
+      "decoderId": "yolov8-v11-bcn-v1",
+      "preprocessId": "ultralytics-letterbox-rgb01-320-v1",
+      "inputSize": 320,
+      "licenseStatus": "blocked_pending_distribution_review",
+      "predictions": [
+        {
+          "sourceId": "bus",
+          "sourceSha256": "c02019c4979c191eb739ddd944445ef408dad5679acab6fd520ef9d434bfbc63",
+          "sourceLicenseStatus": "blocked_pending_asset_provenance_review",
+          "detections": [
+            {
+              "classId": 5,
+              "score": 0.8460785,
+              "boxNormalized": [
+                0.0334677,
+                0.2125948,
+                0.9904177,
+                0.6842434
+              ],
+              "sector": "forward"
+            },
+            {
+              "classId": 0,
+              "score": 0.8110937,
+              "boxNormalized": [
+                0.0638858,
+                0.3650371,
+                0.2971243,
+                0.8406737
+              ],
+              "sector": "left"
+            },
+            {
+              "classId": 0,
+              "score": 0.8027489,
+              "boxNormalized": [
+                0.2707767,
+                0.3701154,
+                0.4257274,
+                0.7904425
+              ],
+              "sector": "forward"
+            },
+            {
+              "classId": 0,
+              "score": 0.7308121,
+              "boxNormalized": [
+                0.8263958,
+                0.3639981,
+                0.9988664,
+                0.8084883
+              ],
+              "sector": "right"
+            },
+            {
+              "classId": 0,
+              "score": 0.3172023,
+              "boxNormalized": [
+                0.0,
+                0.5180255,
+                0.1149938,
+                0.8205625
+              ],
+              "sector": "left"
+            }
+          ]
+        },
+        {
+          "sourceId": "zidane",
+          "sourceSha256": "16d73869e3267a7d4ed00de8e860833bd1657c1b252e94c0c348277adc7b6edb",
+          "sourceLicenseStatus": "blocked_pending_asset_provenance_review",
+          "detections": [
+            {
+              "classId": 0,
+              "score": 0.8896676,
+              "boxNormalized": [
+                0.095154,
+                0.2796704,
+                0.860828,
+                0.9855035
+              ],
+              "sector": "forward"
+            },
+            {
+              "classId": 0,
+              "score": 0.8548338,
+              "boxNormalized": [
+                0.5831946,
+                0.0591411,
+                0.8949779,
+                0.9899594
+              ],
+              "sector": "right"
+            },
+            {
+              "classId": 0,
+              "score": 0.3197001,
+              "boxNormalized": [
+                0.8565323,
+                0.5224779,
+                0.9982685,
+                0.9905385
+              ],
+              "sector": "right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "modelId": "yolo11n-onnx-416-experiment",
+      "artifactSha256": "b9c6c86aa850523b970dff6aec9683dbafb363aa52051a449d4e1651c4a580ce",
+      "decoderId": "yolov8-v11-bcn-v1",
+      "preprocessId": "ultralytics-letterbox-rgb01-416-v1",
+      "inputSize": 416,
+      "licenseStatus": "blocked_pending_distribution_review",
+      "predictions": [
+        {
+          "sourceId": "bus",
+          "sourceSha256": "c02019c4979c191eb739ddd944445ef408dad5679acab6fd520ef9d434bfbc63",
+          "sourceLicenseStatus": "blocked_pending_asset_provenance_review",
+          "detections": [
+            {
+              "classId": 5,
+              "score": 0.902704,
+              "boxNormalized": [
+                0.0297713,
+                0.2145951,
+                0.9919299,
+                0.6930313
+              ],
+              "sector": "forward"
+            },
+            {
+              "classId": 0,
+              "score": 0.8579184,
+              "boxNormalized": [
+                0.0614399,
+                0.3679551,
+                0.2986093,
+                0.838563
+              ],
+              "sector": "left"
+            },
+            {
+              "classId": 0,
+              "score": 0.8221365,
+              "boxNormalized": [
+                0.2746927,
+                0.3751074,
+                0.4344021,
+                0.7953368
+              ],
+              "sector": "forward"
+            },
+            {
+              "classId": 0,
+              "score": 0.7410791,
+              "boxNormalized": [
+                0.8233265,
+                0.3679958,
+                1.0,
+                0.8051817
+              ],
+              "sector": "right"
+            },
+            {
+              "classId": 0,
+              "score": 0.3890299,
+              "boxNormalized": [
+                0.0021304,
+                0.5424588,
+                0.0912655,
+                0.8089531
+              ],
+              "sector": "left"
+            }
+          ]
+        },
+        {
+          "sourceId": "zidane",
+          "sourceSha256": "16d73869e3267a7d4ed00de8e860833bd1657c1b252e94c0c348277adc7b6edb",
+          "sourceLicenseStatus": "blocked_pending_asset_provenance_review",
+          "detections": [
+            {
+              "classId": 0,
+              "score": 0.8595782,
+              "boxNormalized": [
+                0.5819275,
+                0.0596308,
+                0.8922979,
+                0.98698
+              ],
+              "sector": "right"
+            },
+            {
+              "classId": 0,
+              "score": 0.8369995,
+              "boxNormalized": [
+                0.1023551,
+                0.2813864,
+                0.8889509,
+                0.9874041
+              ],
+              "sector": "forward"
+            },
+            {
+              "classId": 27,
+              "score": 0.3232779,
+              "boxNormalized": [
+                0.7711633,
+                0.4311334,
+                0.7984764,
+                0.5868352
+              ],
+              "sector": "right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "modelId": "yolo26n-onnx-416-experiment",
+      "artifactSha256": "b0db38ca8a0fe5c8ff00391b18206e07a423f218f5a8236e1f1dbe1b8a2e1332",
+      "decoderId": "yolo26-end2end-bnc-v1",
+      "preprocessId": "ultralytics-letterbox-rgb01-416-v1",
+      "inputSize": 416,
+      "licenseStatus": "blocked_pending_distribution_review",
+      "predictions": [
+        {
+          "sourceId": "bus",
+          "sourceSha256": "c02019c4979c191eb739ddd944445ef408dad5679acab6fd520ef9d434bfbc63",
+          "sourceLicenseStatus": "blocked_pending_asset_provenance_review",
+          "detections": [
+            {
+              "classId": 0,
+              "score": 0.9032267,
+              "boxNormalized": [
+                0.2741174,
+                0.3719116,
+                0.4304588,
+                0.7981771
+              ],
+              "sector": "forward"
+            },
+            {
+              "classId": 0,
+              "score": 0.8836192,
+              "boxNormalized": [
+                0.0602624,
+                0.3642887,
+                0.2898914,
+                0.8384094
+              ],
+              "sector": "left"
+            },
+            {
+              "classId": 5,
+              "score": 0.7965882,
+              "boxNormalized": [
+                0.0210257,
+                0.2125965,
+                0.995236,
+                0.6874623
+              ],
+              "sector": "forward"
+            },
+            {
+              "classId": 0,
+              "score": 0.6928589,
+              "boxNormalized": [
+                0.8243988,
+                0.3621054,
+                1.0,
+                0.8037531
+              ],
+              "sector": "right"
+            },
+            {
+              "classId": 0,
+              "score": 0.6763087,
+              "boxNormalized": [
+                0.822996,
+                0.3693675,
+                1.0,
+                0.8046597
+              ],
+              "sector": "right"
+            },
+            {
+              "classId": 0,
+              "score": 0.5050996,
+              "boxNormalized": [
+                0.0,
+                0.517676,
+                0.0785148,
+                0.8051251
+              ],
+              "sector": "left"
+            }
+          ]
+        },
+        {
+          "sourceId": "zidane",
+          "sourceSha256": "16d73869e3267a7d4ed00de8e860833bd1657c1b252e94c0c348277adc7b6edb",
+          "sourceLicenseStatus": "blocked_pending_asset_provenance_review",
+          "detections": [
+            {
+              "classId": 0,
+              "score": 0.9272089,
+              "boxNormalized": [
+                0.0947108,
+                0.2775562,
+                0.8290919,
+                0.9893413
+              ],
+              "sector": "forward"
+            },
+            {
+              "classId": 0,
+              "score": 0.9032469,
+              "boxNormalized": [
+                0.5784742,
+                0.0535827,
+                0.9003614,
+                0.9881979
+              ],
+              "sector": "right"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "promotionAllowed": false,
+  "blockingReasons": [
+    "source asset provenance/license review",
+    "no Blender RGB/depth ground truth corpus",
+    "no production YOLOv8 control predictions in the same runtime",
+    "no named-device latency/thermal evidence"
+  ]
+}

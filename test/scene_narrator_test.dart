@@ -28,7 +28,7 @@ void main() {
       );
 
       final result = narrator.narrate(snapshot, Verbosity.normal);
-      expect(result, 'Nothing detected. Path appears clear.');
+      expect(result, 'Nothing recognized.');
     });
 
     test('narrates single object', () {
@@ -80,7 +80,7 @@ void main() {
 
       final result = narrator.narrate(snapshot, Verbosity.normal);
       expect(result, contains('I see 2 objects.'));
-      
+
       final carIdx = result.indexOf('car');
       final dogIdx = result.indexOf('dog');
       expect(carIdx < dogIdx, isTrue);
@@ -108,9 +108,9 @@ void main() {
       );
 
       final result = narrator.narrate(snapshot, Verbosity.normal);
-      
+
       final count = '\n'.allMatches(result).length;
-      expect(count, lessThanOrEqualTo(7)); 
+      expect(count, lessThanOrEqualTo(7));
     });
 
     test('narrates hazards', () {

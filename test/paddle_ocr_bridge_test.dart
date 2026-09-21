@@ -67,14 +67,11 @@ void main() {
         const channel = MethodChannel('bagdar/paddle_ocr');
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
             .setMockMethodCallHandler(channel, (call) async {
-          if (call.method == 'availableEngine') {
-            return {
-              'available': true,
-              'version': '2.13',
-            };
-          }
-          return null;
-        });
+              if (call.method == 'availableEngine') {
+                return {'available': true, 'version': '2.13'};
+              }
+              return null;
+            });
 
         final bridge = PaddleOcrBridge.forTesting(methodChannel: channel);
         await bridge.init();
@@ -92,22 +89,22 @@ void main() {
         const channel = MethodChannel('bagdar/paddle_ocr');
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
             .setMockMethodCallHandler(channel, (call) async {
-          if (call.method == 'recognize') {
-            return [
-              {
-                'text': 'Қазақстан',
-                'confidence': 0.91,
-                'box': [0, 0, 100, 30],
-              },
-              {
-                'text': 'Астана',
-                'confidence': 0.74,
-                'box': [0, 40, 80, 30],
-              },
-            ];
-          }
-          return null;
-        });
+              if (call.method == 'recognize') {
+                return [
+                  {
+                    'text': 'Қазақстан',
+                    'confidence': 0.91,
+                    'box': [0, 0, 100, 30],
+                  },
+                  {
+                    'text': 'Астана',
+                    'confidence': 0.74,
+                    'box': [0, 40, 80, 30],
+                  },
+                ];
+              }
+              return null;
+            });
 
         final bridge = PaddleOcrBridge.forTesting(methodChannel: channel);
         bridge.debugSetCapability(const PaddleOcrCapability(available: true));
@@ -122,8 +119,7 @@ void main() {
         expect(lines, hasLength(2));
         expect(lines[0].text, 'Қазақстан');
         expect(lines[1].text, 'Астана');
-        expect(lines.map((l) => l.confidence),
-            everyElement(greaterThan(0)));
+        expect(lines.map((l) => l.confidence), everyElement(greaterThan(0)));
 
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
             .setMockMethodCallHandler(channel, null);
@@ -137,12 +133,12 @@ void main() {
         var channelHits = 0;
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
             .setMockMethodCallHandler(channel, (call) async {
-          channelHits++;
-          return null;
-        });
+              channelHits++;
+              return null;
+            });
 
         final bridge = PaddleOcrBridge.forTesting(methodChannel: channel);
-        
+
         final lines = await bridge.recognize(
           yuvBytes: Uint8List.fromList(const [0, 1, 2, 3]),
           width: 100,
@@ -151,8 +147,11 @@ void main() {
           rotationDeg: 90,
         );
         expect(lines, isEmpty);
-        expect(channelHits, 0,
-            reason: 'unavailable engine must not hit the platform channel');
+        expect(
+          channelHits,
+          0,
+          reason: 'unavailable engine must not hit the platform channel',
+        );
 
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
             .setMockMethodCallHandler(channel, null);
@@ -165,11 +164,11 @@ void main() {
         const channel = MethodChannel('bagdar/paddle_ocr');
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
             .setMockMethodCallHandler(channel, (call) async {
-          if (call.method == 'recognize') {
-            throw PlatformException(code: 'RECOGNIZE_FAILED');
-          }
-          return null;
-        });
+              if (call.method == 'recognize') {
+                throw PlatformException(code: 'RECOGNIZE_FAILED');
+              }
+              return null;
+            });
 
         final bridge = PaddleOcrBridge.forTesting(methodChannel: channel);
         bridge.debugSetCapability(const PaddleOcrCapability(available: true));
@@ -189,8 +188,6 @@ void main() {
     );
 
     test('init flagged as unavailable when plugin is missing', () async {
-      
-      
       final bridge = PaddleOcrBridge.forTesting(
         methodChannel: const MethodChannel('bagdar/paddle_ocr_unmocked'),
       );

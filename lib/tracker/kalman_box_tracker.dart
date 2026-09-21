@@ -9,7 +9,6 @@ class KalmanBoxTracker {
   KalmanBoxTracker(RawDet det) {
     final stats = _boxStats(det.x1, det.y1, det.x2, det.y2);
 
-    
     x = [det.cx, det.cy, stats.area, stats.aspect, 0, 0, 0];
     P = List.generate(7, (i) => List.filled(7, 0.0));
     for (int i = 0; i < 4; i++) {
@@ -22,12 +21,12 @@ class KalmanBoxTracker {
   }
 
   void predict() {
-    x[0]=_finiteOr(x[0],0.0)+_finiteOr(x[4],0.0);
-    x[1]=_finiteOr(x[1],0.0)+_finiteOr(x[5],0.0);
-    x[2]=math.max(1.0,_finiteOr(x[2],1.0)+_finiteOr(x[6],0.0));
+    x[0] = _finiteOr(x[0], 0.0) + _finiteOr(x[4], 0.0);
+    x[1] = _finiteOr(x[1], 0.0) + _finiteOr(x[5], 0.0);
+    x[2] = math.max(1.0, _finiteOr(x[2], 1.0) + _finiteOr(x[6], 0.0));
     x[4] = _clampFinite(_finiteOr(x[4], 0.0) * 0.92, -3000.0, 3000.0);
     x[5] = _clampFinite(_finiteOr(x[5], 0.0) * 0.92, -3000.0, 3000.0);
-    
+
     x[6] = _clampFinite(_finiteOr(x[6], 0.0) * 0.85, -4000.0, 4000.0);
     _normalizeState();
     for (int i = 0; i < 7; i++) {
@@ -131,7 +130,7 @@ class KalmanBoxTracker {
     final sizeScore = math.min(detArea, area) / math.max(detArea, area);
     final distanceScore = 1.0 - (centerDist / kTrackMatchDist);
     final fallbackScore = distanceScore * 0.65 + sizeScore * 0.35;
-    
+
     return math.max(iou, fallbackScore);
   }
 
@@ -150,7 +149,6 @@ class KalmanBoxTracker {
   }
 
   static double _clampFinite(double value, double min, double max) {
-    
     if (!value.isFinite) return min;
     if (value < min) return min;
     if (value > max) return max;

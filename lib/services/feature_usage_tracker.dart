@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class FeatureUsageTracker {
   FeatureUsageTracker._();
   static final FeatureUsageTracker instance = FeatureUsageTracker._();
@@ -91,7 +90,6 @@ class FeatureUsageTracker {
     });
   }
 }
-
 
 class FeatureUsageKeys {
   FeatureUsageKeys._();

@@ -6,11 +6,9 @@ enum DepthHazardType {
   lowCurb,
   deadZone,
   stairsDown,
-  
-  
+
   escalatorRiding,
-  
-  
+
   nearFieldIntrusion,
   overhead,
   glassDoor,

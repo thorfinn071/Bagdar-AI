@@ -4,6 +4,11 @@ import '../models/constants.dart';
 import '../models/external_hazard.dart';
 import '../models/speech_job.dart';
 import '../models/strings.dart';
+import '../core/build_profile.dart';
+import '../safety/alerts/alert_arbiter.dart';
+import '../safety/alerts/feedback_command.dart';
+import '../safety/planning/safety_action.dart';
+import '../safety/runtime/safety_feedback_runtime.dart';
 import '../services/settings_service.dart';
 import '../services/earcon_service.dart';
 import '../services/field_logger.dart';
@@ -25,11 +30,13 @@ class AlertManager {
   final EarconService _earcon;
   final void Function(double? distMeters, double pan)? onProximityChanged;
   final AlertFilter _filter = AlertFilter();
-  
+
   final DecisionEngine _engine = DecisionEngine();
+  final BuildProfile _buildProfile;
+  final AlertArbiter spatialArbiter;
+  SafetyFeedbackRuntime? _safetyFeedback;
   final bool Function() _isGuideDogMode;
-  
-  
+
   final bool Function() _isIndoorMode;
   final Map<int, bool> _trackIsClose = {};
 
@@ -39,13 +46,38 @@ class AlertManager {
     this.onProximityChanged,
     bool Function()? isGuideDogMode,
     bool Function()? isIndoorMode,
+    BuildProfile buildProfile = BuildProfile.current,
+    AlertArbiter? spatialArbiter,
   }) : _tts = tts,
        _earcon = earcon,
+       _buildProfile = buildProfile,
+       spatialArbiter = spatialArbiter ?? AlertArbiter(),
        _isGuideDogMode = isGuideDogMode ?? _noGuideDog,
        _isIndoorMode = isIndoorMode ?? _noIndoor;
 
   static bool _noGuideDog() => false;
   static bool _noIndoor() => false;
+
+  void attachSafetyFeedback(SafetyFeedbackRuntime runtime) {
+    if (!identical(runtime.arbiter, spatialArbiter)) {
+      throw ArgumentError('Safety feedback must share the spatial arbiter.');
+    }
+    _safetyFeedback = runtime;
+  }
+
+  /// The pre-spatial YOLO-gap corridor voice path is research-only.
+  ///
+  /// It estimates passage width from pixels and cannot provide the positive
+  /// geometry/traversability evidence required by Core.
+  static bool legacyCorridorHintsEnabledFor(BuildProfile profile) =>
+      profile.isResearch;
+
+  /// Stage 5 adapter boundary. The spatial planner supplies a typed action;
+  /// legacy alert heuristics are not allowed to recompute its scene risk.
+  AlertArbiterEvent admitSpatialAction(
+    SafetyAction action, {
+    required DateTime now,
+  }) => spatialArbiter.submitAction(action, now: now);
 
   Duration _scaledCooldown(Duration base) => Duration(
     milliseconds:
@@ -53,7 +85,6 @@ class AlertManager {
             .round(),
   );
 
-  
   static bool _isGuideDogTrack(Track t, int imgH) {
     if (t.label != 'dog' && t.label != 'cat') return false;
     if (imgH <= 0) return false;
@@ -63,7 +94,6 @@ class AlertManager {
     return true;
   }
 
-  
   static const int _kGuideDogLockFrames = 3;
   static const int _kGuideDogUnlockFrames = 10;
   final Map<int, int> _guideDogCandidateFrames = {};
@@ -78,7 +108,6 @@ class AlertManager {
       presentIds.add(t.id);
       final passes = _isGuideDogTrack(t, imgH);
       if (_guideDogLockedMissing.containsKey(t.id)) {
-        
         _guideDogLockedMissing[t.id] = 0;
         continue;
       }
@@ -91,8 +120,6 @@ class AlertManager {
           _guideDogCandidateFrames[t.id] = c;
         }
       } else {
-        
-        
         final c = _guideDogCandidateFrames[t.id];
         if (c != null) {
           if (c <= 1) {
@@ -103,7 +130,7 @@ class AlertManager {
         }
       }
     }
-    
+
     final staleLockIds = <int>[];
     _guideDogLockedMissing.forEach((id, missing) {
       if (presentIds.contains(id)) return;
@@ -117,9 +144,8 @@ class AlertManager {
     for (final id in staleLockIds) {
       _guideDogLockedMissing.remove(id);
     }
-    
-    _guideDogCandidateFrames
-        .removeWhere((id, _) => !presentIds.contains(id));
+
+    _guideDogCandidateFrames.removeWhere((id, _) => !presentIds.contains(id));
   }
 
   DateTime _lastApproachSay = DateTime.fromMillisecondsSinceEpoch(0);
@@ -127,17 +153,14 @@ class AlertManager {
   String _lastGuideText = '';
   DateTime _objectLastSeen = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _emptySince = DateTime.fromMillisecondsSinceEpoch(0);
-  
-  
+
   bool _emptySinceIndoor = false;
   bool _clearAnnounced = false;
   DateTime _lastCriticalAt = DateTime.fromMillisecondsSinceEpoch(0);
   bool _guidanceGiven = false;
 
-  
   DateTime _lastCameraStallAt = DateTime.fromMillisecondsSinceEpoch(0);
-  
-  
+
   DateTime _lastClearAnnounceAt = DateTime.fromMillisecondsSinceEpoch(0);
   static const Duration _kPostStallClearGuard = Duration(seconds: 6);
   static const Duration _kClearAnnounceMinInterval = Duration(seconds: 12);
@@ -148,13 +171,10 @@ class AlertManager {
 
   final Set<int> _prevCloseTrackIds = {};
 
-  
   DateTime _lastCrowdAlertAt = DateTime.fromMillisecondsSinceEpoch(0);
 
-  
   bool _crowdActive = false;
 
-  
   final Map<int, double> _lastAnnouncedDistM = {};
 
   DateTime _lastVibrateAt = DateTime.fromMillisecondsSinceEpoch(0);
@@ -167,7 +187,6 @@ class AlertManager {
 
   void updateLastCriticalAt(DateTime t) => _lastCriticalAt = t;
 
-  
   void markCameraStall(DateTime now) {
     _lastCameraStallAt = now;
     _emptySince = DateTime.fromMillisecondsSinceEpoch(0);
@@ -184,6 +203,7 @@ class AlertManager {
   void reset() {
     _filter.reset();
     _engine.reset();
+    spatialArbiter.reset();
     _guidanceGiven = false;
     _lastGuideText = '';
     _pendingHint = '';
@@ -224,14 +244,16 @@ class AlertManager {
 
     final pan = event.pan.clamp(-1.0, 1.0);
 
-    _filter.add(AlertCandidate(
-      text: event.text,
-      priority: event.priority,
-      pan: pan.toDouble(),
-      category: event.category,
-      urgency: event.urgency.clamp(0.0, 1.0),
-      distanceM: event.distanceM,
-    ));
+    _filter.add(
+      AlertCandidate(
+        text: event.text,
+        priority: event.priority,
+        pan: pan.toDouble(),
+        category: event.category,
+        urgency: event.urgency.clamp(0.0, 1.0),
+        distanceM: event.distanceM,
+      ),
+    );
 
     FieldLogger.instance.log('external_hazard', {
       'source': event.source.name,
@@ -254,20 +276,23 @@ class AlertManager {
 
   void handleDepthHazard({
     required String text,
+    String speechKey = 'generic_obstacle_ahead',
     required SpeechPriority priority,
     required double pan,
     required AlertCategory category,
     required DateTime now,
     double? distanceM,
   }) {
-    _filter.add(AlertCandidate(
-      text: text,
-      priority: priority,
-      pan: pan,
-      category: category,
-      urgency: 0.9,
-      distanceM: distanceM,
-    ));
+    _filter.add(
+      AlertCandidate(
+        text: text,
+        priority: priority,
+        pan: pan,
+        category: category,
+        urgency: 0.9,
+        distanceM: distanceM,
+      ),
+    );
 
     final winner = _filter.flush(
       0,
@@ -277,6 +302,38 @@ class AlertManager {
     );
 
     if (winner != null) {
+      final runtime = _safetyFeedback;
+      if (runtime != null) {
+        final isCritical = winner.priority == SpeechPriority.critical;
+        runtime.submitCommand(
+          FeedbackCommand(
+            actionId: 'depth-${now.microsecondsSinceEpoch}-$speechKey',
+            sceneRevision: -1,
+            speechKey: speechKey,
+            earcon: isCritical ? FeedbackEarcon.stop : FeedbackEarcon.none,
+            hapticPattern: isCritical
+                ? FeedbackHapticPattern.immediateStop
+                : FeedbackHapticPattern.none,
+            priority: isCritical
+                ? SafetyPriority.p0Emergency
+                : SafetyPriority.p1Correction,
+            source: FeedbackCommandSource.depthHazard,
+            actionKind: isCritical ? SafetyActionKind.stopNow : null,
+            direction: null,
+            urgency: winner.urgency.clamp(0.0, 1.0),
+            canInterrupt: isCritical,
+            replaceKey: 'depth:$speechKey',
+            createdAt: now,
+            expiresAt: now.add(const Duration(seconds: 2)),
+            ruleId: isCritical ? 'DEPTH-P0-CRITICAL' : 'DEPTH-P1-WARNING',
+            hazardIds: <String>['depth:$speechKey'],
+            pan: winner.pan,
+          ),
+          now: now,
+        );
+        if (isCritical) _lastCriticalAt = now;
+        return;
+      }
       _tts.say(
         winner.text,
         winner.priority,
@@ -379,13 +436,15 @@ class AlertManager {
 
     _earcon.play(earcon, pan: pan);
 
-    _filter.add(AlertCandidate(
-      text: text,
-      priority: event.suggestedPriority,
-      pan: pan,
-      category: category,
-      urgency: urgency,
-    ));
+    _filter.add(
+      AlertCandidate(
+        text: text,
+        priority: event.suggestedPriority,
+        pan: pan,
+        category: category,
+        urgency: urgency,
+      ),
+    );
 
     final winner = _filter.flush(
       0,
@@ -398,7 +457,6 @@ class AlertManager {
     }
   }
 
-  
   AlertCandidate? handleMotionIntrusion(
     MotionIntrusionEvent event, {
     required String text,
@@ -409,7 +467,6 @@ class AlertManager {
       MotionIntrusionSide.center => 0.0,
     };
 
-    
     final isVehicleLike = event.classGuess == MotionEventClass.vehicleLike;
     final category = isVehicleLike
         ? AlertCategory.approachingVehicle
@@ -419,7 +476,6 @@ class AlertManager {
         ? SpeechPriority.critical
         : SpeechPriority.warning;
 
-    
     final urgency = event.isCritical
         ? 0.95
         : (0.55 + 0.35 * event.strength).clamp(0.0, 0.90);
@@ -455,14 +511,11 @@ class AlertManager {
     if (_isGuideDogMode()) {
       _updateGuideDogLocks(tracks, imgH);
       final filtered = tracks
-          .where((t) =>
-              !_isLockedGuideDog(t.id) && !_isGuideDogTrack(t, imgH))
+          .where((t) => !_isLockedGuideDog(t.id) && !_isGuideDogTrack(t, imgH))
           .toList(growable: false);
       if (filtered.length != tracks.length) tracks = filtered;
     } else if (_guideDogLockedMissing.isNotEmpty ||
         _guideDogCandidateFrames.isNotEmpty) {
-      
-      
       _guideDogLockedMissing.clear();
       _guideDogCandidateFrames.clear();
     }
@@ -477,7 +530,8 @@ class AlertManager {
       final currentCloseIds = <int>{};
       for (final t in tracks) {
         final distClose = t.dist == 'close' || t.dist == 'very close';
-        final isInitiallyClose = distClose && (t.nearFrameCount >= 2 || t.fastTrack);
+        final isInitiallyClose =
+            distClose && (t.nearFrameCount >= 2 || t.fastTrack);
 
         bool isClose = isInitiallyClose;
         final prevIsClose = _trackIsClose[t.id];
@@ -489,7 +543,9 @@ class AlertManager {
               }
             } else {
               final frameArea = (imgW * imgH).toDouble();
-              final ar = frameArea > 0 ? ((t.x2 - t.x1) * (t.y2 - t.y1)) / frameArea : 0.0;
+              final ar = frameArea > 0
+                  ? ((t.x2 - t.x1) * (t.y2 - t.y1)) / frameArea
+                  : 0.0;
               final bboxFrac = imgH > 0 ? (t.y2 - t.y1) / imgH : 0.0;
               final bottomRatio = imgH > 0 ? t.y2 / imgH : 0.0;
               final score = ar * 0.70 + bboxFrac * 0.25 + bottomRatio * 0.05;
@@ -517,8 +573,6 @@ class AlertManager {
       _emptySince = DateTime.fromMillisecondsSinceEpoch(0);
       _clearAnnounced = false;
     } else {
-      
-      
       final currentIndoor = _isIndoorMode();
       if (_emptySince.millisecondsSinceEpoch == 0) {
         _emptySince = now;
@@ -584,14 +638,17 @@ class AlertManager {
       now,
       isCalibrated,
     );
-    _handleNavHint(tracks, imgW, imgH, viewportAspect, now);
+    if (legacyCorridorHintsEnabledFor(_buildProfile)) {
+      _handleNavHint(tracks, imgW, imgH, viewportAspect, now);
+    }
 
-    
     final labels = _crowdActive
-        ? [for (final t in tracks) if (t.label != 'person') t.label]
+        ? [
+            for (final t in tracks)
+              if (t.label != 'person') t.label,
+          ]
         : tracks.map((t) => t.label).toList();
 
-    
     final trackDistances = <String, double>{};
     for (final t in tracks) {
       if (t.distM > 0) trackDistances[t.label] = t.distM;
@@ -600,8 +657,7 @@ class AlertManager {
       labels,
       trackDistances: trackDistances,
     );
-    
-    
+
     final reliableTrackIds = <int>{
       for (final t in tracks)
         if (t.reliableFrames >= 3) t.id,
@@ -615,14 +671,16 @@ class AlertManager {
       alertFrequency: Settings.instance.alertFrequency,
     );
     for (final winner in winners) {
-      _tts.say(
-        winner.text,
-        winner.priority,
-        pan: winner.pan,
-        trackId: winner.trackId,
-        barge: winner.priority == SpeechPriority.critical,
-        skipHaptic: winner.priority == SpeechPriority.critical,
-      );
+      if (!_submitObjectWinner(winner, now: now)) {
+        _tts.say(
+          winner.text,
+          winner.priority,
+          pan: winner.pan,
+          trackId: winner.trackId,
+          barge: winner.priority == SpeechPriority.critical,
+          skipHaptic: winner.priority == SpeechPriority.critical,
+        );
+      }
       if (winner.trackId != null) {
         final spoken = tracks.firstWhere(
           (t) => t.id == winner.trackId,
@@ -630,7 +688,6 @@ class AlertManager {
         );
         if (spoken.id == winner.trackId) spoken.lastSpoken = now;
 
-        
         if (winner.category == AlertCategory.obstacleClose &&
             winner.distanceM != null &&
             winner.distanceM! > 0) {
@@ -638,7 +695,6 @@ class AlertManager {
         }
       }
 
-      
       if (winner.isGroupAlert) {
         _lastCrowdAlertAt = now;
       }
@@ -658,20 +714,19 @@ class AlertManager {
     final baseConfirm = mode == AppMode.cane
         ? kEmptyConfirmDurationCane
         : kEmptyConfirmDuration;
-    
-    
+
     final confirmDuration = _isIndoorMode()
         ? baseConfirm + const Duration(milliseconds: 1500)
         : baseConfirm;
     final recentCritical =
         now.difference(_lastCriticalAt) < kPostCriticalClearDelay;
 
-    
-    final recentStall = _lastCameraStallAt.millisecondsSinceEpoch != 0 &&
+    final recentStall =
+        _lastCameraStallAt.millisecondsSinceEpoch != 0 &&
         now.difference(_lastCameraStallAt) < _kPostStallClearGuard;
 
-    
-    final clearCooldownOk = _lastClearAnnounceAt.millisecondsSinceEpoch == 0 ||
+    final clearCooldownOk =
+        _lastClearAnnounceAt.millisecondsSinceEpoch == 0 ||
         now.difference(_lastClearAnnounceAt) >= _kClearAnnounceMinInterval;
 
     if (!_clearAnnounced &&
@@ -681,19 +736,14 @@ class AlertManager {
         !recentCritical &&
         !recentStall &&
         clearCooldownOk) {
-      if (mode == AppMode.cane) {
-        _earcon.play(Earcon.pathClear);
-        _tts.say(S.alert('path_clear_cane'), SpeechPriority.info, pan: 0.0);
-      } else {
-        _earcon.play(Earcon.pathClear);
-        _tts.say(S.alert('path_clear'), SpeechPriority.info, pan: 0.0);
-      }
+      // Geometry absence is not a safety certificate. Do not speak
+      // "path clear" / "no obstacles". An earcon remains optional.
+      _earcon.play(Earcon.pathClear);
       _clearAnnounced = true;
       _lastClearAnnounceAt = now;
       return;
     }
 
-    
     if (_clearAnnounced &&
         Settings.instance.clearPathAnnounce &&
         !recentCritical &&
@@ -714,8 +764,6 @@ class AlertManager {
   ) {
     Track? top;
     for (final t in tracks) {
-      
-      
       final bool labelThreat =
           t.approaching &&
           t.avgConf >= kMinAlertConf &&
@@ -723,7 +771,6 @@ class AlertManager {
       final bool kinematicThreat =
           !t.approaching &&
           t.dynamicThreat &&
-          
           t.avgConf >= 0.45 &&
           t.distM > 0 &&
           t.distM <= 8.0;
@@ -740,7 +787,8 @@ class AlertManager {
         top.distM > 0 ? top.distM : _distanceEstimate(top.dist),
         pan,
       );
-      if (now.difference(_lastApproachSay) >= _scaledCooldown(kApproachCooldown)) {
+      if (now.difference(_lastApproachSay) >=
+          _scaledCooldown(kApproachCooldown)) {
         _lastApproachSay = now;
         _earcon.play(Earcon.approaching, pan: pan);
         final phraseKey = isVehicle(top.label)
@@ -761,8 +809,7 @@ class AlertManager {
         final text = switch (v) {
           Verbosity.minimal => '$dir.',
           Verbosity.normal => '${S.alert(phraseKey)}, $dir$approachDist.',
-          Verbosity.detailed =>
-              '${S.alert(phraseKey)}, $dir$approachDist.',
+          Verbosity.detailed => '${S.alert(phraseKey)}, $dir$approachDist.',
         };
         _filter.add(
           AlertCandidate(
@@ -771,8 +818,7 @@ class AlertManager {
             pan: pan,
             category: AlertCategory.approachingVehicle,
             urgency: 0.85,
-            
-            
+
             distanceM: top.distM > 0 ? top.distM : null,
           ),
         );
@@ -810,7 +856,6 @@ class AlertManager {
       pan,
     );
 
-    
     if (now.difference(_lastCriticalAt) >= kCriticalCooldown) {
       top.lastSpoken = now;
       _lastCriticalAt = now;
@@ -832,31 +877,49 @@ class AlertManager {
         Verbosity.normal => '${S.alert('stop')}. $label $dir$distPart.',
         Verbosity.detailed => '${S.alert('stop')}. $label $dir$distPart.',
       };
-      _tts.say(
-        text,
-        SpeechPriority.critical,
-        pan: pan,
-        barge: true,
-        skipHaptic: true,
+      final routed = _submitObjectWinner(
+        AlertCandidate(
+          text: text,
+          priority: SpeechPriority.critical,
+          pan: pan,
+          category: AlertCategory.obstacleClose,
+          urgency: 1,
+          trackId: top.id,
+          distanceM: top.distM > 0 ? top.distM : null,
+        ),
+        now: now,
       );
-      _earcon.play(Earcon.criticalAlert, pan: pan);
+      if (!routed) {
+        _tts.say(
+          text,
+          SpeechPriority.critical,
+          pan: pan,
+          barge: true,
+          skipHaptic: true,
+        );
+        _earcon.play(Earcon.criticalAlert, pan: pan);
+      }
       // Register in the filter so flushMulti in the same frame doesn't
       // double-fire an obstacleClose critical (fix 3.2).
       _filter.noteCritical(AlertCategory.obstacleClose, now);
       if (isVehicle(top.label)) {
         _filter.noteCritical(AlertCategory.approachingVehicle, now);
       }
-      _vibrate(
-        kHapticCriticalAlertPattern,
-        isCritical: true,
-        intensities: kHapticCriticalAlertIntensities,
-      );
+      if (!routed) {
+        _vibrate(
+          kHapticCriticalAlertPattern,
+          isCritical: true,
+          intensities: kHapticCriticalAlertIntensities,
+        );
+      }
     } else {
-      _vibrate(
-        kHapticCriticalCooldownPattern,
-        isCritical: true,
-        intensities: kHapticCriticalCooldownIntensities,
-      );
+      if (_safetyFeedback == null) {
+        _vibrate(
+          kHapticCriticalCooldownPattern,
+          isCritical: true,
+          intensities: kHapticCriticalCooldownIntensities,
+        );
+      }
     }
   }
 
@@ -871,7 +934,6 @@ class AlertManager {
   ) {
     final indoor = _isIndoorMode();
 
-    
     var personCount = 0;
     double personSumCx = 0;
     double personMinDistM = double.infinity;
@@ -901,8 +963,13 @@ class AlertManager {
 
       if (t.dist == 'far' && !t.approaching) {
         const suppressedFar = {
-          'bench', 'fire hydrant', 'parking meter',
-          'backpack', 'handbag', 'suitcase', 'umbrella',
+          'bench',
+          'fire hydrant',
+          'parking meter',
+          'backpack',
+          'handbag',
+          'suitcase',
+          'umbrella',
         };
         if (suppressedFar.contains(t.label)) continue;
         if (t.label == 'person') continue;
@@ -920,8 +987,9 @@ class AlertManager {
       }
 
       final confFactor = t.avgConf >= kHighConfLevel ? 1.0 : 1.5;
-      
-      final isClose = _trackIsClose[t.id] ?? (t.dist == 'close' || t.dist == 'very close');
+
+      final isClose =
+          _trackIsClose[t.id] ?? (t.dist == 'close' || t.dist == 'very close');
       final Duration baseCooldown;
       if (t.label == 'person') {
         if (indoor) {
@@ -936,8 +1004,8 @@ class AlertManager {
       }
       final freqMult = Settings.instance.alertFrequency.multiplier;
       final cooldown = Duration(
-        milliseconds:
-            (baseCooldown.inMilliseconds * confFactor * freqMult).round(),
+        milliseconds: (baseCooldown.inMilliseconds * confFactor * freqMult)
+            .round(),
       );
 
       if (now.difference(t.lastSpoken) < cooldown) continue;
@@ -968,41 +1036,38 @@ class AlertManager {
 
       final verb = Settings.instance.verbosity;
       if (isClose) {
-        
-        
         final lastAnnouncedDistM = _lastAnnouncedDistM[t.id];
-        final shouldEscalate = lastAnnouncedDistM != null &&
+        final shouldEscalate =
+            lastAnnouncedDistM != null &&
             t.distM > 0 &&
             t.distM <=
-                lastAnnouncedDistM *
-                    kSustainedHazardEscalationDistanceFraction;
+                lastAnnouncedDistM * kSustainedHazardEscalationDistanceFraction;
 
         final bboxFrac = imgH > 0 ? (t.y2 - t.y1) / imgH : 0.0;
         final widthFrac = imgW > 0 ? (t.x2 - t.x1) / imgW : 0.0;
         final sizeSanityEscalation =
-            (isVehicle(t.label) &&
-                (bboxFrac >= 0.35 || widthFrac >= 0.35)) ||
+            (isVehicle(t.label) && (bboxFrac >= 0.35 || widthFrac >= 0.35)) ||
             (t.label == 'person' && bboxFrac >= 0.75);
 
         final closePriority = (shouldEscalate || sizeSanityEscalation)
             ? SpeechPriority.critical
             : SpeechPriority.warning;
 
-        if (closePriority == SpeechPriority.critical) {
+        if (_safetyFeedback == null &&
+            closePriority == SpeechPriority.critical) {
           _earcon.play(Earcon.criticalAlert, pan: pan);
           _vibrate(
             kHapticCriticalAlertPattern,
             isCritical: true,
             intensities: kHapticCriticalAlertIntensities,
           );
-        } else {
+        } else if (_safetyFeedback == null) {
           _vibrate([0, 150]);
         }
         final text = switch (verb) {
           Verbosity.minimal => '${S.alert('close')}, $dir.',
           Verbosity.normal => '$label ${S.alert('close')}, $dir$distPart.',
-          Verbosity.detailed =>
-              '$label ${S.alert('close')}, $dir$distPart.',
+          Verbosity.detailed => '$label ${S.alert('close')}, $dir$distPart.',
         };
         _filter.add(
           AlertCandidate(
@@ -1012,7 +1077,7 @@ class AlertManager {
             category: AlertCategory.obstacleClose,
             urgency: score * t.avgConf,
             trackId: t.id,
-            
+
             distanceM: t.distM > 0 ? t.distM : null,
           ),
         );
@@ -1046,7 +1111,6 @@ class AlertManager {
       );
     }
 
-    
     if (_crowdActive) {
       final avgCx = personSumCx / personCount;
       final crowdPan = _pan(avgCx, imgW, imgH, viewportAspect);
@@ -1067,7 +1131,6 @@ class AlertManager {
         );
       }
 
-      
       if (personMinDistM.isFinite) {
         _emitProximity(personMinDistM, crowdPan);
       }
@@ -1095,8 +1158,11 @@ class AlertManager {
     );
     final corridorDecision = _engine.evaluate(corridor);
 
-    
-    final needGuide = centTh >= kGuideMinCenterThreat && (centTh - bestTh >= kGuideImprovementAbs) && centTh >= bestTh * kGuideImprovementRatio && hint5 != 'forward';
+    final needGuide =
+        centTh >= kGuideMinCenterThreat &&
+        (centTh - bestTh >= kGuideImprovementAbs) &&
+        centTh >= bestTh * kGuideImprovementRatio &&
+        hint5 != 'forward';
 
     String? corridorDir;
     if (corridor != null) {
@@ -1270,13 +1336,24 @@ class AlertManager {
         final canePriority = effectiveDist == 'very close'
             ? SpeechPriority.critical
             : (top.approaching ? SpeechPriority.warning : SpeechPriority.info);
-        _tts.say(
-          ttsText,
-          canePriority,
+        final candidate = AlertCandidate(
+          text: ttsText,
+          priority: canePriority,
           pan: pan,
-          barge: effectiveDist == 'very close',
+          category: AlertCategory.obstacleClose,
+          urgency: effectiveDist == 'very close' ? 1 : 0.7,
           trackId: top.id,
+          distanceM: top.distM > 0 ? top.distM : null,
         );
+        if (!_submitObjectWinner(candidate, now: now)) {
+          _tts.say(
+            ttsText,
+            canePriority,
+            pan: pan,
+            barge: effectiveDist == 'very close',
+            trackId: top.id,
+          );
+        }
       } else {
         top.lastSpoken = now;
       }
@@ -1338,10 +1415,61 @@ class AlertManager {
     await HapticService.vibrate(
       pattern,
       intensities:
-          intensities ??
-          (pattern.length >= 4 ? const [0, 255, 0, 200] : null),
+          intensities ?? (pattern.length >= 4 ? const [0, 255, 0, 200] : null),
     );
   }
+
+  bool _submitObjectWinner(AlertCandidate winner, {required DateTime now}) {
+    final runtime = _safetyFeedback;
+    if (runtime == null) return false;
+    final critical = winner.priority == SpeechPriority.critical;
+    final speechKey = critical
+        ? 'generic_obstacle_stop'
+        : winner.pan < -0.25
+        ? 'generic_obstacle_left'
+        : winner.pan > 0.25
+        ? 'generic_obstacle_right'
+        : 'generic_obstacle_ahead';
+    final sourceId = winner.trackId?.toString() ?? winner.category.name;
+    runtime.submitCommand(
+      FeedbackCommand(
+        actionId: 'object-${now.microsecondsSinceEpoch}-$sourceId',
+        sceneRevision: -1,
+        speechKey: speechKey,
+        earcon: critical ? FeedbackEarcon.stop : FeedbackEarcon.none,
+        hapticPattern: critical
+            ? FeedbackHapticPattern.immediateStop
+            : FeedbackHapticPattern.none,
+        priority: switch (winner.priority) {
+          SpeechPriority.critical => SafetyPriority.p0Emergency,
+          SpeechPriority.warning => SafetyPriority.p1Correction,
+          SpeechPriority.info => SafetyPriority.p3Information,
+        },
+        source: FeedbackCommandSource.objectHazard,
+        actionKind: critical ? SafetyActionKind.stopNow : null,
+        direction: null,
+        urgency: winner.urgency.clamp(0.0, 1.0),
+        canInterrupt: critical,
+        replaceKey: 'object:$sourceId',
+        createdAt: now,
+        expiresAt: now.add(
+          critical ? const Duration(seconds: 2) : const Duration(seconds: 4),
+        ),
+        ruleId: critical ? 'OBJECT-P0-CLOSE' : 'OBJECT-P1-PROXIMITY',
+        hazardIds: <String>['object:$sourceId'],
+        pan: winner.pan,
+      ),
+      now: now,
+    );
+    return true;
+  }
+
+  /// Routes a winner already admitted by the legacy evidence filter through
+  /// the single safety-output owner. Returns false until that owner is ready.
+  bool submitFilteredObjectAlert(
+    AlertCandidate winner, {
+    required DateTime now,
+  }) => _submitObjectWinner(winner, now: now);
 
   Future<void> _vibrateCane(List<int> pattern, {List<int>? intensities}) async {
     final now = DateTime.now();

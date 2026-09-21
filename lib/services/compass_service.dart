@@ -25,7 +25,7 @@ class CompassService {
       if (stream == null) {
         debugPrint('CompassService: compass not available');
         _available = false;
-        return false; 
+        return false;
       }
       _available = true;
       _sub = FlutterCompass.events?.listen((event) {
@@ -57,7 +57,6 @@ class CompassService {
   }
 
   String relativeDirection(double compassHeading, double targetBearing) {
-    
     double diff = ((targetBearing - compassHeading) % 360 + 360) % 360;
     if (diff <= 20 || diff >= 340) return 'straight';
     if (diff > 20 && diff <= 60) return 'slight_right';

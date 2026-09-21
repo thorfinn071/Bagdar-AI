@@ -26,10 +26,7 @@ class ArCoreDepthWhitelist {
     'Pixel Fold',
   };
 
-  static const Set<String> _knownUnsupportedModels = {
-    'BRP-NX1', 
-    'BRP_NX1',
-  };
+  static const Set<String> _knownUnsupportedModels = {'BRP-NX1', 'BRP_NX1'};
 
   static const Set<String> _knownUnsupportedBrands = {
     'ITEL',

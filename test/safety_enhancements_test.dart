@@ -40,7 +40,9 @@ void main() {
     });
 
     test('quasi-periodic staircase signal is detected as stairsDown', () {
-      final hazard = GroundPlaneAnalyzer.detectStairsDownFromMap(makeStaircase());
+      final hazard = GroundPlaneAnalyzer.detectStairsDownFromMap(
+        makeStaircase(),
+      );
       expect(hazard, isNotNull);
       expect(hazard!.type, DepthHazardType.stairsDown);
       expect(hazard.zone, HazardZone.center);
@@ -56,18 +58,12 @@ void main() {
           map[y * size + x] = z;
         }
       }
-      expect(
-        GroundPlaneAnalyzer.detectStairsDownFromMap(map),
-        isNull,
-      );
+      expect(GroundPlaneAnalyzer.detectStairsDownFromMap(map), isNull);
     });
 
     test('non-conformant map size returns null without crashing', () {
       final tiny = Float32List(10);
-      expect(
-        GroundPlaneAnalyzer.detectStairsDownFromMap(tiny),
-        isNull,
-      );
+      expect(GroundPlaneAnalyzer.detectStairsDownFromMap(tiny), isNull);
     });
   });
 
@@ -76,7 +72,7 @@ void main() {
       final suppress = GroundPlaneAnalyzer.isLikelyShadowArtifact(
         dropCount: 100,
         dropSum: 35.0,
-        dropSqSum: 12.3, 
+        dropSqSum: 12.3,
         dropLumaSum: 60.0 * 100,
         dropLumaCount: 100,
         flatLumaSum: 150.0 * 200,
@@ -90,7 +86,7 @@ void main() {
       final suppress = GroundPlaneAnalyzer.isLikelyShadowArtifact(
         dropCount: 100,
         dropSum: 35.0,
-        dropSqSum: 22.0, 
+        dropSqSum: 22.0,
         dropLumaSum: 60.0 * 100,
         dropLumaCount: 100,
         flatLumaSum: 150.0 * 200,
@@ -100,20 +96,22 @@ void main() {
       expect(suppress, isFalse);
     });
 
-    test('keeps a deep drop even when variance is low (deep hole signature)',
-        () {
-      final suppress = GroundPlaneAnalyzer.isLikelyShadowArtifact(
-        dropCount: 100,
-        dropSum: 80.0,
-        dropSqSum: 64.2, 
-        dropLumaSum: 60.0 * 100,
-        dropLumaCount: 100,
-        flatLumaSum: 150.0 * 200,
-        flatLumaCount: 200,
-        maxDrop: 0.80,
-      );
-      expect(suppress, isFalse);
-    });
+    test(
+      'keeps a deep drop even when variance is low (deep hole signature)',
+      () {
+        final suppress = GroundPlaneAnalyzer.isLikelyShadowArtifact(
+          dropCount: 100,
+          dropSum: 80.0,
+          dropSqSum: 64.2,
+          dropLumaSum: 60.0 * 100,
+          dropLumaCount: 100,
+          flatLumaSum: 150.0 * 200,
+          flatLumaCount: 200,
+          maxDrop: 0.80,
+        );
+        expect(suppress, isFalse);
+      },
+    );
 
     test('keeps a drop that is not darker than surrounding flat', () {
       final suppress = GroundPlaneAnalyzer.isLikelyShadowArtifact(
@@ -143,37 +141,15 @@ void main() {
       expect(suppress, isFalse);
     });
 
-    test(
-        'OPT-04: suppresses a drop that is much BRIGHTER than surrounding '
+    test('OPT-04: suppresses a drop that is much BRIGHTER than surrounding '
         'flat (puddle reflecting sky)', () {
-      
-      
-      final suppress = GroundPlaneAnalyzer.isLikelyShadowArtifact(
-        dropCount: 100,
-        dropSum: 35.0,
-        dropSqSum: 12.3, 
-        dropLumaSum: 200.0 * 100, 
-        dropLumaCount: 100,
-        flatLumaSum: 40.0 * 200, 
-        flatLumaCount: 200,
-        maxDrop: 0.38,
-      );
-      expect(suppress, isTrue);
-    });
-
-    test(
-        'OPT-04: suppresses a drop with matching mean luma but high intra-zone '
-        'variance (patchy puddle)', () {
-      
-      
       final suppress = GroundPlaneAnalyzer.isLikelyShadowArtifact(
         dropCount: 100,
         dropSum: 35.0,
         dropSqSum: 12.3,
-        dropLumaSum: 150.0 * 100,
-        dropLumaSqSum: (150.0 * 150.0 + 900.0) * 100,
+        dropLumaSum: 200.0 * 100,
         dropLumaCount: 100,
-        flatLumaSum: 150.0 * 200,
+        flatLumaSum: 40.0 * 200,
         flatLumaCount: 200,
         maxDrop: 0.38,
       );
@@ -181,10 +157,26 @@ void main() {
     });
 
     test(
-        'OPT-04: keeps a uniformly dark real pothole even when sqSum is '
+      'OPT-04: suppresses a drop with matching mean luma but high intra-zone '
+      'variance (patchy puddle)',
+      () {
+        final suppress = GroundPlaneAnalyzer.isLikelyShadowArtifact(
+          dropCount: 100,
+          dropSum: 35.0,
+          dropSqSum: 12.3,
+          dropLumaSum: 150.0 * 100,
+          dropLumaSqSum: (150.0 * 150.0 + 900.0) * 100,
+          dropLumaCount: 100,
+          flatLumaSum: 150.0 * 200,
+          flatLumaCount: 200,
+          maxDrop: 0.38,
+        );
+        expect(suppress, isTrue);
+      },
+    );
+
+    test('OPT-04: keeps a uniformly dark real pothole even when sqSum is '
         'supplied (low intra-zone variance)', () {
-      
-      
       final suppress = GroundPlaneAnalyzer.isLikelyShadowArtifact(
         dropCount: 100,
         dropSum: 35.0,
@@ -206,7 +198,6 @@ void main() {
     Float32List makeFlat(double value) =>
         Float32List(size * size)..fillRange(0, size * size, value);
 
-    
     Float32List makeStableHazardMap() {
       final map = Float32List(size * size)..fillRange(0, size * size, 0.5);
       for (int y = GroundPlaneAnalyzer.kFootZoneStartRow; y < size; y++) {
@@ -217,8 +208,7 @@ void main() {
       return map;
     }
 
-    test(
-        'single-frame hazard after warm-up is filtered out (4-of-5 '
+    test('single-frame hazard after warm-up is filtered out (4-of-5 '
         'confirmation required)', () {
       final analyzer = GroundPlaneAnalyzer();
       final flat = makeFlat(0.5);
@@ -232,8 +222,7 @@ void main() {
       expect(flicker, isEmpty);
     });
 
-    test(
-        'a hazard that persists long enough survives the '
+    test('a hazard that persists long enough survives the '
         '4-of-5 temporal filter', () {
       final analyzer = GroundPlaneAnalyzer();
       final flat = makeFlat(0.5);
@@ -247,9 +236,10 @@ void main() {
       }
       final out = analyzer.analyze(map);
       expect(
-        out.any((h) =>
-            h.zone == HazardZone.center &&
-            h.type == DepthHazardType.deadZone),
+        out.any(
+          (h) =>
+              h.zone == HazardZone.center && h.type == DepthHazardType.deadZone,
+        ),
         isTrue,
       );
     });
@@ -263,9 +253,10 @@ void main() {
       final out = analyzer.analyze(map);
 
       expect(
-        out.any((h) =>
-            h.zone == HazardZone.center &&
-            h.type == DepthHazardType.deadZone),
+        out.any(
+          (h) =>
+              h.zone == HazardZone.center && h.type == DepthHazardType.deadZone,
+        ),
         isTrue,
       );
     });
@@ -283,9 +274,10 @@ void main() {
       analyzer.analyze(map);
       final out = analyzer.analyze(map);
       expect(
-        out.any((h) =>
-            h.zone == HazardZone.center &&
-            h.type == DepthHazardType.deadZone),
+        out.any(
+          (h) =>
+              h.zone == HazardZone.center && h.type == DepthHazardType.deadZone,
+        ),
         isTrue,
       );
     });
@@ -373,11 +365,9 @@ void main() {
       expect(event!.side, MotionIntrusionSide.center);
     });
 
-    test('high baseline suppresses noisy flicker below trigger multiplier',
-        () {
+    test('high baseline suppresses noisy flicker below trigger multiplier', () {
       final now = DateTime(2025, 1, 1, 12);
-      
-      
+
       final cur = makeUniform(32, 24, 128);
       for (int y = 0; y < 24; y++) {
         for (int x = 0; x < 8; x++) {
@@ -402,7 +392,7 @@ void main() {
 
     Float32List makeBackground(double near, double far) {
       final map = Float32List(size * size);
-      
+
       for (int y = 0; y < size; y++) {
         final t = (size - 1 - y) / (size - 1);
         final z = far * (1.0 - t) + near * t;
@@ -426,8 +416,7 @@ void main() {
 
     test('narrow horizontal band at chest level is flagged overhead', () {
       final map = makeBackground(0.4, 1.8);
-      
-      
+
       for (int y = 80; y < 88; y++) {
         for (int x = 40; x < 220; x++) {
           map[y * size + x] = 0.4;
@@ -446,7 +435,7 @@ void main() {
     test('tall vertical pillar does not trigger overhead (vertical spread '
         'gate filters walls)', () {
       final map = makeBackground(0.4, 1.8);
-      
+
       for (int y = 55; y < 120; y++) {
         for (int x = 110; x < 135; x++) {
           map[y * size + x] = 0.4;
@@ -485,8 +474,6 @@ void main() {
 
     test('sustained depth jump extending the floor slope direction is '
         'caught as a pit', () {
-      
-      
       final map = makeLinearFloor(0.5, 1.4);
       for (int y = 120; y < 195; y += 2) {
         for (int x = 100; x < 156; x++) {
@@ -503,8 +490,7 @@ void main() {
     test('wall ahead (deviation opposite to floor slope) is NOT flagged as '
         'a pit', () {
       final map = makeLinearFloor(0.5, 1.4);
-      
-      
+
       for (int y = 120; y < 195; y += 2) {
         for (int x = 100; x < 156; x++) {
           map[y * size + x] = 2.5;
@@ -526,7 +512,10 @@ void main() {
 
     test('scanZoneLumaVariance is ~0 on uniform luma', () {
       final luma = Uint8List(size * size)..fillRange(0, size * size, 128);
-      expect(GroundPlaneAnalyzer.scanZoneLumaVariance(luma), closeTo(0.0, 1e-9));
+      expect(
+        GroundPlaneAnalyzer.scanZoneLumaVariance(luma),
+        closeTo(0.0, 1e-9),
+      );
     });
 
     test('scanZoneLumaVariance is large on high-contrast scan zone', () {
@@ -549,20 +538,25 @@ void main() {
         'low variance', () {
       expect(
         GroundPlaneAnalyzer.isSuspiciousReflectiveSurface(
-            inlierRatio: 0.95, lumaVariance: 40.0),
+          inlierRatio: 0.95,
+          lumaVariance: 40.0,
+        ),
         isTrue,
       );
-      
+
       expect(
         GroundPlaneAnalyzer.isSuspiciousReflectiveSurface(
-            inlierRatio: 0.95, lumaVariance: 500.0),
+          inlierRatio: 0.95,
+          lumaVariance: 500.0,
+        ),
         isFalse,
       );
-      
-      
+
       expect(
         GroundPlaneAnalyzer.isSuspiciousReflectiveSurface(
-            inlierRatio: 0.50, lumaVariance: 40.0),
+          inlierRatio: 0.50,
+          lumaVariance: 40.0,
+        ),
         isFalse,
       );
     });
@@ -570,7 +564,9 @@ void main() {
     test('isSuspiciousReflectiveSurface returns false when luma is null', () {
       expect(
         GroundPlaneAnalyzer.isSuspiciousReflectiveSurface(
-            inlierRatio: 0.95, lumaVariance: null),
+          inlierRatio: 0.95,
+          lumaVariance: null,
+        ),
         isFalse,
       );
     });
@@ -578,19 +574,22 @@ void main() {
     test('isSuspiciousReflectiveSurface is defensive against NaN/Infinity', () {
       expect(
         GroundPlaneAnalyzer.isSuspiciousReflectiveSurface(
-            inlierRatio: double.nan, lumaVariance: 40.0),
+          inlierRatio: double.nan,
+          lumaVariance: 40.0,
+        ),
         isFalse,
       );
       expect(
         GroundPlaneAnalyzer.isSuspiciousReflectiveSurface(
-            inlierRatio: 0.95, lumaVariance: double.infinity),
+          inlierRatio: 0.95,
+          lumaVariance: double.infinity,
+        ),
         isFalse,
       );
     });
 
     test('analyze() on a perfect plane with uniform luma suppresses the '
         'plane-based zone classifier and emits a dead-zone caution', () {
-      
       final depth = Float32List(size * size);
       for (int y = 0; y < size; y++) {
         final z = 0.5 + y * 0.002;
@@ -601,13 +600,13 @@ void main() {
       final luma = Uint8List(size * size)..fillRange(0, size * size, 128);
       final analyzer = GroundPlaneAnalyzer();
       final hazards = analyzer.analyze(depth, lumaMap: luma);
-      
-      
+
       expect(hazards, isNotEmpty);
       expect(
-        hazards.any((h) =>
-            h.type == DepthHazardType.deadZone &&
-            h.zone == HazardZone.center),
+        hazards.any(
+          (h) =>
+              h.type == DepthHazardType.deadZone && h.zone == HazardZone.center,
+        ),
         isTrue,
       );
     });
@@ -621,7 +620,7 @@ void main() {
           depth[y * size + x] = z;
         }
       }
-      
+
       final luma = Uint8List(size * size);
       for (int y = 0; y < size; y++) {
         for (int x = 0; x < size; x++) {
@@ -631,21 +630,31 @@ void main() {
       final analyzer = GroundPlaneAnalyzer();
       final hazards = analyzer.analyze(depth, lumaMap: luma);
       expect(
-        hazards.any((h) =>
-            h.type == DepthHazardType.deadZone &&
-            h.zone == HazardZone.center &&
-            h.midasScore == 0.60),
+        hazards.any(
+          (h) =>
+              h.type == DepthHazardType.deadZone &&
+              h.zone == HazardZone.center &&
+              h.midasScore == 0.60,
+        ),
         isFalse,
       );
     });
   });
 
   group('OrientationService.cropTopFracForPitch', () {
-    test('returns min crop when phone is nearly flat (looking at the floor)',
-        () {
-      expect(OrientationService.cropTopFracForPitch(10.0), closeTo(0.20, 1e-9));
-      expect(OrientationService.cropTopFracForPitch(25.0), closeTo(0.20, 1e-9));
-    });
+    test(
+      'returns min crop when phone is nearly flat (looking at the floor)',
+      () {
+        expect(
+          OrientationService.cropTopFracForPitch(10.0),
+          closeTo(0.20, 1e-9),
+        );
+        expect(
+          OrientationService.cropTopFracForPitch(25.0),
+          closeTo(0.20, 1e-9),
+        );
+      },
+    );
 
     test('returns max crop when phone points at the horizon', () {
       expect(OrientationService.cropTopFracForPitch(75.0), closeTo(0.55, 1e-9));
@@ -787,10 +796,7 @@ void main() {
     });
 
     test('non-conformant map size returns null without crashing', () {
-      expect(
-        GroundPlaneAnalyzer.detectSlipperyFromLuma(Uint8List(16)),
-        isNull,
-      );
+      expect(GroundPlaneAnalyzer.detectSlipperyFromLuma(Uint8List(16)), isNull);
     });
   });
 
@@ -828,14 +834,7 @@ void main() {
 
     test('single close obstacle centred ahead forces a side corridor', () {
       final tracks = [
-        makeTrack(
-          id: 1,
-          cx: 800,
-          cy: 600,
-          width: 120,
-          height: 400,
-          distM: 1.0,
-        ),
+        makeTrack(id: 1, cx: 800, cy: 600, width: 120, height: 400, distM: 1.0),
       ];
       final result = findFreeCorridor(tracks, 1600, 900);
       expect(result, isNotNull);
@@ -845,14 +844,7 @@ void main() {
 
     test('obstacles on both edges leave a centred corridor', () {
       final tracks = [
-        makeTrack(
-          id: 1,
-          cx: 100,
-          cy: 600,
-          width: 120,
-          height: 400,
-          distM: 0.8,
-        ),
+        makeTrack(id: 1, cx: 100, cy: 600, width: 120, height: 400, distM: 0.8),
         makeTrack(
           id: 2,
           cx: 1500,
@@ -872,14 +864,16 @@ void main() {
       final tracks = <Track>[];
       for (int i = 0; i < 9; i++) {
         final cx = 100.0 + i * 180.0;
-        tracks.add(makeTrack(
-          id: i,
-          cx: cx,
-          cy: 600,
-          width: 260,
-          height: 400,
-          distM: 0.8,
-        ));
+        tracks.add(
+          makeTrack(
+            id: i,
+            cx: cx,
+            cy: 600,
+            width: 260,
+            height: 400,
+            distM: 0.8,
+          ),
+        );
       }
       final result = findFreeCorridor(tracks, 1600, 900);
       expect(result, isNotNull);
@@ -888,14 +882,7 @@ void main() {
 
     test('far obstacles (distM >> 1.5m) leave the whole FOV passable', () {
       final tracks = [
-        makeTrack(
-          id: 1,
-          cx: 800,
-          cy: 600,
-          width: 60,
-          height: 200,
-          distM: 10.0,
-        ),
+        makeTrack(id: 1, cx: 800, cy: 600, width: 60, height: 200, distM: 10.0),
       ];
       final result = findFreeCorridor(tracks, 1600, 900);
       expect(result, isNotNull);

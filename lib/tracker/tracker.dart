@@ -31,12 +31,18 @@ class _GraveyardEntry {
     required ListQueue<(DateTime, double)> areaHist,
     required ListQueue<(DateTime, double)> heightHist,
     required this.diedAt,
-  })  : areaHist = ListQueue.of(areaHist),
-        heightHist = ListQueue.of(heightHist);
+  }) : areaHist = ListQueue.of(areaHist),
+       heightHist = ListQueue.of(heightHist);
 
   static double _iou(
-    double ax1, double ay1, double ax2, double ay2,
-    double bx1, double by1, double bx2, double by2,
+    double ax1,
+    double ay1,
+    double ax2,
+    double ay2,
+    double bx1,
+    double by1,
+    double bx2,
+    double by2,
   ) {
     final ix1 = ax1 > bx1 ? ax1 : bx1;
     final iy1 = ay1 > by1 ? ay1 : by1;
@@ -54,11 +60,8 @@ class _GraveyardEntry {
 }
 
 class Tracker {
-  
-  
   static const double _kIouWeight = 0.6;
-  
-  
+
   static const double _kAppearanceBlend = 0.3;
 
   int _nextId = 1;
@@ -67,15 +70,12 @@ class Tracker {
   final List<_GraveyardEntry> _graveyard = [];
   static const Duration _kGraveyardTtl = Duration(seconds: 3);
 
-  
   final Map<int, int> _predictOnlyFrames = {};
 
-  
   DateTime? lastVehicleApproachingAcousticAt;
 
   TtsService? ttsService;
 
-  
   bool weatherDegraded = false;
   static const double _kPedWeatherBoost = 1.3;
 
@@ -87,7 +87,6 @@ class Tracker {
   /// lowered further since no depth cross-check is possible.
   bool depthProviderAvailable = true;
 
-  
   bool userWalking = false;
   static const double _kEgoMotionApproachBoost = 1.8;
 
@@ -104,8 +103,6 @@ class Tracker {
     if (trackList.isEmpty || dets.isEmpty) {
       unmatched.addAll(dets);
     } else {
-      
-      
       final cost = List<List<double>>.generate(
         dets.length,
         (_) => List<double>.filled(trackList.length, Hungarian.kForbidden),
@@ -152,8 +149,7 @@ class Tracker {
         initialConf: det.conf,
       );
       t.distHist.addLast(det.dist);
-      
-      
+
       t.centerHist.addLast((now, det.cx, det.cy));
       if (det.appearance != null) {
         t.appearance = Float32List.fromList(det.appearance!);
@@ -167,9 +163,7 @@ class Tracker {
       // spatial position (ID swap). This prevents the approaching-vehicle
       // ramp-up from restarting from zero after a brief tracker ID switch.
       if (isVehicle(det.label)) {
-        final graveIdx = _graveyard.indexWhere(
-          (e) => e.matchesDet(det),
-        );
+        final graveIdx = _graveyard.indexWhere((e) => e.matchesDet(det));
         if (graveIdx >= 0) {
           final g = _graveyard.removeAt(graveIdx);
           for (final entry in g.areaHist) {
@@ -189,8 +183,12 @@ class Tracker {
         if (t.approaching && isVehicle(t.label) && t.areaHist.isNotEmpty) {
           _graveyard.add(
             _GraveyardEntry(
-              cx: t.cx, cy: t.cy,
-              x1: t.x1, y1: t.y1, x2: t.x2, y2: t.y2,
+              cx: t.cx,
+              cy: t.cy,
+              x1: t.x1,
+              y1: t.y1,
+              x2: t.x2,
+              y2: t.y2,
               areaHist: t.areaHist,
               heightHist: t.heightHist,
               diedAt: now,
@@ -202,20 +200,18 @@ class Tracker {
       }
     });
     _tracks.removeWhere((_, t) => t.age > kTrackMaxAge);
-    _graveyard.removeWhere(
-      (e) => now.difference(e.diedAt) > _kGraveyardTtl,
-    );
+    _graveyard.removeWhere((e) => now.difference(e.diedAt) > _kGraveyardTtl);
 
-    
     return _tracks.values
-        .where((t) =>
-            t.age == 0 &&
-            (t.seenCount >= kTrackConfirmFrames ||
-                (t.fastTrack && _fastTrackAllowed(t, now))))
+        .where(
+          (t) =>
+              t.age == 0 &&
+              (t.seenCount >= kTrackConfirmFrames ||
+                  (t.fastTrack && _fastTrackAllowed(t, now))),
+        )
         .toList();
   }
 
-  
   bool _fastTrackAllowed(Track t, DateTime now) {
     if (t.reliableFrames >= 2) return true;
     if (t.avgConf < 0.75) return false;
@@ -224,7 +220,6 @@ class Tracker {
     return now.difference(ac) <= const Duration(seconds: 1);
   }
 
-  
   double _combinedScore(Track t, RawDet det) {
     final iou = t.kalman.matchScore(det);
     final tHist = t.appearance;
@@ -234,19 +229,12 @@ class Tracker {
     return iou * _kIouWeight + sim * (1.0 - _kIouWeight);
   }
 
-  void _applyMatch(
-    Track t,
-    RawDet det,
-    int imgW,
-    int imgH,
-    DateTime now,
-  ) {
+  void _applyMatch(Track t, RawDet det, int imgW, int imgH, DateTime now) {
     t.kalman.update(det);
     t.age = 0;
     t.seenCount = math.min(9999, t.seenCount + 1);
     if (t.seenCount >= kTrackConfirmFrames) t.fastTrack = false;
 
-    
     final gap = _predictOnlyFrames.remove(t.id) ?? 0;
     final preserveApproaching = t.approaching && gap >= 1 && gap <= 3;
     t.cx = det.cx;
@@ -259,7 +247,6 @@ class Tracker {
         ? det.conf
         : t.avgConf * (1.0 - kConfEmaAlpha) + det.conf * kConfEmaAlpha;
 
-    
     t.centerHist.addLast((now, det.cx, det.cy));
     while (t.centerHist.length > kVehTurnMinCenterHist) {
       t.centerHist.removeFirst();
@@ -268,7 +255,6 @@ class Tracker {
     t.lastAngularVelocity = turnState.angularVelocity;
     t.turning = turnState.turning;
 
-    
     if (det.appearance != null) {
       final existing = t.appearance;
       if (existing == null) {
@@ -293,7 +279,7 @@ class Tracker {
     if (t.distHist.length > 5) t.distHist.removeFirst();
     t.dist = _majorityDist(t.distHist);
     final rawDist = det.dist;
-    
+
     if (rawDist == 'very close' || rawDist == 'close') {
       if (t.nearFrameCount == 0) {
         t.lastSpoken = DateTime.fromMillisecondsSinceEpoch(0);
@@ -317,13 +303,12 @@ class Tracker {
       if (t.areaHist.length > kApproachHistLen) t.areaHist.removeFirst();
       if (t.heightHist.length > kApproachHistLen) t.heightHist.removeFirst();
 
-      
       t.approaching = preserveApproaching;
       t.dynamicThreat = false;
       if (t.areaHist.length >= 2) {
         final dt =
             t.areaHist.last.$1.difference(t.areaHist.first.$1).inMilliseconds /
-                1000.0;
+            1000.0;
         if (dt >= kApproachMinDtSec) {
           final ar0 = t.areaHist.first.$2;
           final ar1 = t.areaHist.last.$2;
@@ -333,14 +318,10 @@ class Tracker {
           final heightRate = (h1 - h0) / dt;
 
           if (isVehicle(t.label)) {
-            
-            
             final closeRange = t.distM > 0 && t.distM <= 4.0;
-            
-            
-            final turningNear = t.turning &&
-                t.distM > 0 &&
-                t.distM <= kVehTurnDistThreshold;
+
+            final turningNear =
+                t.turning && t.distM > 0 && t.distM <= kVehTurnDistThreshold;
             // V1.4: Use looser threshold when calibration is absent and no
             // depth cross-check is available — earlier warnings at the cost
             // of somewhat higher false-positive rate.
@@ -376,8 +357,6 @@ class Tracker {
               }
             }
           } else if (isPedestrian(t.label)) {
-            
-            
             double areaT = weatherDegraded
                 ? kPedApproachAreaRateT * _kPedWeatherBoost
                 : kPedApproachAreaRateT;
@@ -407,7 +386,6 @@ class Tracker {
     }
   }
 
-  
   bool _shouldFastTrackVeryCloseCenter(RawDet det, int imgW) {
     if (!isVehicle(det.label)) return false;
     if (det.dist != 'very close') return false;
@@ -419,8 +397,8 @@ class Tracker {
     if (userWalking) {
       final hasAcousticCorroboration =
           lastVehicleApproachingAcousticAt != null &&
-              DateTime.now().difference(lastVehicleApproachingAcousticAt!) <=
-                  const Duration(seconds: 1);
+          DateTime.now().difference(lastVehicleApproachingAcousticAt!) <=
+              const Duration(seconds: 1);
       if (!hasAcousticCorroboration) return false;
     }
     return true;
@@ -430,14 +408,14 @@ class Tracker {
     if (det.conf < 0.60) return false;
     if (det.dist != 'very close' && det.dist != 'close') return false;
     if (det.distM <= 0) return false;
-    final isLightVehicle =
-        det.label == 'bicycle' || det.label == 'motorcycle';
+    final isLightVehicle = det.label == 'bicycle' || det.label == 'motorcycle';
     if (det.dist == 'close' && !isLightVehicle) return false;
     final maxDist = isLightVehicle ? 5.0 : 1.5;
     if (det.distM > maxDist) return false;
 
     if (userWalking) {
-      final hasAcousticCorroboration = lastVehicleApproachingAcousticAt != null &&
+      final hasAcousticCorroboration =
+          lastVehicleApproachingAcousticAt != null &&
           DateTime.now().difference(lastVehicleApproachingAcousticAt!) <=
               const Duration(seconds: 1);
       if (!hasAcousticCorroboration) {
@@ -463,13 +441,11 @@ class Tracker {
       t.x2 = pBox[2];
       t.y2 = pBox[3];
 
-      
       final next = (_predictOnlyFrames[t.id] ?? 0) + 1;
       _predictOnlyFrames[t.id] = next;
 
-      final isCloseVehicle = isVehicle(t.label) &&
-          t.distM > 0 &&
-          t.distM <= 12.0;
+      final isCloseVehicle =
+          isVehicle(t.label) && t.distM > 0 && t.distM <= 12.0;
       final predictLimit = isCloseVehicle ? 6 : 3;
       final exemptFastTrack = t.fastTrack && next <= predictLimit;
       if (next > predictLimit && !exemptFastTrack) {
@@ -482,8 +458,7 @@ class Tracker {
       // stale Kalman predictions cannot sustain high-confidence alerts.
       // This prevents "ghost car" critical alerts when an object leaves frame.
       if (next > kTrackGhostDecayFrames) {
-        t.avgConf = (t.avgConf * kTrackGhostDecayFactor)
-            .clamp(0.0, t.avgConf);
+        t.avgConf = (t.avgConf * kTrackGhostDecayFactor).clamp(0.0, t.avgConf);
       }
     }
 
@@ -505,7 +480,6 @@ class Tracker {
     lastVehicleApproachingAcousticAt = null;
   }
 
-  
   static ({bool turning, double angularVelocity}) _computeTurnState(
     ListQueue<(DateTime, double, double)> hist,
   ) {
@@ -527,13 +501,11 @@ class Tracker {
       return (turning: false, angularVelocity: 0.0);
     }
 
-    
     final dtSec = p2.$1.difference(p1.$1).inMicroseconds / 1e6;
     if (dtSec <= 0.05 || dtSec >= 1.0) {
       return (turning: false, angularVelocity: 0.0);
     }
 
-    
     final a1 = math.atan2(v1y, v1x);
     final a2 = math.atan2(v2y, v2x);
     var dA = a2 - a1;
@@ -545,12 +517,12 @@ class Tracker {
     }
     final angVel = dA / dtSec;
 
-    
     final cross = v1x * v2y - v1y * v2x;
     final d1cubed = d1 * d1 * d1;
     final curvature = cross.abs() / d1cubed;
 
-    final turning = angVel.abs() > kVehTurnAngVelThreshold &&
+    final turning =
+        angVel.abs() > kVehTurnAngVelThreshold &&
         curvature > kVehTurnCurvatureThreshold;
     return (turning: turning, angularVelocity: angVel);
   }

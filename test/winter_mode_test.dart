@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:bagdar/core/core_feature_policy.dart';
 import 'package:bagdar/camera/depth_pipeline_controller.dart'
     show DepthPipelineController;
 import 'package:bagdar/camera/fall_countdown_controller.dart';
@@ -18,9 +19,16 @@ void main() {
 
     setUp(() async {
       SharedPreferences.setMockInitialValues({});
+      SettingsService.instance.debugSetPolicy(
+        const CoreFeaturePolicy(BuildProfile.research),
+      );
       await SettingsService.instance.init();
       svc = WinterModeService();
       svc.loadFromSettings();
+    });
+
+    tearDown(() {
+      SettingsService.instance.debugResetPolicy();
     });
 
     test('defaults to OFF when nothing is set', () {
@@ -36,70 +44,84 @@ void main() {
 
       final reloaded = WinterModeService();
       reloaded.loadFromSettings();
-      expect(reloaded.isManualEnabled, isTrue,
-          reason: 'manual toggle must survive process restart');
+      expect(
+        reloaded.isManualEnabled,
+        isTrue,
+        reason: 'manual toggle must survive process restart',
+      );
     });
 
-    test(
-      'auto-detect trips only after `kAutoEnableMinAge` consecutive cold '
-      'readings, and auto-disables on the first warm reading',
-      () {
-        ThermalReadings cold(double t) => ThermalReadings(
-              batteryTempC: t,
-              thermalStatus: null,
-              severity: ThermalSeverity.normal,
-            );
+    test('auto-detect trips only after `kAutoEnableMinAge` consecutive cold '
+        'readings, and auto-disables on the first warm reading', () {
+      ThermalReadings cold(double t) => ThermalReadings(
+        batteryTempC: t,
+        thermalStatus: null,
+        severity: ThermalSeverity.normal,
+      );
 
-        
-        svc.noteThermalReading(
-            cold(WinterModeService.kAutoEnableBatteryTempC - 1));
-        expect(svc.isAutoEnabled, isFalse);
+      svc.noteThermalReading(
+        cold(WinterModeService.kAutoEnableBatteryTempC - 1),
+      );
+      expect(svc.isAutoEnabled, isFalse);
 
-        
-        svc.noteThermalReading(
-            cold(WinterModeService.kAutoEnableBatteryTempC - 2));
-        expect(svc.isAutoEnabled, isTrue);
-        expect(svc.active, isTrue);
+      svc.noteThermalReading(
+        cold(WinterModeService.kAutoEnableBatteryTempC - 2),
+      );
+      expect(svc.isAutoEnabled, isTrue);
+      expect(svc.active, isTrue);
 
-        
-        svc.noteThermalReading(cold(25.0));
-        expect(svc.isAutoEnabled, isFalse);
-        expect(svc.active, isFalse);
-      },
-    );
+      svc.noteThermalReading(cold(25.0));
+      expect(svc.isAutoEnabled, isFalse);
+      expect(svc.active, isFalse);
+    });
 
     test(
       'auto-detect cannot turn OFF a manual toggle: user intent wins',
       () async {
         await svc.setManualEnabled(true);
-        svc.noteThermalReading(const ThermalReadings(
-          batteryTempC: 30.0,
-          thermalStatus: null,
-          severity: ThermalSeverity.normal,
-        ));
-        expect(svc.isAutoEnabled, isFalse,
-            reason: 'warm battery = no auto-enable');
-        expect(svc.active, isTrue,
-            reason: 'manual toggle keeps effective state ON');
+        svc.noteThermalReading(
+          const ThermalReadings(
+            batteryTempC: 30.0,
+            thermalStatus: null,
+            severity: ThermalSeverity.normal,
+          ),
+        );
+        expect(
+          svc.isAutoEnabled,
+          isFalse,
+          reason: 'warm battery = no auto-enable',
+        );
+        expect(
+          svc.active,
+          isTrue,
+          reason: 'manual toggle keeps effective state ON',
+        );
       },
     );
 
     test('null battery temp clears the streak without flipping state', () {
-      svc.noteThermalReading(const ThermalReadings(
-        batteryTempC: WinterModeService.kAutoEnableBatteryTempC - 1,
-        thermalStatus: null,
-        severity: ThermalSeverity.normal,
-      ));
+      svc.noteThermalReading(
+        const ThermalReadings(
+          batteryTempC: WinterModeService.kAutoEnableBatteryTempC - 1,
+          thermalStatus: null,
+          severity: ThermalSeverity.normal,
+        ),
+      );
       svc.noteThermalReading(const ThermalReadings.unavailable());
       expect(svc.isAutoEnabled, isFalse);
-      
-      svc.noteThermalReading(const ThermalReadings(
-        batteryTempC: 0.0,
-        thermalStatus: null,
-        severity: ThermalSeverity.normal,
-      ));
-      expect(svc.isAutoEnabled, isFalse,
-          reason: 'null reading reset the streak');
+
+      svc.noteThermalReading(
+        const ThermalReadings(
+          batteryTempC: 0.0,
+          thermalStatus: null,
+          severity: ThermalSeverity.normal,
+        ),
+      );
+      expect(
+        svc.isAutoEnabled,
+        isFalse,
+        reason: 'null reading reset the streak',
+      );
     });
   });
 
@@ -144,96 +166,84 @@ void main() {
 
   group('DepthPipelineController._isHazardCritical (Winter Mode)', () {
     DepthHazard slippery(HazardZone zone, double score) => DepthHazard(
-          type: DepthHazardType.slippery,
-          zone: zone,
-          midasScore: score,
-          coverage: 0.5,
-        );
-
-    test(
-      'normal mode: slippery in the LEFT zone is NOT critical even at high '
-      'score — zone gate holds',
-      () {
-        final crit = DepthPipelineController.isHazardCriticalForTesting(
-          slippery(HazardZone.left, 0.80),
-          rollExcessive: false,
-          userStationary: false,
-        );
-        expect(crit, isFalse,
-            reason: 'default behavior from C3: only center lane is critical');
-      },
+      type: DepthHazardType.slippery,
+      zone: zone,
+      midasScore: score,
+      coverage: 0.5,
     );
 
-    test(
-      'winter mode: slippery in the LEFT zone IS critical at the score '
-      'floor — black ice off-center still ends a walk badly',
-      () {
-        final crit = DepthPipelineController.isHazardCriticalForTesting(
-          slippery(HazardZone.left, 0.80),
+    test('normal mode: slippery in the LEFT zone is NOT critical even at high '
+        'score — zone gate holds', () {
+      final crit = DepthPipelineController.isHazardCriticalForTesting(
+        slippery(HazardZone.left, 0.80),
+        rollExcessive: false,
+        userStationary: false,
+      );
+      expect(
+        crit,
+        isFalse,
+        reason: 'default behavior from C3: only center lane is critical',
+      );
+    });
+
+    test('winter mode: slippery in the LEFT zone IS critical at the score '
+        'floor — black ice off-center still ends a walk badly', () {
+      final crit = DepthPipelineController.isHazardCriticalForTesting(
+        slippery(HazardZone.left, 0.80),
+        rollExcessive: false,
+        userStationary: false,
+        winterMode: true,
+      );
+      expect(crit, isTrue);
+    });
+
+    test('winter mode: slippery still suppressed for stationary users '
+        '(no point shouting "Stop!" at a standing user)', () {
+      final crit = DepthPipelineController.isHazardCriticalForTesting(
+        slippery(HazardZone.left, 0.80),
+        rollExcessive: false,
+        userStationary: true,
+        winterMode: true,
+      );
+      expect(crit, isFalse);
+    });
+
+    test('winter mode: below score floor (0.50) still not critical even off-'
+        'center', () {
+      final crit = DepthPipelineController.isHazardCriticalForTesting(
+        slippery(HazardZone.right, 0.40),
+        rollExcessive: false,
+        userStationary: false,
+        winterMode: true,
+      );
+      expect(crit, isFalse);
+    });
+
+    test('winter mode does not change behavior for non-slippery hazards', () {
+      const pothole = DepthHazard(
+        type: DepthHazardType.pothole,
+        zone: HazardZone.right,
+        midasScore: 0.70,
+        coverage: 0.5,
+      );
+      expect(
+        DepthPipelineController.isHazardCriticalForTesting(
+          pothole,
           rollExcessive: false,
-          userStationary: false,
+          winterMode: false,
+        ),
+        isFalse,
+      );
+      expect(
+        DepthPipelineController.isHazardCriticalForTesting(
+          pothole,
+          rollExcessive: false,
           winterMode: true,
-        );
-        expect(crit, isTrue);
-      },
-    );
-
-    test(
-      'winter mode: slippery still suppressed for stationary users '
-      '(no point shouting "Stop!" at a standing user)',
-      () {
-        final crit = DepthPipelineController.isHazardCriticalForTesting(
-          slippery(HazardZone.left, 0.80),
-          rollExcessive: false,
-          userStationary: true,
-          winterMode: true,
-        );
-        expect(crit, isFalse);
-      },
-    );
-
-    test(
-      'winter mode: below score floor (0.50) still not critical even off-'
-      'center',
-      () {
-        final crit = DepthPipelineController.isHazardCriticalForTesting(
-          slippery(HazardZone.right, 0.40),
-          rollExcessive: false,
-          userStationary: false,
-          winterMode: true,
-        );
-        expect(crit, isFalse);
-      },
-    );
-
-    test(
-      'winter mode does not change behavior for non-slippery hazards',
-      () {
-        const pothole = DepthHazard(
-          type: DepthHazardType.pothole,
-          zone: HazardZone.right,
-          midasScore: 0.70,
-          coverage: 0.5,
-        );
-        expect(
-          DepthPipelineController.isHazardCriticalForTesting(
-            pothole,
-            rollExcessive: false,
-            winterMode: false,
-          ),
-          isFalse,
-        );
-        expect(
-          DepthPipelineController.isHazardCriticalForTesting(
-            pothole,
-            rollExcessive: false,
-            winterMode: true,
-          ),
-          isFalse,
-          reason: 'off-center potholes remain non-critical in winter too',
-        );
-      },
-    );
+        ),
+        isFalse,
+        reason: 'off-center potholes remain non-critical in winter too',
+      );
+    });
   });
 
   group('FallCountdownController window scaling (Winter Mode)', () {
@@ -242,8 +252,11 @@ void main() {
         FallCountdownController.kInitialDuration,
         FallCountdownController.kWinterCancelWindowScale,
       );
-      expect(out.inSeconds, 11,
-          reason: '10.5 s must round UP — leave the user slightly more time');
+      expect(
+        out.inSeconds,
+        11,
+        reason: '10.5 s must round UP — leave the user slightly more time',
+      );
     });
 
     test('30 s × 0.7 = exactly 21 s', () {
@@ -270,16 +283,13 @@ void main() {
       expect(out.inSeconds, greaterThanOrEqualTo(1));
     });
 
-    test(
-      'kWinterCancelWindowScale matches the documented 30 % reduction',
-      () {
-        expect(
-          FallCountdownController.kWinterCancelWindowScale,
-          WinterModeService.kCancelWindowScale,
-          reason: 'both sources must declare the same 0.7 multiplier',
-        );
-        expect(FallCountdownController.kWinterCancelWindowScale, 0.7);
-      },
-    );
+    test('kWinterCancelWindowScale matches the documented 30 % reduction', () {
+      expect(
+        FallCountdownController.kWinterCancelWindowScale,
+        WinterModeService.kCancelWindowScale,
+        reason: 'both sources must declare the same 0.7 multiplier',
+      );
+      expect(FallCountdownController.kWinterCancelWindowScale, 0.7);
+    });
   });
 }
