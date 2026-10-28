@@ -1,0 +1,31 @@
+{
+  "scope": "Windows x64 owned transport/allocation correction; known synthetic regression",
+  "sourceSha256": {
+    "lib/safety/perception/camera_fast_metric_motion_packed.dart": "5c96539ea2b5848e17aeba01985f864b26c6bb2a23635621f8398af61481cd0c",
+    "lib/safety/perception/camera_fast_motion_bulk_native_match.dart": "6fc656b91fda1af6987660a3a2dbfc4783f276811f5d158c4c3b2084973e2698",
+    "lib/safety/runtime/camera_fast_motion_packed_transport.dart": "8d953de2a491c3481f67a02bcb99ecf79e188a8e5140f72c02abc699b8780860",
+    "lib/safety/runtime/camera_fast_motion_packed_worker.dart": "c87e629c1004c22e418e6dbb9bb78f71eb523ab9646328db593b7151d20a3209",
+    "lib/safety/runtime/camera_fast_motion_packed_shadow_adapter.dart": "d536bf8633622591f39c2bd1d09676e9dd81249bb20515e5b634de3c5085b662",
+    "tool/model_benchmark/profile_fast_camera_motion_packed.dart": "0a1a0748f47df1a2ee698fe2b739f143aaee2bf5b26142892786dc33ed560c70",
+    "tool/model_benchmark/replay_fast_camera_motion_packed.dart": "5902daa5bf6e6f55c3ffc41232ecb4d00a41a668cd6f7657f5819fd9691720b7",
+    "tool/model_benchmark/evaluate_fast_camera_motion_packed.dart": "9c4bae45a5233cd4c0c984e3b03aef60350f6cb688d996f582f3a79c20bf3877",
+    "tool/model_benchmark/verify_fast_camera_motion_packed.py": "5ab531a007e28b7314a36ba3e0d4e9a0d522f3d390160f56aa70ba26fe2cb6da",
+    "test/camera_fast_motion_packed_worker_test.dart": "fb328172232eabc822f7135333cbd9a69a9f11768f046dea6d521ec93713c1ea",
+    "test/camera_fast_motion_packed_shadow_replay_test.dart": "b6cb0c5c3152fc8abe3ab9c7b4ab016f88fe3a3c4bb1894a657bfb144209efe4",
+    "test/harness/camera_fast_motion_packed_shadow_benchmark.dart": "10faccf0bb7fa123cc7cfe91b49a3e00dc26ebb876486e32398916764b162628",
+    "docs/camera-fast-motion-packed-protocol-2026-10-07.md": "09a74101c9b372bc7c8067fec81097f1fc42a92a666b66a8068b713cb5032889"
+  },
+  "previousLoadContractSha256": "3cab85ea97f39bbcc2936eb58ab1c98998335042b354861294a6da7d77be77d1",
+  "frozenReferencesSha256": {
+    "docs/_baseline_logs/camera_fast_motion_parity.json": "f079bb8449ea546326e01a3da008cd9e8e126ed84da8ff98f8ea44009fb72ea3",
+    "docs/_baseline_logs/camera_fast_motion_functional.json": "27bdc69a468261eb6933aa00737a5e78c5728964a48403741c594b882ef377d4",
+    "docs/_baseline_logs/camera_fast_motion_load_shadow.json": "dd53dece46ae4eac997a8670ec9a50b98b1494b6b3d967360f981dff4bc97f38"
+  },
+  "numericSourceUnchanged": true,
+  "currentAgeLimitUs": 100000,
+  "promotionAllowed": false,
+  "ordinaryCameraWired": false,
+  "newIndependentHoldout": false,
+  "captureToCommandMeasured": false,
+  "timingsAreReproducibilityData": false
+}

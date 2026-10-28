@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "seed": 202610041,
+  "width": 160,
+  "height": 120,
+  "lensMm": 26,
+  "sensorWidthMm": 36,
+  "originM": [0, 0, 1.47],
+  "captureEpochUs": 1791072000000000,
+  "scenes": [
+    {"id":"rig-room-clear", "kind":"room", "hazard":false, "dynamic":false},
+    {"id":"rig-room-box", "kind":"box", "hazard":true, "dynamic":false},
+    {"id":"rig-portal-high", "kind":"high", "hazard":false, "dynamic":false},
+    {"id":"rig-portal-low", "kind":"low", "hazard":true, "dynamic":false},
+    {"id":"rig-floor-flat", "kind":"flat", "hazard":false, "dynamic":false},
+    {"id":"rig-floor-drop", "kind":"drop", "hazard":true, "dynamic":false},
+    {"id":"rig-moving-before", "kind":"moving", "hazard":false, "dynamic":true, "frame":1, "offsetUs":0},
+    {"id":"rig-moving-after", "kind":"moving", "hazard":true, "dynamic":true, "frame":2, "offsetUs":40000}
+  ]
+}

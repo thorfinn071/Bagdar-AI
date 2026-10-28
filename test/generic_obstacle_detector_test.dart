@@ -96,6 +96,83 @@ Float32List _planarWall() {
   return m;
 }
 
+Float32List _doorwayFrame() {
+  final m = _openCorridor();
+  for (int y = 45; y < 180; y++) {
+    for (int x = 70; x < 104; x++) {
+      m[y * 256 + x] = 0.92;
+    }
+    for (int x = 153; x < 187; x++) {
+      m[y * 256 + x] = 0.92;
+    }
+  }
+  for (int y = 45; y < 76; y++) {
+    for (int x = 70; x < 187; x++) {
+      m[y * 256 + x] = 0.92;
+    }
+  }
+  return m;
+}
+
+Float32List _wallWithNarrowCenterGap() {
+  final m = _wall();
+  final ground = _openCorridor();
+  for (int y = 60; y < 190; y++) {
+    for (int x = 123; x < 133; x++) {
+      m[y * 256 + x] = ground[y * 256 + x];
+    }
+  }
+  return m;
+}
+
+Float32List _wallWithWideDepthDropout() {
+  final m = _wall();
+  for (int y = 60; y < 190; y++) {
+    for (int x = 102; x < 154; x++) {
+      m[y * 256 + x] = double.nan;
+    }
+  }
+  return m;
+}
+
+Float32List _wideDoorwayFrame() {
+  final m = _openCorridor();
+  for (int y = 45; y < 180; y++) {
+    for (int x = 60; x < 96; x++) {
+      m[y * 256 + x] = 0.92;
+    }
+    for (int x = 160; x < 196; x++) {
+      m[y * 256 + x] = 0.92;
+    }
+  }
+  for (int y = 45; y < 76; y++) {
+    for (int x = 60; x < 196; x++) {
+      m[y * 256 + x] = 0.92;
+    }
+  }
+  return m;
+}
+
+Float32List _wideDoorwayWithBottomEdgeStrip() {
+  final m = _wideDoorwayFrame();
+  for (int y = 235; y < 256; y++) {
+    for (int x = 74; x < 182; x++) {
+      m[y * 256 + x] = 0.92;
+    }
+  }
+  return m;
+}
+
+Float32List _wideDoorwayWithLowObstacle() {
+  final m = _wideDoorwayFrame();
+  for (int y = 186; y < 250; y++) {
+    for (int x = 106; x < 150; x++) {
+      m[y * 256 + x] = 0.92;
+    }
+  }
+  return m;
+}
+
 void main() {
   final det = GenericObstacleDetector();
 
@@ -196,6 +273,56 @@ void main() {
       );
     },
   );
+
+  test('structured centre aperture is not collapsed into a broad wall', () {
+    final r = run(_doorwayFrame());
+    expect(
+      r.observations.any((o) => o.geometry == ObstacleGeometry.broadSurface),
+      isFalse,
+    );
+    expect(r.surfaceEvidence.isAvailable, isTrue);
+    expect(r.unknownProbabilityFloor, 0.65);
+  });
+
+  test('wide observed doorway keeps its centre unknown without a wall', () {
+    final r = run(_wideDoorwayFrame());
+    expect(
+      r.observations.any((o) => o.geometry == ObstacleGeometry.broadSurface),
+      isFalse,
+    );
+    expect(r.unknownProbabilityFloor, 0.65);
+  });
+
+  test('bottom-edge strip in doorway stays unknown', () {
+    final r = run(_wideDoorwayWithBottomEdgeStrip());
+    expect(r.observations, isEmpty);
+    expect(r.unknownProbabilityFloor, 0.65);
+  });
+
+  test('low obstacle rising above bottom fringe remains an observation', () {
+    final r = run(_wideDoorwayWithLowObstacle());
+    expect(
+      r.observations.any((o) => o.geometry == ObstacleGeometry.lowObstacle),
+      isTrue,
+    );
+    expect(r.unknownProbabilityFloor, 0.65);
+  });
+
+  test('wide depth dropout in a solid wall is not a doorway', () {
+    final r = run(_wallWithWideDepthDropout());
+    expect(
+      r.observations.any((o) => o.geometry == ObstacleGeometry.broadSurface),
+      isTrue,
+    );
+  });
+
+  test('narrow depth dropout does not suppress a broad wall', () {
+    final r = run(_wallWithNarrowCenterGap());
+    expect(
+      r.observations.any((o) => o.geometry == ObstacleGeometry.broadSurface),
+      isTrue,
+    );
+  });
 
   test('crop metadata remaps component bounds into the full upright frame', () {
     final r = det.detect(

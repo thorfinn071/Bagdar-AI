@@ -1,0 +1,1605 @@
+{
+  "schemaVersion": 1,
+  "corpusManifestSha256": "1ad79b545c2b617f88acf70d6e07ab84e783c31eeea0b30dec07c79202a80d16",
+  "generatorSha256": "2e794a5d8e43353ec060b0c91d4cde21948d81ded9934670a787f3758f06d0af",
+  "modelParamSha256": "d618bb98777ff7e7adeeef1c8cf50ede79c97c754876681d6a0b26330708e8d3",
+  "modelBinSha256": "324412b094f3309c0c7acd506a06ccdc60296749ac382dc58431efdde0f13242",
+  "runtime": "ncnn-1.0.20260114-cpu-threads1",
+  "preprocessId": "rgb01-chw-256-nearest-stretch-no-crop-v1",
+  "valueSemantics": "rawRelativeInverseDepthLargerNearer",
+  "calibration": {
+    "scope": "synthetic diagnostic only; no device metric calibration",
+    "fitSplit": "calibration",
+    "validationSplit": "validation",
+    "testUsedForFit": false,
+    "a": 0.0004449824573113248,
+    "b": 0.17112806664345248,
+    "sampleCount": 137871,
+    "validationAbsErrorP50M": 0.3561618511903488,
+    "validationAbsErrorP95M": 1.7001118899366332,
+    "validationAbsErrorMaxM": 3.296987145447478,
+    "invalidValidationFraction": 0.0,
+    "accepted": false,
+    "maximumAllowedP95M": 0.05,
+    "maximumAllowedMaxM": 0.1,
+    "promotionAllowed": false
+  },
+  "frozenCalibrationSourceSha256": "949e24d5124c7595a8f4759e0a0b11e77d840ef33601fda4911cab14ec61cc1d",
+  "newScenesUsedForFit": false,
+  "inferenceHelperSha256": "fd8b28236f016fc5faed4e7cfcb65848b19e71421076931a65007b3f9b4a86ce",
+  "frames": [
+    {
+      "layoutId": "validation-metric-motion-stationary-00",
+      "frameId": 1,
+      "variant": "clean",
+      "rgbSha256": "75354e83453e5da9507695f06522dfd88ce3d3ed2e14390e818b3042319ea51c",
+      "path": "validation-metric-motion-stationary-00-clean-1.f32.gz",
+      "sha256": "a0fe8261b811b74ff424987cb6caf362e50e7c409664e46a88b4e271dacc4579",
+      "rgbPixels": {
+        "path": "validation-metric-motion-stationary-00-rgb-1.u8.gz",
+        "sha256": "353df3039fe2d94d61a353477c36ec95ad68bc740c941c63e65d60cc492d4d3b"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-stationary-00",
+      "frameId": 2,
+      "variant": "clean",
+      "rgbSha256": "7c6e7efa8cb028a11ff54a0c3b5b381e26ed5832596c644bf5cc8f74ef87f2a9",
+      "path": "validation-metric-motion-stationary-00-clean-2.f32.gz",
+      "sha256": "a0fe8261b811b74ff424987cb6caf362e50e7c409664e46a88b4e271dacc4579",
+      "rgbPixels": {
+        "path": "validation-metric-motion-stationary-00-rgb-2.u8.gz",
+        "sha256": "353df3039fe2d94d61a353477c36ec95ad68bc740c941c63e65d60cc492d4d3b"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-stationary-00",
+      "frameId": 3,
+      "variant": "clean",
+      "rgbSha256": "fcd459680298a28db39e3daad71e4547d90fa2f6dfd7081dc39d254faf136b14",
+      "path": "validation-metric-motion-stationary-00-clean-3.f32.gz",
+      "sha256": "a0fe8261b811b74ff424987cb6caf362e50e7c409664e46a88b4e271dacc4579",
+      "rgbPixels": {
+        "path": "validation-metric-motion-stationary-00-rgb-3.u8.gz",
+        "sha256": "353df3039fe2d94d61a353477c36ec95ad68bc740c941c63e65d60cc492d4d3b"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-stationary-00",
+      "frameId": 4,
+      "variant": "clean",
+      "rgbSha256": "3b0249eea67d4f97d18a509a89c4eacf8dbf9b34deead4a9d2f1bf7d177a82a8",
+      "path": "validation-metric-motion-stationary-00-clean-4.f32.gz",
+      "sha256": "a0fe8261b811b74ff424987cb6caf362e50e7c409664e46a88b4e271dacc4579",
+      "rgbPixels": {
+        "path": "validation-metric-motion-stationary-00-rgb-4.u8.gz",
+        "sha256": "353df3039fe2d94d61a353477c36ec95ad68bc740c941c63e65d60cc492d4d3b"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-stationary-00",
+      "frameId": 5,
+      "variant": "clean",
+      "rgbSha256": "098880053780f0fe7491eb30dd49578804520b9683f8689472bf65fed5bbac1f",
+      "path": "validation-metric-motion-stationary-00-clean-5.f32.gz",
+      "sha256": "a0fe8261b811b74ff424987cb6caf362e50e7c409664e46a88b4e271dacc4579",
+      "rgbPixels": {
+        "path": "validation-metric-motion-stationary-00-rgb-5.u8.gz",
+        "sha256": "353df3039fe2d94d61a353477c36ec95ad68bc740c941c63e65d60cc492d4d3b"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-stationary-00",
+      "frameId": 6,
+      "variant": "clean",
+      "rgbSha256": "c559f7443a8912eeaa5e94509c42530e0a13cb0ed848ba2440dfbf89c3c7ae74",
+      "path": "validation-metric-motion-stationary-00-clean-6.f32.gz",
+      "sha256": "a0fe8261b811b74ff424987cb6caf362e50e7c409664e46a88b4e271dacc4579",
+      "rgbPixels": {
+        "path": "validation-metric-motion-stationary-00-rgb-6.u8.gz",
+        "sha256": "353df3039fe2d94d61a353477c36ec95ad68bc740c941c63e65d60cc492d4d3b"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-stationary-00",
+      "frameId": 7,
+      "variant": "clean",
+      "rgbSha256": "79d28d01f86cec103d8bfea5d1348b9ea98551fb28e91143d81a8597d077b616",
+      "path": "validation-metric-motion-stationary-00-clean-7.f32.gz",
+      "sha256": "a0fe8261b811b74ff424987cb6caf362e50e7c409664e46a88b4e271dacc4579",
+      "rgbPixels": {
+        "path": "validation-metric-motion-stationary-00-rgb-7.u8.gz",
+        "sha256": "353df3039fe2d94d61a353477c36ec95ad68bc740c941c63e65d60cc492d4d3b"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-approach-01",
+      "frameId": 1,
+      "variant": "clean",
+      "rgbSha256": "0508fb8187716d16e568c1e6c4d41b5078cc37ebb83f6711e1354a7ad0de7cf1",
+      "path": "validation-metric-motion-approach-01-clean-1.f32.gz",
+      "sha256": "f5ee8cf623e0469d99918ef5aa206280a00c4096a015d45924fc08f18b5d16e3",
+      "rgbPixels": {
+        "path": "validation-metric-motion-approach-01-rgb-1.u8.gz",
+        "sha256": "b40749a30da8cf98390fa0fc0e8c43d241faa6a5306f28770bbfc1cf85e8a817"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-approach-01",
+      "frameId": 2,
+      "variant": "clean",
+      "rgbSha256": "9bf60281af726f55f1d75969c725200149b9a7015edd2d67b6ebefc70668cdb5",
+      "path": "validation-metric-motion-approach-01-clean-2.f32.gz",
+      "sha256": "f11876a29c28b8c2b57ccc259741d252c9b32b18f94c1199848ec33e31f8233e",
+      "rgbPixels": {
+        "path": "validation-metric-motion-approach-01-rgb-2.u8.gz",
+        "sha256": "3d55453ae9a4243193505bfa607c296390c190c9a6b36b64f4491076fbbfe767"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-approach-01",
+      "frameId": 3,
+      "variant": "clean",
+      "rgbSha256": "cbf0ca200b8108c6dace122991ad249902e98c9623bfac2191012ccc657f695e",
+      "path": "validation-metric-motion-approach-01-clean-3.f32.gz",
+      "sha256": "35e07fce5d2aec81a7f9092bb0064573d489fb8f926be07fac3c85e66c9e3107",
+      "rgbPixels": {
+        "path": "validation-metric-motion-approach-01-rgb-3.u8.gz",
+        "sha256": "70bdce2b0c301867de7f69b93e3b20653152866984204e58a6220ab8d1dde0e4"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-approach-01",
+      "frameId": 4,
+      "variant": "clean",
+      "rgbSha256": "96c47f4874eb88c83a18ca64182387ee55ee5d9ec8577cdd634ca0998874881a",
+      "path": "validation-metric-motion-approach-01-clean-4.f32.gz",
+      "sha256": "61fd5a3d113a780155b224b4e6af0b61b18384245d291126dca702f5a86f07f2",
+      "rgbPixels": {
+        "path": "validation-metric-motion-approach-01-rgb-4.u8.gz",
+        "sha256": "ad57e1c26a02f81c9c48da9c8c5bbe44030415c50b5192f89875b208428c5eaf"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-approach-01",
+      "frameId": 5,
+      "variant": "clean",
+      "rgbSha256": "a3ff6fb327ce8ae689a7e202907bca14b76e5bc59e66854e23606c9d690ece00",
+      "path": "validation-metric-motion-approach-01-clean-5.f32.gz",
+      "sha256": "27deaff4aa9212f1a838212b609c5992b637a4e882baf6b480b59235f4f149ff",
+      "rgbPixels": {
+        "path": "validation-metric-motion-approach-01-rgb-5.u8.gz",
+        "sha256": "f0acfbce5c95b2ce6d469459b80f878395b4c6e6ded3a10cba1d8dcdee32b831"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-approach-01",
+      "frameId": 6,
+      "variant": "clean",
+      "rgbSha256": "32c2c9d0f05e8ae5809daa5a394a1cb0ede94089a42a65b140fe2737e1b9fc64",
+      "path": "validation-metric-motion-approach-01-clean-6.f32.gz",
+      "sha256": "7e62cb5497b22a3aa8d07af002b80296e4a847b319f3784193243501651c7797",
+      "rgbPixels": {
+        "path": "validation-metric-motion-approach-01-rgb-6.u8.gz",
+        "sha256": "a38a84cac031c71d281e1d6f49a138072268998994757c30b9be80fed26b423e"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-approach-01",
+      "frameId": 7,
+      "variant": "clean",
+      "rgbSha256": "18a9b5bd60f48ed91eed2d974d7585c99e0728ed7a552e716dbe3706885b530b",
+      "path": "validation-metric-motion-approach-01-clean-7.f32.gz",
+      "sha256": "8b0fc0e9207c94135b4e0e1a2c79a9298cbb1bcdb868e0edcaa96bd928df6165",
+      "rgbPixels": {
+        "path": "validation-metric-motion-approach-01-rgb-7.u8.gz",
+        "sha256": "07753faaddd2569f8a0ea5c1200e99cbd20203f5c3d85600396067bf7fdee06a"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-receding-02",
+      "frameId": 1,
+      "variant": "clean",
+      "rgbSha256": "4475769f070cb16e0e3e63eaec7ad0a47c6ccf4b5c883a2669a7cfd0312f748a",
+      "path": "validation-metric-motion-receding-02-clean-1.f32.gz",
+      "sha256": "c1a223a4111392a12c22b4f017ef1029db4fdddf948115e0eafe7c646624d44f",
+      "rgbPixels": {
+        "path": "validation-metric-motion-receding-02-rgb-1.u8.gz",
+        "sha256": "832db19bbbd9c6545f6a39309c7b367420099e78f26d5b96959550f17d9d2db2"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-receding-02",
+      "frameId": 2,
+      "variant": "clean",
+      "rgbSha256": "e1beb0254778336104663e0d1ab30440aff37b77204c5142fbd6c28bac5ee8dd",
+      "path": "validation-metric-motion-receding-02-clean-2.f32.gz",
+      "sha256": "3ea86b457f8837c55f554d1c2e53dac86ad84c00019bf9d77e4bbf671a655b81",
+      "rgbPixels": {
+        "path": "validation-metric-motion-receding-02-rgb-2.u8.gz",
+        "sha256": "ccbf1d3f4e4e84a954a04cfd080af244548a58dc6be9713aaaf1be816176719e"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-receding-02",
+      "frameId": 3,
+      "variant": "clean",
+      "rgbSha256": "7ae68d9cbb6159e37b4840f5d14d5b5a94b596f97ded8ec310f0542228fa18bf",
+      "path": "validation-metric-motion-receding-02-clean-3.f32.gz",
+      "sha256": "8ca0b5f6a47919dc14707fcf45c580b0951d6935164a5b925785cb6d1352e57b",
+      "rgbPixels": {
+        "path": "validation-metric-motion-receding-02-rgb-3.u8.gz",
+        "sha256": "cc6d6e56e177afeb8e3b4f788d0355635630fa1399ad8a7335e4968fef877c63"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-receding-02",
+      "frameId": 4,
+      "variant": "clean",
+      "rgbSha256": "ef63597ff3422dcee16e34782abb6dfa426b1cc6097117ebfabe12596eb423f5",
+      "path": "validation-metric-motion-receding-02-clean-4.f32.gz",
+      "sha256": "785d674015b3f3d6aa7384b4fcfd0aa398e7071aa0ab9ea7d0d630889884c151",
+      "rgbPixels": {
+        "path": "validation-metric-motion-receding-02-rgb-4.u8.gz",
+        "sha256": "861d1883397d97f05921e0fedf92ff53337c29093eedc0cd748701e900c983e0"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-receding-02",
+      "frameId": 5,
+      "variant": "clean",
+      "rgbSha256": "44e71f6d93cf461ece7cadf80386cdf0fd7fcb2be3884e14d8baba6397fa6e61",
+      "path": "validation-metric-motion-receding-02-clean-5.f32.gz",
+      "sha256": "0044f66034af194cb08fe8bdfc9e6ba740b11f11ccfa2654e6fffe64ea6d2040",
+      "rgbPixels": {
+        "path": "validation-metric-motion-receding-02-rgb-5.u8.gz",
+        "sha256": "b2527c9c0efca40df87069f2064a6992da289db51574c6361a3fd07850a27312"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-receding-02",
+      "frameId": 6,
+      "variant": "clean",
+      "rgbSha256": "e4c3ad692d3c09f88c40155be42fac5f979e8adb33e6ad685e8a7bc92a273829",
+      "path": "validation-metric-motion-receding-02-clean-6.f32.gz",
+      "sha256": "8bd090b6491189e15fb3e4697347cea5d8a672d715842a66eadb220f1b84ca52",
+      "rgbPixels": {
+        "path": "validation-metric-motion-receding-02-rgb-6.u8.gz",
+        "sha256": "0439f780db921f4bc2138494ba356b5de20c25c2c414e586e2a23bcdc113ff86"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-receding-02",
+      "frameId": 7,
+      "variant": "clean",
+      "rgbSha256": "4b8ac9812fd78eee26deb45261c51e9a4276912547135544a917788993a06f15",
+      "path": "validation-metric-motion-receding-02-clean-7.f32.gz",
+      "sha256": "d4c7fc85781f8f265e6b915ac11125b7899bca583df46c190cdbc5d7170301a8",
+      "rgbPixels": {
+        "path": "validation-metric-motion-receding-02-rgb-7.u8.gz",
+        "sha256": "851f1bcce25218341536a79e7a99f0d60856e484bb5b724db3a712d96121de91"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-crossing-03",
+      "frameId": 1,
+      "variant": "clean",
+      "rgbSha256": "83f4809f5f384c5db88785e95b60401113853f086e523c29d00dec77c0136c0c",
+      "path": "validation-metric-motion-crossing-03-clean-1.f32.gz",
+      "sha256": "0bbbd3d730587f4dd5b6afc26ecf6d77f12df30181379428e8237937e7a726ab",
+      "rgbPixels": {
+        "path": "validation-metric-motion-crossing-03-rgb-1.u8.gz",
+        "sha256": "38c852c0da64ac6171eaeea265209f7ecde27e2e0bab754455f4de78d42e1ec5"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-crossing-03",
+      "frameId": 2,
+      "variant": "clean",
+      "rgbSha256": "219faa7e475ac485f4118dd3536a47048813680d08544619a6923b3c972aeeba",
+      "path": "validation-metric-motion-crossing-03-clean-2.f32.gz",
+      "sha256": "cee2e12d2d6b6505e33bd5ef5489f9bbee0d7fec421fbc814e1ea1fff5f1f78c",
+      "rgbPixels": {
+        "path": "validation-metric-motion-crossing-03-rgb-2.u8.gz",
+        "sha256": "4775b681a0bbcd61ce214a4db8ca62e4904ca68d24923334e89a70d1ad8958f1"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-crossing-03",
+      "frameId": 3,
+      "variant": "clean",
+      "rgbSha256": "e7d946c1430a5ce60bc79783c26158cb7924750ac948966364b649b41074fe69",
+      "path": "validation-metric-motion-crossing-03-clean-3.f32.gz",
+      "sha256": "66cd5ee7345f0c53a97882497e14c10186840954bc2e98dd41f4d6813f09ebf5",
+      "rgbPixels": {
+        "path": "validation-metric-motion-crossing-03-rgb-3.u8.gz",
+        "sha256": "9284931900207041a122f599c3790772bcdabd608f413f90905d1a97b986275e"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-crossing-03",
+      "frameId": 4,
+      "variant": "clean",
+      "rgbSha256": "0f1df0166febf5df1b4e7db2938eaff965bce53080bc80a71846c3e2d48605a9",
+      "path": "validation-metric-motion-crossing-03-clean-4.f32.gz",
+      "sha256": "8232523ce38b8887b6d9cc67b8fddbf6f5b22251a7d22656bf8701c68f643b8d",
+      "rgbPixels": {
+        "path": "validation-metric-motion-crossing-03-rgb-4.u8.gz",
+        "sha256": "dbf4a86bd89ff37d0c4f6b2091a26833200db4a258f673398f4a1e04e1368307"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-crossing-03",
+      "frameId": 5,
+      "variant": "clean",
+      "rgbSha256": "deb3379131f8158bf7e2cd7e876474dab954db3be68075b15e42a4b530fa160c",
+      "path": "validation-metric-motion-crossing-03-clean-5.f32.gz",
+      "sha256": "913fba3ce61c18c7a185de23ddb5e27b11a21d5cac9ff9541eedeb1bdb115eed",
+      "rgbPixels": {
+        "path": "validation-metric-motion-crossing-03-rgb-5.u8.gz",
+        "sha256": "8e54aa5f5369956b0cdbf56c079f4962fb500425e3d2b238dded2c96f975ad07"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-crossing-03",
+      "frameId": 6,
+      "variant": "clean",
+      "rgbSha256": "2f7d9fb917bb41b99f630e92383c5fcaebae90e5b84339ed2ba82aa14fd06610",
+      "path": "validation-metric-motion-crossing-03-clean-6.f32.gz",
+      "sha256": "70ee1b73e546930a486578f6321ffb0d570ef7a277001d6f8ac0445318a33b83",
+      "rgbPixels": {
+        "path": "validation-metric-motion-crossing-03-rgb-6.u8.gz",
+        "sha256": "6d20bb58d7924ccbe01172cfa517c59c7cf6bb243c185cba03eda53963dad8fa"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-crossing-03",
+      "frameId": 7,
+      "variant": "clean",
+      "rgbSha256": "fce83068fc7a4709f0823d1bfb9c627d958863c4cb4f6a5e95f6aeb13facca29",
+      "path": "validation-metric-motion-crossing-03-clean-7.f32.gz",
+      "sha256": "93804494f5ac84089e5fb92611b961105ebd37c5b442554d5d86154d6685c153",
+      "rgbPixels": {
+        "path": "validation-metric-motion-crossing-03-rgb-7.u8.gz",
+        "sha256": "32eb335dc15c75de8670e2c76174255078814130ab21d3942568c35a76684a0a"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-camera-yaw-04",
+      "frameId": 1,
+      "variant": "clean",
+      "rgbSha256": "c68a328f23e674bb435a544ceace94295ab2c4f63117d77e9ee1e692732dd5fe",
+      "path": "validation-metric-motion-camera-yaw-04-clean-1.f32.gz",
+      "sha256": "2bcbad76595c1c80947987bf2acf90f9dd4cd2e9e0b1d9bfb2e720e02ed18ddf",
+      "rgbPixels": {
+        "path": "validation-metric-motion-camera-yaw-04-rgb-1.u8.gz",
+        "sha256": "93d86fc4c35107b2b0c58d5cc6f74f5be2238cb54fbf6ad8a68001c15a4d45a4"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-camera-yaw-04",
+      "frameId": 2,
+      "variant": "clean",
+      "rgbSha256": "2b0299606819c587304d6d9aa162afbd67b4d20df6f061d22883fa03ce07a6f0",
+      "path": "validation-metric-motion-camera-yaw-04-clean-2.f32.gz",
+      "sha256": "e6978b1ee60cdff1cedf6643093a439be842cf8cd62f4f9ba0507232ef473f68",
+      "rgbPixels": {
+        "path": "validation-metric-motion-camera-yaw-04-rgb-2.u8.gz",
+        "sha256": "d430d5091f1c4cf644a58adf103eb6c91ee6d84076b7453cc5a14ec9f89570e3"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-camera-yaw-04",
+      "frameId": 3,
+      "variant": "clean",
+      "rgbSha256": "7f1ebd9ee30c305c3f332b901d2f1c662869b489f30d58b162e4472968b4b8aa",
+      "path": "validation-metric-motion-camera-yaw-04-clean-3.f32.gz",
+      "sha256": "eccef532f0e7eeb3b22795815bc7f48e6a6ef4371e5deed8da56928c5a1f98aa",
+      "rgbPixels": {
+        "path": "validation-metric-motion-camera-yaw-04-rgb-3.u8.gz",
+        "sha256": "64a11a49888334cc34fa4ab6f659c0d36ace43e3c84941b4ffbf97699cbb683b"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-camera-yaw-04",
+      "frameId": 4,
+      "variant": "clean",
+      "rgbSha256": "43c8b03ca364b19cd5a2e2d450aae55b5ebdd13491dc5690afaf82c9a1d736ff",
+      "path": "validation-metric-motion-camera-yaw-04-clean-4.f32.gz",
+      "sha256": "e0230d05e8011366972df8c719f16c49b3f8e0e148f000a16264649cd3dd07f0",
+      "rgbPixels": {
+        "path": "validation-metric-motion-camera-yaw-04-rgb-4.u8.gz",
+        "sha256": "e8a70985a799eaff6bfd877435f0125b34a3a73d7db788ceced5690fa2ce6aa7"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-camera-yaw-04",
+      "frameId": 5,
+      "variant": "clean",
+      "rgbSha256": "c2a10c6e9fffc9f7a2946ab374c5d6ddd6fe0f6138a7e8f98496d3f5e154547f",
+      "path": "validation-metric-motion-camera-yaw-04-clean-5.f32.gz",
+      "sha256": "f5a2890f83f5e9209a5d1b9af227b596d1c871b707ad621d60aaf499ea2eb708",
+      "rgbPixels": {
+        "path": "validation-metric-motion-camera-yaw-04-rgb-5.u8.gz",
+        "sha256": "9459512906b896f50a8ff722335a107d6a87e2bff8919dee7131918fee76326a"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-camera-yaw-04",
+      "frameId": 6,
+      "variant": "clean",
+      "rgbSha256": "bfd313515a576208d5c3efa34f5924076245327c11b40dc77210849be0163468",
+      "path": "validation-metric-motion-camera-yaw-04-clean-6.f32.gz",
+      "sha256": "67c3468e35f12fdec178d3646640f14c543ea64c95014013fc5f64e817c8f1dc",
+      "rgbPixels": {
+        "path": "validation-metric-motion-camera-yaw-04-rgb-6.u8.gz",
+        "sha256": "56fdc4724dbd90f424ffd9ebb538633728711d4984394357e89de2d116e94f83"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-camera-yaw-04",
+      "frameId": 7,
+      "variant": "clean",
+      "rgbSha256": "7e3622bbb96fa9c7a52afb06ed05e086d17bfa70434f66a928c144b31f460ec2",
+      "path": "validation-metric-motion-camera-yaw-04-clean-7.f32.gz",
+      "sha256": "e5c517c47b6a9c140d82fb4810aaa37549834f70ef3829f09b228eea072b5713",
+      "rgbPixels": {
+        "path": "validation-metric-motion-camera-yaw-04-rgb-7.u8.gz",
+        "sha256": "188fb039f27b9f12aae141bbc0e3ae19356906705428c2b6cf7c184d4473290c"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-camera-translation-05",
+      "frameId": 1,
+      "variant": "clean",
+      "rgbSha256": "44f8940311af17c4e87a60677c1418b58a337085e10ab331090f2318ebffc6b4",
+      "path": "validation-metric-motion-camera-translation-05-clean-1.f32.gz",
+      "sha256": "3a9ac0226544166b3970659468cc8636389991e4908fcd478d6ae28271013250",
+      "rgbPixels": {
+        "path": "validation-metric-motion-camera-translation-05-rgb-1.u8.gz",
+        "sha256": "a06e4a1a11458efb7247f952f0b80c9f9bdf9b81804fe512cb2bfda4cf9c0412"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-camera-translation-05",
+      "frameId": 2,
+      "variant": "clean",
+      "rgbSha256": "04dc3c0355c4da41e16af958a768b996dca66f2db73fd6175bc709645ced44c9",
+      "path": "validation-metric-motion-camera-translation-05-clean-2.f32.gz",
+      "sha256": "3611f8d9b1865cf6079db4cd70415c5828dd6e4db7ed8e73b7827497abba6fcd",
+      "rgbPixels": {
+        "path": "validation-metric-motion-camera-translation-05-rgb-2.u8.gz",
+        "sha256": "47a51d84208aefc16a11607cef7475f09a28611023d71c2bc09db84f7cc041a8"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-camera-translation-05",
+      "frameId": 3,
+      "variant": "clean",
+      "rgbSha256": "c77ef6992c0eb5a4e096fc483560e839e8fecfc9f77de90e452b10af492e49d0",
+      "path": "validation-metric-motion-camera-translation-05-clean-3.f32.gz",
+      "sha256": "7eef3bb161cd5ab3bf33f332ae7619c2e3dacb9e51c7e30d3a353369bd62f2bf",
+      "rgbPixels": {
+        "path": "validation-metric-motion-camera-translation-05-rgb-3.u8.gz",
+        "sha256": "203f96bc44b98f3289ca95a8e7a5bd20450f0bb2ea6334160214e7f3c4e647f1"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-camera-translation-05",
+      "frameId": 4,
+      "variant": "clean",
+      "rgbSha256": "333b9638e2f829699bbb43135a65438f342b64e37c06ea4e09dbdc1b40773613",
+      "path": "validation-metric-motion-camera-translation-05-clean-4.f32.gz",
+      "sha256": "612d24ff4a8ad05e480fd621f899912a91429dbaf4725cfe6b5747604a9334b5",
+      "rgbPixels": {
+        "path": "validation-metric-motion-camera-translation-05-rgb-4.u8.gz",
+        "sha256": "11aca4e7930b468f1cce10116c417a12700ee1c14ede2c37a7678eb76f2f99c8"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-camera-translation-05",
+      "frameId": 5,
+      "variant": "clean",
+      "rgbSha256": "8786001af0b37a6d447b42d24d5f54146b68aea919587ae1b577de41817cfa5e",
+      "path": "validation-metric-motion-camera-translation-05-clean-5.f32.gz",
+      "sha256": "1f9441fb7847b8c031e6a302d7f032b2dbe1c40cd8964bae01ef9a88a861e107",
+      "rgbPixels": {
+        "path": "validation-metric-motion-camera-translation-05-rgb-5.u8.gz",
+        "sha256": "f6cea13ba573bd9344fce7a938ca376887ab19f2c087cce8aacc9065a0c85320"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-camera-translation-05",
+      "frameId": 6,
+      "variant": "clean",
+      "rgbSha256": "302038872cb66f12396daef622b12468280a1dc91daca5fa34d5ca48fc482bce",
+      "path": "validation-metric-motion-camera-translation-05-clean-6.f32.gz",
+      "sha256": "9b31122db994953e1725fe99986fc7436760624af9665980797bbcd957fb083f",
+      "rgbPixels": {
+        "path": "validation-metric-motion-camera-translation-05-rgb-6.u8.gz",
+        "sha256": "d3b5c72daf8869e042dbc71b5356e2e1aab149503d64ab430aa22fd14875e0d1"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-camera-translation-05",
+      "frameId": 7,
+      "variant": "clean",
+      "rgbSha256": "9ae4905ffee6e967b7354652ec7b755380c9ecd8d876f5d361fb9e9c3b99ea20",
+      "path": "validation-metric-motion-camera-translation-05-clean-7.f32.gz",
+      "sha256": "4f0b30e09be3564eb7442a6af21974cdf125591c3578a2ade2984425eea47877",
+      "rgbPixels": {
+        "path": "validation-metric-motion-camera-translation-05-rgb-7.u8.gz",
+        "sha256": "5ad627763a43feeb6917b1e8ee6eee3a823da4d5a9c8ac2404ac9c41979486c7"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-wide-06",
+      "frameId": 1,
+      "variant": "clean",
+      "rgbSha256": "d04140299ba6ed7b380b60ef041fdab87b60a4da0d7ee3afef691419edd75bd6",
+      "path": "validation-metric-motion-wide-06-clean-1.f32.gz",
+      "sha256": "d25b956df4a519056c1eb0de17f1f11ff352328a4865b9de19397b0fea51d999",
+      "rgbPixels": {
+        "path": "validation-metric-motion-wide-06-rgb-1.u8.gz",
+        "sha256": "cefc91c186bd5626b986b29cee917764805a8df1e125893555168d566e88e5b2"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-wide-06",
+      "frameId": 2,
+      "variant": "clean",
+      "rgbSha256": "79222bcf0bddcb173e969d72cee5fa529c9cbb87d71ddeb7516187e4fffc3400",
+      "path": "validation-metric-motion-wide-06-clean-2.f32.gz",
+      "sha256": "97cf858635c509cdee08ca43209df459fc5a04a310e57312fc5a5b635cc2472a",
+      "rgbPixels": {
+        "path": "validation-metric-motion-wide-06-rgb-2.u8.gz",
+        "sha256": "30f4c4c32d39a2386392df9c8cb73e61d1aeca845eb7b6334fcfecc886d6d520"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-wide-06",
+      "frameId": 3,
+      "variant": "clean",
+      "rgbSha256": "a149922d14be8a3f1b8b79729cf48b501acbf12bc7a58a1e623162e22ef01141",
+      "path": "validation-metric-motion-wide-06-clean-3.f32.gz",
+      "sha256": "97cf858635c509cdee08ca43209df459fc5a04a310e57312fc5a5b635cc2472a",
+      "rgbPixels": {
+        "path": "validation-metric-motion-wide-06-rgb-3.u8.gz",
+        "sha256": "30f4c4c32d39a2386392df9c8cb73e61d1aeca845eb7b6334fcfecc886d6d520"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-wide-06",
+      "frameId": 4,
+      "variant": "clean",
+      "rgbSha256": "da5179cca11cff938fa4b1598061f0b6d5e06dae6b0f872e2e7366e9c72080e0",
+      "path": "validation-metric-motion-wide-06-clean-4.f32.gz",
+      "sha256": "97cf858635c509cdee08ca43209df459fc5a04a310e57312fc5a5b635cc2472a",
+      "rgbPixels": {
+        "path": "validation-metric-motion-wide-06-rgb-4.u8.gz",
+        "sha256": "30f4c4c32d39a2386392df9c8cb73e61d1aeca845eb7b6334fcfecc886d6d520"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-wide-06",
+      "frameId": 5,
+      "variant": "clean",
+      "rgbSha256": "d0824e98625da53aacccb47f6675df8c8005b8163c7a4ea898e3ed132182ed5b",
+      "path": "validation-metric-motion-wide-06-clean-5.f32.gz",
+      "sha256": "789c4e05496d25f1ade313a058e1a9279e72d337419d4f82b948cc77d8b02f32",
+      "rgbPixels": {
+        "path": "validation-metric-motion-wide-06-rgb-5.u8.gz",
+        "sha256": "c325036d7892d7a8f3623de8c7e2e6540ffa745623032fac21a07549d46c44cc"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-wide-06",
+      "frameId": 6,
+      "variant": "clean",
+      "rgbSha256": "8d1568bae1af9a7b3f852b83f06397b4044bed79c6b7c0689c1c5bc395477c5c",
+      "path": "validation-metric-motion-wide-06-clean-6.f32.gz",
+      "sha256": "acb0659bcc1a3f9e28b140fc160af045fb1c6eb5a4ec59eed4fc362fd82995c0",
+      "rgbPixels": {
+        "path": "validation-metric-motion-wide-06-rgb-6.u8.gz",
+        "sha256": "db69f3bfc067eead32e3f95c7b11cf6ef44b6dba7d2df2ded08c8fd27288b04f"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-wide-06",
+      "frameId": 7,
+      "variant": "clean",
+      "rgbSha256": "1258a4a59b9c0b674e4e9f853addf063ce5b1113dc56ad840468726e9a61bd92",
+      "path": "validation-metric-motion-wide-06-clean-7.f32.gz",
+      "sha256": "4371457f420160feb6596c0e96bbef37476e27b3c83b02cbdb66cbf1775c466c",
+      "rgbPixels": {
+        "path": "validation-metric-motion-wide-06-rgb-7.u8.gz",
+        "sha256": "1da88dcb5132b5fe3219c8ef840f460f0a368eeb18e80c80754b7e6040bf2876"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-wide-06",
+      "frameId": 8,
+      "variant": "clean",
+      "rgbSha256": "e4459c0957eab4ec26d4dcaae9fb2dfd637fe37656c711b07d6c38a9689f98e7",
+      "path": "validation-metric-motion-wide-06-clean-8.f32.gz",
+      "sha256": "1c03074bedd42718c48970c92b45cf06096fbc56912c7b81842b7ec259553b41",
+      "rgbPixels": {
+        "path": "validation-metric-motion-wide-06-rgb-8.u8.gz",
+        "sha256": "c2e7bac8ff7f45e8b537de6f7023b934678bd4cc86b44290db19e089b28eb367"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-wide-06",
+      "frameId": 9,
+      "variant": "clean",
+      "rgbSha256": "7a5a6fd47a9674e3edcdd6b4f279722daa9add91548eceb20f2d859043b115f9",
+      "path": "validation-metric-motion-wide-06-clean-9.f32.gz",
+      "sha256": "4a72ecf793ceb25c6473e66fc0278b19d569cdeaebf1c982c6f70519c7790bf9",
+      "rgbPixels": {
+        "path": "validation-metric-motion-wide-06-rgb-9.u8.gz",
+        "sha256": "1a74cbd586db545ba95d58d85440d51e8aca400dbd0ceae8eba2c9e54e9549e0"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-wide-06",
+      "frameId": 10,
+      "variant": "clean",
+      "rgbSha256": "84e64dbed149432c2456d5187b195725d8bc74f67c66f1ef7dc6fcc578744935",
+      "path": "validation-metric-motion-wide-06-clean-10.f32.gz",
+      "sha256": "c7e3fe83d543a11bce4016b61f3e97a3acf1f7af4b803a9594048c2bacff7e47",
+      "rgbPixels": {
+        "path": "validation-metric-motion-wide-06-rgb-10.u8.gz",
+        "sha256": "8749c02f761c400121699e982b6012975897568ec9f9bfa581e7b1c9bed5cd93"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-wide-06",
+      "frameId": 11,
+      "variant": "clean",
+      "rgbSha256": "1512f03e98a9fa2dfee270b6911722f2a2eca92152438f1b280e97ff0ce051ce",
+      "path": "validation-metric-motion-wide-06-clean-11.f32.gz",
+      "sha256": "d25b956df4a519056c1eb0de17f1f11ff352328a4865b9de19397b0fea51d999",
+      "rgbPixels": {
+        "path": "validation-metric-motion-wide-06-rgb-11.u8.gz",
+        "sha256": "cefc91c186bd5626b986b29cee917764805a8df1e125893555168d566e88e5b2"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-wide-06",
+      "frameId": 12,
+      "variant": "clean",
+      "rgbSha256": "8995ca01079aef75e3534edcb34ef44cd4e5108f05f57547ac109c1cca2d7bc8",
+      "path": "validation-metric-motion-wide-06-clean-12.f32.gz",
+      "sha256": "d25b956df4a519056c1eb0de17f1f11ff352328a4865b9de19397b0fea51d999",
+      "rgbPixels": {
+        "path": "validation-metric-motion-wide-06-rgb-12.u8.gz",
+        "sha256": "cefc91c186bd5626b986b29cee917764805a8df1e125893555168d566e88e5b2"
+      }
+    },
+    {
+      "layoutId": "validation-metric-motion-wide-06",
+      "frameId": 13,
+      "variant": "clean",
+      "rgbSha256": "e66dad1125fef4395ced1ebcbe3f00ba8ab746d16b51d36df331944aa11139bd",
+      "path": "validation-metric-motion-wide-06-clean-13.f32.gz",
+      "sha256": "d25b956df4a519056c1eb0de17f1f11ff352328a4865b9de19397b0fea51d999",
+      "rgbPixels": {
+        "path": "validation-metric-motion-wide-06-rgb-13.u8.gz",
+        "sha256": "cefc91c186bd5626b986b29cee917764805a8df1e125893555168d566e88e5b2"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-stationary-07",
+      "frameId": 1,
+      "variant": "clean",
+      "rgbSha256": "e3dab5b0888f9dde9ef49166201eb5b530aa9e5766e1464b68a35c1e6753d415",
+      "path": "test-metric-motion-stationary-07-clean-1.f32.gz",
+      "sha256": "2042bfddd899920add0277675818ee64099ff52ace2090d42752b4490d2010ce",
+      "rgbPixels": {
+        "path": "test-metric-motion-stationary-07-rgb-1.u8.gz",
+        "sha256": "0d0642cc2114921d231ca99f7023dacfbc3d102654032c1b093669f2f9809449"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-stationary-07",
+      "frameId": 2,
+      "variant": "clean",
+      "rgbSha256": "f060ec6a6fd5c571fad0ba1a844b5cfef5566cabec4fb96106722d75bcec49ad",
+      "path": "test-metric-motion-stationary-07-clean-2.f32.gz",
+      "sha256": "2042bfddd899920add0277675818ee64099ff52ace2090d42752b4490d2010ce",
+      "rgbPixels": {
+        "path": "test-metric-motion-stationary-07-rgb-2.u8.gz",
+        "sha256": "0d0642cc2114921d231ca99f7023dacfbc3d102654032c1b093669f2f9809449"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-stationary-07",
+      "frameId": 3,
+      "variant": "clean",
+      "rgbSha256": "4b8fb3fa75926d9ef2625d8edb82672a983d38e5866b619696b73e5c69429bbf",
+      "path": "test-metric-motion-stationary-07-clean-3.f32.gz",
+      "sha256": "2042bfddd899920add0277675818ee64099ff52ace2090d42752b4490d2010ce",
+      "rgbPixels": {
+        "path": "test-metric-motion-stationary-07-rgb-3.u8.gz",
+        "sha256": "0d0642cc2114921d231ca99f7023dacfbc3d102654032c1b093669f2f9809449"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-stationary-07",
+      "frameId": 4,
+      "variant": "clean",
+      "rgbSha256": "bf1561cadc12d232d000dfbefce3a0dd0dca4c307ab275e91bc63183df91385d",
+      "path": "test-metric-motion-stationary-07-clean-4.f32.gz",
+      "sha256": "2042bfddd899920add0277675818ee64099ff52ace2090d42752b4490d2010ce",
+      "rgbPixels": {
+        "path": "test-metric-motion-stationary-07-rgb-4.u8.gz",
+        "sha256": "0d0642cc2114921d231ca99f7023dacfbc3d102654032c1b093669f2f9809449"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-stationary-07",
+      "frameId": 5,
+      "variant": "clean",
+      "rgbSha256": "d538f7950eaa2e47ddcdfe1aab5f8f2c55f637cd1797d8f873bd25570d372408",
+      "path": "test-metric-motion-stationary-07-clean-5.f32.gz",
+      "sha256": "2042bfddd899920add0277675818ee64099ff52ace2090d42752b4490d2010ce",
+      "rgbPixels": {
+        "path": "test-metric-motion-stationary-07-rgb-5.u8.gz",
+        "sha256": "0d0642cc2114921d231ca99f7023dacfbc3d102654032c1b093669f2f9809449"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-stationary-07",
+      "frameId": 6,
+      "variant": "clean",
+      "rgbSha256": "a9bec88f77291c7c203dfb635e09e626a316d3b3da427865d5f1d23fd78bf53c",
+      "path": "test-metric-motion-stationary-07-clean-6.f32.gz",
+      "sha256": "2042bfddd899920add0277675818ee64099ff52ace2090d42752b4490d2010ce",
+      "rgbPixels": {
+        "path": "test-metric-motion-stationary-07-rgb-6.u8.gz",
+        "sha256": "0d0642cc2114921d231ca99f7023dacfbc3d102654032c1b093669f2f9809449"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-stationary-07",
+      "frameId": 7,
+      "variant": "clean",
+      "rgbSha256": "433fe0bf928b13a2c232c260c40f3937f58bed22f61b055b546f784661d4249f",
+      "path": "test-metric-motion-stationary-07-clean-7.f32.gz",
+      "sha256": "2042bfddd899920add0277675818ee64099ff52ace2090d42752b4490d2010ce",
+      "rgbPixels": {
+        "path": "test-metric-motion-stationary-07-rgb-7.u8.gz",
+        "sha256": "0d0642cc2114921d231ca99f7023dacfbc3d102654032c1b093669f2f9809449"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "frameId": 1,
+      "variant": "clean",
+      "rgbSha256": "98832f356357ba8aaf3a5f3a4405b375d25df48c772f849dfc699f1c230780fd",
+      "path": "test-metric-motion-approach-08-clean-1.f32.gz",
+      "sha256": "e3a3d39fd97f02dcca7e9bd2e59992b4b5bc6b0fb5b01e941dcc0392d2204103",
+      "rgbPixels": {
+        "path": "test-metric-motion-approach-08-rgb-1.u8.gz",
+        "sha256": "238d16d01ed6d97941406c5691a8a973e0d726b104169ccce1a7c990acf88c01"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "frameId": 2,
+      "variant": "clean",
+      "rgbSha256": "cb89d1e488e940e3415d32b82263da534ae1ec2b5a18c7986465685104250008",
+      "path": "test-metric-motion-approach-08-clean-2.f32.gz",
+      "sha256": "b41624b74d09758aa5482bbb405fb2557d52caa81b0f2e9e6ae11d98f2dfbfdb",
+      "rgbPixels": {
+        "path": "test-metric-motion-approach-08-rgb-2.u8.gz",
+        "sha256": "831503d7f97058e8aa7d0ea3a510b975551d40ee964801f8ea6373fd60183f20"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "frameId": 3,
+      "variant": "clean",
+      "rgbSha256": "63b4dff9ef644198299d7cdecb3a2908ff8ed718e74b625c06d51ab9a1772786",
+      "path": "test-metric-motion-approach-08-clean-3.f32.gz",
+      "sha256": "b6c9be2e98d20e3a403df54038a4f48482cd56a861654769e210868635972e4a",
+      "rgbPixels": {
+        "path": "test-metric-motion-approach-08-rgb-3.u8.gz",
+        "sha256": "0d8209d3752ebdc9ac0f6eead728f5464c8d4c47ee69aafab4541be3e08c1377"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "frameId": 4,
+      "variant": "clean",
+      "rgbSha256": "730da15e8f49064796e59b4ceded8711a0dea26a75d545769dc48e2975edcf2c",
+      "path": "test-metric-motion-approach-08-clean-4.f32.gz",
+      "sha256": "2acbd52da45a70e4099fb8c0385b33fe154a7010b5d6eafbcf3b8cce3ed4397e",
+      "rgbPixels": {
+        "path": "test-metric-motion-approach-08-rgb-4.u8.gz",
+        "sha256": "76b79c7c4e57f45f1ed98712a507ab5ba33bc71e5f59c34387faedebbb8247ce"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "frameId": 5,
+      "variant": "clean",
+      "rgbSha256": "53509b33252706b846eb675daf90c26a8f3209d725f2a4cc8368861b295ced8c",
+      "path": "test-metric-motion-approach-08-clean-5.f32.gz",
+      "sha256": "331d9be897dd935cf679a4154823b212ee4ede7fb272e894f7a332be07e3e588",
+      "rgbPixels": {
+        "path": "test-metric-motion-approach-08-rgb-5.u8.gz",
+        "sha256": "3d40566d6672d479beec11b12d0e8e1e795265effe46a32e40696dc6ed522487"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "frameId": 6,
+      "variant": "clean",
+      "rgbSha256": "eefa6d8b3beb47c158b64b2b5b60e642511a30299589074fcd6b571e525c142b",
+      "path": "test-metric-motion-approach-08-clean-6.f32.gz",
+      "sha256": "36654de6e78a0878f4200a08a3cf719cb158b633ed90765168c76c3acee4854c",
+      "rgbPixels": {
+        "path": "test-metric-motion-approach-08-rgb-6.u8.gz",
+        "sha256": "93832e9661b34db5e5561a8d1e9095ebfcd6defa7ca14529e1b8e2a419b6a254"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "frameId": 7,
+      "variant": "clean",
+      "rgbSha256": "5a38ceea3dc51b6bc6a10e80ec3cef63bb109f6cbfab3405fc8ecca8fd053f00",
+      "path": "test-metric-motion-approach-08-clean-7.f32.gz",
+      "sha256": "2477c51fea3dad359dd3553f48dd8d61b03b3dde024b20520e55497799b88dcd",
+      "rgbPixels": {
+        "path": "test-metric-motion-approach-08-rgb-7.u8.gz",
+        "sha256": "959015379ce3918ef71b338d2f971f50bedfda5ff9169fd76616eb5459dd0f32"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-receding-09",
+      "frameId": 1,
+      "variant": "clean",
+      "rgbSha256": "98e0de48ee8488228c4fbbe2c3aaa59790d6eeb8b5cb20c8ada0d36dd6d64e58",
+      "path": "test-metric-motion-receding-09-clean-1.f32.gz",
+      "sha256": "e720fcc238365141450abf641314acce628d05d07cde734aae50ffe9581fd1fd",
+      "rgbPixels": {
+        "path": "test-metric-motion-receding-09-rgb-1.u8.gz",
+        "sha256": "c7724094eb19851af0d33a3d07e8a8066ed10fba1783349683b280aeab3969d0"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-receding-09",
+      "frameId": 2,
+      "variant": "clean",
+      "rgbSha256": "1b3d88cf629c3df98adde333965c9d36dad5bf0ba3d0081c71efc5e281141bfe",
+      "path": "test-metric-motion-receding-09-clean-2.f32.gz",
+      "sha256": "f9bc00db1560986bb152c59de182041f017f704dc309b300fb8af11a09c99a5b",
+      "rgbPixels": {
+        "path": "test-metric-motion-receding-09-rgb-2.u8.gz",
+        "sha256": "2031756d9f685aba5a83493eef3547d9cc9a8262f1ea3db65ccd256fdeaacda3"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-receding-09",
+      "frameId": 3,
+      "variant": "clean",
+      "rgbSha256": "ba2442783f04681d30f4ce59694ce4fa1e00a71935e52bc40ee13159ec618046",
+      "path": "test-metric-motion-receding-09-clean-3.f32.gz",
+      "sha256": "f93409daa852591df3fe53d11df1e1132dba39f209e28254fb131739ae6d20e2",
+      "rgbPixels": {
+        "path": "test-metric-motion-receding-09-rgb-3.u8.gz",
+        "sha256": "5b981c1200343d63ecd81be12621de7faad83e71f329769b7a8a4a5c056d911c"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-receding-09",
+      "frameId": 4,
+      "variant": "clean",
+      "rgbSha256": "1786f881b9b75e5e6e1cb92eaa3795e70bebacb9e7c7411f5f5df8325785107d",
+      "path": "test-metric-motion-receding-09-clean-4.f32.gz",
+      "sha256": "bb3e57888fa195757e580c657a5f401333558da2f48db009c9faaad7c02a8ee3",
+      "rgbPixels": {
+        "path": "test-metric-motion-receding-09-rgb-4.u8.gz",
+        "sha256": "400ea2fe5f368be1bef40663efcc18b0e9c368c5c79c6061f1e549c5e8825b53"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-receding-09",
+      "frameId": 5,
+      "variant": "clean",
+      "rgbSha256": "5b4d2e0d94664f9201150d8860217c74f83263ba3d17ad35a1f24bb5592fc760",
+      "path": "test-metric-motion-receding-09-clean-5.f32.gz",
+      "sha256": "57f55e374d2d77e0116ebc96512669b7a7115671213797f56bfc163eb50a84b1",
+      "rgbPixels": {
+        "path": "test-metric-motion-receding-09-rgb-5.u8.gz",
+        "sha256": "d4c2b81840a8c740c8a7d1d9639c29ac534cc9bbf5ca7fb8d366f971ced68ca4"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-receding-09",
+      "frameId": 6,
+      "variant": "clean",
+      "rgbSha256": "bf8ea83c3ac2988016ba0e5f9ffaa2f3de0935c245f0093987ae13559fc6e028",
+      "path": "test-metric-motion-receding-09-clean-6.f32.gz",
+      "sha256": "00ce18d9b0a783320ed89e3d2134c62698b7c3605ec189fc20479220d053b3c6",
+      "rgbPixels": {
+        "path": "test-metric-motion-receding-09-rgb-6.u8.gz",
+        "sha256": "2088b839bc5bafa96aabfe84fada06cdce41077b529f9133ec1c1dadae5c2f78"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-receding-09",
+      "frameId": 7,
+      "variant": "clean",
+      "rgbSha256": "52233cfe30a74bee1ec902f51605566120c7ca550ac6835da1cc76ec38874a9f",
+      "path": "test-metric-motion-receding-09-clean-7.f32.gz",
+      "sha256": "9e6429d689f281d749ef4d7b5aa4afef7775e744a718760f0c8e0387839fb2f3",
+      "rgbPixels": {
+        "path": "test-metric-motion-receding-09-rgb-7.u8.gz",
+        "sha256": "aee8244b22c50906ec1f67a6ce4aefe6da260c455e2ecb41410409afe9d47275"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-crossing-10",
+      "frameId": 1,
+      "variant": "clean",
+      "rgbSha256": "fe640bcf28ff554eeb84681aa7773022eb01af44d0f3e29947bd4e6c88317b45",
+      "path": "test-metric-motion-crossing-10-clean-1.f32.gz",
+      "sha256": "c86560ad964c181154164f49fcc8631c4b07151e8bedcb6c882c138f2a99ecfb",
+      "rgbPixels": {
+        "path": "test-metric-motion-crossing-10-rgb-1.u8.gz",
+        "sha256": "7d014bcf564614038351e0c701dc682f5a8ff426c0b4bb07d03183eaa31291b0"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-crossing-10",
+      "frameId": 2,
+      "variant": "clean",
+      "rgbSha256": "b3872537be4847accbc6800f966c3992d9bd8572e057417408eb1780566d63c2",
+      "path": "test-metric-motion-crossing-10-clean-2.f32.gz",
+      "sha256": "5e1b725866a2de33b3f0b44bb41ad5bbb3584fd1245dda0a470543348bb80a47",
+      "rgbPixels": {
+        "path": "test-metric-motion-crossing-10-rgb-2.u8.gz",
+        "sha256": "65b6b72827afd1ecceefa5ba1bee3c1e37ab2fde8ad94787bc0569405c1bcc0c"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-crossing-10",
+      "frameId": 3,
+      "variant": "clean",
+      "rgbSha256": "b63b8282d15dfa3dabdde17a9c879586d88f791d70bf45e9d7c59d9d5fe1ca8e",
+      "path": "test-metric-motion-crossing-10-clean-3.f32.gz",
+      "sha256": "50cdfe1dcc29ea1712da8bbd2609a2ba8897c49685a96689c77fef0181836ba1",
+      "rgbPixels": {
+        "path": "test-metric-motion-crossing-10-rgb-3.u8.gz",
+        "sha256": "f7da6024ab872b8903762607ae4028561d773b253f70c7974ce92f674d80a60e"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-crossing-10",
+      "frameId": 4,
+      "variant": "clean",
+      "rgbSha256": "819661c3677dff87ecaacc6429c8a2ea0ab244caaf43938bbd93f2e0071b2f21",
+      "path": "test-metric-motion-crossing-10-clean-4.f32.gz",
+      "sha256": "8d47409e01e6dc19d7b1a954c47cf1095126f3e74a619363c967f9169455d98f",
+      "rgbPixels": {
+        "path": "test-metric-motion-crossing-10-rgb-4.u8.gz",
+        "sha256": "a79533dd386c73260fc473d685ad91c15e090a572f9c3bfa46a160e895e3fe27"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-crossing-10",
+      "frameId": 5,
+      "variant": "clean",
+      "rgbSha256": "69f732d0e431811a3f2257798bc94955b3bd0934d3853d343048cb99eecf8fb9",
+      "path": "test-metric-motion-crossing-10-clean-5.f32.gz",
+      "sha256": "1807760e00d1058789448db23eb3c2a887b89c9417d7171a51d637327de610a4",
+      "rgbPixels": {
+        "path": "test-metric-motion-crossing-10-rgb-5.u8.gz",
+        "sha256": "d29c1f231135b2dfdac233d83768172c39431b5981ecc56d785b2b0ef2aef4ca"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-crossing-10",
+      "frameId": 6,
+      "variant": "clean",
+      "rgbSha256": "e49ca3c88f3bcda22b4df784c294d226933e4a9f8db4578c98731c3a964ca27f",
+      "path": "test-metric-motion-crossing-10-clean-6.f32.gz",
+      "sha256": "0ef7c295486150457b37efa3a9b376fe411557f3b5ca2617345c700180fecd55",
+      "rgbPixels": {
+        "path": "test-metric-motion-crossing-10-rgb-6.u8.gz",
+        "sha256": "cc5c9311736821c23b8781edd16779b546a200818de90c8863c984eea3f0d093"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-crossing-10",
+      "frameId": 7,
+      "variant": "clean",
+      "rgbSha256": "1d17c48275139dd818b6a0b5d8cf7a9ee075cf0555ebb6f935366a9b8e1cb377",
+      "path": "test-metric-motion-crossing-10-clean-7.f32.gz",
+      "sha256": "18508679e7639244e640da2b8314cdc58aaa4e38e4290e92df84a1834f158216",
+      "rgbPixels": {
+        "path": "test-metric-motion-crossing-10-rgb-7.u8.gz",
+        "sha256": "59687f2ed8717da46ac373527541f5cfaeee9a071d8b03a2420ebc097c15f95a"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-camera-yaw-11",
+      "frameId": 1,
+      "variant": "clean",
+      "rgbSha256": "72a3e91a906b33468cb2b3b3be66813c3e47c02b25d7a61a37965c05492147fb",
+      "path": "test-metric-motion-camera-yaw-11-clean-1.f32.gz",
+      "sha256": "12dd3e1aac93cf43f18671cc13c2142b4165e1371e8bc6e1c0df7480b54d5ed1",
+      "rgbPixels": {
+        "path": "test-metric-motion-camera-yaw-11-rgb-1.u8.gz",
+        "sha256": "69e27800297eb738d43229001a41a09c651de617ee11030f455d5bf673c40f44"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-camera-yaw-11",
+      "frameId": 2,
+      "variant": "clean",
+      "rgbSha256": "306f7e8e4bf338a5d6a743a0b86b4d358adb3d994520e10002959fc402c13e65",
+      "path": "test-metric-motion-camera-yaw-11-clean-2.f32.gz",
+      "sha256": "d32f6f8c7b9f16a2bbfa60d1750738496ea7fbadcf51f6ecd478a7bcba090203",
+      "rgbPixels": {
+        "path": "test-metric-motion-camera-yaw-11-rgb-2.u8.gz",
+        "sha256": "c450ec69c3f81b5178991099a0d1abb734b82951c510d0f50efe8979ab217e04"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-camera-yaw-11",
+      "frameId": 3,
+      "variant": "clean",
+      "rgbSha256": "bc6a09a4fa6d314acd7c4e71f0334418620b455cd3d6449d1c48548ecd04359b",
+      "path": "test-metric-motion-camera-yaw-11-clean-3.f32.gz",
+      "sha256": "9815251b07f453653fef48bd4d831695d13ec19e760aa99ac25501085261d2e9",
+      "rgbPixels": {
+        "path": "test-metric-motion-camera-yaw-11-rgb-3.u8.gz",
+        "sha256": "7594b1038559dc2db8b9fb938e01413a03de660e7d4f80609439d55bbc1041c0"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-camera-yaw-11",
+      "frameId": 4,
+      "variant": "clean",
+      "rgbSha256": "eace19ad6b8ece07f45655f567a53ceb375721c03d03fbc763fd3a969712c22c",
+      "path": "test-metric-motion-camera-yaw-11-clean-4.f32.gz",
+      "sha256": "023b061597331504e2596cc66131a4067c3022f357f8bb883b2612d1e6de76f5",
+      "rgbPixels": {
+        "path": "test-metric-motion-camera-yaw-11-rgb-4.u8.gz",
+        "sha256": "cd7d06553cd51b7eea493892660fbaf4d1b0b7b3b0e954d009ae6efeaf56f4ae"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-camera-yaw-11",
+      "frameId": 5,
+      "variant": "clean",
+      "rgbSha256": "1045d6a34ad680ba3f4deba61cf7a82146ef9319c36644b6ea24d8047bca0221",
+      "path": "test-metric-motion-camera-yaw-11-clean-5.f32.gz",
+      "sha256": "88ee0c9650642a1cbd418b2015760177068dbf931eb3a3a838fdc61ff0d1a9c3",
+      "rgbPixels": {
+        "path": "test-metric-motion-camera-yaw-11-rgb-5.u8.gz",
+        "sha256": "7b3c67896543f69f9394c99340f2e5aa243ade1a33e7503625be5c0827b6a79a"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-camera-yaw-11",
+      "frameId": 6,
+      "variant": "clean",
+      "rgbSha256": "386f2311ea2fbf155c7560126f077a7c78cc09f717eeea9e65c0597303392337",
+      "path": "test-metric-motion-camera-yaw-11-clean-6.f32.gz",
+      "sha256": "bf91f65199d966925137c86101a769459b8159cc7684fe31c6d28dd82da8be3b",
+      "rgbPixels": {
+        "path": "test-metric-motion-camera-yaw-11-rgb-6.u8.gz",
+        "sha256": "5f11e9f841282df502ddb31e6afb2b86b1948bcb3b616e142dd2ed27789779d7"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-camera-yaw-11",
+      "frameId": 7,
+      "variant": "clean",
+      "rgbSha256": "2c409d52e35702f9d8103d347806cc395c9130032979edd254ed95bea25d5e9b",
+      "path": "test-metric-motion-camera-yaw-11-clean-7.f32.gz",
+      "sha256": "ba0c7b6e81b03aaf34882abe1c8caf224c75ae7c0fca974215cd63d77930f01a",
+      "rgbPixels": {
+        "path": "test-metric-motion-camera-yaw-11-rgb-7.u8.gz",
+        "sha256": "ec31ac8690068b833354541e84faa2783623fc6ede8303e906d277b4b7c04311"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-camera-translation-12",
+      "frameId": 1,
+      "variant": "clean",
+      "rgbSha256": "34d5a17b77dde13e5cc1db86971711fd1c8093a9a66dbea789b549f48fd0c06a",
+      "path": "test-metric-motion-camera-translation-12-clean-1.f32.gz",
+      "sha256": "24c83260b90cb3af93fe36dfa8d2396a34bea5785a17616f517fb628ec6b26b7",
+      "rgbPixels": {
+        "path": "test-metric-motion-camera-translation-12-rgb-1.u8.gz",
+        "sha256": "a4c9cd596febabadd216265ccc66ac2cc248acf4fa6a3c4db2d148b0c22b0e2c"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-camera-translation-12",
+      "frameId": 2,
+      "variant": "clean",
+      "rgbSha256": "69ff69448cff4695ec5bfe6bdcd6d279503ec497dc7cd01a3b86e5b574030273",
+      "path": "test-metric-motion-camera-translation-12-clean-2.f32.gz",
+      "sha256": "9351578234a15059539fb4ccee6959ab11ba844bf812f0dd159a819842cf6ceb",
+      "rgbPixels": {
+        "path": "test-metric-motion-camera-translation-12-rgb-2.u8.gz",
+        "sha256": "3f55588776537ed97220f0bbf76a54eb0223ca6b64a245a981145e0789b8db21"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-camera-translation-12",
+      "frameId": 3,
+      "variant": "clean",
+      "rgbSha256": "84abdb4883354f15a1576c01e36dd3ca0510ac9702bfe1db40be0b77980d25f2",
+      "path": "test-metric-motion-camera-translation-12-clean-3.f32.gz",
+      "sha256": "816a94c50b7e44505ad6a52e885fdb3ce07193cf2d0adfa2dd9ed0173b227b9e",
+      "rgbPixels": {
+        "path": "test-metric-motion-camera-translation-12-rgb-3.u8.gz",
+        "sha256": "321f57063b6757fcbdd96be31d52ff93744f81734405e896f97ff590e828f721"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-camera-translation-12",
+      "frameId": 4,
+      "variant": "clean",
+      "rgbSha256": "91e722423b6451edaaf56b6cc314bfa7a8e310aa843c71e65df8dd41cf030b48",
+      "path": "test-metric-motion-camera-translation-12-clean-4.f32.gz",
+      "sha256": "a96ec30ec4409862d4fea60dfbceca7554d69b4ffd9a3f0de3d965589524ea61",
+      "rgbPixels": {
+        "path": "test-metric-motion-camera-translation-12-rgb-4.u8.gz",
+        "sha256": "27339285757a1e3c2345e641d3dbb72139b48f9277c04e73f23e0731d66c49ac"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-camera-translation-12",
+      "frameId": 5,
+      "variant": "clean",
+      "rgbSha256": "53a21e5977a84e766153fa408840075911ad42ec43fc234309aaf103b90422e4",
+      "path": "test-metric-motion-camera-translation-12-clean-5.f32.gz",
+      "sha256": "b37981031e5dbd7fac31bc1e4644497974acde4b15df268fd54e2c6900281ddb",
+      "rgbPixels": {
+        "path": "test-metric-motion-camera-translation-12-rgb-5.u8.gz",
+        "sha256": "1b297dfa7ba065f596a6d7aa990b27948a32b962fbb06f90fc1a6634a4beed92"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-camera-translation-12",
+      "frameId": 6,
+      "variant": "clean",
+      "rgbSha256": "9dd3d08a70137607118e5d6f2eb1fd1c24b473b6a5874753e2574cd2d0aedc70",
+      "path": "test-metric-motion-camera-translation-12-clean-6.f32.gz",
+      "sha256": "5ea906d733267f4af84f65b17f2e7f15fab496b5dd20be3159021462ec915b43",
+      "rgbPixels": {
+        "path": "test-metric-motion-camera-translation-12-rgb-6.u8.gz",
+        "sha256": "3923f7d965d4c99431dd1ad259ef887555f361f376a2d82f3cb3641950023f80"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-camera-translation-12",
+      "frameId": 7,
+      "variant": "clean",
+      "rgbSha256": "fd49803219f12d51c4423bcf85235fa133a71a814588f085f9239a5c5173d3ca",
+      "path": "test-metric-motion-camera-translation-12-clean-7.f32.gz",
+      "sha256": "116564912e756587256027b72b2eccaeead43d12933f02581bed7ee4adea36ea",
+      "rgbPixels": {
+        "path": "test-metric-motion-camera-translation-12-rgb-7.u8.gz",
+        "sha256": "bdf426296f6145d82baf4cd985dd6c671b8644e0b4346211b3ba57e216d9640e"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-mixed-13",
+      "frameId": 1,
+      "variant": "clean",
+      "rgbSha256": "7a0cac0248537beeda528a69e0797d3752b7276734ca8ae6c0060c8c5c9d8289",
+      "path": "test-metric-motion-mixed-13-clean-1.f32.gz",
+      "sha256": "46841672d7390f0a66d4c5fdb81448b21a8749921333f65eb3fdb49a81228857",
+      "rgbPixels": {
+        "path": "test-metric-motion-mixed-13-rgb-1.u8.gz",
+        "sha256": "36feeb547e95719a4474fa4006b324ea982453fcb3aa44e6195c2f732756c96e"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-mixed-13",
+      "frameId": 2,
+      "variant": "clean",
+      "rgbSha256": "4390b65d89f21215811f9f430f3b4023d6c8737aa41997785a593b0d1c33f849",
+      "path": "test-metric-motion-mixed-13-clean-2.f32.gz",
+      "sha256": "4b78d5b0c5171bf8622e496452d46ad8f75f669b08d23a99518eaf7a24867d03",
+      "rgbPixels": {
+        "path": "test-metric-motion-mixed-13-rgb-2.u8.gz",
+        "sha256": "2e04625b113bc554474c0f29ba86cc4d9e27e10a1be6dc05c70e67412a6b9bc0"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-mixed-13",
+      "frameId": 3,
+      "variant": "clean",
+      "rgbSha256": "d571562d092dff7337ddcb66aff332569ebd2c76a7cea194430dae3f357185fc",
+      "path": "test-metric-motion-mixed-13-clean-3.f32.gz",
+      "sha256": "7b3562e642d142943bddc2835dce6b812143b96d6a3afdb9f19d0081707288e9",
+      "rgbPixels": {
+        "path": "test-metric-motion-mixed-13-rgb-3.u8.gz",
+        "sha256": "404a73d7c98dbd46f6cf132c95f1754f78f5bfd8dee453c0e2de3d2529dc57b7"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-mixed-13",
+      "frameId": 4,
+      "variant": "clean",
+      "rgbSha256": "efec2442f71871eeedb0109155a02339ff630ee64f5fad9a8aa070899f702c0a",
+      "path": "test-metric-motion-mixed-13-clean-4.f32.gz",
+      "sha256": "d48a6abd58e051a38dc108ab38e9195daf8e3c5ccea9f516cf88d3ee9ce87408",
+      "rgbPixels": {
+        "path": "test-metric-motion-mixed-13-rgb-4.u8.gz",
+        "sha256": "e450a7df55bccd09fbf6db99e39fb128321f35539915f5ad224b6b62862aeb5d"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-mixed-13",
+      "frameId": 5,
+      "variant": "clean",
+      "rgbSha256": "91d6f56dab1a9219f36b647f93d06f224c58ca4d27a82c0665c3074a02fe1034",
+      "path": "test-metric-motion-mixed-13-clean-5.f32.gz",
+      "sha256": "960df5bf097ca68d8ce05655328552c3e6579e3a938e1eaffbfde0d67b0380c0",
+      "rgbPixels": {
+        "path": "test-metric-motion-mixed-13-rgb-5.u8.gz",
+        "sha256": "d4381a747454c98a0e317275b779dba8c74e9df002a19f5a65b8eadcd9f42b04"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-mixed-13",
+      "frameId": 6,
+      "variant": "clean",
+      "rgbSha256": "64340845aeba2aa3771f51734783e89c6c70ca9492effb3ed26e82c26d762e72",
+      "path": "test-metric-motion-mixed-13-clean-6.f32.gz",
+      "sha256": "ff65816f658bbb61bb03c3c3c0b1ad616687ca97ec46d6b507d323db59066903",
+      "rgbPixels": {
+        "path": "test-metric-motion-mixed-13-rgb-6.u8.gz",
+        "sha256": "f381da5b64ef43dc89d82550d12a0a3fd7766d0268aa3b334ddf62bca9b0d075"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-mixed-13",
+      "frameId": 7,
+      "variant": "clean",
+      "rgbSha256": "380ae708f40f14102b324f57ab51a0b5add4cdbfeca4b2a7b8f7e00152f02ef8",
+      "path": "test-metric-motion-mixed-13-clean-7.f32.gz",
+      "sha256": "55e5be4b5293498aace82f193ad8b201f6c3bac667439c3d357b4249410357da",
+      "rgbPixels": {
+        "path": "test-metric-motion-mixed-13-rgb-7.u8.gz",
+        "sha256": "49e836ac531f208821185b7705fd7c080be34d1ae7a9f054515bd5cc97b46c4f"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-occluded-14",
+      "frameId": 1,
+      "variant": "clean",
+      "rgbSha256": "689ae5f66cd5bf72e6636b78f2fe7b479f318d3df98aca67dea4726c4a1b2587",
+      "path": "test-metric-motion-occluded-14-clean-1.f32.gz",
+      "sha256": "56b5647a083aabc3a5cd402d19da76c9cbc353c5d2258f0bf494b24f03e45f5e",
+      "rgbPixels": {
+        "path": "test-metric-motion-occluded-14-rgb-1.u8.gz",
+        "sha256": "7b52a91315d2021b1c0d44f9066f39bc963b5233e6a9be5ee851925afb3f2b0d"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-occluded-14",
+      "frameId": 2,
+      "variant": "clean",
+      "rgbSha256": "d138393ab186478951329feb2a0c8470a2e2bce6372fbaeda59bc591c3b581a1",
+      "path": "test-metric-motion-occluded-14-clean-2.f32.gz",
+      "sha256": "b3049a5df201ac9d0fff6cd07045ae2bc573c829618b5c1776917d615f336757",
+      "rgbPixels": {
+        "path": "test-metric-motion-occluded-14-rgb-2.u8.gz",
+        "sha256": "4a283d76b1aabdbe5b9b24f0a973d8bf92b2f13f5733ed15e72c80933f74c9b2"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-occluded-14",
+      "frameId": 3,
+      "variant": "clean",
+      "rgbSha256": "f8f9e663c56a1fc023ff075d72a96a7f4ee206e8921658ff5670d98d9e698e53",
+      "path": "test-metric-motion-occluded-14-clean-3.f32.gz",
+      "sha256": "3fd542a582afa924b6e68830516c7d478dd60c9cca3dcf74805784f26a110f99",
+      "rgbPixels": {
+        "path": "test-metric-motion-occluded-14-rgb-3.u8.gz",
+        "sha256": "75716bc9c07a15d20327d434469236f39bcdccf4665990725ed25c953a8f371b"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-occluded-14",
+      "frameId": 4,
+      "variant": "clean",
+      "rgbSha256": "c60f4e6a8ebd24b2aa3fc151527455360bfb0b28f6a18c96d49761b755b1330a",
+      "path": "test-metric-motion-occluded-14-clean-4.f32.gz",
+      "sha256": "1bdb6b81c63e562c474c20512d2117c2fdff504fe045a8c9f2697e22241aba5c",
+      "rgbPixels": {
+        "path": "test-metric-motion-occluded-14-rgb-4.u8.gz",
+        "sha256": "72244eafa064ef5a72e5b7eb51c7a5fd5d1fbabb12bea3ad5a9d599d9aef751c"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-occluded-14",
+      "frameId": 5,
+      "variant": "clean",
+      "rgbSha256": "84f04ce59ffe53ea68d23ee6a947e22397612d148f31bdece253fd9b2afff58b",
+      "path": "test-metric-motion-occluded-14-clean-5.f32.gz",
+      "sha256": "27f77f34fc1347ab4951996aeab16a083f56c139691e820c40f49783bbccea58",
+      "rgbPixels": {
+        "path": "test-metric-motion-occluded-14-rgb-5.u8.gz",
+        "sha256": "9f087fc9c37904836355b9ee6b4eb90de45c9413ebc8917f4e62bace7e1de486"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-occluded-14",
+      "frameId": 6,
+      "variant": "clean",
+      "rgbSha256": "6ea8a8aeb7d62ea474f5620a6ec3ddf1a5e013e67594e4e22f98f3d69508fbb1",
+      "path": "test-metric-motion-occluded-14-clean-6.f32.gz",
+      "sha256": "bf9ab6c89eb6757bf96bb04722801373c62342823e8775d18fd25edaa4a3853f",
+      "rgbPixels": {
+        "path": "test-metric-motion-occluded-14-rgb-6.u8.gz",
+        "sha256": "fe27025859374b70d993d883753087146b732f3220829e17330ae2918de7a74c"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-occluded-14",
+      "frameId": 7,
+      "variant": "clean",
+      "rgbSha256": "1adb979addfe21e5a25c9b8a7a8cd25093bf60e7b1dd3551ef154dce578bf2f7",
+      "path": "test-metric-motion-occluded-14-clean-7.f32.gz",
+      "sha256": "012949d8b382954054917b059692ce1d88add63a7662bb4c3d4639b2d0ae4d25",
+      "rgbPixels": {
+        "path": "test-metric-motion-occluded-14-rgb-7.u8.gz",
+        "sha256": "b5b521eeba5ad6514b858efa983878e0bda45dfd79f5fa3c68442ad3d4b1af78"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-textureless-15",
+      "frameId": 1,
+      "variant": "clean",
+      "rgbSha256": "d8d1d1d46a74dc3dbd92307b0e59ef221220602546e61ab17343d91d7ce4349a",
+      "path": "test-metric-motion-textureless-15-clean-1.f32.gz",
+      "sha256": "ac0921ff7e7ffee524c4e8ac6538b6176da7464a6c096877db0c7faae2920a96",
+      "rgbPixels": {
+        "path": "test-metric-motion-textureless-15-rgb-1.u8.gz",
+        "sha256": "15f6130d50fb734a56254f40fbe1083902f730a1cf01600bd6e73bfc322706bd"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-textureless-15",
+      "frameId": 2,
+      "variant": "clean",
+      "rgbSha256": "005933a36758ddcc9976943dd629eccc965ddb5cd1e78e024d32e37872527fb0",
+      "path": "test-metric-motion-textureless-15-clean-2.f32.gz",
+      "sha256": "ac0921ff7e7ffee524c4e8ac6538b6176da7464a6c096877db0c7faae2920a96",
+      "rgbPixels": {
+        "path": "test-metric-motion-textureless-15-rgb-2.u8.gz",
+        "sha256": "15f6130d50fb734a56254f40fbe1083902f730a1cf01600bd6e73bfc322706bd"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-textureless-15",
+      "frameId": 3,
+      "variant": "clean",
+      "rgbSha256": "b14eb41ce61e8f47dd6d0a094a3882018faf4b863a8fba9581188471820dfa7a",
+      "path": "test-metric-motion-textureless-15-clean-3.f32.gz",
+      "sha256": "ac0921ff7e7ffee524c4e8ac6538b6176da7464a6c096877db0c7faae2920a96",
+      "rgbPixels": {
+        "path": "test-metric-motion-textureless-15-rgb-3.u8.gz",
+        "sha256": "15f6130d50fb734a56254f40fbe1083902f730a1cf01600bd6e73bfc322706bd"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-textureless-15",
+      "frameId": 4,
+      "variant": "clean",
+      "rgbSha256": "f9fc7b2f57693a1d1d5bc255fa6a5cf45be1057f962e8608e3d61188af583f02",
+      "path": "test-metric-motion-textureless-15-clean-4.f32.gz",
+      "sha256": "ac0921ff7e7ffee524c4e8ac6538b6176da7464a6c096877db0c7faae2920a96",
+      "rgbPixels": {
+        "path": "test-metric-motion-textureless-15-rgb-4.u8.gz",
+        "sha256": "15f6130d50fb734a56254f40fbe1083902f730a1cf01600bd6e73bfc322706bd"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-textureless-15",
+      "frameId": 5,
+      "variant": "clean",
+      "rgbSha256": "41817b29c294e2682d979381e824d24a4ae2e851bd9445ef1a36b5c58e1fe00e",
+      "path": "test-metric-motion-textureless-15-clean-5.f32.gz",
+      "sha256": "ac0921ff7e7ffee524c4e8ac6538b6176da7464a6c096877db0c7faae2920a96",
+      "rgbPixels": {
+        "path": "test-metric-motion-textureless-15-rgb-5.u8.gz",
+        "sha256": "15f6130d50fb734a56254f40fbe1083902f730a1cf01600bd6e73bfc322706bd"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-textureless-15",
+      "frameId": 6,
+      "variant": "clean",
+      "rgbSha256": "51c10b1819c1d7126016765dbaee82542f7b103f83a52d916a873b4149baefe5",
+      "path": "test-metric-motion-textureless-15-clean-6.f32.gz",
+      "sha256": "ac0921ff7e7ffee524c4e8ac6538b6176da7464a6c096877db0c7faae2920a96",
+      "rgbPixels": {
+        "path": "test-metric-motion-textureless-15-rgb-6.u8.gz",
+        "sha256": "15f6130d50fb734a56254f40fbe1083902f730a1cf01600bd6e73bfc322706bd"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-textureless-15",
+      "frameId": 7,
+      "variant": "clean",
+      "rgbSha256": "d68efab2673c9280bcf2ac3f45b9770b29678098894372607d490cd545a960ed",
+      "path": "test-metric-motion-textureless-15-clean-7.f32.gz",
+      "sha256": "ac0921ff7e7ffee524c4e8ac6538b6176da7464a6c096877db0c7faae2920a96",
+      "rgbPixels": {
+        "path": "test-metric-motion-textureless-15-rgb-7.u8.gz",
+        "sha256": "15f6130d50fb734a56254f40fbe1083902f730a1cf01600bd6e73bfc322706bd"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-wide-16",
+      "frameId": 1,
+      "variant": "clean",
+      "rgbSha256": "49102865f4094b322cefa8f902c7e88558bc513b66d89eb786227b86471dee02",
+      "path": "test-metric-motion-wide-16-clean-1.f32.gz",
+      "sha256": "e42c9cfc5f0c6435a58a3834c6df2a4b0159abc90f3ca034b2d972a377974bc1",
+      "rgbPixels": {
+        "path": "test-metric-motion-wide-16-rgb-1.u8.gz",
+        "sha256": "9b0650a629e730be256e05e6f80ff3f44291c420c2b919ee9624aa53639720a0"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-wide-16",
+      "frameId": 2,
+      "variant": "clean",
+      "rgbSha256": "a2dcf0d80cae95f068f0a100451592614f39d94c9b7c544f648b94d3bd2972ba",
+      "path": "test-metric-motion-wide-16-clean-2.f32.gz",
+      "sha256": "97cf858635c509cdee08ca43209df459fc5a04a310e57312fc5a5b635cc2472a",
+      "rgbPixels": {
+        "path": "test-metric-motion-wide-16-rgb-2.u8.gz",
+        "sha256": "30f4c4c32d39a2386392df9c8cb73e61d1aeca845eb7b6334fcfecc886d6d520"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-wide-16",
+      "frameId": 3,
+      "variant": "clean",
+      "rgbSha256": "96b50cfbd97054913180ff0025c807328dfff670c750ba597d626dbbc200d491",
+      "path": "test-metric-motion-wide-16-clean-3.f32.gz",
+      "sha256": "97cf858635c509cdee08ca43209df459fc5a04a310e57312fc5a5b635cc2472a",
+      "rgbPixels": {
+        "path": "test-metric-motion-wide-16-rgb-3.u8.gz",
+        "sha256": "30f4c4c32d39a2386392df9c8cb73e61d1aeca845eb7b6334fcfecc886d6d520"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-wide-16",
+      "frameId": 4,
+      "variant": "clean",
+      "rgbSha256": "6942a710a3f081294371f6ef20b096c9a1efd4a6492a2aa612b8431f22ec2281",
+      "path": "test-metric-motion-wide-16-clean-4.f32.gz",
+      "sha256": "97cf858635c509cdee08ca43209df459fc5a04a310e57312fc5a5b635cc2472a",
+      "rgbPixels": {
+        "path": "test-metric-motion-wide-16-rgb-4.u8.gz",
+        "sha256": "30f4c4c32d39a2386392df9c8cb73e61d1aeca845eb7b6334fcfecc886d6d520"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-wide-16",
+      "frameId": 5,
+      "variant": "clean",
+      "rgbSha256": "4b5fb88c389f9bf5e8af90342af317c792904f517c01b1dd6f800f695ddd3596",
+      "path": "test-metric-motion-wide-16-clean-5.f32.gz",
+      "sha256": "ebce1027d9769b500dd524946be888b3ed901419f938ada8bed5fd7c66333824",
+      "rgbPixels": {
+        "path": "test-metric-motion-wide-16-rgb-5.u8.gz",
+        "sha256": "03ea8475b63d8894575bf1a8294f5664f72b72f3d2faddccce4435515f2ec46a"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-wide-16",
+      "frameId": 6,
+      "variant": "clean",
+      "rgbSha256": "3176d296ed0594d5ff84e121a00d482a691f26c16eeb9cc29dade2cd78c412e7",
+      "path": "test-metric-motion-wide-16-clean-6.f32.gz",
+      "sha256": "c38cca7e238f04936b5d2b425ff678d3db92441d0482f4f824a62fda70cafc13",
+      "rgbPixels": {
+        "path": "test-metric-motion-wide-16-rgb-6.u8.gz",
+        "sha256": "91b6577ea216c862f80debf276dbb9385e69e107c074fae246939a919a649145"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-wide-16",
+      "frameId": 7,
+      "variant": "clean",
+      "rgbSha256": "3ae6fab649c5aa8fc886c72eacbe6724dbac5071d71aef713d505532f3b6612a",
+      "path": "test-metric-motion-wide-16-clean-7.f32.gz",
+      "sha256": "60809b1bb6491fba67fad5526db4326abda66c2b87b636305e484ba260073a46",
+      "rgbPixels": {
+        "path": "test-metric-motion-wide-16-rgb-7.u8.gz",
+        "sha256": "c82872685e0c039b11bd1f90b25bdb0c1459a0dae392b1441cb48ba1bbce5bec"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-wide-16",
+      "frameId": 8,
+      "variant": "clean",
+      "rgbSha256": "22feaeeab54f1074a1a040bbcebdf663849b83945038668bed1b3baf571c2416",
+      "path": "test-metric-motion-wide-16-clean-8.f32.gz",
+      "sha256": "3fb853768763e1f80e32e14460c3e6c2d5cf91049b35f82cfce19740511cd629",
+      "rgbPixels": {
+        "path": "test-metric-motion-wide-16-rgb-8.u8.gz",
+        "sha256": "407767b804a7da71a35c0aa0a38d9d3db46077d2346c3fcf689a75b71f67fcd9"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-wide-16",
+      "frameId": 9,
+      "variant": "clean",
+      "rgbSha256": "4451e819d914aa456e7539b94dd6e675266bec305268257fe5ae53fc74088d5d",
+      "path": "test-metric-motion-wide-16-clean-9.f32.gz",
+      "sha256": "9ba9f4f63f9e2f5befcba57e52f24b368838f78b54592c10f94092d727cdd487",
+      "rgbPixels": {
+        "path": "test-metric-motion-wide-16-rgb-9.u8.gz",
+        "sha256": "dc4b65222bf2395c0f01ae8fd3c7b35f85ceb3280ec1cf84fd05f5778a3ba90b"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-wide-16",
+      "frameId": 10,
+      "variant": "clean",
+      "rgbSha256": "25e3e000649d038fec86bca3f87ae7ffbd499e29c7c445846b36093a2e9e2989",
+      "path": "test-metric-motion-wide-16-clean-10.f32.gz",
+      "sha256": "c86866a7a95206865f19b9c0d10596606f6da57bcbc0aba226fe69c08f84ad1c",
+      "rgbPixels": {
+        "path": "test-metric-motion-wide-16-rgb-10.u8.gz",
+        "sha256": "961f48f9a84be11a1c98b2208e0e347543cbb1925009d01ff8dddd8524ec3e3b"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-wide-16",
+      "frameId": 11,
+      "variant": "clean",
+      "rgbSha256": "6fa910e2303d470995c6a4c19938d070b660bbb5cb7685357ccde041b26302ad",
+      "path": "test-metric-motion-wide-16-clean-11.f32.gz",
+      "sha256": "e42c9cfc5f0c6435a58a3834c6df2a4b0159abc90f3ca034b2d972a377974bc1",
+      "rgbPixels": {
+        "path": "test-metric-motion-wide-16-rgb-11.u8.gz",
+        "sha256": "9b0650a629e730be256e05e6f80ff3f44291c420c2b919ee9624aa53639720a0"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-wide-16",
+      "frameId": 12,
+      "variant": "clean",
+      "rgbSha256": "f6ace740ec75522bd64547eb4530835fd51eff8770ec50b5fdeaaae04daa2ff8",
+      "path": "test-metric-motion-wide-16-clean-12.f32.gz",
+      "sha256": "e42c9cfc5f0c6435a58a3834c6df2a4b0159abc90f3ca034b2d972a377974bc1",
+      "rgbPixels": {
+        "path": "test-metric-motion-wide-16-rgb-12.u8.gz",
+        "sha256": "9b0650a629e730be256e05e6f80ff3f44291c420c2b919ee9624aa53639720a0"
+      }
+    },
+    {
+      "layoutId": "test-metric-motion-wide-16",
+      "frameId": 13,
+      "variant": "clean",
+      "rgbSha256": "d1027e90057fde422572cbb725330c27d84fc330929bec01cd59e30e8602f1b9",
+      "path": "test-metric-motion-wide-16-clean-13.f32.gz",
+      "sha256": "e42c9cfc5f0c6435a58a3834c6df2a4b0159abc90f3ca034b2d972a377974bc1",
+      "rgbPixels": {
+        "path": "test-metric-motion-wide-16-rgb-13.u8.gz",
+        "sha256": "9b0650a629e730be256e05e6f80ff3f44291c420c2b919ee9624aa53639720a0"
+      }
+    }
+  ],
+  "promotionAllowed": false
+}

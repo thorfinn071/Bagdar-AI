@@ -1,0 +1,45 @@
+{
+  "scope": "post-hoc RGB/local correspondence diagnostics; no hidden geometry",
+  "plots": [
+    {
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "path": "docs\\_baseline_logs\\camera_scale_motion_diagnostics\\test-scale-motion-approach-slow-06.png"
+    },
+    {
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "path": "docs\\_baseline_logs\\camera_scale_motion_diagnostics\\test-scale-motion-approach-fast-07.png"
+    },
+    {
+      "layoutId": "test-scale-motion-approach-small-08",
+      "path": "docs\\_baseline_logs\\camera_scale_motion_diagnostics\\test-scale-motion-approach-small-08.png"
+    },
+    {
+      "layoutId": "test-scale-motion-receding-09",
+      "path": "docs\\_baseline_logs\\camera_scale_motion_diagnostics\\test-scale-motion-receding-09.png"
+    },
+    {
+      "layoutId": "test-scale-motion-stationary-10",
+      "path": "docs\\_baseline_logs\\camera_scale_motion_diagnostics\\test-scale-motion-stationary-10.png"
+    },
+    {
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "path": "docs\\_baseline_logs\\camera_scale_motion_diagnostics\\test-scale-motion-camera-yaw-11.png"
+    },
+    {
+      "layoutId": "test-scale-motion-mixed-12",
+      "path": "docs\\_baseline_logs\\camera_scale_motion_diagnostics\\test-scale-motion-mixed-12.png"
+    },
+    {
+      "layoutId": "test-scale-motion-occluded-13",
+      "path": "docs\\_baseline_logs\\camera_scale_motion_diagnostics\\test-scale-motion-occluded-13.png"
+    },
+    {
+      "layoutId": "test-scale-motion-textureless-14",
+      "path": "docs\\_baseline_logs\\camera_scale_motion_diagnostics\\test-scale-motion-textureless-14.png"
+    },
+    {
+      "layoutId": "test-scale-motion-wide-15",
+      "path": "docs\\_baseline_logs\\camera_scale_motion_diagnostics\\test-scale-motion-wide-15.png"
+    }
+  ]
+}

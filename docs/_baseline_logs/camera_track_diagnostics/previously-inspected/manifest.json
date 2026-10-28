@@ -1,0 +1,88 @@
+{
+  "scope": "post-decision camera-only diagnostic plots; no scorer labels",
+  "reportSha256": "35ff029856ff48ef87c48652aa822d7c26cb0f18a1d556764f925c610c877676",
+  "corpusManifestSha256": "19ba79942c4cc51f9f8c7bd30c440fadf25aed558fa80002443be15f1b2f8edc",
+  "rendererSha256": "a4b41cce6945151cb1fb6ddf9b12c4ca60109197082c6c1fd188b6ba7d16aba8",
+  "plots": [
+    {
+      "layoutId": "validation-recovery-wide-00",
+      "path": "validation-recovery-wide-00.png",
+      "sha256": "3f089bb7df882cf726d6882ea90d74b05650c503966d681922112828027332d6"
+    },
+    {
+      "layoutId": "validation-recovery-door-pass-01",
+      "path": "validation-recovery-door-pass-01.png",
+      "sha256": "afd2c710ba8b5f68881a209daf8363c4860cca6a057a9c58643a9d6e03fe9de3"
+    },
+    {
+      "layoutId": "validation-recovery-pole-02",
+      "path": "validation-recovery-pole-02.png",
+      "sha256": "9cad3826114d42e14919b4a378c660f4cfd3aab95c5e7b629041b8dc009a19c1"
+    },
+    {
+      "layoutId": "validation-recovery-low-bar-03",
+      "path": "validation-recovery-low-bar-03.png",
+      "sha256": "aa990d75a2f0aa3f6d846ffcf056393ec0244e27febe114eb470fb53698ef80b"
+    },
+    {
+      "layoutId": "test-recovery-wide-04",
+      "path": "test-recovery-wide-04.png",
+      "sha256": "5f0cc1e97bb2f6e25c1f8487ce63cf9f025df3ae9e48966fe8e6be2de33b27cc"
+    },
+    {
+      "layoutId": "test-recovery-wide-05",
+      "path": "test-recovery-wide-05.png",
+      "sha256": "de2d1d02a6f79328a9591527a17cb4c1f5f9724472935c1eeb23fa9cb24645d5"
+    },
+    {
+      "layoutId": "test-recovery-wide-06",
+      "path": "test-recovery-wide-06.png",
+      "sha256": "1c8e6700e068476698db235a61ae513c31a00948dddfc56be19016bf53680bd7"
+    },
+    {
+      "layoutId": "test-recovery-door-pass-07",
+      "path": "test-recovery-door-pass-07.png",
+      "sha256": "98c670adbd066c0432ebe98586b6bcff1c63f948f80bee9b2cca61aea1af2761"
+    },
+    {
+      "layoutId": "test-recovery-door-pass-08",
+      "path": "test-recovery-door-pass-08.png",
+      "sha256": "b39f73551784e3d4f63bf04f5b7e97b01b3ea99ad58dc5611bdede6bbe28776e"
+    },
+    {
+      "layoutId": "test-recovery-door-pass-09",
+      "path": "test-recovery-door-pass-09.png",
+      "sha256": "acd185e7d5c0492145f78068dc3d8986503f8ddd4b12ad66addb72c07abdaf03"
+    },
+    {
+      "layoutId": "test-recovery-narrow-10",
+      "path": "test-recovery-narrow-10.png",
+      "sha256": "23e5707360417fd8196c4f894622b490920e7e7480a267af888251b9b07b261a"
+    },
+    {
+      "layoutId": "test-recovery-pole-11",
+      "path": "test-recovery-pole-11.png",
+      "sha256": "ae2dfaca79440894564d1307a5cb558e21d69af98e2ac10d95b694212bd1d0fd"
+    },
+    {
+      "layoutId": "test-recovery-low-bar-12",
+      "path": "test-recovery-low-bar-12.png",
+      "sha256": "2c57aea231e31229c9e1dad7684194795eaac122d05737fa0f2bed9d1749cdf5"
+    },
+    {
+      "layoutId": "test-recovery-box-13",
+      "path": "test-recovery-box-13.png",
+      "sha256": "019272ff3ba405535041a1fa97860a0c9c710bd4088d5cb9dc2414da84719497"
+    },
+    {
+      "layoutId": "test-recovery-floor-gap-14",
+      "path": "test-recovery-floor-gap-14.png",
+      "sha256": "3e9536f1f1f4e5fb4f67a0309323f1959ab1893fba92bfc7a75f3e5bd8a5b823"
+    },
+    {
+      "layoutId": "test-recovery-subpixel-pole-15",
+      "path": "test-recovery-subpixel-pole-15.png",
+      "sha256": "628a33319a665d7eb4784ae29d63f07ce3671938ea8eb89d5a42a42432227081"
+    }
+  ]
+}

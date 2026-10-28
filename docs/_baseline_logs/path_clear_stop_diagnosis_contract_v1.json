@@ -1,0 +1,34 @@
+{
+  "scope": "known paired causal diagnosis and opt-in cause-only shadow correction",
+  "sourceSha256": {
+    "lib/safety/planning/coverage_aware_stop_guidance.dart": "16048f6a55259888c270b9fc53047bad32cb998c13817a200f96de72b6b321a9",
+    "test/coverage_aware_stop_guidance_test.dart": "c2b7315144a5f60a901c3ce19c74cb0c84abe99b43774d4ab38dd922d0d774ca",
+    "test/harness/path_clear_stop_diagnosis.dart": "d868e7a20e0c1b6ec78d6ad1694a0fa20b8ade77097660a36270850f895331d6",
+    "test/path_clear_stop_diagnosis_test.dart": "5e1b2698ab5eca2839082b79e0708d199977fbc988da7b035a042665bd759967",
+    "tool/model_benchmark/verify_path_clear_stop_diagnosis.py": "c9c69bd6880526dfd7ee9ea12dbfbf4ab5a99ae18ce63901308a8d622bafa76d",
+    "docs/path-clear-stop-diagnosis-protocol-2026-10-07.md": "7a4b6decf57e2d9c395a2bc80b051c81b0c2d1a395c15ad2623e71072ff6421f"
+  },
+  "reportSha256": "8ca7a32ed880d550a880a033c40cca2ac3641789f0a0c70d911a4b383c70622e",
+  "priorVisibleBodyContractSha256": "9bed3662e6a1fe317de12a50fa7ea9a0848a959434047b190bc5873dcc59e5bc",
+  "priorVisibleBodyReportSha256": "1b332fe56b1838fea42425f057dadd547747fc39c21b4ccd1a9637a7ba24b4d6",
+  "summary": {
+    "frames": 22,
+    "passableFrames": 11,
+    "hazardFrames": 11,
+    "baselineFalseStops": 11,
+    "correctedFalseStops": 11,
+    "hazardStops": 11,
+    "hazardUnsafeContinues": 0,
+    "reasonCorrections": 1,
+    "passableWithoutLatchStops": 11,
+    "passableWithoutTracksMovingStops": 11,
+    "passableWithoutTracksStationaryHolds": 11
+  },
+  "metricPassageAgeLimitUs": 100000,
+  "falseStopReductionEstablished": false,
+  "promotionAllowed": false,
+  "ordinaryCameraWired": false,
+  "newIndependentHoldout": false,
+  "namedDeviceRuntime": "not_run",
+  "captureToCommandMeasured": false
+}

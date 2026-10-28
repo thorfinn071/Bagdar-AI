@@ -1,0 +1,207 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:bagdar/models/depth_frame.dart';
+import 'package:bagdar/safety/perception/camera_passage_clearance_source.dart';
+import 'package:bagdar/safety/perception/passage_clearance.dart';
+import 'package:bagdar/utils/depth_map_ops.dart';
+import 'package:crypto/crypto.dart';
+
+const pairedBodyRoot =
+    'test/fixtures/spatial_safety/blender-paired-visible-body-v1';
+const pairedRgbRoot = 'test/fixtures/spatial_safety/blender-paired-holdout-v1';
+final pairedBodyStamp = DateTime.utc(2026, 10, 4).microsecondsSinceEpoch;
+const pairedBodyRequest = PassageClearanceRequest(
+  referenceFrameId: 'paired-local-walking-v1',
+  lateralCenterM: 0,
+  widthM: .9,
+  headroomM: 1.85,
+  forwardStartM: .2,
+  forwardEndM: 3.5,
+  maximumFloorRiseM: .05,
+  maximumFloorDropM: .05,
+);
+const pairedBodyPolicy = PassageClearancePolicy(
+  maximumAgeUs: 100000,
+  maximumPairSkewUs: 50000,
+  maximumProcessingLatencyUs: 100000,
+  minimumConfidence: .99,
+);
+const pairedBodyScanDiagnosticPolicy = PassageClearancePolicy(
+  maximumAgeUs: 3000000,
+  maximumPairSkewUs: 50000,
+  maximumProcessingLatencyUs: 100000,
+  minimumConfidence: .99,
+);
+
+Map<String, dynamic> bodyJson(String path) =>
+    jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>;
+String bodySha(String path) =>
+    sha256.convert(File(path).readAsBytesSync()).toString();
+
+Uint8List bodyAsset(String root, Map asset) {
+  final relative = asset['path'] as String;
+  if (relative.contains('..') ||
+      relative.contains('\\') ||
+      relative.contains(':') ||
+      relative.startsWith('/')) {
+    throw const FormatException('Unsafe optical asset path');
+  }
+  final file = File('$root/$relative');
+  if (!file.resolveSymbolicLinksSync().startsWith(
+    '${Directory(root).resolveSymbolicLinksSync()}${Platform.pathSeparator}',
+  )) {
+    throw const FormatException('Escaped optical asset');
+  }
+  final bytes = file.readAsBytesSync();
+  if (sha256.convert(bytes).toString() != asset['sha256']) {
+    throw FormatException('Changed optical asset $relative');
+  }
+  return bytes;
+}
+
+List<double> bodyFloats(Uint8List bytes) {
+  final raw = ByteData.sublistView(Uint8List.fromList(gzip.decode(bytes)));
+  if (raw.lengthInBytes % 4 != 0) {
+    throw const FormatException('Invalid float payload');
+  }
+  return List.generate(
+    raw.lengthInBytes ~/ 4,
+    (i) => raw.getFloat32(i * 4, Endian.little),
+  );
+}
+
+class PairedBodyFixture {
+  final manifest = bodyJson('$pairedBodyRoot/manifest.json');
+  final corpus = bodyJson('$pairedRgbRoot/corpus-manifest.json');
+  final ncnn = bodyJson('docs/_baseline_logs/blender_paired_ncnn.json');
+  final modelHash = bodySha('$pairedBodyRoot/manifest.json');
+  final preprocess = bodyJson(
+    'docs/_baseline_logs/blender_body_preprocess_equivalence_v1.json',
+  );
+
+  PairedBodyFixture() {
+    final original = bodySha('$pairedRgbRoot/corpus-manifest.json');
+    if (manifest['sourceCorpusSha256'] != original ||
+        ncnn['corpusManifestSha256'] != original ||
+        manifest['promotionAllowed'] != false) {
+      throw StateError('Invalid paired-body scope or RGB identity');
+    }
+    for (final entry in (manifest['sources'] as Map).entries) {
+      if (bodySha(entry.key as String) != entry.value) {
+        throw StateError('Changed exporter source ${entry.key}');
+      }
+    }
+    if (bodySha('assets/midas_small.ncnn.param') != ncnn['modelParamSha256'] ||
+        bodySha('assets/midas_small.ncnn.bin') != ncnn['modelBinSha256']) {
+      throw StateError('Changed neural model');
+    }
+    if (preprocess['passed'] != true ||
+        preprocess['exactInputFrames'] != 132 ||
+        preprocess['corpusManifestSha256'] != original ||
+        preprocess['fromId'] != ncnn['preprocessId'] ||
+        preprocess['toId'] != 'rgb01-chw-256-nearest-stretch-no-crop-v1') {
+      throw StateError('Unverified preprocessing contract equivalence');
+    }
+    for (final entry in (preprocess['sources'] as Map).entries) {
+      if (bodySha(entry.key as String) != entry.value) {
+        throw StateError('Changed preprocessing source ${entry.key}');
+      }
+    }
+  }
+
+  String get relativeHash =>
+      'param:${ncnn['modelParamSha256']};bin:${ncnn['modelBinSha256']}';
+  String transform(String sceneId) => 'paired-$sceneId-256x256';
+
+  PassageCalibration calibration(String sceneId) => PassageCalibration(
+    id: 'paired-synthetic-whole-pixel-v1',
+    providerId: 'paired-synthetic-visible-metric',
+    modelId: 'first-return-whole-pixel-v1',
+    modelHash: modelHash,
+    preprocessId: 'opaque-first-return-whole-pixel-v1',
+    referenceFrameId: pairedBodyRequest.referenceFrameId,
+    transformId: transform(sceneId),
+    timestampDomain: PassageTimestampDomain.utcEpochMicroseconds,
+    metricScaleValidated: true,
+    alignmentValidated: true,
+    floorReferenceValidated: true,
+  );
+
+  CameraVisibleDepthFrame visible(Map packet, String sceneId) =>
+      CameraVisibleDepthFrame(
+        width: packet['width'] as int,
+        height: packet['height'] as int,
+        frameId: packet['frameId'] as int,
+        capturedAtUs:
+            pairedBodyStamp + (packet['capturedOffsetMs'] as int) * 1000,
+        sessionGeneration: 1,
+        fx: (packet['fx'] as num).toDouble(),
+        fy: (packet['fy'] as num).toDouble(),
+        cx: (packet['cx'] as num).toDouble(),
+        cy: (packet['cy'] as num).toDouble(),
+        errorM: 0,
+        poseQuality: 1,
+        cameraId: 'paired-one-camera',
+        modelHash: modelHash,
+        transformId: transform(sceneId),
+        referenceFrameId: pairedBodyRequest.referenceFrameId,
+        units: PassageUnits.metricMeters,
+        providerHealthy: true,
+        rotation: (packet['cameraToWalkingRotation'] as List)
+            .map((v) => (v as num).toDouble())
+            .toList(),
+        originM: (packet['cameraOriginM'] as List)
+            .map((v) => (v as num).toDouble())
+            .toList(),
+        rangeM: bodyFloats(bodyAsset(pairedBodyRoot, packet['depth'] as Map)),
+        freeZLowerM: bodyFloats(
+          bodyAsset(pairedBodyRoot, packet['freeZLower'] as Map),
+        ),
+        surfaceZUpperM: bodyFloats(
+          bodyAsset(pairedBodyRoot, packet['surfaceZUpper'] as Map),
+        ),
+        valid: gzip
+            .decode(bodyAsset(pairedBodyRoot, packet['validity'] as Map))
+            .map((v) => v == 1)
+            .toList(),
+      );
+
+  DepthFrame relative(
+    Map original,
+    String sceneId,
+    int timestampUs, {
+    bool canonicalPreprocess = false,
+  }) {
+    bodyAsset(pairedRgbRoot, original['rgb'] as Map);
+    final record = (ncnn['frames'] as List).cast<Map>().singleWhere(
+      (r) =>
+          r['sceneId'] == sceneId && r['frameIndex'] == original['frameIndex'],
+    );
+    if (record['rgbSha256'] != (original['rgb'] as Map)['sha256']) {
+      throw StateError('Relative depth RGB mismatch');
+    }
+    final raw = bodyFloats(bodyAsset(pairedRgbRoot, record['asset'] as Map));
+    if (raw.length != 65536 || raw.any((v) => !v.isFinite)) {
+      throw StateError('Invalid pinned MiDaS output');
+    }
+    return DepthFrame(
+      values: DepthMapOps.normalizeRelativeProximity(Float32List.fromList(raw)),
+      confidence01: Float32List.fromList(List.filled(65536, 1)),
+      width: 256,
+      height: 256,
+      timestampUs: timestampUs,
+      provider: DepthProviderKind.ncnnRelative,
+      semantics: DepthValueSemantics.relativeProximity,
+      modelId: 'midas-small-ncnn',
+      modelHash: relativeHash,
+      preprocessId:
+          (canonicalPreprocess ? preprocess['toId'] : ncnn['preprocessId'])
+              as String,
+      cropTopFraction: 0,
+      frameQuality: 1,
+      alignedToImage: true,
+    );
+  }
+}

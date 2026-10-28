@@ -1,0 +1,72 @@
+{
+  "scope": "nominal scan labels corrected before first test replay using projection only",
+  "scriptSha256": "560681d63699d04ff7fe6981114f28fbf934131669c83689f6a6fe199f48f372",
+  "manifestSha256": "1ad79b545c2b617f88acf70d6e07ab84e783c31eeea0b30dec07c79202a80d16",
+  "nominalAnnotationSha256": "fd0fa53aa6d92b952358c2dcb9fc2d718367ffd381e13d950c5de7fa290b8f56",
+  "annotationsSha256": "f05894991ae32cd02c90f72973f801d31d50d83b75a2941882d5393054a6a27a",
+  "decisionReportsRead": false,
+  "witnesses": [
+    {
+      "layoutId": "validation-metric-motion-wide-06",
+      "unseenProtectedVolumeWitnessesM": [
+        [
+          -0.09999999999999998,
+          0.2,
+          1.85
+        ],
+        [
+          -0.04999999999999999,
+          0.2,
+          1.85
+        ],
+        [
+          0.0,
+          0.2,
+          1.85
+        ],
+        [
+          0.04999999999999999,
+          0.2,
+          1.85
+        ],
+        [
+          0.10000000000000003,
+          0.2,
+          1.85
+        ]
+      ],
+      "observationSufficientDisproved": true
+    },
+    {
+      "layoutId": "test-metric-motion-wide-16",
+      "unseenProtectedVolumeWitnessesM": [
+        [
+          -0.09999999999999998,
+          0.2,
+          1.85
+        ],
+        [
+          -0.04999999999999999,
+          0.2,
+          1.85
+        ],
+        [
+          0.0,
+          0.2,
+          1.85
+        ],
+        [
+          0.04999999999999999,
+          0.2,
+          1.85
+        ],
+        [
+          0.10000000000000003,
+          0.2,
+          1.85
+        ]
+      ],
+      "observationSufficientDisproved": true
+    }
+  ]
+}

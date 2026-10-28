@@ -1,0 +1,358 @@
+{
+  "scope": "measured desktop wall clock, separate from functional reaction offsets; excludes scan and NN",
+  "frames": [
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "mode": "fixed-patch",
+      "frameId": 1,
+      "captureOffsetUs": 0,
+      "action": "stopNow",
+      "scaleMotionMs": 15.612,
+      "normalizationMs": 90.407,
+      "detectorTrackerMs": 69.292,
+      "reconstructionMs": 99.609,
+      "runtimeMs": 126.784,
+      "decisionComputeMs": 311.541
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "mode": "fixed-patch",
+      "frameId": 2,
+      "captureOffsetUs": 200000,
+      "action": "stopNow",
+      "scaleMotionMs": 212.385,
+      "normalizationMs": 37.65,
+      "detectorTrackerMs": 39.145,
+      "reconstructionMs": 67.6,
+      "runtimeMs": 1.763,
+      "decisionComputeMs": 320.916
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "mode": "fixed-patch",
+      "frameId": 3,
+      "captureOffsetUs": 400000,
+      "action": "stopNow",
+      "scaleMotionMs": 189.592,
+      "normalizationMs": 31.511,
+      "detectorTrackerMs": 51.33,
+      "reconstructionMs": 43.158,
+      "runtimeMs": 2.511,
+      "decisionComputeMs": 286.615
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "mode": "fixed-patch",
+      "frameId": 4,
+      "captureOffsetUs": 600000,
+      "action": "stopNow",
+      "scaleMotionMs": 202.248,
+      "normalizationMs": 29.154,
+      "detectorTrackerMs": 9.355,
+      "reconstructionMs": 39.831,
+      "runtimeMs": 2.232,
+      "decisionComputeMs": 253.7
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "mode": "fixed-patch",
+      "frameId": 5,
+      "captureOffsetUs": 800000,
+      "action": "stopNow",
+      "scaleMotionMs": 296.421,
+      "normalizationMs": 42.209,
+      "detectorTrackerMs": 5.124,
+      "reconstructionMs": 53.827,
+      "runtimeMs": 2.287,
+      "decisionComputeMs": 357.684
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "mode": "fixed-patch",
+      "frameId": 6,
+      "captureOffsetUs": 1000000,
+      "action": "stopNow",
+      "scaleMotionMs": 323.065,
+      "normalizationMs": 40.745,
+      "detectorTrackerMs": 6.694,
+      "reconstructionMs": 53.283,
+      "runtimeMs": 49.135,
+      "decisionComputeMs": 432.205
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "mode": "fixed-patch",
+      "frameId": 7,
+      "captureOffsetUs": 1200000,
+      "action": "stopNow",
+      "scaleMotionMs": 232.231,
+      "normalizationMs": 43.033,
+      "detectorTrackerMs": 6.954,
+      "reconstructionMs": 46.518,
+      "runtimeMs": 135.834,
+      "decisionComputeMs": 421.569
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "mode": "spatial-only",
+      "frameId": 1,
+      "captureOffsetUs": 0,
+      "action": "stopNow",
+      "scaleMotionMs": 17.943,
+      "normalizationMs": 66.776,
+      "detectorTrackerMs": 8.753,
+      "reconstructionMs": 130.53,
+      "runtimeMs": 58.004,
+      "decisionComputeMs": 215.26
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "mode": "spatial-only",
+      "frameId": 2,
+      "captureOffsetUs": 200000,
+      "action": "stopNow",
+      "scaleMotionMs": 329.982,
+      "normalizationMs": 46.202,
+      "detectorTrackerMs": 8.272,
+      "reconstructionMs": 68.792,
+      "runtimeMs": 1.754,
+      "decisionComputeMs": 408.827
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "mode": "spatial-only",
+      "frameId": 3,
+      "captureOffsetUs": 400000,
+      "action": "stopNow",
+      "scaleMotionMs": 302.199,
+      "normalizationMs": 46.29,
+      "detectorTrackerMs": 9.385,
+      "reconstructionMs": 60.254,
+      "runtimeMs": 1.88,
+      "decisionComputeMs": 373.747
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "mode": "spatial-only",
+      "frameId": 4,
+      "captureOffsetUs": 600000,
+      "action": "stopNow",
+      "scaleMotionMs": 377.848,
+      "normalizationMs": 60.889,
+      "detectorTrackerMs": 9.453,
+      "reconstructionMs": 55.057,
+      "runtimeMs": 1.958,
+      "decisionComputeMs": 444.343
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "mode": "spatial-only",
+      "frameId": 5,
+      "captureOffsetUs": 800000,
+      "action": "stopNow",
+      "scaleMotionMs": 358.975,
+      "normalizationMs": 56.366,
+      "detectorTrackerMs": 5.409,
+      "reconstructionMs": 48.263,
+      "runtimeMs": 1.375,
+      "decisionComputeMs": 414.05
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "mode": "spatial-only",
+      "frameId": 6,
+      "captureOffsetUs": 1000000,
+      "action": "stopNow",
+      "scaleMotionMs": 361.594,
+      "normalizationMs": 51.39,
+      "detectorTrackerMs": 10.665,
+      "reconstructionMs": 74.352,
+      "runtimeMs": 3.151,
+      "decisionComputeMs": 449.792
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "mode": "spatial-only",
+      "frameId": 7,
+      "captureOffsetUs": 1200000,
+      "action": "stopNow",
+      "scaleMotionMs": 345.759,
+      "normalizationMs": 54.389,
+      "detectorTrackerMs": 10.144,
+      "reconstructionMs": 63.48,
+      "runtimeMs": 29.084,
+      "decisionComputeMs": 448.493
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "mode": "scale-motion",
+      "frameId": 1,
+      "captureOffsetUs": 0,
+      "action": "stopNow",
+      "scaleMotionMs": 11.853,
+      "normalizationMs": 44.716,
+      "detectorTrackerMs": 9.865,
+      "reconstructionMs": 59.837,
+      "runtimeMs": 40.342,
+      "decisionComputeMs": 121.926
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "mode": "scale-motion",
+      "frameId": 2,
+      "captureOffsetUs": 200000,
+      "action": "stopNow",
+      "scaleMotionMs": 406.507,
+      "normalizationMs": 39.357,
+      "detectorTrackerMs": 8.168,
+      "reconstructionMs": 119.742,
+      "runtimeMs": 0.916,
+      "decisionComputeMs": 535.358
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "mode": "scale-motion",
+      "frameId": 3,
+      "captureOffsetUs": 400000,
+      "action": "stopNow",
+      "scaleMotionMs": 442.706,
+      "normalizationMs": 41.744,
+      "detectorTrackerMs": 5.936,
+      "reconstructionMs": 59.852,
+      "runtimeMs": 1.668,
+      "decisionComputeMs": 510.19
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "mode": "scale-motion",
+      "frameId": 4,
+      "captureOffsetUs": 600000,
+      "action": "stopNow",
+      "scaleMotionMs": 351.778,
+      "normalizationMs": 43.562,
+      "detectorTrackerMs": 4.591,
+      "reconstructionMs": 52.122,
+      "runtimeMs": 1.621,
+      "decisionComputeMs": 410.136
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "mode": "scale-motion",
+      "frameId": 5,
+      "captureOffsetUs": 800000,
+      "action": "stopNow",
+      "scaleMotionMs": 377.315,
+      "normalizationMs": 48.507,
+      "detectorTrackerMs": 10.074,
+      "reconstructionMs": 85.706,
+      "runtimeMs": 1.595,
+      "decisionComputeMs": 474.72
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "mode": "scale-motion",
+      "frameId": 6,
+      "captureOffsetUs": 1000000,
+      "action": "stopNow",
+      "scaleMotionMs": 368.34,
+      "normalizationMs": 40.674,
+      "detectorTrackerMs": 8.615,
+      "reconstructionMs": 53.291,
+      "runtimeMs": 2.999,
+      "decisionComputeMs": 433.273
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "mode": "scale-motion",
+      "frameId": 7,
+      "captureOffsetUs": 1200000,
+      "action": "stopNow",
+      "scaleMotionMs": 319.66,
+      "normalizationMs": 40.164,
+      "detectorTrackerMs": 6.117,
+      "reconstructionMs": 48.692,
+      "runtimeMs": 16.261,
+      "decisionComputeMs": 390.756
+    }
+  ],
+  "summaries": {
+    "fixed-patch": {
+      "normalizationMs": {
+        "p50": 40.745,
+        "p95": 90.407
+      },
+      "scaleMotionMs": {
+        "p50": 212.385,
+        "p95": 323.065
+      },
+      "detectorTrackerMs": {
+        "p50": 9.355,
+        "p95": 69.292
+      },
+      "reconstructionMs": {
+        "p50": 53.283,
+        "p95": 99.609
+      },
+      "runtimeMs": {
+        "p50": 2.511,
+        "p95": 135.834
+      },
+      "decisionComputeMs": {
+        "p50": 320.916,
+        "p95": 432.205
+      }
+    },
+    "spatial-only": {
+      "normalizationMs": {
+        "p50": 54.389,
+        "p95": 66.776
+      },
+      "scaleMotionMs": {
+        "p50": 345.759,
+        "p95": 377.848
+      },
+      "detectorTrackerMs": {
+        "p50": 9.385,
+        "p95": 10.665
+      },
+      "reconstructionMs": {
+        "p50": 63.48,
+        "p95": 130.53
+      },
+      "runtimeMs": {
+        "p50": 1.958,
+        "p95": 58.004
+      },
+      "decisionComputeMs": {
+        "p50": 414.05,
+        "p95": 449.792
+      }
+    },
+    "scale-motion": {
+      "normalizationMs": {
+        "p50": 41.744,
+        "p95": 48.507
+      },
+      "scaleMotionMs": {
+        "p50": 368.34,
+        "p95": 442.706
+      },
+      "detectorTrackerMs": {
+        "p50": 8.168,
+        "p95": 10.074
+      },
+      "reconstructionMs": {
+        "p50": 59.837,
+        "p95": 119.742
+      },
+      "runtimeMs": {
+        "p50": 1.668,
+        "p95": 40.342
+      },
+      "decisionComputeMs": {
+        "p50": 433.273,
+        "p95": 535.358
+      }
+    }
+  }
+}

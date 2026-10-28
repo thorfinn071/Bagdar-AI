@@ -1,0 +1,1853 @@
+{
+  "scope": "Flutter test VM desktop stage timing; excludes model inference/asset materialization/capture; not release or deadline evidence",
+  "samples": [
+    {
+      "mode": "visible-oracle",
+      "sceneId": "path-clear",
+      "frameIndex": 0,
+      "geometryTrackerUs": 117111,
+      "geometryTrackerRuntimeUs": 146320
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "path-clear",
+      "frameIndex": 1,
+      "geometryTrackerUs": 51227,
+      "geometryTrackerRuntimeUs": 52780
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "path-clear",
+      "frameIndex": 2,
+      "geometryTrackerUs": 61694,
+      "geometryTrackerRuntimeUs": 62388
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "path-clear",
+      "frameIndex": 3,
+      "geometryTrackerUs": 29272,
+      "geometryTrackerRuntimeUs": 29857
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "path-clear",
+      "frameIndex": 4,
+      "geometryTrackerUs": 26822,
+      "geometryTrackerRuntimeUs": 27657
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "path-clear",
+      "frameIndex": 5,
+      "geometryTrackerUs": 34068,
+      "geometryTrackerRuntimeUs": 36015
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "path-clear",
+      "frameIndex": 6,
+      "geometryTrackerUs": 23179,
+      "geometryTrackerRuntimeUs": 23840
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "path-clear",
+      "frameIndex": 7,
+      "geometryTrackerUs": 24418,
+      "geometryTrackerRuntimeUs": 25157
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "path-clear",
+      "frameIndex": 8,
+      "geometryTrackerUs": 31375,
+      "geometryTrackerRuntimeUs": 32096
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "path-clear",
+      "frameIndex": 9,
+      "geometryTrackerUs": 25846,
+      "geometryTrackerRuntimeUs": 26495
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "path-clear",
+      "frameIndex": 10,
+      "geometryTrackerUs": 24822,
+      "geometryTrackerRuntimeUs": 25485
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "path-box",
+      "frameIndex": 0,
+      "geometryTrackerUs": 31178,
+      "geometryTrackerRuntimeUs": 31827
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "path-box",
+      "frameIndex": 1,
+      "geometryTrackerUs": 24567,
+      "geometryTrackerRuntimeUs": 25179
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "path-box",
+      "frameIndex": 2,
+      "geometryTrackerUs": 26148,
+      "geometryTrackerRuntimeUs": 27001
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "path-box",
+      "frameIndex": 3,
+      "geometryTrackerUs": 30537,
+      "geometryTrackerRuntimeUs": 31430
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "path-box",
+      "frameIndex": 4,
+      "geometryTrackerUs": 25528,
+      "geometryTrackerRuntimeUs": 26184
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "path-box",
+      "frameIndex": 5,
+      "geometryTrackerUs": 26170,
+      "geometryTrackerRuntimeUs": 26796
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "path-box",
+      "frameIndex": 6,
+      "geometryTrackerUs": 30204,
+      "geometryTrackerRuntimeUs": 30807
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "path-box",
+      "frameIndex": 7,
+      "geometryTrackerUs": 24766,
+      "geometryTrackerRuntimeUs": 25648
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "path-box",
+      "frameIndex": 8,
+      "geometryTrackerUs": 28640,
+      "geometryTrackerRuntimeUs": 29334
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "path-box",
+      "frameIndex": 9,
+      "geometryTrackerUs": 30147,
+      "geometryTrackerRuntimeUs": 30791
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "path-box",
+      "frameIndex": 10,
+      "geometryTrackerUs": 26624,
+      "geometryTrackerRuntimeUs": 27396
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "doorway-wide",
+      "frameIndex": 0,
+      "geometryTrackerUs": 32378,
+      "geometryTrackerRuntimeUs": 33333
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "doorway-wide",
+      "frameIndex": 1,
+      "geometryTrackerUs": 49010,
+      "geometryTrackerRuntimeUs": 49841
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "doorway-wide",
+      "frameIndex": 2,
+      "geometryTrackerUs": 44498,
+      "geometryTrackerRuntimeUs": 45208
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "doorway-wide",
+      "frameIndex": 3,
+      "geometryTrackerUs": 28918,
+      "geometryTrackerRuntimeUs": 29750
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "doorway-wide",
+      "frameIndex": 4,
+      "geometryTrackerUs": 30848,
+      "geometryTrackerRuntimeUs": 31583
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "doorway-wide",
+      "frameIndex": 5,
+      "geometryTrackerUs": 24686,
+      "geometryTrackerRuntimeUs": 25541
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "doorway-wide",
+      "frameIndex": 6,
+      "geometryTrackerUs": 26101,
+      "geometryTrackerRuntimeUs": 26757
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "doorway-wide",
+      "frameIndex": 7,
+      "geometryTrackerUs": 27377,
+      "geometryTrackerRuntimeUs": 27977
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "doorway-wide",
+      "frameIndex": 8,
+      "geometryTrackerUs": 25405,
+      "geometryTrackerRuntimeUs": 26347
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "doorway-wide",
+      "frameIndex": 9,
+      "geometryTrackerUs": 28647,
+      "geometryTrackerRuntimeUs": 29291
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "doorway-wide",
+      "frameIndex": 10,
+      "geometryTrackerUs": 30481,
+      "geometryTrackerRuntimeUs": 31280
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "doorway-narrow",
+      "frameIndex": 0,
+      "geometryTrackerUs": 32973,
+      "geometryTrackerRuntimeUs": 33570
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "doorway-narrow",
+      "frameIndex": 1,
+      "geometryTrackerUs": 39472,
+      "geometryTrackerRuntimeUs": 42526
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "doorway-narrow",
+      "frameIndex": 2,
+      "geometryTrackerUs": 40011,
+      "geometryTrackerRuntimeUs": 40946
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "doorway-narrow",
+      "frameIndex": 3,
+      "geometryTrackerUs": 28321,
+      "geometryTrackerRuntimeUs": 28969
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "doorway-narrow",
+      "frameIndex": 4,
+      "geometryTrackerUs": 38106,
+      "geometryTrackerRuntimeUs": 38951
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "doorway-narrow",
+      "frameIndex": 5,
+      "geometryTrackerUs": 29761,
+      "geometryTrackerRuntimeUs": 30339
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "doorway-narrow",
+      "frameIndex": 6,
+      "geometryTrackerUs": 31665,
+      "geometryTrackerRuntimeUs": 32285
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "doorway-narrow",
+      "frameIndex": 7,
+      "geometryTrackerUs": 29762,
+      "geometryTrackerRuntimeUs": 30548
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "doorway-narrow",
+      "frameIndex": 8,
+      "geometryTrackerUs": 32031,
+      "geometryTrackerRuntimeUs": 32882
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "doorway-narrow",
+      "frameIndex": 9,
+      "geometryTrackerUs": 37413,
+      "geometryTrackerRuntimeUs": 38009
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "doorway-narrow",
+      "frameIndex": 10,
+      "geometryTrackerUs": 32555,
+      "geometryTrackerRuntimeUs": 33185
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "headroom-high",
+      "frameIndex": 0,
+      "geometryTrackerUs": 29189,
+      "geometryTrackerRuntimeUs": 29843
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "headroom-high",
+      "frameIndex": 1,
+      "geometryTrackerUs": 30924,
+      "geometryTrackerRuntimeUs": 31468
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "headroom-high",
+      "frameIndex": 2,
+      "geometryTrackerUs": 25445,
+      "geometryTrackerRuntimeUs": 26262
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "headroom-high",
+      "frameIndex": 3,
+      "geometryTrackerUs": 29084,
+      "geometryTrackerRuntimeUs": 29690
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "headroom-high",
+      "frameIndex": 4,
+      "geometryTrackerUs": 29948,
+      "geometryTrackerRuntimeUs": 30611
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "headroom-high",
+      "frameIndex": 5,
+      "geometryTrackerUs": 26599,
+      "geometryTrackerRuntimeUs": 27363
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "headroom-high",
+      "frameIndex": 6,
+      "geometryTrackerUs": 30572,
+      "geometryTrackerRuntimeUs": 31485
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "headroom-high",
+      "frameIndex": 7,
+      "geometryTrackerUs": 36937,
+      "geometryTrackerRuntimeUs": 37684
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "headroom-high",
+      "frameIndex": 8,
+      "geometryTrackerUs": 25343,
+      "geometryTrackerRuntimeUs": 25902
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "headroom-high",
+      "frameIndex": 9,
+      "geometryTrackerUs": 27811,
+      "geometryTrackerRuntimeUs": 28613
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "headroom-high",
+      "frameIndex": 10,
+      "geometryTrackerUs": 31743,
+      "geometryTrackerRuntimeUs": 32336
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "headroom-low",
+      "frameIndex": 0,
+      "geometryTrackerUs": 30061,
+      "geometryTrackerRuntimeUs": 30736
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "headroom-low",
+      "frameIndex": 1,
+      "geometryTrackerUs": 36152,
+      "geometryTrackerRuntimeUs": 36666
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "headroom-low",
+      "frameIndex": 2,
+      "geometryTrackerUs": 31937,
+      "geometryTrackerRuntimeUs": 32601
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "headroom-low",
+      "frameIndex": 3,
+      "geometryTrackerUs": 29055,
+      "geometryTrackerRuntimeUs": 29644
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "headroom-low",
+      "frameIndex": 4,
+      "geometryTrackerUs": 41349,
+      "geometryTrackerRuntimeUs": 41933
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "headroom-low",
+      "frameIndex": 5,
+      "geometryTrackerUs": 30735,
+      "geometryTrackerRuntimeUs": 31358
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "headroom-low",
+      "frameIndex": 6,
+      "geometryTrackerUs": 33330,
+      "geometryTrackerRuntimeUs": 33930
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "headroom-low",
+      "frameIndex": 7,
+      "geometryTrackerUs": 31758,
+      "geometryTrackerRuntimeUs": 32512
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "headroom-low",
+      "frameIndex": 8,
+      "geometryTrackerUs": 30057,
+      "geometryTrackerRuntimeUs": 31009
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "headroom-low",
+      "frameIndex": 9,
+      "geometryTrackerUs": 38267,
+      "geometryTrackerRuntimeUs": 39095
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "headroom-low",
+      "frameIndex": 10,
+      "geometryTrackerUs": 31408,
+      "geometryTrackerRuntimeUs": 32183
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "floor-level",
+      "frameIndex": 0,
+      "geometryTrackerUs": 27679,
+      "geometryTrackerRuntimeUs": 28459
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "floor-level",
+      "frameIndex": 1,
+      "geometryTrackerUs": 34903,
+      "geometryTrackerRuntimeUs": 35442
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "floor-level",
+      "frameIndex": 2,
+      "geometryTrackerUs": 29176,
+      "geometryTrackerRuntimeUs": 29771
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "floor-level",
+      "frameIndex": 3,
+      "geometryTrackerUs": 25609,
+      "geometryTrackerRuntimeUs": 26113
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "floor-level",
+      "frameIndex": 4,
+      "geometryTrackerUs": 32851,
+      "geometryTrackerRuntimeUs": 33378
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "floor-level",
+      "frameIndex": 5,
+      "geometryTrackerUs": 28549,
+      "geometryTrackerRuntimeUs": 29295
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "floor-level",
+      "frameIndex": 6,
+      "geometryTrackerUs": 28421,
+      "geometryTrackerRuntimeUs": 29075
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "floor-level",
+      "frameIndex": 7,
+      "geometryTrackerUs": 33732,
+      "geometryTrackerRuntimeUs": 34318
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "floor-level",
+      "frameIndex": 8,
+      "geometryTrackerUs": 25909,
+      "geometryTrackerRuntimeUs": 26573
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "floor-level",
+      "frameIndex": 9,
+      "geometryTrackerUs": 29440,
+      "geometryTrackerRuntimeUs": 30288
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "floor-level",
+      "frameIndex": 10,
+      "geometryTrackerUs": 30345,
+      "geometryTrackerRuntimeUs": 30930
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "floor-drop",
+      "frameIndex": 0,
+      "geometryTrackerUs": 32213,
+      "geometryTrackerRuntimeUs": 32992
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "floor-drop",
+      "frameIndex": 1,
+      "geometryTrackerUs": 37638,
+      "geometryTrackerRuntimeUs": 38628
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "floor-drop",
+      "frameIndex": 2,
+      "geometryTrackerUs": 34098,
+      "geometryTrackerRuntimeUs": 34716
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "floor-drop",
+      "frameIndex": 3,
+      "geometryTrackerUs": 28803,
+      "geometryTrackerRuntimeUs": 29370
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "floor-drop",
+      "frameIndex": 4,
+      "geometryTrackerUs": 27236,
+      "geometryTrackerRuntimeUs": 27790
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "floor-drop",
+      "frameIndex": 5,
+      "geometryTrackerUs": 35267,
+      "geometryTrackerRuntimeUs": 36050
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "floor-drop",
+      "frameIndex": 6,
+      "geometryTrackerUs": 25449,
+      "geometryTrackerRuntimeUs": 26075
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "floor-drop",
+      "frameIndex": 7,
+      "geometryTrackerUs": 24685,
+      "geometryTrackerRuntimeUs": 25281
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "floor-drop",
+      "frameIndex": 8,
+      "geometryTrackerUs": 32753,
+      "geometryTrackerRuntimeUs": 33373
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "floor-drop",
+      "frameIndex": 9,
+      "geometryTrackerUs": 27800,
+      "geometryTrackerRuntimeUs": 28471
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "floor-drop",
+      "frameIndex": 10,
+      "geometryTrackerUs": 25034,
+      "geometryTrackerRuntimeUs": 25638
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "person-side",
+      "frameIndex": 0,
+      "geometryTrackerUs": 33760,
+      "geometryTrackerRuntimeUs": 34619
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "person-side",
+      "frameIndex": 1,
+      "geometryTrackerUs": 26286,
+      "geometryTrackerRuntimeUs": 26814
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "person-side",
+      "frameIndex": 2,
+      "geometryTrackerUs": 26615,
+      "geometryTrackerRuntimeUs": 27362
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "person-side",
+      "frameIndex": 3,
+      "geometryTrackerUs": 41926,
+      "geometryTrackerRuntimeUs": 42564
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "person-side",
+      "frameIndex": 4,
+      "geometryTrackerUs": 32142,
+      "geometryTrackerRuntimeUs": 32832
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "person-side",
+      "frameIndex": 5,
+      "geometryTrackerUs": 28183,
+      "geometryTrackerRuntimeUs": 28666
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "person-side",
+      "frameIndex": 6,
+      "geometryTrackerUs": 36773,
+      "geometryTrackerRuntimeUs": 37467
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "person-side",
+      "frameIndex": 7,
+      "geometryTrackerUs": 26858,
+      "geometryTrackerRuntimeUs": 27374
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "person-side",
+      "frameIndex": 8,
+      "geometryTrackerUs": 29141,
+      "geometryTrackerRuntimeUs": 29644
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "person-side",
+      "frameIndex": 9,
+      "geometryTrackerUs": 36693,
+      "geometryTrackerRuntimeUs": 37252
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "person-side",
+      "frameIndex": 10,
+      "geometryTrackerUs": 26374,
+      "geometryTrackerRuntimeUs": 26955
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "person-approach",
+      "frameIndex": 0,
+      "geometryTrackerUs": 28227,
+      "geometryTrackerRuntimeUs": 28870
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "person-approach",
+      "frameIndex": 1,
+      "geometryTrackerUs": 42197,
+      "geometryTrackerRuntimeUs": 42819
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "person-approach",
+      "frameIndex": 2,
+      "geometryTrackerUs": 27695,
+      "geometryTrackerRuntimeUs": 28272
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "person-approach",
+      "frameIndex": 3,
+      "geometryTrackerUs": 28557,
+      "geometryTrackerRuntimeUs": 29185
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "person-approach",
+      "frameIndex": 4,
+      "geometryTrackerUs": 35597,
+      "geometryTrackerRuntimeUs": 36731
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "person-approach",
+      "frameIndex": 5,
+      "geometryTrackerUs": 29433,
+      "geometryTrackerRuntimeUs": 29936
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "person-approach",
+      "frameIndex": 6,
+      "geometryTrackerUs": 29852,
+      "geometryTrackerRuntimeUs": 30564
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "person-approach",
+      "frameIndex": 7,
+      "geometryTrackerUs": 35688,
+      "geometryTrackerRuntimeUs": 36262
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "person-approach",
+      "frameIndex": 8,
+      "geometryTrackerUs": 28080,
+      "geometryTrackerRuntimeUs": 28649
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "person-approach",
+      "frameIndex": 9,
+      "geometryTrackerUs": 29106,
+      "geometryTrackerRuntimeUs": 29657
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "person-approach",
+      "frameIndex": 10,
+      "geometryTrackerUs": 41851,
+      "geometryTrackerRuntimeUs": 42580
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 0,
+      "geometryTrackerUs": 30922,
+      "geometryTrackerRuntimeUs": 31641
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 1,
+      "geometryTrackerUs": 27430,
+      "geometryTrackerRuntimeUs": 27926
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 2,
+      "geometryTrackerUs": 33190,
+      "geometryTrackerRuntimeUs": 33666
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 3,
+      "geometryTrackerUs": 27663,
+      "geometryTrackerRuntimeUs": 28222
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 4,
+      "geometryTrackerUs": 25995,
+      "geometryTrackerRuntimeUs": 26504
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 5,
+      "geometryTrackerUs": 32369,
+      "geometryTrackerRuntimeUs": 32863
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 6,
+      "geometryTrackerUs": 28848,
+      "geometryTrackerRuntimeUs": 29438
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 7,
+      "geometryTrackerUs": 26759,
+      "geometryTrackerRuntimeUs": 27274
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 8,
+      "geometryTrackerUs": 32818,
+      "geometryTrackerRuntimeUs": 33406
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 9,
+      "geometryTrackerUs": 25794,
+      "geometryTrackerRuntimeUs": 26703
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 10,
+      "geometryTrackerUs": 29433,
+      "geometryTrackerRuntimeUs": 30020
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 0,
+      "geometryTrackerUs": 34098,
+      "geometryTrackerRuntimeUs": 34598
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 1,
+      "geometryTrackerUs": 27667,
+      "geometryTrackerRuntimeUs": 28197
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 2,
+      "geometryTrackerUs": 31110,
+      "geometryTrackerRuntimeUs": 31745
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 3,
+      "geometryTrackerUs": 35365,
+      "geometryTrackerRuntimeUs": 36044
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 4,
+      "geometryTrackerUs": 28109,
+      "geometryTrackerRuntimeUs": 28587
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 5,
+      "geometryTrackerUs": 30859,
+      "geometryTrackerRuntimeUs": 31372
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 6,
+      "geometryTrackerUs": 36236,
+      "geometryTrackerRuntimeUs": 36733
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 7,
+      "geometryTrackerUs": 33134,
+      "geometryTrackerRuntimeUs": 33663
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 8,
+      "geometryTrackerUs": 31403,
+      "geometryTrackerRuntimeUs": 31974
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 9,
+      "geometryTrackerUs": 36592,
+      "geometryTrackerRuntimeUs": 37091
+    },
+    {
+      "mode": "visible-oracle",
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 10,
+      "geometryTrackerUs": 28238,
+      "geometryTrackerRuntimeUs": 28736
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "path-clear",
+      "frameIndex": 0,
+      "geometryTrackerUs": 19820,
+      "geometryTrackerRuntimeUs": 20688
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "path-clear",
+      "frameIndex": 1,
+      "geometryTrackerUs": 22331,
+      "geometryTrackerRuntimeUs": 22959
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "path-clear",
+      "frameIndex": 2,
+      "geometryTrackerUs": 21470,
+      "geometryTrackerRuntimeUs": 22109
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "path-clear",
+      "frameIndex": 3,
+      "geometryTrackerUs": 6523,
+      "geometryTrackerRuntimeUs": 7029
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "path-clear",
+      "frameIndex": 4,
+      "geometryTrackerUs": 3695,
+      "geometryTrackerRuntimeUs": 4594
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "path-clear",
+      "frameIndex": 5,
+      "geometryTrackerUs": 4404,
+      "geometryTrackerRuntimeUs": 5035
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "path-clear",
+      "frameIndex": 6,
+      "geometryTrackerUs": 4316,
+      "geometryTrackerRuntimeUs": 4967
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "path-clear",
+      "frameIndex": 7,
+      "geometryTrackerUs": 4544,
+      "geometryTrackerRuntimeUs": 5084
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "path-clear",
+      "frameIndex": 8,
+      "geometryTrackerUs": 4426,
+      "geometryTrackerRuntimeUs": 5036
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "path-clear",
+      "frameIndex": 9,
+      "geometryTrackerUs": 4115,
+      "geometryTrackerRuntimeUs": 4624
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "path-clear",
+      "frameIndex": 10,
+      "geometryTrackerUs": 5092,
+      "geometryTrackerRuntimeUs": 5818
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "path-box",
+      "frameIndex": 0,
+      "geometryTrackerUs": 4881,
+      "geometryTrackerRuntimeUs": 5454
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "path-box",
+      "frameIndex": 1,
+      "geometryTrackerUs": 4313,
+      "geometryTrackerRuntimeUs": 4878
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "path-box",
+      "frameIndex": 2,
+      "geometryTrackerUs": 4666,
+      "geometryTrackerRuntimeUs": 5226
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "path-box",
+      "frameIndex": 3,
+      "geometryTrackerUs": 4590,
+      "geometryTrackerRuntimeUs": 5190
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "path-box",
+      "frameIndex": 4,
+      "geometryTrackerUs": 5576,
+      "geometryTrackerRuntimeUs": 6126
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "path-box",
+      "frameIndex": 5,
+      "geometryTrackerUs": 4298,
+      "geometryTrackerRuntimeUs": 5269
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "path-box",
+      "frameIndex": 6,
+      "geometryTrackerUs": 4702,
+      "geometryTrackerRuntimeUs": 5217
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "path-box",
+      "frameIndex": 7,
+      "geometryTrackerUs": 4004,
+      "geometryTrackerRuntimeUs": 4471
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "path-box",
+      "frameIndex": 8,
+      "geometryTrackerUs": 4141,
+      "geometryTrackerRuntimeUs": 4645
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "path-box",
+      "frameIndex": 9,
+      "geometryTrackerUs": 6268,
+      "geometryTrackerRuntimeUs": 6684
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "path-box",
+      "frameIndex": 10,
+      "geometryTrackerUs": 4186,
+      "geometryTrackerRuntimeUs": 4705
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "doorway-wide",
+      "frameIndex": 0,
+      "geometryTrackerUs": 5145,
+      "geometryTrackerRuntimeUs": 5940
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "doorway-wide",
+      "frameIndex": 1,
+      "geometryTrackerUs": 5468,
+      "geometryTrackerRuntimeUs": 6006
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "doorway-wide",
+      "frameIndex": 2,
+      "geometryTrackerUs": 7201,
+      "geometryTrackerRuntimeUs": 7856
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "doorway-wide",
+      "frameIndex": 3,
+      "geometryTrackerUs": 5630,
+      "geometryTrackerRuntimeUs": 6200
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "doorway-wide",
+      "frameIndex": 4,
+      "geometryTrackerUs": 5268,
+      "geometryTrackerRuntimeUs": 5764
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "doorway-wide",
+      "frameIndex": 5,
+      "geometryTrackerUs": 4184,
+      "geometryTrackerRuntimeUs": 4740
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "doorway-wide",
+      "frameIndex": 6,
+      "geometryTrackerUs": 5441,
+      "geometryTrackerRuntimeUs": 6156
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "doorway-wide",
+      "frameIndex": 7,
+      "geometryTrackerUs": 5041,
+      "geometryTrackerRuntimeUs": 5675
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "doorway-wide",
+      "frameIndex": 8,
+      "geometryTrackerUs": 6360,
+      "geometryTrackerRuntimeUs": 6975
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "doorway-wide",
+      "frameIndex": 9,
+      "geometryTrackerUs": 5180,
+      "geometryTrackerRuntimeUs": 5674
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "doorway-wide",
+      "frameIndex": 10,
+      "geometryTrackerUs": 3930,
+      "geometryTrackerRuntimeUs": 4580
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "doorway-narrow",
+      "frameIndex": 0,
+      "geometryTrackerUs": 4414,
+      "geometryTrackerRuntimeUs": 4895
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "doorway-narrow",
+      "frameIndex": 1,
+      "geometryTrackerUs": 4995,
+      "geometryTrackerRuntimeUs": 5457
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "doorway-narrow",
+      "frameIndex": 2,
+      "geometryTrackerUs": 7008,
+      "geometryTrackerRuntimeUs": 7426
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "doorway-narrow",
+      "frameIndex": 3,
+      "geometryTrackerUs": 4391,
+      "geometryTrackerRuntimeUs": 4908
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "doorway-narrow",
+      "frameIndex": 4,
+      "geometryTrackerUs": 4684,
+      "geometryTrackerRuntimeUs": 5333
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "doorway-narrow",
+      "frameIndex": 5,
+      "geometryTrackerUs": 4438,
+      "geometryTrackerRuntimeUs": 4947
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "doorway-narrow",
+      "frameIndex": 6,
+      "geometryTrackerUs": 4902,
+      "geometryTrackerRuntimeUs": 5432
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "doorway-narrow",
+      "frameIndex": 7,
+      "geometryTrackerUs": 6673,
+      "geometryTrackerRuntimeUs": 7178
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "doorway-narrow",
+      "frameIndex": 8,
+      "geometryTrackerUs": 6215,
+      "geometryTrackerRuntimeUs": 8278
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "doorway-narrow",
+      "frameIndex": 9,
+      "geometryTrackerUs": 6533,
+      "geometryTrackerRuntimeUs": 7151
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "doorway-narrow",
+      "frameIndex": 10,
+      "geometryTrackerUs": 6399,
+      "geometryTrackerRuntimeUs": 7204
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "headroom-high",
+      "frameIndex": 0,
+      "geometryTrackerUs": 5089,
+      "geometryTrackerRuntimeUs": 5565
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "headroom-high",
+      "frameIndex": 1,
+      "geometryTrackerUs": 7130,
+      "geometryTrackerRuntimeUs": 7583
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "headroom-high",
+      "frameIndex": 2,
+      "geometryTrackerUs": 4683,
+      "geometryTrackerRuntimeUs": 5272
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "headroom-high",
+      "frameIndex": 3,
+      "geometryTrackerUs": 4384,
+      "geometryTrackerRuntimeUs": 4881
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "headroom-high",
+      "frameIndex": 4,
+      "geometryTrackerUs": 4532,
+      "geometryTrackerRuntimeUs": 5123
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "headroom-high",
+      "frameIndex": 5,
+      "geometryTrackerUs": 5813,
+      "geometryTrackerRuntimeUs": 6321
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "headroom-high",
+      "frameIndex": 6,
+      "geometryTrackerUs": 5388,
+      "geometryTrackerRuntimeUs": 5966
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "headroom-high",
+      "frameIndex": 7,
+      "geometryTrackerUs": 4517,
+      "geometryTrackerRuntimeUs": 5010
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "headroom-high",
+      "frameIndex": 8,
+      "geometryTrackerUs": 4237,
+      "geometryTrackerRuntimeUs": 4827
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "headroom-high",
+      "frameIndex": 9,
+      "geometryTrackerUs": 4590,
+      "geometryTrackerRuntimeUs": 5337
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "headroom-high",
+      "frameIndex": 10,
+      "geometryTrackerUs": 4917,
+      "geometryTrackerRuntimeUs": 5539
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "headroom-low",
+      "frameIndex": 0,
+      "geometryTrackerUs": 5943,
+      "geometryTrackerRuntimeUs": 6455
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "headroom-low",
+      "frameIndex": 1,
+      "geometryTrackerUs": 4574,
+      "geometryTrackerRuntimeUs": 5216
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "headroom-low",
+      "frameIndex": 2,
+      "geometryTrackerUs": 4394,
+      "geometryTrackerRuntimeUs": 4904
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "headroom-low",
+      "frameIndex": 3,
+      "geometryTrackerUs": 5619,
+      "geometryTrackerRuntimeUs": 6223
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "headroom-low",
+      "frameIndex": 4,
+      "geometryTrackerUs": 4177,
+      "geometryTrackerRuntimeUs": 4669
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "headroom-low",
+      "frameIndex": 5,
+      "geometryTrackerUs": 4393,
+      "geometryTrackerRuntimeUs": 4844
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "headroom-low",
+      "frameIndex": 6,
+      "geometryTrackerUs": 4434,
+      "geometryTrackerRuntimeUs": 5010
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "headroom-low",
+      "frameIndex": 7,
+      "geometryTrackerUs": 5043,
+      "geometryTrackerRuntimeUs": 5705
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "headroom-low",
+      "frameIndex": 8,
+      "geometryTrackerUs": 3821,
+      "geometryTrackerRuntimeUs": 4366
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "headroom-low",
+      "frameIndex": 9,
+      "geometryTrackerUs": 3929,
+      "geometryTrackerRuntimeUs": 4431
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "headroom-low",
+      "frameIndex": 10,
+      "geometryTrackerUs": 6002,
+      "geometryTrackerRuntimeUs": 6432
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "floor-level",
+      "frameIndex": 0,
+      "geometryTrackerUs": 4865,
+      "geometryTrackerRuntimeUs": 5358
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "floor-level",
+      "frameIndex": 1,
+      "geometryTrackerUs": 3953,
+      "geometryTrackerRuntimeUs": 4384
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "floor-level",
+      "frameIndex": 2,
+      "geometryTrackerUs": 5263,
+      "geometryTrackerRuntimeUs": 5752
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "floor-level",
+      "frameIndex": 3,
+      "geometryTrackerUs": 5219,
+      "geometryTrackerRuntimeUs": 5842
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "floor-level",
+      "frameIndex": 4,
+      "geometryTrackerUs": 4611,
+      "geometryTrackerRuntimeUs": 5109
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "floor-level",
+      "frameIndex": 5,
+      "geometryTrackerUs": 3729,
+      "geometryTrackerRuntimeUs": 4496
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "floor-level",
+      "frameIndex": 6,
+      "geometryTrackerUs": 5831,
+      "geometryTrackerRuntimeUs": 6371
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "floor-level",
+      "frameIndex": 7,
+      "geometryTrackerUs": 4572,
+      "geometryTrackerRuntimeUs": 5130
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "floor-level",
+      "frameIndex": 8,
+      "geometryTrackerUs": 4378,
+      "geometryTrackerRuntimeUs": 4936
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "floor-level",
+      "frameIndex": 9,
+      "geometryTrackerUs": 5402,
+      "geometryTrackerRuntimeUs": 5828
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "floor-level",
+      "frameIndex": 10,
+      "geometryTrackerUs": 4218,
+      "geometryTrackerRuntimeUs": 4683
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "floor-drop",
+      "frameIndex": 0,
+      "geometryTrackerUs": 4124,
+      "geometryTrackerRuntimeUs": 4789
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "floor-drop",
+      "frameIndex": 1,
+      "geometryTrackerUs": 3878,
+      "geometryTrackerRuntimeUs": 4381
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "floor-drop",
+      "frameIndex": 2,
+      "geometryTrackerUs": 4342,
+      "geometryTrackerRuntimeUs": 4908
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "floor-drop",
+      "frameIndex": 3,
+      "geometryTrackerUs": 6922,
+      "geometryTrackerRuntimeUs": 7477
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "floor-drop",
+      "frameIndex": 4,
+      "geometryTrackerUs": 4245,
+      "geometryTrackerRuntimeUs": 4801
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "floor-drop",
+      "frameIndex": 5,
+      "geometryTrackerUs": 4442,
+      "geometryTrackerRuntimeUs": 4973
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "floor-drop",
+      "frameIndex": 6,
+      "geometryTrackerUs": 3706,
+      "geometryTrackerRuntimeUs": 4226
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "floor-drop",
+      "frameIndex": 7,
+      "geometryTrackerUs": 5000,
+      "geometryTrackerRuntimeUs": 5699
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "floor-drop",
+      "frameIndex": 8,
+      "geometryTrackerUs": 5170,
+      "geometryTrackerRuntimeUs": 5697
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "floor-drop",
+      "frameIndex": 9,
+      "geometryTrackerUs": 4578,
+      "geometryTrackerRuntimeUs": 5174
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "floor-drop",
+      "frameIndex": 10,
+      "geometryTrackerUs": 5591,
+      "geometryTrackerRuntimeUs": 6165
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "person-side",
+      "frameIndex": 0,
+      "geometryTrackerUs": 5278,
+      "geometryTrackerRuntimeUs": 5726
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "person-side",
+      "frameIndex": 1,
+      "geometryTrackerUs": 3889,
+      "geometryTrackerRuntimeUs": 4478
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "person-side",
+      "frameIndex": 2,
+      "geometryTrackerUs": 6752,
+      "geometryTrackerRuntimeUs": 7196
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "person-side",
+      "frameIndex": 3,
+      "geometryTrackerUs": 5270,
+      "geometryTrackerRuntimeUs": 5736
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "person-side",
+      "frameIndex": 4,
+      "geometryTrackerUs": 3762,
+      "geometryTrackerRuntimeUs": 4336
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "person-side",
+      "frameIndex": 5,
+      "geometryTrackerUs": 3646,
+      "geometryTrackerRuntimeUs": 4102
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "person-side",
+      "frameIndex": 6,
+      "geometryTrackerUs": 4403,
+      "geometryTrackerRuntimeUs": 4935
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "person-side",
+      "frameIndex": 7,
+      "geometryTrackerUs": 7247,
+      "geometryTrackerRuntimeUs": 7997
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "person-side",
+      "frameIndex": 8,
+      "geometryTrackerUs": 3748,
+      "geometryTrackerRuntimeUs": 4220
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "person-side",
+      "frameIndex": 9,
+      "geometryTrackerUs": 4308,
+      "geometryTrackerRuntimeUs": 4788
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "person-side",
+      "frameIndex": 10,
+      "geometryTrackerUs": 4668,
+      "geometryTrackerRuntimeUs": 5163
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "person-approach",
+      "frameIndex": 0,
+      "geometryTrackerUs": 4061,
+      "geometryTrackerRuntimeUs": 4700
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "person-approach",
+      "frameIndex": 1,
+      "geometryTrackerUs": 4457,
+      "geometryTrackerRuntimeUs": 4939
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "person-approach",
+      "frameIndex": 2,
+      "geometryTrackerUs": 6019,
+      "geometryTrackerRuntimeUs": 6667
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "person-approach",
+      "frameIndex": 3,
+      "geometryTrackerUs": 3833,
+      "geometryTrackerRuntimeUs": 4361
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "person-approach",
+      "frameIndex": 4,
+      "geometryTrackerUs": 6089,
+      "geometryTrackerRuntimeUs": 7406
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "person-approach",
+      "frameIndex": 5,
+      "geometryTrackerUs": 3807,
+      "geometryTrackerRuntimeUs": 4340
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "person-approach",
+      "frameIndex": 6,
+      "geometryTrackerUs": 3763,
+      "geometryTrackerRuntimeUs": 4275
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "person-approach",
+      "frameIndex": 7,
+      "geometryTrackerUs": 4176,
+      "geometryTrackerRuntimeUs": 4739
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "person-approach",
+      "frameIndex": 8,
+      "geometryTrackerUs": 4421,
+      "geometryTrackerRuntimeUs": 5071
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "person-approach",
+      "frameIndex": 9,
+      "geometryTrackerUs": 5994,
+      "geometryTrackerRuntimeUs": 6660
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "person-approach",
+      "frameIndex": 10,
+      "geometryTrackerUs": 4668,
+      "geometryTrackerRuntimeUs": 5159
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 0,
+      "geometryTrackerUs": 4595,
+      "geometryTrackerRuntimeUs": 5056
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 1,
+      "geometryTrackerUs": 5613,
+      "geometryTrackerRuntimeUs": 6183
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 2,
+      "geometryTrackerUs": 4011,
+      "geometryTrackerRuntimeUs": 4495
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 3,
+      "geometryTrackerUs": 5471,
+      "geometryTrackerRuntimeUs": 5997
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 4,
+      "geometryTrackerUs": 3643,
+      "geometryTrackerRuntimeUs": 4337
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 5,
+      "geometryTrackerUs": 4420,
+      "geometryTrackerRuntimeUs": 5006
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 6,
+      "geometryTrackerUs": 4157,
+      "geometryTrackerRuntimeUs": 4684
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 7,
+      "geometryTrackerUs": 4224,
+      "geometryTrackerRuntimeUs": 4702
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 8,
+      "geometryTrackerUs": 6799,
+      "geometryTrackerRuntimeUs": 7243
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 9,
+      "geometryTrackerUs": 4270,
+      "geometryTrackerRuntimeUs": 4991
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 10,
+      "geometryTrackerUs": 4000,
+      "geometryTrackerRuntimeUs": 4462
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 0,
+      "geometryTrackerUs": 4935,
+      "geometryTrackerRuntimeUs": 5865
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 1,
+      "geometryTrackerUs": 3796,
+      "geometryTrackerRuntimeUs": 4513
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 2,
+      "geometryTrackerUs": 5102,
+      "geometryTrackerRuntimeUs": 5642
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 3,
+      "geometryTrackerUs": 4620,
+      "geometryTrackerRuntimeUs": 5092
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 4,
+      "geometryTrackerUs": 4264,
+      "geometryTrackerRuntimeUs": 4975
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 5,
+      "geometryTrackerUs": 4194,
+      "geometryTrackerRuntimeUs": 4964
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 6,
+      "geometryTrackerUs": 4300,
+      "geometryTrackerRuntimeUs": 4974
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 7,
+      "geometryTrackerUs": 5752,
+      "geometryTrackerRuntimeUs": 6307
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 8,
+      "geometryTrackerUs": 4276,
+      "geometryTrackerRuntimeUs": 4822
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 9,
+      "geometryTrackerUs": 4729,
+      "geometryTrackerRuntimeUs": 5247
+    },
+    {
+      "mode": "midas-relative",
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 10,
+      "geometryTrackerUs": 5735,
+      "geometryTrackerRuntimeUs": 6460
+    }
+  ]
+}

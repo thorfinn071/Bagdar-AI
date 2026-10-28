@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "scope": "Exact source snapshots preceding scene-admission corrections; historical frozen recipes retain their original hashes.",
+  "sources": {
+    "lib/safety/runtime/spatial_safety_runtime.dart": "f430dcf5cb1f8784f636392437aeeb7c47c4e33d8e0f90ac6f42c5a5c8e1bb7d",
+    "lib/safety/world/generic_geometry_scene_adapter.dart": "e2f3a00b91fd9bd249de4891f25ff2e504b31d5db970a2232497accf611deba6",
+    "test/harness/camera_metric_motion_benchmark.dart": "b8d3afa3fa3b13d08d68d0481ecfd73f53f16b6dd60cd5ede7fce1a9d14b7e93",
+    "test/harness/camera_scale_motion_benchmark.dart": "26dcd09cd8893236a05df3fccb1e7d207489f4cf77d920a4d6ba2a8b325cf29d",
+    "test/harness/camera_temporal_passage_benchmark.dart": "4d19fa15270fcfee7d135334ac9a4122f54998d78fd01c614c1bbd4f7f7bc418",
+    "test/camera_visible_passage_replay_test.dart": "0b25cce91e554bf45515aad31a1150012f20cf6af0450d6585c589284517d416",
+    "tool/model_benchmark/profile_camera_processing.dart": "da4a096bb23f7bd8749875f5967fa358261aa3c946244fd667d62799ee7cddcb",
+    "test/camera_metric_motion_replay_test.dart": "a61eb43bb459bb9fffb5fe43f9b47c07b7a8649d2c6ace9bcd4bb07ad77fa727",
+    "test/camera_scale_motion_replay_test.dart": "a14e57ddf12454a0b53375549346fa0883e007f5aad9b1917d08d7ebde4c31d1",
+    "test/camera_temporal_passage_replay_test.dart": "452f44a6f45e2653b8e3809bd027d0a14ecdb0880f153d2a85518049e87825c4",
+    "test/camera_track_passage_replay_test.dart": "f7cf9d92222452bc97418189929c17c722ecdfc278714651b5710465300e96b9",
+    "test/camera_processing_parity_test.dart": "b9d2b2cff52185a0a8c1e5459a923fed0c7d7037eebc0e189ba15183b7fcdbb5"
+  }
+}

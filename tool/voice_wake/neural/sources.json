@@ -1,0 +1,230 @@
+{
+  "repo": "rhasspy/piper-voices",
+  "revision": "c10ece1aade47bb51c153c893d14e5bf8e5b7117",
+  "voices": {
+    "ru_RU-dmitri-medium": {
+      "key": "ru_RU-dmitri-medium",
+      "name": "dmitri",
+      "language": {
+        "code": "ru_RU",
+        "family": "ru",
+        "region": "RU",
+        "name_native": "Русский",
+        "name_english": "Russian",
+        "country_english": "Russia"
+      },
+      "quality": "medium",
+      "num_speakers": 1,
+      "speaker_id_map": {},
+      "files": {
+        "ru/ru_RU/dmitri/medium/ru_RU-dmitri-medium.onnx": {
+          "size_bytes": 63201294,
+          "md5_digest": "589ccc91745a1e2353508ff62c5941b7"
+        },
+        "ru/ru_RU/dmitri/medium/ru_RU-dmitri-medium.onnx.json": {
+          "size_bytes": 4824,
+          "md5_digest": "4eaf0d090190ecb8d958d40c76fd85e8"
+        },
+        "ru/ru_RU/dmitri/medium/MODEL_CARD": {
+          "size_bytes": 277,
+          "md5_digest": "203e4e94894ffb31722b456cab6a2259"
+        }
+      },
+      "aliases": []
+    },
+    "ru_RU-denis-medium": {
+      "key": "ru_RU-denis-medium",
+      "name": "denis",
+      "language": {
+        "code": "ru_RU",
+        "family": "ru",
+        "region": "RU",
+        "name_native": "Русский",
+        "name_english": "Russian",
+        "country_english": "Russia"
+      },
+      "quality": "medium",
+      "num_speakers": 1,
+      "speaker_id_map": {},
+      "files": {
+        "ru/ru_RU/denis/medium/ru_RU-denis-medium.onnx": {
+          "size_bytes": 63201294,
+          "md5_digest": "76c2f14e521fef3ed574f97ad492728e"
+        },
+        "ru/ru_RU/denis/medium/ru_RU-denis-medium.onnx.json": {
+          "size_bytes": 4823,
+          "md5_digest": "e3df5957c07647cab05cf9910ef3ede0"
+        },
+        "ru/ru_RU/denis/medium/MODEL_CARD": {
+          "size_bytes": 276,
+          "md5_digest": "baa1911124846d4474ef1e4536158cee"
+        }
+      },
+      "aliases": []
+    },
+    "kk_KZ-iseke-x_low": {
+      "key": "kk_KZ-iseke-x_low",
+      "name": "iseke",
+      "language": {
+        "code": "kk_KZ",
+        "family": "kk",
+        "region": "KZ",
+        "name_native": "қазақша",
+        "name_english": "Kazakh",
+        "country_english": "Kazakhstan"
+      },
+      "quality": "x_low",
+      "num_speakers": 1,
+      "speaker_id_map": {},
+      "files": {
+        "kk/kk_KZ/iseke/x_low/kk_KZ-iseke-x_low.onnx": {
+          "size_bytes": 28130791,
+          "md5_digest": "1674f3f4ce48981d77e500741afa4ff9"
+        },
+        "kk/kk_KZ/iseke/x_low/kk_KZ-iseke-x_low.onnx.json": {
+          "size_bytes": 4168,
+          "md5_digest": "bc9832bc17f9d64367ee3bfb64f7f944"
+        },
+        "kk/kk_KZ/iseke/x_low/MODEL_CARD": {
+          "size_bytes": 239,
+          "md5_digest": "fce637093c4437a1f929280913a86aa5"
+        }
+      },
+      "aliases": [
+        "kk-iseke-x-low"
+      ]
+    },
+    "kk_KZ-raya-x_low": {
+      "key": "kk_KZ-raya-x_low",
+      "name": "raya",
+      "language": {
+        "code": "kk_KZ",
+        "family": "kk",
+        "region": "KZ",
+        "name_native": "қазақша",
+        "name_english": "Kazakh",
+        "country_english": "Kazakhstan"
+      },
+      "quality": "x_low",
+      "num_speakers": 1,
+      "speaker_id_map": {},
+      "files": {
+        "kk/kk_KZ/raya/x_low/kk_KZ-raya-x_low.onnx": {
+          "size_bytes": 28130791,
+          "md5_digest": "476ecc32e07cad26572a50f26d0ebe28"
+        },
+        "kk/kk_KZ/raya/x_low/kk_KZ-raya-x_low.onnx.json": {
+          "size_bytes": 4167,
+          "md5_digest": "cc696dbf95d53a280b6805d81b4eac64"
+        },
+        "kk/kk_KZ/raya/x_low/MODEL_CARD": {
+          "size_bytes": 238,
+          "md5_digest": "fb34d2e65fac42f4d6e003d3d30c897e"
+        }
+      },
+      "aliases": [
+        "kk-raya-x-low"
+      ]
+    },
+    "kk_KZ-issai-high": {
+      "key": "kk_KZ-issai-high",
+      "name": "issai",
+      "language": {
+        "code": "kk_KZ",
+        "family": "kk",
+        "region": "KZ",
+        "name_native": "қазақша",
+        "name_english": "Kazakh",
+        "country_english": "Kazakhstan"
+      },
+      "quality": "high",
+      "num_speakers": 6,
+      "speaker_id_map": {
+        "ISSAI_KazakhTTS2_M2": 0,
+        "ISSAI_KazakhTTS_M1_Iseke": 1,
+        "ISSAI_KazakhTTS2_F3": 2,
+        "ISSAI_KazakhTTS_F1_Raya": 3,
+        "ISSAI_KazakhTTS2_F1": 4,
+        "ISSAI_KazakhTTS2_F2": 5
+      },
+      "files": {
+        "kk/kk_KZ/issai/high/kk_KZ-issai-high.onnx": {
+          "size_bytes": 127864258,
+          "md5_digest": "d5a97c25feb0949c187ae5f8e72753e3"
+        },
+        "kk/kk_KZ/issai/high/kk_KZ-issai-high.onnx.json": {
+          "size_bytes": 4358,
+          "md5_digest": "cfef5328137c8a1e4d1e5d3dac0c7056"
+        },
+        "kk/kk_KZ/issai/high/MODEL_CARD": {
+          "size_bytes": 237,
+          "md5_digest": "30487d1011336ed15feabd156424cbd9"
+        }
+      },
+      "aliases": [
+        "kk-issai-high"
+      ]
+    },
+    "en_US-ljspeech-high": {
+      "key": "en_US-ljspeech-high",
+      "name": "ljspeech",
+      "language": {
+        "code": "en_US",
+        "family": "en",
+        "region": "US",
+        "name_native": "English",
+        "name_english": "English",
+        "country_english": "United States"
+      },
+      "quality": "high",
+      "num_speakers": 1,
+      "speaker_id_map": {},
+      "files": {
+        "en/en_US/ljspeech/high/en_US-ljspeech-high.onnx": {
+          "size_bytes": 114199011,
+          "md5_digest": "dad093b5d2cff6a5fda99883ceda09d1"
+        },
+        "en/en_US/ljspeech/high/en_US-ljspeech-high.onnx.json": {
+          "size_bytes": 4970,
+          "md5_digest": "de98fc398ddead60fb82d93bfafb3ad1"
+        },
+        "en/en_US/ljspeech/high/MODEL_CARD": {
+          "size_bytes": 513,
+          "md5_digest": "bc3fe20b3e3f359ec423b98c1b6ed32e"
+        }
+      },
+      "aliases": []
+    },
+    "en_US-joe-medium": {
+      "key": "en_US-joe-medium",
+      "name": "joe",
+      "language": {
+        "code": "en_US",
+        "family": "en",
+        "region": "US",
+        "name_native": "English",
+        "name_english": "English",
+        "country_english": "United States"
+      },
+      "quality": "medium",
+      "num_speakers": 1,
+      "speaker_id_map": {},
+      "files": {
+        "en/en_US/joe/medium/en_US-joe-medium.onnx": {
+          "size_bytes": 63201294,
+          "md5_digest": "74fd6a4dc39e0aa9dce145d7f5acd4f6"
+        },
+        "en/en_US/joe/medium/en_US-joe-medium.onnx.json": {
+          "size_bytes": 4794,
+          "md5_digest": "811036b9c1451545f9495fdc1baa0754"
+        },
+        "en/en_US/joe/medium/MODEL_CARD": {
+          "size_bytes": 281,
+          "md5_digest": "7dc55becaf84cb3b713281fac70491a1"
+        }
+      },
+      "aliases": []
+    }
+  },
+  "fsddRevision": "26eb9aaf76e81b692f806f9140c2d2777410d7a1"
+}

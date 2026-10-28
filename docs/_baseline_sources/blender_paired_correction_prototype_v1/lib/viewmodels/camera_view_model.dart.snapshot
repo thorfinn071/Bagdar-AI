@@ -1,0 +1,819 @@
+import 'dart:async';
+import 'package:camera/camera.dart';
+import 'package:flutter/material.dart';
+import '../camera/camera_session.dart';
+import '../core/core_feature_policy.dart';
+import '../core/core_health_coordinator.dart';
+import '../models/a11y_prefs.dart';
+import '../models/app_mode.dart';
+import '../models/speech_job.dart';
+import '../services/feature_usage_tracker.dart';
+import '../services/field_logger.dart';
+import '../services/settings_service.dart';
+import '../services/tts_service.dart';
+import '../services/earcon_service.dart';
+import '../services/battery_monitor.dart';
+import '../services/memory_monitor.dart';
+import '../services/thermal_monitor.dart';
+import '../services/proximity_beacon_service.dart';
+import '../services/haptic_service.dart';
+import '../services/payment_sms_service.dart';
+import '../services/device_capability.dart';
+import '../services/sos_service.dart';
+import '../services/waypoint_service.dart';
+import '../services/fall_detector.dart';
+import '../services/navigation_service.dart';
+import '../services/compass_service.dart';
+import '../services/twogis_service.dart';
+import '../services/map_package_manager.dart';
+import '../services/offline_routing_service.dart';
+import '../services/gtfs_service.dart';
+import '../camera/alert_manager.dart';
+import '../tracker/tracker.dart';
+import '../tracker/track.dart';
+import '../utils/performance_throttler.dart';
+import '../models/strings.dart';
+import '../models/nav_models.dart';
+import '../services/voice_command_service.dart';
+import '../services/vosk_kk_recognizer.dart';
+import '../services/traffic_light_analyzer.dart';
+import '../services/ocr_service.dart';
+import '../services/motion_prealert.dart';
+import '../services/weather_gate.dart';
+import '../services/indoor_gate.dart';
+import '../services/object_memory_service.dart';
+import '../services/acoustic_world_model.dart';
+import '../camera/object_finder_session.dart';
+import '../safety/runtime/spatial_safety_runtime.dart';
+import '../safety/runtime/safety_feedback_runtime.dart';
+import '../safety/alerts/bagdar_feedback_output.dart';
+import '../safety/alerts/feedback_command.dart';
+import '../safety/alerts/feedback_dispatcher.dart';
+import '../safety/planning/safety_action.dart';
+
+import '../services/orientation_service.dart';
+import '../services/step_service.dart';
+import '../services/winter_mode_service.dart';
+import '../services/indoor_trail_recorder.dart';
+import '../services/indoor_trail_replay.dart';
+import '../services/bazaar_livestock_service.dart';
+import '../services/mesh_buddy_alert_service.dart';
+import '../services/oscp_service.dart';
+import '../services/near_miss_buffer.dart';
+import '../services/charging_job_scheduler.dart';
+import '../services/model_pack_manager.dart';
+import '../services/scene_question_service.dart';
+import '../services/sonar_service.dart';
+
+class CameraViewModel extends ChangeNotifier {
+  final CoreHealthCoordinator health = CoreHealthCoordinator();
+  final CameraSession cameraSession = CameraSession();
+  final Tracker tracker = Tracker();
+  final TtsService tts = TtsService.instance;
+  final EarconService earcon = EarconService();
+  final BatteryMonitor battery = BatteryMonitor();
+  final ThermalMonitor thermal = ThermalMonitor();
+  final MemoryMonitor memory = MemoryMonitor();
+  final PerformanceThrottler throttler = PerformanceThrottler();
+  final CompassService compass = CompassService();
+  final OrientationService orientation = OrientationService();
+  final StepService steps = StepService();
+  final WaypointService waypoints = WaypointService();
+  late final SosService sos = SosService(
+    stepProvider: () => steps.steps,
+    headingProvider: () => compass.heading,
+    networkContextProvider: DeviceCapabilityProbe.getNetworkContext,
+  );
+  final FallDetector fallDetector = FallDetector();
+  final TwoGisService twoGis = TwoGisService();
+  final MapPackageManager mapPkg = MapPackageManager();
+  final OfflineRoutingService offlineRouting = OfflineRoutingService();
+  final GtfsService gtfs = GtfsService();
+  final VoiceCommandService voice = VoiceCommandService();
+  final TrafficLightAnalyzer trafficLight = TrafficLightAnalyzer();
+
+  late final OcrService ocr = OcrService(memoryMonitor: memory);
+  final MotionPreAlert motionPreAlert = MotionPreAlert();
+  final WeatherGate weatherGate = WeatherGate();
+
+  final IndoorGate indoorGate = IndoorGate();
+
+  final WinterModeService winterMode = WinterModeService();
+
+  late final AlertManager alertMgr;
+  late final SpatialSafetyRuntime spatialSafety;
+  late final BagdarFeedbackOutput feedbackOutput;
+  late final SafetyFeedbackRuntime safetyFeedback;
+  late final ProximityBeaconService proximityBeacon;
+  late final NavigationService nav;
+  late final PaymentSmsService paymentSms;
+  final ObjectMemoryService objectMemory = ObjectMemoryService();
+  final AcousticWorldModel awm = AcousticWorldModel();
+  late final ObjectFinderSession objectFinder;
+  late final IndoorTrailRecorder trailRecorder;
+  late final IndoorTrailReplay trailReplay;
+  final BazaarLivestockService bazaarLivestock =
+      BazaarLivestockService.instance;
+
+  final MeshBuddyAlertService meshBuddy = MeshBuddyAlertService.instance;
+
+  final OscpService oscp = OscpService.instance;
+
+  final NearMissBuffer nearMissBuffer = NearMissBuffer.instance;
+
+  final ChargingJobScheduler chargingJobs = ChargingJobScheduler.instance;
+
+  final ModelPackManager modelPacks = ModelPackManager.instance;
+
+  final SceneQuestionService vlmCompanion = SceneQuestionService.instance;
+
+  SonarService get sonar => SonarService.instance;
+
+  AppMode mode = AppMode.street;
+  String statusLine = 'Запуск Bagdar...';
+  bool isCameraReady = false;
+  bool showDebugHud = false;
+  bool isLowPowerMode = false;
+  bool isPitchBlack = false;
+  bool guideDogMode = false;
+
+  /// Source-camera geometry used to normalize depth/luma and to align YOLO
+  /// boxes with generic-obstacle observations.
+  int cameraSensorRotationDeg = 0;
+  bool cameraMirrored = false;
+
+  /// V1.2: Notified whenever [FallDetector.motionState] changes so that
+  /// camera_screen.dart can issue the "you are running" TTS cue.
+  void Function(MotionState state)? onMotionStateChanged;
+
+  /// Service names passed to [_initService] during the last [init] call.
+  /// Visible for Core boot-policy tests.
+  List<String> debugBootServiceNames = const [];
+
+  DateTime _lastRollWarnAt = DateTime.fromMillisecondsSinceEpoch(0);
+  DateTime _lastOrientationWarnAt = DateTime.fromMillisecondsSinceEpoch(0);
+
+  final ValueNotifier<List<Track>> tracksNotifier = ValueNotifier(const []);
+
+  bool get isIndoor => indoorGate.state == IndoorState.indoor;
+
+  CameraViewModel() {
+    proximityBeacon = ProximityBeaconService(earcon: earcon);
+    alertMgr = AlertManager(
+      tts: tts,
+      earcon: earcon,
+      onProximityChanged: (dist, pan) {
+        if (dist == null || tts.speaking) {
+          proximityBeacon.pause();
+        } else {
+          proximityBeacon.update(
+            dist,
+            pan,
+            weatherDegraded: weatherGate.degraded,
+          );
+        }
+      },
+      isGuideDogMode: () => guideDogMode,
+      isIndoorMode: () => isIndoor,
+    );
+    feedbackOutput = BagdarFeedbackOutput(tts: tts, earcon: earcon);
+    safetyFeedback = SafetyFeedbackRuntime(
+      arbiter: alertMgr.spatialArbiter,
+      dispatcher: FeedbackDispatcher(healthCoordinator: health),
+      output: feedbackOutput,
+    );
+    spatialSafety = SpatialSafetyRuntime(
+      healthCoordinator: health,
+      arbiter: alertMgr.spatialArbiter,
+      conservativeConfidenceAuthority: true,
+    );
+    nav = NavigationService(compass: compass, stepService: steps);
+    paymentSms = PaymentSmsService(tts: tts, earcon: earcon);
+    objectFinder = ObjectFinderSession(
+      tts: tts,
+      earcon: earcon,
+      memory: objectMemory,
+    );
+    trailRecorder = IndoorTrailRecorder(
+      compass: compass,
+      steps: steps,
+      indoorGate: indoorGate,
+    );
+    trailReplay = IndoorTrailReplay(compass: compass, steps: steps);
+
+    if (CoreFeaturePolicy.current.mayInitialize(
+      CoreFeature.experimentalWinter,
+    )) {
+      winterMode.loadFromSettings();
+      thermal.setWinterMode(winterMode.active);
+      winterMode.addListener(_onWinterModeChanged);
+    }
+  }
+
+  void _onWinterModeChanged() {
+    thermal.setWinterMode(winterMode.active);
+    notifyListeners();
+  }
+
+  Future<void> togglePaymentSms() async {
+    if (!CoreFeaturePolicy.current.mayInitialize(CoreFeature.paymentSms)) {
+      return;
+    }
+    await paymentSms.toggle();
+    notifyListeners();
+  }
+
+  void applyIndoorTransition(IndoorTransition transition) {
+    if (transition == IndoorTransition.none) return;
+    throttler.setIndoorMode(isIndoor);
+    if (transition == IndoorTransition.enteredIndoor) {
+      earcon.play(Earcon.indoorEntered);
+      tts.say(S.alert('indoor_mode_entered'), SpeechPriority.info, pan: 0.0);
+    } else {
+      earcon.play(Earcon.indoorExited);
+      tts.say(S.alert('indoor_mode_exited'), SpeechPriority.info, pan: 0.0);
+    }
+    notifyListeners();
+  }
+
+  int beginCameraSession(DateTime now) {
+    final gen = cameraSession.beginNewSession();
+    tracker.clear();
+    unawaited(safetyFeedback.resetSession(now: now));
+    alertMgr.reset();
+    health.resetSession(now);
+    spatialSafety.beginSession(gen, now: now);
+    return gen;
+  }
+
+  void endCameraSession(DateTime now) {
+    spatialSafety.endSession(now: now);
+    cameraSession.endSession();
+    unawaited(safetyFeedback.resetSession(now: now));
+  }
+
+  void publishHealth(DateTime now) {
+    for (final a in health.drainAnnouncements()) {
+      safetyFeedback.submitHealth(
+        health.snapshot(now),
+        userMoving: fallDetector.motionState != MotionState.stationary,
+        now: now,
+      );
+      setStatus(S.get(a.stringKey));
+    }
+    notifyListeners();
+  }
+
+  void setStatus(String s) {
+    statusLine = s;
+    notifyListeners();
+  }
+
+  void toggleDebugHud() {
+    showDebugHud = !showDebugHud;
+    notifyListeners();
+  }
+
+  void setMode(AppMode newMode) {
+    final oldMode = mode;
+    mode = newMode;
+    alertMgr.markModeSwitch(DateTime.now());
+    // Safety audit C-2: markModeSwitch only resets the "path clear"
+    // announcement guard. Without a full reset(), per-track distance
+    // history, category suppression windows, and critical-alert cooldowns
+    // from the OLD mode leak into the new mode (e.g. switching cane -> street
+    // right after a critical alert could suppress a genuinely new hazard).
+    alertMgr.reset();
+    FeatureUsageTracker.instance.increment(FeatureUsageKeys.mode(newMode.name));
+    FieldLogger.instance.logModeSwitch(newMode.name, from: oldMode.name);
+    if (Settings.instance.modeAnnounce) {
+      tts.say(
+        '${S.get('mode_changed')} ${mode.label}',
+        SpeechPriority.warning,
+        pan: 0.0,
+      );
+    }
+    notifyListeners();
+  }
+
+  void cycleMode(int delta) {
+    const modes = AppMode.values;
+    int index = (modes.indexOf(mode) + delta) % modes.length;
+    if (index < 0) index = modes.length - 1;
+    setMode(modes[index]);
+    HapticService.vibrate([0, 100]);
+  }
+
+  void togglePitchBlack() {
+    isPitchBlack = !isPitchBlack;
+    unawaited(Settings.instance.setPitchBlackUi(isPitchBlack));
+    final msg = isPitchBlack ? S.get('curtain_on') : S.get('curtain_off');
+
+    tts.say(msg, SpeechPriority.info, pan: 0.0);
+    HapticService.vibrate([0, 150]);
+    notifyListeners();
+  }
+
+  void toggleGuideDogMode() {
+    guideDogMode = !guideDogMode;
+    unawaited(Settings.instance.setGuideDogMode(guideDogMode));
+    final msg = guideDogMode
+        ? S.alert('guide_dog_on')
+        : S.alert('guide_dog_off');
+    earcon.play(Earcon.success);
+
+    tts.say(msg, SpeechPriority.info, pan: 0.0);
+    HapticService.vibrate([0, 150]);
+    notifyListeners();
+  }
+
+  void showHelp() {
+    final key = Settings.instance.classicGestures
+        ? 'help_summary_classic'
+        : 'help_summary';
+
+    tts.say(S.get(key), SpeechPriority.info, pan: 0.0);
+  }
+
+  void applyA11yPrefs() {
+    final s = Settings.instance;
+    unawaited(tts.setUserRate(s.speechRate));
+    unawaited(tts.setUserVolume(s.ttsVolume));
+    unawaited(earcon.setVolume(s.earconVolume));
+    HapticService.setStrengthMultiplier(s.hapticStrength.multiplier);
+  }
+
+  Future<void> init({AppMode? initialMode}) async {
+    const policy = CoreFeaturePolicy.current;
+    debugBootServiceNames = CoreBootServices.namesFor(policy);
+    final List<Future<void>> services = [
+      for (final name in debugBootServiceNames)
+        _initService(name, _bootFutureFor(name)),
+    ];
+
+    await Future.wait(services);
+    await feedbackOutput.refreshCapabilities();
+    // Keep construction side-effect free for tests and dormant screens.  The
+    // unified output path becomes authoritative only after its concrete
+    // services have completed boot.
+    alertMgr.attachSafetyFeedback(safetyFeedback);
+
+    if (policy.mayInitialize(CoreFeature.acousticWorldModel)) {
+      awm.onAcousticEvent = (event) {
+        alertMgr.handleAcousticEvent(event);
+      };
+      awm.onReverbEstimate = (estimate) {
+        indoorGate.feedAcousticPrior(estimate);
+      };
+    }
+
+    if (policy.mayInitialize(CoreFeature.indoorTrail)) {
+      trailReplay.onHazard = (event) {
+        alertMgr.handleExternalHazard(event);
+      };
+      trailReplay.onArrived = (trail) {
+        earcon.play(Earcon.success);
+      };
+      trailReplay.onLost = () {
+        earcon.play(Earcon.fail);
+      };
+    }
+
+    if (policy.mayInitialize(CoreFeature.bazaarLivestock)) {
+      bazaarLivestock.onHazard = (event) {
+        alertMgr.handleExternalHazard(event);
+      };
+    }
+
+    if (policy.mayInitialize(CoreFeature.bleMesh)) {
+      meshBuddy.onHazard = (event) {
+        alertMgr.handleExternalHazard(event);
+      };
+    }
+
+    if (policy.mayInitialize(CoreFeature.smartCane)) {
+      oscp.onHazard = (event) {
+        alertMgr.handleExternalHazard(event);
+      };
+    }
+
+    if (policy.mayInitialize(CoreFeature.vlmSceneQa)) {
+      vlmCompanion.onAnswer = (event) {
+        alertMgr.handleExternalHazard(event);
+      };
+    }
+
+    if (policy.mayInitialize(CoreFeature.sonar)) {
+      sonar.onShadowObservation = (observation) {
+        FieldLogger.instance.logSonarChirp(
+          'shadow_observation_received',
+          data: observation.toDiagnosticMap().cast<String, dynamic>(),
+        );
+      };
+    }
+
+    if (policy.mayInitialize(CoreFeature.paymentSms)) {
+      paymentSms.onHazard = (event) {
+        alertMgr.handleExternalHazard(event);
+      };
+    }
+
+    if (policy.mayInitialize(CoreFeature.chargingJobs)) {
+      chargingJobs.isChargingProvider = () => battery.isCharging;
+      chargingJobs.isWifiProvider = () => battery.isWifi;
+      chargingJobs.batteryPctProvider = () => battery.batteryPct;
+      chargingJobs.thermalProvider = () => thermal.severity;
+      chargingJobs.memoryProvider = () => memory.level;
+    }
+
+    applyA11yPrefs();
+
+    waypoints.onNearWaypoint = (wp) {
+      tts.say(
+        '${S.get('waypoint_near')} ${wp.name}',
+        SpeechPriority.warning,
+        pan: 0.0,
+      );
+      earcon.play(Earcon.success);
+    };
+    waypoints.startProximityMonitor(intervalSec: 30);
+
+    tracker.ttsService = tts;
+
+    orientation.onPitchChanged = (state) {
+      final now = DateTime.now();
+      if (now.difference(_lastOrientationWarnAt) <
+          const Duration(seconds: 10)) {
+        return;
+      }
+
+      if (state == DevicePitch.tooHigh) {
+        _lastOrientationWarnAt = now;
+        tts.say(S.get('pitch_too_high'), SpeechPriority.info, pan: 0.0);
+      } else if (state == DevicePitch.tooLow) {
+        _lastOrientationWarnAt = now;
+        tts.say(S.get('pitch_too_low'), SpeechPriority.info, pan: 0.0);
+      }
+    };
+
+    orientation.onRollChanged = (excessive) {
+      if (!excessive) return;
+      earcon.play(Earcon.fail);
+      HapticService.vibrate([0, 100, 80, 100]);
+      Future.delayed(const Duration(seconds: 3), () {
+        if (!orientation.isRollExcessive) return;
+        final t = DateTime.now();
+        if (t.difference(_lastRollWarnAt) < const Duration(seconds: 20)) {
+          return;
+        }
+        _lastRollWarnAt = t;
+        tts.say(
+          S.get('phone_tilted_sideways'),
+          SpeechPriority.warning,
+          pan: 0.0,
+        );
+      });
+    };
+
+    battery.onThrottleChanged = (level) {
+      isLowPowerMode =
+          (level == ThrottleLevel.aggressive ||
+          level == ThrottleLevel.critical);
+      throttler.setLowPowerMode(isLowPowerMode);
+      notifyListeners();
+    };
+
+    nav.onInstruction = (msg) => tts.say(msg, SpeechPriority.info, pan: 0.0);
+    nav.onOffRoute = () {
+      tts.say(S.get('nav_off_route'), SpeechPriority.warning, pan: 0.0);
+      tts.say(S.get('nav_rerouting_try'), SpeechPriority.info, pan: 0.0);
+    };
+    nav.onSoftOffRoute = () =>
+        tts.say(S.get('nav_maybe_off_route'), SpeechPriority.info, pan: 0.0);
+    nav.onArrived = () =>
+        tts.say(S.get('nav_arrived_short'), SpeechPriority.warning, pan: 0.0);
+
+    nav.onOffRouteBearing = (bearing, distanceMeters) {
+      final clockHint = _bearingToClockHint(bearing);
+      tts.say(
+        '$clockHint. $distanceMeters ${S.get('meters')}.',
+        SpeechPriority.warning,
+        pan: 0.0,
+      );
+    };
+
+    nav.onRerouteRequested = _rerouteFromPosition;
+
+    nav.onGpsError = (msg) => tts.say(msg, SpeechPriority.warning, pan: 0.0);
+
+    nav.onNavMuteChanged = (msg) =>
+        tts.say(msg, SpeechPriority.warning, pan: 0.0);
+
+    nav.onPositionUpdated = (pos) {
+      sos.updateCachedPosition(pos);
+    };
+
+    nav.onRouteStarted = (destination) {
+      sos.setPlannedDestination(destination);
+    };
+    nav.onRouteStopped = () {
+      sos.setPlannedDestination(null);
+    };
+
+    fallDetector.onMotionStateChanged = (state) {
+      throttler.setMotionState(state);
+      onMotionStateChanged?.call(state);
+    };
+
+    throttler.setMemoryPressure(memory.level);
+    memory.onChanged = (readings) {
+      throttler.setMemoryPressure(readings.level);
+      FieldLogger.instance.logMemoryPressure(
+        readings.level.name,
+        availMb: readings.isAvailable ? readings.availMB : null,
+        totalMb: readings.isAvailable ? readings.totalMB : null,
+      );
+
+      if (readings.level == MemoryPressureLevel.critical &&
+          VoskKkRecognizer.instance.isReady) {
+        FieldLogger.instance.log('vosk_kk_unloaded_oom', {
+          'availMb': readings.availMB,
+        });
+        unawaited(VoskKkRecognizer.instance.dispose());
+      }
+      notifyListeners();
+    };
+
+    if (initialMode != null) mode = initialMode;
+
+    if (Settings.instance.isReady) {
+      guideDogMode = Settings.instance.guideDogMode;
+      isPitchBlack = Settings.instance.pitchBlackUi;
+    }
+
+    notifyListeners();
+  }
+
+  void submitCameraSafety({
+    required String speechKey,
+    required String replaceKey,
+    required DateTime now,
+    bool critical = false,
+    bool recovered = false,
+    double urgency = 0.7,
+  }) {
+    assert(!(critical && recovered));
+    safetyFeedback.submitCommand(
+      FeedbackCommand(
+        actionId: 'camera-${now.microsecondsSinceEpoch}-$replaceKey',
+        sceneRevision: -1,
+        speechKey: speechKey,
+        earcon: critical
+            ? FeedbackEarcon.stop
+            : recovered
+            ? FeedbackEarcon.confirmation
+            : FeedbackEarcon.degraded,
+        hapticPattern: critical
+            ? FeedbackHapticPattern.immediateStop
+            : recovered
+            ? FeedbackHapticPattern.confirmation
+            : FeedbackHapticPattern.sensingDegraded,
+        priority: critical
+            ? SafetyPriority.p0Emergency
+            : recovered
+            ? SafetyPriority.p3Information
+            : SafetyPriority.p2Degraded,
+        source: FeedbackCommandSource.cameraHealth,
+        actionKind: critical
+            ? SafetyActionKind.stopNow
+            : recovered
+            ? null
+            : SafetyActionKind.holdAndScan,
+        direction: null,
+        urgency: urgency.clamp(0.0, 1.0),
+        canInterrupt: critical,
+        replaceKey: 'camera:$replaceKey',
+        createdAt: now,
+        expiresAt: now.add(const Duration(seconds: 3)),
+        ruleId: critical
+            ? 'CAMERA-P0-UNAVAILABLE'
+            : recovered
+            ? 'CAMERA-P3-RECOVERED'
+            : 'CAMERA-P2-DEGRADED',
+        hazardIds: <String>['camera:$replaceKey'],
+      ),
+      now: now,
+    );
+  }
+
+  void submitEmergencySafety({
+    required String speechKey,
+    required String replaceKey,
+    required DateTime now,
+    double urgency = 1,
+  }) {
+    safetyFeedback.submitCommand(
+      FeedbackCommand(
+        actionId: 'emergency-${now.microsecondsSinceEpoch}-$replaceKey',
+        sceneRevision: -1,
+        speechKey: speechKey,
+        earcon: FeedbackEarcon.stop,
+        hapticPattern: FeedbackHapticPattern.immediateStop,
+        priority: SafetyPriority.p0Emergency,
+        source: FeedbackCommandSource.emergency,
+        actionKind: SafetyActionKind.stopNow,
+        direction: null,
+        urgency: urgency.clamp(0.0, 1.0),
+        canInterrupt: true,
+        replaceKey: 'emergency:$replaceKey',
+        createdAt: now,
+        expiresAt: now.add(const Duration(seconds: 5)),
+        ruleId: 'EMERGENCY-P0',
+        hazardIds: <String>['emergency:$replaceKey'],
+      ),
+      now: now,
+    );
+  }
+
+  Future<NavRoute?> _rerouteFromPosition(double fromLat, double fromLng) async {
+    final currentRoute = nav.route;
+    final currentTransit = nav.transitRoute;
+    double toLat = 0, toLng = 0;
+    String dest = '';
+    if (currentRoute != null && currentRoute.steps.isNotEmpty) {
+      final last = currentRoute.steps.last;
+      toLat = last.endLat;
+      toLng = last.endLng;
+      dest = currentRoute.destinationName;
+    } else if (currentTransit != null && currentTransit.legs.isNotEmpty) {
+      final lastLeg = currentTransit.legs.last;
+      final arr = lastLeg.arrivalStop;
+      if (arr != null) {
+        toLat = arr.lat;
+        toLng = arr.lng;
+        dest = currentTransit.destinationName;
+      }
+    }
+    if (toLat == 0 && toLng == 0) return null;
+
+    if (offlineRouting.isReady) {
+      final r = await offlineRouting.getWalkRoute(
+        fromLat,
+        fromLng,
+        toLat,
+        toLng,
+        destinationName: dest,
+      );
+      if (r != null) return r;
+    }
+    if (twoGis.hasApiKey) {
+      return twoGis.getWalkRoute(
+        fromLat,
+        fromLng,
+        toLat,
+        toLng,
+        destinationName: dest,
+      );
+    }
+    return null;
+  }
+
+  String _bearingToClockHint(double bearing) {
+    const hintKeys = <String>[
+      'forward',
+      '1',
+      '2',
+      '3',
+      '2',
+      '1',
+      'forward',
+      '11',
+      '10',
+      '9',
+      '10',
+      '11',
+    ];
+    final idx = ((bearing % 360) / 30).round() % 12;
+    return S.dir(hintKeys[idx]);
+  }
+
+  Future<void> _initService(String name, Future<void> initCall) async {
+    try {
+      await initCall;
+    } catch (e) {
+      debugPrint('CameraViewModel: Service $name failed to init: $e');
+    }
+  }
+
+  Future<void> _bootFutureFor(String name) {
+    switch (name) {
+      case 'TTS':
+        return tts.init();
+      case 'Battery':
+        return battery.init();
+      case 'Thermal':
+        return thermal.init();
+      case 'Memory':
+        return memory.init();
+      case 'Earcon':
+        return earcon.init();
+      case 'Compass':
+        return compass.init();
+      case 'Orientation':
+        return orientation.init();
+      case 'Steps':
+        return steps.init();
+      case 'Waypoints':
+        return waypoints.init();
+      case 'SOS':
+        return sos.init();
+      case '2GIS':
+        return twoGis.init();
+      case 'Voice':
+        return voice.init(locale: AppStrings.ttsLang);
+      case CoreBootServices.paymentSms:
+        return paymentSms.init();
+      case CoreBootServices.objectMemory:
+        return objectMemory.init(tts: tts, earcon: earcon);
+      case CoreBootServices.acousticWorldModel:
+        return awm.init();
+      default:
+        return Future<void>.value();
+    }
+  }
+
+  void updateTracks(List<Track> tracks, {int imgW = 0, int imgH = 0}) {
+    tracksNotifier.value = tracks;
+    if (imgW > 0 &&
+        imgH > 0 &&
+        CoreFeaturePolicy.current.mayInitialize(
+          CoreFeature.objectMemoryFinder,
+        )) {
+      objectMemory.onTracks(tracks, imgW, imgH);
+      objectFinder.onTracks(tracks, imgW, imgH);
+    }
+  }
+
+  void objectMemoryFeed(CameraImage image, DateTime now) {
+    if (!CoreFeaturePolicy.current.mayInitialize(
+      CoreFeature.objectMemoryFinder,
+    )) {
+      return;
+    }
+    if (objectMemory.rememberActive) objectMemory.feed(image, now);
+    if (objectFinder.active) objectFinder.feed(image, now);
+  }
+
+  @override
+  void dispose() {
+    if (CoreFeaturePolicy.current.mayInitialize(
+      CoreFeature.experimentalWinter,
+    )) {
+      winterMode.removeListener(_onWinterModeChanged);
+    }
+    winterMode.dispose();
+    bazaarLivestock.onHazard = null;
+    meshBuddy.onHazard = null;
+    oscp.onHazard = null;
+    vlmCompanion.onAnswer = null;
+    if (CoreFeaturePolicy.current.mayInitialize(CoreFeature.sonar)) {
+      sonar.onShadowObservation = null;
+    }
+    trailReplay.onHazard = null;
+    paymentSms.onHazard = null;
+    tts.dispose();
+    earcon.dispose();
+    battery.dispose();
+    thermal.dispose();
+    memory.dispose();
+    proximityBeacon.dispose();
+    compass.dispose();
+    orientation.dispose();
+    steps.dispose();
+    waypoints.dispose();
+    fallDetector.dispose();
+    nav.dispose();
+    ocr.dispose();
+    paymentSms.dispose();
+    objectMemory.dispose();
+    objectFinder.dispose();
+    awm.dispose();
+    trailRecorder.dispose();
+    trailReplay.dispose();
+    meshBuddy.dispose();
+    oscp.dispose();
+    chargingJobs.dispose();
+    vlmCompanion.dispose();
+    if (CoreFeaturePolicy.current.mayInitialize(CoreFeature.sonar)) {
+      sonar.dispose();
+    }
+    modelPacks.dispose();
+    voice.dispose();
+    twoGis.dispose();
+    mapPkg.dispose();
+    offlineRouting.dispose();
+    gtfs.dispose();
+    tracksNotifier.dispose();
+    super.dispose();
+  }
+}

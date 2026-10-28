@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "experimentId": "bagdar-quality-causal-v1",
+  "scope": "Independent diagnostic charts, not a calibrated phone camera or obstacle-recognition benchmark",
+  "runtimePolicy": "Measure the unchanged production blur score and threshold; no threshold fitting or runtime promotion",
+  "sizes": [[320, 480], [640, 480]],
+  "contrasts": [0.25, 1.0],
+  "splits": {
+    "development": {"families": ["panel", "tiles", "shelves", "bars"], "seeds": [271010, 271011]},
+    "holdout": {"families": ["doorway", "bricks", "steps", "foliage"], "seeds": [927201, 927202]}
+  },
+  "conditions": [
+    {"id": "sharp", "blurSigmaPx": 0, "motionPx": 1, "noiseSigmaLuma": 0, "gain": 1},
+    {"id": "noise-2", "blurSigmaPx": 0, "motionPx": 1, "noiseSigmaLuma": 2, "gain": 1},
+    {"id": "noise-8", "blurSigmaPx": 0, "motionPx": 1, "noiseSigmaLuma": 8, "gain": 1},
+    {"id": "noise-24", "blurSigmaPx": 0, "motionPx": 1, "noiseSigmaLuma": 24, "gain": 1},
+    {"id": "defocus-2", "blurSigmaPx": 2, "motionPx": 1, "noiseSigmaLuma": 0, "gain": 1},
+    {"id": "defocus-5", "blurSigmaPx": 5, "motionPx": 1, "noiseSigmaLuma": 0, "gain": 1},
+    {"id": "motion-15", "blurSigmaPx": 0, "motionPx": 15, "noiseSigmaLuma": 0, "gain": 1},
+    {"id": "defocus-5-noise-8", "blurSigmaPx": 5, "motionPx": 1, "noiseSigmaLuma": 8, "gain": 1},
+    {"id": "defocus-5-noise-24", "blurSigmaPx": 5, "motionPx": 1, "noiseSigmaLuma": 24, "gain": 1},
+    {"id": "motion-15-noise-8", "blurSigmaPx": 0, "motionPx": 15, "noiseSigmaLuma": 8, "gain": 1},
+    {"id": "dark", "blurSigmaPx": 0, "motionPx": 1, "noiseSigmaLuma": 0, "gain": 0.15},
+    {"id": "dark-noise-8", "blurSigmaPx": 0, "motionPx": 1, "noiseSigmaLuma": 8, "gain": 0.15},
+    {"id": "dark-defocus-5-noise-8", "blurSigmaPx": 5, "motionPx": 1, "noiseSigmaLuma": 8, "gain": 0.15}
+  ],
+  "phaseProbe": {"cellPx": 8, "xOffsets": [0, 1, 2, 3, 4, 5, 6, 7], "yOffsets": [0, 1, 2, 3, 4, 5, 6, 7]},
+  "metrics": ["sharpControlsRejected", "transformedBlurAccepted", "pairedBlurToNoisyBlurDecisionFlip", "samplingPhaseAcceptanceRange", "stride8VersusDenseDecisionDisagreement"],
+  "interpretation": [
+    "Known transforms label optical manipulation, not navigation usability or camera recognizability",
+    "Flat and sparse images can be intrinsically uninformative even when optically sharp",
+    "Noise-only acceptance is not a blur-detection error; the relevant paired failure is noise masking known blur",
+    "Dense sampling is a diagnostic comparator, not a validated replacement",
+    "Do not select a new threshold from holdout results"
+  ],
+  "promotionAllowed": false
+}

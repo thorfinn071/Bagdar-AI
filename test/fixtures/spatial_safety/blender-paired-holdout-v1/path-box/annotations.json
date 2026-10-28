@@ -1,0 +1,25 @@
+{
+  "sceneId": "path-box",
+  "pair": "path",
+  "physicalHazard": true,
+  "referencePassable": false,
+  "hazardOnsetMs": 0,
+  "userMoving": true,
+  "latestStopOffsetMs": 300,
+  "compatibleCocoClassIds": [],
+  "parameters": {
+    "id": "path-box",
+    "pair": "path",
+    "hazard": true,
+    "kind": "box",
+    "boxCenterY": 2.5,
+    "boxSizeM": [
+      0.72,
+      0.55,
+      0.42
+    ],
+    "cameraAdvanceM": 0.4,
+    "appearanceSeed": 4101
+  },
+  "labelSource": "predeclared scene geometry, not model output"
+}

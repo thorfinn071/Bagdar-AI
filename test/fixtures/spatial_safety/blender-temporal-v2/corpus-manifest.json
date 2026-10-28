@@ -1,0 +1,681 @@
+{
+  "schemaVersion": 2,
+  "corpusId": "blender-temporal-v2",
+  "generator": "tool/blender/generate_spatial_temporal_corpus.py",
+  "generatorSha256": "e7524d4db09c3853f932d4a754bfb8edf63eb2efc93694c26a296d0c63c864eb",
+  "baseGeometryGeneratorSha256": "231ae63ab6802070c98abd23c27b16ec63fa028a06b81f3e58a1504843ba0692",
+  "blender": {
+    "version": "5.2.2 LTS",
+    "versionTuple": [
+      5,
+      2,
+      2
+    ]
+  },
+  "seed": 20260922,
+  "license": "project-generated-test-fixture",
+  "consentClass": "not_applicable",
+  "handling": "public",
+  "containsRecordedMedia": false,
+  "frameCountPerScene": 3,
+  "scene": {
+    "path": "scene.blend",
+    "sha256": "5a6be477a7bcf2a69cbba1dfe147ebcd632859ab83d4b7e75d6083eb32ca60be"
+  },
+  "replayManifest": {
+    "path": "replay-manifest.json",
+    "sha256": "970a91eb7db7934b6b2e5c5293800b3af54e7bd45429af30014521bf9fbaee9a"
+  },
+  "semanticClasses": {
+    "0": "unobserved",
+    "1": "ground",
+    "2": "obstacle",
+    "3": "transparent",
+    "4": "low",
+    "5": "overhead",
+    "6": "drop",
+    "7": "stairs",
+    "8": "traversable",
+    "9": "crowd",
+    "10": "moving",
+    "11": "obstruction"
+  },
+  "assets": [
+    {
+      "sceneId": "temporal-thin-pole",
+      "state": "blocked",
+      "tags": [
+        "thin",
+        "obstacle"
+      ],
+      "frames": [
+        {
+          "frameIndex": 0,
+          "capturedOffsetMs": 0,
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.570796,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/temporal-thin-pole_f0_rgb.png",
+            "sha256": "5aeeecdab2eba972b2caaa6b5d364aef09285306c7bec2fc73ba3b38c5903850"
+          },
+          "depth": {
+            "path": "renders/temporal-thin-pole_f0_depth_mm.pgm",
+            "sha256": "c906e0e202d02922225f764a9ade4c1c9f752e07ad6847a9d12ed43b74859968",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/temporal-thin-pole_f0_semantic.pgm",
+            "sha256": "ba0ab0915f71d87e135b17990b20c272604883f5ab6da3c35466f3d74513185a",
+            "encoding": "P5 uint8 class id"
+          }
+        },
+        {
+          "frameIndex": 1,
+          "capturedOffsetMs": 300,
+          "cameraPose": {
+            "locationMetres": [
+              0.03,
+              0.12,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.570796,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/temporal-thin-pole_f1_rgb.png",
+            "sha256": "cb0ef97db4ef29b6b533b934bb619978d059653f7eb953ffe53676d64d62535d"
+          },
+          "depth": {
+            "path": "renders/temporal-thin-pole_f1_depth_mm.pgm",
+            "sha256": "8dee67eb0aef79fb249d033a1bd18806ad1c34b358efdb075d938457c657ccf4",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/temporal-thin-pole_f1_semantic.pgm",
+            "sha256": "26b8d97ed74877ade15cca487554c842b334fb5e852e9d22177479d2b5bc69a5",
+            "encoding": "P5 uint8 class id"
+          }
+        },
+        {
+          "frameIndex": 2,
+          "capturedOffsetMs": 600,
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.24,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.570796,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/temporal-thin-pole_f2_rgb.png",
+            "sha256": "35a64e74e1ad9b262790b0ddc55d6322646f438debc0c2544eccb302ed69f1ce"
+          },
+          "depth": {
+            "path": "renders/temporal-thin-pole_f2_depth_mm.pgm",
+            "sha256": "303628229e641819ed91fb058580db14731a48bb469d1ea49fba2485fc6c6467",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/temporal-thin-pole_f2_semantic.pgm",
+            "sha256": "6670d4211819139f614880138d531e0ab8864e4a5b41e54b760e6039d2da7988",
+            "encoding": "P5 uint8 class id"
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "temporal-low-obstacle",
+      "state": "blocked",
+      "tags": [
+        "low",
+        "obstacle"
+      ],
+      "frames": [
+        {
+          "frameIndex": 0,
+          "capturedOffsetMs": 0,
+          "cameraPose": {
+            "locationMetres": [
+              30.0,
+              0.0,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.570796,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/temporal-low-obstacle_f0_rgb.png",
+            "sha256": "841e01ddadd7f3c50b729be033ba62698df93b33881d7badbe259a2f9f195572"
+          },
+          "depth": {
+            "path": "renders/temporal-low-obstacle_f0_depth_mm.pgm",
+            "sha256": "b5597ed10a82be6a97efad3dd976fe0a7c9c413a826bb20cd3cd54a787ee6a30",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/temporal-low-obstacle_f0_semantic.pgm",
+            "sha256": "bdf230385d2c81d5c840e2c2a6385822ee73ce03932e9b958dfa42e1f18a7b11",
+            "encoding": "P5 uint8 class id"
+          }
+        },
+        {
+          "frameIndex": 1,
+          "capturedOffsetMs": 300,
+          "cameraPose": {
+            "locationMetres": [
+              30.030001,
+              0.12,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.570796,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/temporal-low-obstacle_f1_rgb.png",
+            "sha256": "5189b9e5ce1ce9b3b8e7fb8f714972a370a2d4d03b425bfcaa6081cee865efd7"
+          },
+          "depth": {
+            "path": "renders/temporal-low-obstacle_f1_depth_mm.pgm",
+            "sha256": "2d599399b90664ac4db8fd072226070a34cccd0e404415d2c61ce8e613b77068",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/temporal-low-obstacle_f1_semantic.pgm",
+            "sha256": "5b1cc8b463f1c72b4194fdd2eedb3141e66b889727fd5cf90f0b234066443858",
+            "encoding": "P5 uint8 class id"
+          }
+        },
+        {
+          "frameIndex": 2,
+          "capturedOffsetMs": 600,
+          "cameraPose": {
+            "locationMetres": [
+              30.0,
+              0.24,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.570796,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/temporal-low-obstacle_f2_rgb.png",
+            "sha256": "fc8c4ad136d1b35eaa475ceb88f157bcab79aacfcd20cd5dcdf99ff878aa9e40"
+          },
+          "depth": {
+            "path": "renders/temporal-low-obstacle_f2_depth_mm.pgm",
+            "sha256": "1f14353d30b142dcca4e1264352f214bdbb14e4bec1918b4d6c724bbf880c733",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/temporal-low-obstacle_f2_semantic.pgm",
+            "sha256": "9a38c43652d089715bcd61c08f330ef4fde20286531951a0e596e8110027dd0b",
+            "encoding": "P5 uint8 class id"
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "temporal-overhead",
+      "state": "blocked",
+      "tags": [
+        "overhead",
+        "obstacle"
+      ],
+      "frames": [
+        {
+          "frameIndex": 0,
+          "capturedOffsetMs": 0,
+          "cameraPose": {
+            "locationMetres": [
+              60.0,
+              0.0,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.570796,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/temporal-overhead_f0_rgb.png",
+            "sha256": "9ef9fbaa379f4d447715c487e8f85275fb87a073bd2a68220d24a2a4dbc207ca"
+          },
+          "depth": {
+            "path": "renders/temporal-overhead_f0_depth_mm.pgm",
+            "sha256": "732f9de868c62d7d373270c309215098e4ff1a0a3f8482871ef2778f7be3422f",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/temporal-overhead_f0_semantic.pgm",
+            "sha256": "467c802e1c6d6d5b50ba306f7667631dac3a28e409dbb9b9b92d08245b1f20b3",
+            "encoding": "P5 uint8 class id"
+          }
+        },
+        {
+          "frameIndex": 1,
+          "capturedOffsetMs": 300,
+          "cameraPose": {
+            "locationMetres": [
+              60.029999,
+              0.12,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.570796,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/temporal-overhead_f1_rgb.png",
+            "sha256": "4bb3d6c3d293ed2e48167d406d8a49754bd774ea0b8f42b5fcfb649ea506a395"
+          },
+          "depth": {
+            "path": "renders/temporal-overhead_f1_depth_mm.pgm",
+            "sha256": "0f67826d871d6556f79cb38303145958c90492c1d99de8b501ac0b466ba2cd63",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/temporal-overhead_f1_semantic.pgm",
+            "sha256": "cc44562864c4bad6846fd49b380712cb72daeacf06da5bc9552807b2f5899c10",
+            "encoding": "P5 uint8 class id"
+          }
+        },
+        {
+          "frameIndex": 2,
+          "capturedOffsetMs": 600,
+          "cameraPose": {
+            "locationMetres": [
+              60.0,
+              0.24,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.570796,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/temporal-overhead_f2_rgb.png",
+            "sha256": "03d2c7fd27af2307c97f6ce62d250ff5b193d3b6802dedbbff1ac16125dc4032"
+          },
+          "depth": {
+            "path": "renders/temporal-overhead_f2_depth_mm.pgm",
+            "sha256": "2647b672b7d049163bd878cbad0126fc4adf66d843e7d504a3a5b6fb2f155da9",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/temporal-overhead_f2_semantic.pgm",
+            "sha256": "ae5646606c8e45c14a25978d1e839ef5cf7faf1683728e42f4ed69d81b0db5ce",
+            "encoding": "P5 uint8 class id"
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "temporal-crossing-rider",
+      "state": "moving",
+      "tags": [
+        "moving",
+        "rider"
+      ],
+      "frames": [
+        {
+          "frameIndex": 0,
+          "capturedOffsetMs": 0,
+          "cameraPose": {
+            "locationMetres": [
+              90.0,
+              0.0,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.570796,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/temporal-crossing-rider_f0_rgb.png",
+            "sha256": "646a967aef09778bfef12e895b483164d7e9ccb5a81e01e4924841d5fd1d616d"
+          },
+          "depth": {
+            "path": "renders/temporal-crossing-rider_f0_depth_mm.pgm",
+            "sha256": "c1341d57d02a84a20c5e06f127bad6ffc0533962da636ff711c413eaa3a5c82a",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/temporal-crossing-rider_f0_semantic.pgm",
+            "sha256": "e41ea6be8d849d9c9460a037542f937802650bd6a25c22a1ec05f381ea4ba0fb",
+            "encoding": "P5 uint8 class id"
+          }
+        },
+        {
+          "frameIndex": 1,
+          "capturedOffsetMs": 300,
+          "cameraPose": {
+            "locationMetres": [
+              90.029999,
+              0.12,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.570796,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/temporal-crossing-rider_f1_rgb.png",
+            "sha256": "84c7a719acd7be9e8c2e3c89547a5d6cfc79bb9d8564a74d5dfeef1b1f813f15"
+          },
+          "depth": {
+            "path": "renders/temporal-crossing-rider_f1_depth_mm.pgm",
+            "sha256": "bef70adca6f94f7fd7918468e641d8357e6c0c4034ae9b580fd39fe993e67b27",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/temporal-crossing-rider_f1_semantic.pgm",
+            "sha256": "4a5d5252e10b3d1e7f57ade8a04aaac9329a7d35f9c3326262caccc865b30bd5",
+            "encoding": "P5 uint8 class id"
+          }
+        },
+        {
+          "frameIndex": 2,
+          "capturedOffsetMs": 600,
+          "cameraPose": {
+            "locationMetres": [
+              90.0,
+              0.24,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.570796,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/temporal-crossing-rider_f2_rgb.png",
+            "sha256": "77a11d7b025085741e11d7acd4468f9e88d058b06ad63589961f0941c53517b3"
+          },
+          "depth": {
+            "path": "renders/temporal-crossing-rider_f2_depth_mm.pgm",
+            "sha256": "42d8c40908e4f7403c1a08798cb45054eb69b8b424556c26ba083e739d75fef1",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/temporal-crossing-rider_f2_semantic.pgm",
+            "sha256": "9bfc4c1a8fa03f6b85d349c1202022b0d3c99836a48fd2171b21a473d1416d2e",
+            "encoding": "P5 uint8 class id"
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "temporal-ramp",
+      "state": "safe",
+      "tags": [
+        "ramp",
+        "traversable"
+      ],
+      "frames": [
+        {
+          "frameIndex": 0,
+          "capturedOffsetMs": 0,
+          "cameraPose": {
+            "locationMetres": [
+              120.0,
+              0.0,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.570796,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/temporal-ramp_f0_rgb.png",
+            "sha256": "937b17d1bee2e938c0f672f728ad906ec917c92b591df946c4959dc2d2391cbb"
+          },
+          "depth": {
+            "path": "renders/temporal-ramp_f0_depth_mm.pgm",
+            "sha256": "51cd6e9cc3defa1c23a5b736f2315358995f6bb681dd68a3aed91defa61986d8",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/temporal-ramp_f0_semantic.pgm",
+            "sha256": "73ebec312d0c682ae4f0b232909661729b4c9022e058ac1cddbf98adfcc7632e",
+            "encoding": "P5 uint8 class id"
+          }
+        },
+        {
+          "frameIndex": 1,
+          "capturedOffsetMs": 300,
+          "cameraPose": {
+            "locationMetres": [
+              120.029999,
+              0.12,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.570796,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/temporal-ramp_f1_rgb.png",
+            "sha256": "9f1289e5f88b15db61f73b4c29d62b0e6dea3a2f0d07c1c22ef28a5024a3605a"
+          },
+          "depth": {
+            "path": "renders/temporal-ramp_f1_depth_mm.pgm",
+            "sha256": "7793d5e0a95982072a355e95496abd8e036d276f74b1ddbc20da165fb3677d9e",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/temporal-ramp_f1_semantic.pgm",
+            "sha256": "dc51706ef8aeaf8982b7ab271027ee06d331ec12d157302b9144c57249e117a9",
+            "encoding": "P5 uint8 class id"
+          }
+        },
+        {
+          "frameIndex": 2,
+          "capturedOffsetMs": 600,
+          "cameraPose": {
+            "locationMetres": [
+              120.0,
+              0.24,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.570796,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/temporal-ramp_f2_rgb.png",
+            "sha256": "44cdc99bd4873358f0bd30ad5ec2246ffc76ab4b3bde66c0aeb4f455e4ee1b3f"
+          },
+          "depth": {
+            "path": "renders/temporal-ramp_f2_depth_mm.pgm",
+            "sha256": "e957d928256e659ff72bf00363cf31e7ba7695e559ffa17083a008356a0a72d9",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/temporal-ramp_f2_semantic.pgm",
+            "sha256": "8eb7e1a9427c192206617bc7a57a97f3da1cd2e45cbbffc6af0dbacc7eefbf6e",
+            "encoding": "P5 uint8 class id"
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "temporal-doorway",
+      "state": "safe",
+      "tags": [
+        "doorway",
+        "opening"
+      ],
+      "frames": [
+        {
+          "frameIndex": 0,
+          "capturedOffsetMs": 0,
+          "cameraPose": {
+            "locationMetres": [
+              150.0,
+              0.0,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.570796,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/temporal-doorway_f0_rgb.png",
+            "sha256": "013d2405efe1b90c2f198a65dd2c63a4279e9987cf9b10c91c49327de327b902"
+          },
+          "depth": {
+            "path": "renders/temporal-doorway_f0_depth_mm.pgm",
+            "sha256": "2afe77dba574ce69d73fc45348d8356bd0db42ffc9eb89f7aa29f83e94b350f6",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/temporal-doorway_f0_semantic.pgm",
+            "sha256": "b8dc53c55f66457eb97c48023f3937f595c029c76c31f03381700db2e5e582d8",
+            "encoding": "P5 uint8 class id"
+          }
+        },
+        {
+          "frameIndex": 1,
+          "capturedOffsetMs": 300,
+          "cameraPose": {
+            "locationMetres": [
+              150.029999,
+              0.12,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.570796,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/temporal-doorway_f1_rgb.png",
+            "sha256": "c74807e5de16973a777b1989f6471e5f9592cf9832e8f8e8b382dc0ff706dc92"
+          },
+          "depth": {
+            "path": "renders/temporal-doorway_f1_depth_mm.pgm",
+            "sha256": "5d79c6034a8ce9b8005f3451c188106acaa40c8b42fc19f4327014cada6afc9a",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/temporal-doorway_f1_semantic.pgm",
+            "sha256": "0a14bbb4fd3973e1e3e9ebe887a500c035e76d85db3baa2a6ac8ac6d9cc0876c",
+            "encoding": "P5 uint8 class id"
+          }
+        },
+        {
+          "frameIndex": 2,
+          "capturedOffsetMs": 600,
+          "cameraPose": {
+            "locationMetres": [
+              150.0,
+              0.24,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.570796,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/temporal-doorway_f2_rgb.png",
+            "sha256": "7e1e4f595aa6ddb8e4bfee21bb940f7484587664523e3675acf0bda338566db5"
+          },
+          "depth": {
+            "path": "renders/temporal-doorway_f2_depth_mm.pgm",
+            "sha256": "895eb232964deb1b6d47831b6098c694353603bae209ca7f699255d84041b4b2",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/temporal-doorway_f2_semantic.pgm",
+            "sha256": "f11cb131632ccf1afe9f4391df9da427d4df2766d300382d81785c955eb5e0dc",
+            "encoding": "P5 uint8 class id"
+          }
+        }
+      ]
+    }
+  ]
+}

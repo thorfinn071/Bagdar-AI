@@ -1,0 +1,19 @@
+{
+  "sceneId": "path-clear",
+  "pair": "path",
+  "physicalHazard": false,
+  "referencePassable": true,
+  "hazardOnsetMs": null,
+  "userMoving": true,
+  "latestStopOffsetMs": null,
+  "compatibleCocoClassIds": [],
+  "parameters": {
+    "id": "path-clear",
+    "pair": "path",
+    "hazard": false,
+    "kind": "clear",
+    "cameraAdvanceM": 0.4,
+    "appearanceSeed": 4101
+  },
+  "labelSource": "predeclared scene geometry, not model output"
+}

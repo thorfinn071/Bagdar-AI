@@ -1,0 +1,4 @@
+# Existing model_export/venv supplies pinned torch/onnx/onnxruntime/numpy.
+# These two packages are isolated in conversion_env and imported explicitly.
+pnnx==20260526
+ncnn==1.0.20260526

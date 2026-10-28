@@ -275,10 +275,15 @@ Map<String, String> _generateCorpus() {
     });
   }
 
-  const blenderManifestRelative =
-      'blender-egocentric-v1/corpus-manifest.json';
+  const blenderManifestRelative = 'blender-egocentric-v1/corpus-manifest.json';
   final blenderManifest = File('$_root/$blenderManifestRelative');
   final blenderAvailable = blenderManifest.existsSync();
+  const temporalManifestRelative = 'blender-temporal-v2/corpus-manifest.json';
+  final temporalManifest = File('$_root/$temporalManifestRelative');
+  final temporalAvailable = temporalManifest.existsSync();
+  const contextManifestRelative = 'blender-context-v3/corpus-manifest.json';
+  final contextManifest = File('$_root/$contextManifestRelative');
+  final contextAvailable = contextManifest.existsSync();
   files['$_root/manifest.json'] = _pretty(<String, Object?>{
     'schemaVersion': _schemaVersion,
     'corpusId': 'bagdar-spatial-canonical-v1',
@@ -314,6 +319,34 @@ Map<String, String> _generateCorpus() {
           'manifestPath': blenderManifestRelative,
           'manifestSha256': sha256
               .convert(blenderManifest.readAsBytesSync())
+              .toString(),
+        },
+      },
+      <String, Object?>{
+        'id': 'blender-temporal-v2',
+        'source': 'blender',
+        'handling': 'public',
+        'consentClass': 'not_applicable',
+        'requiredForRc': true,
+        'availability': temporalAvailable ? 'available' : 'missing',
+        if (temporalAvailable) ...<String, Object?>{
+          'manifestPath': temporalManifestRelative,
+          'manifestSha256': sha256
+              .convert(temporalManifest.readAsBytesSync())
+              .toString(),
+        },
+      },
+      <String, Object?>{
+        'id': 'blender-context-v3',
+        'source': 'blender',
+        'handling': 'public',
+        'consentClass': 'not_applicable',
+        'requiredForRc': true,
+        'availability': contextAvailable ? 'available' : 'missing',
+        if (contextAvailable) ...<String, Object?>{
+          'manifestPath': contextManifestRelative,
+          'manifestSha256': sha256
+              .convert(contextManifest.readAsBytesSync())
               .toString(),
         },
       },

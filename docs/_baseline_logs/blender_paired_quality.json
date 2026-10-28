@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "corpusManifestSha256": "8b8a79c60ace7cbc2641f36384fda8a89d8d5af7121fc4bd6844dd9d8e944e91",
+  "shadowReportSha256": "25fe4ec63dbbb6346a4f99824b064796a7c852ce953a28f27e10ccdc6fe03adb",
+  "toolSha256": "f6a6f3aa3c7ea735ef921b5831a63b53c1989c175bce19bd87985fbc906fb994",
+  "scope": "synthetic shadow quality gate, independent of hash/report reproducibility; not field accuracy",
+  "promotionAllowed": false,
+  "passed": false,
+  "failures": [
+    {
+      "mode": "visible-oracle",
+      "metric": "falseImminentFrames",
+      "actual": 32,
+      "maximumAllowed": 0
+    },
+    {
+      "mode": "midas-relative",
+      "metric": "unsafeContinues",
+      "actual": 1,
+      "maximumAllowed": 0
+    },
+    {
+      "mode": "midas-relative",
+      "metric": "lateStopSequences",
+      "actual": 1,
+      "maximumAllowed": 0
+    },
+    {
+      "mode": "midas-relative",
+      "metric": "falseImminentFrames",
+      "actual": 25,
+      "maximumAllowed": 0
+    }
+  ]
+}

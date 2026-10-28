@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "scope": "scoring only, never an inference input",
+  "layouts": [
+    {
+      "layoutId": "validation-recovery-wide-00",
+      "physicalHazard": false,
+      "orientationUsable": true,
+      "idealWidthM": 1.5,
+      "idealHeadroomM": 2.08,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "validation-recovery-door-pass-01",
+      "physicalHazard": false,
+      "orientationUsable": true,
+      "idealWidthM": 1.3,
+      "idealHeadroomM": 2.06,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "validation-recovery-pole-02",
+      "physicalHazard": true,
+      "orientationUsable": true,
+      "idealWidthM": 1.45,
+      "idealHeadroomM": 2.06,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": false,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "validation-recovery-low-bar-03",
+      "physicalHazard": true,
+      "orientationUsable": true,
+      "idealWidthM": 1.5,
+      "idealHeadroomM": 1.55,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": false,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "test-recovery-wide-04",
+      "physicalHazard": false,
+      "orientationUsable": true,
+      "idealWidthM": 1.46,
+      "idealHeadroomM": 2.03,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "test-recovery-wide-05",
+      "physicalHazard": false,
+      "orientationUsable": true,
+      "idealWidthM": 1.58,
+      "idealHeadroomM": 2.1,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "test-recovery-wide-06",
+      "physicalHazard": false,
+      "orientationUsable": true,
+      "idealWidthM": 1.52,
+      "idealHeadroomM": 2.14,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "test-recovery-door-pass-07",
+      "physicalHazard": false,
+      "orientationUsable": true,
+      "idealWidthM": 1.28,
+      "idealHeadroomM": 2.04,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "test-recovery-door-pass-08",
+      "physicalHazard": false,
+      "orientationUsable": true,
+      "idealWidthM": 1.36,
+      "idealHeadroomM": 2.09,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "test-recovery-door-pass-09",
+      "physicalHazard": false,
+      "orientationUsable": true,
+      "idealWidthM": 1.4200000000000002,
+      "idealHeadroomM": 2.13,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "test-recovery-narrow-10",
+      "physicalHazard": true,
+      "orientationUsable": true,
+      "idealWidthM": 0.79,
+      "idealHeadroomM": 2.1,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": false,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "test-recovery-pole-11",
+      "physicalHazard": true,
+      "orientationUsable": true,
+      "idealWidthM": 1.52,
+      "idealHeadroomM": 2.08,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": false,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "test-recovery-low-bar-12",
+      "physicalHazard": true,
+      "orientationUsable": true,
+      "idealWidthM": 1.52,
+      "idealHeadroomM": 1.47,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": false,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "test-recovery-box-13",
+      "physicalHazard": true,
+      "orientationUsable": true,
+      "idealWidthM": 1.58,
+      "idealHeadroomM": 2.03,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": false,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "test-recovery-floor-gap-14",
+      "physicalHazard": true,
+      "orientationUsable": true,
+      "idealWidthM": 1.54,
+      "idealHeadroomM": 2.15,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": false,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "test-recovery-subpixel-pole-15",
+      "physicalHazard": true,
+      "orientationUsable": true,
+      "idealWidthM": 1.54,
+      "idealHeadroomM": 2.12,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": false,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    }
+  ]
+}

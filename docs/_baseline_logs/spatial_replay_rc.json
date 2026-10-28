@@ -1,0 +1,231 @@
+{
+  "corpusId": "bagdar-spatial-canonical-v1",
+  "schemaVersion": 1,
+  "seed": 20260919,
+  "mode": "releaseCandidate",
+  "passed": true,
+  "metrics": {
+    "unsafeGuidanceCount": 0,
+    "guidanceIntoUnknownCount": 0,
+    "staleActionEmissionCount": 0,
+    "expectedActionMismatchCount": 0,
+    "healthMismatchCount": 0,
+    "alertMismatchCount": 0
+  },
+  "missingExternalCorpora": [],
+  "missingPrivateCorpora": [
+    "controlled-camera-v1"
+  ],
+  "invalidExternalCorpora": [],
+  "blockingReasons": [],
+  "scenarios": [
+    {
+      "sceneId": "center-blocked-left-observed",
+      "requiredForRc": true,
+      "status": "pass",
+      "violations": [],
+      "frames": [
+        {
+          "frameIndex": 0,
+          "evaluateOffsetMs": 0,
+          "action": "stopNow",
+          "health": "healthy",
+          "alertEvent": "emitted",
+          "interruptCurrent": false,
+          "shadowDirection": "none",
+          "violations": []
+        }
+      ]
+    },
+    {
+      "sceneId": "center-blocked-sides-unobserved",
+      "requiredForRc": true,
+      "status": "pass",
+      "violations": [],
+      "frames": [
+        {
+          "frameIndex": 0,
+          "evaluateOffsetMs": 0,
+          "action": "stopNow",
+          "health": "healthy",
+          "alertEvent": "emitted",
+          "interruptCurrent": false,
+          "shadowDirection": "none",
+          "violations": []
+        }
+      ]
+    },
+    {
+      "sceneId": "center-obstacle",
+      "requiredForRc": true,
+      "status": "pass",
+      "violations": [],
+      "frames": [
+        {
+          "frameIndex": 0,
+          "evaluateOffsetMs": 0,
+          "action": "stopNow",
+          "health": "healthy",
+          "alertEvent": "emitted",
+          "interruptCurrent": false,
+          "shadowDirection": "none",
+          "violations": []
+        }
+      ]
+    },
+    {
+      "sceneId": "critical-during-information",
+      "requiredForRc": true,
+      "status": "pass",
+      "violations": [],
+      "frames": [
+        {
+          "frameIndex": 0,
+          "evaluateOffsetMs": 0,
+          "action": "stopNow",
+          "health": "healthy",
+          "alertEvent": "emitted",
+          "interruptCurrent": true,
+          "shadowDirection": "none",
+          "violations": []
+        }
+      ]
+    },
+    {
+      "sceneId": "hazard-emerges-during-guidance",
+      "requiredForRc": true,
+      "status": "pass",
+      "violations": [],
+      "frames": [
+        {
+          "frameIndex": 0,
+          "evaluateOffsetMs": 0,
+          "action": "continueForward",
+          "health": "healthy",
+          "alertEvent": "suppressed",
+          "interruptCurrent": false,
+          "shadowDirection": "none",
+          "violations": []
+        },
+        {
+          "frameIndex": 1,
+          "evaluateOffsetMs": 300,
+          "action": "stopNow",
+          "health": "healthy",
+          "alertEvent": "emitted",
+          "interruptCurrent": false,
+          "shadowDirection": "none",
+          "violations": []
+        }
+      ]
+    },
+    {
+      "sceneId": "stable-left-shadow-correction",
+      "requiredForRc": true,
+      "status": "pass",
+      "violations": [],
+      "frames": [
+        {
+          "frameIndex": 0,
+          "evaluateOffsetMs": 0,
+          "action": "holdAndScan",
+          "health": "healthy",
+          "alertEvent": "emitted",
+          "interruptCurrent": false,
+          "shadowDirection": "none",
+          "violations": []
+        },
+        {
+          "frameIndex": 1,
+          "evaluateOffsetMs": 300,
+          "action": "holdAndScan",
+          "health": "healthy",
+          "alertEvent": "suppressed",
+          "interruptCurrent": false,
+          "shadowDirection": "none",
+          "violations": []
+        },
+        {
+          "frameIndex": 2,
+          "evaluateOffsetMs": 600,
+          "action": "holdAndScan",
+          "health": "healthy",
+          "alertEvent": "suppressed",
+          "interruptCurrent": false,
+          "shadowDirection": "left",
+          "violations": []
+        }
+      ]
+    },
+    {
+      "sceneId": "stale-depth-moving",
+      "requiredForRc": true,
+      "status": "pass",
+      "violations": [],
+      "frames": [
+        {
+          "frameIndex": 0,
+          "evaluateOffsetMs": 2000,
+          "action": "stopNow",
+          "health": "stale",
+          "alertEvent": "emitted",
+          "interruptCurrent": false,
+          "shadowDirection": "none",
+          "violations": []
+        }
+      ]
+    },
+    {
+      "sceneId": "unknown-center-moving",
+      "requiredForRc": true,
+      "status": "pass",
+      "violations": [],
+      "frames": [
+        {
+          "frameIndex": 0,
+          "evaluateOffsetMs": 0,
+          "action": "stopNow",
+          "health": "healthy",
+          "alertEvent": "emitted",
+          "interruptCurrent": false,
+          "shadowDirection": "none",
+          "violations": []
+        }
+      ]
+    },
+    {
+      "sceneId": "unknown-center-stopped",
+      "requiredForRc": true,
+      "status": "pass",
+      "violations": [],
+      "frames": [
+        {
+          "frameIndex": 0,
+          "evaluateOffsetMs": 0,
+          "action": "holdAndScan",
+          "health": "healthy",
+          "alertEvent": "emitted",
+          "interruptCurrent": false,
+          "shadowDirection": "none",
+          "violations": []
+        }
+      ]
+    }
+  ],
+  "evidence": {
+    "tool": "tool/report_spatial_metrics.dart",
+    "toolSchemaVersion": 2,
+    "generatedAtUtc": "2026-09-22T18:20:38.909020Z",
+    "commitSha": "180bd16bc7cc46f9c06936a3f6ad82f3d9da2c8d",
+    "dirty": true,
+    "command": [
+      "dart",
+      "run",
+      "tool/report_spatial_metrics.dart",
+      "--rc",
+      "--output",
+      "docs\\_baseline_logs\\spatial_replay_rc.json"
+    ],
+    "manifestPath": "test/fixtures/spatial_safety/manifest.json"
+  }
+}

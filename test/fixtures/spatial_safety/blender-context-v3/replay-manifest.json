@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "corpusId": "blender-context-v3",
+  "seed": 20260923,
+  "generatorId": "bagdar-blender-temporal-v2",
+  "timelineOriginUtc": "2026-09-22T00:00:00.000Z",
+  "source": {
+    "type": "blender",
+    "license": "project-generated-test-fixture",
+    "consentClass": "not_applicable"
+  },
+  "handling": "public",
+  "camera": {
+    "mount": "synthetic_chest_approach",
+    "parameters": "256x192; lens=26mm; sensor=36mm",
+    "coordinateMode": "relative"
+  },
+  "modelContract": {
+    "modelId": "blender-synthetic-scene-state-context-v3",
+    "modelHash": "06e2f50ce6ad2cc207f1cbfdca7ca83b93f4fe4c8a5f517a0c1926ba3ea34ebd",
+    "preprocessId": "blender-scene-state-sectors-context-v3"
+  },
+  "scenes": [
+    {
+      "id": "context-thin-pole",
+      "kind": "blender-temporal",
+      "frames": "scenes/context-thin-pole/frames.jsonl",
+      "annotations": "scenes/context-thin-pole/annotations.json",
+      "sha256": {
+        "frames": "28dd0a52392edb5cb2588d7131fb254b06a57d7776b5c6a37f53c1e6fef608c9",
+        "annotations": "0379eb057cf753814be47b00361c861e3a81286d096dbf34c5e4c66974a2da0e"
+      },
+      "tags": [
+        "thin",
+        "obstacle",
+        "contextual-urban",
+        "blender",
+        "temporal",
+        "synthetic-scene-state"
+      ],
+      "annotationRevision": 1,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "context-low-obstacle",
+      "kind": "blender-temporal",
+      "frames": "scenes/context-low-obstacle/frames.jsonl",
+      "annotations": "scenes/context-low-obstacle/annotations.json",
+      "sha256": {
+        "frames": "6b0e4c5e08c390a22369e5f3e5d2a854819844befab6ca9ae2dc0fcbf0d3d2e7",
+        "annotations": "512dd1f7afbb137b2d06bed8d08c4b72367d1c742221b4fd229cfa70f59d0116"
+      },
+      "tags": [
+        "low",
+        "obstacle",
+        "contextual-urban",
+        "blender",
+        "temporal",
+        "synthetic-scene-state"
+      ],
+      "annotationRevision": 1,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "context-overhead",
+      "kind": "blender-temporal",
+      "frames": "scenes/context-overhead/frames.jsonl",
+      "annotations": "scenes/context-overhead/annotations.json",
+      "sha256": {
+        "frames": "a48d3669d779ce582a68babddda82e3768df44dcabbab640369c5667850ceff1",
+        "annotations": "b0b1369fdd5ad7d85793db7bb0f0fcf6c6c8dac4c1bd7fded04f88b0112ef064"
+      },
+      "tags": [
+        "overhead",
+        "obstacle",
+        "contextual-urban",
+        "blender",
+        "temporal",
+        "synthetic-scene-state"
+      ],
+      "annotationRevision": 1,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "context-crossing-rider",
+      "kind": "blender-temporal",
+      "frames": "scenes/context-crossing-rider/frames.jsonl",
+      "annotations": "scenes/context-crossing-rider/annotations.json",
+      "sha256": {
+        "frames": "b58fd1200ef94500654bc1cfa4f9d77b429a4d40c4e66f74bc0d821383f21b0c",
+        "annotations": "ceb2f013851dcc3f9de23aa94c99592f12c829007e176679cd90292062d05d85"
+      },
+      "tags": [
+        "moving",
+        "rider",
+        "contextual-urban",
+        "blender",
+        "temporal",
+        "synthetic-scene-state"
+      ],
+      "annotationRevision": 1,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "context-ramp",
+      "kind": "blender-temporal",
+      "frames": "scenes/context-ramp/frames.jsonl",
+      "annotations": "scenes/context-ramp/annotations.json",
+      "sha256": {
+        "frames": "24390863d3bc596e20affb414c97e76ef28405ed03af7ef09e50b776a34089b9",
+        "annotations": "945f5dfc6807408f5a961ea17f60fbae414405e261a218efcb0b51720335c6f1"
+      },
+      "tags": [
+        "ramp",
+        "traversable",
+        "contextual-urban",
+        "blender",
+        "temporal",
+        "synthetic-scene-state"
+      ],
+      "annotationRevision": 1,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "context-doorway",
+      "kind": "blender-temporal",
+      "frames": "scenes/context-doorway/frames.jsonl",
+      "annotations": "scenes/context-doorway/annotations.json",
+      "sha256": {
+        "frames": "a18e6b73d89340f8d8e045cd2fd7e8d3912027e05905cd34a04de04875b63e7a",
+        "annotations": "ebb25348d6ae7256e24a6cfd29febb782a084ae337b3028940454be519b854bf"
+      },
+      "tags": [
+        "doorway",
+        "opening",
+        "contextual-urban",
+        "blender",
+        "temporal",
+        "synthetic-scene-state"
+      ],
+      "annotationRevision": 1,
+      "requiredForRc": true,
+      "coverage": "complete"
+    }
+  ],
+  "externalCorpora": []
+}

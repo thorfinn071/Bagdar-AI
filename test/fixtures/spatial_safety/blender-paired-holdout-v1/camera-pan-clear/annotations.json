@@ -1,0 +1,20 @@
+{
+  "sceneId": "camera-pan-clear",
+  "pair": "camera-pan",
+  "physicalHazard": false,
+  "referencePassable": true,
+  "hazardOnsetMs": null,
+  "userMoving": false,
+  "latestStopOffsetMs": null,
+  "compatibleCocoClassIds": [],
+  "parameters": {
+    "id": "camera-pan-clear",
+    "pair": "camera-pan",
+    "hazard": false,
+    "kind": "clear",
+    "cameraAdvanceM": 0,
+    "cameraYawAmplitudeDeg": 6,
+    "appearanceSeed": 4106
+  },
+  "labelSource": "predeclared scene geometry, not model output"
+}

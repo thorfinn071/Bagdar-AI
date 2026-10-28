@@ -1,0 +1,1123 @@
+{
+  "scope": "desktop Dart JIT, serial separate stage estimate, warmed 10 calls; per-frame median of five; excludes loading",
+  "sourceSha256": "46022af01a7fb9e601e11e3a34079acc26a1b50f9fe609fdd86e1a9448f48267",
+  "normalizationSourceSha256": "5765a4ea15790ac6c55f68805056446c313f00fc722dfdb5daff23aaa4bad09c",
+  "frames": [
+    {
+      "layoutId": "validation-temporal-wide-00",
+      "frameId": 1,
+      "normalizationMs": 22.409,
+      "samplesMs": [
+        22.281,
+        22.343,
+        22.409,
+        23.587,
+        26.252
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-wide-00",
+      "frameId": 11,
+      "normalizationMs": 23.787,
+      "samplesMs": [
+        22.815,
+        23.241,
+        23.787,
+        25.875,
+        26.233
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-wide-00",
+      "frameId": 12,
+      "normalizationMs": 24.021,
+      "samplesMs": [
+        22.714,
+        23.578,
+        24.021,
+        24.838,
+        28.686
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-wide-00",
+      "frameId": 13,
+      "normalizationMs": 25.275,
+      "samplesMs": [
+        22.651,
+        23.948,
+        25.275,
+        26.355,
+        27.208
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-door-pass-01",
+      "frameId": 1,
+      "normalizationMs": 23.766,
+      "samplesMs": [
+        22.375,
+        22.401,
+        23.766,
+        24.374,
+        26.567
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-door-pass-01",
+      "frameId": 11,
+      "normalizationMs": 29.354,
+      "samplesMs": [
+        25.191,
+        25.983,
+        29.354,
+        29.596,
+        35.092
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-door-pass-01",
+      "frameId": 12,
+      "normalizationMs": 23.962,
+      "samplesMs": [
+        23.251,
+        23.303,
+        23.962,
+        27.084,
+        27.291
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-door-pass-01",
+      "frameId": 13,
+      "normalizationMs": 22.969,
+      "samplesMs": [
+        22.411,
+        22.841,
+        22.969,
+        22.984,
+        25.276
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-outside-pole-02",
+      "frameId": 1,
+      "normalizationMs": 26.053,
+      "samplesMs": [
+        22.757,
+        24.628,
+        26.053,
+        26.274,
+        26.97
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-outside-pole-02",
+      "frameId": 11,
+      "normalizationMs": 27.236,
+      "samplesMs": [
+        24.259,
+        25.691,
+        27.236,
+        27.243,
+        29.786
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-outside-pole-02",
+      "frameId": 12,
+      "normalizationMs": 27.507,
+      "samplesMs": [
+        24.813,
+        26.46,
+        27.507,
+        27.672,
+        29.67
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-outside-pole-02",
+      "frameId": 13,
+      "normalizationMs": 33.647,
+      "samplesMs": [
+        23.716,
+        24.225,
+        33.647,
+        35.079,
+        36.749
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-low-bar-03",
+      "frameId": 1,
+      "normalizationMs": 34.944,
+      "samplesMs": [
+        30.69,
+        32.664,
+        34.944,
+        35.569,
+        37.987
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-low-bar-03",
+      "frameId": 11,
+      "normalizationMs": 34.223,
+      "samplesMs": [
+        33.308,
+        33.398,
+        34.223,
+        37.88,
+        44.488
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-low-bar-03",
+      "frameId": 12,
+      "normalizationMs": 36.109,
+      "samplesMs": [
+        30.726,
+        33.562,
+        36.109,
+        38.601,
+        41.803
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-low-bar-03",
+      "frameId": 13,
+      "normalizationMs": 34.033,
+      "samplesMs": [
+        32.028,
+        32.537,
+        34.033,
+        36.953,
+        37.459
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "frameId": 1,
+      "normalizationMs": 30.245,
+      "samplesMs": [
+        29.638,
+        29.687,
+        30.245,
+        30.748,
+        33.457
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "frameId": 2,
+      "normalizationMs": 32.772,
+      "samplesMs": [
+        29.369,
+        30.761,
+        32.772,
+        41.194,
+        41.717
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "frameId": 3,
+      "normalizationMs": 34.623,
+      "samplesMs": [
+        30.253,
+        34.016,
+        34.623,
+        34.71,
+        34.937
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "frameId": 4,
+      "normalizationMs": 36.861,
+      "samplesMs": [
+        34.888,
+        35.931,
+        36.861,
+        37.386,
+        38.146
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "frameId": 5,
+      "normalizationMs": 33.833,
+      "samplesMs": [
+        31.717,
+        32.515,
+        33.833,
+        33.876,
+        40.151
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "frameId": 6,
+      "normalizationMs": 35.144,
+      "samplesMs": [
+        31.636,
+        33.253,
+        35.144,
+        39.887,
+        43.269
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "frameId": 7,
+      "normalizationMs": 37.479,
+      "samplesMs": [
+        35.258,
+        36.264,
+        37.479,
+        38.498,
+        40.088
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "frameId": 1,
+      "normalizationMs": 37.511,
+      "samplesMs": [
+        33.567,
+        34.46,
+        37.511,
+        38.315,
+        41.559
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "frameId": 2,
+      "normalizationMs": 36.455,
+      "samplesMs": [
+        32.865,
+        35.182,
+        36.455,
+        43.615,
+        43.822
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "frameId": 3,
+      "normalizationMs": 41.281,
+      "samplesMs": [
+        36.418,
+        40.759,
+        41.281,
+        61.417,
+        63.322
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "frameId": 4,
+      "normalizationMs": 48.837,
+      "samplesMs": [
+        36.678,
+        41.436,
+        48.837,
+        50.588,
+        65.029
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "frameId": 5,
+      "normalizationMs": 35.013,
+      "samplesMs": [
+        32.852,
+        33.288,
+        35.013,
+        36.249,
+        39.343
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "frameId": 6,
+      "normalizationMs": 35.828,
+      "samplesMs": [
+        35.611,
+        35.625,
+        35.828,
+        37.589,
+        50.301
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "frameId": 7,
+      "normalizationMs": 35.577,
+      "samplesMs": [
+        33.423,
+        34.369,
+        35.577,
+        36.792,
+        39.62
+      ]
+    },
+    {
+      "layoutId": "test-temporal-wide-06",
+      "frameId": 1,
+      "normalizationMs": 36.007,
+      "samplesMs": [
+        34.173,
+        34.496,
+        36.007,
+        37.241,
+        40.137
+      ]
+    },
+    {
+      "layoutId": "test-temporal-wide-06",
+      "frameId": 11,
+      "normalizationMs": 33.613,
+      "samplesMs": [
+        32.987,
+        33.203,
+        33.613,
+        36.795,
+        38.463
+      ]
+    },
+    {
+      "layoutId": "test-temporal-wide-06",
+      "frameId": 12,
+      "normalizationMs": 36.774,
+      "samplesMs": [
+        32.395,
+        36.692,
+        36.774,
+        38.626,
+        41.378
+      ]
+    },
+    {
+      "layoutId": "test-temporal-wide-06",
+      "frameId": 13,
+      "normalizationMs": 37.166,
+      "samplesMs": [
+        34.961,
+        35.007,
+        37.166,
+        38.189,
+        38.345
+      ]
+    },
+    {
+      "layoutId": "test-temporal-wide-07",
+      "frameId": 1,
+      "normalizationMs": 38.498,
+      "samplesMs": [
+        33.413,
+        35.212,
+        38.498,
+        41.182,
+        46.754
+      ]
+    },
+    {
+      "layoutId": "test-temporal-wide-07",
+      "frameId": 11,
+      "normalizationMs": 35.202,
+      "samplesMs": [
+        31.212,
+        34.793,
+        35.202,
+        37.13,
+        45.614
+      ]
+    },
+    {
+      "layoutId": "test-temporal-wide-07",
+      "frameId": 12,
+      "normalizationMs": 31.427,
+      "samplesMs": [
+        28.862,
+        30.469,
+        31.427,
+        35.65,
+        37.211
+      ]
+    },
+    {
+      "layoutId": "test-temporal-wide-07",
+      "frameId": 13,
+      "normalizationMs": 33.794,
+      "samplesMs": [
+        30.239,
+        30.893,
+        33.794,
+        34.414,
+        39.739
+      ]
+    },
+    {
+      "layoutId": "test-temporal-door-pass-08",
+      "frameId": 1,
+      "normalizationMs": 34.139,
+      "samplesMs": [
+        31.029,
+        32.158,
+        34.139,
+        34.672,
+        36.07
+      ]
+    },
+    {
+      "layoutId": "test-temporal-door-pass-08",
+      "frameId": 11,
+      "normalizationMs": 34.9,
+      "samplesMs": [
+        28.488,
+        33.377,
+        34.9,
+        34.997,
+        37.335
+      ]
+    },
+    {
+      "layoutId": "test-temporal-door-pass-08",
+      "frameId": 12,
+      "normalizationMs": 33.72,
+      "samplesMs": [
+        31.867,
+        32.555,
+        33.72,
+        36.457,
+        39.544
+      ]
+    },
+    {
+      "layoutId": "test-temporal-door-pass-08",
+      "frameId": 13,
+      "normalizationMs": 36.416,
+      "samplesMs": [
+        34.434,
+        35.572,
+        36.416,
+        39.492,
+        41.152
+      ]
+    },
+    {
+      "layoutId": "test-temporal-outside-pole-09",
+      "frameId": 1,
+      "normalizationMs": 35.984,
+      "samplesMs": [
+        33.652,
+        35.607,
+        35.984,
+        37.741,
+        41.647
+      ]
+    },
+    {
+      "layoutId": "test-temporal-outside-pole-09",
+      "frameId": 11,
+      "normalizationMs": 33.364,
+      "samplesMs": [
+        30.311,
+        31.193,
+        33.364,
+        34.496,
+        36.723
+      ]
+    },
+    {
+      "layoutId": "test-temporal-outside-pole-09",
+      "frameId": 12,
+      "normalizationMs": 33.759,
+      "samplesMs": [
+        31.057,
+        31.886,
+        33.759,
+        34.553,
+        36.267
+      ]
+    },
+    {
+      "layoutId": "test-temporal-outside-pole-09",
+      "frameId": 13,
+      "normalizationMs": 38.623,
+      "samplesMs": [
+        37.615,
+        38.461,
+        38.623,
+        42.19,
+        42.269
+      ]
+    },
+    {
+      "layoutId": "test-temporal-low-bar-10",
+      "frameId": 1,
+      "normalizationMs": 35.065,
+      "samplesMs": [
+        33.484,
+        34.662,
+        35.065,
+        42.934,
+        50.44
+      ]
+    },
+    {
+      "layoutId": "test-temporal-low-bar-10",
+      "frameId": 11,
+      "normalizationMs": 37.063,
+      "samplesMs": [
+        29.973,
+        33.823,
+        37.063,
+        39.208,
+        41.422
+      ]
+    },
+    {
+      "layoutId": "test-temporal-low-bar-10",
+      "frameId": 12,
+      "normalizationMs": 39.151,
+      "samplesMs": [
+        36.761,
+        37.28,
+        39.151,
+        39.717,
+        44.166
+      ]
+    },
+    {
+      "layoutId": "test-temporal-low-bar-10",
+      "frameId": 13,
+      "normalizationMs": 36.69,
+      "samplesMs": [
+        32.891,
+        33.608,
+        36.69,
+        40.046,
+        43.965
+      ]
+    },
+    {
+      "layoutId": "test-temporal-pole-11",
+      "frameId": 1,
+      "normalizationMs": 34.501,
+      "samplesMs": [
+        30.159,
+        32.903,
+        34.501,
+        35.008,
+        35.032
+      ]
+    },
+    {
+      "layoutId": "test-temporal-pole-11",
+      "frameId": 11,
+      "normalizationMs": 38.006,
+      "samplesMs": [
+        34.337,
+        37.616,
+        38.006,
+        38.564,
+        39.235
+      ]
+    },
+    {
+      "layoutId": "test-temporal-pole-11",
+      "frameId": 12,
+      "normalizationMs": 37.741,
+      "samplesMs": [
+        32.298,
+        34.423,
+        37.741,
+        41.841,
+        45.901
+      ]
+    },
+    {
+      "layoutId": "test-temporal-pole-11",
+      "frameId": 13,
+      "normalizationMs": 38.752,
+      "samplesMs": [
+        32.704,
+        34.853,
+        38.752,
+        43.079,
+        56.285
+      ]
+    },
+    {
+      "layoutId": "test-temporal-subpixel-pole-12",
+      "frameId": 1,
+      "normalizationMs": 34.119,
+      "samplesMs": [
+        31.747,
+        33.424,
+        34.119,
+        37.866,
+        42.022
+      ]
+    },
+    {
+      "layoutId": "test-temporal-subpixel-pole-12",
+      "frameId": 11,
+      "normalizationMs": 41.143,
+      "samplesMs": [
+        36.829,
+        38.28,
+        41.143,
+        44.42,
+        44.516
+      ]
+    },
+    {
+      "layoutId": "test-temporal-subpixel-pole-12",
+      "frameId": 12,
+      "normalizationMs": 35.576,
+      "samplesMs": [
+        33.703,
+        34.312,
+        35.576,
+        36.027,
+        36.04
+      ]
+    },
+    {
+      "layoutId": "test-temporal-subpixel-pole-12",
+      "frameId": 13,
+      "normalizationMs": 34.41,
+      "samplesMs": [
+        32.002,
+        33.251,
+        34.41,
+        37.172,
+        40.566
+      ]
+    },
+    {
+      "layoutId": "test-temporal-approach-13",
+      "frameId": 1,
+      "normalizationMs": 34.091,
+      "samplesMs": [
+        31.902,
+        32.966,
+        34.091,
+        35.557,
+        37.258
+      ]
+    },
+    {
+      "layoutId": "test-temporal-approach-13",
+      "frameId": 2,
+      "normalizationMs": 33.229,
+      "samplesMs": [
+        32.597,
+        32.661,
+        33.229,
+        34.852,
+        38.691
+      ]
+    },
+    {
+      "layoutId": "test-temporal-approach-13",
+      "frameId": 3,
+      "normalizationMs": 37.256,
+      "samplesMs": [
+        34.26,
+        34.392,
+        37.256,
+        37.55,
+        39.943
+      ]
+    },
+    {
+      "layoutId": "test-temporal-approach-13",
+      "frameId": 4,
+      "normalizationMs": 34.865,
+      "samplesMs": [
+        34.095,
+        34.743,
+        34.865,
+        37.833,
+        41.317
+      ]
+    },
+    {
+      "layoutId": "test-temporal-approach-13",
+      "frameId": 5,
+      "normalizationMs": 36.703,
+      "samplesMs": [
+        31.994,
+        33.16,
+        36.703,
+        36.845,
+        37.631
+      ]
+    },
+    {
+      "layoutId": "test-temporal-approach-13",
+      "frameId": 6,
+      "normalizationMs": 34.081,
+      "samplesMs": [
+        33.24,
+        33.824,
+        34.081,
+        35.369,
+        37.135
+      ]
+    },
+    {
+      "layoutId": "test-temporal-approach-13",
+      "frameId": 7,
+      "normalizationMs": 33.81,
+      "samplesMs": [
+        33.12,
+        33.635,
+        33.81,
+        34.147,
+        39.17
+      ]
+    },
+    {
+      "layoutId": "test-temporal-crossing-14",
+      "frameId": 1,
+      "normalizationMs": 35.306,
+      "samplesMs": [
+        34.442,
+        34.671,
+        35.306,
+        36.098,
+        38.941
+      ]
+    },
+    {
+      "layoutId": "test-temporal-crossing-14",
+      "frameId": 2,
+      "normalizationMs": 35.934,
+      "samplesMs": [
+        34.283,
+        35.008,
+        35.934,
+        36.105,
+        36.398
+      ]
+    },
+    {
+      "layoutId": "test-temporal-crossing-14",
+      "frameId": 3,
+      "normalizationMs": 35.076,
+      "samplesMs": [
+        34.216,
+        34.631,
+        35.076,
+        35.139,
+        42.906
+      ]
+    },
+    {
+      "layoutId": "test-temporal-crossing-14",
+      "frameId": 4,
+      "normalizationMs": 35.599,
+      "samplesMs": [
+        33.819,
+        34.376,
+        35.599,
+        38.357,
+        39.295
+      ]
+    },
+    {
+      "layoutId": "test-temporal-crossing-14",
+      "frameId": 5,
+      "normalizationMs": 37.455,
+      "samplesMs": [
+        32.29,
+        33.62,
+        37.455,
+        39.096,
+        39.598
+      ]
+    },
+    {
+      "layoutId": "test-temporal-crossing-14",
+      "frameId": 6,
+      "normalizationMs": 34.845,
+      "samplesMs": [
+        34.064,
+        34.275,
+        34.845,
+        36.772,
+        40.641
+      ]
+    },
+    {
+      "layoutId": "test-temporal-crossing-14",
+      "frameId": 7,
+      "normalizationMs": 37.141,
+      "samplesMs": [
+        33.055,
+        35.994,
+        37.141,
+        37.197,
+        44.149
+      ]
+    },
+    {
+      "layoutId": "test-temporal-receding-15",
+      "frameId": 1,
+      "normalizationMs": 35.157,
+      "samplesMs": [
+        33.821,
+        34.914,
+        35.157,
+        36.25,
+        36.305
+      ]
+    },
+    {
+      "layoutId": "test-temporal-receding-15",
+      "frameId": 2,
+      "normalizationMs": 35.216,
+      "samplesMs": [
+        31.451,
+        34.792,
+        35.216,
+        38.274,
+        38.922
+      ]
+    },
+    {
+      "layoutId": "test-temporal-receding-15",
+      "frameId": 3,
+      "normalizationMs": 34.378,
+      "samplesMs": [
+        34.102,
+        34.149,
+        34.378,
+        36.371,
+        37.0
+      ]
+    },
+    {
+      "layoutId": "test-temporal-receding-15",
+      "frameId": 4,
+      "normalizationMs": 37.581,
+      "samplesMs": [
+        33.078,
+        36.733,
+        37.581,
+        39.812,
+        40.452
+      ]
+    },
+    {
+      "layoutId": "test-temporal-receding-15",
+      "frameId": 5,
+      "normalizationMs": 42.698,
+      "samplesMs": [
+        39.939,
+        41.773,
+        42.698,
+        49.675,
+        53.86
+      ]
+    },
+    {
+      "layoutId": "test-temporal-receding-15",
+      "frameId": 6,
+      "normalizationMs": 35.517,
+      "samplesMs": [
+        32.504,
+        32.599,
+        35.517,
+        39.515,
+        42.179
+      ]
+    },
+    {
+      "layoutId": "test-temporal-receding-15",
+      "frameId": 7,
+      "normalizationMs": 34.516,
+      "samplesMs": [
+        33.446,
+        34.13,
+        34.516,
+        34.529,
+        38.761
+      ]
+    },
+    {
+      "layoutId": "test-temporal-camera-yaw-16",
+      "frameId": 1,
+      "normalizationMs": 36.014,
+      "samplesMs": [
+        34.116,
+        35.749,
+        36.014,
+        37.087,
+        54.504
+      ]
+    },
+    {
+      "layoutId": "test-temporal-camera-yaw-16",
+      "frameId": 2,
+      "normalizationMs": 38.553,
+      "samplesMs": [
+        34.903,
+        36.569,
+        38.553,
+        39.467,
+        39.513
+      ]
+    },
+    {
+      "layoutId": "test-temporal-camera-yaw-16",
+      "frameId": 3,
+      "normalizationMs": 36.668,
+      "samplesMs": [
+        35.994,
+        36.348,
+        36.668,
+        37.195,
+        41.608
+      ]
+    },
+    {
+      "layoutId": "test-temporal-camera-yaw-16",
+      "frameId": 4,
+      "normalizationMs": 35.237,
+      "samplesMs": [
+        32.815,
+        35.234,
+        35.237,
+        38.917,
+        39.003
+      ]
+    },
+    {
+      "layoutId": "test-temporal-camera-yaw-16",
+      "frameId": 5,
+      "normalizationMs": 37.51,
+      "samplesMs": [
+        34.713,
+        35.742,
+        37.51,
+        39.9,
+        40.246
+      ]
+    },
+    {
+      "layoutId": "test-temporal-camera-yaw-16",
+      "frameId": 6,
+      "normalizationMs": 37.019,
+      "samplesMs": [
+        33.601,
+        36.918,
+        37.019,
+        38.874,
+        39.39
+      ]
+    },
+    {
+      "layoutId": "test-temporal-camera-yaw-16",
+      "frameId": 7,
+      "normalizationMs": 37.754,
+      "samplesMs": [
+        36.823,
+        37.661,
+        37.754,
+        38.874,
+        41.931
+      ]
+    },
+    {
+      "layoutId": "test-temporal-camera-translation-17",
+      "frameId": 1,
+      "normalizationMs": 33.288,
+      "samplesMs": [
+        31.221,
+        33.191,
+        33.288,
+        34.301,
+        37.327
+      ]
+    },
+    {
+      "layoutId": "test-temporal-camera-translation-17",
+      "frameId": 2,
+      "normalizationMs": 36.122,
+      "samplesMs": [
+        33.482,
+        35.483,
+        36.122,
+        36.987,
+        37.569
+      ]
+    },
+    {
+      "layoutId": "test-temporal-camera-translation-17",
+      "frameId": 3,
+      "normalizationMs": 34.8,
+      "samplesMs": [
+        34.315,
+        34.775,
+        34.8,
+        35.907,
+        36.561
+      ]
+    },
+    {
+      "layoutId": "test-temporal-camera-translation-17",
+      "frameId": 4,
+      "normalizationMs": 37.379,
+      "samplesMs": [
+        32.692,
+        36.226,
+        37.379,
+        39.184,
+        39.98
+      ]
+    },
+    {
+      "layoutId": "test-temporal-camera-translation-17",
+      "frameId": 5,
+      "normalizationMs": 35.648,
+      "samplesMs": [
+        33.037,
+        33.616,
+        35.648,
+        37.049,
+        38.388
+      ]
+    },
+    {
+      "layoutId": "test-temporal-camera-translation-17",
+      "frameId": 6,
+      "normalizationMs": 36.591,
+      "samplesMs": [
+        32.825,
+        34.898,
+        36.591,
+        37.635,
+        40.537
+      ]
+    },
+    {
+      "layoutId": "test-temporal-camera-translation-17",
+      "frameId": 7,
+      "normalizationMs": 33.096,
+      "samplesMs": [
+        30.641,
+        32.69,
+        33.096,
+        33.6,
+        35.467
+      ]
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "corpusId": "bagdar-simulation-lab-v1",
+  "seed": 20261027,
+  "width": 320,
+  "height": 480,
+  "fps": 15,
+  "frames": 31,
+  "camera": {"heightM": 1.45, "pitchDownDeg": 32, "lensMm": 20, "sensorWidthMm": 24, "walkingSpeedMps": 0.65},
+  "referenceBody": {"widthM": 0.9, "heightM": 1.85},
+  "conditions": ["clean", "shake", "lowlight", "defocus", "rain", "mixed"],
+  "layouts": ["hallway", "courtyard", "shop", "sidewalk", "underpass", "pedestrian"],
+  "severity": 1,
+  "sensorHz": 60,
+  "scope": "procedural synthetic camera approximation; no physical camera calibration or assistive promotion"
+}

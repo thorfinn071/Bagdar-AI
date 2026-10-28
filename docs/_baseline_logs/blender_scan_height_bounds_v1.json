@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "promotionAllowed": false,
+  "sources": {
+    "tool/blender/visible_height_bounds.py": "238f68984f2266e4ffdfcb53001cb2692cd9b2df458bdb142c4223eec39976e4",
+    "tool/blender/pixel_surface_height_envelope.py": "4b69128d2d4ff9657dbb1ef8fdfe7dbd13536f9a6ff9a084bfbad35859dc693b",
+    "tool/blender/check_scan_height_bounds.py": "b1dfaaac53695f882788fa778b6e6d1205702153fdb57d3a57e92e62d0cf946b",
+    "tool/blender/visible_bounds_union.py": "76b5bcaf840025a8d45d9c554112525a89a6ab65e54e61ba97075c68d1db567f"
+  },
+  "cases": [
+    {
+      "sceneId": "path-clear",
+      "fourArraysExact": true,
+      "rayHeightWitnesses": 550,
+      "hiddenGeometryExact": true
+    },
+    {
+      "sceneId": "person-approach",
+      "fourArraysExact": true,
+      "rayHeightWitnesses": 540,
+      "hiddenGeometryExact": true
+    }
+  ]
+}

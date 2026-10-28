@@ -1,0 +1,53 @@
+{
+  "scope": "desktop static source/evaluation compute; excludes capture, neural inference and delivery",
+  "samples": [
+    {
+      "sceneId": "path-clear",
+      "computeUs": 1063112
+    },
+    {
+      "sceneId": "path-box",
+      "computeUs": 1171380
+    },
+    {
+      "sceneId": "doorway-wide",
+      "computeUs": 936404
+    },
+    {
+      "sceneId": "doorway-narrow",
+      "computeUs": 1127932
+    },
+    {
+      "sceneId": "headroom-high",
+      "computeUs": 1172357
+    },
+    {
+      "sceneId": "headroom-low",
+      "computeUs": 1047561
+    },
+    {
+      "sceneId": "floor-level",
+      "computeUs": 1076071
+    },
+    {
+      "sceneId": "floor-drop",
+      "computeUs": 1019503
+    },
+    {
+      "sceneId": "person-side",
+      "computeUs": 1063709
+    },
+    {
+      "sceneId": "person-approach",
+      "computeUs": 1124335
+    },
+    {
+      "sceneId": "camera-pan-clear",
+      "computeUs": 1035127
+    },
+    {
+      "sceneId": "camera-pan-approach",
+      "computeUs": 1040229
+    }
+  ]
+}

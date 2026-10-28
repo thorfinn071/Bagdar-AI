@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "experimentId": "bagdar-quality-observer-v1",
+  "scope": "Fresh diagnostic charts; optical manipulations only, no navigation or physical-camera truth",
+  "promotionAllowed": false,
+  "candidatePolicy": "Freeze source before generation; fixed parameters; evaluate holdout once; any revision requires a new holdout",
+  "sizes": [[160, 240], [320, 480]],
+  "contrasts": [0.35, 1.0],
+  "splits": {
+    "development": {"families": ["sparse-polylines", "disks", "staggered-blocks", "random-crosses"], "seeds": [2717001, 2717002]},
+    "holdout": {"families": ["sparse-arcs", "triangles", "zigzag-ribbons", "scattered-rectangles"], "seeds": [8317901, 8317902]}
+  },
+  "conditions": [
+    {"id": "sharp", "blur": 0, "motion": 1, "noise": "none", "sigma": 0, "gain": 1},
+    {"id": "defocus-3", "blur": 3, "motion": 1, "noise": "none", "sigma": 0, "gain": 1},
+    {"id": "defocus-6", "blur": 6, "motion": 1, "noise": "none", "sigma": 0, "gain": 1},
+    {"id": "motion-17", "blur": 0, "motion": 17, "noise": "none", "sigma": 0, "gain": 1},
+    {"id": "white-8", "blur": 0, "motion": 1, "noise": "white", "sigma": 8, "gain": 1},
+    {"id": "defocus-6-white-8", "blur": 6, "motion": 1, "noise": "white", "sigma": 8, "gain": 1},
+    {"id": "motion-17-white-8", "blur": 0, "motion": 17, "noise": "white", "sigma": 8, "gain": 1},
+    {"id": "correlated-8", "blur": 0, "motion": 1, "noise": "correlated", "sigma": 8, "gain": 1},
+    {"id": "defocus-6-correlated-8", "blur": 6, "motion": 1, "noise": "correlated", "sigma": 8, "gain": 1},
+    {"id": "shot-64", "blur": 0, "motion": 1, "noise": "shot", "peak": 64, "sigma": 0, "gain": 1},
+    {"id": "defocus-6-shot-64", "blur": 6, "motion": 1, "noise": "shot", "peak": 64, "sigma": 0, "gain": 1},
+    {"id": "dark-defocus-6-white-8", "blur": 6, "motion": 1, "noise": "white", "sigma": 8, "gain": 0.15}
+  ],
+  "phaseCells": [7, 11],
+  "phaseOffsets": [0, 1, 2, 3, 4, 5, 6, 7],
+  "metrics": ["pairedNoiseMaskingByModel", "sharpSparseEvidenceStates", "knownBlurEvidenceStates", "phaseStateVariation", "unknownAndClipping", "desktopCostBySize"],
+  "interpretation": "No overall navigation accuracy, no automatic accept/reject replacement, no tuning after holdout"
+}

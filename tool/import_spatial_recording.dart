@@ -44,7 +44,8 @@ Map<String, Object?> validateSpatialRecordingManifest(String manifestPath) {
   if (decoded is! Map<String, dynamic>) {
     throw const FormatException('Recording manifest root must be an object.');
   }
-  if (decoded['schemaVersion'] != 1) {
+  final schemaVersion = decoded['schemaVersion'];
+  if (schemaVersion != 1 && schemaVersion != 2) {
     throw const FormatException('Unsupported recording schema.');
   }
   final recordingId = _string(decoded, 'recordingId');
@@ -52,12 +53,32 @@ Map<String, Object?> validateSpatialRecordingManifest(String manifestPath) {
   if (source != 'recorded' && source != 'blender') {
     throw FormatException('Unsupported source: $source.');
   }
+  if (schemaVersion == 2 && source != 'recorded') {
+    throw const FormatException('Schema v2 requires a recorded source.');
+  }
+  if (schemaVersion == 2) {
+    _onlyKeys(decoded, <String>{
+      'schemaVersion',
+      'recordingId',
+      'source',
+      'handling',
+      'license',
+      'consent',
+      'retention',
+      'capture',
+      'rawArtifacts',
+      'derivedArtifacts',
+    }, 'manifest');
+  }
   final handling = _string(decoded, 'handling');
   if (handling != 'private' && handling != 'public') {
     throw FormatException('Unsupported handling: $handling.');
   }
   final license = _string(decoded, 'license');
   final consent = _map(decoded, 'consent');
+  if (schemaVersion == 2) {
+    _onlyKeys(consent, <String>{'class', 'confirmed'}, 'consent');
+  }
   final consentClass = _string(consent, 'class');
   if (source == 'recorded' && consentClass != 'explicit') {
     throw const FormatException('Recorded data requires explicit consent.');
@@ -66,6 +87,12 @@ Map<String, Object?> validateSpatialRecordingManifest(String manifestPath) {
     throw const FormatException('Recorded-data consent is not confirmed.');
   }
   final retention = _map(decoded, 'retention');
+  if (schemaVersion == 2) {
+    _onlyKeys(retention, <String>{
+      'rawMediaInGit',
+      'rawMediaPolicy',
+    }, 'retention');
+  }
   if (retention['rawMediaInGit'] != false ||
       _string(retention, 'rawMediaPolicy') != 'external') {
     throw const FormatException(
@@ -82,10 +109,18 @@ Map<String, Object?> validateSpatialRecordingManifest(String manifestPath) {
   for (final entry in rawArtifacts) {
     if (entry is! Map) throw const FormatException('Invalid raw artifact.');
     final item = entry.cast<String, dynamic>();
+    if (schemaVersion == 2) {
+      _onlyKeys(item, <String>{'kind', 'sha256', 'retainedAt'}, 'raw artifact');
+    }
+    final retainedAt = _string(item, 'retainedAt');
+    if (schemaVersion == 2 && !retainedAt.startsWith('external://')) {
+      throw const FormatException('Raw media retention must be external.');
+    }
     rawEvidence.add(<String, Object?>{
       'kind': _string(item, 'kind'),
       'sha256': _sha(item, 'sha256'),
-      'retainedAt': _string(item, 'retainedAt'),
+      if (schemaVersion == 1) 'retainedAt': retainedAt,
+      if (schemaVersion == 2) 'retentionLocation': 'external',
     });
   }
 
@@ -94,10 +129,17 @@ Map<String, Object?> validateSpatialRecordingManifest(String manifestPath) {
     throw const FormatException('derivedArtifacts must not be empty.');
   }
   final root = manifestFile.parent;
+  final capture = schemaVersion == 2
+      ? _validateCapture(_map(decoded, 'capture'))
+      : null;
   final derivedEvidence = <Map<String, Object?>>[];
+  String? pairPath;
   for (final entry in derived) {
     if (entry is! Map) throw const FormatException('Invalid derived artifact.');
     final item = entry.cast<String, dynamic>();
+    if (schemaVersion == 2) {
+      _onlyKeys(item, <String>{'kind', 'path', 'sha256'}, 'derived artifact');
+    }
     final path = _safeRelativePath(_string(item, 'path'));
     final expectedHash = _sha(item, 'sha256');
     final extension = path.toLowerCase();
@@ -108,21 +150,42 @@ Map<String, Object?> validateSpatialRecordingManifest(String manifestPath) {
     }
     final file = File('${root.path}${Platform.pathSeparator}$path');
     if (!file.existsSync()) throw FileSystemException('Artifact missing', path);
+    if (!_isInsideRoot(file, root)) {
+      throw FormatException('Artifact escapes manifest directory: $path.');
+    }
     final actualHash = sha256.convert(file.readAsBytesSync()).toString();
     if (actualHash != expectedHash) {
       throw FormatException('Artifact hash mismatch: $path.');
     }
+    final kind = _string(item, 'kind');
+    if (schemaVersion == 2 && kind == 'frame-pairs') {
+      if (pairPath != null || !extension.endsWith('.jsonl')) {
+        throw const FormatException(
+          'Exactly one JSONL frame-pairs artifact is required.',
+        );
+      }
+      pairPath = path;
+    }
     derivedEvidence.add(<String, Object?>{
       'path': path.replaceAll('\\', '/'),
       'sha256': actualHash,
-      'kind': _string(item, 'kind'),
+      'kind': kind,
     });
   }
+  if (schemaVersion == 2 && pairPath == null) {
+    throw const FormatException('Schema v2 requires a frame-pairs artifact.');
+  }
+  final pairSummary = pairPath == null
+      ? null
+      : _validateFramePairs(
+          File('${root.path}${Platform.pathSeparator}$pairPath'),
+          capture!,
+        );
   derivedEvidence.sort(
     (a, b) => (a['path'] as String).compareTo(b['path'] as String),
   );
   return <String, Object?>{
-    'schemaVersion': 1,
+    'schemaVersion': schemaVersion,
     'recordingId': recordingId,
     'source': source,
     'handling': handling,
@@ -132,8 +195,169 @@ Map<String, Object?> validateSpatialRecordingManifest(String manifestPath) {
     'manifestSha256': sha256.convert(manifestFile.readAsBytesSync()).toString(),
     'rawEvidence': rawEvidence,
     'derivedArtifacts': derivedEvidence,
+    if (capture != null) 'capture': capture,
+    if (pairSummary != null) 'framePairs': pairSummary,
     'status': 'validated',
   };
+}
+
+/// Schema v2 describes synchronized evidence, not a claim of safe guidance.
+Map<String, Object> _validateCapture(Map<String, dynamic> value) {
+  _onlyKeys(value, <String>{
+    'deviceModel',
+    'androidVersion',
+    'cameraMountId',
+    'rgbCameraId',
+    'depthProviderId',
+    'depthModelId',
+    'depthModelHash',
+    'preprocessId',
+    'depthSemantics',
+    'timestampDomain',
+    'maxPairSkewUs',
+  }, 'capture');
+  final timestampDomain = _string(value, 'timestampDomain');
+  if (timestampDomain != 'elapsedRealtimeUs') {
+    throw const FormatException(
+      'Capture timestamps need one monotonic domain.',
+    );
+  }
+  final semantics = _string(value, 'depthSemantics');
+  if (semantics != 'metricMeters' && semantics != 'relativeProximity') {
+    throw const FormatException('Unknown depth semantics.');
+  }
+  final maxPairSkewUs = _integer(value, 'maxPairSkewUs');
+  if (maxPairSkewUs < 1 || maxPairSkewUs > 150000) {
+    throw const FormatException('maxPairSkewUs must be 1..150000.');
+  }
+  return <String, Object>{
+    'deviceModel': _string(value, 'deviceModel'),
+    'androidVersion': _string(value, 'androidVersion'),
+    'cameraMountId': _string(value, 'cameraMountId'),
+    'rgbCameraId': _string(value, 'rgbCameraId'),
+    'depthProviderId': _string(value, 'depthProviderId'),
+    'depthModelId': _string(value, 'depthModelId'),
+    'depthModelHash': _string(value, 'depthModelHash'),
+    'preprocessId': _string(value, 'preprocessId'),
+    'depthSemantics': semantics,
+    'timestampDomain': timestampDomain,
+    'maxPairSkewUs': maxPairSkewUs,
+  };
+}
+
+Map<String, Object> _validateFramePairs(
+  File file,
+  Map<String, Object> capture,
+) {
+  // Keep the offline validator bounded even if a malformed export is supplied.
+  if (file.lengthSync() > 16 * 1024 * 1024) {
+    throw const FormatException('Frame-pairs artifact exceeds 16 MiB.');
+  }
+  final lines = file.readAsLinesSync();
+  if (lines.isEmpty) {
+    throw const FormatException('Frame-pairs artifact is empty.');
+  }
+  var alignedCount = 0;
+  var missingCount = 0;
+  var maxObservedSkewUs = 0;
+  var previousGeneration = -1;
+  var previousFrameId = 0;
+  var previousRgbTimestampUs = 0;
+  var previousDepthTimestampUs = 0;
+  final allowedKeys = <String>{
+    'frameIndex',
+    'sessionGeneration',
+    'frameId',
+    'rgbTimestampUs',
+    'rgbSha256',
+    'rgbTransformId',
+    'depthStatus',
+    'depthTimestampUs',
+    'depthSha256',
+    'depthTransformId',
+  };
+  for (var index = 0; index < lines.length; index++) {
+    final decoded = jsonDecode(lines[index]);
+    if (decoded is! Map<String, dynamic> ||
+        decoded.keys.any((key) => !allowedKeys.contains(key))) {
+      throw FormatException('Invalid frame-pair fields at line ${index + 1}.');
+    }
+    if (_integer(decoded, 'frameIndex') != index) {
+      throw FormatException('Non-contiguous frameIndex at line ${index + 1}.');
+    }
+    final generation = _integer(decoded, 'sessionGeneration');
+    final frameId = _integer(decoded, 'frameId');
+    final rgbTimestampUs = _integer(decoded, 'rgbTimestampUs');
+    _sha(decoded, 'rgbSha256');
+    final rgbTransformId = _string(decoded, 'rgbTransformId');
+    if (generation < 1 ||
+        generation < previousGeneration ||
+        frameId < 1 ||
+        (generation == previousGeneration && frameId <= previousFrameId) ||
+        rgbTimestampUs <= previousRgbTimestampUs) {
+      throw FormatException('Out-of-order frame at line ${index + 1}.');
+    }
+    if (generation != previousGeneration) previousDepthTimestampUs = 0;
+    previousGeneration = generation;
+    previousFrameId = frameId;
+    previousRgbTimestampUs = rgbTimestampUs;
+
+    final status = _string(decoded, 'depthStatus');
+    if (status == 'aligned') {
+      final depthTimestampUs = _integer(decoded, 'depthTimestampUs');
+      _sha(decoded, 'depthSha256');
+      final depthTransformId = _string(decoded, 'depthTransformId');
+      final skewUs = (rgbTimestampUs - depthTimestampUs).abs();
+      if (depthTimestampUs <= previousDepthTimestampUs ||
+          skewUs > (capture['maxPairSkewUs'] as int) ||
+          depthTransformId != rgbTransformId) {
+        throw FormatException('Unaligned/reused depth at line ${index + 1}.');
+      }
+      previousDepthTimestampUs = depthTimestampUs;
+      if (skewUs > maxObservedSkewUs) maxObservedSkewUs = skewUs;
+      alignedCount++;
+    } else if (status == 'missing') {
+      if (decoded['depthTimestampUs'] != null ||
+          decoded['depthSha256'] != null ||
+          decoded['depthTransformId'] != null) {
+        throw FormatException(
+          'Missing depth has payload at line ${index + 1}.',
+        );
+      }
+      missingCount++;
+    } else {
+      throw FormatException('Unknown depthStatus at line ${index + 1}.');
+    }
+  }
+  return <String, Object>{
+    'frameCount': lines.length,
+    'alignedCount': alignedCount,
+    'missingCount': missingCount,
+    'maxObservedSkewUs': maxObservedSkewUs,
+    'accuracyMetricsReady': false,
+  };
+}
+
+bool _isInsideRoot(File file, Directory root) {
+  var rootPath = root.resolveSymbolicLinksSync();
+  var filePath = file.resolveSymbolicLinksSync();
+  if (Platform.isWindows) {
+    rootPath = rootPath.toLowerCase();
+    filePath = filePath.toLowerCase();
+  }
+  return filePath.startsWith('$rootPath${Platform.pathSeparator}');
+}
+
+int _integer(Map<String, dynamic> value, String key) {
+  final result = value[key];
+  if (result is int) return result;
+  throw FormatException('$key must be an integer.');
+}
+
+void _onlyKeys(Map<String, dynamic> value, Set<String> allowed, String label) {
+  if (value.keys.any((key) => !allowed.contains(key))) {
+    throw FormatException('Unexpected $label field.');
+  }
 }
 
 String? _valueAfter(List<String> arguments, String option) {

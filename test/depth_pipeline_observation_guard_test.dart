@@ -6,10 +6,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:bagdar/camera/depth_pipeline_controller.dart';
+import 'package:bagdar/core/performance/perception_performance.dart';
 import 'package:bagdar/services/depth_provider.dart';
 import 'package:bagdar/services/device_capability.dart';
 import 'package:bagdar/services/model_service.dart';
 import 'package:bagdar/services/settings_service.dart';
+import 'package:bagdar/tracker/track.dart';
 import 'package:bagdar/utils/depth_hazard.dart';
 import 'package:bagdar/viewmodels/camera_view_model.dart';
 
@@ -157,6 +159,85 @@ class _ControlledDepthProvider implements DepthProvider {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  test('callback age includes waiting before provider starts', () async {
+    final vm = CameraViewModel();
+    final controller = DepthPipelineController(
+      vm: vm,
+      models: ModelService.instance,
+      maxObservationLatency: const Duration(milliseconds: 100),
+    )..setProviderReady(true);
+    controller.beginSession(vm.cameraSession.beginNewSession());
+    ModelService.instance.debugInjectDepthProvider(
+      _ControlledDepthProvider.immediate(),
+    );
+    final samples = <DepthPerformanceSample>[];
+    controller.onPerformanceSample = samples.add;
+    final at = DateTime.utc(2026, 10, 5);
+    final result = await controller.analyze(
+      _FakeCameraImage(),
+      at,
+      timing: CallbackFrameTiming.forTesting(
+        at.microsecondsSinceEpoch,
+        () => 150000,
+      ),
+    );
+    expect(result, isEmpty);
+    expect(controller.lastAcceptedPacket, isNull);
+    expect(controller.lastFrameRejectionReason, 'stale_observation_latency');
+    expect(samples.single.callbackToDecisionUs, 150000);
+    expect(samples.single.providerCalled, isTrue);
+    expect(samples.single.accepted, isFalse);
+    expect(samples.single.rejectionReason, 'stale_observation_latency');
+  });
+
+  test('release checks age again after generic postprocessing', () async {
+    final vm = CameraViewModel();
+    final controller = DepthPipelineController(
+      vm: vm,
+      models: ModelService.instance,
+      maxObservationLatency: const Duration(milliseconds: 100),
+    )..setProviderReady(true);
+    controller.beginSession(vm.cameraSession.beginNewSession());
+    ModelService.instance.debugInjectDepthProvider(
+      _ControlledDepthProvider.immediate(),
+    );
+    var clockReads = 0;
+    final at = DateTime.utc(2026, 10, 5);
+    await controller.analyze(
+      _FakeCameraImage(),
+      at,
+      timing: CallbackFrameTiming.forTesting(
+        at.microsecondsSinceEpoch,
+        () => ++clockReads <= 2 ? 0 : 200000,
+      ),
+    );
+    expect(controller.lastAcceptedPacket, isNull);
+    expect(controller.lastAcceptedObservationHeader, isNull);
+    expect(controller.lastGenericDetection, isNull);
+    expect(controller.lastGenericDecisions, isEmpty);
+    expect(controller.lastFrameRejectionReason, 'stale_observation_latency');
+    expect(controller.status, DepthPipelineStatus.unalignedStale);
+  });
+
+  test(
+    'telemetry sink failure cannot reject an otherwise valid result',
+    () async {
+      final vm = CameraViewModel();
+      final controller = DepthPipelineController(
+        vm: vm,
+        models: ModelService.instance,
+      )..setProviderReady(true);
+      controller.beginSession(vm.cameraSession.beginNewSession());
+      ModelService.instance.debugInjectDepthProvider(
+        _ControlledDepthProvider.immediate(),
+      );
+      controller.onPerformanceSample = (_) => throw StateError('sink failed');
+      final at = DateTime.utc(2026, 10, 5);
+      await controller.analyze(_FakeCameraImage(), at);
+      expect(controller.lastAcceptedPacket, isNotNull);
+    },
+  );
+
   setUp(() async {
     SharedPreferences.setMockInitialValues(<String, Object>{});
     await SettingsService.instance.init();
@@ -166,6 +247,73 @@ void main() {
   tearDown(() {
     ModelService.instance.debugInjectDepthProvider(null);
   });
+
+  for (final initiallyHasCar in [false, true]) {
+    test(
+      'background result uses its submitted YOLO context: $initiallyHasCar',
+      () async {
+        final vm = CameraViewModel();
+        final controller = DepthPipelineController(
+          vm: vm,
+          models: ModelService.instance,
+        )..setProviderReady(true);
+        controller.beginSession(vm.cameraSession.beginNewSession());
+        final at = DateTime.utc(2026, 10, 5);
+        final car = Track(
+          id: 1,
+          label: 'car',
+          cx: 160,
+          cy: 120,
+          x1: 140,
+          y1: 80,
+          x2: 180,
+          y2: 160,
+          dist: 'close',
+          distM: 1,
+          initialConf: 0.9,
+        );
+        List<DepthHazardAlert> alerts = [];
+        // Fusion requires three stable frames. Advance its history with the
+        // same submitted context while replacing live YOLO during every await.
+        for (var i = 0; i < 3; i++) {
+          final provider = _ControlledDepthProvider.blocking();
+          ModelService.instance.debugInjectDepthProvider(provider);
+          final frameAt = at.add(Duration(seconds: i * 5));
+          controller.updateYoloTracks(
+            initiallyHasCar ? [car] : [],
+            imgW: 320,
+            now: frameAt,
+          );
+          final result = controller.analyze(_FakeCameraImage(), frameAt);
+          await provider.called.future;
+          controller.updateYoloTracks(
+            initiallyHasCar ? [] : [car],
+            imgW: 320,
+            now: frameAt.add(const Duration(milliseconds: 50)),
+          );
+          provider.pending!.complete(
+            DepthAnalysisResult(
+              legacyHazards: const [
+                DepthHazard(
+                  midasScore: 0.5,
+                  type: DepthHazardType.curb,
+                  zone: HazardZone.center,
+                  coverage: 1,
+                ),
+              ],
+              health: DepthHealth.legacyOnly(
+                provider: DepthProviderKind.ncnnRelative,
+                reason: 'genericObstacleUnavailable',
+              ),
+            ),
+          );
+          alerts = await result;
+        }
+        expect(alerts, hasLength(1));
+        expect(alerts.single.isCritical, initiallyHasCar);
+      },
+    );
+  }
 
   test(
     'a superseded late inference cannot update current scene state',
@@ -202,6 +350,41 @@ void main() {
       expect(rejected, contains('superseded_frame'));
     },
   );
+
+  for (final changeMirror in [false, true]) {
+    test(
+      'camera transform changing during inference rejects result: mirror=$changeMirror',
+      () async {
+        final provider = _ControlledDepthProvider.blocking();
+        final vm = CameraViewModel();
+        final controller = DepthPipelineController(
+          vm: vm,
+          models: ModelService.instance,
+        )..setProviderReady(true);
+        controller.beginSession(vm.cameraSession.beginNewSession());
+        ModelService.instance.debugInjectDepthProvider(provider);
+        final result = controller.analyze(
+          _FakeCameraImage(),
+          DateTime.utc(2026, 10, 5),
+        );
+        await provider.called.future;
+        if (changeMirror) {
+          vm.cameraMirrored = true;
+        } else {
+          vm.cameraSensorRotationDeg = 90;
+        }
+        provider.pending!.complete(_ControlledDepthProvider.legacyResult());
+        expect(await result, isEmpty);
+        expect(controller.lastAcceptedPacket, isNull);
+        expect(controller.lastGenericDetection, isNull);
+        expect(controller.lastGenericDecisions, isEmpty);
+        expect(
+          controller.lastFrameRejectionReason,
+          'active_camera_transform_mismatch',
+        );
+      },
+    );
+  }
 
   test('camera session restart rejects the old provider result', () async {
     final provider = _ControlledDepthProvider.blocking();

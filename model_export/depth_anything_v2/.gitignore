@@ -1,0 +1,9 @@
+upstream/
+*.pth
+*.onnx
+*.pt
+*.bin
+*.param
+*_pnnx.py
+*_ncnn.py
+conversion_env/

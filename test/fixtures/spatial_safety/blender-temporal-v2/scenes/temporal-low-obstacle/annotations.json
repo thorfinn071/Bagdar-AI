@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "sceneId": "temporal-low-obstacle",
+  "annotationRevision": 1,
+  "initialFeedback": "none",
+  "timeline": [
+    {
+      "startOffsetMs": 0,
+      "endOffsetMs": 100,
+      "expectedActions": [
+        "stopNow"
+      ],
+      "forbiddenActions": [
+        "adjustLeft",
+        "adjustRight",
+        "continueForward"
+      ],
+      "expectedHealth": [
+        "healthy"
+      ],
+      "expectedAlertEvents": [
+        "emitted"
+      ],
+      "expectedShadowDirections": [
+        "none"
+      ],
+      "interruptCurrent": false
+    },
+    {
+      "startOffsetMs": 300,
+      "endOffsetMs": 400,
+      "expectedActions": [
+        "stopNow"
+      ],
+      "forbiddenActions": [
+        "adjustLeft",
+        "adjustRight",
+        "continueForward"
+      ],
+      "expectedHealth": [
+        "healthy"
+      ],
+      "expectedAlertEvents": [
+        "suppressed"
+      ],
+      "expectedShadowDirections": [
+        "none"
+      ],
+      "interruptCurrent": false
+    },
+    {
+      "startOffsetMs": 600,
+      "endOffsetMs": 700,
+      "expectedActions": [
+        "stopNow"
+      ],
+      "forbiddenActions": [
+        "adjustLeft",
+        "adjustRight",
+        "continueForward"
+      ],
+      "expectedHealth": [
+        "healthy"
+      ],
+      "expectedAlertEvents": [
+        "suppressed"
+      ],
+      "expectedShadowDirections": [
+        "left"
+      ],
+      "interruptCurrent": false
+    }
+  ]
+}

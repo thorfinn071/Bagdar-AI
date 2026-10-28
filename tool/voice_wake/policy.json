@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "modelId": "vosk-model-small-kz-0.42",
+  "archiveUrl": "https://alphacephei.com/vosk/models/vosk-model-small-kz-0.42.zip",
+  "archiveSha256": "b6d6bfe6195c866805bd18b1f56723e4d2ba4866e81df1481006d0c5704fda4f",
+  "license": "Apache-2.0",
+  "grammar": ["бағдар", "[unk]"],
+  "sampleRate": 16000,
+  "confidenceMin": 0.85,
+  "wordDurationMinSeconds": 0.25,
+  "wordDurationMaxSeconds": 2.0,
+  "chunkSamples": 1600,
+  "verifier": "full_vocabulary_exact_word",
+  "verifierBufferMaxSeconds": 4,
+  "sessionMaxSeconds": 300,
+  "promotionAllowed": false,
+  "deviceAcceptance": "not_run",
+  "provisionalAcceptanceTargets": {
+    "falseActivationsPerHourMax": 0.5,
+    "missRateMax": 0.1,
+    "wakeAfterWordEndP95MsMax": 1500,
+    "scope": "held_out_human_audio_and_named_android_device_required"
+  }
+}

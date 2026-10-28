@@ -1,0 +1,38 @@
+{
+  "scope": "post-decision camera-only diagnostic plots; no scorer labels",
+  "reportSha256": "a2c0441b59bdc3fd7b49d1c4fd3abb7c89b1326eebd4d8003e8b8922a6eea7a5",
+  "corpusManifestSha256": "40895a0bbc2b9b70692fa80bb2a361d524a64e2dd7cca552548c7991ba6b85f7",
+  "rendererSha256": "a4b41cce6945151cb1fb6ddf9b12c4ca60109197082c6c1fd188b6ba7d16aba8",
+  "plots": [
+    {
+      "layoutId": "validation-association-wide-00",
+      "path": "validation-association-wide-00.png",
+      "sha256": "7a6bf5d3a841b9ed4b5f9ed86090f63a4b680c3f4887ec0a1d1ed7c9575f47a1"
+    },
+    {
+      "layoutId": "validation-association-door-pass-01",
+      "path": "validation-association-door-pass-01.png",
+      "sha256": "372d45b24b63aeed56cb75d9e46e6a58f70f448172eba6efa0c4efceee2c78ee"
+    },
+    {
+      "layoutId": "validation-association-outside-pole-02",
+      "path": "validation-association-outside-pole-02.png",
+      "sha256": "d4d47644ca4c1101fabd8076e111c38cd16adefaa9c63d77399177feae6e3cff"
+    },
+    {
+      "layoutId": "validation-association-boundary-pole-03",
+      "path": "validation-association-boundary-pole-03.png",
+      "sha256": "161e6a6071675be41b5baa9d87915f79ec3b53ccc97e27d9cb74d8673e356e14"
+    },
+    {
+      "layoutId": "validation-association-near-box-04",
+      "path": "validation-association-near-box-04.png",
+      "sha256": "91cc1092cac7a2c411b152e7d1ef3d4fe00a9956a2458ce9d2937b70c8d18bae"
+    },
+    {
+      "layoutId": "validation-association-low-bar-05",
+      "path": "validation-association-low-bar-05.png",
+      "sha256": "4dd3bb0cf28d70621eef1d199efcbca6faf72106a037922f59d5c27abf07a059"
+    }
+  ]
+}

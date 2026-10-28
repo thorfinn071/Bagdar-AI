@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "promotionAllowed": false,
+  "localizedSlabBottomRemoved": true,
+  "recomputedPixels": 184,
+  "fractionalHeightRayWitnesses": 55,
+  "hiddenGeometryExact": true,
+  "thinForegroundPixelsRetained": 50,
+  "sources": {
+    "tool/blender/check_scan_exact_bounds.py": "ccbd4a2ba70cee9c79018185d4cc9776f6dd16c1f8c1d3e583f7bc1dbeb9362d",
+    "tool/blender/visible_exact_floor_height_bounds.py": "0037cac76a1867a8d6db3663cf35d890f98d68a755c3dd9a9cc0c994f9bc5e05",
+    "tool/blender/pixel_exact_surface_envelope.py": "b153893a86076a485ae44829646d38dae3937155e62bbdb5e7bb522bbe018c37",
+    "tool/blender/watertight_surface_projection.py": "bcb4671a217f3afcd9922d8c99ee9b4ed295bb33bb493e69975e020b6eedf1f1",
+    "tool/blender/test_pixel_exact_surface_envelope.py": "8ad0c74ef4bb5267ba6c7d0d0e5d475cadbc6824dd44c66a981c7ff4719b9f40",
+    "docs/blender-scan-exact-partition-protocol-2026-10-04.md": "977d841a7ef4d21351e7e51a68c9d2ffbd8725a919d1c2f1d5a4fecead00c3d1"
+  }
+}

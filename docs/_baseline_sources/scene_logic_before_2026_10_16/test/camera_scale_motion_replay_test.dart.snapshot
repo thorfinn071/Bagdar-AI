@@ -1,0 +1,34 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'harness/camera_scale_motion_benchmark.dart';
+
+void main() {
+  test(
+    'frozen independent metric motion holdout and shadow runtime',
+    () async {
+      final report = await runScaleMotionBenchmark(
+        write: const bool.fromEnvironment('BAGDAR_WRITE_SCALE_MOTION_REPORT'),
+        check: const bool.fromEnvironment('BAGDAR_CHECK_SCALE_MOTION_REPORT'),
+      );
+      final summary = (report['summaries'] as Map)['scale-motion'] as Map;
+      expect(summary['sequences'], 10);
+      expect(summary['unsafeContinueSteps'], 0);
+      expect(summary['unjustifiedClearances'], 0);
+      final motions = (report['motionSummary'] as Map).values.cast<Map>();
+      for (final row in motions.where((r) => r['mode'] == 'scale-motion')) {
+        if (['stationary', 'camera-yaw'].contains(row['motionKindLabel'])) {
+          final classes = row['patchClassifications'] as Map;
+          expect(classes['approaching'], 0);
+          expect(classes['receding'], 0);
+          expect(classes['lateral'], 0);
+        }
+        expect((row['correspondenceScores'] as Map)['surfaceMismatch'], 0);
+        expect(
+          (row['correspondenceScores'] as Map)['falseBackgroundMotion'],
+          0,
+        );
+      }
+      expect(report['promotionAllowed'], false);
+    },
+    timeout: const Timeout(Duration(minutes: 10)),
+  );
+}

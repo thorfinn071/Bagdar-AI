@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "experimentId": "bagdar-continuity-v1",
+  "promotionAllowed": false,
+  "durationSeconds": 30,
+  "fps": 15,
+  "backgroundAfterSeconds": 8,
+  "backgroundSeconds": 2,
+  "controllerDeadlineSeconds": 180,
+  "sourceSequenceIds": ["courtyard-blocked-lowlight", "hallway-clear-clean"],
+  "scope": "Repeat existing two-second renders on a continuous 30-second clock, with one actual Android Home/resume. Repeated pixels and ideal IMU are stress inputs, not a new natural scene or calibrated sensor. No hazard recall is measured.",
+  "metrics": ["deliveryAge", "callbackConcurrencyNotInferenceQueue", "rssSamples", "actualLifecycleEvents", "postResumeDelivery", "routeDisposal", "anrAndTimeout", "modelResultAge"]
+}

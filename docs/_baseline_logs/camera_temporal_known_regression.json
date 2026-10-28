@@ -1,0 +1,4881 @@
+{
+  "schemaVersion": 1,
+  "benchmarkId": "camera-track-passage-v1",
+  "scope": "synthetic desktop shadow; static inspection and actual temporal RGB tested separately",
+  "promotionAllowed": false,
+  "summarySplit": "known-regression",
+  "developmentFreezeSha256": null,
+  "functionalProcessingOffsetUs": 2000,
+  "functionalOffsetIsMeasuredLatency": false,
+  "temporalObservationPolicy": "current first-visible depth only; no static scan accumulation",
+  "relativeDepthUnits": "relative proximity; no metric interpretation or new calibration fit",
+  "sourceSha256": {
+    "lib/safety/perception/passage_clearance.dart": "96493aa036f0e7c1e3d0b5202d70e621eb38fe936fb31a3f3c08257555c12308",
+    "lib/safety/perception/camera_passage_clearance_source.dart": "329455be1c728f11554a933915873065cc8c773e3e91aa0d74e12d12fa80b3f8",
+    "lib/safety/perception/camera_track_association.dart": "7ea8f9e0c261e51ba4b524ecce09ec0830b67856d22de6409a987fd4fb63dc77",
+    "lib/models/generic_obstacle.dart": "d460b73fe83c0cd45a7e206dde2bed7506814fe44de45d47ce81ebf023ddd5f6",
+    "lib/safety/runtime/passage_clearance_shadow.dart": "d1ec8d03790022db54443ccbd7277e06acb1602209f010b87acbf031b5c7c711",
+    "lib/safety/runtime/spatial_safety_runtime.dart": "f430dcf5cb1f8784f636392437aeeb7c47c4e33d8e0f90ac6f42c5a5c8e1bb7d",
+    "lib/services/generic_obstacle_detector.dart": "f0a822d787c21f27401443ba6c606b7e0d569335382103f846556c841830860c",
+    "lib/tracker/generic_obstacle_tracker.dart": "bb7a2698cfa84ce28d31df4c25499eb1675c001cecc86b7aeaf168cc0f0300b6",
+    "lib/safety/world/generic_geometry_scene_adapter.dart": "e2f3a00b91fd9bd249de4891f25ff2e504b31d5db970a2232497accf611deba6",
+    "lib/safety/world/local_scene_model.dart": "045d4fae23d9f028d68af4889cc2032382633fec5d9b13d56ac598853a0e361f",
+    "lib/safety/world/scene_fusion_policy.dart": "2635bf8b108b8388033959fd369fa8e4b7000efb632ceb407c35664d1ddc3350",
+    "lib/safety/world/relative_polar_grid.dart": "8d59e46f9f38d0d92213100588add63c6f6999572a68f33f1bb76e82f9170336",
+    "lib/safety/planning/guidance_state_machine.dart": "6f46b4b9acf4a33a7d48b7b537faff32ebe18be4be10be21206479ddb981f120",
+    "lib/safety/planning/corridor_generator.dart": "0c2adfd3bee27a7b315376138aa40dff28eda3c74e0657533a7ab0d2e7ba4c14",
+    "lib/safety/planning/corridor_evaluator.dart": "e8c995d49698b30d3ff4b8c663bce77245117d11b5defc3de0df75601fe512f8",
+    "test/harness/camera_visible_passage_fixture.dart": "1734c277215504447de5c0033135f174fb657fcbc124fc2f05333208db05d716",
+    "test/camera_visible_passage_replay_test.dart": "0b25cce91e554bf45515aad31a1150012f20cf6af0450d6585c589284517d416",
+    "tool/blender/generate_track_passage_corpus.py": "4e755ed7e698f6c064ce430516b9d8e8b2284e8c1349ec16c29407a83af5712e",
+    "tool/blender/generate_visible_passage_corpus.py": "97d96eb474afdbd9900f11a439e8235039390f04bc8ad9ba334c1d8904d41c82",
+    "tool/model_benchmark/generate_track_passage_ncnn.py": "f38efffc511e95be0ee451e1e09fd3696adf55ea7f77c2242f33e2e0f2e38d79",
+    "tool/model_benchmark/freeze_track_passage_development.py": "432cca2f043baf18229934ef05ce16eff0ed9a08e4fe9b0e6afebf1079233bd7",
+    "lib/services/frame_stable_generic_obstacle_detector.dart": "6e17ebc20199ccf3c354400d635adc3d725d352192c52fd9b03ff29e0d254d6d",
+    "test/harness/camera_temporal_passage_benchmark.dart": "4d19fa15270fcfee7d135334ac9a4122f54998d78fd01c614c1bbd4f7f7bc418",
+    "test/frame_stable_generic_obstacle_detector_test.dart": "b3dd3867659f62cad9caf46487a503e6624dd298f12917c9484055b03a479c3c",
+    "tool/blender/generate_temporal_passage_corpus.py": "aa20be147b1022a48f146fca16088a93390a100021ed486b1a574447f2b931d9",
+    "tool/model_benchmark/generate_temporal_passage_ncnn.py": "84b8c5b9348878382258d9c6f93e7a0927d4d0a6eb097e97035b5f9c7c068ba6",
+    "tool/model_benchmark/verify_temporal_passage_assets.py": "e1ce2fa3ab4a1a9e45fbed147d1aae5a33d2d1e30b8d2b0a0b5e72b0607ba90a",
+    "tool/model_benchmark/freeze_temporal_passage_development.py": "0a1a8f6956aad71ffb54f8dca0c567419dd195632a48c01b1e7d1e48ba8ec0fd",
+    "tool/model_benchmark/evaluate_temporal_passage.dart": "b38dece9fb076cd5c9e6f3b763d3365761263439814d1cc940ace2f277497cc1",
+    "tool/model_benchmark/generate_context_ncnn_depth.py": "fd8b28236f016fc5faed4e7cfcb65848b19e71421076931a65007b3f9b4a86ce",
+    "docs/camera-temporal-stability-protocol-2026-10-03.md": "aec94d51a282cdb3781946ee59541939d1911eac655035c6f6624743c265689e",
+    "assets/midas_small.ncnn.param": "d618bb98777ff7e7adeeef1c8cf50ede79c97c754876681d6a0b26330708e8d3",
+    "assets/midas_small.ncnn.bin": "324412b094f3309c0c7acd506a06ccdc60296749ac382dc58431efdde0f13242",
+    "test/fixtures/spatial_safety/camera-track-passage-v1/manifest.json": "40895a0bbc2b9b70692fa80bb2a361d524a64e2dd7cca552548c7991ba6b85f7",
+    "test/fixtures/spatial_safety/camera-track-passage-v1/annotations.json": "08e70f705910172b84df1271bd625c7622835d2dbf3aa8e4376d6f49f467db4e",
+    "test/fixtures/spatial_safety/camera-track-passage-v1/ncnn/manifest.json": "fafca3ad18591dafb01437dcc5d59cc72ddb2cc9cd03ebf21ed06631ae28dc28"
+  },
+  "summaries": {
+    "ncnn-control": {
+      "sequences": 1,
+      "hazardSequences": 0,
+      "onTimeStops": 0,
+      "lateStops": 0,
+      "missedStops": 0,
+      "hazardOnsetsAlreadyStopped": 0,
+      "heldHazardSteps": 0,
+      "unsafeContinueSteps": 0,
+      "sufficientPassableSequences": 1,
+      "falseStopSequences": 1,
+      "falseHoldSequences": 0,
+      "producerClearSufficient": 0,
+      "runtimeAppliedSufficient": 0,
+      "insufficientFinalStops": 0,
+      "insufficientFinalHolds": 0,
+      "unjustifiedClearances": 0
+    },
+    "associated-stateful": {
+      "sequences": 1,
+      "hazardSequences": 0,
+      "onTimeStops": 0,
+      "lateStops": 0,
+      "missedStops": 0,
+      "hazardOnsetsAlreadyStopped": 0,
+      "heldHazardSteps": 0,
+      "unsafeContinueSteps": 0,
+      "sufficientPassableSequences": 1,
+      "falseStopSequences": 1,
+      "falseHoldSequences": 0,
+      "producerClearSufficient": 1,
+      "runtimeAppliedSufficient": 1,
+      "insufficientFinalStops": 0,
+      "insufficientFinalHolds": 0,
+      "unjustifiedClearances": 0
+    },
+    "associated-stable": {
+      "sequences": 1,
+      "hazardSequences": 0,
+      "onTimeStops": 0,
+      "lateStops": 0,
+      "missedStops": 0,
+      "hazardOnsetsAlreadyStopped": 0,
+      "heldHazardSteps": 0,
+      "unsafeContinueSteps": 0,
+      "sufficientPassableSequences": 1,
+      "falseStopSequences": 0,
+      "falseHoldSequences": 0,
+      "producerClearSufficient": 1,
+      "runtimeAppliedSufficient": 1,
+      "insufficientFinalStops": 0,
+      "insufficientFinalHolds": 0,
+      "unjustifiedClearances": 0
+    }
+  },
+  "sequences": [
+    {
+      "layoutId": "test-association-wide-08",
+      "split": "known-regression",
+      "mode": "ncnn-control",
+      "staticSyntheticScan": true,
+      "physicalHazard": false,
+      "hazardSteps": 0,
+      "heldHazardSteps": 0,
+      "criticalOnsetOffsetUs": 0,
+      "firstHazardStopOffsetUs": null,
+      "hazardOnsetAlreadyStopped": false,
+      "onTimeStop": false,
+      "unsafeContinueSteps": 0,
+      "unjustifiedClearances": 0,
+      "positiveApproachTrackSteps": 3,
+      "maximumApproachTrend": 0.06826621294021606,
+      "scanDurationUs": 2000000,
+      "decisions": [
+        {
+          "frameId": 1,
+          "captureOffsetUs": 0,
+          "rgbSha256": "c4ad8a6bf7a5a28eb0b59dee6902d709fe899ae68e0ec5841d92e29cf5ff5e77",
+          "physicalHazard": false,
+          "sufficientObservationLabel": false,
+          "userMoving": true,
+          "pose": {
+            "rotation": [
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              -0.05233597382903099,
+              0.9986295104026794,
+              0.0,
+              -0.9986295104026794,
+              -0.05233597382903099
+            ],
+            "originM": [
+              0.0,
+              0.0,
+              1.45
+            ]
+          },
+          "oldestEvidenceTimestampUs": null,
+          "producer": null,
+          "sections": null,
+          "passage": null,
+          "runtimePassage": null,
+          "runtimePassageApplied": false,
+          "groundConfidence": 0.703125,
+          "groundDisagreementPixels": 0,
+          "detectorReject": "none",
+          "unknownReasons": [],
+          "tracks": [
+            {
+              "id": 1,
+              "confirmed": false,
+              "hits": 1,
+              "misses": 0,
+              "geometry": "overhead",
+              "zone": "center",
+              "pixelCount": 923,
+              "proximity": 0.735005795955658,
+              "approachTrend": 0.0,
+              "proximityHistory": [
+                0.735005795955658
+              ],
+              "bounds": [
+                0.30078125,
+                0.0,
+                0.6875,
+                0.0546875
+              ],
+              "supportSha256": "9e8f3e1c2b9d2989b809744edfa54e78d0ffcfa2f4620b822e39a0e13cfc6b2f",
+              "association": null
+            },
+            {
+              "id": 2,
+              "confirmed": false,
+              "hits": 1,
+              "misses": 0,
+              "geometry": "broadSurface",
+              "zone": "center",
+              "pixelCount": 13561,
+              "proximity": 0.9317337870597839,
+              "approachTrend": 0.0,
+              "proximityHistory": [
+                0.9317337870597839
+              ],
+              "bounds": [
+                0.2890625,
+                0.1796875,
+                0.7109375,
+                0.91015625
+              ],
+              "supportSha256": "3fb9b99fa788e8edcbc31de67de98572174926919ec6e5211201567d55e7b1fd",
+              "association": null
+            }
+          ],
+          "action": "stopNow",
+          "ruleId": "SPATIAL-P0-FORWARD-UNCONFIRMED",
+          "plannerState": "emergencyStop",
+          "plannerPreviousState": "observing",
+          "plannerForward": {
+            "observedFraction": 0.8515625,
+            "unknownRisk": 0.1484375,
+            "collisionRisk": 0.0,
+            "movingThreatRisk": 0.0,
+            "dropRisk": 0.0,
+            "positiveEvidencePassed": false,
+            "rejectionReasons": [
+              "surfaceNotContinuous"
+            ]
+          }
+        },
+        {
+          "frameId": 11,
+          "captureOffsetUs": 2000000,
+          "rgbSha256": "c4ad8a6bf7a5a28eb0b59dee6902d709fe899ae68e0ec5841d92e29cf5ff5e77",
+          "physicalHazard": false,
+          "sufficientObservationLabel": true,
+          "userMoving": false,
+          "pose": {
+            "rotation": [
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              -0.05233597382903099,
+              0.9986295104026794,
+              0.0,
+              -0.9986295104026794,
+              -0.05233597382903099
+            ],
+            "originM": [
+              0.0,
+              0.0,
+              1.45
+            ]
+          },
+          "oldestEvidenceTimestampUs": null,
+          "producer": null,
+          "sections": null,
+          "passage": null,
+          "runtimePassage": null,
+          "runtimePassageApplied": false,
+          "groundConfidence": 0.73828125,
+          "groundDisagreementPixels": 3692,
+          "detectorReject": "none",
+          "unknownReasons": [
+            "groundModelDisagreement"
+          ],
+          "tracks": [
+            {
+              "id": 1,
+              "confirmed": false,
+              "hits": 2,
+              "misses": 0,
+              "geometry": "overhead",
+              "zone": "center",
+              "pixelCount": 923,
+              "proximity": 0.735005795955658,
+              "approachTrend": 0.0,
+              "proximityHistory": [
+                0.735005795955658,
+                0.735005795955658
+              ],
+              "bounds": [
+                0.30078125,
+                0.0,
+                0.6875,
+                0.0546875
+              ],
+              "supportSha256": "9e8f3e1c2b9d2989b809744edfa54e78d0ffcfa2f4620b822e39a0e13cfc6b2f",
+              "association": null
+            },
+            {
+              "id": 2,
+              "confirmed": false,
+              "hits": 2,
+              "misses": 0,
+              "geometry": "broadSurface",
+              "zone": "center",
+              "pixelCount": 17268,
+              "proximity": 1.0,
+              "approachTrend": 0.06826621294021606,
+              "proximityHistory": [
+                0.9317337870597839,
+                1.0
+              ],
+              "bounds": [
+                0.2890625,
+                0.1796875,
+                0.7109375,
+                1.0
+              ],
+              "supportSha256": "eaf45db156c6c7061b2b198777dd1097e316a9c88371f3b9da7f2ef7430b95d8",
+              "association": null
+            }
+          ],
+          "action": "holdAndScan",
+          "ruleId": "SPATIAL-P2-POST-STOP-SCAN",
+          "plannerState": "holdingForScan",
+          "plannerPreviousState": "emergencyStop",
+          "plannerForward": {
+            "observedFraction": 0.19999999999999996,
+            "unknownRisk": 0.8,
+            "collisionRisk": 0.0,
+            "movingThreatRisk": 0.0,
+            "dropRisk": 0.0,
+            "positiveEvidencePassed": false,
+            "rejectionReasons": [
+              "insufficientObservedWidth",
+              "unknownArea"
+            ]
+          }
+        },
+        {
+          "frameId": 12,
+          "captureOffsetUs": 2200000,
+          "rgbSha256": "c4ad8a6bf7a5a28eb0b59dee6902d709fe899ae68e0ec5841d92e29cf5ff5e77",
+          "physicalHazard": false,
+          "sufficientObservationLabel": true,
+          "userMoving": false,
+          "pose": {
+            "rotation": [
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              -0.05233597382903099,
+              0.9986295104026794,
+              0.0,
+              -0.9986295104026794,
+              -0.05233597382903099
+            ],
+            "originM": [
+              0.0,
+              0.0,
+              1.45
+            ]
+          },
+          "oldestEvidenceTimestampUs": null,
+          "producer": null,
+          "sections": null,
+          "passage": null,
+          "runtimePassage": null,
+          "runtimePassageApplied": false,
+          "groundConfidence": 0.73828125,
+          "groundDisagreementPixels": 2312,
+          "detectorReject": "none",
+          "unknownReasons": [
+            "groundModelDisagreement"
+          ],
+          "tracks": [
+            {
+              "id": 1,
+              "confirmed": true,
+              "hits": 3,
+              "misses": 0,
+              "geometry": "overhead",
+              "zone": "center",
+              "pixelCount": 923,
+              "proximity": 0.735005795955658,
+              "approachTrend": 0.0,
+              "proximityHistory": [
+                0.735005795955658,
+                0.735005795955658,
+                0.735005795955658
+              ],
+              "bounds": [
+                0.30078125,
+                0.0,
+                0.6875,
+                0.0546875
+              ],
+              "supportSha256": "9e8f3e1c2b9d2989b809744edfa54e78d0ffcfa2f4620b822e39a0e13cfc6b2f",
+              "association": null
+            },
+            {
+              "id": 2,
+              "confirmed": true,
+              "hits": 3,
+              "misses": 0,
+              "geometry": "broadSurface",
+              "zone": "center",
+              "pixelCount": 15728,
+              "proximity": 1.0,
+              "approachTrend": 0.06826621294021606,
+              "proximityHistory": [
+                0.9317337870597839,
+                1.0,
+                1.0
+              ],
+              "bounds": [
+                0.2890625,
+                0.1796875,
+                0.7109375,
+                1.0
+              ],
+              "supportSha256": "095f6fdbf174188a7a30500632b3d29ee21bb2960530f4f1e5c0f9269b179b20",
+              "association": null
+            }
+          ],
+          "action": "stopNow",
+          "ruleId": "SPATIAL-P0-IMMINENT",
+          "plannerState": "emergencyStop",
+          "plannerPreviousState": "holdingForScan",
+          "plannerForward": {
+            "observedFraction": 0.19999999999999996,
+            "unknownRisk": 0.8,
+            "collisionRisk": 1.0,
+            "movingThreatRisk": 0.2047986388206482,
+            "dropRisk": 0.0,
+            "positiveEvidencePassed": false,
+            "rejectionReasons": [
+              "insufficientObservedWidth",
+              "unknownArea",
+              "confirmedObstacle"
+            ]
+          }
+        },
+        {
+          "frameId": 13,
+          "captureOffsetUs": 2400000,
+          "rgbSha256": "c4ad8a6bf7a5a28eb0b59dee6902d709fe899ae68e0ec5841d92e29cf5ff5e77",
+          "physicalHazard": false,
+          "sufficientObservationLabel": true,
+          "userMoving": true,
+          "pose": {
+            "rotation": [
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              -0.05233597382903099,
+              0.9986295104026794,
+              0.0,
+              -0.9986295104026794,
+              -0.05233597382903099
+            ],
+            "originM": [
+              0.0,
+              0.0,
+              1.45
+            ]
+          },
+          "oldestEvidenceTimestampUs": null,
+          "producer": null,
+          "sections": null,
+          "passage": null,
+          "runtimePassage": null,
+          "runtimePassageApplied": false,
+          "groundConfidence": 0.75,
+          "groundDisagreementPixels": 3864,
+          "detectorReject": "none",
+          "unknownReasons": [
+            "groundModelDisagreement"
+          ],
+          "tracks": [
+            {
+              "id": 1,
+              "confirmed": true,
+              "hits": 4,
+              "misses": 0,
+              "geometry": "overhead",
+              "zone": "center",
+              "pixelCount": 923,
+              "proximity": 0.735005795955658,
+              "approachTrend": 0.0,
+              "proximityHistory": [
+                0.735005795955658,
+                0.735005795955658,
+                0.735005795955658,
+                0.735005795955658
+              ],
+              "bounds": [
+                0.30078125,
+                0.0,
+                0.6875,
+                0.0546875
+              ],
+              "supportSha256": "9e8f3e1c2b9d2989b809744edfa54e78d0ffcfa2f4620b822e39a0e13cfc6b2f",
+              "association": null
+            },
+            {
+              "id": 2,
+              "confirmed": true,
+              "hits": 4,
+              "misses": 0,
+              "geometry": "broadSurface",
+              "zone": "center",
+              "pixelCount": 16745,
+              "proximity": 1.0,
+              "approachTrend": 0.06826621294021606,
+              "proximityHistory": [
+                0.9317337870597839,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "bounds": [
+                0.2890625,
+                0.1796875,
+                0.7109375,
+                1.0
+              ],
+              "supportSha256": "43ed9d58c6a5e1c3953889f411f4de6a9d732c6563031b86570f0bfdfe8d2204",
+              "association": null
+            }
+          ],
+          "action": "stopNow",
+          "ruleId": "SPATIAL-P0-IMMINENT",
+          "plannerState": "emergencyStop",
+          "plannerPreviousState": "emergencyStop",
+          "plannerForward": {
+            "observedFraction": 0.19999999999999996,
+            "unknownRisk": 0.8,
+            "collisionRisk": 1.0,
+            "movingThreatRisk": 0.2047986388206482,
+            "dropRisk": 0.0,
+            "positiveEvidencePassed": false,
+            "rejectionReasons": [
+              "insufficientObservedWidth",
+              "unknownArea",
+              "confirmedObstacle"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "frameId": 13,
+        "captureOffsetUs": 2400000,
+        "rgbSha256": "c4ad8a6bf7a5a28eb0b59dee6902d709fe899ae68e0ec5841d92e29cf5ff5e77",
+        "physicalHazard": false,
+        "sufficientObservationLabel": true,
+        "userMoving": true,
+        "pose": {
+          "rotation": [
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            -0.05233597382903099,
+            0.9986295104026794,
+            0.0,
+            -0.9986295104026794,
+            -0.05233597382903099
+          ],
+          "originM": [
+            0.0,
+            0.0,
+            1.45
+          ]
+        },
+        "oldestEvidenceTimestampUs": null,
+        "producer": null,
+        "sections": null,
+        "passage": null,
+        "runtimePassage": null,
+        "runtimePassageApplied": false,
+        "groundConfidence": 0.75,
+        "groundDisagreementPixels": 3864,
+        "detectorReject": "none",
+        "unknownReasons": [
+          "groundModelDisagreement"
+        ],
+        "tracks": [
+          {
+            "id": 1,
+            "confirmed": true,
+            "hits": 4,
+            "misses": 0,
+            "geometry": "overhead",
+            "zone": "center",
+            "pixelCount": 923,
+            "proximity": 0.735005795955658,
+            "approachTrend": 0.0,
+            "proximityHistory": [
+              0.735005795955658,
+              0.735005795955658,
+              0.735005795955658,
+              0.735005795955658
+            ],
+            "bounds": [
+              0.30078125,
+              0.0,
+              0.6875,
+              0.0546875
+            ],
+            "supportSha256": "9e8f3e1c2b9d2989b809744edfa54e78d0ffcfa2f4620b822e39a0e13cfc6b2f",
+            "association": null
+          },
+          {
+            "id": 2,
+            "confirmed": true,
+            "hits": 4,
+            "misses": 0,
+            "geometry": "broadSurface",
+            "zone": "center",
+            "pixelCount": 16745,
+            "proximity": 1.0,
+            "approachTrend": 0.06826621294021606,
+            "proximityHistory": [
+              0.9317337870597839,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "bounds": [
+              0.2890625,
+              0.1796875,
+              0.7109375,
+              1.0
+            ],
+            "supportSha256": "43ed9d58c6a5e1c3953889f411f4de6a9d732c6563031b86570f0bfdfe8d2204",
+            "association": null
+          }
+        ],
+        "action": "stopNow",
+        "ruleId": "SPATIAL-P0-IMMINENT",
+        "plannerState": "emergencyStop",
+        "plannerPreviousState": "emergencyStop",
+        "plannerForward": {
+          "observedFraction": 0.19999999999999996,
+          "unknownRisk": 0.8,
+          "collisionRisk": 1.0,
+          "movingThreatRisk": 0.2047986388206482,
+          "dropRisk": 0.0,
+          "positiveEvidencePassed": false,
+          "rejectionReasons": [
+            "insufficientObservedWidth",
+            "unknownArea",
+            "confirmedObstacle"
+          ]
+        }
+      }
+    },
+    {
+      "layoutId": "test-association-wide-08",
+      "split": "known-regression",
+      "mode": "associated-stateful",
+      "staticSyntheticScan": true,
+      "physicalHazard": false,
+      "hazardSteps": 0,
+      "heldHazardSteps": 0,
+      "criticalOnsetOffsetUs": 0,
+      "firstHazardStopOffsetUs": null,
+      "hazardOnsetAlreadyStopped": false,
+      "onTimeStop": false,
+      "unsafeContinueSteps": 0,
+      "unjustifiedClearances": 0,
+      "positiveApproachTrackSteps": 3,
+      "maximumApproachTrend": 0.06826621294021606,
+      "scanDurationUs": 2000000,
+      "decisions": [
+        {
+          "frameId": 1,
+          "captureOffsetUs": 0,
+          "rgbSha256": "c4ad8a6bf7a5a28eb0b59dee6902d709fe899ae68e0ec5841d92e29cf5ff5e77",
+          "physicalHazard": false,
+          "sufficientObservationLabel": false,
+          "userMoving": true,
+          "pose": {
+            "rotation": [
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              -0.05233597382903099,
+              0.9986295104026794,
+              0.0,
+              -0.9986295104026794,
+              -0.05233597382903099
+            ],
+            "originM": [
+              0.0,
+              0.0,
+              1.45
+            ]
+          },
+          "oldestEvidenceTimestampUs": 1790899200000000,
+          "producer": [],
+          "sections": [
+            {
+              "startM": 0.2,
+              "endM": 0.35,
+              "state": "unknown",
+              "bodyObservedFraction": 0.0,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 0.35,
+              "endM": 0.5,
+              "state": "unknown",
+              "bodyObservedFraction": 0.05555555555555555,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 0.5,
+              "endM": 0.6499999999999999,
+              "state": "unknown",
+              "bodyObservedFraction": 0.1111111111111111,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 0.6499999999999999,
+              "endM": 0.8,
+              "state": "unknown",
+              "bodyObservedFraction": 0.2777777777777778,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 0.8,
+              "endM": 0.95,
+              "state": "unknown",
+              "bodyObservedFraction": 0.3333333333333333,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 0.95,
+              "endM": 1.0999999999999999,
+              "state": "unknown",
+              "bodyObservedFraction": 0.5,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 1.0999999999999999,
+              "endM": 1.2499999999999998,
+              "state": "unknown",
+              "bodyObservedFraction": 0.5,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 1.2499999999999998,
+              "endM": 1.4,
+              "state": "unknown",
+              "bodyObservedFraction": 0.5833333333333334,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 1.4,
+              "endM": 1.5499999999999998,
+              "state": "unknown",
+              "bodyObservedFraction": 0.6666666666666666,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 1.5499999999999998,
+              "endM": 1.7,
+              "state": "unknown",
+              "bodyObservedFraction": 0.6666666666666666,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 1.7,
+              "endM": 1.8499999999999999,
+              "state": "unknown",
+              "bodyObservedFraction": 0.75,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 1.8499999999999999,
+              "endM": 1.9999999999999998,
+              "state": "unknown",
+              "bodyObservedFraction": 0.75,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 1.9999999999999998,
+              "endM": 2.15,
+              "state": "unknown",
+              "bodyObservedFraction": 0.8333333333333334,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 2.15,
+              "endM": 2.3,
+              "state": "unknown",
+              "bodyObservedFraction": 0.9166666666666666,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 2.3,
+              "endM": 2.45,
+              "state": "unknown",
+              "bodyObservedFraction": 0.9166666666666666,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 2.45,
+              "endM": 2.6,
+              "state": "unknown",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 2.6,
+              "endM": 2.75,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.75,
+              "endM": 2.9,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.9,
+              "endM": 3.05,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 3.05,
+              "endM": 3.2,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 3.2,
+              "endM": 3.35,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 3.35,
+              "endM": 3.5,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            }
+          ],
+          "passage": {
+            "status": "unavailable",
+            "reasons": [
+              "unobservedBody",
+              "unobservedFloor",
+              "missingMeasurements"
+            ],
+            "minimumWidthLowerBoundM": 0.9,
+            "minimumHeadroomLowerBoundM": 1.8,
+            "minimumEvidenceConfidence": 1.0,
+            "validUntilUs": 1790899203000000,
+            "sessionGeneration": 1,
+            "frameId": 1,
+            "evaluatedAtUs": 1790899200002000,
+            "timestampDomain": "utcEpochMicroseconds",
+            "referenceFrameId": "synthetic-walking-frame-v1"
+          },
+          "runtimePassage": {
+            "status": "unavailable",
+            "reasons": [
+              "unobservedBody",
+              "unobservedFloor",
+              "missingMeasurements"
+            ],
+            "minimumWidthLowerBoundM": 0.9,
+            "minimumHeadroomLowerBoundM": 1.8,
+            "minimumEvidenceConfidence": 1.0,
+            "validUntilUs": 1790899203000000,
+            "sessionGeneration": 1,
+            "frameId": 1,
+            "evaluatedAtUs": 1790899200002000,
+            "timestampDomain": "utcEpochMicroseconds",
+            "referenceFrameId": "synthetic-walking-frame-v1"
+          },
+          "runtimePassageApplied": false,
+          "groundConfidence": 0.703125,
+          "groundDisagreementPixels": 0,
+          "detectorReject": "none",
+          "unknownReasons": [],
+          "tracks": [
+            {
+              "id": 1,
+              "confirmed": false,
+              "hits": 1,
+              "misses": 0,
+              "geometry": "overhead",
+              "zone": "center",
+              "pixelCount": 923,
+              "proximity": 0.735005795955658,
+              "approachTrend": 0.0,
+              "proximityHistory": [
+                0.735005795955658
+              ],
+              "bounds": [
+                0.30078125,
+                0.0,
+                0.6875,
+                0.0546875
+              ],
+              "supportSha256": "9e8f3e1c2b9d2989b809744edfa54e78d0ffcfa2f4620b822e39a0e13cfc6b2f",
+              "association": {
+                "relation": "outsidePassage",
+                "reason": "all_first_surface_footprints_outside",
+                "checkedPixels": 1891,
+                "unknownPixels": 0,
+                "intersectingPixels": 0,
+                "excludedUnboundedPixels": 127,
+                "boundedSurfaceEnvelopeM": [
+                  -0.9140813644405762,
+                  3.0694234977364143,
+                  2.6655552130135423,
+                  0.8535973875655098,
+                  3.8150699099971304,
+                  3.013427971583304
+                ]
+              }
+            },
+            {
+              "id": 2,
+              "confirmed": false,
+              "hits": 1,
+              "misses": 0,
+              "geometry": "broadSurface",
+              "zone": "center",
+              "pixelCount": 13561,
+              "proximity": 0.9317337870597839,
+              "approachTrend": 0.0,
+              "proximityHistory": [
+                0.9317337870597839
+              ],
+              "bounds": [
+                0.2890625,
+                0.1796875,
+                0.7109375,
+                0.91015625
+              ],
+              "supportSha256": "3fb9b99fa788e8edcbc31de67de98572174926919ec6e5211201567d55e7b1fd",
+              "association": {
+                "relation": "outsidePassage",
+                "reason": "all_first_surface_footprints_outside",
+                "checkedPixels": 24495,
+                "unknownPixels": 0,
+                "intersectingPixels": 0,
+                "excludedUnboundedPixels": 1091,
+                "boundedSurfaceEnvelopeM": [
+                  -1.312810192320167,
+                  2.9212825078674194,
+                  -0.019456769785884953,
+                  1.312810192320167,
+                  5.401041705048996,
+                  2.668027073232146
+                ]
+              }
+            }
+          ],
+          "action": "stopNow",
+          "ruleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "plannerState": "emergencyStop",
+          "plannerPreviousState": "observing",
+          "plannerForward": {
+            "observedFraction": 0.0,
+            "unknownRisk": 1.0,
+            "collisionRisk": 0.0,
+            "movingThreatRisk": 0.0,
+            "dropRisk": 0.0,
+            "positiveEvidencePassed": false,
+            "rejectionReasons": [
+              "insufficientObservedWidth",
+              "unknownArea",
+              "surfaceNotContinuous"
+            ]
+          }
+        },
+        {
+          "frameId": 11,
+          "captureOffsetUs": 2000000,
+          "rgbSha256": "c4ad8a6bf7a5a28eb0b59dee6902d709fe899ae68e0ec5841d92e29cf5ff5e77",
+          "physicalHazard": false,
+          "sufficientObservationLabel": true,
+          "userMoving": false,
+          "pose": {
+            "rotation": [
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              -0.05233597382903099,
+              0.9986295104026794,
+              0.0,
+              -0.9986295104026794,
+              -0.05233597382903099
+            ],
+            "originM": [
+              0.0,
+              0.0,
+              1.45
+            ]
+          },
+          "oldestEvidenceTimestampUs": 1790899200200000,
+          "producer": [],
+          "sections": [
+            {
+              "startM": 0.2,
+              "endM": 0.35,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.35,
+              "endM": 0.5,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.5,
+              "endM": 0.6499999999999999,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.6499999999999999,
+              "endM": 0.8,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.8,
+              "endM": 0.95,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.95,
+              "endM": 1.0999999999999999,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.0999999999999999,
+              "endM": 1.2499999999999998,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.2499999999999998,
+              "endM": 1.4,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.4,
+              "endM": 1.5499999999999998,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.5499999999999998,
+              "endM": 1.7,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.7,
+              "endM": 1.8499999999999999,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.8499999999999999,
+              "endM": 1.9999999999999998,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.9999999999999998,
+              "endM": 2.15,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.15,
+              "endM": 2.3,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.3,
+              "endM": 2.45,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.45,
+              "endM": 2.6,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.6,
+              "endM": 2.75,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.75,
+              "endM": 2.9,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.9,
+              "endM": 3.05,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 3.05,
+              "endM": 3.2,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 3.2,
+              "endM": 3.35,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 3.35,
+              "endM": 3.5,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            }
+          ],
+          "passage": {
+            "status": "measuredClear",
+            "reasons": [],
+            "minimumWidthLowerBoundM": 0.9,
+            "minimumHeadroomLowerBoundM": 1.8,
+            "minimumEvidenceConfidence": 1.0,
+            "validUntilUs": 1790899203200000,
+            "sessionGeneration": 1,
+            "frameId": 11,
+            "evaluatedAtUs": 1790899202002000,
+            "timestampDomain": "utcEpochMicroseconds",
+            "referenceFrameId": "synthetic-walking-frame-v1"
+          },
+          "runtimePassage": {
+            "status": "measuredClear",
+            "reasons": [],
+            "minimumWidthLowerBoundM": 0.9,
+            "minimumHeadroomLowerBoundM": 1.8,
+            "minimumEvidenceConfidence": 1.0,
+            "validUntilUs": 1790899203200000,
+            "sessionGeneration": 1,
+            "frameId": 11,
+            "evaluatedAtUs": 1790899202002000,
+            "timestampDomain": "utcEpochMicroseconds",
+            "referenceFrameId": "synthetic-walking-frame-v1"
+          },
+          "runtimePassageApplied": false,
+          "groundConfidence": 0.73828125,
+          "groundDisagreementPixels": 3692,
+          "detectorReject": "none",
+          "unknownReasons": [
+            "groundModelDisagreement"
+          ],
+          "tracks": [
+            {
+              "id": 1,
+              "confirmed": false,
+              "hits": 2,
+              "misses": 0,
+              "geometry": "overhead",
+              "zone": "center",
+              "pixelCount": 923,
+              "proximity": 0.735005795955658,
+              "approachTrend": 0.0,
+              "proximityHistory": [
+                0.735005795955658,
+                0.735005795955658
+              ],
+              "bounds": [
+                0.30078125,
+                0.0,
+                0.6875,
+                0.0546875
+              ],
+              "supportSha256": "9e8f3e1c2b9d2989b809744edfa54e78d0ffcfa2f4620b822e39a0e13cfc6b2f",
+              "association": {
+                "relation": "outsidePassage",
+                "reason": "all_first_surface_footprints_outside",
+                "checkedPixels": 1891,
+                "unknownPixels": 0,
+                "intersectingPixels": 0,
+                "excludedUnboundedPixels": 127,
+                "boundedSurfaceEnvelopeM": [
+                  -0.9140813644405762,
+                  3.0694234977364143,
+                  2.6655552130135423,
+                  0.8535973875655098,
+                  3.8150699099971304,
+                  3.013427971583304
+                ]
+              }
+            },
+            {
+              "id": 2,
+              "confirmed": false,
+              "hits": 2,
+              "misses": 0,
+              "geometry": "broadSurface",
+              "zone": "center",
+              "pixelCount": 17268,
+              "proximity": 1.0,
+              "approachTrend": 0.06826621294021606,
+              "proximityHistory": [
+                0.9317337870597839,
+                1.0
+              ],
+              "bounds": [
+                0.2890625,
+                0.1796875,
+                0.7109375,
+                1.0
+              ],
+              "supportSha256": "eaf45db156c6c7061b2b198777dd1097e316a9c88371f3b9da7f2ef7430b95d8",
+              "association": {
+                "relation": "unknown",
+                "reason": "motion_or_semantic_priority",
+                "checkedPixels": 0,
+                "unknownPixels": 0,
+                "intersectingPixels": 0,
+                "excludedUnboundedPixels": 0,
+                "boundedSurfaceEnvelopeM": null
+              }
+            }
+          ],
+          "action": "holdAndScan",
+          "ruleId": "SPATIAL-P2-POST-STOP-SCAN",
+          "plannerState": "holdingForScan",
+          "plannerPreviousState": "emergencyStop",
+          "plannerForward": {
+            "observedFraction": 0.0,
+            "unknownRisk": 1.0,
+            "collisionRisk": 0.0,
+            "movingThreatRisk": 0.0,
+            "dropRisk": 0.0,
+            "positiveEvidencePassed": false,
+            "rejectionReasons": [
+              "insufficientObservedWidth",
+              "unknownArea"
+            ]
+          }
+        },
+        {
+          "frameId": 12,
+          "captureOffsetUs": 2200000,
+          "rgbSha256": "c4ad8a6bf7a5a28eb0b59dee6902d709fe899ae68e0ec5841d92e29cf5ff5e77",
+          "physicalHazard": false,
+          "sufficientObservationLabel": true,
+          "userMoving": false,
+          "pose": {
+            "rotation": [
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              -0.05233597382903099,
+              0.9986295104026794,
+              0.0,
+              -0.9986295104026794,
+              -0.05233597382903099
+            ],
+            "originM": [
+              0.0,
+              0.0,
+              1.45
+            ]
+          },
+          "oldestEvidenceTimestampUs": 1790899200200000,
+          "producer": [],
+          "sections": [
+            {
+              "startM": 0.2,
+              "endM": 0.35,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.35,
+              "endM": 0.5,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.5,
+              "endM": 0.6499999999999999,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.6499999999999999,
+              "endM": 0.8,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.8,
+              "endM": 0.95,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.95,
+              "endM": 1.0999999999999999,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.0999999999999999,
+              "endM": 1.2499999999999998,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.2499999999999998,
+              "endM": 1.4,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.4,
+              "endM": 1.5499999999999998,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.5499999999999998,
+              "endM": 1.7,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.7,
+              "endM": 1.8499999999999999,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.8499999999999999,
+              "endM": 1.9999999999999998,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.9999999999999998,
+              "endM": 2.15,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.15,
+              "endM": 2.3,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.3,
+              "endM": 2.45,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.45,
+              "endM": 2.6,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.6,
+              "endM": 2.75,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.75,
+              "endM": 2.9,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.9,
+              "endM": 3.05,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 3.05,
+              "endM": 3.2,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 3.2,
+              "endM": 3.35,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 3.35,
+              "endM": 3.5,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            }
+          ],
+          "passage": {
+            "status": "measuredClear",
+            "reasons": [],
+            "minimumWidthLowerBoundM": 0.9,
+            "minimumHeadroomLowerBoundM": 1.8,
+            "minimumEvidenceConfidence": 1.0,
+            "validUntilUs": 1790899203200000,
+            "sessionGeneration": 1,
+            "frameId": 12,
+            "evaluatedAtUs": 1790899202202000,
+            "timestampDomain": "utcEpochMicroseconds",
+            "referenceFrameId": "synthetic-walking-frame-v1"
+          },
+          "runtimePassage": {
+            "status": "measuredClear",
+            "reasons": [],
+            "minimumWidthLowerBoundM": 0.9,
+            "minimumHeadroomLowerBoundM": 1.8,
+            "minimumEvidenceConfidence": 1.0,
+            "validUntilUs": 1790899203200000,
+            "sessionGeneration": 1,
+            "frameId": 12,
+            "evaluatedAtUs": 1790899202202000,
+            "timestampDomain": "utcEpochMicroseconds",
+            "referenceFrameId": "synthetic-walking-frame-v1"
+          },
+          "runtimePassageApplied": true,
+          "groundConfidence": 0.73828125,
+          "groundDisagreementPixels": 2312,
+          "detectorReject": "none",
+          "unknownReasons": [
+            "groundModelDisagreement"
+          ],
+          "tracks": [
+            {
+              "id": 1,
+              "confirmed": true,
+              "hits": 3,
+              "misses": 0,
+              "geometry": "overhead",
+              "zone": "center",
+              "pixelCount": 923,
+              "proximity": 0.735005795955658,
+              "approachTrend": 0.0,
+              "proximityHistory": [
+                0.735005795955658,
+                0.735005795955658,
+                0.735005795955658
+              ],
+              "bounds": [
+                0.30078125,
+                0.0,
+                0.6875,
+                0.0546875
+              ],
+              "supportSha256": "9e8f3e1c2b9d2989b809744edfa54e78d0ffcfa2f4620b822e39a0e13cfc6b2f",
+              "association": {
+                "relation": "outsidePassage",
+                "reason": "all_first_surface_footprints_outside",
+                "checkedPixels": 1891,
+                "unknownPixels": 0,
+                "intersectingPixels": 0,
+                "excludedUnboundedPixels": 127,
+                "boundedSurfaceEnvelopeM": [
+                  -0.9140813644405762,
+                  3.0694234977364143,
+                  2.6655552130135423,
+                  0.8535973875655098,
+                  3.8150699099971304,
+                  3.013427971583304
+                ]
+              }
+            },
+            {
+              "id": 2,
+              "confirmed": true,
+              "hits": 3,
+              "misses": 0,
+              "geometry": "broadSurface",
+              "zone": "center",
+              "pixelCount": 15728,
+              "proximity": 1.0,
+              "approachTrend": 0.06826621294021606,
+              "proximityHistory": [
+                0.9317337870597839,
+                1.0,
+                1.0
+              ],
+              "bounds": [
+                0.2890625,
+                0.1796875,
+                0.7109375,
+                1.0
+              ],
+              "supportSha256": "095f6fdbf174188a7a30500632b3d29ee21bb2960530f4f1e5c0f9269b179b20",
+              "association": {
+                "relation": "unknown",
+                "reason": "motion_or_semantic_priority",
+                "checkedPixels": 0,
+                "unknownPixels": 0,
+                "intersectingPixels": 0,
+                "excludedUnboundedPixels": 0,
+                "boundedSurfaceEnvelopeM": null
+              }
+            }
+          ],
+          "action": "stopNow",
+          "ruleId": "SPATIAL-P0-IMMINENT",
+          "plannerState": "emergencyStop",
+          "plannerPreviousState": "holdingForScan",
+          "plannerForward": {
+            "observedFraction": 0.0,
+            "unknownRisk": 1.0,
+            "collisionRisk": 1.0,
+            "movingThreatRisk": 0.2047986388206482,
+            "dropRisk": 0.0,
+            "positiveEvidencePassed": false,
+            "rejectionReasons": [
+              "insufficientObservedWidth",
+              "unknownArea",
+              "confirmedObstacle"
+            ]
+          }
+        },
+        {
+          "frameId": 13,
+          "captureOffsetUs": 2400000,
+          "rgbSha256": "c4ad8a6bf7a5a28eb0b59dee6902d709fe899ae68e0ec5841d92e29cf5ff5e77",
+          "physicalHazard": false,
+          "sufficientObservationLabel": true,
+          "userMoving": true,
+          "pose": {
+            "rotation": [
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              -0.05233597382903099,
+              0.9986295104026794,
+              0.0,
+              -0.9986295104026794,
+              -0.05233597382903099
+            ],
+            "originM": [
+              0.0,
+              0.0,
+              1.45
+            ]
+          },
+          "oldestEvidenceTimestampUs": 1790899200200000,
+          "producer": [],
+          "sections": [
+            {
+              "startM": 0.2,
+              "endM": 0.35,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.35,
+              "endM": 0.5,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.5,
+              "endM": 0.6499999999999999,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.6499999999999999,
+              "endM": 0.8,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.8,
+              "endM": 0.95,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.95,
+              "endM": 1.0999999999999999,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.0999999999999999,
+              "endM": 1.2499999999999998,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.2499999999999998,
+              "endM": 1.4,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.4,
+              "endM": 1.5499999999999998,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.5499999999999998,
+              "endM": 1.7,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.7,
+              "endM": 1.8499999999999999,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.8499999999999999,
+              "endM": 1.9999999999999998,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.9999999999999998,
+              "endM": 2.15,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.15,
+              "endM": 2.3,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.3,
+              "endM": 2.45,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.45,
+              "endM": 2.6,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.6,
+              "endM": 2.75,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.75,
+              "endM": 2.9,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.9,
+              "endM": 3.05,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 3.05,
+              "endM": 3.2,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 3.2,
+              "endM": 3.35,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 3.35,
+              "endM": 3.5,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            }
+          ],
+          "passage": {
+            "status": "measuredClear",
+            "reasons": [],
+            "minimumWidthLowerBoundM": 0.9,
+            "minimumHeadroomLowerBoundM": 1.8,
+            "minimumEvidenceConfidence": 1.0,
+            "validUntilUs": 1790899203200000,
+            "sessionGeneration": 1,
+            "frameId": 13,
+            "evaluatedAtUs": 1790899202402000,
+            "timestampDomain": "utcEpochMicroseconds",
+            "referenceFrameId": "synthetic-walking-frame-v1"
+          },
+          "runtimePassage": {
+            "status": "measuredClear",
+            "reasons": [],
+            "minimumWidthLowerBoundM": 0.9,
+            "minimumHeadroomLowerBoundM": 1.8,
+            "minimumEvidenceConfidence": 1.0,
+            "validUntilUs": 1790899203200000,
+            "sessionGeneration": 1,
+            "frameId": 13,
+            "evaluatedAtUs": 1790899202402000,
+            "timestampDomain": "utcEpochMicroseconds",
+            "referenceFrameId": "synthetic-walking-frame-v1"
+          },
+          "runtimePassageApplied": true,
+          "groundConfidence": 0.75,
+          "groundDisagreementPixels": 3864,
+          "detectorReject": "none",
+          "unknownReasons": [
+            "groundModelDisagreement"
+          ],
+          "tracks": [
+            {
+              "id": 1,
+              "confirmed": true,
+              "hits": 4,
+              "misses": 0,
+              "geometry": "overhead",
+              "zone": "center",
+              "pixelCount": 923,
+              "proximity": 0.735005795955658,
+              "approachTrend": 0.0,
+              "proximityHistory": [
+                0.735005795955658,
+                0.735005795955658,
+                0.735005795955658,
+                0.735005795955658
+              ],
+              "bounds": [
+                0.30078125,
+                0.0,
+                0.6875,
+                0.0546875
+              ],
+              "supportSha256": "9e8f3e1c2b9d2989b809744edfa54e78d0ffcfa2f4620b822e39a0e13cfc6b2f",
+              "association": {
+                "relation": "outsidePassage",
+                "reason": "all_first_surface_footprints_outside",
+                "checkedPixels": 1891,
+                "unknownPixels": 0,
+                "intersectingPixels": 0,
+                "excludedUnboundedPixels": 127,
+                "boundedSurfaceEnvelopeM": [
+                  -0.9140813644405762,
+                  3.0694234977364143,
+                  2.6655552130135423,
+                  0.8535973875655098,
+                  3.8150699099971304,
+                  3.013427971583304
+                ]
+              }
+            },
+            {
+              "id": 2,
+              "confirmed": true,
+              "hits": 4,
+              "misses": 0,
+              "geometry": "broadSurface",
+              "zone": "center",
+              "pixelCount": 16745,
+              "proximity": 1.0,
+              "approachTrend": 0.06826621294021606,
+              "proximityHistory": [
+                0.9317337870597839,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "bounds": [
+                0.2890625,
+                0.1796875,
+                0.7109375,
+                1.0
+              ],
+              "supportSha256": "43ed9d58c6a5e1c3953889f411f4de6a9d732c6563031b86570f0bfdfe8d2204",
+              "association": {
+                "relation": "unknown",
+                "reason": "motion_or_semantic_priority",
+                "checkedPixels": 0,
+                "unknownPixels": 0,
+                "intersectingPixels": 0,
+                "excludedUnboundedPixels": 0,
+                "boundedSurfaceEnvelopeM": null
+              }
+            }
+          ],
+          "action": "stopNow",
+          "ruleId": "SPATIAL-P0-IMMINENT",
+          "plannerState": "emergencyStop",
+          "plannerPreviousState": "emergencyStop",
+          "plannerForward": {
+            "observedFraction": 0.0,
+            "unknownRisk": 1.0,
+            "collisionRisk": 1.0,
+            "movingThreatRisk": 0.2047986388206482,
+            "dropRisk": 0.0,
+            "positiveEvidencePassed": false,
+            "rejectionReasons": [
+              "insufficientObservedWidth",
+              "unknownArea",
+              "confirmedObstacle"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "frameId": 13,
+        "captureOffsetUs": 2400000,
+        "rgbSha256": "c4ad8a6bf7a5a28eb0b59dee6902d709fe899ae68e0ec5841d92e29cf5ff5e77",
+        "physicalHazard": false,
+        "sufficientObservationLabel": true,
+        "userMoving": true,
+        "pose": {
+          "rotation": [
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            -0.05233597382903099,
+            0.9986295104026794,
+            0.0,
+            -0.9986295104026794,
+            -0.05233597382903099
+          ],
+          "originM": [
+            0.0,
+            0.0,
+            1.45
+          ]
+        },
+        "oldestEvidenceTimestampUs": 1790899200200000,
+        "producer": [],
+        "sections": [
+          {
+            "startM": 0.2,
+            "endM": 0.35,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 0.35,
+            "endM": 0.5,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 0.5,
+            "endM": 0.6499999999999999,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 0.6499999999999999,
+            "endM": 0.8,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 0.8,
+            "endM": 0.95,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 0.95,
+            "endM": 1.0999999999999999,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 1.0999999999999999,
+            "endM": 1.2499999999999998,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 1.2499999999999998,
+            "endM": 1.4,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 1.4,
+            "endM": 1.5499999999999998,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 1.5499999999999998,
+            "endM": 1.7,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 1.7,
+            "endM": 1.8499999999999999,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 1.8499999999999999,
+            "endM": 1.9999999999999998,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 1.9999999999999998,
+            "endM": 2.15,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 2.15,
+            "endM": 2.3,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 2.3,
+            "endM": 2.45,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 2.45,
+            "endM": 2.6,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 2.6,
+            "endM": 2.75,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 2.75,
+            "endM": 2.9,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 2.9,
+            "endM": 3.05,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 3.05,
+            "endM": 3.2,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 3.2,
+            "endM": 3.35,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 3.35,
+            "endM": 3.5,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          }
+        ],
+        "passage": {
+          "status": "measuredClear",
+          "reasons": [],
+          "minimumWidthLowerBoundM": 0.9,
+          "minimumHeadroomLowerBoundM": 1.8,
+          "minimumEvidenceConfidence": 1.0,
+          "validUntilUs": 1790899203200000,
+          "sessionGeneration": 1,
+          "frameId": 13,
+          "evaluatedAtUs": 1790899202402000,
+          "timestampDomain": "utcEpochMicroseconds",
+          "referenceFrameId": "synthetic-walking-frame-v1"
+        },
+        "runtimePassage": {
+          "status": "measuredClear",
+          "reasons": [],
+          "minimumWidthLowerBoundM": 0.9,
+          "minimumHeadroomLowerBoundM": 1.8,
+          "minimumEvidenceConfidence": 1.0,
+          "validUntilUs": 1790899203200000,
+          "sessionGeneration": 1,
+          "frameId": 13,
+          "evaluatedAtUs": 1790899202402000,
+          "timestampDomain": "utcEpochMicroseconds",
+          "referenceFrameId": "synthetic-walking-frame-v1"
+        },
+        "runtimePassageApplied": true,
+        "groundConfidence": 0.75,
+        "groundDisagreementPixels": 3864,
+        "detectorReject": "none",
+        "unknownReasons": [
+          "groundModelDisagreement"
+        ],
+        "tracks": [
+          {
+            "id": 1,
+            "confirmed": true,
+            "hits": 4,
+            "misses": 0,
+            "geometry": "overhead",
+            "zone": "center",
+            "pixelCount": 923,
+            "proximity": 0.735005795955658,
+            "approachTrend": 0.0,
+            "proximityHistory": [
+              0.735005795955658,
+              0.735005795955658,
+              0.735005795955658,
+              0.735005795955658
+            ],
+            "bounds": [
+              0.30078125,
+              0.0,
+              0.6875,
+              0.0546875
+            ],
+            "supportSha256": "9e8f3e1c2b9d2989b809744edfa54e78d0ffcfa2f4620b822e39a0e13cfc6b2f",
+            "association": {
+              "relation": "outsidePassage",
+              "reason": "all_first_surface_footprints_outside",
+              "checkedPixels": 1891,
+              "unknownPixels": 0,
+              "intersectingPixels": 0,
+              "excludedUnboundedPixels": 127,
+              "boundedSurfaceEnvelopeM": [
+                -0.9140813644405762,
+                3.0694234977364143,
+                2.6655552130135423,
+                0.8535973875655098,
+                3.8150699099971304,
+                3.013427971583304
+              ]
+            }
+          },
+          {
+            "id": 2,
+            "confirmed": true,
+            "hits": 4,
+            "misses": 0,
+            "geometry": "broadSurface",
+            "zone": "center",
+            "pixelCount": 16745,
+            "proximity": 1.0,
+            "approachTrend": 0.06826621294021606,
+            "proximityHistory": [
+              0.9317337870597839,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "bounds": [
+              0.2890625,
+              0.1796875,
+              0.7109375,
+              1.0
+            ],
+            "supportSha256": "43ed9d58c6a5e1c3953889f411f4de6a9d732c6563031b86570f0bfdfe8d2204",
+            "association": {
+              "relation": "unknown",
+              "reason": "motion_or_semantic_priority",
+              "checkedPixels": 0,
+              "unknownPixels": 0,
+              "intersectingPixels": 0,
+              "excludedUnboundedPixels": 0,
+              "boundedSurfaceEnvelopeM": null
+            }
+          }
+        ],
+        "action": "stopNow",
+        "ruleId": "SPATIAL-P0-IMMINENT",
+        "plannerState": "emergencyStop",
+        "plannerPreviousState": "emergencyStop",
+        "plannerForward": {
+          "observedFraction": 0.0,
+          "unknownRisk": 1.0,
+          "collisionRisk": 1.0,
+          "movingThreatRisk": 0.2047986388206482,
+          "dropRisk": 0.0,
+          "positiveEvidencePassed": false,
+          "rejectionReasons": [
+            "insufficientObservedWidth",
+            "unknownArea",
+            "confirmedObstacle"
+          ]
+        }
+      }
+    },
+    {
+      "layoutId": "test-association-wide-08",
+      "split": "known-regression",
+      "mode": "associated-stable",
+      "staticSyntheticScan": true,
+      "physicalHazard": false,
+      "hazardSteps": 0,
+      "heldHazardSteps": 0,
+      "criticalOnsetOffsetUs": 0,
+      "firstHazardStopOffsetUs": null,
+      "hazardOnsetAlreadyStopped": false,
+      "onTimeStop": false,
+      "unsafeContinueSteps": 0,
+      "unjustifiedClearances": 0,
+      "positiveApproachTrackSteps": 0,
+      "maximumApproachTrend": 0.0,
+      "scanDurationUs": 2000000,
+      "decisions": [
+        {
+          "frameId": 1,
+          "captureOffsetUs": 0,
+          "rgbSha256": "c4ad8a6bf7a5a28eb0b59dee6902d709fe899ae68e0ec5841d92e29cf5ff5e77",
+          "physicalHazard": false,
+          "sufficientObservationLabel": false,
+          "userMoving": true,
+          "pose": {
+            "rotation": [
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              -0.05233597382903099,
+              0.9986295104026794,
+              0.0,
+              -0.9986295104026794,
+              -0.05233597382903099
+            ],
+            "originM": [
+              0.0,
+              0.0,
+              1.45
+            ]
+          },
+          "oldestEvidenceTimestampUs": 1790899200000000,
+          "producer": [],
+          "sections": [
+            {
+              "startM": 0.2,
+              "endM": 0.35,
+              "state": "unknown",
+              "bodyObservedFraction": 0.0,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 0.35,
+              "endM": 0.5,
+              "state": "unknown",
+              "bodyObservedFraction": 0.05555555555555555,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 0.5,
+              "endM": 0.6499999999999999,
+              "state": "unknown",
+              "bodyObservedFraction": 0.1111111111111111,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 0.6499999999999999,
+              "endM": 0.8,
+              "state": "unknown",
+              "bodyObservedFraction": 0.2777777777777778,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 0.8,
+              "endM": 0.95,
+              "state": "unknown",
+              "bodyObservedFraction": 0.3333333333333333,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 0.95,
+              "endM": 1.0999999999999999,
+              "state": "unknown",
+              "bodyObservedFraction": 0.5,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 1.0999999999999999,
+              "endM": 1.2499999999999998,
+              "state": "unknown",
+              "bodyObservedFraction": 0.5,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 1.2499999999999998,
+              "endM": 1.4,
+              "state": "unknown",
+              "bodyObservedFraction": 0.5833333333333334,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 1.4,
+              "endM": 1.5499999999999998,
+              "state": "unknown",
+              "bodyObservedFraction": 0.6666666666666666,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 1.5499999999999998,
+              "endM": 1.7,
+              "state": "unknown",
+              "bodyObservedFraction": 0.6666666666666666,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 1.7,
+              "endM": 1.8499999999999999,
+              "state": "unknown",
+              "bodyObservedFraction": 0.75,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 1.8499999999999999,
+              "endM": 1.9999999999999998,
+              "state": "unknown",
+              "bodyObservedFraction": 0.75,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 1.9999999999999998,
+              "endM": 2.15,
+              "state": "unknown",
+              "bodyObservedFraction": 0.8333333333333334,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 2.15,
+              "endM": 2.3,
+              "state": "unknown",
+              "bodyObservedFraction": 0.9166666666666666,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 2.3,
+              "endM": 2.45,
+              "state": "unknown",
+              "bodyObservedFraction": 0.9166666666666666,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 2.45,
+              "endM": 2.6,
+              "state": "unknown",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 0.0,
+              "leftUpperM": null,
+              "rightLowerM": null,
+              "headroomLowerM": null,
+              "floorRiseUpperM": null,
+              "floorDropUpperM": null
+            },
+            {
+              "startM": 2.6,
+              "endM": 2.75,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.75,
+              "endM": 2.9,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.9,
+              "endM": 3.05,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 3.05,
+              "endM": 3.2,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 3.2,
+              "endM": 3.35,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 3.35,
+              "endM": 3.5,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            }
+          ],
+          "passage": {
+            "status": "unavailable",
+            "reasons": [
+              "unobservedBody",
+              "unobservedFloor",
+              "missingMeasurements"
+            ],
+            "minimumWidthLowerBoundM": 0.9,
+            "minimumHeadroomLowerBoundM": 1.8,
+            "minimumEvidenceConfidence": 1.0,
+            "validUntilUs": 1790899203000000,
+            "sessionGeneration": 1,
+            "frameId": 1,
+            "evaluatedAtUs": 1790899200002000,
+            "timestampDomain": "utcEpochMicroseconds",
+            "referenceFrameId": "synthetic-walking-frame-v1"
+          },
+          "runtimePassage": {
+            "status": "unavailable",
+            "reasons": [
+              "unobservedBody",
+              "unobservedFloor",
+              "missingMeasurements"
+            ],
+            "minimumWidthLowerBoundM": 0.9,
+            "minimumHeadroomLowerBoundM": 1.8,
+            "minimumEvidenceConfidence": 1.0,
+            "validUntilUs": 1790899203000000,
+            "sessionGeneration": 1,
+            "frameId": 1,
+            "evaluatedAtUs": 1790899200002000,
+            "timestampDomain": "utcEpochMicroseconds",
+            "referenceFrameId": "synthetic-walking-frame-v1"
+          },
+          "runtimePassageApplied": false,
+          "groundConfidence": 0.703125,
+          "groundDisagreementPixels": 0,
+          "detectorReject": "none",
+          "unknownReasons": [],
+          "tracks": [
+            {
+              "id": 1,
+              "confirmed": false,
+              "hits": 1,
+              "misses": 0,
+              "geometry": "overhead",
+              "zone": "center",
+              "pixelCount": 923,
+              "proximity": 0.735005795955658,
+              "approachTrend": 0.0,
+              "proximityHistory": [
+                0.735005795955658
+              ],
+              "bounds": [
+                0.30078125,
+                0.0,
+                0.6875,
+                0.0546875
+              ],
+              "supportSha256": "9e8f3e1c2b9d2989b809744edfa54e78d0ffcfa2f4620b822e39a0e13cfc6b2f",
+              "association": {
+                "relation": "outsidePassage",
+                "reason": "all_first_surface_footprints_outside",
+                "checkedPixels": 1891,
+                "unknownPixels": 0,
+                "intersectingPixels": 0,
+                "excludedUnboundedPixels": 127,
+                "boundedSurfaceEnvelopeM": [
+                  -0.9140813644405762,
+                  3.0694234977364143,
+                  2.6655552130135423,
+                  0.8535973875655098,
+                  3.8150699099971304,
+                  3.013427971583304
+                ]
+              }
+            },
+            {
+              "id": 2,
+              "confirmed": false,
+              "hits": 1,
+              "misses": 0,
+              "geometry": "broadSurface",
+              "zone": "center",
+              "pixelCount": 13561,
+              "proximity": 0.9317337870597839,
+              "approachTrend": 0.0,
+              "proximityHistory": [
+                0.9317337870597839
+              ],
+              "bounds": [
+                0.2890625,
+                0.1796875,
+                0.7109375,
+                0.91015625
+              ],
+              "supportSha256": "3fb9b99fa788e8edcbc31de67de98572174926919ec6e5211201567d55e7b1fd",
+              "association": {
+                "relation": "outsidePassage",
+                "reason": "all_first_surface_footprints_outside",
+                "checkedPixels": 24495,
+                "unknownPixels": 0,
+                "intersectingPixels": 0,
+                "excludedUnboundedPixels": 1091,
+                "boundedSurfaceEnvelopeM": [
+                  -1.312810192320167,
+                  2.9212825078674194,
+                  -0.019456769785884953,
+                  1.312810192320167,
+                  5.401041705048996,
+                  2.668027073232146
+                ]
+              }
+            }
+          ],
+          "action": "stopNow",
+          "ruleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "plannerState": "emergencyStop",
+          "plannerPreviousState": "observing",
+          "plannerForward": {
+            "observedFraction": 0.0,
+            "unknownRisk": 1.0,
+            "collisionRisk": 0.0,
+            "movingThreatRisk": 0.0,
+            "dropRisk": 0.0,
+            "positiveEvidencePassed": false,
+            "rejectionReasons": [
+              "insufficientObservedWidth",
+              "unknownArea",
+              "surfaceNotContinuous"
+            ]
+          }
+        },
+        {
+          "frameId": 11,
+          "captureOffsetUs": 2000000,
+          "rgbSha256": "c4ad8a6bf7a5a28eb0b59dee6902d709fe899ae68e0ec5841d92e29cf5ff5e77",
+          "physicalHazard": false,
+          "sufficientObservationLabel": true,
+          "userMoving": false,
+          "pose": {
+            "rotation": [
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              -0.05233597382903099,
+              0.9986295104026794,
+              0.0,
+              -0.9986295104026794,
+              -0.05233597382903099
+            ],
+            "originM": [
+              0.0,
+              0.0,
+              1.45
+            ]
+          },
+          "oldestEvidenceTimestampUs": 1790899200200000,
+          "producer": [],
+          "sections": [
+            {
+              "startM": 0.2,
+              "endM": 0.35,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.35,
+              "endM": 0.5,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.5,
+              "endM": 0.6499999999999999,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.6499999999999999,
+              "endM": 0.8,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.8,
+              "endM": 0.95,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.95,
+              "endM": 1.0999999999999999,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.0999999999999999,
+              "endM": 1.2499999999999998,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.2499999999999998,
+              "endM": 1.4,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.4,
+              "endM": 1.5499999999999998,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.5499999999999998,
+              "endM": 1.7,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.7,
+              "endM": 1.8499999999999999,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.8499999999999999,
+              "endM": 1.9999999999999998,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.9999999999999998,
+              "endM": 2.15,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.15,
+              "endM": 2.3,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.3,
+              "endM": 2.45,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.45,
+              "endM": 2.6,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.6,
+              "endM": 2.75,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.75,
+              "endM": 2.9,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.9,
+              "endM": 3.05,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 3.05,
+              "endM": 3.2,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 3.2,
+              "endM": 3.35,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 3.35,
+              "endM": 3.5,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            }
+          ],
+          "passage": {
+            "status": "measuredClear",
+            "reasons": [],
+            "minimumWidthLowerBoundM": 0.9,
+            "minimumHeadroomLowerBoundM": 1.8,
+            "minimumEvidenceConfidence": 1.0,
+            "validUntilUs": 1790899203200000,
+            "sessionGeneration": 1,
+            "frameId": 11,
+            "evaluatedAtUs": 1790899202002000,
+            "timestampDomain": "utcEpochMicroseconds",
+            "referenceFrameId": "synthetic-walking-frame-v1"
+          },
+          "runtimePassage": {
+            "status": "measuredClear",
+            "reasons": [],
+            "minimumWidthLowerBoundM": 0.9,
+            "minimumHeadroomLowerBoundM": 1.8,
+            "minimumEvidenceConfidence": 1.0,
+            "validUntilUs": 1790899203200000,
+            "sessionGeneration": 1,
+            "frameId": 11,
+            "evaluatedAtUs": 1790899202002000,
+            "timestampDomain": "utcEpochMicroseconds",
+            "referenceFrameId": "synthetic-walking-frame-v1"
+          },
+          "runtimePassageApplied": true,
+          "groundConfidence": 0.703125,
+          "groundDisagreementPixels": 0,
+          "detectorReject": "none",
+          "unknownReasons": [],
+          "tracks": [
+            {
+              "id": 1,
+              "confirmed": false,
+              "hits": 2,
+              "misses": 0,
+              "geometry": "overhead",
+              "zone": "center",
+              "pixelCount": 923,
+              "proximity": 0.735005795955658,
+              "approachTrend": 0.0,
+              "proximityHistory": [
+                0.735005795955658,
+                0.735005795955658
+              ],
+              "bounds": [
+                0.30078125,
+                0.0,
+                0.6875,
+                0.0546875
+              ],
+              "supportSha256": "9e8f3e1c2b9d2989b809744edfa54e78d0ffcfa2f4620b822e39a0e13cfc6b2f",
+              "association": {
+                "relation": "outsidePassage",
+                "reason": "all_first_surface_footprints_outside",
+                "checkedPixels": 1891,
+                "unknownPixels": 0,
+                "intersectingPixels": 0,
+                "excludedUnboundedPixels": 127,
+                "boundedSurfaceEnvelopeM": [
+                  -0.9140813644405762,
+                  3.0694234977364143,
+                  2.6655552130135423,
+                  0.8535973875655098,
+                  3.8150699099971304,
+                  3.013427971583304
+                ]
+              }
+            },
+            {
+              "id": 2,
+              "confirmed": false,
+              "hits": 2,
+              "misses": 0,
+              "geometry": "broadSurface",
+              "zone": "center",
+              "pixelCount": 13561,
+              "proximity": 0.9317337870597839,
+              "approachTrend": 0.0,
+              "proximityHistory": [
+                0.9317337870597839,
+                0.9317337870597839
+              ],
+              "bounds": [
+                0.2890625,
+                0.1796875,
+                0.7109375,
+                0.91015625
+              ],
+              "supportSha256": "3fb9b99fa788e8edcbc31de67de98572174926919ec6e5211201567d55e7b1fd",
+              "association": {
+                "relation": "outsidePassage",
+                "reason": "all_first_surface_footprints_outside",
+                "checkedPixels": 24495,
+                "unknownPixels": 0,
+                "intersectingPixels": 0,
+                "excludedUnboundedPixels": 1091,
+                "boundedSurfaceEnvelopeM": [
+                  -1.312810192320167,
+                  2.9212825078674194,
+                  -0.019456769785884953,
+                  1.312810192320167,
+                  5.401041705048996,
+                  2.668027073232146
+                ]
+              }
+            }
+          ],
+          "action": "holdAndScan",
+          "ruleId": "SPATIAL-P2-POST-STOP-SCAN",
+          "plannerState": "holdingForScan",
+          "plannerPreviousState": "emergencyStop",
+          "plannerForward": {
+            "observedFraction": 1.0,
+            "unknownRisk": 0.0,
+            "collisionRisk": 0.0,
+            "movingThreatRisk": 0.0,
+            "dropRisk": 0.0,
+            "positiveEvidencePassed": true,
+            "rejectionReasons": []
+          }
+        },
+        {
+          "frameId": 12,
+          "captureOffsetUs": 2200000,
+          "rgbSha256": "c4ad8a6bf7a5a28eb0b59dee6902d709fe899ae68e0ec5841d92e29cf5ff5e77",
+          "physicalHazard": false,
+          "sufficientObservationLabel": true,
+          "userMoving": false,
+          "pose": {
+            "rotation": [
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              -0.05233597382903099,
+              0.9986295104026794,
+              0.0,
+              -0.9986295104026794,
+              -0.05233597382903099
+            ],
+            "originM": [
+              0.0,
+              0.0,
+              1.45
+            ]
+          },
+          "oldestEvidenceTimestampUs": 1790899200200000,
+          "producer": [],
+          "sections": [
+            {
+              "startM": 0.2,
+              "endM": 0.35,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.35,
+              "endM": 0.5,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.5,
+              "endM": 0.6499999999999999,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.6499999999999999,
+              "endM": 0.8,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.8,
+              "endM": 0.95,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.95,
+              "endM": 1.0999999999999999,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.0999999999999999,
+              "endM": 1.2499999999999998,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.2499999999999998,
+              "endM": 1.4,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.4,
+              "endM": 1.5499999999999998,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.5499999999999998,
+              "endM": 1.7,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.7,
+              "endM": 1.8499999999999999,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.8499999999999999,
+              "endM": 1.9999999999999998,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.9999999999999998,
+              "endM": 2.15,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.15,
+              "endM": 2.3,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.3,
+              "endM": 2.45,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.45,
+              "endM": 2.6,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.6,
+              "endM": 2.75,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.75,
+              "endM": 2.9,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.9,
+              "endM": 3.05,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 3.05,
+              "endM": 3.2,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 3.2,
+              "endM": 3.35,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 3.35,
+              "endM": 3.5,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            }
+          ],
+          "passage": {
+            "status": "measuredClear",
+            "reasons": [],
+            "minimumWidthLowerBoundM": 0.9,
+            "minimumHeadroomLowerBoundM": 1.8,
+            "minimumEvidenceConfidence": 1.0,
+            "validUntilUs": 1790899203200000,
+            "sessionGeneration": 1,
+            "frameId": 12,
+            "evaluatedAtUs": 1790899202202000,
+            "timestampDomain": "utcEpochMicroseconds",
+            "referenceFrameId": "synthetic-walking-frame-v1"
+          },
+          "runtimePassage": {
+            "status": "measuredClear",
+            "reasons": [],
+            "minimumWidthLowerBoundM": 0.9,
+            "minimumHeadroomLowerBoundM": 1.8,
+            "minimumEvidenceConfidence": 1.0,
+            "validUntilUs": 1790899203200000,
+            "sessionGeneration": 1,
+            "frameId": 12,
+            "evaluatedAtUs": 1790899202202000,
+            "timestampDomain": "utcEpochMicroseconds",
+            "referenceFrameId": "synthetic-walking-frame-v1"
+          },
+          "runtimePassageApplied": true,
+          "groundConfidence": 0.703125,
+          "groundDisagreementPixels": 0,
+          "detectorReject": "none",
+          "unknownReasons": [],
+          "tracks": [
+            {
+              "id": 1,
+              "confirmed": true,
+              "hits": 3,
+              "misses": 0,
+              "geometry": "overhead",
+              "zone": "center",
+              "pixelCount": 923,
+              "proximity": 0.735005795955658,
+              "approachTrend": 0.0,
+              "proximityHistory": [
+                0.735005795955658,
+                0.735005795955658,
+                0.735005795955658
+              ],
+              "bounds": [
+                0.30078125,
+                0.0,
+                0.6875,
+                0.0546875
+              ],
+              "supportSha256": "9e8f3e1c2b9d2989b809744edfa54e78d0ffcfa2f4620b822e39a0e13cfc6b2f",
+              "association": {
+                "relation": "outsidePassage",
+                "reason": "all_first_surface_footprints_outside",
+                "checkedPixels": 1891,
+                "unknownPixels": 0,
+                "intersectingPixels": 0,
+                "excludedUnboundedPixels": 127,
+                "boundedSurfaceEnvelopeM": [
+                  -0.9140813644405762,
+                  3.0694234977364143,
+                  2.6655552130135423,
+                  0.8535973875655098,
+                  3.8150699099971304,
+                  3.013427971583304
+                ]
+              }
+            },
+            {
+              "id": 2,
+              "confirmed": true,
+              "hits": 3,
+              "misses": 0,
+              "geometry": "broadSurface",
+              "zone": "center",
+              "pixelCount": 13561,
+              "proximity": 0.9317337870597839,
+              "approachTrend": 0.0,
+              "proximityHistory": [
+                0.9317337870597839,
+                0.9317337870597839,
+                0.9317337870597839
+              ],
+              "bounds": [
+                0.2890625,
+                0.1796875,
+                0.7109375,
+                0.91015625
+              ],
+              "supportSha256": "3fb9b99fa788e8edcbc31de67de98572174926919ec6e5211201567d55e7b1fd",
+              "association": {
+                "relation": "outsidePassage",
+                "reason": "all_first_surface_footprints_outside",
+                "checkedPixels": 24495,
+                "unknownPixels": 0,
+                "intersectingPixels": 0,
+                "excludedUnboundedPixels": 1091,
+                "boundedSurfaceEnvelopeM": [
+                  -1.312810192320167,
+                  2.9212825078674194,
+                  -0.019456769785884953,
+                  1.312810192320167,
+                  5.401041705048996,
+                  2.668027073232146
+                ]
+              }
+            }
+          ],
+          "action": "continueForward",
+          "ruleId": "SPATIAL-P3-NO-CHANGE",
+          "plannerState": "observing",
+          "plannerPreviousState": "holdingForScan",
+          "plannerForward": {
+            "observedFraction": 1.0,
+            "unknownRisk": 0.0,
+            "collisionRisk": 0.0,
+            "movingThreatRisk": 0.0,
+            "dropRisk": 0.0,
+            "positiveEvidencePassed": true,
+            "rejectionReasons": []
+          }
+        },
+        {
+          "frameId": 13,
+          "captureOffsetUs": 2400000,
+          "rgbSha256": "c4ad8a6bf7a5a28eb0b59dee6902d709fe899ae68e0ec5841d92e29cf5ff5e77",
+          "physicalHazard": false,
+          "sufficientObservationLabel": true,
+          "userMoving": true,
+          "pose": {
+            "rotation": [
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              -0.05233597382903099,
+              0.9986295104026794,
+              0.0,
+              -0.9986295104026794,
+              -0.05233597382903099
+            ],
+            "originM": [
+              0.0,
+              0.0,
+              1.45
+            ]
+          },
+          "oldestEvidenceTimestampUs": 1790899200200000,
+          "producer": [],
+          "sections": [
+            {
+              "startM": 0.2,
+              "endM": 0.35,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.35,
+              "endM": 0.5,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.5,
+              "endM": 0.6499999999999999,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.6499999999999999,
+              "endM": 0.8,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.8,
+              "endM": 0.95,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 0.95,
+              "endM": 1.0999999999999999,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.0999999999999999,
+              "endM": 1.2499999999999998,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.2499999999999998,
+              "endM": 1.4,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.4,
+              "endM": 1.5499999999999998,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.5499999999999998,
+              "endM": 1.7,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.7,
+              "endM": 1.8499999999999999,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.8499999999999999,
+              "endM": 1.9999999999999998,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 1.9999999999999998,
+              "endM": 2.15,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.15,
+              "endM": 2.3,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.3,
+              "endM": 2.45,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.45,
+              "endM": 2.6,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.6,
+              "endM": 2.75,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.75,
+              "endM": 2.9,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 2.9,
+              "endM": 3.05,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 3.05,
+              "endM": 3.2,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 3.2,
+              "endM": 3.35,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            },
+            {
+              "startM": 3.35,
+              "endM": 3.5,
+              "state": "measured",
+              "bodyObservedFraction": 1.0,
+              "floorObservedFraction": 1.0,
+              "leftUpperM": -0.45,
+              "rightLowerM": 0.45,
+              "headroomLowerM": 1.8,
+              "floorRiseUpperM": 0.05,
+              "floorDropUpperM": 0.05
+            }
+          ],
+          "passage": {
+            "status": "measuredClear",
+            "reasons": [],
+            "minimumWidthLowerBoundM": 0.9,
+            "minimumHeadroomLowerBoundM": 1.8,
+            "minimumEvidenceConfidence": 1.0,
+            "validUntilUs": 1790899203200000,
+            "sessionGeneration": 1,
+            "frameId": 13,
+            "evaluatedAtUs": 1790899202402000,
+            "timestampDomain": "utcEpochMicroseconds",
+            "referenceFrameId": "synthetic-walking-frame-v1"
+          },
+          "runtimePassage": {
+            "status": "measuredClear",
+            "reasons": [],
+            "minimumWidthLowerBoundM": 0.9,
+            "minimumHeadroomLowerBoundM": 1.8,
+            "minimumEvidenceConfidence": 1.0,
+            "validUntilUs": 1790899203200000,
+            "sessionGeneration": 1,
+            "frameId": 13,
+            "evaluatedAtUs": 1790899202402000,
+            "timestampDomain": "utcEpochMicroseconds",
+            "referenceFrameId": "synthetic-walking-frame-v1"
+          },
+          "runtimePassageApplied": true,
+          "groundConfidence": 0.703125,
+          "groundDisagreementPixels": 0,
+          "detectorReject": "none",
+          "unknownReasons": [],
+          "tracks": [
+            {
+              "id": 1,
+              "confirmed": true,
+              "hits": 4,
+              "misses": 0,
+              "geometry": "overhead",
+              "zone": "center",
+              "pixelCount": 923,
+              "proximity": 0.735005795955658,
+              "approachTrend": 0.0,
+              "proximityHistory": [
+                0.735005795955658,
+                0.735005795955658,
+                0.735005795955658,
+                0.735005795955658
+              ],
+              "bounds": [
+                0.30078125,
+                0.0,
+                0.6875,
+                0.0546875
+              ],
+              "supportSha256": "9e8f3e1c2b9d2989b809744edfa54e78d0ffcfa2f4620b822e39a0e13cfc6b2f",
+              "association": {
+                "relation": "outsidePassage",
+                "reason": "all_first_surface_footprints_outside",
+                "checkedPixels": 1891,
+                "unknownPixels": 0,
+                "intersectingPixels": 0,
+                "excludedUnboundedPixels": 127,
+                "boundedSurfaceEnvelopeM": [
+                  -0.9140813644405762,
+                  3.0694234977364143,
+                  2.6655552130135423,
+                  0.8535973875655098,
+                  3.8150699099971304,
+                  3.013427971583304
+                ]
+              }
+            },
+            {
+              "id": 2,
+              "confirmed": true,
+              "hits": 4,
+              "misses": 0,
+              "geometry": "broadSurface",
+              "zone": "center",
+              "pixelCount": 13561,
+              "proximity": 0.9317337870597839,
+              "approachTrend": 0.0,
+              "proximityHistory": [
+                0.9317337870597839,
+                0.9317337870597839,
+                0.9317337870597839,
+                0.9317337870597839
+              ],
+              "bounds": [
+                0.2890625,
+                0.1796875,
+                0.7109375,
+                0.91015625
+              ],
+              "supportSha256": "3fb9b99fa788e8edcbc31de67de98572174926919ec6e5211201567d55e7b1fd",
+              "association": {
+                "relation": "outsidePassage",
+                "reason": "all_first_surface_footprints_outside",
+                "checkedPixels": 24495,
+                "unknownPixels": 0,
+                "intersectingPixels": 0,
+                "excludedUnboundedPixels": 1091,
+                "boundedSurfaceEnvelopeM": [
+                  -1.312810192320167,
+                  2.9212825078674194,
+                  -0.019456769785884953,
+                  1.312810192320167,
+                  5.401041705048996,
+                  2.668027073232146
+                ]
+              }
+            }
+          ],
+          "action": "continueForward",
+          "ruleId": "SPATIAL-P3-NO-CHANGE",
+          "plannerState": "movingStable",
+          "plannerPreviousState": "observing",
+          "plannerForward": {
+            "observedFraction": 1.0,
+            "unknownRisk": 0.0,
+            "collisionRisk": 0.0,
+            "movingThreatRisk": 0.0,
+            "dropRisk": 0.0,
+            "positiveEvidencePassed": true,
+            "rejectionReasons": []
+          }
+        }
+      ],
+      "final": {
+        "frameId": 13,
+        "captureOffsetUs": 2400000,
+        "rgbSha256": "c4ad8a6bf7a5a28eb0b59dee6902d709fe899ae68e0ec5841d92e29cf5ff5e77",
+        "physicalHazard": false,
+        "sufficientObservationLabel": true,
+        "userMoving": true,
+        "pose": {
+          "rotation": [
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            -0.05233597382903099,
+            0.9986295104026794,
+            0.0,
+            -0.9986295104026794,
+            -0.05233597382903099
+          ],
+          "originM": [
+            0.0,
+            0.0,
+            1.45
+          ]
+        },
+        "oldestEvidenceTimestampUs": 1790899200200000,
+        "producer": [],
+        "sections": [
+          {
+            "startM": 0.2,
+            "endM": 0.35,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 0.35,
+            "endM": 0.5,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 0.5,
+            "endM": 0.6499999999999999,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 0.6499999999999999,
+            "endM": 0.8,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 0.8,
+            "endM": 0.95,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 0.95,
+            "endM": 1.0999999999999999,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 1.0999999999999999,
+            "endM": 1.2499999999999998,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 1.2499999999999998,
+            "endM": 1.4,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 1.4,
+            "endM": 1.5499999999999998,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 1.5499999999999998,
+            "endM": 1.7,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 1.7,
+            "endM": 1.8499999999999999,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 1.8499999999999999,
+            "endM": 1.9999999999999998,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 1.9999999999999998,
+            "endM": 2.15,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 2.15,
+            "endM": 2.3,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 2.3,
+            "endM": 2.45,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 2.45,
+            "endM": 2.6,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 2.6,
+            "endM": 2.75,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 2.75,
+            "endM": 2.9,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 2.9,
+            "endM": 3.05,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 3.05,
+            "endM": 3.2,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 3.2,
+            "endM": 3.35,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          },
+          {
+            "startM": 3.35,
+            "endM": 3.5,
+            "state": "measured",
+            "bodyObservedFraction": 1.0,
+            "floorObservedFraction": 1.0,
+            "leftUpperM": -0.45,
+            "rightLowerM": 0.45,
+            "headroomLowerM": 1.8,
+            "floorRiseUpperM": 0.05,
+            "floorDropUpperM": 0.05
+          }
+        ],
+        "passage": {
+          "status": "measuredClear",
+          "reasons": [],
+          "minimumWidthLowerBoundM": 0.9,
+          "minimumHeadroomLowerBoundM": 1.8,
+          "minimumEvidenceConfidence": 1.0,
+          "validUntilUs": 1790899203200000,
+          "sessionGeneration": 1,
+          "frameId": 13,
+          "evaluatedAtUs": 1790899202402000,
+          "timestampDomain": "utcEpochMicroseconds",
+          "referenceFrameId": "synthetic-walking-frame-v1"
+        },
+        "runtimePassage": {
+          "status": "measuredClear",
+          "reasons": [],
+          "minimumWidthLowerBoundM": 0.9,
+          "minimumHeadroomLowerBoundM": 1.8,
+          "minimumEvidenceConfidence": 1.0,
+          "validUntilUs": 1790899203200000,
+          "sessionGeneration": 1,
+          "frameId": 13,
+          "evaluatedAtUs": 1790899202402000,
+          "timestampDomain": "utcEpochMicroseconds",
+          "referenceFrameId": "synthetic-walking-frame-v1"
+        },
+        "runtimePassageApplied": true,
+        "groundConfidence": 0.703125,
+        "groundDisagreementPixels": 0,
+        "detectorReject": "none",
+        "unknownReasons": [],
+        "tracks": [
+          {
+            "id": 1,
+            "confirmed": true,
+            "hits": 4,
+            "misses": 0,
+            "geometry": "overhead",
+            "zone": "center",
+            "pixelCount": 923,
+            "proximity": 0.735005795955658,
+            "approachTrend": 0.0,
+            "proximityHistory": [
+              0.735005795955658,
+              0.735005795955658,
+              0.735005795955658,
+              0.735005795955658
+            ],
+            "bounds": [
+              0.30078125,
+              0.0,
+              0.6875,
+              0.0546875
+            ],
+            "supportSha256": "9e8f3e1c2b9d2989b809744edfa54e78d0ffcfa2f4620b822e39a0e13cfc6b2f",
+            "association": {
+              "relation": "outsidePassage",
+              "reason": "all_first_surface_footprints_outside",
+              "checkedPixels": 1891,
+              "unknownPixels": 0,
+              "intersectingPixels": 0,
+              "excludedUnboundedPixels": 127,
+              "boundedSurfaceEnvelopeM": [
+                -0.9140813644405762,
+                3.0694234977364143,
+                2.6655552130135423,
+                0.8535973875655098,
+                3.8150699099971304,
+                3.013427971583304
+              ]
+            }
+          },
+          {
+            "id": 2,
+            "confirmed": true,
+            "hits": 4,
+            "misses": 0,
+            "geometry": "broadSurface",
+            "zone": "center",
+            "pixelCount": 13561,
+            "proximity": 0.9317337870597839,
+            "approachTrend": 0.0,
+            "proximityHistory": [
+              0.9317337870597839,
+              0.9317337870597839,
+              0.9317337870597839,
+              0.9317337870597839
+            ],
+            "bounds": [
+              0.2890625,
+              0.1796875,
+              0.7109375,
+              0.91015625
+            ],
+            "supportSha256": "3fb9b99fa788e8edcbc31de67de98572174926919ec6e5211201567d55e7b1fd",
+            "association": {
+              "relation": "outsidePassage",
+              "reason": "all_first_surface_footprints_outside",
+              "checkedPixels": 24495,
+              "unknownPixels": 0,
+              "intersectingPixels": 0,
+              "excludedUnboundedPixels": 1091,
+              "boundedSurfaceEnvelopeM": [
+                -1.312810192320167,
+                2.9212825078674194,
+                -0.019456769785884953,
+                1.312810192320167,
+                5.401041705048996,
+                2.668027073232146
+              ]
+            }
+          }
+        ],
+        "action": "continueForward",
+        "ruleId": "SPATIAL-P3-NO-CHANGE",
+        "plannerState": "movingStable",
+        "plannerPreviousState": "observing",
+        "plannerForward": {
+          "observedFraction": 1.0,
+          "unknownRisk": 0.0,
+          "collisionRisk": 0.0,
+          "movingThreatRisk": 0.0,
+          "dropRisk": 0.0,
+          "positiveEvidencePassed": true,
+          "rejectionReasons": []
+        }
+      }
+    }
+  ]
+}

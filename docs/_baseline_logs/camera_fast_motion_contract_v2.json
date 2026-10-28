@@ -1,0 +1,28 @@
+{
+  "scope": "known synthetic AOT parity and additive independent shadow worker; no phone promotion",
+  "sourceSha256": {
+    "lib/safety/perception/camera_fast_motion_types.dart": "e1c56d2858e11c45632359b1b4090df922f9d09296c0c4a0fd78a1b75528c1e4",
+    "lib/safety/perception/camera_fast_metric_motion.dart": "816edc800cf437136860800400499027ff857a144161db0ca16f98074c1d2a0a",
+    "lib/safety/runtime/camera_fast_motion_worker.dart": "76be60afa1303d84ec5ddbadc792a195fbd6da88df12df8fa04c00282a7dc196",
+    "lib/safety/runtime/camera_fast_motion_shadow_adapter.dart": "0dd92e99999aa505639519cc3a14d7b851a54ef7da4be2f13d538c16e617ed69",
+    "tool/model_benchmark/fast_camera_motion_fixture.dart": "29817c220bab0e69e26e0a035bdba3d17557032c4b736779fc69ad1300c86d35",
+    "tool/model_benchmark/profile_fast_camera_motion.dart": "cb482041519a12fa5688da0fbceee89b4266bd07956c6b1ddbbdeab7ed369e2e",
+    "tool/model_benchmark/replay_fast_camera_motion.dart": "c44151dabf54f4abb91b8a08bc739a4e2175ac93d6eb792dfa8447e54b2c9b59",
+    "tool/model_benchmark/evaluate_fast_camera_motion.dart": "c01bce17148e665a271695f72a3eb729c8637c584b1fa4b904cb6968d26a68a9",
+    "tool/model_benchmark/verify_fast_camera_motion.py": "774aef4c4a6fffed7c230ecf71339ee1fc8b4df7bd8e648e5b34f76d5f9c3c0c",
+    "test/camera_fast_motion_test.dart": "0eddc867818c05b629c8bd6af6b6662cfd8a3b31dfa8b021de4f24e10cb73bd7",
+    "test/camera_fast_motion_shadow_replay_test.dart": "31e7dd95fc649833600edc4804049d42b650cb6f505a5d1d82f1ce2e4788022e",
+    "test/harness/camera_fast_motion_shadow_benchmark.dart": "12eaaaeb52bdadd5380d3939f4839dd1f52a3ce4d28462ace3bdbb55ddb382f9",
+    "docs/camera-fast-motion-protocol-2026-10-03.md": "7f611a6ecf07308171ae18b58518a5559b67c0884d7f065993ca29ad93aa4665"
+  },
+  "reportSha256": {
+    "docs/_baseline_logs/camera_fast_motion_parity.json": "f079bb8449ea546326e01a3da008cd9e8e126ed84da8ff98f8ea44009fb72ea3",
+    "docs/_baseline_logs/camera_fast_motion_functional.json": "27bdc69a468261eb6933aa00737a5e78c5728964a48403741c594b882ef377d4",
+    "docs/_baseline_logs/camera_fast_motion_shadow.json": "dd53dece46ae4eac997a8670ec9a50b98b1494b6b3d967360f981dff4bc97f38"
+  },
+  "previousProcessingContractSha256": "02702594399be29c173c4bc8ebfcd4d42641893026588e42cff4b88f94bffb9b",
+  "initialFastContractSha256": "561536ce0912e30ed4a9c1dddb0f3ad335c32553174ab235975ec3c2befe98b9",
+  "promotionAllowed": false,
+  "newIndependentHoldout": false,
+  "timingsAreReproducibilityData": false
+}

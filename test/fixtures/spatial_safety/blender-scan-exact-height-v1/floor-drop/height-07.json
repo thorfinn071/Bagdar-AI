@@ -1,0 +1,82 @@
+{
+  "identity": "125ab9e6870b151acc2d91c3d593f8818139cd6051616d981df0064f34abe028",
+  "frame": {
+    "priorPacket": {
+      "priorPacket": {
+        "axisPacket": {
+          "width": 320,
+          "height": 240,
+          "frameId": 208,
+          "capturedOffsetMs": 1400,
+          "fx": 231.1111068725586,
+          "fy": 231.11111640930176,
+          "cx": 160.0,
+          "cy": 120.0,
+          "cameraToWalkingRotation": [
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.1736481934785843,
+            0.9848077297210693,
+            0.0,
+            -0.9848077297210693,
+            0.1736481934785843
+          ],
+          "cameraOriginM": [
+            0.0,
+            0.0,
+            1.4199999570846558
+          ],
+          "depth": {
+            "path": "floor-drop/coverage-views-07-range.f32.gz",
+            "sha256": "5d95c133b6244d870abea671fb4faac5dd60d7bb2d48af0b3c8cceed17f0775f"
+          },
+          "freeZLower": {
+            "path": "floor-drop/coverage-views-07-lower.f32.gz",
+            "sha256": "5c51ce9be0f2526a8a25cc37070e5cca7e85682dc36b002f139eb96d9775122a"
+          },
+          "surfaceZUpper": {
+            "path": "floor-drop/coverage-views-07-upper.f32.gz",
+            "sha256": "58b406be261984acf425b9b157e6c19567c6ece18a05fc6b214627c4181a6f3a"
+          },
+          "validity": {
+            "path": "floor-drop/coverage-views-07-valid.u8.gz",
+            "sha256": "92857a39358c36bff934cd967eb32bf3a17a46c6ce0ebebbf7e8c62e5427f778"
+          }
+        },
+        "fourArraysExact": true,
+        "heightLower": {
+          "path": "floor-drop/height-07-heightLower.f32.gz",
+          "sha256": "548952f1ca2068804d69b5fff7f09eed1722cf94ff025c1fc1f6843859aa7c1d"
+        },
+        "heightUpper": {
+          "path": "floor-drop/height-07-heightUpper.f32.gz",
+          "sha256": "a1aff05e674865f1c9c4095fdd843494c5497e33fc0dfc7e08c43fff390cced9"
+        },
+        "firstZLower": {
+          "path": "floor-drop/height-07-firstZLower.f32.gz",
+          "sha256": "e8c8c1f61848e594eebc3c327910d114e8373b6262cbd37fe8bbe13c32829e83"
+        }
+      },
+      "recomputedPixels": 562,
+      "heightLower": {
+        "path": "floor-drop/height-07-heightLower.f32.gz",
+        "sha256": "98d8d6d8c5fac201fff851432b193ff1d42f5054b71976c566b02a16628797c0"
+      },
+      "heightUpper": {
+        "path": "floor-drop/height-07-heightUpper.f32.gz",
+        "sha256": "a1aff05e674865f1c9c4095fdd843494c5497e33fc0dfc7e08c43fff390cced9"
+      }
+    },
+    "recomputedPixels": 562,
+    "heightLower": {
+      "path": "floor-drop/height-07-heightLower.f32.gz",
+      "sha256": "dc34816294dad28fff807e2aeda2f067b5fdcdb554e2ecaab9247c464580e6c2"
+    },
+    "heightUpper": {
+      "path": "floor-drop/height-07-heightUpper.f32.gz",
+      "sha256": "a1aff05e674865f1c9c4095fdd843494c5497e33fc0dfc7e08c43fff390cced9"
+    }
+  }
+}

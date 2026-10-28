@@ -1,0 +1,603 @@
+{
+  "schemaVersion": 1,
+  "stage": "phone-performance-stage4",
+  "generatedAtUtc": "2026-10-06T05:24:26.711659+00:00",
+  "source": {
+    "commitSha": "180bd16bc7cc46f9c06936a3f6ad82f3d9da2c8d",
+    "dirty": true,
+    "selectedSourceSha256": {
+      "lib/camera_screen.dart": "801748bc3880b9ddc8c125156c3b9eacfb7451e124fda0879b1281c3e3a1f54d",
+      "lib/camera/depth_pipeline_controller.dart": "931c99cc870bc6903b447de347503a19104fede8e9e31d621151de40ddb03443",
+      "lib/core/performance/perception_performance.dart": "0808c7543f426c336b5585597f173696dfad0c93419c505b8e1eef350360c8c1",
+      "lib/core/performance/perception_scheduler.dart": "ee6d8b89df7bb7f31c8e1408b0b132c66b8ceba04b998916a372e1c16bf6561c",
+      "test/perception_scheduler_test.dart": "a9376ea37f98781d125d65de31e7b2fe7756ad5a6b491533b088dac8f650291c",
+      "test/perception_performance_test.dart": "71b58261a9612f36447d6c8986a84fec112b1f227a2c7e2ca224f248ad0b5a96",
+      "test/depth_semantic_alignment_test.dart": "d751a57a5c7ab18f2032318524f311948f7ac883ec99a70f376956319b2d775b",
+      "test/depth_pipeline_observation_guard_test.dart": "c6c5673e13375203d3b5276bde651a1f3513dd5a422dba0a6e53d275b190a3c6",
+      "tool/model_benchmark/compare_core_scheduling.py": "3826937c867f300964bb9d29495fd8d2eb2a7d5b9af37af5e8cf586a466e86ef",
+      "lib/services/model_service.dart": "83de53022a60491ff79be198649598fa15372912853921108cf2a0f5bbfdde9e",
+      "lib/utils/performance_throttler.dart": "6505ef30ac1552461fed2086b14a110b794484d17334aaa0ab3ac40325ef951a",
+      "assets/yolov8n_int8.tflite": "3f5c681641e439321ec529c26995de18a910d62a25a49ccb02da2a0a771cae02",
+      "assets/midas_small.ncnn.param": "d618bb98777ff7e7adeeef1c8cf50ede79c97c754876681d6a0b26330708e8d3",
+      "assets/midas_small.ncnn.bin": "324412b094f3309c0c7acd506a06ccdc60296749ac382dc58431efdde0f13242",
+      "pubspec.yaml": "c6ed7fbd00772bcc5410e94da742a4b381ae7ee4e23d54d6758976259d058eec",
+      "pubspec.lock": "6e63ef35adebd66ea69ed7b114fd53661da9524cd053bf6676098b5da231f442"
+    },
+    "selectedFilesUnchanged": true,
+    "wholeCheckoutFingerprint": false,
+    "unchangedControlFiles": [
+      "lib/services/model_service.dart",
+      "lib/utils/performance_throttler.dart",
+      "assets/yolov8n_int8.tflite",
+      "assets/midas_small.ncnn.param",
+      "assets/midas_small.ncnn.bin"
+    ]
+  },
+  "modelControls": {
+    "assets/yolov8n_int8.tflite": "3f5c681641e439321ec529c26995de18a910d62a25a49ccb02da2a0a771cae02",
+    "assets/midas_small.ncnn.param": "d618bb98777ff7e7adeeef1c8cf50ede79c97c754876681d6a0b26330708e8d3",
+    "assets/midas_small.ncnn.bin": "324412b094f3309c0c7acd506a06ccdc60296749ac382dc58431efdde0f13242"
+  },
+  "validation": {
+    "targeted": {
+      "passed": 59,
+      "newCases": 18,
+      "log": "scratch/phone-performance-stage4-2026-10-05/targeted-frozen.log"
+    },
+    "coreRc": {
+      "passed": true,
+      "requiredStages": 59,
+      "stages": [
+        {
+          "name": "static analysis",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 197727
+        },
+        {
+          "name": "Flutter software tests",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 1644307
+        },
+        {
+          "name": "strict legacy safety harness",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 24238
+        },
+        {
+          "name": "procedural spatial corpus reproducibility",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 3348
+        },
+        {
+          "name": "real model-output replay reproducibility",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 2492
+        },
+        {
+          "name": "metric passage contract reproducibility",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 2697
+        },
+        {
+          "name": "synthetic metric passage shadow replay reproducibility",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 8323
+        },
+        {
+          "name": "camera-visible corpus and held-out split integrity",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 8895
+        },
+        {
+          "name": "camera-visible NCNN and frozen scale reproducibility",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 79526
+        },
+        {
+          "name": "camera-visible shadow passage replay reproducibility",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 304725
+        },
+        {
+          "name": "camera recovery independent corpus integrity",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 3860
+        },
+        {
+          "name": "camera recovery NCNN and original frozen calibration",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 24808
+        },
+        {
+          "name": "camera recovery shadow replay reproducibility",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 82186
+        },
+        {
+          "name": "camera track association independent corpus integrity",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 5302
+        },
+        {
+          "name": "camera track association development freeze integrity",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 562
+        },
+        {
+          "name": "camera track association pinned NCNN and frozen calibration",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 34007
+        },
+        {
+          "name": "camera track association shadow replay reproducibility",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 87750
+        },
+        {
+          "name": "camera temporal independent corpus integrity",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 5496
+        },
+        {
+          "name": "camera temporal development freeze integrity",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 255
+        },
+        {
+          "name": "camera temporal pinned NCNN reproducibility",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 28450
+        },
+        {
+          "name": "camera temporal shadow replay reproducibility",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 75834
+        },
+        {
+          "name": "camera metric motion visible corpus and observation labels",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 5545
+        },
+        {
+          "name": "camera metric motion development freeze integrity",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 236
+        },
+        {
+          "name": "camera metric motion pinned NCNN reproducibility",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 21316
+        },
+        {
+          "name": "camera metric motion shadow replay reproducibility",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 81086
+        },
+        {
+          "name": "camera scale motion independent visible corpus integrity",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 6292
+        },
+        {
+          "name": "camera scale motion development freeze integrity",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 470
+        },
+        {
+          "name": "camera scale motion pinned NCNN reproducibility",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 20835
+        },
+        {
+          "name": "camera scale motion shadow replay reproducibility",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 97990
+        },
+        {
+          "name": "camera processing age source and regression contract integrity",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 1455
+        },
+        {
+          "name": "camera processing age parity, deadlines and overload shadow replay",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 197531
+        },
+        {
+          "name": "independent fast motion source and shadow contract integrity",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 554
+        },
+        {
+          "name": "independent fast motion AOT parity, worker and shadow reproducibility",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 173175
+        },
+        {
+          "name": "concurrent-load motion source and earlier fast contract integrity",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 686
+        },
+        {
+          "name": "concurrent-load native motion AOT parity, worker and shadow reproducibility",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 90320
+        },
+        {
+          "name": "paired Blender scene corpus, admission negatives and first baseline integrity",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 30599
+        },
+        {
+          "name": "paired Blender production YOLO control reproducibility",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 43328
+        },
+        {
+          "name": "paired Blender production MiDaS NCNN reproducibility",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 30539
+        },
+        {
+          "name": "paired Blender geometry and shadow runtime report reproducibility",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 42570
+        },
+        {
+          "name": "paired Blender no hazardous continue, timely stops and no false imminent quality gate",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 14259
+        },
+        {
+          "name": "visible body optical packet admission and prior baseline integrity",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 19872
+        },
+        {
+          "name": "visible body single-frame replay and static scan authority reproducibility",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 56088
+        },
+        {
+          "name": "complete optical surface bounds, negative coverage and prior freezes",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 35506
+        },
+        {
+          "name": "static scan coverage and complete envelope replay reproducibility",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 116614
+        },
+        {
+          "name": "scan processing elapsed evidence, NCNN load and prior freezes",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 428
+        },
+        {
+          "name": "synchronized synthetic rig capture, coverage and elapsed receipts",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 2113
+        },
+        {
+          "name": "procedural replay and external manifest integrity",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 3903
+        },
+        {
+          "name": "external Blender frame replay: test/fixtures/spatial_safety/blender-egocentric-v1/replay-manifest.json",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 3581
+        },
+        {
+          "name": "external Blender frame replay: test/fixtures/spatial_safety/blender-temporal-v2/replay-manifest.json",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 3753
+        },
+        {
+          "name": "external Blender frame replay: test/fixtures/spatial_safety/blender-context-v3/replay-manifest.json",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 4537
+        },
+        {
+          "name": "Blender oracle-depth shadow runtime replay reproducibility",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 13970
+        },
+        {
+          "name": "context Blender oracle-depth shadow replay reproducibility",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 13772
+        },
+        {
+          "name": "context desktop NCNN depth output reproducibility",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 3673
+        },
+        {
+          "name": "context desktop NCNN depth shadow replay reproducibility",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 15280
+        },
+        {
+          "name": "context oracle versus NCNN diagnostic reproducibility",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 248
+        },
+        {
+          "name": "model artifact/hash/decoder contracts",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 13104
+        },
+        {
+          "name": "real ONNX candidate predictions",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 8224
+        },
+        {
+          "name": "ONNX reference vs NCNN parity",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 2589
+        },
+        {
+          "name": "working-tree whitespace check",
+          "required": true,
+          "passed": true,
+          "exitCode": 0,
+          "durationMs": 499
+        }
+      ],
+      "report": "scratch/phone-performance-stage4-2026-10-05/core-rc/core-verification.json"
+    },
+    "fullFlutterSuite": {
+      "passed": 1715,
+      "skipped": 1,
+      "failed": 0
+    },
+    "androidCompilation": [
+      {
+        "mode": "profile",
+        "command": "flutter build apk --flavor core --profile --target-platform android-arm64 --split-per-abi",
+        "exitCode": 0,
+        "durationMs": 189196,
+        "log": "android-profile.log",
+        "installed": false,
+        "deviceRuntimeTested": false,
+        "artifactCopyRecovered": false,
+        "apk": "app-core-profile-compact.apk",
+        "bytes": 151249119,
+        "sha256": "cfa7d39870ebe089dbf4eb6ceb1558e204d1c907a877c0f8995051b2923d4441",
+        "compiledApk": "app-core-arm64-v8a-profile.apk",
+        "compiledBytes": 162268104,
+        "postprocess": {
+          "tool": "Android build-tools 36.1.0 zipalign + apksigner",
+          "zipalignPageKb": 16,
+          "nonSignatureZipEntriesIdentical": 643,
+          "signingCertificateMatches": true,
+          "signatureVerified": true,
+          "log": "profile-signature.log",
+          "metadataResourcesAlsoCompared": true
+        },
+        "verifiedNativeAbis": [
+          "arm64-v8a"
+        ],
+        "modelAssetsIdentical": true,
+        "compiledSha256": "07e6720fa4f63556758bb9c20e4d67a0fbee49eb39311bfcad6e33701953ee4e"
+      },
+      {
+        "mode": "release",
+        "command": "flutter build apk --flavor core --release --target-platform android-arm64 --split-per-abi",
+        "exitCode": 0,
+        "log": "android-release-resumed.log",
+        "durationMs": null,
+        "gradleDurationMs": 355400,
+        "installed": false,
+        "deviceRuntimeTested": false,
+        "artifactCopyRecovered": false,
+        "apk": "app-core-arm64-v8a-release.apk",
+        "signatureVerified": true,
+        "zipalignPageKb": 16,
+        "signatureLog": "release-signature.log",
+        "bytes": 123898921,
+        "sha256": "ea62dfc8d1ab8b27912e473407ecda77ffa18ddb0d50442d2c925a4562577931",
+        "verifiedNativeAbis": [
+          "arm64-v8a"
+        ],
+        "modelAssetsIdentical": true
+      }
+    ],
+    "realModels": {
+      "measuredCalls": 324,
+      "warmupCalls": 6,
+      "staticFrames": 18,
+      "trials": 162,
+      "outputIdenticalAcrossSchedules": true,
+      "summary": [
+        {
+          "policy": "legacy-yolo-then-depth",
+          "trials": 54,
+          "modelErrors": 0,
+          "outputIdenticalAcrossSchedules": true,
+          "yolo_sourceToReplyMs_p50": 82.5615,
+          "yolo_sourceToReplyMs_p95": 97.659,
+          "yolo_dispatchToReplyMs_p50": 82.5591,
+          "yolo_dispatchToReplyMs_p95": 97.657,
+          "yolo_dispatchAgeMs_p50": 0.0019,
+          "yolo_dispatchAgeMs_p95": 0.0028,
+          "yolo_overTwoSeconds": 0,
+          "depth_sourceToReplyMs_p50": 218.5236,
+          "depth_sourceToReplyMs_p95": 254.9468,
+          "depth_dispatchToReplyMs_p50": 137.22,
+          "depth_dispatchToReplyMs_p95": 158.3197,
+          "depth_dispatchAgeMs_p50": 82.5685,
+          "depth_dispatchAgeMs_p95": 97.6684,
+          "depth_overTwoSeconds": 0
+        },
+        {
+          "policy": "staggered-next-callback",
+          "trials": 54,
+          "modelErrors": 0,
+          "outputIdenticalAcrossSchedules": true,
+          "yolo_sourceToReplyMs_p50": 97.0241,
+          "yolo_sourceToReplyMs_p95": 111.8049,
+          "yolo_dispatchToReplyMs_p50": 96.8812,
+          "yolo_dispatchToReplyMs_p95": 110.7499,
+          "yolo_dispatchAgeMs_p50": 0.0973,
+          "yolo_dispatchAgeMs_p95": 0.179,
+          "yolo_overTwoSeconds": 0,
+          "depth_sourceToReplyMs_p50": 147.8009,
+          "depth_sourceToReplyMs_p95": 162.9135,
+          "depth_dispatchToReplyMs_p50": 147.6782,
+          "depth_dispatchToReplyMs_p95": 162.7911,
+          "depth_dispatchAgeMs_p50": 0.1204,
+          "depth_dispatchAgeMs_p95": 0.19,
+          "depth_overTwoSeconds": 0
+        },
+        {
+          "policy": "controlled-parallel",
+          "trials": 54,
+          "modelErrors": 0,
+          "outputIdenticalAcrossSchedules": true,
+          "yolo_sourceToReplyMs_p50": 109.0026,
+          "yolo_sourceToReplyMs_p95": 119.1784,
+          "yolo_dispatchToReplyMs_p50": 108.8699,
+          "yolo_dispatchToReplyMs_p95": 119.0668,
+          "yolo_dispatchAgeMs_p50": 0.1007,
+          "yolo_dispatchAgeMs_p95": 0.222,
+          "yolo_overTwoSeconds": 0,
+          "depth_sourceToReplyMs_p50": 156.7078,
+          "depth_sourceToReplyMs_p95": 171.9914,
+          "depth_dispatchToReplyMs_p50": 156.5691,
+          "depth_dispatchToReplyMs_p95": 171.8041,
+          "depth_dispatchAgeMs_p50": 0.1618,
+          "depth_dispatchAgeMs_p95": 0.3612,
+          "depth_overTwoSeconds": 0
+        }
+      ]
+    }
+  },
+  "evidenceClasses": {
+    "desktopSoftwareRc": "pass",
+    "modelCorrectnessRc": "not_established",
+    "androidCompilation": "profile_release_pass",
+    "namedDeviceRuntime": "not_run",
+    "controlledWalking": "not_run",
+    "phonePerformanceValidated": false,
+    "promotionAllowed": false
+  }
+}

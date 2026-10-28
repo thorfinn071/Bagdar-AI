@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "corpusId": "blender-paired-holdout-v1",
+  "seed": 20261004,
+  "width": 320,
+  "height": 240,
+  "frameOffsetsMs": [0, 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000],
+  "referenceBody": {"widthM": 0.9, "heightM": 1.85},
+  "camera": {"heightM": 1.42, "pitchDownDeg": 12, "lensMm": 26, "sensorWidthMm": 36},
+  "latestStopAfterOnsetMs": 300,
+  "scenes": [
+    {"id": "path-clear", "pair": "path", "hazard": false, "kind": "clear", "cameraAdvanceM": 0.4, "appearanceSeed": 4101},
+    {"id": "path-box", "pair": "path", "hazard": true, "kind": "box", "boxCenterY": 2.5, "boxSizeM": [0.72, 0.55, 0.42], "cameraAdvanceM": 0.4, "appearanceSeed": 4101},
+    {"id": "doorway-wide", "pair": "doorway", "hazard": false, "kind": "doorway", "openingWidthM": 1.5, "openingHeightM": 2.3, "planeY": 2.8, "cameraAdvanceM": 0.4, "appearanceSeed": 4102},
+    {"id": "doorway-narrow", "pair": "doorway", "hazard": true, "kind": "doorway", "openingWidthM": 0.62, "openingHeightM": 2.3, "planeY": 2.8, "cameraAdvanceM": 0.4, "appearanceSeed": 4102},
+    {"id": "headroom-high", "pair": "headroom", "hazard": false, "kind": "doorway", "openingWidthM": 1.5, "openingHeightM": 2.3, "planeY": 2.6, "cameraAdvanceM": 0.4, "appearanceSeed": 4103},
+    {"id": "headroom-low", "pair": "headroom", "hazard": true, "kind": "doorway", "openingWidthM": 1.5, "openingHeightM": 1.3, "planeY": 2.6, "cameraAdvanceM": 0.4, "appearanceSeed": 4103},
+    {"id": "floor-level", "pair": "floor", "hazard": false, "kind": "clear", "cameraAdvanceM": 0.4, "appearanceSeed": 4104},
+    {"id": "floor-drop", "pair": "floor", "hazard": true, "kind": "drop", "edgeY": 2.3, "dropM": 0.36, "cameraAdvanceM": 0.4, "appearanceSeed": 4104},
+    {"id": "person-side", "pair": "person", "hazard": false, "kind": "person", "personX": 1.3, "personStartY": 3.3, "personAdvanceM": 1.0, "cameraAdvanceM": 0.1, "appearanceSeed": 4105},
+    {"id": "person-approach", "pair": "person", "hazard": true, "kind": "person", "personX": 0, "personStartY": 3.3, "personAdvanceM": 1.0, "cameraAdvanceM": 0.1, "appearanceSeed": 4105},
+    {"id": "camera-pan-clear", "pair": "camera-pan", "hazard": false, "kind": "clear", "cameraAdvanceM": 0, "cameraYawAmplitudeDeg": 6, "appearanceSeed": 4106},
+    {"id": "camera-pan-approach", "pair": "camera-pan", "hazard": true, "kind": "person", "personX": 0, "personStartY": 3.3, "personAdvanceM": 1.0, "cameraAdvanceM": 0, "cameraYawAmplitudeDeg": 6, "appearanceSeed": 4106}
+  ]
+}

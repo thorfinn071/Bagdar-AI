@@ -1,0 +1,71 @@
+{
+  "identity": "216a8b377c7f54ad3268609480ed23220a21ea57959b19ab510ed9a311b5b308",
+  "frame": {
+    "priorPacket": {
+      "axisPacket": {
+        "width": 320,
+        "height": 240,
+        "frameId": 202,
+        "capturedOffsetMs": 200,
+        "fx": 231.1111068725586,
+        "fy": 231.11111640930176,
+        "cx": 160.0,
+        "cy": 120.0,
+        "cameraToWalkingRotation": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.8660253882408142,
+          0.5,
+          0.0,
+          -0.5,
+          -0.8660253882408142
+        ],
+        "cameraOriginM": [
+          0.0,
+          0.0,
+          1.4199999570846558
+        ],
+        "depth": {
+          "path": "headroom-low/coverage-views-01-range.f32.gz",
+          "sha256": "1ad05434cd4c95fcb471a6e03c76cd72fa3f861404a193acc4cd1057e37304ae"
+        },
+        "freeZLower": {
+          "path": "headroom-low/coverage-views-01-lower.f32.gz",
+          "sha256": "2e55cd73829aaded8a57a682d1c62a59ef9fa6e198748e48295979649fc6484f"
+        },
+        "surfaceZUpper": {
+          "path": "headroom-low/coverage-views-01-upper.f32.gz",
+          "sha256": "fa320b05180c1c2a791e7b3d136a7249cc0f73e8a2d7b1cf300181f9a7262610"
+        },
+        "validity": {
+          "path": "headroom-low/coverage-views-01-valid.u8.gz",
+          "sha256": "004cdacd6163c635e68cca086aa885f59bd894af2d01d1cda61a0ef5be30aab2"
+        }
+      },
+      "fourArraysExact": true,
+      "heightLower": {
+        "path": "headroom-low/height-01-heightLower.f32.gz",
+        "sha256": "46f5ffae42e6f17365024aefd7bc2368f3a0e7bc6b7df70dcaf6ad7627232902"
+      },
+      "heightUpper": {
+        "path": "headroom-low/height-01-heightUpper.f32.gz",
+        "sha256": "0d9efe4f730880e17c58b4c7a66bae7c9c010f3cf0f0e8708aabd6a4e4ef3a31"
+      },
+      "firstZLower": {
+        "path": "headroom-low/height-01-firstZLower.f32.gz",
+        "sha256": "533ea9dd0dddec688a9d0466332ab065607234222f95210405e18044bc7cbea3"
+      }
+    },
+    "recomputedPixels": 269,
+    "heightLower": {
+      "path": "headroom-low/height-01-heightLower.f32.gz",
+      "sha256": "2a8c41ec5337c35a5a629ea04437ac1910a2e39c7bfdba1bcf67630379a45892"
+    },
+    "heightUpper": {
+      "path": "headroom-low/height-01-heightUpper.f32.gz",
+      "sha256": "0d9efe4f730880e17c58b4c7a66bae7c9c010f3cf0f0e8708aabd6a4e4ef3a31"
+    }
+  }
+}

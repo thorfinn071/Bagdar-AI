@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "corpusId": "bagdar-procedural-breadth-v1",
+  "promotionAllowed": false,
+  "seed": 27176011,
+  "width": 192,
+  "height": 288,
+  "fps": 10,
+  "frames": 7,
+  "camera": {"heightM": 1.25, "pitchDownDeg": 25, "lensMm": 16, "sensorWidthMm": 24, "walkingSpeedMps": 0.45},
+  "geometry": {"crossTrackScale": 1.15},
+  "materials": {"textureScale": 7, "bumpStrength": 0.02, "roughnessMultiplier": 1.1},
+  "referenceBody": {"widthM": 0.9, "heightM": 1.85},
+  "conditions": ["clean", "rain"],
+  "layouts": ["courtyard", "shop"],
+  "severity": 1.25,
+  "sensorHz": 60,
+  "scope": "Versioned procedural breadth smoke: changed camera, cross-track geometry and material controls. No measured camera calibration, sensor realism, material accuracy or navigation validation."
+}

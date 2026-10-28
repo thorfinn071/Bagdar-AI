@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "promotionAllowed": false,
+  "localizedSlabBottomRemoved": true,
+  "recomputedPixels": 919,
+  "fractionalHeightRayWitnesses": 580,
+  "hiddenGeometryExact": true,
+  "thinForegroundPixelsRetained": 50,
+  "sources": {
+    "tool/blender/check_scan_watertight_bounds.py": "a0dcc9b1fc1ad99d94a75579a242b9d4d5f6627eda438808a6543a38c663cfb3",
+    "tool/blender/visible_floor_height_bounds.py": "3e9be449241c554985f0e2eabb9be048b0fce0ed3ef1bde4f43b0b5ffdda9632",
+    "tool/blender/pixel_watertight_surface_envelope.py": "bd439bfdbae529b9b256c41d7a8f1ddd337db8940c7c6264351f095f2affb89b",
+    "tool/blender/watertight_surface_projection.py": "bcb4671a217f3afcd9922d8c99ee9b4ed295bb33bb493e69975e020b6eedf1f1",
+    "tool/blender/test_pixel_watertight_surface_envelope.py": "80ab0891e264240ae5644c89efe6f9e97d676e9c4097b8ced746c56d99a63372",
+    "docs/blender-scan-watertight-protocol-2026-10-04.md": "97e4771f153ae9c96e5627d1482161a3f8c48c9b75199d1d32ca72145846fee9"
+  }
+}

@@ -1,0 +1,727 @@
+{
+  "schemaVersion": 1,
+  "benchmarkId": "synthetic-passage-clearance-contract-v1",
+  "scope": "declared conservative metric bounds -> stateless contract evaluator; no depth-model inference or runtime integration",
+  "sourceSha256": {
+    "lib/safety/perception/passage_clearance.dart": "96493aa036f0e7c1e3d0b5202d70e621eb38fe936fb31a3f3c08257555c12308",
+    "test/fixtures/passage_clearance_contract/scenarios.dart": "e15aa1d0524df6ba37a35d2764a25896fbbe468c1fdc1c024eaf0cbda5561f43",
+    "tool/model_benchmark/evaluate_passage_clearance_contract.dart": "80963008f3d3899e4532b39aac144d1899fcd77b96a8525afdbbd02c2735f60a"
+  },
+  "scenarioCount": 44,
+  "expectationMismatchCount": 0,
+  "statuses": {
+    "measuredClear": 3,
+    "blocked": 7,
+    "unavailable": 34
+  },
+  "scenarios": [
+    {
+      "scenarioId": "wide-clear",
+      "status": "measuredClear",
+      "reasons": [],
+      "minimumWidthLowerBoundM": 1.4,
+      "minimumHeadroomLowerBoundM": 2.2,
+      "minimumEvidenceConfidence": 0.99,
+      "validUntilUs": 1400000,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "unsorted-contiguous-intervals",
+      "status": "measuredClear",
+      "reasons": [],
+      "minimumWidthLowerBoundM": 1.4,
+      "minimumHeadroomLowerBoundM": 2.2,
+      "minimumEvidenceConfidence": 0.99,
+      "validUntilUs": 1400000,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "exact-conservative-bounds",
+      "status": "measuredClear",
+      "reasons": [],
+      "minimumWidthLowerBoundM": 0.9,
+      "minimumHeadroomLowerBoundM": 1.8,
+      "minimumEvidenceConfidence": 0.99,
+      "validUntilUs": 1400000,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "width-bound-too-small",
+      "status": "blocked",
+      "reasons": [
+        "narrowPassage"
+      ],
+      "minimumWidthLowerBoundM": 0.8,
+      "minimumHeadroomLowerBoundM": 2.2,
+      "minimumEvidenceConfidence": 0.99,
+      "validUntilUs": 1400000,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "wide-but-offset",
+      "status": "blocked",
+      "reasons": [
+        "corridorOutsideOpening"
+      ],
+      "minimumWidthLowerBoundM": 1.4,
+      "minimumHeadroomLowerBoundM": 2.2,
+      "minimumEvidenceConfidence": 0.99,
+      "validUntilUs": 1400000,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "low-lintel",
+      "status": "blocked",
+      "reasons": [
+        "insufficientHeadroom"
+      ],
+      "minimumWidthLowerBoundM": 1.4,
+      "minimumHeadroomLowerBoundM": 1.6,
+      "minimumEvidenceConfidence": 0.99,
+      "validUntilUs": 1400000,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "raised-threshold",
+      "status": "blocked",
+      "reasons": [
+        "floorRise"
+      ],
+      "minimumWidthLowerBoundM": 1.4,
+      "minimumHeadroomLowerBoundM": 2.2,
+      "minimumEvidenceConfidence": 0.99,
+      "validUntilUs": 1400000,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "floor-drop",
+      "status": "blocked",
+      "reasons": [
+        "floorDrop"
+      ],
+      "minimumWidthLowerBoundM": 1.4,
+      "minimumHeadroomLowerBoundM": 2.2,
+      "minimumEvidenceConfidence": 0.99,
+      "validUntilUs": 1400000,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "interior-pole",
+      "status": "blocked",
+      "reasons": [
+        "blockedSection"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": 0.99,
+      "validUntilUs": 1400000,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "blocked-overlap-cannot-be-hidden",
+      "status": "blocked",
+      "reasons": [
+        "blockedSection"
+      ],
+      "minimumWidthLowerBoundM": 1.4,
+      "minimumHeadroomLowerBoundM": 2.2,
+      "minimumEvidenceConfidence": 0.99,
+      "validUntilUs": 1400000,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "unknown-interval",
+      "status": "unavailable",
+      "reasons": [
+        "missingMeasurements"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": 0.99,
+      "validUntilUs": 1400000,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "conflicting-bounds",
+      "status": "unavailable",
+      "reasons": [
+        "conflictingMeasurements"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": 0.99,
+      "validUntilUs": 1400000,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "floor-only",
+      "status": "unavailable",
+      "reasons": [
+        "unobservedBody"
+      ],
+      "minimumWidthLowerBoundM": 1.4,
+      "minimumHeadroomLowerBoundM": 2.2,
+      "minimumEvidenceConfidence": 0.99,
+      "validUntilUs": 1400000,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "body-without-floor",
+      "status": "unavailable",
+      "reasons": [
+        "unobservedFloor"
+      ],
+      "minimumWidthLowerBoundM": 1.4,
+      "minimumHeadroomLowerBoundM": 2.2,
+      "minimumEvidenceConfidence": 0.99,
+      "validUntilUs": 1400000,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "longitudinal-gap",
+      "status": "unavailable",
+      "reasons": [
+        "coverageGap"
+      ],
+      "minimumWidthLowerBoundM": 1.4,
+      "minimumHeadroomLowerBoundM": 2.2,
+      "minimumEvidenceConfidence": 0.99,
+      "validUntilUs": 1400000,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "missing-headroom",
+      "status": "unavailable",
+      "reasons": [
+        "missingMeasurements"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": 0.99,
+      "validUntilUs": 1400000,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "relative-map-cannot-be-metres",
+      "status": "unavailable",
+      "reasons": [
+        "nonMetricMeasurements"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": null,
+      "validUntilUs": null,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "stale",
+      "status": "unavailable",
+      "reasons": [
+        "staleObservation"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": null,
+      "validUntilUs": null,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1500000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "rgb-depth-skew",
+      "status": "unavailable",
+      "reasons": [
+        "pairSkew",
+        "processingLatency"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": null,
+      "validUntilUs": null,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "future-result",
+      "status": "unavailable",
+      "reasons": [
+        "futureObservation"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": null,
+      "validUntilUs": null,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "processing-delay",
+      "status": "unavailable",
+      "reasons": [
+        "processingLatency"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": null,
+      "validUntilUs": null,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1200000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "different-clock",
+      "status": "unavailable",
+      "reasons": [
+        "clockMismatch"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": null,
+      "validUntilUs": null,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "previous-session",
+      "status": "unavailable",
+      "reasons": [
+        "sessionMismatch"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": null,
+      "validUntilUs": null,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "wrong-frame",
+      "status": "unavailable",
+      "reasons": [
+        "frameMismatch"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": null,
+      "validUntilUs": null,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "wrong-rgb-timestamp",
+      "status": "unavailable",
+      "reasons": [
+        "frameMismatch"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": null,
+      "validUntilUs": null,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "different-transform",
+      "status": "unavailable",
+      "reasons": [
+        "transformMismatch"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": null,
+      "validUntilUs": null,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "different-reference-frame",
+      "status": "unavailable",
+      "reasons": [
+        "referenceFrameMismatch"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": null,
+      "validUntilUs": null,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "foreign-provider",
+      "status": "unavailable",
+      "reasons": [
+        "calibrationMismatch"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": null,
+      "validUntilUs": null,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "changed-model",
+      "status": "unavailable",
+      "reasons": [
+        "modelMismatch"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": null,
+      "validUntilUs": null,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "missing-calibration",
+      "status": "unavailable",
+      "reasons": [
+        "missingCalibration"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": null,
+      "validUntilUs": null,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "unverified-scale",
+      "status": "unavailable",
+      "reasons": [
+        "unverifiedCalibration"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": null,
+      "validUntilUs": null,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "unverified-alignment",
+      "status": "unavailable",
+      "reasons": [
+        "unverifiedCalibration"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": null,
+      "validUntilUs": null,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "unverified-floor-reference",
+      "status": "unavailable",
+      "reasons": [
+        "unverifiedCalibration"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": null,
+      "validUntilUs": null,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "unhealthy-provider",
+      "status": "unavailable",
+      "reasons": [
+        "providerUnhealthy"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": null,
+      "validUntilUs": null,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "empty-sections",
+      "status": "unavailable",
+      "reasons": [
+        "missingSections"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": null,
+      "validUntilUs": null,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "reversed-interval",
+      "status": "unavailable",
+      "reasons": [
+        "invalidSection",
+        "coverageGap"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": null,
+      "validUntilUs": 1400000,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "insufficient-confidence",
+      "status": "unavailable",
+      "reasons": [
+        "insufficientConfidence"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": 0.1,
+      "validUntilUs": 1400000,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "nonfinite-headroom",
+      "status": "unavailable",
+      "reasons": [
+        "invalidSection"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": 0.99,
+      "validUntilUs": 1400000,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "negative-floor-bound",
+      "status": "unavailable",
+      "reasons": [
+        "invalidSection"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": 0.99,
+      "validUntilUs": 1400000,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "too-many-sections",
+      "status": "unavailable",
+      "reasons": [
+        "tooManySections"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": null,
+      "validUntilUs": null,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "missing-observation",
+      "status": "unavailable",
+      "reasons": [
+        "missingObservation"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": null,
+      "validUntilUs": null,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "empty-identity",
+      "status": "unavailable",
+      "reasons": [
+        "invalidIdentity",
+        "calibrationMismatch"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": null,
+      "validUntilUs": null,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "negative-depth-timestamp",
+      "status": "unavailable",
+      "reasons": [
+        "invalidTimestamp",
+        "staleObservation",
+        "pairSkew",
+        "processingLatency"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": null,
+      "validUntilUs": null,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    },
+    {
+      "scenarioId": "result-before-capture",
+      "status": "unavailable",
+      "reasons": [
+        "invalidTimestamp"
+      ],
+      "minimumWidthLowerBoundM": null,
+      "minimumHeadroomLowerBoundM": null,
+      "minimumEvidenceConfidence": null,
+      "validUntilUs": null,
+      "sessionGeneration": 1,
+      "frameId": 1,
+      "evaluatedAtUs": 1020000,
+      "timestampDomain": "elapsedRealtimeMicroseconds",
+      "referenceFrameId": "walking-frame-fixture-v1"
+    }
+  ],
+  "modelCorrectnessEstablished": false,
+  "deviceCalibrationEstablished": false,
+  "runtimeIntegrated": false,
+  "promotionAllowed": false
+}

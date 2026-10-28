@@ -1,0 +1,45 @@
+{
+  "checkpointIdentity": "fc6b3bc0262dd6c018886578bcebd5a9971cbd642bc89698a7576182ff235187",
+  "packet": {
+    "width": 320,
+    "height": 240,
+    "frameId": 201,
+    "capturedOffsetMs": 0,
+    "fx": 231.1111068725586,
+    "fy": 231.11111640930176,
+    "cx": 160.0,
+    "cy": 120.0,
+    "cameraToWalkingRotation": [
+      0.7986354827880859,
+      0.5211871266365051,
+      -0.30090752243995667,
+      0.6018150448799133,
+      -0.6916385889053345,
+      0.39931774139404297,
+      0.0,
+      -0.5,
+      -0.8660253882408142
+    ],
+    "cameraOriginM": [
+      0.0,
+      0.0,
+      1.4199999570846558
+    ],
+    "depth": {
+      "path": "camera-pan-approach/coverage-views-00-range.f32.gz",
+      "sha256": "d0bb3a965b94e904ba67ee1454c65ef100b57eded7d40f7aa8c9189480b78d4f"
+    },
+    "freeZLower": {
+      "path": "camera-pan-approach/coverage-views-00-lower.f32.gz",
+      "sha256": "157c9ebf7df21b2e62449dd9caec58723823c99fbbad8580817815375bfcf992"
+    },
+    "surfaceZUpper": {
+      "path": "camera-pan-approach/coverage-views-00-upper.f32.gz",
+      "sha256": "ee91f100ca296d5208ddf01e5cf547e73125fe4a7e97903ccdec8756a8d0c85c"
+    },
+    "validity": {
+      "path": "camera-pan-approach/coverage-views-00-valid.u8.gz",
+      "sha256": "004cdacd6163c635e68cca086aa885f59bd894af2d01d1cda61a0ef5be30aab2"
+    }
+  }
+}

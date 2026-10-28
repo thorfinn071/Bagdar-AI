@@ -1,0 +1,57 @@
+{
+  "sourceManifestSha256": "8b8a79c60ace7cbc2641f36384fda8a89d8d5af7121fc4bd6844dd9d8e944e91",
+  "assets": [
+    {
+      "path": "previews/camera-pan-approach.gif",
+      "sha256": "3bd538f5d047422f0d925ac17d7e2fe1981bb94b562d286e9edbdef743f0400e"
+    },
+    {
+      "path": "previews/camera-pan-clear.gif",
+      "sha256": "934ddcc7e009a5ca93ed7b1b1679dff9d0f821e64f54cd94a041a940b4329d34"
+    },
+    {
+      "path": "previews/doorway-narrow.gif",
+      "sha256": "41cec24f359e5e6cc929d4fdfa34ace1bcade4b4ed0b759cf6ae478ad508d7fa"
+    },
+    {
+      "path": "previews/doorway-wide.gif",
+      "sha256": "c24d369d38f5058dc3097f7573ae2f5bd90713070ce3b6b73cc96f50f0c72cbc"
+    },
+    {
+      "path": "previews/floor-drop.gif",
+      "sha256": "434e485fd2e16e846d9b8fb2fe9bc5d373013968214a69a31e18c7aa316467f8"
+    },
+    {
+      "path": "previews/floor-level.gif",
+      "sha256": "e3ec75d0ac9dd1539048ad32a22a838a22ecf10b337f5138d281235272dec827"
+    },
+    {
+      "path": "previews/headroom-high.gif",
+      "sha256": "b95a30d6104144abec4170fae72f70a94a75c6eec006d27bdde3b9c50b7a3776"
+    },
+    {
+      "path": "previews/headroom-low.gif",
+      "sha256": "604f81334eac682183eeaa25357a3ee5e788a1c8bd358e7dd4f6d7f59c18406a"
+    },
+    {
+      "path": "previews/overview.png",
+      "sha256": "269cf383006c48d3c5f916dcee838bdebdbdeabaef0433b97a9cdc852aa5e59f"
+    },
+    {
+      "path": "previews/path-box.gif",
+      "sha256": "9c99f9b8ef5b6d6cc66b3c60aa2e64aa9ee21bb440d46519513705a20afe1210"
+    },
+    {
+      "path": "previews/path-clear.gif",
+      "sha256": "12b9681b7f9dc64bdbc8c993af4f1909510ab91aa12323d62faa179647a65e6e"
+    },
+    {
+      "path": "previews/person-approach.gif",
+      "sha256": "d9ef0242ee441d9527872272f031359fb1c7d559d37291a3250693946a1443ee"
+    },
+    {
+      "path": "previews/person-side.gif",
+      "sha256": "72ff916aaf20960c80d9600e04fc001995f98de7638a34bda996fcbe83ce73f6"
+    }
+  ]
+}

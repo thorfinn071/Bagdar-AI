@@ -1,0 +1,100 @@
+{
+  "passed": true,
+  "promotionAllowed": false,
+  "sources": {
+    "tool/blender/check_scan_surface_bounds.py": "bb74c78321108d1bd04dc193162ee37749bfbe8fd9c2803fbe143fe0683a021d",
+    "tool/blender/visible_bounds_union.py": "76b5bcaf840025a8d45d9c554112525a89a6ab65e54e61ba97075c68d1db567f",
+    "tool/blender/pixel_surface_envelope.py": "fb062d4cef5cf0e34cac7c4262411435fcdb63f8f470c3ed487a6f7b735b2b51",
+    "tool/blender/scan_view_selection.py": "dcfefe3a79a72b8e97b2d36416e01a07a90d918b2cb520559fee187cac0447bd",
+    "tool/blender/visible_bounds_fast.py": "179a93ea117d46e934ef6e26e3b10d230254f09ace7954a3571246f9e5a6d09b"
+  },
+  "cases": [
+    {
+      "case": "shallow-seams",
+      "rangeLowerValidityExact": true,
+      "newBoundedPixels": 2560,
+      "grid": {
+        "horizontalHalfFovDeg": 34.695154023007596,
+        "verticalHalfFovDeg": 27.43972741101578,
+        "marginDeg": 5,
+        "yawDeg": [
+          -37.0,
+          0.0,
+          37.0
+        ],
+        "pitchDeg": [
+          -60.0,
+          -25.0,
+          10.0,
+          45.0
+        ],
+        "poses": [
+          [
+            -37.0,
+            -60.0
+          ],
+          [
+            0.0,
+            -60.0
+          ],
+          [
+            37.0,
+            -60.0
+          ],
+          [
+            -37.0,
+            -25.0
+          ],
+          [
+            0.0,
+            -25.0
+          ],
+          [
+            37.0,
+            -25.0
+          ],
+          [
+            -37.0,
+            10.0
+          ],
+          [
+            0.0,
+            10.0
+          ],
+          [
+            37.0,
+            10.0
+          ],
+          [
+            -37.0,
+            45.0
+          ],
+          [
+            0.0,
+            45.0
+          ],
+          [
+            37.0,
+            45.0
+          ]
+        ]
+      }
+    },
+    {
+      "case": "subpixel-foreground",
+      "passed": true
+    },
+    {
+      "case": "noncentral-ray-witnesses",
+      "boundedWitnesses": 245
+    },
+    {
+      "case": "hidden-geometry-invariance",
+      "bitExact": true
+    },
+    {
+      "case": "overlapping-coplanar-hole",
+      "passed": true
+    }
+  ]
+}

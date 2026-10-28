@@ -1,0 +1,2055 @@
+{
+  "schemaVersion": 1,
+  "passed": true,
+  "geometryGoalReached": true,
+  "promotionAllowed": false,
+  "runtimeWired": false,
+  "deviceRuntime": "not_run",
+  "scope": "known regression frozen-state geometry; strict runtime freshness unchanged",
+  "movingFalseStops": "not_remeasured; prior 55/55 unchanged",
+  "manifestSha256": "9ac0c485109504e37d399868e04b1eee2d83470a5db440ee3a0434ed2306367f",
+  "completeEnvelopeManifestSha256": "705352e35f5a00354a967f338ce2e8b583f8419579a47097fcc7211df6784736",
+  "canonicalHeightManifestSha256": "4e986747a13e255b3cd7d1c262ca72ad7b2c4079aee88598693059a232a0c3e2",
+  "priorReportSha256": "1eb8bdb79ebd7ad199e4f7c2488aed76040467e3acf0000eba5922a4b712602a",
+  "evaluatorSha256": "214bf1a4ddd54089618b8f1c66304b480b7fce0b2b638cae5db5074fcf5a499d",
+  "summary": {
+    "passableMeasuredClear": 6,
+    "hazardBlocked": 6,
+    "hazardIncorrectlyClear": 0,
+    "strictStaleRejected": 12
+  },
+  "originalHeightSummary": {
+    "passableUnavailable": 6,
+    "hazardBlocked": 6
+  },
+  "scans": [
+    {
+      "sceneId": "path-clear",
+      "physicalHazard": false,
+      "views": 12,
+      "diagnosticStatus": "measuredClear",
+      "originalHeightStatus": "unavailable",
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation"
+      ],
+      "certifiedBodyBoxes": 1716,
+      "unknownBodyBoxes": 0,
+      "sections": [
+        {
+          "startM": 0.2,
+          "endM": 0.35,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.35,
+          "endM": 0.5,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.5,
+          "endM": 0.6499999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.6499999999999999,
+          "endM": 0.8,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.8,
+          "endM": 0.95,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.95,
+          "endM": 1.0999999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.0999999999999999,
+          "endM": 1.2499999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.2499999999999998,
+          "endM": 1.4,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.4,
+          "endM": 1.5499999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.5499999999999998,
+          "endM": 1.7,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.7,
+          "endM": 1.8499999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.8499999999999999,
+          "endM": 1.9999999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.9999999999999998,
+          "endM": 2.15,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.15,
+          "endM": 2.3,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.3,
+          "endM": 2.45,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.45,
+          "endM": 2.6,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.6,
+          "endM": 2.75,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.75,
+          "endM": 2.9,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.9,
+          "endM": 3.05,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 3.05,
+          "endM": 3.2,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 3.2,
+          "endM": 3.35,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 3.35,
+          "endM": 3.5,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        }
+      ]
+    },
+    {
+      "sceneId": "path-box",
+      "physicalHazard": true,
+      "views": 12,
+      "diagnosticStatus": "blocked",
+      "originalHeightStatus": "blocked",
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation"
+      ],
+      "certifiedBodyBoxes": 1260,
+      "unknownBodyBoxes": 66,
+      "sections": [
+        {
+          "startM": 0.2,
+          "endM": 0.35,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.35,
+          "endM": 0.5,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.5,
+          "endM": 0.6499999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.6499999999999999,
+          "endM": 0.8,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.8,
+          "endM": 0.95,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.95,
+          "endM": 1.0999999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.0999999999999999,
+          "endM": 1.2499999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.2499999999999998,
+          "endM": 1.4,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.4,
+          "endM": 1.5499999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.5499999999999998,
+          "endM": 1.7,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.7,
+          "endM": 1.8499999999999999,
+          "state": "blocked",
+          "bodyObservedFraction": 0.0,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 1.8499999999999999,
+          "endM": 1.9999999999999998,
+          "state": "blocked",
+          "bodyObservedFraction": 0.0,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 1.9999999999999998,
+          "endM": 2.15,
+          "state": "blocked",
+          "bodyObservedFraction": 0.0,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 2.15,
+          "endM": 2.3,
+          "state": "blocked",
+          "bodyObservedFraction": 0.0,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 2.3,
+          "endM": 2.45,
+          "state": "blocked",
+          "bodyObservedFraction": 0.0,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 2.45,
+          "endM": 2.6,
+          "state": "unknown",
+          "bodyObservedFraction": 0.7692307692307693,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 2.6,
+          "endM": 2.75,
+          "state": "unknown",
+          "bodyObservedFraction": 0.8461538461538461,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 2.75,
+          "endM": 2.9,
+          "state": "unknown",
+          "bodyObservedFraction": 0.8461538461538461,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 2.9,
+          "endM": 3.05,
+          "state": "unknown",
+          "bodyObservedFraction": 0.8461538461538461,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 3.05,
+          "endM": 3.2,
+          "state": "unknown",
+          "bodyObservedFraction": 0.9230769230769231,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 3.2,
+          "endM": 3.35,
+          "state": "unknown",
+          "bodyObservedFraction": 0.9230769230769231,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 3.35,
+          "endM": 3.5,
+          "state": "unknown",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 0.0
+        }
+      ]
+    },
+    {
+      "sceneId": "doorway-wide",
+      "physicalHazard": false,
+      "views": 12,
+      "diagnosticStatus": "measuredClear",
+      "originalHeightStatus": "unavailable",
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation"
+      ],
+      "certifiedBodyBoxes": 1716,
+      "unknownBodyBoxes": 0,
+      "sections": [
+        {
+          "startM": 0.2,
+          "endM": 0.35,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.35,
+          "endM": 0.5,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.5,
+          "endM": 0.6499999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.6499999999999999,
+          "endM": 0.8,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.8,
+          "endM": 0.95,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.95,
+          "endM": 1.0999999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.0999999999999999,
+          "endM": 1.2499999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.2499999999999998,
+          "endM": 1.4,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.4,
+          "endM": 1.5499999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.5499999999999998,
+          "endM": 1.7,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.7,
+          "endM": 1.8499999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.8499999999999999,
+          "endM": 1.9999999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.9999999999999998,
+          "endM": 2.15,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.15,
+          "endM": 2.3,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.3,
+          "endM": 2.45,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.45,
+          "endM": 2.6,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.6,
+          "endM": 2.75,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.75,
+          "endM": 2.9,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.9,
+          "endM": 3.05,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 3.05,
+          "endM": 3.2,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 3.2,
+          "endM": 3.35,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 3.35,
+          "endM": 3.5,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        }
+      ]
+    },
+    {
+      "sceneId": "doorway-narrow",
+      "physicalHazard": true,
+      "views": 12,
+      "diagnosticStatus": "blocked",
+      "originalHeightStatus": "blocked",
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation"
+      ],
+      "certifiedBodyBoxes": 1326,
+      "unknownBodyBoxes": 156,
+      "sections": [
+        {
+          "startM": 0.2,
+          "endM": 0.35,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.35,
+          "endM": 0.5,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.5,
+          "endM": 0.6499999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.6499999999999999,
+          "endM": 0.8,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.8,
+          "endM": 0.95,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.95,
+          "endM": 1.0999999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.0999999999999999,
+          "endM": 1.2499999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.2499999999999998,
+          "endM": 1.4,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.4,
+          "endM": 1.5499999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.5499999999999998,
+          "endM": 1.7,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.7,
+          "endM": 1.8499999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.8499999999999999,
+          "endM": 1.9999999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.9999999999999998,
+          "endM": 2.15,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.15,
+          "endM": 2.3,
+          "state": "blocked",
+          "bodyObservedFraction": 0.0,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 2.3,
+          "endM": 2.45,
+          "state": "blocked",
+          "bodyObservedFraction": 0.0,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 2.45,
+          "endM": 2.6,
+          "state": "blocked",
+          "bodyObservedFraction": 0.0,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 2.6,
+          "endM": 2.75,
+          "state": "unknown",
+          "bodyObservedFraction": 0.6666666666666666,
+          "floorObservedFraction": 0.6666666666666666
+        },
+        {
+          "startM": 2.75,
+          "endM": 2.9,
+          "state": "unknown",
+          "bodyObservedFraction": 0.6666666666666666,
+          "floorObservedFraction": 0.6666666666666666
+        },
+        {
+          "startM": 2.9,
+          "endM": 3.05,
+          "state": "unknown",
+          "bodyObservedFraction": 0.6666666666666666,
+          "floorObservedFraction": 0.6666666666666666
+        },
+        {
+          "startM": 3.05,
+          "endM": 3.2,
+          "state": "unknown",
+          "bodyObservedFraction": 0.6666666666666666,
+          "floorObservedFraction": 0.6666666666666666
+        },
+        {
+          "startM": 3.2,
+          "endM": 3.35,
+          "state": "unknown",
+          "bodyObservedFraction": 0.6666666666666666,
+          "floorObservedFraction": 0.6666666666666666
+        },
+        {
+          "startM": 3.35,
+          "endM": 3.5,
+          "state": "unknown",
+          "bodyObservedFraction": 0.6666666666666666,
+          "floorObservedFraction": 0.6666666666666666
+        }
+      ]
+    },
+    {
+      "sceneId": "headroom-high",
+      "physicalHazard": false,
+      "views": 12,
+      "diagnosticStatus": "measuredClear",
+      "originalHeightStatus": "unavailable",
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation"
+      ],
+      "certifiedBodyBoxes": 1716,
+      "unknownBodyBoxes": 0,
+      "sections": [
+        {
+          "startM": 0.2,
+          "endM": 0.35,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.35,
+          "endM": 0.5,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.5,
+          "endM": 0.6499999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.6499999999999999,
+          "endM": 0.8,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.8,
+          "endM": 0.95,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.95,
+          "endM": 1.0999999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.0999999999999999,
+          "endM": 1.2499999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.2499999999999998,
+          "endM": 1.4,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.4,
+          "endM": 1.5499999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.5499999999999998,
+          "endM": 1.7,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.7,
+          "endM": 1.8499999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.8499999999999999,
+          "endM": 1.9999999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.9999999999999998,
+          "endM": 2.15,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.15,
+          "endM": 2.3,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.3,
+          "endM": 2.45,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.45,
+          "endM": 2.6,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.6,
+          "endM": 2.75,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.75,
+          "endM": 2.9,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.9,
+          "endM": 3.05,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 3.05,
+          "endM": 3.2,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 3.2,
+          "endM": 3.35,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 3.35,
+          "endM": 3.5,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        }
+      ]
+    },
+    {
+      "sceneId": "headroom-low",
+      "physicalHazard": true,
+      "views": 12,
+      "diagnosticStatus": "blocked",
+      "originalHeightStatus": "blocked",
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation"
+      ],
+      "certifiedBodyBoxes": 1368,
+      "unknownBodyBoxes": 270,
+      "sections": [
+        {
+          "startM": 0.2,
+          "endM": 0.35,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.35,
+          "endM": 0.5,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.5,
+          "endM": 0.6499999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.6499999999999999,
+          "endM": 0.8,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.8,
+          "endM": 0.95,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.95,
+          "endM": 1.0999999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.0999999999999999,
+          "endM": 1.2499999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.2499999999999998,
+          "endM": 1.4,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.4,
+          "endM": 1.5499999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.5499999999999998,
+          "endM": 1.7,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.7,
+          "endM": 1.8499999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.8499999999999999,
+          "endM": 1.9999999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.9999999999999998,
+          "endM": 2.15,
+          "state": "blocked",
+          "bodyObservedFraction": 0.0,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 2.15,
+          "endM": 2.3,
+          "state": "unknown",
+          "bodyObservedFraction": 0.6153846153846154,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.3,
+          "endM": 2.45,
+          "state": "unknown",
+          "bodyObservedFraction": 0.6153846153846154,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.45,
+          "endM": 2.6,
+          "state": "unknown",
+          "bodyObservedFraction": 0.6153846153846154,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.6,
+          "endM": 2.75,
+          "state": "unknown",
+          "bodyObservedFraction": 0.6153846153846154,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.75,
+          "endM": 2.9,
+          "state": "unknown",
+          "bodyObservedFraction": 0.6153846153846154,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.9,
+          "endM": 3.05,
+          "state": "unknown",
+          "bodyObservedFraction": 0.6153846153846154,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 3.05,
+          "endM": 3.2,
+          "state": "unknown",
+          "bodyObservedFraction": 0.6153846153846154,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 3.2,
+          "endM": 3.35,
+          "state": "unknown",
+          "bodyObservedFraction": 0.6153846153846154,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 3.35,
+          "endM": 3.5,
+          "state": "unknown",
+          "bodyObservedFraction": 0.6153846153846154,
+          "floorObservedFraction": 1.0
+        }
+      ]
+    },
+    {
+      "sceneId": "floor-level",
+      "physicalHazard": false,
+      "views": 12,
+      "diagnosticStatus": "measuredClear",
+      "originalHeightStatus": "unavailable",
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation"
+      ],
+      "certifiedBodyBoxes": 1716,
+      "unknownBodyBoxes": 0,
+      "sections": [
+        {
+          "startM": 0.2,
+          "endM": 0.35,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.35,
+          "endM": 0.5,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.5,
+          "endM": 0.6499999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.6499999999999999,
+          "endM": 0.8,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.8,
+          "endM": 0.95,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.95,
+          "endM": 1.0999999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.0999999999999999,
+          "endM": 1.2499999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.2499999999999998,
+          "endM": 1.4,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.4,
+          "endM": 1.5499999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.5499999999999998,
+          "endM": 1.7,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.7,
+          "endM": 1.8499999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.8499999999999999,
+          "endM": 1.9999999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.9999999999999998,
+          "endM": 2.15,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.15,
+          "endM": 2.3,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.3,
+          "endM": 2.45,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.45,
+          "endM": 2.6,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.6,
+          "endM": 2.75,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.75,
+          "endM": 2.9,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.9,
+          "endM": 3.05,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 3.05,
+          "endM": 3.2,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 3.2,
+          "endM": 3.35,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 3.35,
+          "endM": 3.5,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        }
+      ]
+    },
+    {
+      "sceneId": "floor-drop",
+      "physicalHazard": true,
+      "views": 12,
+      "diagnosticStatus": "blocked",
+      "originalHeightStatus": "blocked",
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation"
+      ],
+      "certifiedBodyBoxes": 948,
+      "unknownBodyBoxes": 144,
+      "sections": [
+        {
+          "startM": 0.2,
+          "endM": 0.35,
+          "state": "unknown",
+          "bodyObservedFraction": 0.8461538461538461,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.35,
+          "endM": 0.5,
+          "state": "unknown",
+          "bodyObservedFraction": 0.8461538461538461,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.5,
+          "endM": 0.6499999999999999,
+          "state": "unknown",
+          "bodyObservedFraction": 0.8461538461538461,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.6499999999999999,
+          "endM": 0.8,
+          "state": "unknown",
+          "bodyObservedFraction": 0.8974358974358975,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.8,
+          "endM": 0.95,
+          "state": "unknown",
+          "bodyObservedFraction": 0.8974358974358975,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.95,
+          "endM": 1.0999999999999999,
+          "state": "unknown",
+          "bodyObservedFraction": 0.8974358974358975,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.0999999999999999,
+          "endM": 1.2499999999999998,
+          "state": "unknown",
+          "bodyObservedFraction": 0.8461538461538461,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.2499999999999998,
+          "endM": 1.4,
+          "state": "unknown",
+          "bodyObservedFraction": 0.8461538461538461,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.4,
+          "endM": 1.5499999999999998,
+          "state": "unknown",
+          "bodyObservedFraction": 0.9230769230769231,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.5499999999999998,
+          "endM": 1.7,
+          "state": "unknown",
+          "bodyObservedFraction": 0.9230769230769231,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.7,
+          "endM": 1.8499999999999999,
+          "state": "unknown",
+          "bodyObservedFraction": 0.8461538461538461,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.8499999999999999,
+          "endM": 1.9999999999999998,
+          "state": "unknown",
+          "bodyObservedFraction": 0.8461538461538461,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 1.9999999999999998,
+          "endM": 2.15,
+          "state": "unknown",
+          "bodyObservedFraction": 0.8461538461538461,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 2.15,
+          "endM": 2.3,
+          "state": "unknown",
+          "bodyObservedFraction": 0.8461538461538461,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 2.3,
+          "endM": 2.45,
+          "state": "blocked",
+          "bodyObservedFraction": 0.0,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 2.45,
+          "endM": 2.6,
+          "state": "blocked",
+          "bodyObservedFraction": 0.0,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 2.6,
+          "endM": 2.75,
+          "state": "blocked",
+          "bodyObservedFraction": 0.0,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 2.75,
+          "endM": 2.9,
+          "state": "blocked",
+          "bodyObservedFraction": 0.0,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 2.9,
+          "endM": 3.05,
+          "state": "blocked",
+          "bodyObservedFraction": 0.0,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 3.05,
+          "endM": 3.2,
+          "state": "blocked",
+          "bodyObservedFraction": 0.0,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 3.2,
+          "endM": 3.35,
+          "state": "blocked",
+          "bodyObservedFraction": 0.0,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 3.35,
+          "endM": 3.5,
+          "state": "blocked",
+          "bodyObservedFraction": 0.0,
+          "floorObservedFraction": 0.0
+        }
+      ]
+    },
+    {
+      "sceneId": "person-side",
+      "physicalHazard": false,
+      "views": 12,
+      "diagnosticStatus": "measuredClear",
+      "originalHeightStatus": "unavailable",
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation"
+      ],
+      "certifiedBodyBoxes": 1716,
+      "unknownBodyBoxes": 0,
+      "sections": [
+        {
+          "startM": 0.2,
+          "endM": 0.35,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.35,
+          "endM": 0.5,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.5,
+          "endM": 0.6499999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.6499999999999999,
+          "endM": 0.8,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.8,
+          "endM": 0.95,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.95,
+          "endM": 1.0999999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.0999999999999999,
+          "endM": 1.2499999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.2499999999999998,
+          "endM": 1.4,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.4,
+          "endM": 1.5499999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.5499999999999998,
+          "endM": 1.7,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.7,
+          "endM": 1.8499999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.8499999999999999,
+          "endM": 1.9999999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.9999999999999998,
+          "endM": 2.15,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.15,
+          "endM": 2.3,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.3,
+          "endM": 2.45,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.45,
+          "endM": 2.6,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.6,
+          "endM": 2.75,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.75,
+          "endM": 2.9,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.9,
+          "endM": 3.05,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 3.05,
+          "endM": 3.2,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 3.2,
+          "endM": 3.35,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 3.35,
+          "endM": 3.5,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        }
+      ]
+    },
+    {
+      "sceneId": "person-approach",
+      "physicalHazard": true,
+      "views": 12,
+      "diagnosticStatus": "blocked",
+      "originalHeightStatus": "blocked",
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation"
+      ],
+      "certifiedBodyBoxes": 1018,
+      "unknownBodyBoxes": 542,
+      "sections": [
+        {
+          "startM": 0.2,
+          "endM": 0.35,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.35,
+          "endM": 0.5,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.5,
+          "endM": 0.6499999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.6499999999999999,
+          "endM": 0.8,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.8,
+          "endM": 0.95,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.95,
+          "endM": 1.0999999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.0999999999999999,
+          "endM": 1.2499999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.2499999999999998,
+          "endM": 1.4,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.4,
+          "endM": 1.5499999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.5499999999999998,
+          "endM": 1.7,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.7,
+          "endM": 1.8499999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.8499999999999999,
+          "endM": 1.9999999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.9999999999999998,
+          "endM": 2.15,
+          "state": "blocked",
+          "bodyObservedFraction": 0.0,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 2.15,
+          "endM": 2.3,
+          "state": "blocked",
+          "bodyObservedFraction": 0.0,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 2.3,
+          "endM": 2.45,
+          "state": "unknown",
+          "bodyObservedFraction": 0.20512820512820512,
+          "floorObservedFraction": 0.3333333333333333
+        },
+        {
+          "startM": 2.45,
+          "endM": 2.6,
+          "state": "unknown",
+          "bodyObservedFraction": 0.1794871794871795,
+          "floorObservedFraction": 0.3333333333333333
+        },
+        {
+          "startM": 2.6,
+          "endM": 2.75,
+          "state": "unknown",
+          "bodyObservedFraction": 0.15384615384615385,
+          "floorObservedFraction": 0.3333333333333333
+        },
+        {
+          "startM": 2.75,
+          "endM": 2.9,
+          "state": "unknown",
+          "bodyObservedFraction": 0.15384615384615385,
+          "floorObservedFraction": 0.3333333333333333
+        },
+        {
+          "startM": 2.9,
+          "endM": 3.05,
+          "state": "unknown",
+          "bodyObservedFraction": 0.1282051282051282,
+          "floorObservedFraction": 0.3333333333333333
+        },
+        {
+          "startM": 3.05,
+          "endM": 3.2,
+          "state": "unknown",
+          "bodyObservedFraction": 0.10256410256410256,
+          "floorObservedFraction": 0.3333333333333333
+        },
+        {
+          "startM": 3.2,
+          "endM": 3.35,
+          "state": "unknown",
+          "bodyObservedFraction": 0.07692307692307693,
+          "floorObservedFraction": 0.3333333333333333
+        },
+        {
+          "startM": 3.35,
+          "endM": 3.5,
+          "state": "unknown",
+          "bodyObservedFraction": 0.05128205128205128,
+          "floorObservedFraction": 0.0
+        }
+      ]
+    },
+    {
+      "sceneId": "camera-pan-clear",
+      "physicalHazard": false,
+      "views": 12,
+      "diagnosticStatus": "measuredClear",
+      "originalHeightStatus": "unavailable",
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation"
+      ],
+      "certifiedBodyBoxes": 1716,
+      "unknownBodyBoxes": 0,
+      "sections": [
+        {
+          "startM": 0.2,
+          "endM": 0.35,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.35,
+          "endM": 0.5,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.5,
+          "endM": 0.6499999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.6499999999999999,
+          "endM": 0.8,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.8,
+          "endM": 0.95,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.95,
+          "endM": 1.0999999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.0999999999999999,
+          "endM": 1.2499999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.2499999999999998,
+          "endM": 1.4,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.4,
+          "endM": 1.5499999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.5499999999999998,
+          "endM": 1.7,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.7,
+          "endM": 1.8499999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.8499999999999999,
+          "endM": 1.9999999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.9999999999999998,
+          "endM": 2.15,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.15,
+          "endM": 2.3,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.3,
+          "endM": 2.45,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.45,
+          "endM": 2.6,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.6,
+          "endM": 2.75,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.75,
+          "endM": 2.9,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 2.9,
+          "endM": 3.05,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 3.05,
+          "endM": 3.2,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 3.2,
+          "endM": 3.35,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 3.35,
+          "endM": 3.5,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        }
+      ]
+    },
+    {
+      "sceneId": "camera-pan-approach",
+      "physicalHazard": true,
+      "views": 12,
+      "diagnosticStatus": "blocked",
+      "originalHeightStatus": "blocked",
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation"
+      ],
+      "certifiedBodyBoxes": 1012,
+      "unknownBodyBoxes": 470,
+      "sections": [
+        {
+          "startM": 0.2,
+          "endM": 0.35,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.35,
+          "endM": 0.5,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.5,
+          "endM": 0.6499999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.6499999999999999,
+          "endM": 0.8,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.8,
+          "endM": 0.95,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 0.95,
+          "endM": 1.0999999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.0999999999999999,
+          "endM": 1.2499999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.2499999999999998,
+          "endM": 1.4,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.4,
+          "endM": 1.5499999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.5499999999999998,
+          "endM": 1.7,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.7,
+          "endM": 1.8499999999999999,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.8499999999999999,
+          "endM": 1.9999999999999998,
+          "state": "measured",
+          "bodyObservedFraction": 1.0,
+          "floorObservedFraction": 1.0
+        },
+        {
+          "startM": 1.9999999999999998,
+          "endM": 2.15,
+          "state": "blocked",
+          "bodyObservedFraction": 0.0,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 2.15,
+          "endM": 2.3,
+          "state": "blocked",
+          "bodyObservedFraction": 0.0,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 2.3,
+          "endM": 2.45,
+          "state": "blocked",
+          "bodyObservedFraction": 0.0,
+          "floorObservedFraction": 0.0
+        },
+        {
+          "startM": 2.45,
+          "endM": 2.6,
+          "state": "unknown",
+          "bodyObservedFraction": 0.20512820512820512,
+          "floorObservedFraction": 0.3333333333333333
+        },
+        {
+          "startM": 2.6,
+          "endM": 2.75,
+          "state": "unknown",
+          "bodyObservedFraction": 0.1794871794871795,
+          "floorObservedFraction": 0.3333333333333333
+        },
+        {
+          "startM": 2.75,
+          "endM": 2.9,
+          "state": "unknown",
+          "bodyObservedFraction": 0.15384615384615385,
+          "floorObservedFraction": 0.3333333333333333
+        },
+        {
+          "startM": 2.9,
+          "endM": 3.05,
+          "state": "unknown",
+          "bodyObservedFraction": 0.15384615384615385,
+          "floorObservedFraction": 0.3333333333333333
+        },
+        {
+          "startM": 3.05,
+          "endM": 3.2,
+          "state": "unknown",
+          "bodyObservedFraction": 0.1282051282051282,
+          "floorObservedFraction": 0.3333333333333333
+        },
+        {
+          "startM": 3.2,
+          "endM": 3.35,
+          "state": "unknown",
+          "bodyObservedFraction": 0.10256410256410256,
+          "floorObservedFraction": 0.3333333333333333
+        },
+        {
+          "startM": 3.35,
+          "endM": 3.5,
+          "state": "unknown",
+          "bodyObservedFraction": 0.05128205128205128,
+          "floorObservedFraction": 0.3333333333333333
+        }
+      ]
+    }
+  ]
+}

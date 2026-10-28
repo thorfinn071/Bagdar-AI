@@ -1,0 +1,1051 @@
+{
+  "scope": "measured desktop wall clock, separate from functional reaction offsets; excludes scan and NN",
+  "frames": [
+    {
+      "layoutId": "validation-temporal-wide-00",
+      "mode": "ncnn-control",
+      "frameId": 1,
+      "captureOffsetUs": 0,
+      "action": "continueForward",
+      "detectorTrackerMs": 80.391,
+      "reconstructionMs": 0.004,
+      "runtimeMs": 32.035,
+      "decisionComputeMs": 113.008
+    },
+    {
+      "layoutId": "validation-temporal-wide-00",
+      "mode": "ncnn-control",
+      "frameId": 11,
+      "captureOffsetUs": 2000000,
+      "action": "holdAndScan",
+      "detectorTrackerMs": 32.892,
+      "reconstructionMs": 0.001,
+      "runtimeMs": 1.38,
+      "decisionComputeMs": 34.286
+    },
+    {
+      "layoutId": "validation-temporal-wide-00",
+      "mode": "ncnn-control",
+      "frameId": 12,
+      "captureOffsetUs": 2200000,
+      "action": "holdAndScan",
+      "detectorTrackerMs": 20.042,
+      "reconstructionMs": 0.001,
+      "runtimeMs": 2.341,
+      "decisionComputeMs": 22.397
+    },
+    {
+      "layoutId": "validation-temporal-wide-00",
+      "mode": "ncnn-control",
+      "frameId": 13,
+      "captureOffsetUs": 2400000,
+      "action": "stopNow",
+      "detectorTrackerMs": 5.306,
+      "reconstructionMs": 0.0,
+      "runtimeMs": 0.731,
+      "decisionComputeMs": 6.051
+    },
+    {
+      "layoutId": "validation-temporal-wide-00",
+      "mode": "associated-stateful",
+      "frameId": 1,
+      "captureOffsetUs": 0,
+      "action": "stopNow",
+      "detectorTrackerMs": 4.868,
+      "reconstructionMs": 94.976,
+      "runtimeMs": 106.195,
+      "decisionComputeMs": 206.091
+    },
+    {
+      "layoutId": "validation-temporal-wide-00",
+      "mode": "associated-stateful",
+      "frameId": 11,
+      "captureOffsetUs": 2000000,
+      "action": "holdAndScan",
+      "detectorTrackerMs": 5.281,
+      "reconstructionMs": 277.839,
+      "runtimeMs": 28.732,
+      "decisionComputeMs": 311.872
+    },
+    {
+      "layoutId": "validation-temporal-wide-00",
+      "mode": "associated-stateful",
+      "frameId": 12,
+      "captureOffsetUs": 2200000,
+      "action": "continueForward",
+      "detectorTrackerMs": 4.948,
+      "reconstructionMs": 250.249,
+      "runtimeMs": 24.226,
+      "decisionComputeMs": 279.44
+    },
+    {
+      "layoutId": "validation-temporal-wide-00",
+      "mode": "associated-stateful",
+      "frameId": 13,
+      "captureOffsetUs": 2400000,
+      "action": "continueForward",
+      "detectorTrackerMs": 4.714,
+      "reconstructionMs": 293.043,
+      "runtimeMs": 30.877,
+      "decisionComputeMs": 328.65
+    },
+    {
+      "layoutId": "validation-temporal-wide-00",
+      "mode": "associated-stable",
+      "frameId": 1,
+      "captureOffsetUs": 0,
+      "action": "stopNow",
+      "detectorTrackerMs": 6.981,
+      "reconstructionMs": 63.755,
+      "runtimeMs": 34.967,
+      "decisionComputeMs": 105.72
+    },
+    {
+      "layoutId": "validation-temporal-wide-00",
+      "mode": "associated-stable",
+      "frameId": 11,
+      "captureOffsetUs": 2000000,
+      "action": "holdAndScan",
+      "detectorTrackerMs": 19.491,
+      "reconstructionMs": 357.317,
+      "runtimeMs": 32.925,
+      "decisionComputeMs": 409.753
+    },
+    {
+      "layoutId": "validation-temporal-wide-00",
+      "mode": "associated-stable",
+      "frameId": 12,
+      "captureOffsetUs": 2200000,
+      "action": "continueForward",
+      "detectorTrackerMs": 5.961,
+      "reconstructionMs": 279.999,
+      "runtimeMs": 26.879,
+      "decisionComputeMs": 312.855
+    },
+    {
+      "layoutId": "validation-temporal-wide-00",
+      "mode": "associated-stable",
+      "frameId": 13,
+      "captureOffsetUs": 2400000,
+      "action": "continueForward",
+      "detectorTrackerMs": 6.094,
+      "reconstructionMs": 320.705,
+      "runtimeMs": 29.023,
+      "decisionComputeMs": 355.839
+    },
+    {
+      "layoutId": "validation-temporal-door-pass-01",
+      "mode": "ncnn-control",
+      "frameId": 1,
+      "captureOffsetUs": 0,
+      "action": "stopNow",
+      "detectorTrackerMs": 36.444,
+      "reconstructionMs": 0.001,
+      "runtimeMs": 0.941,
+      "decisionComputeMs": 37.404
+    },
+    {
+      "layoutId": "validation-temporal-door-pass-01",
+      "mode": "ncnn-control",
+      "frameId": 11,
+      "captureOffsetUs": 2000000,
+      "action": "holdAndScan",
+      "detectorTrackerMs": 12.981,
+      "reconstructionMs": 0.002,
+      "runtimeMs": 1.173,
+      "decisionComputeMs": 14.173
+    },
+    {
+      "layoutId": "validation-temporal-door-pass-01",
+      "mode": "ncnn-control",
+      "frameId": 12,
+      "captureOffsetUs": 2200000,
+      "action": "holdAndScan",
+      "detectorTrackerMs": 12.245,
+      "reconstructionMs": 0.001,
+      "runtimeMs": 1.794,
+      "decisionComputeMs": 14.06
+    },
+    {
+      "layoutId": "validation-temporal-door-pass-01",
+      "mode": "ncnn-control",
+      "frameId": 13,
+      "captureOffsetUs": 2400000,
+      "action": "stopNow",
+      "detectorTrackerMs": 5.246,
+      "reconstructionMs": 0.001,
+      "runtimeMs": 0.775,
+      "decisionComputeMs": 6.035
+    },
+    {
+      "layoutId": "validation-temporal-door-pass-01",
+      "mode": "associated-stateful",
+      "frameId": 1,
+      "captureOffsetUs": 0,
+      "action": "stopNow",
+      "detectorTrackerMs": 6.334,
+      "reconstructionMs": 46.849,
+      "runtimeMs": 0.889,
+      "decisionComputeMs": 54.09
+    },
+    {
+      "layoutId": "validation-temporal-door-pass-01",
+      "mode": "associated-stateful",
+      "frameId": 11,
+      "captureOffsetUs": 2000000,
+      "action": "holdAndScan",
+      "detectorTrackerMs": 5.423,
+      "reconstructionMs": 309.123,
+      "runtimeMs": 1.289,
+      "decisionComputeMs": 315.854
+    },
+    {
+      "layoutId": "validation-temporal-door-pass-01",
+      "mode": "associated-stateful",
+      "frameId": 12,
+      "captureOffsetUs": 2200000,
+      "action": "continueForward",
+      "detectorTrackerMs": 4.99,
+      "reconstructionMs": 299.201,
+      "runtimeMs": 0.884,
+      "decisionComputeMs": 305.091
+    },
+    {
+      "layoutId": "validation-temporal-door-pass-01",
+      "mode": "associated-stateful",
+      "frameId": 13,
+      "captureOffsetUs": 2400000,
+      "action": "continueForward",
+      "detectorTrackerMs": 6.063,
+      "reconstructionMs": 305.443,
+      "runtimeMs": 1.056,
+      "decisionComputeMs": 312.582
+    },
+    {
+      "layoutId": "validation-temporal-door-pass-01",
+      "mode": "associated-stable",
+      "frameId": 1,
+      "captureOffsetUs": 0,
+      "action": "stopNow",
+      "detectorTrackerMs": 7.165,
+      "reconstructionMs": 44.437,
+      "runtimeMs": 1.344,
+      "decisionComputeMs": 52.964
+    },
+    {
+      "layoutId": "validation-temporal-door-pass-01",
+      "mode": "associated-stable",
+      "frameId": 11,
+      "captureOffsetUs": 2000000,
+      "action": "holdAndScan",
+      "detectorTrackerMs": 5.845,
+      "reconstructionMs": 326.07,
+      "runtimeMs": 0.928,
+      "decisionComputeMs": 332.86
+    },
+    {
+      "layoutId": "validation-temporal-door-pass-01",
+      "mode": "associated-stable",
+      "frameId": 12,
+      "captureOffsetUs": 2200000,
+      "action": "continueForward",
+      "detectorTrackerMs": 12.701,
+      "reconstructionMs": 459.392,
+      "runtimeMs": 1.183,
+      "decisionComputeMs": 473.298
+    },
+    {
+      "layoutId": "validation-temporal-door-pass-01",
+      "mode": "associated-stable",
+      "frameId": 13,
+      "captureOffsetUs": 2400000,
+      "action": "continueForward",
+      "detectorTrackerMs": 5.348,
+      "reconstructionMs": 377.274,
+      "runtimeMs": 1.005,
+      "decisionComputeMs": 383.644
+    },
+    {
+      "layoutId": "validation-temporal-outside-pole-02",
+      "mode": "ncnn-control",
+      "frameId": 1,
+      "captureOffsetUs": 0,
+      "action": "stopNow",
+      "detectorTrackerMs": 16.167,
+      "reconstructionMs": 0.001,
+      "runtimeMs": 0.97,
+      "decisionComputeMs": 17.158
+    },
+    {
+      "layoutId": "validation-temporal-outside-pole-02",
+      "mode": "ncnn-control",
+      "frameId": 11,
+      "captureOffsetUs": 2000000,
+      "action": "holdAndScan",
+      "detectorTrackerMs": 5.955,
+      "reconstructionMs": 0.001,
+      "runtimeMs": 0.689,
+      "decisionComputeMs": 6.662
+    },
+    {
+      "layoutId": "validation-temporal-outside-pole-02",
+      "mode": "ncnn-control",
+      "frameId": 12,
+      "captureOffsetUs": 2200000,
+      "action": "holdAndScan",
+      "detectorTrackerMs": 6.845,
+      "reconstructionMs": 0.001,
+      "runtimeMs": 1.122,
+      "decisionComputeMs": 7.981
+    },
+    {
+      "layoutId": "validation-temporal-outside-pole-02",
+      "mode": "ncnn-control",
+      "frameId": 13,
+      "captureOffsetUs": 2400000,
+      "action": "stopNow",
+      "detectorTrackerMs": 5.963,
+      "reconstructionMs": 0.001,
+      "runtimeMs": 0.706,
+      "decisionComputeMs": 6.684
+    },
+    {
+      "layoutId": "validation-temporal-outside-pole-02",
+      "mode": "associated-stateful",
+      "frameId": 1,
+      "captureOffsetUs": 0,
+      "action": "stopNow",
+      "detectorTrackerMs": 10.287,
+      "reconstructionMs": 44.963,
+      "runtimeMs": 51.49,
+      "decisionComputeMs": 106.758
+    },
+    {
+      "layoutId": "validation-temporal-outside-pole-02",
+      "mode": "associated-stateful",
+      "frameId": 11,
+      "captureOffsetUs": 2000000,
+      "action": "holdAndScan",
+      "detectorTrackerMs": 5.488,
+      "reconstructionMs": 298.284,
+      "runtimeMs": 53.563,
+      "decisionComputeMs": 357.352
+    },
+    {
+      "layoutId": "validation-temporal-outside-pole-02",
+      "mode": "associated-stateful",
+      "frameId": 12,
+      "captureOffsetUs": 2200000,
+      "action": "continueForward",
+      "detectorTrackerMs": 7.094,
+      "reconstructionMs": 298.343,
+      "runtimeMs": 52.786,
+      "decisionComputeMs": 358.24
+    },
+    {
+      "layoutId": "validation-temporal-outside-pole-02",
+      "mode": "associated-stateful",
+      "frameId": 13,
+      "captureOffsetUs": 2400000,
+      "action": "continueForward",
+      "detectorTrackerMs": 5.661,
+      "reconstructionMs": 286.149,
+      "runtimeMs": 32.179,
+      "decisionComputeMs": 324.008
+    },
+    {
+      "layoutId": "validation-temporal-outside-pole-02",
+      "mode": "associated-stable",
+      "frameId": 1,
+      "captureOffsetUs": 0,
+      "action": "stopNow",
+      "detectorTrackerMs": 4.874,
+      "reconstructionMs": 36.023,
+      "runtimeMs": 37.697,
+      "decisionComputeMs": 78.611
+    },
+    {
+      "layoutId": "validation-temporal-outside-pole-02",
+      "mode": "associated-stable",
+      "frameId": 11,
+      "captureOffsetUs": 2000000,
+      "action": "holdAndScan",
+      "detectorTrackerMs": 5.026,
+      "reconstructionMs": 289.996,
+      "runtimeMs": 41.179,
+      "decisionComputeMs": 336.217
+    },
+    {
+      "layoutId": "validation-temporal-outside-pole-02",
+      "mode": "associated-stable",
+      "frameId": 12,
+      "captureOffsetUs": 2200000,
+      "action": "continueForward",
+      "detectorTrackerMs": 9.523,
+      "reconstructionMs": 373.778,
+      "runtimeMs": 37.97,
+      "decisionComputeMs": 421.289
+    },
+    {
+      "layoutId": "validation-temporal-outside-pole-02",
+      "mode": "associated-stable",
+      "frameId": 13,
+      "captureOffsetUs": 2400000,
+      "action": "continueForward",
+      "detectorTrackerMs": 4.801,
+      "reconstructionMs": 251.576,
+      "runtimeMs": 37.012,
+      "decisionComputeMs": 293.408
+    },
+    {
+      "layoutId": "validation-temporal-low-bar-03",
+      "mode": "ncnn-control",
+      "frameId": 1,
+      "captureOffsetUs": 0,
+      "action": "stopNow",
+      "detectorTrackerMs": 4.773,
+      "reconstructionMs": 0.001,
+      "runtimeMs": 0.931,
+      "decisionComputeMs": 5.721
+    },
+    {
+      "layoutId": "validation-temporal-low-bar-03",
+      "mode": "ncnn-control",
+      "frameId": 11,
+      "captureOffsetUs": 2000000,
+      "action": "stopNow",
+      "detectorTrackerMs": 4.801,
+      "reconstructionMs": 0.0,
+      "runtimeMs": 0.528,
+      "decisionComputeMs": 5.34
+    },
+    {
+      "layoutId": "validation-temporal-low-bar-03",
+      "mode": "ncnn-control",
+      "frameId": 12,
+      "captureOffsetUs": 2200000,
+      "action": "stopNow",
+      "detectorTrackerMs": 4.885,
+      "reconstructionMs": 0.0,
+      "runtimeMs": 0.489,
+      "decisionComputeMs": 5.384
+    },
+    {
+      "layoutId": "validation-temporal-low-bar-03",
+      "mode": "ncnn-control",
+      "frameId": 13,
+      "captureOffsetUs": 2400000,
+      "action": "stopNow",
+      "detectorTrackerMs": 5.237,
+      "reconstructionMs": 0.0,
+      "runtimeMs": 0.788,
+      "decisionComputeMs": 6.039
+    },
+    {
+      "layoutId": "validation-temporal-low-bar-03",
+      "mode": "associated-stateful",
+      "frameId": 1,
+      "captureOffsetUs": 0,
+      "action": "stopNow",
+      "detectorTrackerMs": 5.35,
+      "reconstructionMs": 37.372,
+      "runtimeMs": 41.403,
+      "decisionComputeMs": 84.141
+    },
+    {
+      "layoutId": "validation-temporal-low-bar-03",
+      "mode": "associated-stateful",
+      "frameId": 11,
+      "captureOffsetUs": 2000000,
+      "action": "stopNow",
+      "detectorTrackerMs": 4.569,
+      "reconstructionMs": 268.332,
+      "runtimeMs": 40.113,
+      "decisionComputeMs": 313.031
+    },
+    {
+      "layoutId": "validation-temporal-low-bar-03",
+      "mode": "associated-stateful",
+      "frameId": 12,
+      "captureOffsetUs": 2200000,
+      "action": "stopNow",
+      "detectorTrackerMs": 4.617,
+      "reconstructionMs": 425.809,
+      "runtimeMs": 60.134,
+      "decisionComputeMs": 490.576
+    },
+    {
+      "layoutId": "validation-temporal-low-bar-03",
+      "mode": "associated-stateful",
+      "frameId": 13,
+      "captureOffsetUs": 2400000,
+      "action": "stopNow",
+      "detectorTrackerMs": 6.773,
+      "reconstructionMs": 340.267,
+      "runtimeMs": 55.435,
+      "decisionComputeMs": 402.492
+    },
+    {
+      "layoutId": "validation-temporal-low-bar-03",
+      "mode": "associated-stable",
+      "frameId": 1,
+      "captureOffsetUs": 0,
+      "action": "stopNow",
+      "detectorTrackerMs": 7.188,
+      "reconstructionMs": 46.332,
+      "runtimeMs": 52.677,
+      "decisionComputeMs": 106.217
+    },
+    {
+      "layoutId": "validation-temporal-low-bar-03",
+      "mode": "associated-stable",
+      "frameId": 11,
+      "captureOffsetUs": 2000000,
+      "action": "stopNow",
+      "detectorTrackerMs": 9.368,
+      "reconstructionMs": 439.747,
+      "runtimeMs": 59.36,
+      "decisionComputeMs": 508.493
+    },
+    {
+      "layoutId": "validation-temporal-low-bar-03",
+      "mode": "associated-stable",
+      "frameId": 12,
+      "captureOffsetUs": 2200000,
+      "action": "stopNow",
+      "detectorTrackerMs": 8.474,
+      "reconstructionMs": 440.851,
+      "runtimeMs": 64.268,
+      "decisionComputeMs": 513.613
+    },
+    {
+      "layoutId": "validation-temporal-low-bar-03",
+      "mode": "associated-stable",
+      "frameId": 13,
+      "captureOffsetUs": 2400000,
+      "action": "stopNow",
+      "detectorTrackerMs": 10.032,
+      "reconstructionMs": 443.178,
+      "runtimeMs": 54.418,
+      "decisionComputeMs": 507.648
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "mode": "ncnn-control",
+      "frameId": 1,
+      "captureOffsetUs": 0,
+      "action": "stopNow",
+      "detectorTrackerMs": 13.398,
+      "reconstructionMs": 0.001,
+      "runtimeMs": 0.71,
+      "decisionComputeMs": 14.125
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "mode": "ncnn-control",
+      "frameId": 2,
+      "captureOffsetUs": 200000,
+      "action": "stopNow",
+      "detectorTrackerMs": 7.634,
+      "reconstructionMs": 0.001,
+      "runtimeMs": 1.542,
+      "decisionComputeMs": 9.195
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "mode": "ncnn-control",
+      "frameId": 3,
+      "captureOffsetUs": 400000,
+      "action": "stopNow",
+      "detectorTrackerMs": 4.311,
+      "reconstructionMs": 0.001,
+      "runtimeMs": 0.721,
+      "decisionComputeMs": 5.047
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "mode": "ncnn-control",
+      "frameId": 4,
+      "captureOffsetUs": 600000,
+      "action": "stopNow",
+      "detectorTrackerMs": 4.863,
+      "reconstructionMs": 0.001,
+      "runtimeMs": 0.694,
+      "decisionComputeMs": 5.57
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "mode": "ncnn-control",
+      "frameId": 5,
+      "captureOffsetUs": 800000,
+      "action": "stopNow",
+      "detectorTrackerMs": 5.294,
+      "reconstructionMs": 0.0,
+      "runtimeMs": 0.941,
+      "decisionComputeMs": 6.248
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "mode": "ncnn-control",
+      "frameId": 6,
+      "captureOffsetUs": 1000000,
+      "action": "stopNow",
+      "detectorTrackerMs": 5.914,
+      "reconstructionMs": 0.001,
+      "runtimeMs": 0.764,
+      "decisionComputeMs": 6.691
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "mode": "ncnn-control",
+      "frameId": 7,
+      "captureOffsetUs": 1200000,
+      "action": "stopNow",
+      "detectorTrackerMs": 5.669,
+      "reconstructionMs": 0.001,
+      "runtimeMs": 0.683,
+      "decisionComputeMs": 6.366
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "mode": "associated-stateful",
+      "frameId": 1,
+      "captureOffsetUs": 0,
+      "action": "stopNow",
+      "detectorTrackerMs": 5.368,
+      "reconstructionMs": 62.684,
+      "runtimeMs": 1.128,
+      "decisionComputeMs": 69.201
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "mode": "associated-stateful",
+      "frameId": 2,
+      "captureOffsetUs": 200000,
+      "action": "stopNow",
+      "detectorTrackerMs": 6.568,
+      "reconstructionMs": 50.515,
+      "runtimeMs": 26.659,
+      "decisionComputeMs": 83.767
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "mode": "associated-stateful",
+      "frameId": 3,
+      "captureOffsetUs": 400000,
+      "action": "stopNow",
+      "detectorTrackerMs": 8.563,
+      "reconstructionMs": 70.421,
+      "runtimeMs": 100.572,
+      "decisionComputeMs": 179.576
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "mode": "associated-stateful",
+      "frameId": 4,
+      "captureOffsetUs": 600000,
+      "action": "stopNow",
+      "detectorTrackerMs": 7.283,
+      "reconstructionMs": 53.173,
+      "runtimeMs": 43.073,
+      "decisionComputeMs": 103.546
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "mode": "associated-stateful",
+      "frameId": 5,
+      "captureOffsetUs": 800000,
+      "action": "stopNow",
+      "detectorTrackerMs": 4.648,
+      "reconstructionMs": 60.98,
+      "runtimeMs": 38.844,
+      "decisionComputeMs": 104.491
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "mode": "associated-stateful",
+      "frameId": 6,
+      "captureOffsetUs": 1000000,
+      "action": "stopNow",
+      "detectorTrackerMs": 6.306,
+      "reconstructionMs": 46.143,
+      "runtimeMs": 32.46,
+      "decisionComputeMs": 84.929
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "mode": "associated-stateful",
+      "frameId": 7,
+      "captureOffsetUs": 1200000,
+      "action": "stopNow",
+      "detectorTrackerMs": 5.419,
+      "reconstructionMs": 38.793,
+      "runtimeMs": 31.938,
+      "decisionComputeMs": 76.17
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "mode": "associated-stable",
+      "frameId": 1,
+      "captureOffsetUs": 0,
+      "action": "stopNow",
+      "detectorTrackerMs": 5.078,
+      "reconstructionMs": 56.065,
+      "runtimeMs": 1.329,
+      "decisionComputeMs": 62.495
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "mode": "associated-stable",
+      "frameId": 2,
+      "captureOffsetUs": 200000,
+      "action": "stopNow",
+      "detectorTrackerMs": 7.043,
+      "reconstructionMs": 52.0,
+      "runtimeMs": 48.481,
+      "decisionComputeMs": 107.543
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "mode": "associated-stable",
+      "frameId": 3,
+      "captureOffsetUs": 400000,
+      "action": "stopNow",
+      "detectorTrackerMs": 6.217,
+      "reconstructionMs": 43.66,
+      "runtimeMs": 13.918,
+      "decisionComputeMs": 63.812
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "mode": "associated-stable",
+      "frameId": 4,
+      "captureOffsetUs": 600000,
+      "action": "stopNow",
+      "detectorTrackerMs": 10.016,
+      "reconstructionMs": 158.852,
+      "runtimeMs": 79.518,
+      "decisionComputeMs": 248.407
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "mode": "associated-stable",
+      "frameId": 5,
+      "captureOffsetUs": 800000,
+      "action": "stopNow",
+      "detectorTrackerMs": 9.389,
+      "reconstructionMs": 79.611,
+      "runtimeMs": 39.52,
+      "decisionComputeMs": 128.543
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "mode": "associated-stable",
+      "frameId": 6,
+      "captureOffsetUs": 1000000,
+      "action": "stopNow",
+      "detectorTrackerMs": 5.329,
+      "reconstructionMs": 40.687,
+      "runtimeMs": 33.399,
+      "decisionComputeMs": 79.433
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "mode": "associated-stable",
+      "frameId": 7,
+      "captureOffsetUs": 1200000,
+      "action": "stopNow",
+      "detectorTrackerMs": 8.283,
+      "reconstructionMs": 43.413,
+      "runtimeMs": 2.171,
+      "decisionComputeMs": 53.885
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "mode": "ncnn-control",
+      "frameId": 1,
+      "captureOffsetUs": 0,
+      "action": "stopNow",
+      "detectorTrackerMs": 6.622,
+      "reconstructionMs": 0.001,
+      "runtimeMs": 0.961,
+      "decisionComputeMs": 7.603
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "mode": "ncnn-control",
+      "frameId": 2,
+      "captureOffsetUs": 200000,
+      "action": "holdAndScan",
+      "detectorTrackerMs": 13.776,
+      "reconstructionMs": 0.03,
+      "runtimeMs": 0.858,
+      "decisionComputeMs": 14.684
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "mode": "ncnn-control",
+      "frameId": 3,
+      "captureOffsetUs": 400000,
+      "action": "stopNow",
+      "detectorTrackerMs": 12.427,
+      "reconstructionMs": 0.001,
+      "runtimeMs": 2.2,
+      "decisionComputeMs": 14.649
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "mode": "ncnn-control",
+      "frameId": 4,
+      "captureOffsetUs": 600000,
+      "action": "stopNow",
+      "detectorTrackerMs": 16.078,
+      "reconstructionMs": 0.001,
+      "runtimeMs": 1.016,
+      "decisionComputeMs": 17.114
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "mode": "ncnn-control",
+      "frameId": 5,
+      "captureOffsetUs": 800000,
+      "action": "stopNow",
+      "detectorTrackerMs": 10.65,
+      "reconstructionMs": 0.001,
+      "runtimeMs": 1.335,
+      "decisionComputeMs": 12.005
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "mode": "ncnn-control",
+      "frameId": 6,
+      "captureOffsetUs": 1000000,
+      "action": "stopNow",
+      "detectorTrackerMs": 8.161,
+      "reconstructionMs": 0.001,
+      "runtimeMs": 1.858,
+      "decisionComputeMs": 10.044
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "mode": "ncnn-control",
+      "frameId": 7,
+      "captureOffsetUs": 1200000,
+      "action": "stopNow",
+      "detectorTrackerMs": 5.457,
+      "reconstructionMs": 0.001,
+      "runtimeMs": 0.614,
+      "decisionComputeMs": 6.086
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "mode": "associated-stateful",
+      "frameId": 1,
+      "captureOffsetUs": 0,
+      "action": "stopNow",
+      "detectorTrackerMs": 5.286,
+      "reconstructionMs": 54.753,
+      "runtimeMs": 32.199,
+      "decisionComputeMs": 92.257
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "mode": "associated-stateful",
+      "frameId": 2,
+      "captureOffsetUs": 200000,
+      "action": "holdAndScan",
+      "detectorTrackerMs": 8.51,
+      "reconstructionMs": 44.939,
+      "runtimeMs": 1.0,
+      "decisionComputeMs": 54.469
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "mode": "associated-stateful",
+      "frameId": 3,
+      "captureOffsetUs": 400000,
+      "action": "stopNow",
+      "detectorTrackerMs": 4.862,
+      "reconstructionMs": 41.24,
+      "runtimeMs": 1.409,
+      "decisionComputeMs": 47.534
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "mode": "associated-stateful",
+      "frameId": 4,
+      "captureOffsetUs": 600000,
+      "action": "stopNow",
+      "detectorTrackerMs": 8.227,
+      "reconstructionMs": 39.461,
+      "runtimeMs": 1.459,
+      "decisionComputeMs": 49.165
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "mode": "associated-stateful",
+      "frameId": 5,
+      "captureOffsetUs": 800000,
+      "action": "stopNow",
+      "detectorTrackerMs": 6.033,
+      "reconstructionMs": 45.819,
+      "runtimeMs": 1.278,
+      "decisionComputeMs": 53.146
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "mode": "associated-stateful",
+      "frameId": 6,
+      "captureOffsetUs": 1000000,
+      "action": "stopNow",
+      "detectorTrackerMs": 4.585,
+      "reconstructionMs": 47.01,
+      "runtimeMs": 1.526,
+      "decisionComputeMs": 53.138
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "mode": "associated-stateful",
+      "frameId": 7,
+      "captureOffsetUs": 1200000,
+      "action": "stopNow",
+      "detectorTrackerMs": 5.528,
+      "reconstructionMs": 44.411,
+      "runtimeMs": 27.341,
+      "decisionComputeMs": 77.305
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "mode": "associated-stable",
+      "frameId": 1,
+      "captureOffsetUs": 0,
+      "action": "stopNow",
+      "detectorTrackerMs": 5.021,
+      "reconstructionMs": 57.553,
+      "runtimeMs": 34.089,
+      "decisionComputeMs": 96.68
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "mode": "associated-stable",
+      "frameId": 2,
+      "captureOffsetUs": 200000,
+      "action": "holdAndScan",
+      "detectorTrackerMs": 7.307,
+      "reconstructionMs": 44.629,
+      "runtimeMs": 1.273,
+      "decisionComputeMs": 53.227
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "mode": "associated-stable",
+      "frameId": 3,
+      "captureOffsetUs": 400000,
+      "action": "stopNow",
+      "detectorTrackerMs": 6.017,
+      "reconstructionMs": 49.328,
+      "runtimeMs": 1.353,
+      "decisionComputeMs": 56.718
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "mode": "associated-stable",
+      "frameId": 4,
+      "captureOffsetUs": 600000,
+      "action": "stopNow",
+      "detectorTrackerMs": 9.397,
+      "reconstructionMs": 53.106,
+      "runtimeMs": 1.184,
+      "decisionComputeMs": 63.706
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "mode": "associated-stable",
+      "frameId": 5,
+      "captureOffsetUs": 800000,
+      "action": "stopNow",
+      "detectorTrackerMs": 6.248,
+      "reconstructionMs": 48.079,
+      "runtimeMs": 1.59,
+      "decisionComputeMs": 55.935
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "mode": "associated-stable",
+      "frameId": 6,
+      "captureOffsetUs": 1000000,
+      "action": "stopNow",
+      "detectorTrackerMs": 6.554,
+      "reconstructionMs": 54.01,
+      "runtimeMs": 1.269,
+      "decisionComputeMs": 61.852
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "mode": "associated-stable",
+      "frameId": 7,
+      "captureOffsetUs": 1200000,
+      "action": "stopNow",
+      "detectorTrackerMs": 6.444,
+      "reconstructionMs": 41.893,
+      "runtimeMs": 22.99,
+      "decisionComputeMs": 71.343
+    }
+  ],
+  "summaries": {
+    "ncnn-control": {
+      "detectorTrackerMs": {
+        "p50": 6.622,
+        "p95": 36.444
+      },
+      "reconstructionMs": {
+        "p50": 0.001,
+        "p95": 0.004
+      },
+      "runtimeMs": {
+        "p50": 0.931,
+        "p95": 2.341
+      },
+      "decisionComputeMs": {
+        "p50": 7.603,
+        "p95": 37.404
+      }
+    },
+    "associated-stateful": {
+      "detectorTrackerMs": {
+        "p50": 5.423,
+        "p95": 8.563
+      },
+      "reconstructionMs": {
+        "p50": 60.98,
+        "p95": 340.267
+      },
+      "runtimeMs": {
+        "p50": 30.877,
+        "p95": 100.572
+      },
+      "decisionComputeMs": {
+        "p50": 104.491,
+        "p95": 402.492
+      }
+    },
+    "associated-stable": {
+      "detectorTrackerMs": {
+        "p50": 6.554,
+        "p95": 12.701
+      },
+      "reconstructionMs": {
+        "p50": 57.553,
+        "p95": 443.178
+      },
+      "runtimeMs": {
+        "p50": 29.023,
+        "p95": 64.268
+      },
+      "decisionComputeMs": {
+        "p50": 106.217,
+        "p95": 508.493
+      }
+    }
+  }
+}

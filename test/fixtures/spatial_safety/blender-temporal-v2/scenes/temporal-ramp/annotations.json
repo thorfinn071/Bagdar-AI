@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "sceneId": "temporal-ramp",
+  "annotationRevision": 1,
+  "initialFeedback": "none",
+  "timeline": [
+    {
+      "startOffsetMs": 0,
+      "endOffsetMs": 100,
+      "expectedActions": [
+        "continueForward"
+      ],
+      "forbiddenActions": [
+        "adjustLeft",
+        "adjustRight"
+      ],
+      "expectedHealth": [
+        "healthy"
+      ],
+      "expectedAlertEvents": [
+        "suppressed"
+      ],
+      "expectedShadowDirections": [
+        "none"
+      ],
+      "interruptCurrent": false
+    },
+    {
+      "startOffsetMs": 300,
+      "endOffsetMs": 400,
+      "expectedActions": [
+        "continueForward"
+      ],
+      "forbiddenActions": [
+        "adjustLeft",
+        "adjustRight"
+      ],
+      "expectedHealth": [
+        "healthy"
+      ],
+      "expectedAlertEvents": [
+        "suppressed"
+      ],
+      "expectedShadowDirections": [
+        "none"
+      ],
+      "interruptCurrent": false
+    },
+    {
+      "startOffsetMs": 600,
+      "endOffsetMs": 700,
+      "expectedActions": [
+        "continueForward"
+      ],
+      "forbiddenActions": [
+        "adjustLeft",
+        "adjustRight"
+      ],
+      "expectedHealth": [
+        "healthy"
+      ],
+      "expectedAlertEvents": [
+        "suppressed"
+      ],
+      "expectedShadowDirections": [
+        "none"
+      ],
+      "interruptCurrent": false
+    }
+  ]
+}

@@ -1,0 +1,3802 @@
+{
+  "schemaVersion": 1,
+  "passed": true,
+  "mode": "elapsed-nn",
+  "runtime": "3.11.1 (stable) (Tue Feb 24 00:03:07 2026 -0800) on \"windows_x64\"",
+  "executableSha256": "c182501ab7982b8722c0859989218798716f68a3f0973335609344c434251db2",
+  "scope": "preloaded known frozen Blender geometry; source construction + one observation + strict evaluation + shadow dispatch guard; original 2.2 s capture span; excludes physical capture, decode/hash loading, phone transport, active planner/audio/haptics",
+  "captureToCommandMeasured": false,
+  "runtimeWired": false,
+  "promotionAllowed": false,
+  "deviceRuntime": "not_run",
+  "controlledWalking": "not_run",
+  "currentAgeLimitUs": 100000,
+  "rounds": 3,
+  "fixtureLoadUs": 9904762,
+  "manifestSha256": "9ac0c485109504e37d399868e04b1eee2d83470a5db440ee3a0434ed2306367f",
+  "baselineCoreSha256": "bed0a3fbf1b192bc0f2f8ace0a46abc8b5ab6aa08e0e3f704397caa719bdb3e0",
+  "sources": {
+    "lib/safety/perception/camera_indexed_height_envelope_passage_source.dart": "9c9142a3d4c366a1f019aa615b79586fd06002a460508f789fb64dff6875040f",
+    "lib/safety/runtime/camera_scan_age_gate.dart": "8c65a06299d8da0136acac0b8ee73dc0a92bf032bfafb59c23a188d315587ad8",
+    "tool/model_benchmark/scan_processing_support.dart": "7b5767e0479ff563c5076fb90680d18341844b83858c622f94919b69724604fc",
+    "tool/model_benchmark/profile_scan_processing.dart": "c4d369c09ae9a10f29b8448a7d7a0887d27236f99ccf4bde061b16650f60fec9",
+    "tool/model_benchmark/scan_processing_ncnn_load.py": "5b5ae72ca9a36067c0abebf777d876ca4216bac28f622faafafef3eef149400b",
+    "test/camera_indexed_scan_replay_test.dart": "d10f45ff712e51fcc59758cf8036936367962c42861c75b412a11e8c8a0508b1",
+    "test/camera_scan_age_gate_test.dart": "7be33583156a98e9431374f374c09aa84ea2378e1c15f17cae34b0223c8b3c2f",
+    "docs/blender-scan-processing-protocol-2026-10-04.md": "f84dd7b2529d4532a4c0a98f7e812315c53956c65bd6efbcb3120bb1ec4747f1"
+  },
+  "neuralLoad": {
+    "ready": {
+      "ready": true,
+      "warmupInferences": 10,
+      "runtime": "ncnn-1.0.20260114-cpu-threads1",
+      "numThreads": 1,
+      "corpusSha256": "cf25129d7303af3f5087967ea03622a96f3eab52694490c6bfb99bf1bfd7d5c1",
+      "pinnedSha256": "7a5f923db0bb3ca1aef6d90a61dcbc9156311fb59392ce9a11e1a914bafd089b",
+      "modelParamSha256": "d618bb98777ff7e7adeeef1c8cf50ede79c97c754876681d6a0b26330708e8d3",
+      "modelBinSha256": "324412b094f3309c0c7acd506a06ccdc60296749ac382dc58431efdde0f13242",
+      "rgbFrames": [
+        {
+          "path": "validation-scale-motion-approach-00/0-rgb.png",
+          "sha256": "fd364198bccac3cbc67a914048dde19a9aea34d7e7e03ce7ddcdbe1d47f57685"
+        },
+        {
+          "path": "validation-scale-motion-approach-00/1-rgb.png",
+          "sha256": "821d6ed2fca05b6a62c05405aeaa5b19dacd689900c5cd16822a7db681c746f3"
+        },
+        {
+          "path": "validation-scale-motion-approach-00/2-rgb.png",
+          "sha256": "2717c9c6036f83c47c8b056b516c51cb30e6bf58a1a6f37e2894632c37b74733"
+        }
+      ],
+      "geometryInput": false
+    },
+    "result": {
+      "stopped": true,
+      "inferences": 293,
+      "allOutputsMatchPinned": true,
+      "rows": [
+        {
+          "startUs": 37,
+          "finishUs": 107734,
+          "preprocessingUs": 1681,
+          "inferenceUs": 106015
+        },
+        {
+          "startUs": 108056,
+          "finishUs": 219669,
+          "preprocessingUs": 1742,
+          "inferenceUs": 109870
+        },
+        {
+          "startUs": 219917,
+          "finishUs": 329131,
+          "preprocessingUs": 1689,
+          "inferenceUs": 107525
+        },
+        {
+          "startUs": 329382,
+          "finishUs": 440394,
+          "preprocessingUs": 1664,
+          "inferenceUs": 109348
+        },
+        {
+          "startUs": 440699,
+          "finishUs": 549915,
+          "preprocessingUs": 1691,
+          "inferenceUs": 107524
+        },
+        {
+          "startUs": 550286,
+          "finishUs": 662888,
+          "preprocessingUs": 2633,
+          "inferenceUs": 109968
+        },
+        {
+          "startUs": 663173,
+          "finishUs": 770311,
+          "preprocessingUs": 1835,
+          "inferenceUs": 105301
+        },
+        {
+          "startUs": 770679,
+          "finishUs": 878139,
+          "preprocessingUs": 1750,
+          "inferenceUs": 105708
+        },
+        {
+          "startUs": 878685,
+          "finishUs": 990226,
+          "preprocessingUs": 2746,
+          "inferenceUs": 108794
+        },
+        {
+          "startUs": 990554,
+          "finishUs": 1090549,
+          "preprocessingUs": 1751,
+          "inferenceUs": 98243
+        },
+        {
+          "startUs": 1090808,
+          "finishUs": 1197251,
+          "preprocessingUs": 1690,
+          "inferenceUs": 104752
+        },
+        {
+          "startUs": 1197795,
+          "finishUs": 1308968,
+          "preprocessingUs": 2160,
+          "inferenceUs": 109012
+        },
+        {
+          "startUs": 1309296,
+          "finishUs": 1463406,
+          "preprocessingUs": 1709,
+          "inferenceUs": 152399
+        },
+        {
+          "startUs": 1463990,
+          "finishUs": 1636440,
+          "preprocessingUs": 4054,
+          "inferenceUs": 168395
+        },
+        {
+          "startUs": 1636998,
+          "finishUs": 1798365,
+          "preprocessingUs": 4126,
+          "inferenceUs": 157240
+        },
+        {
+          "startUs": 1799002,
+          "finishUs": 1966139,
+          "preprocessingUs": 2820,
+          "inferenceUs": 164317
+        },
+        {
+          "startUs": 1966473,
+          "finishUs": 2120738,
+          "preprocessingUs": 3897,
+          "inferenceUs": 150366
+        },
+        {
+          "startUs": 2121147,
+          "finishUs": 2275843,
+          "preprocessingUs": 3699,
+          "inferenceUs": 150996
+        },
+        {
+          "startUs": 2276535,
+          "finishUs": 2434750,
+          "preprocessingUs": 3287,
+          "inferenceUs": 154927
+        },
+        {
+          "startUs": 2435113,
+          "finishUs": 2591064,
+          "preprocessingUs": 3095,
+          "inferenceUs": 152854
+        },
+        {
+          "startUs": 2591364,
+          "finishUs": 2740995,
+          "preprocessingUs": 3189,
+          "inferenceUs": 146441
+        },
+        {
+          "startUs": 2741522,
+          "finishUs": 2895420,
+          "preprocessingUs": 4525,
+          "inferenceUs": 149373
+        },
+        {
+          "startUs": 2895797,
+          "finishUs": 3063762,
+          "preprocessingUs": 4922,
+          "inferenceUs": 163042
+        },
+        {
+          "startUs": 3064297,
+          "finishUs": 3227238,
+          "preprocessingUs": 4876,
+          "inferenceUs": 158064
+        },
+        {
+          "startUs": 3227776,
+          "finishUs": 3398308,
+          "preprocessingUs": 5406,
+          "inferenceUs": 165125
+        },
+        {
+          "startUs": 3398716,
+          "finishUs": 3567338,
+          "preprocessingUs": 3202,
+          "inferenceUs": 165418
+        },
+        {
+          "startUs": 3567843,
+          "finishUs": 3727569,
+          "preprocessingUs": 2340,
+          "inferenceUs": 157386
+        },
+        {
+          "startUs": 3728017,
+          "finishUs": 3890892,
+          "preprocessingUs": 3070,
+          "inferenceUs": 159804
+        },
+        {
+          "startUs": 3891452,
+          "finishUs": 4055614,
+          "preprocessingUs": 4148,
+          "inferenceUs": 160013
+        },
+        {
+          "startUs": 4055954,
+          "finishUs": 4226065,
+          "preprocessingUs": 3013,
+          "inferenceUs": 167097
+        },
+        {
+          "startUs": 4226592,
+          "finishUs": 4388229,
+          "preprocessingUs": 4708,
+          "inferenceUs": 156928
+        },
+        {
+          "startUs": 4388641,
+          "finishUs": 4563327,
+          "preprocessingUs": 3117,
+          "inferenceUs": 171569
+        },
+        {
+          "startUs": 4563893,
+          "finishUs": 4738672,
+          "preprocessingUs": 3985,
+          "inferenceUs": 170793
+        },
+        {
+          "startUs": 4739058,
+          "finishUs": 4903950,
+          "preprocessingUs": 4760,
+          "inferenceUs": 160131
+        },
+        {
+          "startUs": 4904511,
+          "finishUs": 5076406,
+          "preprocessingUs": 4341,
+          "inferenceUs": 167553
+        },
+        {
+          "startUs": 5077007,
+          "finishUs": 5247517,
+          "preprocessingUs": 4718,
+          "inferenceUs": 165791
+        },
+        {
+          "startUs": 5248093,
+          "finishUs": 5427256,
+          "preprocessingUs": 4678,
+          "inferenceUs": 174484
+        },
+        {
+          "startUs": 5427811,
+          "finishUs": 5600780,
+          "preprocessingUs": 4607,
+          "inferenceUs": 168360
+        },
+        {
+          "startUs": 5601201,
+          "finishUs": 5782659,
+          "preprocessingUs": 4032,
+          "inferenceUs": 177425
+        },
+        {
+          "startUs": 5783222,
+          "finishUs": 5966088,
+          "preprocessingUs": 4370,
+          "inferenceUs": 178496
+        },
+        {
+          "startUs": 5966814,
+          "finishUs": 6113622,
+          "preprocessingUs": 2833,
+          "inferenceUs": 143974
+        },
+        {
+          "startUs": 6113884,
+          "finishUs": 6257947,
+          "preprocessingUs": 3303,
+          "inferenceUs": 140758
+        },
+        {
+          "startUs": 6258788,
+          "finishUs": 6442898,
+          "preprocessingUs": 4149,
+          "inferenceUs": 179960
+        },
+        {
+          "startUs": 6443461,
+          "finishUs": 6614479,
+          "preprocessingUs": 3957,
+          "inferenceUs": 167061
+        },
+        {
+          "startUs": 6614912,
+          "finishUs": 6777123,
+          "preprocessingUs": 2702,
+          "inferenceUs": 159508
+        },
+        {
+          "startUs": 6777703,
+          "finishUs": 6947373,
+          "preprocessingUs": 4076,
+          "inferenceUs": 165593
+        },
+        {
+          "startUs": 6947777,
+          "finishUs": 7105411,
+          "preprocessingUs": 3678,
+          "inferenceUs": 153956
+        },
+        {
+          "startUs": 7106198,
+          "finishUs": 7272444,
+          "preprocessingUs": 4202,
+          "inferenceUs": 162043
+        },
+        {
+          "startUs": 7273052,
+          "finishUs": 7421441,
+          "preprocessingUs": 3627,
+          "inferenceUs": 144761
+        },
+        {
+          "startUs": 7422286,
+          "finishUs": 7592259,
+          "preprocessingUs": 3487,
+          "inferenceUs": 166485
+        },
+        {
+          "startUs": 7592883,
+          "finishUs": 7758166,
+          "preprocessingUs": 4257,
+          "inferenceUs": 161025
+        },
+        {
+          "startUs": 7758820,
+          "finishUs": 7919632,
+          "preprocessingUs": 2521,
+          "inferenceUs": 158290
+        },
+        {
+          "startUs": 7920206,
+          "finishUs": 8079075,
+          "preprocessingUs": 2743,
+          "inferenceUs": 156125
+        },
+        {
+          "startUs": 8079993,
+          "finishUs": 8238327,
+          "preprocessingUs": 4162,
+          "inferenceUs": 154171
+        },
+        {
+          "startUs": 8238952,
+          "finishUs": 8400325,
+          "preprocessingUs": 3923,
+          "inferenceUs": 157449
+        },
+        {
+          "startUs": 8400556,
+          "finishUs": 8565037,
+          "preprocessingUs": 3889,
+          "inferenceUs": 160591
+        },
+        {
+          "startUs": 8565504,
+          "finishUs": 8729668,
+          "preprocessingUs": 2901,
+          "inferenceUs": 161262
+        },
+        {
+          "startUs": 8730266,
+          "finishUs": 8907003,
+          "preprocessingUs": 4978,
+          "inferenceUs": 171758
+        },
+        {
+          "startUs": 8907390,
+          "finishUs": 9096864,
+          "preprocessingUs": 2974,
+          "inferenceUs": 186500
+        },
+        {
+          "startUs": 9097354,
+          "finishUs": 9261493,
+          "preprocessingUs": 4484,
+          "inferenceUs": 159654
+        },
+        {
+          "startUs": 9261897,
+          "finishUs": 9457233,
+          "preprocessingUs": 3727,
+          "inferenceUs": 191608
+        },
+        {
+          "startUs": 9457675,
+          "finishUs": 9621174,
+          "preprocessingUs": 4256,
+          "inferenceUs": 159243
+        },
+        {
+          "startUs": 9621596,
+          "finishUs": 9783267,
+          "preprocessingUs": 1977,
+          "inferenceUs": 159693
+        },
+        {
+          "startUs": 9783922,
+          "finishUs": 9957821,
+          "preprocessingUs": 4452,
+          "inferenceUs": 169447
+        },
+        {
+          "startUs": 9958284,
+          "finishUs": 10131071,
+          "preprocessingUs": 4399,
+          "inferenceUs": 168388
+        },
+        {
+          "startUs": 10131587,
+          "finishUs": 10298229,
+          "preprocessingUs": 4491,
+          "inferenceUs": 162150
+        },
+        {
+          "startUs": 10298764,
+          "finishUs": 10467357,
+          "preprocessingUs": 4588,
+          "inferenceUs": 164004
+        },
+        {
+          "startUs": 10467923,
+          "finishUs": 10633253,
+          "preprocessingUs": 4659,
+          "inferenceUs": 160670
+        },
+        {
+          "startUs": 10633660,
+          "finishUs": 10795593,
+          "preprocessingUs": 2502,
+          "inferenceUs": 159430
+        },
+        {
+          "startUs": 10795914,
+          "finishUs": 10974482,
+          "preprocessingUs": 3559,
+          "inferenceUs": 175008
+        },
+        {
+          "startUs": 10975044,
+          "finishUs": 11148026,
+          "preprocessingUs": 5087,
+          "inferenceUs": 167894
+        },
+        {
+          "startUs": 11148442,
+          "finishUs": 11324906,
+          "preprocessingUs": 4617,
+          "inferenceUs": 171846
+        },
+        {
+          "startUs": 11325276,
+          "finishUs": 11496784,
+          "preprocessingUs": 3850,
+          "inferenceUs": 167657
+        },
+        {
+          "startUs": 11497158,
+          "finishUs": 11665658,
+          "preprocessingUs": 4462,
+          "inferenceUs": 164037
+        },
+        {
+          "startUs": 11665966,
+          "finishUs": 11836984,
+          "preprocessingUs": 3571,
+          "inferenceUs": 167446
+        },
+        {
+          "startUs": 11837888,
+          "finishUs": 12005607,
+          "preprocessingUs": 2704,
+          "inferenceUs": 165014
+        },
+        {
+          "startUs": 12006180,
+          "finishUs": 12176935,
+          "preprocessingUs": 4856,
+          "inferenceUs": 165899
+        },
+        {
+          "startUs": 12177602,
+          "finishUs": 12334942,
+          "preprocessingUs": 3904,
+          "inferenceUs": 153436
+        },
+        {
+          "startUs": 12335232,
+          "finishUs": 12502649,
+          "preprocessingUs": 2254,
+          "inferenceUs": 165161
+        },
+        {
+          "startUs": 12502923,
+          "finishUs": 12676109,
+          "preprocessingUs": 2262,
+          "inferenceUs": 170924
+        },
+        {
+          "startUs": 12676683,
+          "finishUs": 12831256,
+          "preprocessingUs": 4127,
+          "inferenceUs": 150444
+        },
+        {
+          "startUs": 12831660,
+          "finishUs": 12989643,
+          "preprocessingUs": 2146,
+          "inferenceUs": 155836
+        },
+        {
+          "startUs": 12990475,
+          "finishUs": 13154565,
+          "preprocessingUs": 2542,
+          "inferenceUs": 161547
+        },
+        {
+          "startUs": 13154830,
+          "finishUs": 13329239,
+          "preprocessingUs": 3842,
+          "inferenceUs": 170566
+        },
+        {
+          "startUs": 13330090,
+          "finishUs": 13488372,
+          "preprocessingUs": 4177,
+          "inferenceUs": 154104
+        },
+        {
+          "startUs": 13488952,
+          "finishUs": 13651674,
+          "preprocessingUs": 4044,
+          "inferenceUs": 158676
+        },
+        {
+          "startUs": 13652316,
+          "finishUs": 13807256,
+          "preprocessingUs": 3315,
+          "inferenceUs": 151624
+        },
+        {
+          "startUs": 13807971,
+          "finishUs": 13965581,
+          "preprocessingUs": 2324,
+          "inferenceUs": 155285
+        },
+        {
+          "startUs": 13966111,
+          "finishUs": 14119366,
+          "preprocessingUs": 3880,
+          "inferenceUs": 149375
+        },
+        {
+          "startUs": 14119924,
+          "finishUs": 14275871,
+          "preprocessingUs": 3200,
+          "inferenceUs": 152747
+        },
+        {
+          "startUs": 14276361,
+          "finishUs": 14430222,
+          "preprocessingUs": 1853,
+          "inferenceUs": 152007
+        },
+        {
+          "startUs": 14431008,
+          "finishUs": 14598575,
+          "preprocessingUs": 3947,
+          "inferenceUs": 163619
+        },
+        {
+          "startUs": 14599097,
+          "finishUs": 14769802,
+          "preprocessingUs": 4223,
+          "inferenceUs": 166481
+        },
+        {
+          "startUs": 14770391,
+          "finishUs": 14939666,
+          "preprocessingUs": 2789,
+          "inferenceUs": 166485
+        },
+        {
+          "startUs": 14940308,
+          "finishUs": 15116025,
+          "preprocessingUs": 3306,
+          "inferenceUs": 172409
+        },
+        {
+          "startUs": 15116444,
+          "finishUs": 15278085,
+          "preprocessingUs": 4404,
+          "inferenceUs": 157236
+        },
+        {
+          "startUs": 15278674,
+          "finishUs": 15443601,
+          "preprocessingUs": 4173,
+          "inferenceUs": 160753
+        },
+        {
+          "startUs": 15443985,
+          "finishUs": 15609391,
+          "preprocessingUs": 2203,
+          "inferenceUs": 163203
+        },
+        {
+          "startUs": 15609750,
+          "finishUs": 15768253,
+          "preprocessingUs": 2585,
+          "inferenceUs": 155916
+        },
+        {
+          "startUs": 15768729,
+          "finishUs": 15944324,
+          "preprocessingUs": 2552,
+          "inferenceUs": 173043
+        },
+        {
+          "startUs": 15944887,
+          "finishUs": 16103557,
+          "preprocessingUs": 3899,
+          "inferenceUs": 154770
+        },
+        {
+          "startUs": 16104121,
+          "finishUs": 16268369,
+          "preprocessingUs": 3191,
+          "inferenceUs": 161056
+        },
+        {
+          "startUs": 16268937,
+          "finishUs": 16440966,
+          "preprocessingUs": 4314,
+          "inferenceUs": 167715
+        },
+        {
+          "startUs": 16441397,
+          "finishUs": 16608757,
+          "preprocessingUs": 4492,
+          "inferenceUs": 162867
+        },
+        {
+          "startUs": 16609132,
+          "finishUs": 16778638,
+          "preprocessingUs": 2946,
+          "inferenceUs": 166560
+        },
+        {
+          "startUs": 16779136,
+          "finishUs": 16957457,
+          "preprocessingUs": 3294,
+          "inferenceUs": 175025
+        },
+        {
+          "startUs": 16957955,
+          "finishUs": 17108358,
+          "preprocessingUs": 3888,
+          "inferenceUs": 146514
+        },
+        {
+          "startUs": 17108650,
+          "finishUs": 17272798,
+          "preprocessingUs": 2781,
+          "inferenceUs": 161366
+        },
+        {
+          "startUs": 17273116,
+          "finishUs": 17430272,
+          "preprocessingUs": 2093,
+          "inferenceUs": 155061
+        },
+        {
+          "startUs": 17430575,
+          "finishUs": 17589320,
+          "preprocessingUs": 2771,
+          "inferenceUs": 155973
+        },
+        {
+          "startUs": 17589537,
+          "finishUs": 17757392,
+          "preprocessingUs": 1854,
+          "inferenceUs": 165999
+        },
+        {
+          "startUs": 17757640,
+          "finishUs": 17922746,
+          "preprocessingUs": 2633,
+          "inferenceUs": 162471
+        },
+        {
+          "startUs": 17923188,
+          "finishUs": 18094222,
+          "preprocessingUs": 3431,
+          "inferenceUs": 167602
+        },
+        {
+          "startUs": 18094658,
+          "finishUs": 18272153,
+          "preprocessingUs": 3057,
+          "inferenceUs": 174437
+        },
+        {
+          "startUs": 18272696,
+          "finishUs": 18448049,
+          "preprocessingUs": 4024,
+          "inferenceUs": 171327
+        },
+        {
+          "startUs": 18448586,
+          "finishUs": 18623765,
+          "preprocessingUs": 4134,
+          "inferenceUs": 171044
+        },
+        {
+          "startUs": 18624329,
+          "finishUs": 18794700,
+          "preprocessingUs": 4058,
+          "inferenceUs": 166313
+        },
+        {
+          "startUs": 18795017,
+          "finishUs": 18992676,
+          "preprocessingUs": 3102,
+          "inferenceUs": 194556
+        },
+        {
+          "startUs": 18993268,
+          "finishUs": 19187192,
+          "preprocessingUs": 4332,
+          "inferenceUs": 189591
+        },
+        {
+          "startUs": 19187724,
+          "finishUs": 19361548,
+          "preprocessingUs": 3942,
+          "inferenceUs": 169882
+        },
+        {
+          "startUs": 19362087,
+          "finishUs": 19540679,
+          "preprocessingUs": 3826,
+          "inferenceUs": 174765
+        },
+        {
+          "startUs": 19541238,
+          "finishUs": 19700535,
+          "preprocessingUs": 4124,
+          "inferenceUs": 155173
+        },
+        {
+          "startUs": 19701088,
+          "finishUs": 19869764,
+          "preprocessingUs": 4389,
+          "inferenceUs": 164285
+        },
+        {
+          "startUs": 19870167,
+          "finishUs": 20026655,
+          "preprocessingUs": 2817,
+          "inferenceUs": 153671
+        },
+        {
+          "startUs": 20027381,
+          "finishUs": 20186690,
+          "preprocessingUs": 3416,
+          "inferenceUs": 155892
+        },
+        {
+          "startUs": 20187186,
+          "finishUs": 20345673,
+          "preprocessingUs": 2604,
+          "inferenceUs": 155882
+        },
+        {
+          "startUs": 20346133,
+          "finishUs": 20498924,
+          "preprocessingUs": 2610,
+          "inferenceUs": 150181
+        },
+        {
+          "startUs": 20499492,
+          "finishUs": 20659945,
+          "preprocessingUs": 4176,
+          "inferenceUs": 156276
+        },
+        {
+          "startUs": 20660323,
+          "finishUs": 20828448,
+          "preprocessingUs": 2807,
+          "inferenceUs": 165318
+        },
+        {
+          "startUs": 20829165,
+          "finishUs": 20994323,
+          "preprocessingUs": 3300,
+          "inferenceUs": 161857
+        },
+        {
+          "startUs": 20994938,
+          "finishUs": 21160553,
+          "preprocessingUs": 4085,
+          "inferenceUs": 161528
+        },
+        {
+          "startUs": 21161091,
+          "finishUs": 21308522,
+          "preprocessingUs": 4125,
+          "inferenceUs": 143305
+        },
+        {
+          "startUs": 21308916,
+          "finishUs": 21450183,
+          "preprocessingUs": 2414,
+          "inferenceUs": 138852
+        },
+        {
+          "startUs": 21450648,
+          "finishUs": 21614407,
+          "preprocessingUs": 2656,
+          "inferenceUs": 161102
+        },
+        {
+          "startUs": 21615309,
+          "finishUs": 21768323,
+          "preprocessingUs": 3976,
+          "inferenceUs": 149038
+        },
+        {
+          "startUs": 21768957,
+          "finishUs": 21944417,
+          "preprocessingUs": 3938,
+          "inferenceUs": 171521
+        },
+        {
+          "startUs": 21944993,
+          "finishUs": 22109890,
+          "preprocessingUs": 3521,
+          "inferenceUs": 161374
+        },
+        {
+          "startUs": 22110289,
+          "finishUs": 22268279,
+          "preprocessingUs": 3084,
+          "inferenceUs": 154905
+        },
+        {
+          "startUs": 22268748,
+          "finishUs": 22424497,
+          "preprocessingUs": 2845,
+          "inferenceUs": 152903
+        },
+        {
+          "startUs": 22425849,
+          "finishUs": 22589030,
+          "preprocessingUs": 3036,
+          "inferenceUs": 160145
+        },
+        {
+          "startUs": 22589650,
+          "finishUs": 22731563,
+          "preprocessingUs": 3484,
+          "inferenceUs": 138428
+        },
+        {
+          "startUs": 22732025,
+          "finishUs": 22894114,
+          "preprocessingUs": 3256,
+          "inferenceUs": 158832
+        },
+        {
+          "startUs": 22894730,
+          "finishUs": 23051695,
+          "preprocessingUs": 3982,
+          "inferenceUs": 152983
+        },
+        {
+          "startUs": 23052298,
+          "finishUs": 23218083,
+          "preprocessingUs": 4411,
+          "inferenceUs": 161373
+        },
+        {
+          "startUs": 23218480,
+          "finishUs": 23373544,
+          "preprocessingUs": 2545,
+          "inferenceUs": 152519
+        },
+        {
+          "startUs": 23374124,
+          "finishUs": 23547960,
+          "preprocessingUs": 3484,
+          "inferenceUs": 170352
+        },
+        {
+          "startUs": 23548519,
+          "finishUs": 23732128,
+          "preprocessingUs": 4054,
+          "inferenceUs": 179555
+        },
+        {
+          "startUs": 23732468,
+          "finishUs": 23894521,
+          "preprocessingUs": 3098,
+          "inferenceUs": 158954
+        },
+        {
+          "startUs": 23894916,
+          "finishUs": 24051667,
+          "preprocessingUs": 3114,
+          "inferenceUs": 153636
+        },
+        {
+          "startUs": 24052077,
+          "finishUs": 24230051,
+          "preprocessingUs": 3018,
+          "inferenceUs": 174956
+        },
+        {
+          "startUs": 24230585,
+          "finishUs": 24412409,
+          "preprocessingUs": 4027,
+          "inferenceUs": 177796
+        },
+        {
+          "startUs": 24412922,
+          "finishUs": 24603681,
+          "preprocessingUs": 4037,
+          "inferenceUs": 186722
+        },
+        {
+          "startUs": 24603970,
+          "finishUs": 24786799,
+          "preprocessingUs": 3481,
+          "inferenceUs": 179347
+        },
+        {
+          "startUs": 24787333,
+          "finishUs": 24980375,
+          "preprocessingUs": 3682,
+          "inferenceUs": 189359
+        },
+        {
+          "startUs": 24980998,
+          "finishUs": 25181870,
+          "preprocessingUs": 4165,
+          "inferenceUs": 196706
+        },
+        {
+          "startUs": 25182382,
+          "finishUs": 25388478,
+          "preprocessingUs": 4747,
+          "inferenceUs": 201347
+        },
+        {
+          "startUs": 25388818,
+          "finishUs": 25572028,
+          "preprocessingUs": 2967,
+          "inferenceUs": 180242
+        },
+        {
+          "startUs": 25572375,
+          "finishUs": 25729364,
+          "preprocessingUs": 2457,
+          "inferenceUs": 154530
+        },
+        {
+          "startUs": 25729584,
+          "finishUs": 25889225,
+          "preprocessingUs": 2870,
+          "inferenceUs": 156771
+        },
+        {
+          "startUs": 25889759,
+          "finishUs": 26055069,
+          "preprocessingUs": 4154,
+          "inferenceUs": 161154
+        },
+        {
+          "startUs": 26055600,
+          "finishUs": 26229669,
+          "preprocessingUs": 3703,
+          "inferenceUs": 170365
+        },
+        {
+          "startUs": 26230231,
+          "finishUs": 26411157,
+          "preprocessingUs": 4253,
+          "inferenceUs": 176672
+        },
+        {
+          "startUs": 26411613,
+          "finishUs": 26576412,
+          "preprocessingUs": 3297,
+          "inferenceUs": 161501
+        },
+        {
+          "startUs": 26576961,
+          "finishUs": 26751339,
+          "preprocessingUs": 4052,
+          "inferenceUs": 170325
+        },
+        {
+          "startUs": 26752197,
+          "finishUs": 26918954,
+          "preprocessingUs": 5034,
+          "inferenceUs": 161722
+        },
+        {
+          "startUs": 26919533,
+          "finishUs": 27070014,
+          "preprocessingUs": 2558,
+          "inferenceUs": 147923
+        },
+        {
+          "startUs": 27070542,
+          "finishUs": 27231634,
+          "preprocessingUs": 4160,
+          "inferenceUs": 156932
+        },
+        {
+          "startUs": 27232196,
+          "finishUs": 27401405,
+          "preprocessingUs": 4225,
+          "inferenceUs": 164983
+        },
+        {
+          "startUs": 27401717,
+          "finishUs": 27581619,
+          "preprocessingUs": 1905,
+          "inferenceUs": 177996
+        },
+        {
+          "startUs": 27582076,
+          "finishUs": 27747806,
+          "preprocessingUs": 3617,
+          "inferenceUs": 162112
+        },
+        {
+          "startUs": 27748171,
+          "finishUs": 27905972,
+          "preprocessingUs": 1919,
+          "inferenceUs": 155881
+        },
+        {
+          "startUs": 27906523,
+          "finishUs": 28071400,
+          "preprocessingUs": 4237,
+          "inferenceUs": 160640
+        },
+        {
+          "startUs": 28071967,
+          "finishUs": 28228292,
+          "preprocessingUs": 3987,
+          "inferenceUs": 152337
+        },
+        {
+          "startUs": 28228822,
+          "finishUs": 28383893,
+          "preprocessingUs": 3256,
+          "inferenceUs": 151814
+        },
+        {
+          "startUs": 28384389,
+          "finishUs": 28541341,
+          "preprocessingUs": 2709,
+          "inferenceUs": 154242
+        },
+        {
+          "startUs": 28541816,
+          "finishUs": 28707816,
+          "preprocessingUs": 3234,
+          "inferenceUs": 162766
+        },
+        {
+          "startUs": 28708053,
+          "finishUs": 28878231,
+          "preprocessingUs": 1759,
+          "inferenceUs": 168418
+        },
+        {
+          "startUs": 28878823,
+          "finishUs": 29045140,
+          "preprocessingUs": 4198,
+          "inferenceUs": 162117
+        },
+        {
+          "startUs": 29045528,
+          "finishUs": 29209030,
+          "preprocessingUs": 3604,
+          "inferenceUs": 159897
+        },
+        {
+          "startUs": 29209580,
+          "finishUs": 29375072,
+          "preprocessingUs": 4118,
+          "inferenceUs": 161373
+        },
+        {
+          "startUs": 29375417,
+          "finishUs": 29534610,
+          "preprocessingUs": 3561,
+          "inferenceUs": 155631
+        },
+        {
+          "startUs": 29534857,
+          "finishUs": 29695659,
+          "preprocessingUs": 1988,
+          "inferenceUs": 158812
+        },
+        {
+          "startUs": 29696188,
+          "finishUs": 29853340,
+          "preprocessingUs": 4119,
+          "inferenceUs": 153033
+        },
+        {
+          "startUs": 29853869,
+          "finishUs": 30018696,
+          "preprocessingUs": 3316,
+          "inferenceUs": 161510
+        },
+        {
+          "startUs": 30019245,
+          "finishUs": 30177860,
+          "preprocessingUs": 4170,
+          "inferenceUs": 154444
+        },
+        {
+          "startUs": 30178212,
+          "finishUs": 30333085,
+          "preprocessingUs": 2642,
+          "inferenceUs": 152231
+        },
+        {
+          "startUs": 30333447,
+          "finishUs": 30490221,
+          "preprocessingUs": 2881,
+          "inferenceUs": 153893
+        },
+        {
+          "startUs": 30490593,
+          "finishUs": 30650720,
+          "preprocessingUs": 3971,
+          "inferenceUs": 156155
+        },
+        {
+          "startUs": 30651063,
+          "finishUs": 30809964,
+          "preprocessingUs": 2633,
+          "inferenceUs": 156268
+        },
+        {
+          "startUs": 30810552,
+          "finishUs": 30990085,
+          "preprocessingUs": 4237,
+          "inferenceUs": 175296
+        },
+        {
+          "startUs": 30990446,
+          "finishUs": 31165628,
+          "preprocessingUs": 3945,
+          "inferenceUs": 171236
+        },
+        {
+          "startUs": 31166146,
+          "finishUs": 31341342,
+          "preprocessingUs": 4116,
+          "inferenceUs": 171078
+        },
+        {
+          "startUs": 31341665,
+          "finishUs": 31534523,
+          "preprocessingUs": 3430,
+          "inferenceUs": 189428
+        },
+        {
+          "startUs": 31535072,
+          "finishUs": 31710841,
+          "preprocessingUs": 4217,
+          "inferenceUs": 171551
+        },
+        {
+          "startUs": 31711155,
+          "finishUs": 31884327,
+          "preprocessingUs": 3778,
+          "inferenceUs": 169393
+        },
+        {
+          "startUs": 31885010,
+          "finishUs": 32066677,
+          "preprocessingUs": 4079,
+          "inferenceUs": 177588
+        },
+        {
+          "startUs": 32067354,
+          "finishUs": 32231901,
+          "preprocessingUs": 3676,
+          "inferenceUs": 160871
+        },
+        {
+          "startUs": 32232684,
+          "finishUs": 32401473,
+          "preprocessingUs": 4051,
+          "inferenceUs": 164737
+        },
+        {
+          "startUs": 32401938,
+          "finishUs": 32559595,
+          "preprocessingUs": 3438,
+          "inferenceUs": 154218
+        },
+        {
+          "startUs": 32560138,
+          "finishUs": 32726079,
+          "preprocessingUs": 2182,
+          "inferenceUs": 163758
+        },
+        {
+          "startUs": 32726456,
+          "finishUs": 32895928,
+          "preprocessingUs": 3892,
+          "inferenceUs": 165578
+        },
+        {
+          "startUs": 32896266,
+          "finishUs": 33065303,
+          "preprocessingUs": 3229,
+          "inferenceUs": 165808
+        },
+        {
+          "startUs": 33065695,
+          "finishUs": 33233027,
+          "preprocessingUs": 2873,
+          "inferenceUs": 164458
+        },
+        {
+          "startUs": 33233357,
+          "finishUs": 33406934,
+          "preprocessingUs": 2851,
+          "inferenceUs": 170725
+        },
+        {
+          "startUs": 33407527,
+          "finishUs": 33559930,
+          "preprocessingUs": 4299,
+          "inferenceUs": 148104
+        },
+        {
+          "startUs": 33560453,
+          "finishUs": 33708610,
+          "preprocessingUs": 3188,
+          "inferenceUs": 144969
+        },
+        {
+          "startUs": 33709000,
+          "finishUs": 33877992,
+          "preprocessingUs": 2696,
+          "inferenceUs": 166294
+        },
+        {
+          "startUs": 33878414,
+          "finishUs": 34059725,
+          "preprocessingUs": 4025,
+          "inferenceUs": 177285
+        },
+        {
+          "startUs": 34060333,
+          "finishUs": 34225982,
+          "preprocessingUs": 3045,
+          "inferenceUs": 162603
+        },
+        {
+          "startUs": 34226536,
+          "finishUs": 34397263,
+          "preprocessingUs": 4154,
+          "inferenceUs": 166572
+        },
+        {
+          "startUs": 34397811,
+          "finishUs": 34556978,
+          "preprocessingUs": 3373,
+          "inferenceUs": 155793
+        },
+        {
+          "startUs": 34557914,
+          "finishUs": 34719815,
+          "preprocessingUs": 2823,
+          "inferenceUs": 159076
+        },
+        {
+          "startUs": 34720208,
+          "finishUs": 34873769,
+          "preprocessingUs": 1991,
+          "inferenceUs": 151569
+        },
+        {
+          "startUs": 34874053,
+          "finishUs": 35043907,
+          "preprocessingUs": 2551,
+          "inferenceUs": 167301
+        },
+        {
+          "startUs": 35044569,
+          "finishUs": 35207776,
+          "preprocessingUs": 2075,
+          "inferenceUs": 161131
+        },
+        {
+          "startUs": 35208302,
+          "finishUs": 35372908,
+          "preprocessingUs": 3426,
+          "inferenceUs": 161179
+        },
+        {
+          "startUs": 35373527,
+          "finishUs": 35536041,
+          "preprocessingUs": 3886,
+          "inferenceUs": 158628
+        },
+        {
+          "startUs": 35536611,
+          "finishUs": 35707730,
+          "preprocessingUs": 3119,
+          "inferenceUs": 167999
+        },
+        {
+          "startUs": 35708327,
+          "finishUs": 35873067,
+          "preprocessingUs": 4161,
+          "inferenceUs": 160578
+        },
+        {
+          "startUs": 35873612,
+          "finishUs": 36034509,
+          "preprocessingUs": 3902,
+          "inferenceUs": 156995
+        },
+        {
+          "startUs": 36035122,
+          "finishUs": 36200948,
+          "preprocessingUs": 4143,
+          "inferenceUs": 161683
+        },
+        {
+          "startUs": 36201340,
+          "finishUs": 36366946,
+          "preprocessingUs": 2965,
+          "inferenceUs": 162641
+        },
+        {
+          "startUs": 36367520,
+          "finishUs": 36529162,
+          "preprocessingUs": 4161,
+          "inferenceUs": 157480
+        },
+        {
+          "startUs": 36529693,
+          "finishUs": 36693464,
+          "preprocessingUs": 2985,
+          "inferenceUs": 160785
+        },
+        {
+          "startUs": 36693744,
+          "finishUs": 36848373,
+          "preprocessingUs": 3391,
+          "inferenceUs": 151238
+        },
+        {
+          "startUs": 36848913,
+          "finishUs": 37014126,
+          "preprocessingUs": 2879,
+          "inferenceUs": 162333
+        },
+        {
+          "startUs": 37014654,
+          "finishUs": 37177566,
+          "preprocessingUs": 3325,
+          "inferenceUs": 159585
+        },
+        {
+          "startUs": 37177860,
+          "finishUs": 37338796,
+          "preprocessingUs": 2424,
+          "inferenceUs": 158512
+        },
+        {
+          "startUs": 37339377,
+          "finishUs": 37507881,
+          "preprocessingUs": 4234,
+          "inferenceUs": 164269
+        },
+        {
+          "startUs": 37508324,
+          "finishUs": 37684641,
+          "preprocessingUs": 3438,
+          "inferenceUs": 172879
+        },
+        {
+          "startUs": 37685292,
+          "finishUs": 37862088,
+          "preprocessingUs": 3364,
+          "inferenceUs": 173431
+        },
+        {
+          "startUs": 37862637,
+          "finishUs": 38037664,
+          "preprocessingUs": 3578,
+          "inferenceUs": 171448
+        },
+        {
+          "startUs": 38038265,
+          "finishUs": 38215433,
+          "preprocessingUs": 4151,
+          "inferenceUs": 173015
+        },
+        {
+          "startUs": 38216005,
+          "finishUs": 38396443,
+          "preprocessingUs": 3816,
+          "inferenceUs": 176620
+        },
+        {
+          "startUs": 38397001,
+          "finishUs": 38582423,
+          "preprocessingUs": 3897,
+          "inferenceUs": 181525
+        },
+        {
+          "startUs": 38583029,
+          "finishUs": 38777944,
+          "preprocessingUs": 4195,
+          "inferenceUs": 190719
+        },
+        {
+          "startUs": 38778642,
+          "finishUs": 38946452,
+          "preprocessingUs": 3880,
+          "inferenceUs": 163929
+        },
+        {
+          "startUs": 38946999,
+          "finishUs": 39115078,
+          "preprocessingUs": 4027,
+          "inferenceUs": 164051
+        },
+        {
+          "startUs": 39115514,
+          "finishUs": 39287955,
+          "preprocessingUs": 3960,
+          "inferenceUs": 168480
+        },
+        {
+          "startUs": 39288480,
+          "finishUs": 39450810,
+          "preprocessingUs": 2657,
+          "inferenceUs": 159672
+        },
+        {
+          "startUs": 39451334,
+          "finishUs": 39619657,
+          "preprocessingUs": 3968,
+          "inferenceUs": 164354
+        },
+        {
+          "startUs": 39620202,
+          "finishUs": 39787248,
+          "preprocessingUs": 4005,
+          "inferenceUs": 163041
+        },
+        {
+          "startUs": 39787733,
+          "finishUs": 39948848,
+          "preprocessingUs": 2676,
+          "inferenceUs": 158437
+        },
+        {
+          "startUs": 39949260,
+          "finishUs": 40112543,
+          "preprocessingUs": 2567,
+          "inferenceUs": 160715
+        },
+        {
+          "startUs": 40112943,
+          "finishUs": 40274746,
+          "preprocessingUs": 3011,
+          "inferenceUs": 158791
+        },
+        {
+          "startUs": 40275153,
+          "finishUs": 40438002,
+          "preprocessingUs": 3402,
+          "inferenceUs": 159446
+        },
+        {
+          "startUs": 40438490,
+          "finishUs": 40602241,
+          "preprocessingUs": 3151,
+          "inferenceUs": 160599
+        },
+        {
+          "startUs": 40602593,
+          "finishUs": 40768261,
+          "preprocessingUs": 1805,
+          "inferenceUs": 163862
+        },
+        {
+          "startUs": 40768782,
+          "finishUs": 40920294,
+          "preprocessingUs": 1831,
+          "inferenceUs": 149680
+        },
+        {
+          "startUs": 40920868,
+          "finishUs": 41088673,
+          "preprocessingUs": 4120,
+          "inferenceUs": 163684
+        },
+        {
+          "startUs": 41089178,
+          "finishUs": 41246275,
+          "preprocessingUs": 2971,
+          "inferenceUs": 154125
+        },
+        {
+          "startUs": 41246929,
+          "finishUs": 41421217,
+          "preprocessingUs": 3941,
+          "inferenceUs": 170346
+        },
+        {
+          "startUs": 41421798,
+          "finishUs": 41578140,
+          "preprocessingUs": 4134,
+          "inferenceUs": 152207
+        },
+        {
+          "startUs": 41578760,
+          "finishUs": 41740480,
+          "preprocessingUs": 3935,
+          "inferenceUs": 157784
+        },
+        {
+          "startUs": 41740749,
+          "finishUs": 41901486,
+          "preprocessingUs": 4051,
+          "inferenceUs": 156685
+        },
+        {
+          "startUs": 41901959,
+          "finishUs": 42067009,
+          "preprocessingUs": 2894,
+          "inferenceUs": 162155
+        },
+        {
+          "startUs": 42067382,
+          "finishUs": 42225777,
+          "preprocessingUs": 2164,
+          "inferenceUs": 156230
+        },
+        {
+          "startUs": 42226261,
+          "finishUs": 42383317,
+          "preprocessingUs": 2666,
+          "inferenceUs": 154389
+        },
+        {
+          "startUs": 42383378,
+          "finishUs": 42549638,
+          "preprocessingUs": 2987,
+          "inferenceUs": 163272
+        },
+        {
+          "startUs": 42550116,
+          "finishUs": 42712580,
+          "preprocessingUs": 2740,
+          "inferenceUs": 159723
+        },
+        {
+          "startUs": 42713107,
+          "finishUs": 42876034,
+          "preprocessingUs": 4209,
+          "inferenceUs": 158718
+        },
+        {
+          "startUs": 42876572,
+          "finishUs": 43048790,
+          "preprocessingUs": 4123,
+          "inferenceUs": 168094
+        },
+        {
+          "startUs": 43049153,
+          "finishUs": 43219695,
+          "preprocessingUs": 3102,
+          "inferenceUs": 167439
+        },
+        {
+          "startUs": 43220179,
+          "finishUs": 43383896,
+          "preprocessingUs": 3621,
+          "inferenceUs": 160095
+        },
+        {
+          "startUs": 43384454,
+          "finishUs": 43554836,
+          "preprocessingUs": 3479,
+          "inferenceUs": 166902
+        },
+        {
+          "startUs": 43554938,
+          "finishUs": 43722973,
+          "preprocessingUs": 3672,
+          "inferenceUs": 164362
+        },
+        {
+          "startUs": 43723605,
+          "finishUs": 43885195,
+          "preprocessingUs": 3423,
+          "inferenceUs": 158166
+        },
+        {
+          "startUs": 43885599,
+          "finishUs": 44066742,
+          "preprocessingUs": 3080,
+          "inferenceUs": 178062
+        },
+        {
+          "startUs": 44067327,
+          "finishUs": 44240010,
+          "preprocessingUs": 4228,
+          "inferenceUs": 168454
+        },
+        {
+          "startUs": 44240534,
+          "finishUs": 44414675,
+          "preprocessingUs": 4210,
+          "inferenceUs": 169931
+        },
+        {
+          "startUs": 44414752,
+          "finishUs": 44603797,
+          "preprocessingUs": 3739,
+          "inferenceUs": 185306
+        },
+        {
+          "startUs": 44604111,
+          "finishUs": 44796117,
+          "preprocessingUs": 2907,
+          "inferenceUs": 189098
+        },
+        {
+          "startUs": 44796650,
+          "finishUs": 44968050,
+          "preprocessingUs": 4008,
+          "inferenceUs": 167391
+        },
+        {
+          "startUs": 44968624,
+          "finishUs": 45134160,
+          "preprocessingUs": 4003,
+          "inferenceUs": 161531
+        },
+        {
+          "startUs": 45134685,
+          "finishUs": 45288110,
+          "preprocessingUs": 2701,
+          "inferenceUs": 150724
+        },
+        {
+          "startUs": 45288174,
+          "finishUs": 45442017,
+          "preprocessingUs": 2124,
+          "inferenceUs": 151719
+        },
+        {
+          "startUs": 45442622,
+          "finishUs": 45606923,
+          "preprocessingUs": 3799,
+          "inferenceUs": 160501
+        },
+        {
+          "startUs": 45607563,
+          "finishUs": 45772702,
+          "preprocessingUs": 2111,
+          "inferenceUs": 163027
+        },
+        {
+          "startUs": 45773241,
+          "finishUs": 45938581,
+          "preprocessingUs": 3865,
+          "inferenceUs": 161474
+        },
+        {
+          "startUs": 45939111,
+          "finishUs": 46127230,
+          "preprocessingUs": 4309,
+          "inferenceUs": 183810
+        },
+        {
+          "startUs": 46127833,
+          "finishUs": 46293790,
+          "preprocessingUs": 4291,
+          "inferenceUs": 161665
+        },
+        {
+          "startUs": 46294464,
+          "finishUs": 46506162,
+          "preprocessingUs": 4718,
+          "inferenceUs": 206979
+        },
+        {
+          "startUs": 46506208,
+          "finishUs": 46724346,
+          "preprocessingUs": 28952,
+          "inferenceUs": 189185
+        },
+        {
+          "startUs": 46724713,
+          "finishUs": 46902722,
+          "preprocessingUs": 3224,
+          "inferenceUs": 174784
+        },
+        {
+          "startUs": 46903277,
+          "finishUs": 47155068,
+          "preprocessingUs": 4291,
+          "inferenceUs": 247499
+        },
+        {
+          "startUs": 47155626,
+          "finishUs": 47332357,
+          "preprocessingUs": 4475,
+          "inferenceUs": 172254
+        },
+        {
+          "startUs": 47332748,
+          "finishUs": 47509646,
+          "preprocessingUs": 3268,
+          "inferenceUs": 173629
+        },
+        {
+          "startUs": 47509757,
+          "finishUs": 47699759,
+          "preprocessingUs": 4129,
+          "inferenceUs": 185872
+        },
+        {
+          "startUs": 47700234,
+          "finishUs": 47866651,
+          "preprocessingUs": 2722,
+          "inferenceUs": 163694
+        },
+        {
+          "startUs": 47867282,
+          "finishUs": 48048270,
+          "preprocessingUs": 3593,
+          "inferenceUs": 177395
+        },
+        {
+          "startUs": 48048904,
+          "finishUs": 48218705,
+          "preprocessingUs": 4342,
+          "inferenceUs": 165458
+        },
+        {
+          "startUs": 48219107,
+          "finishUs": 48382888,
+          "preprocessingUs": 2794,
+          "inferenceUs": 160986
+        },
+        {
+          "startUs": 48382933,
+          "finishUs": 48527142,
+          "preprocessingUs": 2603,
+          "inferenceUs": 141605
+        }
+      ]
+    }
+  },
+  "geometryParity": [
+    {
+      "sceneId": "path-clear",
+      "physicalHazard": false,
+      "identicalObservation": true,
+      "geometryStatus": "measuredClear",
+      "captureSpanUs": 2200000,
+      "currentWindowViews": 1,
+      "currentWindowGeometryStatus": "unavailable"
+    },
+    {
+      "sceneId": "path-box",
+      "physicalHazard": true,
+      "identicalObservation": true,
+      "geometryStatus": "blocked",
+      "captureSpanUs": 2200000,
+      "currentWindowViews": 1,
+      "currentWindowGeometryStatus": "unavailable"
+    },
+    {
+      "sceneId": "doorway-wide",
+      "physicalHazard": false,
+      "identicalObservation": true,
+      "geometryStatus": "measuredClear",
+      "captureSpanUs": 2200000,
+      "currentWindowViews": 1,
+      "currentWindowGeometryStatus": "unavailable"
+    },
+    {
+      "sceneId": "doorway-narrow",
+      "physicalHazard": true,
+      "identicalObservation": true,
+      "geometryStatus": "blocked",
+      "captureSpanUs": 2200000,
+      "currentWindowViews": 1,
+      "currentWindowGeometryStatus": "unavailable"
+    },
+    {
+      "sceneId": "headroom-high",
+      "physicalHazard": false,
+      "identicalObservation": true,
+      "geometryStatus": "measuredClear",
+      "captureSpanUs": 2200000,
+      "currentWindowViews": 1,
+      "currentWindowGeometryStatus": "unavailable"
+    },
+    {
+      "sceneId": "headroom-low",
+      "physicalHazard": true,
+      "identicalObservation": true,
+      "geometryStatus": "blocked",
+      "captureSpanUs": 2200000,
+      "currentWindowViews": 1,
+      "currentWindowGeometryStatus": "unavailable"
+    },
+    {
+      "sceneId": "floor-level",
+      "physicalHazard": false,
+      "identicalObservation": true,
+      "geometryStatus": "measuredClear",
+      "captureSpanUs": 2200000,
+      "currentWindowViews": 1,
+      "currentWindowGeometryStatus": "unavailable"
+    },
+    {
+      "sceneId": "floor-drop",
+      "physicalHazard": true,
+      "identicalObservation": true,
+      "geometryStatus": "blocked",
+      "captureSpanUs": 2200000,
+      "currentWindowViews": 1,
+      "currentWindowGeometryStatus": "unavailable"
+    },
+    {
+      "sceneId": "person-side",
+      "physicalHazard": false,
+      "identicalObservation": true,
+      "geometryStatus": "measuredClear",
+      "captureSpanUs": 2200000,
+      "currentWindowViews": 1,
+      "currentWindowGeometryStatus": "unavailable"
+    },
+    {
+      "sceneId": "person-approach",
+      "physicalHazard": true,
+      "identicalObservation": true,
+      "geometryStatus": "blocked",
+      "captureSpanUs": 2200000,
+      "currentWindowViews": 1,
+      "currentWindowGeometryStatus": "unavailable"
+    },
+    {
+      "sceneId": "camera-pan-clear",
+      "physicalHazard": false,
+      "identicalObservation": true,
+      "geometryStatus": "measuredClear",
+      "captureSpanUs": 2200000,
+      "currentWindowViews": 1,
+      "currentWindowGeometryStatus": "unavailable"
+    },
+    {
+      "sceneId": "camera-pan-approach",
+      "physicalHazard": true,
+      "identicalObservation": true,
+      "geometryStatus": "blocked",
+      "captureSpanUs": 2200000,
+      "currentWindowViews": 1,
+      "currentWindowGeometryStatus": "unavailable"
+    }
+  ],
+  "summaries": {
+    "frozen": {
+      "pipeline": {
+        "samples": 36,
+        "p50Ms": 878.74,
+        "p95Ms": 1504.76975,
+        "maximumMs": 1730.72
+      },
+      "sourceBuild": {
+        "samples": 36,
+        "p50Ms": 874.4205,
+        "p95Ms": 1498.67325,
+        "maximumMs": 1724.118
+      },
+      "oldestAgeAtDispatch": {
+        "samples": 36,
+        "p50Ms": 3080.7405,
+        "p95Ms": 3706.77075,
+        "maximumMs": 3932.72
+      },
+      "latestAgeAtDispatch": {
+        "samples": 36,
+        "p50Ms": 880.7405,
+        "p95Ms": 1506.77075,
+        "maximumMs": 1732.72
+      },
+      "strictStaleRejected": 36,
+      "hazardDecisions": 18,
+      "missedTimelyGeometricHazardDecisions": 18,
+      "fallbackStopsOnHazards": 18,
+      "falseStopsOnPassable": 18,
+      "unsafeContinue": 0,
+      "captureGateReached": false,
+      "computeWithin100ms": 0
+    },
+    "indexed": {
+      "pipeline": {
+        "samples": 36,
+        "p50Ms": 391.17,
+        "p95Ms": 640.1235,
+        "maximumMs": 882.378
+      },
+      "sourceBuild": {
+        "samples": 36,
+        "p50Ms": 391.1545,
+        "p95Ms": 640.1025,
+        "maximumMs": 882.359
+      },
+      "oldestAgeAtDispatch": {
+        "samples": 36,
+        "p50Ms": 2593.1705,
+        "p95Ms": 2842.12375,
+        "maximumMs": 3084.379
+      },
+      "latestAgeAtDispatch": {
+        "samples": 36,
+        "p50Ms": 393.1705,
+        "p95Ms": 642.12375,
+        "maximumMs": 884.379
+      },
+      "strictStaleRejected": 36,
+      "hazardDecisions": 18,
+      "missedTimelyGeometricHazardDecisions": 18,
+      "fallbackStopsOnHazards": 18,
+      "falseStopsOnPassable": 18,
+      "unsafeContinue": 0,
+      "captureGateReached": false,
+      "computeWithin100ms": 0
+    }
+  },
+  "samples": [
+    {
+      "round": 0,
+      "sceneId": "path-clear",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 558833,
+      "observationUs": 3620,
+      "evaluationUs": 33,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 562488,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2764488,
+      "latestAgeAtDispatchUs": 564488,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 0,
+      "sceneId": "path-clear",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 271010,
+      "observationUs": 6,
+      "evaluationUs": 9,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 271027,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2473027,
+      "latestAgeAtDispatchUs": 273027,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 17,
+        "pixelIndexAndEnvelopeValidation": 182187,
+        "coverage": 88794
+      }
+    },
+    {
+      "round": 0,
+      "sceneId": "path-box",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 899672,
+      "observationUs": 3213,
+      "evaluationUs": 10,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 902897,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 3104898,
+      "latestAgeAtDispatchUs": 904898,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 0,
+      "sceneId": "path-box",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 435717,
+      "observationUs": 5,
+      "evaluationUs": 9,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 435733,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2637733,
+      "latestAgeAtDispatchUs": 437733,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 16,
+        "pixelIndexAndEnvelopeValidation": 237466,
+        "coverage": 198223
+      }
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-wide",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 654712,
+      "observationUs": 3730,
+      "evaluationUs": 10,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 658454,
+      "oldestAgeAtStartUs": 2202002,
+      "oldestAgeAtDispatchUs": 2860456,
+      "latestAgeAtDispatchUs": 660456,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-wide",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 274562,
+      "observationUs": 5,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 274580,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2476580,
+      "latestAgeAtDispatchUs": 276580,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 13,
+        "pixelIndexAndEnvelopeValidation": 139043,
+        "coverage": 135496
+      }
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-narrow",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 961915,
+      "observationUs": 3491,
+      "evaluationUs": 27,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 965435,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 3167436,
+      "latestAgeAtDispatchUs": 967436,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-narrow",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 352423,
+      "observationUs": 6,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 352442,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2554442,
+      "latestAgeAtDispatchUs": 354442,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 16,
+        "pixelIndexAndEnvelopeValidation": 162885,
+        "coverage": 189511
+      }
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-high",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 1474240,
+      "observationUs": 6118,
+      "evaluationUs": 15,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 1480375,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 3682376,
+      "latestAgeAtDispatchUs": 1482376,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-high",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 395906,
+      "observationUs": 7,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 3,
+      "pipelineUs": 395927,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2597927,
+      "latestAgeAtDispatchUs": 397927,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 23,
+        "pixelIndexAndEnvelopeValidation": 254507,
+        "coverage": 141360
+      }
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-low",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 843995,
+      "observationUs": 3621,
+      "evaluationUs": 9,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 847626,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 3049627,
+      "latestAgeAtDispatchUs": 849627,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-low",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 371539,
+      "observationUs": 5,
+      "evaluationUs": 9,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 371555,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2573555,
+      "latestAgeAtDispatchUs": 373555,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 13,
+        "pixelIndexAndEnvelopeValidation": 216046,
+        "coverage": 155469
+      }
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-level",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 685663,
+      "observationUs": 4986,
+      "evaluationUs": 14,
+      "dispatchGuardUs": 3,
+      "pipelineUs": 690666,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2892667,
+      "latestAgeAtDispatchUs": 692667,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-level",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 266340,
+      "observationUs": 4,
+      "evaluationUs": 9,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 266354,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2468354,
+      "latestAgeAtDispatchUs": 268354,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 23,
+        "pixelIndexAndEnvelopeValidation": 162638,
+        "coverage": 103665
+      }
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-drop",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 932378,
+      "observationUs": 6275,
+      "evaluationUs": 14,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 938669,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 3140669,
+      "latestAgeAtDispatchUs": 940669,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-drop",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 390936,
+      "observationUs": 3,
+      "evaluationUs": 8,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 390948,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2592948,
+      "latestAgeAtDispatchUs": 392948,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 24,
+        "pixelIndexAndEnvelopeValidation": 212963,
+        "coverage": 177932
+      }
+    },
+    {
+      "round": 0,
+      "sceneId": "person-side",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 767236,
+      "observationUs": 3276,
+      "evaluationUs": 15,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 770529,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2972529,
+      "latestAgeAtDispatchUs": 772529,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 0,
+      "sceneId": "person-side",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 577026,
+      "observationUs": 6,
+      "evaluationUs": 10,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 577043,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2779043,
+      "latestAgeAtDispatchUs": 579043,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 18,
+        "pixelIndexAndEnvelopeValidation": 178759,
+        "coverage": 398237
+      }
+    },
+    {
+      "round": 0,
+      "sceneId": "person-approach",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 1571973,
+      "observationUs": 5964,
+      "evaluationUs": 14,
+      "dispatchGuardUs": 3,
+      "pipelineUs": 1577954,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 3779955,
+      "latestAgeAtDispatchUs": 1579955,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 0,
+      "sceneId": "person-approach",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 507521,
+      "observationUs": 6,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 3,
+      "pipelineUs": 507541,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2709541,
+      "latestAgeAtDispatchUs": 509541,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 22,
+        "pixelIndexAndEnvelopeValidation": 234092,
+        "coverage": 273393
+      }
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-clear",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 669857,
+      "observationUs": 2889,
+      "evaluationUs": 12,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 672760,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2874761,
+      "latestAgeAtDispatchUs": 674761,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-clear",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 351623,
+      "observationUs": 5,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 351640,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2553640,
+      "latestAgeAtDispatchUs": 353640,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 12,
+        "pixelIndexAndEnvelopeValidation": 231418,
+        "coverage": 120183
+      }
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-approach",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 1134992,
+      "observationUs": 3672,
+      "evaluationUs": 9,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 1138674,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 3340675,
+      "latestAgeAtDispatchUs": 1140675,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-approach",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 488624,
+      "observationUs": 5,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 488642,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2690642,
+      "latestAgeAtDispatchUs": 490642,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 11,
+        "pixelIndexAndEnvelopeValidation": 232900,
+        "coverage": 255703
+      }
+    },
+    {
+      "round": 1,
+      "sceneId": "path-clear",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 370362,
+      "observationUs": 5,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 370380,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2572381,
+      "latestAgeAtDispatchUs": 372381,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 28,
+        "pixelIndexAndEnvelopeValidation": 241396,
+        "coverage": 128923
+      }
+    },
+    {
+      "round": 1,
+      "sceneId": "path-clear",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 733022,
+      "observationUs": 6186,
+      "evaluationUs": 10,
+      "dispatchGuardUs": 4,
+      "pipelineUs": 739222,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2941222,
+      "latestAgeAtDispatchUs": 741222,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 1,
+      "sceneId": "path-box",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 454171,
+      "observationUs": 6,
+      "evaluationUs": 12,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 454191,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2656192,
+      "latestAgeAtDispatchUs": 456192,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 21,
+        "pixelIndexAndEnvelopeValidation": 249781,
+        "coverage": 204358
+      }
+    },
+    {
+      "round": 1,
+      "sceneId": "path-box",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 1724118,
+      "observationUs": 6587,
+      "evaluationUs": 13,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 1730720,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 3932720,
+      "latestAgeAtDispatchUs": 1732720,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-wide",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 391373,
+      "observationUs": 6,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 391392,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2593393,
+      "latestAgeAtDispatchUs": 393393,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 22,
+        "pixelIndexAndEnvelopeValidation": 251017,
+        "coverage": 140318
+      }
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-wide",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 677686,
+      "observationUs": 4918,
+      "evaluationUs": 14,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 682620,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2884620,
+      "latestAgeAtDispatchUs": 684620,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-narrow",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 400216,
+      "observationUs": 8,
+      "evaluationUs": 12,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 400238,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2602239,
+      "latestAgeAtDispatchUs": 402239,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 28,
+        "pixelIndexAndEnvelopeValidation": 223693,
+        "coverage": 176480
+      }
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-narrow",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 896496,
+      "observationUs": 4466,
+      "evaluationUs": 14,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 900978,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 3102978,
+      "latestAgeAtDispatchUs": 902978,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-high",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 354008,
+      "observationUs": 6,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 354027,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2556028,
+      "latestAgeAtDispatchUs": 356028,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 29,
+        "pixelIndexAndEnvelopeValidation": 216057,
+        "coverage": 137906
+      }
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-high",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 669998,
+      "observationUs": 2948,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 672959,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2874959,
+      "latestAgeAtDispatchUs": 674959,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-low",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 382166,
+      "observationUs": 7,
+      "evaluationUs": 10,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 382185,
+      "oldestAgeAtStartUs": 2202002,
+      "oldestAgeAtDispatchUs": 2584187,
+      "latestAgeAtDispatchUs": 384187,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 21,
+        "pixelIndexAndEnvelopeValidation": 201803,
+        "coverage": 180331
+      }
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-low",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 874847,
+      "observationUs": 5205,
+      "evaluationUs": 13,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 880067,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 3082067,
+      "latestAgeAtDispatchUs": 882067,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-level",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 640641,
+      "observationUs": 8,
+      "evaluationUs": 14,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 640665,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2842666,
+      "latestAgeAtDispatchUs": 642666,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 27,
+        "pixelIndexAndEnvelopeValidation": 248258,
+        "coverage": 392340
+      }
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-level",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 1090813,
+      "observationUs": 3914,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 1094739,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 3296739,
+      "latestAgeAtDispatchUs": 1096739,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-drop",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 379393,
+      "observationUs": 5,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 3,
+      "pipelineUs": 379412,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2581413,
+      "latestAgeAtDispatchUs": 381413,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 19,
+        "pixelIndexAndEnvelopeValidation": 201656,
+        "coverage": 177704
+      }
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-drop",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 951851,
+      "observationUs": 3459,
+      "evaluationUs": 15,
+      "dispatchGuardUs": 4,
+      "pipelineUs": 955329,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 3157329,
+      "latestAgeAtDispatchUs": 957329,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 1,
+      "sceneId": "person-side",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 310570,
+      "observationUs": 7,
+      "evaluationUs": 10,
+      "dispatchGuardUs": 3,
+      "pipelineUs": 310590,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2512591,
+      "latestAgeAtDispatchUs": 312591,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 26,
+        "pixelIndexAndEnvelopeValidation": 195036,
+        "coverage": 115494
+      }
+    },
+    {
+      "round": 1,
+      "sceneId": "person-side",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 714265,
+      "observationUs": 7997,
+      "evaluationUs": 13,
+      "dispatchGuardUs": 3,
+      "pipelineUs": 722278,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2924278,
+      "latestAgeAtDispatchUs": 724278,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 1,
+      "sceneId": "person-approach",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 445627,
+      "observationUs": 6,
+      "evaluationUs": 7,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 445641,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2647642,
+      "latestAgeAtDispatchUs": 447642,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 25,
+        "pixelIndexAndEnvelopeValidation": 221425,
+        "coverage": 224163
+      }
+    },
+    {
+      "round": 1,
+      "sceneId": "person-approach",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 1113485,
+      "observationUs": 6230,
+      "evaluationUs": 14,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 1119731,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 3321731,
+      "latestAgeAtDispatchUs": 1121731,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-clear",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 345397,
+      "observationUs": 3,
+      "evaluationUs": 8,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 345409,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2547410,
+      "latestAgeAtDispatchUs": 347410,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 26,
+        "pixelIndexAndEnvelopeValidation": 225053,
+        "coverage": 120304
+      }
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-clear",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 661747,
+      "observationUs": 5230,
+      "evaluationUs": 12,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 666991,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2868991,
+      "latestAgeAtDispatchUs": 668991,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-approach",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 882359,
+      "observationUs": 6,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 882378,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 3084379,
+      "latestAgeAtDispatchUs": 884379,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 25,
+        "pixelIndexAndEnvelopeValidation": 222830,
+        "coverage": 659490
+      }
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-approach",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 1241959,
+      "observationUs": 4602,
+      "evaluationUs": 10,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 1246573,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 3448573,
+      "latestAgeAtDispatchUs": 1248573,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 2,
+      "sceneId": "path-clear",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 689336,
+      "observationUs": 3468,
+      "evaluationUs": 14,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 692820,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2894820,
+      "latestAgeAtDispatchUs": 694820,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 2,
+      "sceneId": "path-clear",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 315935,
+      "observationUs": 10,
+      "evaluationUs": 14,
+      "dispatchGuardUs": 3,
+      "pipelineUs": 315962,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2517962,
+      "latestAgeAtDispatchUs": 317962,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 21,
+        "pixelIndexAndEnvelopeValidation": 219800,
+        "coverage": 96098
+      }
+    },
+    {
+      "round": 2,
+      "sceneId": "path-box",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 981058,
+      "observationUs": 7037,
+      "evaluationUs": 17,
+      "dispatchGuardUs": 3,
+      "pipelineUs": 988115,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 3190116,
+      "latestAgeAtDispatchUs": 990116,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 2,
+      "sceneId": "path-box",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 411944,
+      "observationUs": 4,
+      "evaluationUs": 9,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 411959,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2613959,
+      "latestAgeAtDispatchUs": 413959,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 27,
+        "pixelIndexAndEnvelopeValidation": 211719,
+        "coverage": 200181
+      }
+    },
+    {
+      "round": 2,
+      "sceneId": "doorway-wide",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 672465,
+      "observationUs": 4555,
+      "evaluationUs": 14,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 677036,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2879037,
+      "latestAgeAtDispatchUs": 679037,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 2,
+      "sceneId": "doorway-wide",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 350570,
+      "observationUs": 4,
+      "evaluationUs": 10,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 350586,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2552586,
+      "latestAgeAtDispatchUs": 352586,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 21,
+        "pixelIndexAndEnvelopeValidation": 217376,
+        "coverage": 133159
+      }
+    },
+    {
+      "round": 2,
+      "sceneId": "doorway-narrow",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 885908,
+      "observationUs": 5038,
+      "evaluationUs": 13,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 890961,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 3092962,
+      "latestAgeAtDispatchUs": 892962,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 2,
+      "sceneId": "doorway-narrow",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 392845,
+      "observationUs": 4,
+      "evaluationUs": 7,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 392857,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2594857,
+      "latestAgeAtDispatchUs": 394857,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 24,
+        "pixelIndexAndEnvelopeValidation": 210185,
+        "coverage": 182623
+      }
+    },
+    {
+      "round": 2,
+      "sceneId": "headroom-high",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 1366815,
+      "observationUs": 3066,
+      "evaluationUs": 12,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 1369895,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 3571896,
+      "latestAgeAtDispatchUs": 1371896,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 2,
+      "sceneId": "headroom-high",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 347570,
+      "observationUs": 5,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 347588,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2549588,
+      "latestAgeAtDispatchUs": 349588,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 17,
+        "pixelIndexAndEnvelopeValidation": 217586,
+        "coverage": 129956
+      }
+    },
+    {
+      "round": 2,
+      "sceneId": "headroom-low",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 873994,
+      "observationUs": 3402,
+      "evaluationUs": 14,
+      "dispatchGuardUs": 3,
+      "pipelineUs": 877413,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 3079414,
+      "latestAgeAtDispatchUs": 879414,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 2,
+      "sceneId": "headroom-low",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 405846,
+      "observationUs": 6,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 405864,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2607864,
+      "latestAgeAtDispatchUs": 407864,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 26,
+        "pixelIndexAndEnvelopeValidation": 223169,
+        "coverage": 182638
+      }
+    },
+    {
+      "round": 2,
+      "sceneId": "floor-level",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 644682,
+      "observationUs": 5104,
+      "evaluationUs": 15,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 649803,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2851804,
+      "latestAgeAtDispatchUs": 651804,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 2,
+      "sceneId": "floor-level",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 339863,
+      "observationUs": 7,
+      "evaluationUs": 10,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 339882,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2541882,
+      "latestAgeAtDispatchUs": 341882,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 25,
+        "pixelIndexAndEnvelopeValidation": 205989,
+        "coverage": 133835
+      }
+    },
+    {
+      "round": 2,
+      "sceneId": "floor-drop",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 862034,
+      "observationUs": 4336,
+      "evaluationUs": 15,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 866387,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 3068388,
+      "latestAgeAtDispatchUs": 868388,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 2,
+      "sceneId": "floor-drop",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 376981,
+      "observationUs": 4,
+      "evaluationUs": 12,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 376999,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2578999,
+      "latestAgeAtDispatchUs": 378999,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 22,
+        "pixelIndexAndEnvelopeValidation": 208778,
+        "coverage": 168165
+      }
+    },
+    {
+      "round": 2,
+      "sceneId": "person-side",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 666739,
+      "observationUs": 3354,
+      "evaluationUs": 12,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 670106,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2872107,
+      "latestAgeAtDispatchUs": 672107,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 2,
+      "sceneId": "person-side",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 639923,
+      "observationUs": 7,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 639943,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2841943,
+      "latestAgeAtDispatchUs": 641943,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 18,
+        "pixelIndexAndEnvelopeValidation": 244821,
+        "coverage": 395071
+      }
+    },
+    {
+      "round": 2,
+      "sceneId": "person-approach",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 1435391,
+      "observationUs": 4278,
+      "evaluationUs": 13,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 1439684,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 3641685,
+      "latestAgeAtDispatchUs": 1441685,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 2,
+      "sceneId": "person-approach",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 467679,
+      "observationUs": 5,
+      "evaluationUs": 10,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 467696,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2669696,
+      "latestAgeAtDispatchUs": 469696,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 27,
+        "pixelIndexAndEnvelopeValidation": 226953,
+        "coverage": 240686
+      }
+    },
+    {
+      "round": 2,
+      "sceneId": "camera-pan-clear",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 779257,
+      "observationUs": 6047,
+      "evaluationUs": 15,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 785321,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2987322,
+      "latestAgeAtDispatchUs": 787322,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 2,
+      "sceneId": "camera-pan-clear",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 399111,
+      "observationUs": 9,
+      "evaluationUs": 10,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 399132,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2601132,
+      "latestAgeAtDispatchUs": 401132,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 25,
+        "pixelIndexAndEnvelopeValidation": 213906,
+        "coverage": 185166
+      }
+    },
+    {
+      "round": 2,
+      "sceneId": "camera-pan-approach",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 1048595,
+      "observationUs": 6153,
+      "evaluationUs": 16,
+      "dispatchGuardUs": 3,
+      "pipelineUs": 1054767,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 3256768,
+      "latestAgeAtDispatchUs": 1056768,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 2,
+      "sceneId": "camera-pan-approach",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 423953,
+      "observationUs": 5,
+      "evaluationUs": 9,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 423968,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2625968,
+      "latestAgeAtDispatchUs": 425968,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 25,
+        "pixelIndexAndEnvelopeValidation": 223753,
+        "coverage": 200163
+      }
+    }
+  ]
+}

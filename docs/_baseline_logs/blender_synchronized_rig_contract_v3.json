@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "passed": true,
+  "promotionAllowed": false,
+  "runtimeWired": false,
+  "manifestSha256": "1174d4c8dba1c3ffb30685a4d050543e78e5fffba475be82a822be0d78d7e8fa",
+  "profiles": {
+    "blender_synchronized_rig_elapsed_v3.json": "63e47b2bd74bf52386e1d6f9ff79829fa8d8bc8ddfc0e3181413b1197b81e8c0",
+    "blender_synchronized_rig_elapsed-nn_v3.json": "fe71eb57e7180998ff730abac95d983999558d657f700bec758eb76877538bb9"
+  },
+  "priorContractSha256": "3175807d8df623ce46ec53ed0249d76fc518909c3df566f6d19cf0a5a569ad78",
+  "priorCoreSha256": "c1e1dfcfc789f9daf426a1290ecef00f1219713ce645325cbb190b95ec8bf081",
+  "rejectedProfiles": {
+    "blender_synchronized_rig_elapsed_v1.json": "60a80af054eedd1b8ec9a73c266ae5f0634325153cf6ba76e72942b334c95faa",
+    "blender_synchronized_rig_elapsed-nn_v1.json": "402597e3aafdd8434f2a68b476a984ff09a8d37d6a00745486e6b5bad554e499",
+    "blender_synchronized_rig_elapsed_v2.json": "54be2cee329e027667184ccb1d02c4f55cfd67c7c388431f3ce2366f2fdf776f"
+  },
+  "opticalRayWitnesses": 12939,
+  "staticScenes": 6,
+  "dynamicBatches": 2,
+  "sources": {
+    "lib/safety/perception/camera_synchronized_envelope_source.dart": "e03d933a1250d550eb9c7704fb0cb80bbb811976acfd67ae8ba2efba5768ce56",
+    "test/harness/blender_synchronized_rig_fixture.dart": "faee16162e1dbbb4deab324cbcc0618c5f88d23789c245da8e4324ea4c43fda4",
+    "test/camera_synchronized_rig_test.dart": "1244731f20c37bc325b994d14c5194b4203ad7ad8a521717427e4ecb0017b992",
+    "tool/model_benchmark/profile_synchronized_rig.dart": "2f38a05221f96ae134f908259ba577c3be7362bb035977dd8f731da90a72490f",
+    "tool/model_benchmark/synchronized_rig_neural_load.dart": "372988d2c05098a707ce80a53cbee5a7640b38332296ea05f7844f41ac8c7127",
+    "tool/model_benchmark/verify_synchronized_rig.py": "9c4e2d21d7fbd5f85d1b0ac9aaf968ad49147444a3e874d69bab0068e3aad200"
+  }
+}

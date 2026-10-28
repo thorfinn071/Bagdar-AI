@@ -1,0 +1,4687 @@
+{
+  "schemaVersion": 1,
+  "corpusId": "blender-paired-holdout-v1",
+  "pilotOnly": false,
+  "blenderVersion": "5.2.2 LTS",
+  "seed": 20261004,
+  "width": 320,
+  "height": 240,
+  "sources": {
+    "tool/blender/generate_paired_scene_corpus.py": "7dc0cbcc183cc429f040e31f3eaf1f3945f39d84fe59b2a010065c7d66cfe495",
+    "tool/blender/paired_scene_spec_v1.json": "b403ad5f530897fb50ebf63c305dd0b2158f33f763f31a8fc5e45652170b97ef",
+    "docs/blender-paired-scenes-protocol-2026-10-04.md": "3eb766fc991df6ee2b78d7da22d323cdaaf6cfabb6443f2ae3993c44370a7fdf",
+    "tool/blender/generate_spatial_corpus.py": "231ae63ab6802070c98abd23c27b16ec63fa028a06b81f3e58a1504843ba0692",
+    "tool/blender/generate_visible_passage_corpus.py": "97d96eb474afdbd9900f11a439e8235039390f04bc8ad9ba334c1d8904d41c82"
+  },
+  "depthSemantics": "first-visible-ray-euclidean-range-mm; zero=unobserved",
+  "semanticClasses": {
+    "0": "unobserved",
+    "1": "floor",
+    "2": "post",
+    "4": "box",
+    "5": "lintel",
+    "6": "drop",
+    "8": "room",
+    "10": "person"
+  },
+  "containsRecordedMedia": false,
+  "promotionAllowed": false,
+  "sequences": [
+    {
+      "sceneId": "path-clear",
+      "pair": "path",
+      "scene": {
+        "path": "path-clear/scene.blend",
+        "sha256": "ea42555adcb2edb6a37b76dc5771c7dd9845e5b74cb3c528a4ab82370701adcd"
+      },
+      "annotations": {
+        "path": "path-clear/annotations.json",
+        "sha256": "4a0e31446854ee81f86c0ed57d9a39ac17cc0c55dac5689b6223e2bd77be3dd0"
+      },
+      "frames": [
+        {
+          "frameIndex": 0,
+          "capturedOffsetMs": 0,
+          "rgb": {
+            "path": "path-clear/00-rgb.png",
+            "sha256": "2ec2dc1a211ab1d8dc4273a74af50fdebbb72d197c12be13ae1defd324df3c64"
+          },
+          "depth": {
+            "path": "path-clear/00-depth-mm.pgm",
+            "sha256": "d8f408529ac089bc4627b49080847f0e17eed8a8c5c3b7a2167ed899c2d8d75b"
+          },
+          "semantic": {
+            "path": "path-clear/00-semantic.pgm",
+            "sha256": "c84e42f0f9a0a1fe8a241bad3e133224141452b923aae3b61c4f45e1dc20c65e"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 1,
+          "capturedOffsetMs": 200,
+          "rgb": {
+            "path": "path-clear/01-rgb.png",
+            "sha256": "2a19ce5a8138d20f12956131acefebc2c58c1b76ce7095d4bca6372ede661ee8"
+          },
+          "depth": {
+            "path": "path-clear/01-depth-mm.pgm",
+            "sha256": "86fe0562207c954f9e399a6912db89b0c6efe67c9f7a64150c8cfd4fbcb96b69"
+          },
+          "semantic": {
+            "path": "path-clear/01-semantic.pgm",
+            "sha256": "c84e42f0f9a0a1fe8a241bad3e133224141452b923aae3b61c4f45e1dc20c65e"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.03999999910593033,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 2,
+          "capturedOffsetMs": 400,
+          "rgb": {
+            "path": "path-clear/02-rgb.png",
+            "sha256": "82917a494bac646c3809232c5330788554fbce65acba1ed613a23ee1044bd1b4"
+          },
+          "depth": {
+            "path": "path-clear/02-depth-mm.pgm",
+            "sha256": "fbe60595386a5ce720a453910749fcee15c659303365bd1371fac158045eaa83"
+          },
+          "semantic": {
+            "path": "path-clear/02-semantic.pgm",
+            "sha256": "c84e42f0f9a0a1fe8a241bad3e133224141452b923aae3b61c4f45e1dc20c65e"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.07999999821186066,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 3,
+          "capturedOffsetMs": 600,
+          "rgb": {
+            "path": "path-clear/03-rgb.png",
+            "sha256": "73f7d8f34297e26579840b1ba97f9ecf3120add98136935822c241374e0a8a3b"
+          },
+          "depth": {
+            "path": "path-clear/03-depth-mm.pgm",
+            "sha256": "4a78142d8e21207d0e0866524cc29bf4654b8b44de5b523fcadb7b1c948b07f3"
+          },
+          "semantic": {
+            "path": "path-clear/03-semantic.pgm",
+            "sha256": "6f420a8b449c1fe85e703924fd0c3e2deb68a888d0deebeb9dc8a035120910a5"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.11999999731779099,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 4,
+          "capturedOffsetMs": 800,
+          "rgb": {
+            "path": "path-clear/04-rgb.png",
+            "sha256": "a0b4ebf855e6aeb6e62d0e9c4c205bf76e75e45feaf6570e5258a9b7cd09cb56"
+          },
+          "depth": {
+            "path": "path-clear/04-depth-mm.pgm",
+            "sha256": "565dadd8387d266fd6d382a8265d1d9147cd345f108279c36207079811e0e751"
+          },
+          "semantic": {
+            "path": "path-clear/04-semantic.pgm",
+            "sha256": "6f420a8b449c1fe85e703924fd0c3e2deb68a888d0deebeb9dc8a035120910a5"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.1599999964237213,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 5,
+          "capturedOffsetMs": 1000,
+          "rgb": {
+            "path": "path-clear/05-rgb.png",
+            "sha256": "4946aec0f930543fa037015735065057a2dc04ca2150f3059b96686f613a7cf7"
+          },
+          "depth": {
+            "path": "path-clear/05-depth-mm.pgm",
+            "sha256": "9e85572fc0eb1b4c64cdb59daa0f83e154637b4acde98a13dad3e669d7e903ff"
+          },
+          "semantic": {
+            "path": "path-clear/05-semantic.pgm",
+            "sha256": "6f420a8b449c1fe85e703924fd0c3e2deb68a888d0deebeb9dc8a035120910a5"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.20000000298023224,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 6,
+          "capturedOffsetMs": 1200,
+          "rgb": {
+            "path": "path-clear/06-rgb.png",
+            "sha256": "5812dd3e2cbc757f8601e92d4f49c7e4f67f378d6e91663dc6aaf48da0d742cb"
+          },
+          "depth": {
+            "path": "path-clear/06-depth-mm.pgm",
+            "sha256": "a4271d94834ae709bf52183466be285b751711b56a58909115becf7b4f1e5f5a"
+          },
+          "semantic": {
+            "path": "path-clear/06-semantic.pgm",
+            "sha256": "6f420a8b449c1fe85e703924fd0c3e2deb68a888d0deebeb9dc8a035120910a5"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.23999999463558197,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 7,
+          "capturedOffsetMs": 1400,
+          "rgb": {
+            "path": "path-clear/07-rgb.png",
+            "sha256": "12cf5b9945c027498ee75bfed663dd07b169c3cf9addaf7cfe8f16cff02bfce5"
+          },
+          "depth": {
+            "path": "path-clear/07-depth-mm.pgm",
+            "sha256": "b29db6281501af7bcbb6402b3e49b9079b3316f9e9f90e94f3866ec77084ad76"
+          },
+          "semantic": {
+            "path": "path-clear/07-semantic.pgm",
+            "sha256": "6f420a8b449c1fe85e703924fd0c3e2deb68a888d0deebeb9dc8a035120910a5"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.2800000011920929,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 8,
+          "capturedOffsetMs": 1600,
+          "rgb": {
+            "path": "path-clear/08-rgb.png",
+            "sha256": "e03e96b000f03e14d0a86017a8426d71ebbbf2ddbfb2c9ed2d62b61bfc80983d"
+          },
+          "depth": {
+            "path": "path-clear/08-depth-mm.pgm",
+            "sha256": "26ced76c861e06a45fd2eb7fe95c8cce8410dd052d0eb2204b3b32a67eb23024"
+          },
+          "semantic": {
+            "path": "path-clear/08-semantic.pgm",
+            "sha256": "6f420a8b449c1fe85e703924fd0c3e2deb68a888d0deebeb9dc8a035120910a5"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.3199999928474426,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 9,
+          "capturedOffsetMs": 1800,
+          "rgb": {
+            "path": "path-clear/09-rgb.png",
+            "sha256": "9ee2937171b7ddd662a8d6b2dc03b28214e095869f32bb88c404b65405dd4689"
+          },
+          "depth": {
+            "path": "path-clear/09-depth-mm.pgm",
+            "sha256": "3274d2b38dd66af43f02006b3b1919d68f55393ae4e72635720fa0e57525406f"
+          },
+          "semantic": {
+            "path": "path-clear/09-semantic.pgm",
+            "sha256": "c9d34e0aa58bfd85ddff39df4450ae1fa79a0f1993ea21beaf9f1170b31c5b0e"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.36000001430511475,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 10,
+          "capturedOffsetMs": 2000,
+          "rgb": {
+            "path": "path-clear/10-rgb.png",
+            "sha256": "d5159cbfa5d264fecab123af98007b74ed136961f1971dfb6a37f633918c0b57"
+          },
+          "depth": {
+            "path": "path-clear/10-depth-mm.pgm",
+            "sha256": "5d5602f77fcf4c0ccfc00273b539ddff3d737002e9b6f0cc580e5262466afd97"
+          },
+          "semantic": {
+            "path": "path-clear/10-semantic.pgm",
+            "sha256": "c9d34e0aa58bfd85ddff39df4450ae1fa79a0f1993ea21beaf9f1170b31c5b0e"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.4000000059604645,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "path-box",
+      "pair": "path",
+      "scene": {
+        "path": "path-box/scene.blend",
+        "sha256": "1985c53f4c21569f68cbd201c1da4ad782d1be5a6cdd4382290c9304e1704a58"
+      },
+      "annotations": {
+        "path": "path-box/annotations.json",
+        "sha256": "0b1b78b56d39884d89bdce635b45adca83a0614cc24025652a69e48cd2da6a84"
+      },
+      "frames": [
+        {
+          "frameIndex": 0,
+          "capturedOffsetMs": 0,
+          "rgb": {
+            "path": "path-box/00-rgb.png",
+            "sha256": "abdf98b072fe0e16150e473d0dd1d88886458005a85a2678932acc44cd3f89f7"
+          },
+          "depth": {
+            "path": "path-box/00-depth-mm.pgm",
+            "sha256": "44666e973d076d2253dd0bc37da3423a86718e69d6e4343a574f302f7fb6b66b"
+          },
+          "semantic": {
+            "path": "path-box/00-semantic.pgm",
+            "sha256": "27d0050c241056dfdf874df4ecb6c68fdc9c8e044ceb028a99b49f5a82eabd90"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 1,
+          "capturedOffsetMs": 200,
+          "rgb": {
+            "path": "path-box/01-rgb.png",
+            "sha256": "429a1cd0917ed5253e4619ccff10d8ca9c8e4fec8bf7c959dc9a5a4a5ff9f9b8"
+          },
+          "depth": {
+            "path": "path-box/01-depth-mm.pgm",
+            "sha256": "4663efacef24ffaf3b5e76dadd3ff0c037b965768737c017469eac24b811f38a"
+          },
+          "semantic": {
+            "path": "path-box/01-semantic.pgm",
+            "sha256": "1aef956028ebeaaaffb1aa320444a3fad7c632ba6aefaceeb48f350d5e8e6620"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.03999999910593033,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 2,
+          "capturedOffsetMs": 400,
+          "rgb": {
+            "path": "path-box/02-rgb.png",
+            "sha256": "095d4f430257a87593cd4dbcd2fb9bd27aa181341dbe3ccb5ad2e94623ac12ee"
+          },
+          "depth": {
+            "path": "path-box/02-depth-mm.pgm",
+            "sha256": "f0dc35998f6c21b6b83375f5d537959fd344e830b8cd5b4743bdcb581d834706"
+          },
+          "semantic": {
+            "path": "path-box/02-semantic.pgm",
+            "sha256": "427e422699eb631ba20b4c5ea139ebba90e06ce8b36bb77ad88dbbd039827137"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.07999999821186066,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 3,
+          "capturedOffsetMs": 600,
+          "rgb": {
+            "path": "path-box/03-rgb.png",
+            "sha256": "847c391dcfd3629b8051e8944e2ba94cf4ab96be3127c6b8dc6a283274832fea"
+          },
+          "depth": {
+            "path": "path-box/03-depth-mm.pgm",
+            "sha256": "d07b63979ff111c39f6ecedfc90685e8786358683461f70ebb2564b008b8f339"
+          },
+          "semantic": {
+            "path": "path-box/03-semantic.pgm",
+            "sha256": "11d13d59a40ecd34330af32f39f8c133c032eca111fe815213acc016e6249c96"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.11999999731779099,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 4,
+          "capturedOffsetMs": 800,
+          "rgb": {
+            "path": "path-box/04-rgb.png",
+            "sha256": "58f1e685d4322cf6ed9a764c11607c5beac0e998bdf282e7eb934706d72a46e6"
+          },
+          "depth": {
+            "path": "path-box/04-depth-mm.pgm",
+            "sha256": "bad4f42eb52607eca7b453c8809078501c13a103b7b8d83508cb54e995cce068"
+          },
+          "semantic": {
+            "path": "path-box/04-semantic.pgm",
+            "sha256": "b50dbcab8471041e1d88489e3adf0da676fde0c0481d9396f2eda2dc7fdde0e3"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.1599999964237213,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 5,
+          "capturedOffsetMs": 1000,
+          "rgb": {
+            "path": "path-box/05-rgb.png",
+            "sha256": "a2d0023550147f26892e135e062db32512cefe58d9dc8bb7f404b1309e6a6719"
+          },
+          "depth": {
+            "path": "path-box/05-depth-mm.pgm",
+            "sha256": "9f28298a69a125675e2619c5a91a621c2a44cacd306331ec239758460ba8fa59"
+          },
+          "semantic": {
+            "path": "path-box/05-semantic.pgm",
+            "sha256": "a55813dad27eeaefbbfb07e5758d5ced66decc6b6f92779c11a3d98a506a51f6"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.20000000298023224,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 6,
+          "capturedOffsetMs": 1200,
+          "rgb": {
+            "path": "path-box/06-rgb.png",
+            "sha256": "9d7cbe83beb3ed32779e60809df1e3705d0c96089a925f3e4fdd5545bfed06ba"
+          },
+          "depth": {
+            "path": "path-box/06-depth-mm.pgm",
+            "sha256": "b958629e2d48c0353d265b5a9a8b29743e2882069ab471ed8cc2835c45bf30d5"
+          },
+          "semantic": {
+            "path": "path-box/06-semantic.pgm",
+            "sha256": "b7c6464c65e0f5bbce6054422c20d3a7c12d2f210b5aa0685565fa54e3b6eb01"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.23999999463558197,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 7,
+          "capturedOffsetMs": 1400,
+          "rgb": {
+            "path": "path-box/07-rgb.png",
+            "sha256": "98697269093a86c990057769933671146c5d09ececf409c8d3b538189197cb97"
+          },
+          "depth": {
+            "path": "path-box/07-depth-mm.pgm",
+            "sha256": "87c3ef494185b4402d15f40364eb2a38c189608eea6d35684cf2b6407e7e03c2"
+          },
+          "semantic": {
+            "path": "path-box/07-semantic.pgm",
+            "sha256": "ad0b4393d2c8405b18fadbc86db34caa5a6aff897cd78c71139977d63d6fb411"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.2800000011920929,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 8,
+          "capturedOffsetMs": 1600,
+          "rgb": {
+            "path": "path-box/08-rgb.png",
+            "sha256": "7bcc80f125bfac3a0facee1ec88912028d0c175bf64ec4d995f7ca8526282f49"
+          },
+          "depth": {
+            "path": "path-box/08-depth-mm.pgm",
+            "sha256": "f8c09c0304d3252567fac3a2f7a65dcfee6577e60727c2a7584c86f9bf799a15"
+          },
+          "semantic": {
+            "path": "path-box/08-semantic.pgm",
+            "sha256": "e539928dc179c0e790aafb20659b743da679769a92d9e24cb9d477fa39a5fd58"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.3199999928474426,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 9,
+          "capturedOffsetMs": 1800,
+          "rgb": {
+            "path": "path-box/09-rgb.png",
+            "sha256": "cf40830ff822ed9276c42a0c688ff7289a0f638bf837bdfc5481531300299497"
+          },
+          "depth": {
+            "path": "path-box/09-depth-mm.pgm",
+            "sha256": "89fa05196de6c9c38bc1579c28a9178d988d8e1ba71a32c841137fe3d47bfed4"
+          },
+          "semantic": {
+            "path": "path-box/09-semantic.pgm",
+            "sha256": "80b5572e9b28721672dc428ee2ce9572aaf38a67be470b44ca8d24b3a0eabef5"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.36000001430511475,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 10,
+          "capturedOffsetMs": 2000,
+          "rgb": {
+            "path": "path-box/10-rgb.png",
+            "sha256": "9dfb1511dd8f8de4896a7977644c2a906f70b497dc304d7aa538822076fd90e1"
+          },
+          "depth": {
+            "path": "path-box/10-depth-mm.pgm",
+            "sha256": "b6fbeab031df1e5766ae4209d8ec223f6c128bc49148e3aeb7be1586077b5649"
+          },
+          "semantic": {
+            "path": "path-box/10-semantic.pgm",
+            "sha256": "101fc84e13a666de859bfb5963093359eca3ac3ce4e26527eb15a0790a91d1a4"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.4000000059604645,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "doorway-wide",
+      "pair": "doorway",
+      "scene": {
+        "path": "doorway-wide/scene.blend",
+        "sha256": "94425671c5a6bc301d13bc2fc615c45cbd2457b1c121bf28ec6c7c9eb51d98bf"
+      },
+      "annotations": {
+        "path": "doorway-wide/annotations.json",
+        "sha256": "359b7c16bab2b45536a4c1df1b586a9b7087a8f9b657a4c435925e79edbfb8ba"
+      },
+      "frames": [
+        {
+          "frameIndex": 0,
+          "capturedOffsetMs": 0,
+          "rgb": {
+            "path": "doorway-wide/00-rgb.png",
+            "sha256": "c5de9b6ec6608b5d887e3314030cdb0b4ded9f32c5a6947a785bf61b959e67fc"
+          },
+          "depth": {
+            "path": "doorway-wide/00-depth-mm.pgm",
+            "sha256": "b723bfe9017cb43c9471e92f873e72dc406b005c9d10bca54aa32f5d8ad59c75"
+          },
+          "semantic": {
+            "path": "doorway-wide/00-semantic.pgm",
+            "sha256": "72b87b0e82354a2c03eb847b5a4f27c83b12dff887da0a0dabe50d5065985b7a"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 1,
+          "capturedOffsetMs": 200,
+          "rgb": {
+            "path": "doorway-wide/01-rgb.png",
+            "sha256": "42673facac3e239b95709744d967c495d8d26ada477d6543b55763d1d8fa5e5c"
+          },
+          "depth": {
+            "path": "doorway-wide/01-depth-mm.pgm",
+            "sha256": "3ab615311e3e6ae476d87119f0359c2c85b00a908180236b9e5f03734355fe6c"
+          },
+          "semantic": {
+            "path": "doorway-wide/01-semantic.pgm",
+            "sha256": "9d42df674ed95a162de7f5c8241dab2d03a2d538ff1a803b933f7b626e7be0f6"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.03999999910593033,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 2,
+          "capturedOffsetMs": 400,
+          "rgb": {
+            "path": "doorway-wide/02-rgb.png",
+            "sha256": "1ccada12f37235c0472667a6b1129099b857264944d87f015c0bcbadffee29a0"
+          },
+          "depth": {
+            "path": "doorway-wide/02-depth-mm.pgm",
+            "sha256": "695a93c4beac82a544dbbafd0797acea11bf8b7c290915ffce91b983e76e7f25"
+          },
+          "semantic": {
+            "path": "doorway-wide/02-semantic.pgm",
+            "sha256": "0c36289b4aac0bb6c298ce4cb298895cc6017819ffb57d90ccbe940ad1821710"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.07999999821186066,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 3,
+          "capturedOffsetMs": 600,
+          "rgb": {
+            "path": "doorway-wide/03-rgb.png",
+            "sha256": "9a93c61547edbf61791a04d28b93ab0f8acaa72d4ce1041bf389b0aa5dacb898"
+          },
+          "depth": {
+            "path": "doorway-wide/03-depth-mm.pgm",
+            "sha256": "56a638b01bd056d79e9982d27ff758d6d0bae5f6a592a9a2485736cf898f52cb"
+          },
+          "semantic": {
+            "path": "doorway-wide/03-semantic.pgm",
+            "sha256": "2ad1c93fcc8a7362a1b3edba17fb37f5615adb22e640e3b5d53dc22c2113327d"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.11999999731779099,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 4,
+          "capturedOffsetMs": 800,
+          "rgb": {
+            "path": "doorway-wide/04-rgb.png",
+            "sha256": "98a0aecfd28fd9743a04f5dcc196a7590681e11cb10844b997f892db47d36635"
+          },
+          "depth": {
+            "path": "doorway-wide/04-depth-mm.pgm",
+            "sha256": "d46586b11cd1dd6d85ffec7854c3497c3aea6d7d5240c1ec5e732f8b80aba586"
+          },
+          "semantic": {
+            "path": "doorway-wide/04-semantic.pgm",
+            "sha256": "8f20ccbb8df3a60b3418181cb1a19157c674bcc05ab46a4469f9706fb185188b"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.1599999964237213,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 5,
+          "capturedOffsetMs": 1000,
+          "rgb": {
+            "path": "doorway-wide/05-rgb.png",
+            "sha256": "6ac0fbb42533510a6202cb63317935cb7de8f3be08a25841b0e6d055e37a22bc"
+          },
+          "depth": {
+            "path": "doorway-wide/05-depth-mm.pgm",
+            "sha256": "06324a84ee804f1abac577a8f6c3361905581b3baa13e85ccd82459766f331af"
+          },
+          "semantic": {
+            "path": "doorway-wide/05-semantic.pgm",
+            "sha256": "425e49b192ccc8acee2eb0e1adbd6861072fbc548457921953ef7be88aba37ae"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.20000000298023224,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 6,
+          "capturedOffsetMs": 1200,
+          "rgb": {
+            "path": "doorway-wide/06-rgb.png",
+            "sha256": "a523a46320f047661a49f05dbeefc6c4215a3487bbed0df897bc35cc5a25937f"
+          },
+          "depth": {
+            "path": "doorway-wide/06-depth-mm.pgm",
+            "sha256": "54324285d536737c22157952849573a76898ea622b781090ec7a14a15c5ddf8a"
+          },
+          "semantic": {
+            "path": "doorway-wide/06-semantic.pgm",
+            "sha256": "9c6f6a911ad01240b2d4e8bacad02eae3013128b8a3f8502318ebe01b5f3dc3f"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.23999999463558197,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 7,
+          "capturedOffsetMs": 1400,
+          "rgb": {
+            "path": "doorway-wide/07-rgb.png",
+            "sha256": "9ed8dfd1d30baefac93e1899361e6b586df6f1021b7a2db86eb23c1a130e52ba"
+          },
+          "depth": {
+            "path": "doorway-wide/07-depth-mm.pgm",
+            "sha256": "ef8a39777d80d2a3379051f2758baba83b4ee4af7fc84f6205b7c38e9fa420b9"
+          },
+          "semantic": {
+            "path": "doorway-wide/07-semantic.pgm",
+            "sha256": "a43ed60e7192049bbfb1db030ea10a4ce6f6814e791c954439d03ce9792ed49a"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.2800000011920929,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 8,
+          "capturedOffsetMs": 1600,
+          "rgb": {
+            "path": "doorway-wide/08-rgb.png",
+            "sha256": "18900a6b390bfb9baa62100736b57031f95d17982237937a5673714aff49cfe8"
+          },
+          "depth": {
+            "path": "doorway-wide/08-depth-mm.pgm",
+            "sha256": "bf1b7666f9df77ad9c35e7d06bc4104355f8af5bd6ef10de4f3c9d3ee71d9e5b"
+          },
+          "semantic": {
+            "path": "doorway-wide/08-semantic.pgm",
+            "sha256": "f6d7cd445b49b5f8b075e3ac76e3f735d9e4b1884712105c34f56e08ad145669"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.3199999928474426,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 9,
+          "capturedOffsetMs": 1800,
+          "rgb": {
+            "path": "doorway-wide/09-rgb.png",
+            "sha256": "87064bcf781711c016bad578fa7652760eb96ea684263daf28ba961fa1718a23"
+          },
+          "depth": {
+            "path": "doorway-wide/09-depth-mm.pgm",
+            "sha256": "915dba014a381a4c0c2e3a9166f0bee459b63141a552ce9b0ffb8fd309a86d8a"
+          },
+          "semantic": {
+            "path": "doorway-wide/09-semantic.pgm",
+            "sha256": "e5b028c0bcdc50bdfdc5c404a548325ecbe100000f0c0e246fef526a5181cb40"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.36000001430511475,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 10,
+          "capturedOffsetMs": 2000,
+          "rgb": {
+            "path": "doorway-wide/10-rgb.png",
+            "sha256": "c9e00df86fba4651fe1d3aa64fee0f9bd773caa54b739e90a418c33327bb7f15"
+          },
+          "depth": {
+            "path": "doorway-wide/10-depth-mm.pgm",
+            "sha256": "8b5ca40906da3dde6cf27be039cd1c0c349f82d6cd52e83a479063a5811d91d1"
+          },
+          "semantic": {
+            "path": "doorway-wide/10-semantic.pgm",
+            "sha256": "2720f87f3d0b783d6288a4e7e26e31d009106211d6aecb42d0298e45710208d5"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.4000000059604645,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "doorway-narrow",
+      "pair": "doorway",
+      "scene": {
+        "path": "doorway-narrow/scene.blend",
+        "sha256": "96a22b507cfaf6280eeddc8295a0d805aeb72dfaa92e9ebf8937e096fa9235ea"
+      },
+      "annotations": {
+        "path": "doorway-narrow/annotations.json",
+        "sha256": "265954a5c3944be24a152e0d8b0b1c9d22b61a8d1f666814454f10be8e64a77f"
+      },
+      "frames": [
+        {
+          "frameIndex": 0,
+          "capturedOffsetMs": 0,
+          "rgb": {
+            "path": "doorway-narrow/00-rgb.png",
+            "sha256": "fe4909de8b8b02b3afe08c74a98568eb23f3928bfda279b6480b6172685807be"
+          },
+          "depth": {
+            "path": "doorway-narrow/00-depth-mm.pgm",
+            "sha256": "0337f7b09dcd5a298ba99b80a7c12fa0940be9344c3440b683a8ed5c7b8191c0"
+          },
+          "semantic": {
+            "path": "doorway-narrow/00-semantic.pgm",
+            "sha256": "4681c8f9facdc1734a083f20e081a4f36954796798b1a992ebd2f0b60e800dfe"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 1,
+          "capturedOffsetMs": 200,
+          "rgb": {
+            "path": "doorway-narrow/01-rgb.png",
+            "sha256": "96002e633742575d334a4b38ef1b60fd3afe3a107387a0b5b50f9088e81aa744"
+          },
+          "depth": {
+            "path": "doorway-narrow/01-depth-mm.pgm",
+            "sha256": "6518849f40e1b0a3c14e62917ca4fbae0dbde4c349d60424236c577e343ea4a7"
+          },
+          "semantic": {
+            "path": "doorway-narrow/01-semantic.pgm",
+            "sha256": "7d769ae9ccb3b394089cac1debcff0d7ccc755ff2e98aca8eb77317ef8238866"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.03999999910593033,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 2,
+          "capturedOffsetMs": 400,
+          "rgb": {
+            "path": "doorway-narrow/02-rgb.png",
+            "sha256": "77536f99a41c0d2cbafc1530a6baccb55575b70b0ae270e3a3bbc02f8d69023d"
+          },
+          "depth": {
+            "path": "doorway-narrow/02-depth-mm.pgm",
+            "sha256": "1fb72604f358be093bd8001109fb46efc59f4ac70e6770ef141b818126cdfa69"
+          },
+          "semantic": {
+            "path": "doorway-narrow/02-semantic.pgm",
+            "sha256": "f6e491081dae47bfdf86749913454d7c07a745843ed0ff8bb19e9a4a41a1a8ed"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.07999999821186066,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 3,
+          "capturedOffsetMs": 600,
+          "rgb": {
+            "path": "doorway-narrow/03-rgb.png",
+            "sha256": "d5cb0959d990abb50ab839fb19d1368a3b8ddf8ce2495496698fbf2bd1fe9be4"
+          },
+          "depth": {
+            "path": "doorway-narrow/03-depth-mm.pgm",
+            "sha256": "927df2d2a9b951abb3686410b648d88bf014710ac16effbbe317de8f2353ffc2"
+          },
+          "semantic": {
+            "path": "doorway-narrow/03-semantic.pgm",
+            "sha256": "55b8c6fdd46447434b51db8b32055fd0dfef609143e28c9694bca02924c1d841"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.11999999731779099,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 4,
+          "capturedOffsetMs": 800,
+          "rgb": {
+            "path": "doorway-narrow/04-rgb.png",
+            "sha256": "52376c28618328f8dc11f96cb6f59da967dffea5db644871a54e30b38f1c3f6d"
+          },
+          "depth": {
+            "path": "doorway-narrow/04-depth-mm.pgm",
+            "sha256": "71733878fc4d68e5b37aa1aa45f5b0b2574ef8dbd08d6c0bbeeffd338a1f68e4"
+          },
+          "semantic": {
+            "path": "doorway-narrow/04-semantic.pgm",
+            "sha256": "360a3d93ea085f52a6bc31b834429083297bf081c84ef5ea80f1c4753f658816"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.1599999964237213,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 5,
+          "capturedOffsetMs": 1000,
+          "rgb": {
+            "path": "doorway-narrow/05-rgb.png",
+            "sha256": "276b6ee990d060e041d2334c20c90a0e7bf3e978f7485f626598586fdcb3c7eb"
+          },
+          "depth": {
+            "path": "doorway-narrow/05-depth-mm.pgm",
+            "sha256": "26a437ff835194e312895f3457cff1e4fee727b0409a497caa6b216293e6e564"
+          },
+          "semantic": {
+            "path": "doorway-narrow/05-semantic.pgm",
+            "sha256": "8ab9e325cd29bc75b12f389c528f7390fff98f492e7354926d7063b6f0eb6e19"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.20000000298023224,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 6,
+          "capturedOffsetMs": 1200,
+          "rgb": {
+            "path": "doorway-narrow/06-rgb.png",
+            "sha256": "7376f495128bae29eeb530c0021b3bf1b7a674466d4a9ce54afebbf32c65aa4c"
+          },
+          "depth": {
+            "path": "doorway-narrow/06-depth-mm.pgm",
+            "sha256": "88021b2216944455d655f80cd9bbc5f16f39833bd825c01b3edb647a3189391a"
+          },
+          "semantic": {
+            "path": "doorway-narrow/06-semantic.pgm",
+            "sha256": "7d43107d2e7045bc25434cd5a510198beaa8e5d56c304f9bc2fde45cf7a9fe0f"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.23999999463558197,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 7,
+          "capturedOffsetMs": 1400,
+          "rgb": {
+            "path": "doorway-narrow/07-rgb.png",
+            "sha256": "26d31480c9d56495db972fbb83d60efcfb5e8d7f5dfa495ea234918435185f79"
+          },
+          "depth": {
+            "path": "doorway-narrow/07-depth-mm.pgm",
+            "sha256": "86de945dea491432768d6d4873323b7622b3def4d78603d1dc221bb593d5b9c6"
+          },
+          "semantic": {
+            "path": "doorway-narrow/07-semantic.pgm",
+            "sha256": "2db317f10179bf7d685af7ec0e1410cc941d838e0149e8adda6981f556b38edd"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.2800000011920929,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 8,
+          "capturedOffsetMs": 1600,
+          "rgb": {
+            "path": "doorway-narrow/08-rgb.png",
+            "sha256": "95c87c8151718f7ce0f6b761eb7ee9a17e446c8eeaf1e4fae9bc803d6ca7c14c"
+          },
+          "depth": {
+            "path": "doorway-narrow/08-depth-mm.pgm",
+            "sha256": "fde72caadd5ad4e3ef48f2e83e172b1d1f0800c457d685b0765d16f3783313fc"
+          },
+          "semantic": {
+            "path": "doorway-narrow/08-semantic.pgm",
+            "sha256": "8815c9ddf92278bd4d886d8d6efdf68ea19d00650dfba4a29ac79ffba17a0fb3"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.3199999928474426,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 9,
+          "capturedOffsetMs": 1800,
+          "rgb": {
+            "path": "doorway-narrow/09-rgb.png",
+            "sha256": "cc39fc56311088e10362715e9899aca919e894694c4a4247afabdafd10152a6b"
+          },
+          "depth": {
+            "path": "doorway-narrow/09-depth-mm.pgm",
+            "sha256": "e7d4f801e0b199096c6395c6c45e90ee7b6d80477976fc067bf6e32a6a58b9f9"
+          },
+          "semantic": {
+            "path": "doorway-narrow/09-semantic.pgm",
+            "sha256": "172465b7d37678d9c915d9cc6ad42e472713e183cceb699ac50680d360f5fd32"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.36000001430511475,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 10,
+          "capturedOffsetMs": 2000,
+          "rgb": {
+            "path": "doorway-narrow/10-rgb.png",
+            "sha256": "55ee66794c1c04198938fee99564972bc3f08c58b73128a9080e96e746f45c23"
+          },
+          "depth": {
+            "path": "doorway-narrow/10-depth-mm.pgm",
+            "sha256": "cceca7b732e8989ed11e9971c973bb655224cfa036d606c19a073e9b3955078d"
+          },
+          "semantic": {
+            "path": "doorway-narrow/10-semantic.pgm",
+            "sha256": "ecf692b3979a4fcbdbcc9194a6b28c7ddb00907f87c0daf91324f2b101b8e675"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.4000000059604645,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "headroom-high",
+      "pair": "headroom",
+      "scene": {
+        "path": "headroom-high/scene.blend",
+        "sha256": "138fff6b301023deaa8cfd2f41c1feb9088f2aa1eaf808cf6a4077ffc0172a16"
+      },
+      "annotations": {
+        "path": "headroom-high/annotations.json",
+        "sha256": "f318a6e6f66bd7ecec403762c2042ac255716c541f14f56cea0122c8ac63612b"
+      },
+      "frames": [
+        {
+          "frameIndex": 0,
+          "capturedOffsetMs": 0,
+          "rgb": {
+            "path": "headroom-high/00-rgb.png",
+            "sha256": "927725037fdbe3596c3fa05e1eb26bfe022156b5fa1cc2b19b1212bb31de214c"
+          },
+          "depth": {
+            "path": "headroom-high/00-depth-mm.pgm",
+            "sha256": "0428861f27e0b8a9a1d18082bbe2f138474ffaef5b1d6c6ff5ef91d7ffae21d3"
+          },
+          "semantic": {
+            "path": "headroom-high/00-semantic.pgm",
+            "sha256": "01d5d2c803e592bcb6383c5e850767daa835b52da5f8ea1c2c1ecd9c33769183"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 1,
+          "capturedOffsetMs": 200,
+          "rgb": {
+            "path": "headroom-high/01-rgb.png",
+            "sha256": "51409622c8de2dd74cc41260bdd9b04fb32e2d30c52c05f37d6df63bcb776f1f"
+          },
+          "depth": {
+            "path": "headroom-high/01-depth-mm.pgm",
+            "sha256": "fa209991847de4dfd2dcbf31d09c94ef0ade7118c166fed7b586199c26765d24"
+          },
+          "semantic": {
+            "path": "headroom-high/01-semantic.pgm",
+            "sha256": "3671d2a76a546cfa0bc863820d838d4bb85e33dd28a3a7488577e763036f2c9e"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.03999999910593033,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 2,
+          "capturedOffsetMs": 400,
+          "rgb": {
+            "path": "headroom-high/02-rgb.png",
+            "sha256": "5069716230bc8e2f01e2eeb65cfdf4f6816ac7a43aaa9ca3bfaae491c23b1a8d"
+          },
+          "depth": {
+            "path": "headroom-high/02-depth-mm.pgm",
+            "sha256": "6dbc82a0cd4cef2d7ca95e34766227f43cb25f0ccd160a2fc1de24a169e7a080"
+          },
+          "semantic": {
+            "path": "headroom-high/02-semantic.pgm",
+            "sha256": "61fb07d2d1de172ea2d982924678f49d42a0ba5b72751f33a7e4c683742eb846"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.07999999821186066,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 3,
+          "capturedOffsetMs": 600,
+          "rgb": {
+            "path": "headroom-high/03-rgb.png",
+            "sha256": "6c704df0d58fc888725174a60f78f4ff53d276295d88d400631e046c851b073c"
+          },
+          "depth": {
+            "path": "headroom-high/03-depth-mm.pgm",
+            "sha256": "01c39722336407378de8abf0fe7635656e9cb5b90d3adcea4ac90f954472f868"
+          },
+          "semantic": {
+            "path": "headroom-high/03-semantic.pgm",
+            "sha256": "f6d7cd445b49b5f8b075e3ac76e3f735d9e4b1884712105c34f56e08ad145669"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.11999999731779099,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 4,
+          "capturedOffsetMs": 800,
+          "rgb": {
+            "path": "headroom-high/04-rgb.png",
+            "sha256": "12dcf426f567ac603846c27c67f353686d7f28bddcfa111f7711ced6c9ffdce3"
+          },
+          "depth": {
+            "path": "headroom-high/04-depth-mm.pgm",
+            "sha256": "bd2fca62f0de48c006afba3dd070adc67ba50f4749dfbcc29f64295cfcf86773"
+          },
+          "semantic": {
+            "path": "headroom-high/04-semantic.pgm",
+            "sha256": "8cbf52efe14183150b77e0b37dea8242c4553d029abbe5a6abaae8cb59749d87"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.1599999964237213,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 5,
+          "capturedOffsetMs": 1000,
+          "rgb": {
+            "path": "headroom-high/05-rgb.png",
+            "sha256": "47d4747b32f15d86b7ac11dd294c2d02e0c10bc88053f71e13a50001876f5e99"
+          },
+          "depth": {
+            "path": "headroom-high/05-depth-mm.pgm",
+            "sha256": "848c55c954b89870ac65cee6322b82b388095cdf4229b75cd61a92f0049f53ca"
+          },
+          "semantic": {
+            "path": "headroom-high/05-semantic.pgm",
+            "sha256": "ce04482c5c759a9d9a8d62b4f4295b7a0f16bbbdb836abab5a4605907c221aa6"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.20000000298023224,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 6,
+          "capturedOffsetMs": 1200,
+          "rgb": {
+            "path": "headroom-high/06-rgb.png",
+            "sha256": "38caf248af96b4b7b05466626a32310f089351cf178d00b5ff502eb28c5e48ed"
+          },
+          "depth": {
+            "path": "headroom-high/06-depth-mm.pgm",
+            "sha256": "31479afe7d3a0c93936269b4c33481db22e53240e4d041831ecb50f93de3e4cb"
+          },
+          "semantic": {
+            "path": "headroom-high/06-semantic.pgm",
+            "sha256": "f13f630a2128ae24515accb934164f5dd10ad076477b1cdee7a800caf9d6c6f6"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.23999999463558197,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 7,
+          "capturedOffsetMs": 1400,
+          "rgb": {
+            "path": "headroom-high/07-rgb.png",
+            "sha256": "673fa76d4c2628263436c76d8bed1347b36411d13c26c00810f160f9251e7c14"
+          },
+          "depth": {
+            "path": "headroom-high/07-depth-mm.pgm",
+            "sha256": "c317c23970d65ca3d896c2adff39f1660c4bb50aa30a471a07f3cb5508cfc4d7"
+          },
+          "semantic": {
+            "path": "headroom-high/07-semantic.pgm",
+            "sha256": "3cc2627db47898c4b94bb3586c273d22f301d9b40948a869b740dff15b559fb4"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.2800000011920929,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 8,
+          "capturedOffsetMs": 1600,
+          "rgb": {
+            "path": "headroom-high/08-rgb.png",
+            "sha256": "825dbb76ede4ffa6ca88287882763aa8fd43f2b26fcf0ab2bd479d11833a34b8"
+          },
+          "depth": {
+            "path": "headroom-high/08-depth-mm.pgm",
+            "sha256": "8298d94584f0a936fcac82c5fedd19a031effecfe70b62fe8c230635490f5b2b"
+          },
+          "semantic": {
+            "path": "headroom-high/08-semantic.pgm",
+            "sha256": "17a19737763786523cc0526b418dc7f0f5b59552d2429936cee3cba08057e43a"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.3199999928474426,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 9,
+          "capturedOffsetMs": 1800,
+          "rgb": {
+            "path": "headroom-high/09-rgb.png",
+            "sha256": "6054101b010215dda572d1a66d4c1b1c310d21a9e4b0c27ce8d62ee75ea9a1a4"
+          },
+          "depth": {
+            "path": "headroom-high/09-depth-mm.pgm",
+            "sha256": "885b7baf417bc34ae707e858c8a4179e4c67f376b0fe50bbd5909c5a9f651cad"
+          },
+          "semantic": {
+            "path": "headroom-high/09-semantic.pgm",
+            "sha256": "e8562119fe84a1005d08585284a33d586623d6b1e40545c95e3a8c5b5f1628fc"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.36000001430511475,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 10,
+          "capturedOffsetMs": 2000,
+          "rgb": {
+            "path": "headroom-high/10-rgb.png",
+            "sha256": "95db6a110eeab2851f6d9c5186e20741f54897d6b1fe671db2ca7025df0a16b4"
+          },
+          "depth": {
+            "path": "headroom-high/10-depth-mm.pgm",
+            "sha256": "fe9594171564be05abec0220703fc335699bf32b8d4ad88d6ae8ba7660af97d1"
+          },
+          "semantic": {
+            "path": "headroom-high/10-semantic.pgm",
+            "sha256": "0626fabcbf7fe23f1c943f45816b0bea5ab2ae7f999f33b27b5eb6ba72d35e82"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.4000000059604645,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "headroom-low",
+      "pair": "headroom",
+      "scene": {
+        "path": "headroom-low/scene.blend",
+        "sha256": "85ba7fb1f07d9b1d7bb7cc88fd1a40cfd37c6a3d244c7719975ae6587d119a01"
+      },
+      "annotations": {
+        "path": "headroom-low/annotations.json",
+        "sha256": "201953097feebb5aa354cab2c2edc93ad2d93ba1d32737296fc8f6104a5bbb7f"
+      },
+      "frames": [
+        {
+          "frameIndex": 0,
+          "capturedOffsetMs": 0,
+          "rgb": {
+            "path": "headroom-low/00-rgb.png",
+            "sha256": "aa63fff50b6998e67e97d915b22d0ce5a38959a082daaa0148aae7ae2d3ae2ad"
+          },
+          "depth": {
+            "path": "headroom-low/00-depth-mm.pgm",
+            "sha256": "4c50a9f079bd223e8b182a7a8f947b7f848fe7d88352225124bbef06d39251c9"
+          },
+          "semantic": {
+            "path": "headroom-low/00-semantic.pgm",
+            "sha256": "87e3e9e40514faeadb1ea61e6984ce5608175efbb10b31e6cbcf7dcc54943fb3"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 1,
+          "capturedOffsetMs": 200,
+          "rgb": {
+            "path": "headroom-low/01-rgb.png",
+            "sha256": "e1e6d508491aacd6b81cf09e4b743a9b5b72dd4fb1d4e58634f0391c0d939ee1"
+          },
+          "depth": {
+            "path": "headroom-low/01-depth-mm.pgm",
+            "sha256": "6ea9c2b4e8568e19cdd0a3e3db75385136f3f0a7eee712938142cfcb4c4f154e"
+          },
+          "semantic": {
+            "path": "headroom-low/01-semantic.pgm",
+            "sha256": "c59df762bbeb652d729b6ee2e03acdefe8dd2a6b801d32bcfcef06ff0f49e632"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.03999999910593033,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 2,
+          "capturedOffsetMs": 400,
+          "rgb": {
+            "path": "headroom-low/02-rgb.png",
+            "sha256": "2855972d7e5c446ab20bab06a6eb959b7f872f6c3903b1ccfd8df34f94a2e6b2"
+          },
+          "depth": {
+            "path": "headroom-low/02-depth-mm.pgm",
+            "sha256": "8222df73dc5f63d65581aa09d075a825f5a7566b8de51dec9f06af78f043e304"
+          },
+          "semantic": {
+            "path": "headroom-low/02-semantic.pgm",
+            "sha256": "c7ed8a1f3baab326e99f24e9569c471dfce22a634858e79e22508d3b25e4137e"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.07999999821186066,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 3,
+          "capturedOffsetMs": 600,
+          "rgb": {
+            "path": "headroom-low/03-rgb.png",
+            "sha256": "a6fc56673ed77f551788af5aec481e9b7dd2cb10a3e7498bee382cd058aa7361"
+          },
+          "depth": {
+            "path": "headroom-low/03-depth-mm.pgm",
+            "sha256": "57f76fd1af3dd9a641e88590277f0c1a2a8dddd87850abb6934a162deac94202"
+          },
+          "semantic": {
+            "path": "headroom-low/03-semantic.pgm",
+            "sha256": "261c56a61cd4abe44c887ce7df3e27e2874dbb5b37dbce4aaafe01c834c509f5"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.11999999731779099,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 4,
+          "capturedOffsetMs": 800,
+          "rgb": {
+            "path": "headroom-low/04-rgb.png",
+            "sha256": "800d389f6f6411fa8b82b26d6920163bcaee3e562f6423a9fb6b642f69c6b59a"
+          },
+          "depth": {
+            "path": "headroom-low/04-depth-mm.pgm",
+            "sha256": "d752fd77cb014430b693e6e7d7c793127ef2bb2657633786c857adec456f0355"
+          },
+          "semantic": {
+            "path": "headroom-low/04-semantic.pgm",
+            "sha256": "d4d642e63d3e7e5926608b0f27c2f881abec5016b0be44f553569154fd3a5941"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.1599999964237213,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 5,
+          "capturedOffsetMs": 1000,
+          "rgb": {
+            "path": "headroom-low/05-rgb.png",
+            "sha256": "094c142d1bad9dcafd03b3c66dd71d4f92b653ae7c446d13ec70e88009a3afa5"
+          },
+          "depth": {
+            "path": "headroom-low/05-depth-mm.pgm",
+            "sha256": "5342c5b9b034eb63099a31549e1b0033b78edc219197ed735fff8c61c03105a0"
+          },
+          "semantic": {
+            "path": "headroom-low/05-semantic.pgm",
+            "sha256": "fa97b21af1dfb69a73daf0e420b5ad57397345a8f3dc0e3c7a56df3a8c37e257"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.20000000298023224,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 6,
+          "capturedOffsetMs": 1200,
+          "rgb": {
+            "path": "headroom-low/06-rgb.png",
+            "sha256": "9f4a0167d18aca79d2ee5043db3b66c83ef1d8850784ccd341ffcb59e9dadc47"
+          },
+          "depth": {
+            "path": "headroom-low/06-depth-mm.pgm",
+            "sha256": "450b53bbea7aae4f68d87ee6d861e0770764504c1733e68e404ed4ddf85cc686"
+          },
+          "semantic": {
+            "path": "headroom-low/06-semantic.pgm",
+            "sha256": "84472de34c0d4754600b1b227bb4391579400fdbc442f97cc53848f12587419d"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.23999999463558197,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 7,
+          "capturedOffsetMs": 1400,
+          "rgb": {
+            "path": "headroom-low/07-rgb.png",
+            "sha256": "c7235842677ff05db29e68274ed2b170e4c286696114b177a98563081f85b53f"
+          },
+          "depth": {
+            "path": "headroom-low/07-depth-mm.pgm",
+            "sha256": "d3177c2b9e78f40441add8769d56e5988851860d94c29fc5073d5964bf80fefe"
+          },
+          "semantic": {
+            "path": "headroom-low/07-semantic.pgm",
+            "sha256": "9d01ae7590b456dc06b22c96f4d4820d37e9de483492db570476b8cd4f54081d"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.2800000011920929,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 8,
+          "capturedOffsetMs": 1600,
+          "rgb": {
+            "path": "headroom-low/08-rgb.png",
+            "sha256": "1287cc905997558a0ff8969c28fa115a02afcb7f4c19434349e85e4207617d3d"
+          },
+          "depth": {
+            "path": "headroom-low/08-depth-mm.pgm",
+            "sha256": "e1c6d4b83b1b079863d98a9704647e6b994741b5634eac79e80be2a2af9ac163"
+          },
+          "semantic": {
+            "path": "headroom-low/08-semantic.pgm",
+            "sha256": "01553295df772a2508f58bc745051e7ca46e38f25e89d34337fe6a42955ecf47"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.3199999928474426,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 9,
+          "capturedOffsetMs": 1800,
+          "rgb": {
+            "path": "headroom-low/09-rgb.png",
+            "sha256": "5fa122d240ccbc4c067e76f1190cf14b8b5685e57b3fb08d998e9c091045d765"
+          },
+          "depth": {
+            "path": "headroom-low/09-depth-mm.pgm",
+            "sha256": "a4e793d07bb12b4065c418328a6e20bbf50524bcb7765e3bd1db8612450dd8da"
+          },
+          "semantic": {
+            "path": "headroom-low/09-semantic.pgm",
+            "sha256": "ae8e5b6cd2dad4d7475c920eef8d3e6b72ebe159c92d0860d4e849a7060b5e78"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.36000001430511475,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 10,
+          "capturedOffsetMs": 2000,
+          "rgb": {
+            "path": "headroom-low/10-rgb.png",
+            "sha256": "32b6b626a80c958f25c6ae6bedfc02dc0a5794bd02ea607d853a036d434da9c5"
+          },
+          "depth": {
+            "path": "headroom-low/10-depth-mm.pgm",
+            "sha256": "ca77be58af3acbadc199727801ab5248f36e67b55f86a9326af79a99299d6842"
+          },
+          "semantic": {
+            "path": "headroom-low/10-semantic.pgm",
+            "sha256": "d73326d9074c1268b71efb0e45810fec8e33ad0b6a892e55067bdd554d7d5afd"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.4000000059604645,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "floor-level",
+      "pair": "floor",
+      "scene": {
+        "path": "floor-level/scene.blend",
+        "sha256": "e824d3921c5dac0ad2260879a617cd8d6180000f7bd9e85b48a592d02bfa6762"
+      },
+      "annotations": {
+        "path": "floor-level/annotations.json",
+        "sha256": "460b761d479b160d25d8fbbb7af4225ce2a678bc9b38c7f92cba89be5f56030b"
+      },
+      "frames": [
+        {
+          "frameIndex": 0,
+          "capturedOffsetMs": 0,
+          "rgb": {
+            "path": "floor-level/00-rgb.png",
+            "sha256": "59661546f46cc4f44c76b8bcf80eba1c765c83d0be43af9115f65681d61675e6"
+          },
+          "depth": {
+            "path": "floor-level/00-depth-mm.pgm",
+            "sha256": "d8f408529ac089bc4627b49080847f0e17eed8a8c5c3b7a2167ed899c2d8d75b"
+          },
+          "semantic": {
+            "path": "floor-level/00-semantic.pgm",
+            "sha256": "c84e42f0f9a0a1fe8a241bad3e133224141452b923aae3b61c4f45e1dc20c65e"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 1,
+          "capturedOffsetMs": 200,
+          "rgb": {
+            "path": "floor-level/01-rgb.png",
+            "sha256": "449ce6a1d88e4b930ddf1537bf95aa0121b20dbffac1d9bc8d1436919d2d577d"
+          },
+          "depth": {
+            "path": "floor-level/01-depth-mm.pgm",
+            "sha256": "86fe0562207c954f9e399a6912db89b0c6efe67c9f7a64150c8cfd4fbcb96b69"
+          },
+          "semantic": {
+            "path": "floor-level/01-semantic.pgm",
+            "sha256": "c84e42f0f9a0a1fe8a241bad3e133224141452b923aae3b61c4f45e1dc20c65e"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.03999999910593033,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 2,
+          "capturedOffsetMs": 400,
+          "rgb": {
+            "path": "floor-level/02-rgb.png",
+            "sha256": "03d84ecaccf5d9098ee8c4be07c4f8fb4ccba08905714a35491f9b5e1c096feb"
+          },
+          "depth": {
+            "path": "floor-level/02-depth-mm.pgm",
+            "sha256": "fbe60595386a5ce720a453910749fcee15c659303365bd1371fac158045eaa83"
+          },
+          "semantic": {
+            "path": "floor-level/02-semantic.pgm",
+            "sha256": "c84e42f0f9a0a1fe8a241bad3e133224141452b923aae3b61c4f45e1dc20c65e"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.07999999821186066,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 3,
+          "capturedOffsetMs": 600,
+          "rgb": {
+            "path": "floor-level/03-rgb.png",
+            "sha256": "5ebdc6f6305db2fecdf8132c6be479f30da46f86560d83c5f640821f2cad155e"
+          },
+          "depth": {
+            "path": "floor-level/03-depth-mm.pgm",
+            "sha256": "4a78142d8e21207d0e0866524cc29bf4654b8b44de5b523fcadb7b1c948b07f3"
+          },
+          "semantic": {
+            "path": "floor-level/03-semantic.pgm",
+            "sha256": "6f420a8b449c1fe85e703924fd0c3e2deb68a888d0deebeb9dc8a035120910a5"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.11999999731779099,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 4,
+          "capturedOffsetMs": 800,
+          "rgb": {
+            "path": "floor-level/04-rgb.png",
+            "sha256": "9dd1c7dccc5460d819384fd98160b44c63a687a55b507bef6b8a1498e2dbedfc"
+          },
+          "depth": {
+            "path": "floor-level/04-depth-mm.pgm",
+            "sha256": "565dadd8387d266fd6d382a8265d1d9147cd345f108279c36207079811e0e751"
+          },
+          "semantic": {
+            "path": "floor-level/04-semantic.pgm",
+            "sha256": "6f420a8b449c1fe85e703924fd0c3e2deb68a888d0deebeb9dc8a035120910a5"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.1599999964237213,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 5,
+          "capturedOffsetMs": 1000,
+          "rgb": {
+            "path": "floor-level/05-rgb.png",
+            "sha256": "cc5c546482ac14e531356424edcd188273ac34c5829710b0c1aa50e4a5900491"
+          },
+          "depth": {
+            "path": "floor-level/05-depth-mm.pgm",
+            "sha256": "9e85572fc0eb1b4c64cdb59daa0f83e154637b4acde98a13dad3e669d7e903ff"
+          },
+          "semantic": {
+            "path": "floor-level/05-semantic.pgm",
+            "sha256": "6f420a8b449c1fe85e703924fd0c3e2deb68a888d0deebeb9dc8a035120910a5"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.20000000298023224,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 6,
+          "capturedOffsetMs": 1200,
+          "rgb": {
+            "path": "floor-level/06-rgb.png",
+            "sha256": "2c00cd17ec1e3a6e7a61c63b3be8f5069b89db4fb298d9f5220f76cde440473c"
+          },
+          "depth": {
+            "path": "floor-level/06-depth-mm.pgm",
+            "sha256": "a4271d94834ae709bf52183466be285b751711b56a58909115becf7b4f1e5f5a"
+          },
+          "semantic": {
+            "path": "floor-level/06-semantic.pgm",
+            "sha256": "6f420a8b449c1fe85e703924fd0c3e2deb68a888d0deebeb9dc8a035120910a5"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.23999999463558197,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 7,
+          "capturedOffsetMs": 1400,
+          "rgb": {
+            "path": "floor-level/07-rgb.png",
+            "sha256": "4fca81d75be68b81e45940827cb5cb54a7cf640b7c6a0d54576891f10ef96232"
+          },
+          "depth": {
+            "path": "floor-level/07-depth-mm.pgm",
+            "sha256": "b29db6281501af7bcbb6402b3e49b9079b3316f9e9f90e94f3866ec77084ad76"
+          },
+          "semantic": {
+            "path": "floor-level/07-semantic.pgm",
+            "sha256": "6f420a8b449c1fe85e703924fd0c3e2deb68a888d0deebeb9dc8a035120910a5"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.2800000011920929,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 8,
+          "capturedOffsetMs": 1600,
+          "rgb": {
+            "path": "floor-level/08-rgb.png",
+            "sha256": "765e787ac50afd60206bf8bf6f80f30bea7d5abc67875e1721ab5362b3b3feb4"
+          },
+          "depth": {
+            "path": "floor-level/08-depth-mm.pgm",
+            "sha256": "26ced76c861e06a45fd2eb7fe95c8cce8410dd052d0eb2204b3b32a67eb23024"
+          },
+          "semantic": {
+            "path": "floor-level/08-semantic.pgm",
+            "sha256": "6f420a8b449c1fe85e703924fd0c3e2deb68a888d0deebeb9dc8a035120910a5"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.3199999928474426,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 9,
+          "capturedOffsetMs": 1800,
+          "rgb": {
+            "path": "floor-level/09-rgb.png",
+            "sha256": "f6ae3750f8d1648828d032c6dfc33703f8d4ffaf80f64e2e0d092905571a2e75"
+          },
+          "depth": {
+            "path": "floor-level/09-depth-mm.pgm",
+            "sha256": "3274d2b38dd66af43f02006b3b1919d68f55393ae4e72635720fa0e57525406f"
+          },
+          "semantic": {
+            "path": "floor-level/09-semantic.pgm",
+            "sha256": "c9d34e0aa58bfd85ddff39df4450ae1fa79a0f1993ea21beaf9f1170b31c5b0e"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.36000001430511475,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 10,
+          "capturedOffsetMs": 2000,
+          "rgb": {
+            "path": "floor-level/10-rgb.png",
+            "sha256": "e5e1b644c4026e5c68877a48d1412cc73d45e277b05654c42942cdb39ac7b616"
+          },
+          "depth": {
+            "path": "floor-level/10-depth-mm.pgm",
+            "sha256": "5d5602f77fcf4c0ccfc00273b539ddff3d737002e9b6f0cc580e5262466afd97"
+          },
+          "semantic": {
+            "path": "floor-level/10-semantic.pgm",
+            "sha256": "c9d34e0aa58bfd85ddff39df4450ae1fa79a0f1993ea21beaf9f1170b31c5b0e"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.4000000059604645,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "floor-drop",
+      "pair": "floor",
+      "scene": {
+        "path": "floor-drop/scene.blend",
+        "sha256": "505a8d5ed8fe18d2b16f39ca5e5dd689ebca2c791c2c1b260721844d52e5120f"
+      },
+      "annotations": {
+        "path": "floor-drop/annotations.json",
+        "sha256": "8c92f520f23f3d19f00f802b010e9aa0b99923c27130ddf5a20ed0f640cda14a"
+      },
+      "frames": [
+        {
+          "frameIndex": 0,
+          "capturedOffsetMs": 0,
+          "rgb": {
+            "path": "floor-drop/00-rgb.png",
+            "sha256": "d4d7edad1251d350ae0a1c55051709073e598d5d61cc5d976ca02b3ba572468b"
+          },
+          "depth": {
+            "path": "floor-drop/00-depth-mm.pgm",
+            "sha256": "acd71fda5f70de1c4bd3ac50604da9dc68c1e600806b55d44b4a7e8c0ab969e0"
+          },
+          "semantic": {
+            "path": "floor-drop/00-semantic.pgm",
+            "sha256": "931eba67a590f7581270f99b9362139d6180215d7cec05d5977c474c4c83ba9c"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 1,
+          "capturedOffsetMs": 200,
+          "rgb": {
+            "path": "floor-drop/01-rgb.png",
+            "sha256": "b73bf0651ac1bb569cd35277f1f3ab9139e1be5cd4708ad2817de4d8b3dd987a"
+          },
+          "depth": {
+            "path": "floor-drop/01-depth-mm.pgm",
+            "sha256": "ba57b79f943149988ebfff6d89d114d3c0ef6988e4bea2c1c161e2ee62454eca"
+          },
+          "semantic": {
+            "path": "floor-drop/01-semantic.pgm",
+            "sha256": "bafc89cea5dcd4c371183d6e6a2aa8a76ef89ae1582a28b6daefc9c1dff52616"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.03999999910593033,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 2,
+          "capturedOffsetMs": 400,
+          "rgb": {
+            "path": "floor-drop/02-rgb.png",
+            "sha256": "e2608d3f19cb8cdb4c79f06c0a6abb42f4a1834c9cb063657886f0e91b02e249"
+          },
+          "depth": {
+            "path": "floor-drop/02-depth-mm.pgm",
+            "sha256": "2684b343cbf43d3a89afca8910177eb3426bdb11eea889f5f12211e6a269bff7"
+          },
+          "semantic": {
+            "path": "floor-drop/02-semantic.pgm",
+            "sha256": "404a633a0e2573511ac844661540aa9201d0d2db6bef8f2466d56a94f897e48b"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.07999999821186066,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 3,
+          "capturedOffsetMs": 600,
+          "rgb": {
+            "path": "floor-drop/03-rgb.png",
+            "sha256": "a04e2e5d8b65dda89c1c8078cb574c22bc199d4bed515297eb338c1e6233ef08"
+          },
+          "depth": {
+            "path": "floor-drop/03-depth-mm.pgm",
+            "sha256": "c7b1de1dde2c21e348c363ba66b73ea1e003df5744ee37694104f12347c72b91"
+          },
+          "semantic": {
+            "path": "floor-drop/03-semantic.pgm",
+            "sha256": "6f495f99c8eea6c0c56865ba94972453c680252942ae43368698c118d09f7afc"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.11999999731779099,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 4,
+          "capturedOffsetMs": 800,
+          "rgb": {
+            "path": "floor-drop/04-rgb.png",
+            "sha256": "68cdd16b2cc8e24e3382de7881fdbfae45e1f1ad6f3f08bdd5f177502c5a90b4"
+          },
+          "depth": {
+            "path": "floor-drop/04-depth-mm.pgm",
+            "sha256": "54d7a2ab246181e7e844a541b7be6477e768659b41d53657b3b1b1e57c8a205f"
+          },
+          "semantic": {
+            "path": "floor-drop/04-semantic.pgm",
+            "sha256": "37c785ad05fbb6e1da3f610d2d747501761c44154b2e3b94f7c5e0764708f1a5"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.1599999964237213,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 5,
+          "capturedOffsetMs": 1000,
+          "rgb": {
+            "path": "floor-drop/05-rgb.png",
+            "sha256": "2aa3e926249a0b7663fb5366a56f804af99f1ff2d8216f15927905df2c80d206"
+          },
+          "depth": {
+            "path": "floor-drop/05-depth-mm.pgm",
+            "sha256": "c22efff050c43f104b69f6ad21871cfddc125abaeee9622a3f8f2c8f103f7ced"
+          },
+          "semantic": {
+            "path": "floor-drop/05-semantic.pgm",
+            "sha256": "6aa942419e560f6b92dc46de4c95b974b1674ac0fee4430d5bdc67a26cd08a86"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.20000000298023224,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 6,
+          "capturedOffsetMs": 1200,
+          "rgb": {
+            "path": "floor-drop/06-rgb.png",
+            "sha256": "354d06ee4bc8258ce3cf65209af38b79b1ca341c908b0cad0d47e429f0c6c984"
+          },
+          "depth": {
+            "path": "floor-drop/06-depth-mm.pgm",
+            "sha256": "ac2c3b0f1a077c479d083d3d3898ae64f029f1903855282110181baabce726eb"
+          },
+          "semantic": {
+            "path": "floor-drop/06-semantic.pgm",
+            "sha256": "5254af88e1673cbba9b74a74d6b962828b65dae42979631ee980a8cbc1572b39"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.23999999463558197,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 7,
+          "capturedOffsetMs": 1400,
+          "rgb": {
+            "path": "floor-drop/07-rgb.png",
+            "sha256": "5caca74692afa34c6d504c46db57b33d2e1c6dbc9ba33636ddecf36be2417575"
+          },
+          "depth": {
+            "path": "floor-drop/07-depth-mm.pgm",
+            "sha256": "13734673dc0b5cb2cdd5a25e6d376e83c02996afb279e86c9d32ce13128a89a3"
+          },
+          "semantic": {
+            "path": "floor-drop/07-semantic.pgm",
+            "sha256": "d1af6a9ebe47075b975eda8246d634a28ba4ba9c9999f6a8b0b833dc18dcc3dc"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.2800000011920929,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 8,
+          "capturedOffsetMs": 1600,
+          "rgb": {
+            "path": "floor-drop/08-rgb.png",
+            "sha256": "f6f554924d805d908ff62e2c8864c45e2c12d1dc0848d765d3eb079f183b800a"
+          },
+          "depth": {
+            "path": "floor-drop/08-depth-mm.pgm",
+            "sha256": "0fb732f8a0dc0c6dacd6e83a185126b2cf2078c1ae91c4a3213ea178ea4b11c2"
+          },
+          "semantic": {
+            "path": "floor-drop/08-semantic.pgm",
+            "sha256": "390d3f2576897960904f520cb89c23a707112268346480883505d4200da7f09b"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.3199999928474426,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 9,
+          "capturedOffsetMs": 1800,
+          "rgb": {
+            "path": "floor-drop/09-rgb.png",
+            "sha256": "8c4cacb36ec613bff8d9bef70705300112e153dabdad2ec4c78e695c16979aba"
+          },
+          "depth": {
+            "path": "floor-drop/09-depth-mm.pgm",
+            "sha256": "de00067751ededb5331fba90ef2005b32c026534777f8e30fcc2561de3ca1c47"
+          },
+          "semantic": {
+            "path": "floor-drop/09-semantic.pgm",
+            "sha256": "58743d7a92a7fb7a16ef6836783eb53279b44ea5c25dc9b41c57ca52e61ccd9b"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.36000001430511475,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 10,
+          "capturedOffsetMs": 2000,
+          "rgb": {
+            "path": "floor-drop/10-rgb.png",
+            "sha256": "598be74409549725fed63314b11fac069f9a071156f58393979890f5533fa6f6"
+          },
+          "depth": {
+            "path": "floor-drop/10-depth-mm.pgm",
+            "sha256": "13630e1f0a505e949a2f7174e345963d17286943fca8a7766a451e28f298ae1f"
+          },
+          "semantic": {
+            "path": "floor-drop/10-semantic.pgm",
+            "sha256": "3a94de5ffa4dafc9c2e47fd80f5f4640bf5fb5f6259be499aef433fc555bb795"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.4000000059604645,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "person-side",
+      "pair": "person",
+      "scene": {
+        "path": "person-side/scene.blend",
+        "sha256": "e7c82724188284fab6f84b6a9c80064be5baa4675dc61e01c011c2ccb0f82bd3"
+      },
+      "annotations": {
+        "path": "person-side/annotations.json",
+        "sha256": "4b4a0df513223ad49a3b03f4f4e1e79e370985550e9de962058ccaced8523bcb"
+      },
+      "frames": [
+        {
+          "frameIndex": 0,
+          "capturedOffsetMs": 0,
+          "rgb": {
+            "path": "person-side/00-rgb.png",
+            "sha256": "2784bede92486f3a0d5d4546a5cb7d045280b9f56ba927832b0561d6577cb7d8"
+          },
+          "depth": {
+            "path": "person-side/00-depth-mm.pgm",
+            "sha256": "bdc2d6fd056cc4ad675d01dca0eadb6554b90219cfbfd40ee766c4f7ae642a44"
+          },
+          "semantic": {
+            "path": "person-side/00-semantic.pgm",
+            "sha256": "477a509eaca5c69d2cd0430c46aecb75778a0f6a3358bf18fb94380a51c97db2"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 1,
+          "capturedOffsetMs": 200,
+          "rgb": {
+            "path": "person-side/01-rgb.png",
+            "sha256": "413d76db58e01b2979bdcb29edb981c85acea1d9a98774015710cff368c04e03"
+          },
+          "depth": {
+            "path": "person-side/01-depth-mm.pgm",
+            "sha256": "b57acc9b19937440bc73249a867c1aa7e64675420a50b7a15476e44cb805ca78"
+          },
+          "semantic": {
+            "path": "person-side/01-semantic.pgm",
+            "sha256": "95ac1b6b487a568b4e2edaf7e7b29953e3a2a8162742689e827a3c2c24a015ae"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.009999999776482582,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 2,
+          "capturedOffsetMs": 400,
+          "rgb": {
+            "path": "person-side/02-rgb.png",
+            "sha256": "65361d265fb90f59af679fffe38d75dacbd9438f3257062503448b6d5f0ee94f"
+          },
+          "depth": {
+            "path": "person-side/02-depth-mm.pgm",
+            "sha256": "e343ec7f1bcd9096190a7aed78f931ca804916bf1a5887505859e5c233f0b9e9"
+          },
+          "semantic": {
+            "path": "person-side/02-semantic.pgm",
+            "sha256": "b183b87ab5d35fe1f118f91f984900df2b2bfa4ba1e3a0914568bdf2cf5d1e04"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.019999999552965164,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 3,
+          "capturedOffsetMs": 600,
+          "rgb": {
+            "path": "person-side/03-rgb.png",
+            "sha256": "87681b936c3667e279d4527be977a9df37a3667e6c131e2475b97b09bf1e365f"
+          },
+          "depth": {
+            "path": "person-side/03-depth-mm.pgm",
+            "sha256": "9d8130430030c949437ba74fc7de00b6f1806b69491092262eb2063d2c185391"
+          },
+          "semantic": {
+            "path": "person-side/03-semantic.pgm",
+            "sha256": "70dfb58abafe333082b174aea094f33f592fa3ed616bb5c27a42bacddab548f7"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.029999999329447746,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 4,
+          "capturedOffsetMs": 800,
+          "rgb": {
+            "path": "person-side/04-rgb.png",
+            "sha256": "f0fcd52190914f32c5daabeb54f8a6aa964c30601f9a1e5767de1a5e2fe7fe88"
+          },
+          "depth": {
+            "path": "person-side/04-depth-mm.pgm",
+            "sha256": "ca48fc6e286eb37f5f6e498031f25886fe16808936e756def199f9e29acb6dfc"
+          },
+          "semantic": {
+            "path": "person-side/04-semantic.pgm",
+            "sha256": "16e77996f9f6d7d354305d5260c315cc2df91b042260b27ebe2aa0364907b50a"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.03999999910593033,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 5,
+          "capturedOffsetMs": 1000,
+          "rgb": {
+            "path": "person-side/05-rgb.png",
+            "sha256": "e852168a5afc3fcdee7a4cca002f881f589eb85767ff03dc532ca3164f901a96"
+          },
+          "depth": {
+            "path": "person-side/05-depth-mm.pgm",
+            "sha256": "3e9c2d4d03da23043455eab260aca134f0e638bcab676fb98143a98d6a76db58"
+          },
+          "semantic": {
+            "path": "person-side/05-semantic.pgm",
+            "sha256": "0656d56ba4d98356e6f0ed9a0e19797122a6210bfc9728a80edcefa8e19d3469"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.05000000074505806,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 6,
+          "capturedOffsetMs": 1200,
+          "rgb": {
+            "path": "person-side/06-rgb.png",
+            "sha256": "dbc6eded3154dc93a2cf4855b7ebebd841a69d98c7758c174d1283755afb79f6"
+          },
+          "depth": {
+            "path": "person-side/06-depth-mm.pgm",
+            "sha256": "a4c68903ddbf7086be711fc023c8cc25f75212db52c466db893b2fcc6671b569"
+          },
+          "semantic": {
+            "path": "person-side/06-semantic.pgm",
+            "sha256": "89c3ce0ed5f904cdb393728de6adef71c22b6cff7e0b1a7ee2fb78b0506eb65f"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.05999999865889549,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 7,
+          "capturedOffsetMs": 1400,
+          "rgb": {
+            "path": "person-side/07-rgb.png",
+            "sha256": "b1d06bcb941155d960fc7603177c7bcd7aa7a02ad856be47ea56c34309e4e790"
+          },
+          "depth": {
+            "path": "person-side/07-depth-mm.pgm",
+            "sha256": "ebaf75f104cc23b819654db2883654824f08b07ddb98b0ef40ff55aa5c937f26"
+          },
+          "semantic": {
+            "path": "person-side/07-semantic.pgm",
+            "sha256": "52d85965ba08e5fcd8bdca1625ded50b94121bc174a6d0b8231bb3ea943b1b87"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.07000000029802322,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 8,
+          "capturedOffsetMs": 1600,
+          "rgb": {
+            "path": "person-side/08-rgb.png",
+            "sha256": "8dd283e4cee0fe2697a59363fbf277c97b69de1335b137f8c1c1d76fd7f32751"
+          },
+          "depth": {
+            "path": "person-side/08-depth-mm.pgm",
+            "sha256": "61d54083d8ddd21ad634635baa9ea168a490ea5827a30e4994992b2b191bdd76"
+          },
+          "semantic": {
+            "path": "person-side/08-semantic.pgm",
+            "sha256": "cf0786dbcd615cbcfacd35f84a499ea3590414c1172818f4b98ff4f98b6c810e"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.07999999821186066,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 9,
+          "capturedOffsetMs": 1800,
+          "rgb": {
+            "path": "person-side/09-rgb.png",
+            "sha256": "badd1f3cae54de3f1e5cfd055410595d7ea76031ea8c743f7069b7fdb3aa872d"
+          },
+          "depth": {
+            "path": "person-side/09-depth-mm.pgm",
+            "sha256": "3d87b8d09b4b839e60edbe11fff959e65dac33d9355b5a8242f9ad31e46e5f54"
+          },
+          "semantic": {
+            "path": "person-side/09-semantic.pgm",
+            "sha256": "a36a8370e02113863c4fb47e0d27b954461d004843ecaf7df6455efd45b76ff0"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.09000000357627869,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 10,
+          "capturedOffsetMs": 2000,
+          "rgb": {
+            "path": "person-side/10-rgb.png",
+            "sha256": "1498b6458ab5fd499b6b7be5d057bf04e7a22cadf7ef80d362d580d08efe3932"
+          },
+          "depth": {
+            "path": "person-side/10-depth-mm.pgm",
+            "sha256": "9f37251c78b73eddfe12753159a779d78976c068c017c147be10ab082cca9e4c"
+          },
+          "semantic": {
+            "path": "person-side/10-semantic.pgm",
+            "sha256": "a9e64b5651998b858445db8a3c053ffcceee79038bd2cdcddd34180a6c362c03"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.10000000149011612,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "person-approach",
+      "pair": "person",
+      "scene": {
+        "path": "person-approach/scene.blend",
+        "sha256": "367edc3236c68b86e96987fe28440e3b66796c8ef4b57868ef6508be9c9d6137"
+      },
+      "annotations": {
+        "path": "person-approach/annotations.json",
+        "sha256": "5475627c5840f1ecd3a7b06a26fa25ba27afcb460e535d508210c8afb1756bad"
+      },
+      "frames": [
+        {
+          "frameIndex": 0,
+          "capturedOffsetMs": 0,
+          "rgb": {
+            "path": "person-approach/00-rgb.png",
+            "sha256": "b9b18b623b82383c3f36a120cbc284f231951a3920d2aade2b726865ffdab7c5"
+          },
+          "depth": {
+            "path": "person-approach/00-depth-mm.pgm",
+            "sha256": "bbca5512b850d43fb6e8f535aa5223c1acf08e6bd0e878429e7e5c4d9fcbb6df"
+          },
+          "semantic": {
+            "path": "person-approach/00-semantic.pgm",
+            "sha256": "c7e8c74914eb749d3c9e65e75dd8ecdb5bc62599c77883dc7b62d1b4c6164b8c"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 1,
+          "capturedOffsetMs": 200,
+          "rgb": {
+            "path": "person-approach/01-rgb.png",
+            "sha256": "ac17cb5f7b81aca36e27c70b774f3bced4362d4ace823d1271bb519a66a03f7a"
+          },
+          "depth": {
+            "path": "person-approach/01-depth-mm.pgm",
+            "sha256": "a133ad71f41658305b379af41b84db4160b1a912ab168ec9cf35b82cf5c24cb4"
+          },
+          "semantic": {
+            "path": "person-approach/01-semantic.pgm",
+            "sha256": "ba17a87b8a712f989e103098464e19af78309a78eddae705eb306e8aee7e84c4"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.009999999776482582,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 2,
+          "capturedOffsetMs": 400,
+          "rgb": {
+            "path": "person-approach/02-rgb.png",
+            "sha256": "8e2b641c78fb0f8333e77d1f469f042bc4c4a25c5558dae791496f8300a2d6aa"
+          },
+          "depth": {
+            "path": "person-approach/02-depth-mm.pgm",
+            "sha256": "7256d1be05cdc84b02d0dd3e0dff156ef22c362056fe4dd3298fcf083379ed5a"
+          },
+          "semantic": {
+            "path": "person-approach/02-semantic.pgm",
+            "sha256": "e2fcfe6875db98aed88c9568017e0310071673dfabaaa5e038073070b0cb7e91"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.019999999552965164,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 3,
+          "capturedOffsetMs": 600,
+          "rgb": {
+            "path": "person-approach/03-rgb.png",
+            "sha256": "3e96c8e4cb797c751a59d2a1d29881458b3ff3afc1ef79936e9b50b487bd17e2"
+          },
+          "depth": {
+            "path": "person-approach/03-depth-mm.pgm",
+            "sha256": "b752e9ddef87a445971fd9c6f3019ac62677c6677b46e0038f133c762f34f758"
+          },
+          "semantic": {
+            "path": "person-approach/03-semantic.pgm",
+            "sha256": "720498e6c0299aba903f10f20611b03d49b41905937207d2fc3758ab97819ec3"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.029999999329447746,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 4,
+          "capturedOffsetMs": 800,
+          "rgb": {
+            "path": "person-approach/04-rgb.png",
+            "sha256": "912cf0a9e92a42dad0c6fcfc4b5ff9324379ffbef76092eaf9f5bbf25d7d75db"
+          },
+          "depth": {
+            "path": "person-approach/04-depth-mm.pgm",
+            "sha256": "572184778d4e30208debe830257e048f2108c86cd41484ce7440306ab272ce94"
+          },
+          "semantic": {
+            "path": "person-approach/04-semantic.pgm",
+            "sha256": "9d08c5cff4617d49b31eeb8efb08421d5cefd5d15561158a6c9b4d9449cbca2a"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.03999999910593033,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 5,
+          "capturedOffsetMs": 1000,
+          "rgb": {
+            "path": "person-approach/05-rgb.png",
+            "sha256": "336332c7fd04e13f5cbdc3332b59b30e1a263bcbd138e74d7e1a8ee297bdab58"
+          },
+          "depth": {
+            "path": "person-approach/05-depth-mm.pgm",
+            "sha256": "e8212019a4e4320fe7e2653fb233ff0a467fd1bdc4a332bc05a42780b3a9acf0"
+          },
+          "semantic": {
+            "path": "person-approach/05-semantic.pgm",
+            "sha256": "fa8b0997a178311c07777f80b93a754e923b70256486dc9ff1a64096201d42e2"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.05000000074505806,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 6,
+          "capturedOffsetMs": 1200,
+          "rgb": {
+            "path": "person-approach/06-rgb.png",
+            "sha256": "348370218047ebdea4ebea1dc29e946c6587b53ec5207d848d2b8b06e1e284b3"
+          },
+          "depth": {
+            "path": "person-approach/06-depth-mm.pgm",
+            "sha256": "3fb7f6d2791d18839003d7ea9642cf1f791d1e5d61255587fd603cf3ec066ce3"
+          },
+          "semantic": {
+            "path": "person-approach/06-semantic.pgm",
+            "sha256": "1371a95560d905bd05f8793a712246e5796bec037420be142b921759d5818650"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.05999999865889549,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 7,
+          "capturedOffsetMs": 1400,
+          "rgb": {
+            "path": "person-approach/07-rgb.png",
+            "sha256": "ccf62ed7d52582f57cbb025f71a456d0cdffd82a95a7a0dd3bfe90a3bb17c1f7"
+          },
+          "depth": {
+            "path": "person-approach/07-depth-mm.pgm",
+            "sha256": "e7fe2b7a3da317fa76864eb408e2a2ffd23af3850203a1b19c16e7d372bc5196"
+          },
+          "semantic": {
+            "path": "person-approach/07-semantic.pgm",
+            "sha256": "4e1a98fc93a75b14f8b9fc3f49ca826eeeb164b27cd97b2ab9b9ddac440666cb"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.07000000029802322,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 8,
+          "capturedOffsetMs": 1600,
+          "rgb": {
+            "path": "person-approach/08-rgb.png",
+            "sha256": "5e49653deeed74b40940ac07924751dad58ce636d4ea51e9fae5dbe367050661"
+          },
+          "depth": {
+            "path": "person-approach/08-depth-mm.pgm",
+            "sha256": "b248298435052a2280bc749f2964ea2ed0415745120260f4236f1fa83b078a39"
+          },
+          "semantic": {
+            "path": "person-approach/08-semantic.pgm",
+            "sha256": "71c7015c91a665d984fe3c0cbfedb1caf9f839b3c3b2c21712dcb0222cbac223"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.07999999821186066,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 9,
+          "capturedOffsetMs": 1800,
+          "rgb": {
+            "path": "person-approach/09-rgb.png",
+            "sha256": "1bb99db4b45fdc2a05bbc14e6489a505354ffb8c121086a801f23c3c1d0bf49c"
+          },
+          "depth": {
+            "path": "person-approach/09-depth-mm.pgm",
+            "sha256": "eb8999c08c1702ccf421640440031b85b45d00b88fe55a45e99bfe6af6c46c79"
+          },
+          "semantic": {
+            "path": "person-approach/09-semantic.pgm",
+            "sha256": "f00788e885282e77ee2682c9df4e6380b922c79fd00318d8347df61a66640527"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.09000000357627869,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        },
+        {
+          "frameIndex": 10,
+          "capturedOffsetMs": 2000,
+          "rgb": {
+            "path": "person-approach/10-rgb.png",
+            "sha256": "fe53eb20087acf9f8e938ef7943d42eb2cbb8d94d7f0f644d2cbd263c6b819ae"
+          },
+          "depth": {
+            "path": "person-approach/10-depth-mm.pgm",
+            "sha256": "a126763dd10cdfb9a9d134632c603118eb1f1b6d48a0eb230869392b8e94c423"
+          },
+          "semantic": {
+            "path": "person-approach/10-semantic.pgm",
+            "sha256": "c4945f1f42e921a2cf886d533ee4ade9cf2215edd5e79a1d44655d1e6fec6f03"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.10000000149011612,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -0.0
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "camera-pan-clear",
+      "pair": "camera-pan",
+      "scene": {
+        "path": "camera-pan-clear/scene.blend",
+        "sha256": "16beee35fa3215bfe976a313e2439ea0e3b5591647866aa347ab9a5f9b225562"
+      },
+      "annotations": {
+        "path": "camera-pan-clear/annotations.json",
+        "sha256": "663ff9b2d86464c0bdf5124a7a90a635834b5bf7ff5366aae8bda67a93506e9f"
+      },
+      "frames": [
+        {
+          "frameIndex": 0,
+          "capturedOffsetMs": 0,
+          "rgb": {
+            "path": "camera-pan-clear/00-rgb.png",
+            "sha256": "ea80e439a14bac9a1695250826b038cd042f01434d11057d425071ecae16301b"
+          },
+          "depth": {
+            "path": "camera-pan-clear/00-depth-mm.pgm",
+            "sha256": "d8f408529ac089bc4627b49080847f0e17eed8a8c5c3b7a2167ed899c2d8d75b"
+          },
+          "semantic": {
+            "path": "camera-pan-clear/00-semantic.pgm",
+            "sha256": "c84e42f0f9a0a1fe8a241bad3e133224141452b923aae3b61c4f45e1dc20c65e"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 1,
+          "capturedOffsetMs": 200,
+          "rgb": {
+            "path": "camera-pan-clear/01-rgb.png",
+            "sha256": "657910d79e8cf6101170e29a58dd51cd3934dd5eb7843a61d3f29976c01536f0"
+          },
+          "depth": {
+            "path": "camera-pan-clear/01-depth-mm.pgm",
+            "sha256": "9d1a8fc220166c3767bfcb1eaac0bf964bffad04ca1500a04535b0b199672aef"
+          },
+          "semantic": {
+            "path": "camera-pan-clear/01-semantic.pgm",
+            "sha256": "7a77df1c0cf11596a6b8c9c07e784f2dc609ac1fcad84cf732bec9b935cd07d2"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              -0.06155272573232651
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 3.526711513754839
+          }
+        },
+        {
+          "frameIndex": 2,
+          "capturedOffsetMs": 400,
+          "rgb": {
+            "path": "camera-pan-clear/02-rgb.png",
+            "sha256": "00f7347a1ad444fdd3bf05ef40778dd3c7dc092dbbfc15112f2e73facc64b39b"
+          },
+          "depth": {
+            "path": "camera-pan-clear/02-depth-mm.pgm",
+            "sha256": "e56dae0fbdaf5e46647dc4f77e89aef091181b9c57add8b8c1745b90adc606fd"
+          },
+          "semantic": {
+            "path": "camera-pan-clear/02-semantic.pgm",
+            "sha256": "e0e3a8fedad958d59615de79399893e439e0a38c899768f0780cb16fb935677a"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              -0.09959439933300018
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 5.706339097770921
+          }
+        },
+        {
+          "frameIndex": 3,
+          "capturedOffsetMs": 600,
+          "rgb": {
+            "path": "camera-pan-clear/03-rgb.png",
+            "sha256": "700828c4478ba83ce8a06791db40c9dd2e3eae8d5560f0ed8deb5920a6baa1f1"
+          },
+          "depth": {
+            "path": "camera-pan-clear/03-depth-mm.pgm",
+            "sha256": "e56dae0fbdaf5e46647dc4f77e89aef091181b9c57add8b8c1745b90adc606fd"
+          },
+          "semantic": {
+            "path": "camera-pan-clear/03-semantic.pgm",
+            "sha256": "e0e3a8fedad958d59615de79399893e439e0a38c899768f0780cb16fb935677a"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              -0.09959439933300018
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 5.706339097770922
+          }
+        },
+        {
+          "frameIndex": 4,
+          "capturedOffsetMs": 800,
+          "rgb": {
+            "path": "camera-pan-clear/04-rgb.png",
+            "sha256": "ff29db3241336aa909441f4edca2f74a111968834bc8ddb0a9162dc46f4409b4"
+          },
+          "depth": {
+            "path": "camera-pan-clear/04-depth-mm.pgm",
+            "sha256": "9d1a8fc220166c3767bfcb1eaac0bf964bffad04ca1500a04535b0b199672aef"
+          },
+          "semantic": {
+            "path": "camera-pan-clear/04-semantic.pgm",
+            "sha256": "7a77df1c0cf11596a6b8c9c07e784f2dc609ac1fcad84cf732bec9b935cd07d2"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              -0.06155272573232651
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 3.5267115137548393
+          }
+        },
+        {
+          "frameIndex": 5,
+          "capturedOffsetMs": 1000,
+          "rgb": {
+            "path": "camera-pan-clear/05-rgb.png",
+            "sha256": "8c349c71a052b4fc4f702c62f49e1b0bb9ffce6e58a67c1637c1a43d12967abb"
+          },
+          "depth": {
+            "path": "camera-pan-clear/05-depth-mm.pgm",
+            "sha256": "d8f408529ac089bc4627b49080847f0e17eed8a8c5c3b7a2167ed899c2d8d75b"
+          },
+          "semantic": {
+            "path": "camera-pan-clear/05-semantic.pgm",
+            "sha256": "c84e42f0f9a0a1fe8a241bad3e133224141452b923aae3b61c4f45e1dc20c65e"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              -1.2824470905040457e-17
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 7.347880794884119e-16
+          }
+        },
+        {
+          "frameIndex": 6,
+          "capturedOffsetMs": 1200,
+          "rgb": {
+            "path": "camera-pan-clear/06-rgb.png",
+            "sha256": "d39789f6ed540fb55813303cdc0f5a3a14c6dad2bfcbf09b3eb12b8085c74ffa"
+          },
+          "depth": {
+            "path": "camera-pan-clear/06-depth-mm.pgm",
+            "sha256": "302818ba2beb1974090236f0b062acd3c93b87e8a9e1e0ffe594296f588e2c30"
+          },
+          "semantic": {
+            "path": "camera-pan-clear/06-semantic.pgm",
+            "sha256": "eb4872fcccc2293f3e980cfbad481a09eedf4b5d227cee75758617976ea62b63"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.06155272573232651
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -3.5267115137548384
+          }
+        },
+        {
+          "frameIndex": 7,
+          "capturedOffsetMs": 1400,
+          "rgb": {
+            "path": "camera-pan-clear/07-rgb.png",
+            "sha256": "810cb9a9345b3fbffd6fa810f03f45e60bffff3b97a7512af8771671d4ad24fe"
+          },
+          "depth": {
+            "path": "camera-pan-clear/07-depth-mm.pgm",
+            "sha256": "8ab59462ace0900ff16c7f99d032e821898ce7756e386821b5ef554f2185ef7e"
+          },
+          "semantic": {
+            "path": "camera-pan-clear/07-semantic.pgm",
+            "sha256": "edd280ecdf28f352ac93767c0d3018878ccebe703dd031c00ba45a3d9073cfd1"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.09959439933300018
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -5.706339097770921
+          }
+        },
+        {
+          "frameIndex": 8,
+          "capturedOffsetMs": 1600,
+          "rgb": {
+            "path": "camera-pan-clear/08-rgb.png",
+            "sha256": "9d7aee199b0a0a109a752e1f0becf5cb1aba06da61746772c3bf3f7e8ffa1fa7"
+          },
+          "depth": {
+            "path": "camera-pan-clear/08-depth-mm.pgm",
+            "sha256": "8ab59462ace0900ff16c7f99d032e821898ce7756e386821b5ef554f2185ef7e"
+          },
+          "semantic": {
+            "path": "camera-pan-clear/08-semantic.pgm",
+            "sha256": "edd280ecdf28f352ac93767c0d3018878ccebe703dd031c00ba45a3d9073cfd1"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.09959439933300018
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -5.706339097770922
+          }
+        },
+        {
+          "frameIndex": 9,
+          "capturedOffsetMs": 1800,
+          "rgb": {
+            "path": "camera-pan-clear/09-rgb.png",
+            "sha256": "d1c9a9c941780dbcb0af5280e34901f6e5002f7c0e13a3496bedd9d135421e25"
+          },
+          "depth": {
+            "path": "camera-pan-clear/09-depth-mm.pgm",
+            "sha256": "302818ba2beb1974090236f0b062acd3c93b87e8a9e1e0ffe594296f588e2c30"
+          },
+          "semantic": {
+            "path": "camera-pan-clear/09-semantic.pgm",
+            "sha256": "eb4872fcccc2293f3e980cfbad481a09eedf4b5d227cee75758617976ea62b63"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.06155272573232651
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -3.52671151375484
+          }
+        },
+        {
+          "frameIndex": 10,
+          "capturedOffsetMs": 2000,
+          "rgb": {
+            "path": "camera-pan-clear/10-rgb.png",
+            "sha256": "1d0e5039c823cd627b41593c0b20e197c7222d8b14b9f9767852609a091a5ad7"
+          },
+          "depth": {
+            "path": "camera-pan-clear/10-depth-mm.pgm",
+            "sha256": "d8f408529ac089bc4627b49080847f0e17eed8a8c5c3b7a2167ed899c2d8d75b"
+          },
+          "semantic": {
+            "path": "camera-pan-clear/10-semantic.pgm",
+            "sha256": "c84e42f0f9a0a1fe8a241bad3e133224141452b923aae3b61c4f45e1dc20c65e"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              2.5648941810080915e-17
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -1.4695761589768238e-15
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "camera-pan-approach",
+      "pair": "camera-pan",
+      "scene": {
+        "path": "camera-pan-approach/scene.blend",
+        "sha256": "bfef3f8ecd0c3189a028efc926b40486e0da499e698cae4510fee13839c72da2"
+      },
+      "annotations": {
+        "path": "camera-pan-approach/annotations.json",
+        "sha256": "818002588483661c0d2520018b79c921812270f276540a0fa79c96ecbfab8b1a"
+      },
+      "frames": [
+        {
+          "frameIndex": 0,
+          "capturedOffsetMs": 0,
+          "rgb": {
+            "path": "camera-pan-approach/00-rgb.png",
+            "sha256": "1a49afb3408b5c7b15f8b77e0a8619b139567680680d4daa4ce93632a8ed08da"
+          },
+          "depth": {
+            "path": "camera-pan-approach/00-depth-mm.pgm",
+            "sha256": "bbca5512b850d43fb6e8f535aa5223c1acf08e6bd0e878429e7e5c4d9fcbb6df"
+          },
+          "semantic": {
+            "path": "camera-pan-approach/00-semantic.pgm",
+            "sha256": "c7e8c74914eb749d3c9e65e75dd8ecdb5bc62599c77883dc7b62d1b4c6164b8c"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.0
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 0.0
+          }
+        },
+        {
+          "frameIndex": 1,
+          "capturedOffsetMs": 200,
+          "rgb": {
+            "path": "camera-pan-approach/01-rgb.png",
+            "sha256": "57678d72e9b6e0dea10b3497815dfbb1913a56daf074a155195c23b46f291a77"
+          },
+          "depth": {
+            "path": "camera-pan-approach/01-depth-mm.pgm",
+            "sha256": "44449c292b605929b718c6225a88a32e945c425367fb5564098e8318dce10700"
+          },
+          "semantic": {
+            "path": "camera-pan-approach/01-semantic.pgm",
+            "sha256": "0825bef6047913742a4190579bc35a926f54f1e05f221c71fd531263c9e0482d"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              -0.06155272573232651
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 3.526711513754839
+          }
+        },
+        {
+          "frameIndex": 2,
+          "capturedOffsetMs": 400,
+          "rgb": {
+            "path": "camera-pan-approach/02-rgb.png",
+            "sha256": "5b483f4621911fb2f708bd7f3397824b9e4e5ce95b2f99994b014fd03dc718e1"
+          },
+          "depth": {
+            "path": "camera-pan-approach/02-depth-mm.pgm",
+            "sha256": "9b866f912dde335defa436f15c2936f5ef12db97783823cb3a1a86a7de04af30"
+          },
+          "semantic": {
+            "path": "camera-pan-approach/02-semantic.pgm",
+            "sha256": "1bef2eae4523153a37bb84cda508cffeaf4b4056c7dd8cd6527fb249e481a5a2"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              -0.09959439933300018
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 5.706339097770921
+          }
+        },
+        {
+          "frameIndex": 3,
+          "capturedOffsetMs": 600,
+          "rgb": {
+            "path": "camera-pan-approach/03-rgb.png",
+            "sha256": "735d9e25a250172bc752a9c48d54473fc002b158c24ec86976416f0700ab856b"
+          },
+          "depth": {
+            "path": "camera-pan-approach/03-depth-mm.pgm",
+            "sha256": "1c63db8c6fb5cbb92c4cc6d83922b0752fd707172b4b27a5645ea2c0fd7b4dd6"
+          },
+          "semantic": {
+            "path": "camera-pan-approach/03-semantic.pgm",
+            "sha256": "c1d4c5c1bfb045a02a92acfa5f9325b23dbafef198166ae8141e0f0e571df8d2"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              -0.09959439933300018
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 5.706339097770922
+          }
+        },
+        {
+          "frameIndex": 4,
+          "capturedOffsetMs": 800,
+          "rgb": {
+            "path": "camera-pan-approach/04-rgb.png",
+            "sha256": "23d21721e439af9bbdd486895c328b2f38b5b9240d8691959636991caf775da3"
+          },
+          "depth": {
+            "path": "camera-pan-approach/04-depth-mm.pgm",
+            "sha256": "e461c8d2b1f25a4a3648ef0dbd7fc26c7f10ce630f561c5984f95a8947173a75"
+          },
+          "semantic": {
+            "path": "camera-pan-approach/04-semantic.pgm",
+            "sha256": "128adcdf932348d14571474e31cb32cd162b22af1c64015ce5f5ede5f63f17c5"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              -0.06155272573232651
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 3.5267115137548393
+          }
+        },
+        {
+          "frameIndex": 5,
+          "capturedOffsetMs": 1000,
+          "rgb": {
+            "path": "camera-pan-approach/05-rgb.png",
+            "sha256": "8c58e80cb837728bd175a4f8cae0f3cece44353a0cb912690cca09e1c9c6497e"
+          },
+          "depth": {
+            "path": "camera-pan-approach/05-depth-mm.pgm",
+            "sha256": "78d601883f92c3b5fb4c0febac3a0aacb031e72c867223e9941871b1654fc1e8"
+          },
+          "semantic": {
+            "path": "camera-pan-approach/05-semantic.pgm",
+            "sha256": "b2c3732100506016ff18445bc96306efeb083138bb3810f34623ad8e1de3dcaa"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              -1.2824470905040457e-17
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": 7.347880794884119e-16
+          }
+        },
+        {
+          "frameIndex": 6,
+          "capturedOffsetMs": 1200,
+          "rgb": {
+            "path": "camera-pan-approach/06-rgb.png",
+            "sha256": "eb8dfd64a826964aaf4b8afc774811711ce9b387d3f9eae12a7aecbb7dd2b7a0"
+          },
+          "depth": {
+            "path": "camera-pan-approach/06-depth-mm.pgm",
+            "sha256": "313bc834023eca3f7343583e20486fa2bf9b1fb09004a3c09ad2bfa4335a2f49"
+          },
+          "semantic": {
+            "path": "camera-pan-approach/06-semantic.pgm",
+            "sha256": "31cfb78f5b9a179c33f5161d2242aad1271225080330052218ea99c6d4684ba9"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.06155272573232651
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -3.5267115137548384
+          }
+        },
+        {
+          "frameIndex": 7,
+          "capturedOffsetMs": 1400,
+          "rgb": {
+            "path": "camera-pan-approach/07-rgb.png",
+            "sha256": "9118622054e120605f78a600e39cdffbeb3c018ca70713903ba40a7fd5009e5d"
+          },
+          "depth": {
+            "path": "camera-pan-approach/07-depth-mm.pgm",
+            "sha256": "7ee87163e8851061f7ce961d9f0ac71e5e675541d8c0251c6b2f159c16019db4"
+          },
+          "semantic": {
+            "path": "camera-pan-approach/07-semantic.pgm",
+            "sha256": "8097432b700b3ffa16c51c0dc720bb61f4d577e2fb4511963661057210028e84"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.09959439933300018
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -5.706339097770921
+          }
+        },
+        {
+          "frameIndex": 8,
+          "capturedOffsetMs": 1600,
+          "rgb": {
+            "path": "camera-pan-approach/08-rgb.png",
+            "sha256": "e3116c9150066f808a8757f53f1710eaeee6bbe520d4ead3c57086adb03384a9"
+          },
+          "depth": {
+            "path": "camera-pan-approach/08-depth-mm.pgm",
+            "sha256": "44a50ee006bd9d435c9bd07a234c371ec6fb60e52991d0b2e054fab018fa9661"
+          },
+          "semantic": {
+            "path": "camera-pan-approach/08-semantic.pgm",
+            "sha256": "2958deb29a451a969e9b2471b316e6318fd62134871b3c10874c4ac8f4944f3e"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.09959439933300018
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -5.706339097770922
+          }
+        },
+        {
+          "frameIndex": 9,
+          "capturedOffsetMs": 1800,
+          "rgb": {
+            "path": "camera-pan-approach/09-rgb.png",
+            "sha256": "b622ac33ebdbee171c02e4e299117f49be11c8786b9ec2164abce4a670e7dadc"
+          },
+          "depth": {
+            "path": "camera-pan-approach/09-depth-mm.pgm",
+            "sha256": "493aacb4018802fb3a579d138410386d511cd508259493e95b4a04a06a64bb69"
+          },
+          "semantic": {
+            "path": "camera-pan-approach/09-semantic.pgm",
+            "sha256": "6f0c2b6218e746de6a90da695b97829dea4312d801c621cefb043ac08c855b6a"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              0.06155272573232651
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -3.52671151375484
+          }
+        },
+        {
+          "frameIndex": 10,
+          "capturedOffsetMs": 2000,
+          "rgb": {
+            "path": "camera-pan-approach/10-rgb.png",
+            "sha256": "068a973309a3caab28d3c74ec81924b28cf5e424731eb979ece61790de2a583f"
+          },
+          "depth": {
+            "path": "camera-pan-approach/10-depth-mm.pgm",
+            "sha256": "c27914e6feaedd07d84f1e7ddb815623ddb0a47f5fe19aacd13f0d8599f76274"
+          },
+          "semantic": {
+            "path": "camera-pan-approach/10-semantic.pgm",
+            "sha256": "bc97a067c17a4bba3a8bd50ca4070c0334491404225fa653712078140b520329"
+          },
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.4199999570846558
+            ],
+            "rotationEulerRadians": [
+              1.3613568544387817,
+              -0.0,
+              2.5648941810080915e-17
+            ],
+            "fx": 231.1111068725586,
+            "fy": 231.11111640930176,
+            "cx": 160.0,
+            "cy": 120.0,
+            "pitchDownDeg": 12,
+            "yawDeg": -1.4695761589768238e-15
+          }
+        }
+      ]
+    }
+  ]
+}

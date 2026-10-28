@@ -1,0 +1,71 @@
+{
+  "identity": "9154675f4e0a1b533997d1fbb1bbb50c14f5a088eceea8a8724679f091b181b6",
+  "frame": {
+    "priorPacket": {
+      "axisPacket": {
+        "width": 320,
+        "height": 240,
+        "frameId": 205,
+        "capturedOffsetMs": 800,
+        "fx": 231.1111068725586,
+        "fy": 231.11111640930176,
+        "cx": 160.0,
+        "cy": 120.0,
+        "cameraToWalkingRotation": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.42261824011802673,
+          0.9063078165054321,
+          0.0,
+          -0.9063078165054321,
+          -0.42261824011802673
+        ],
+        "cameraOriginM": [
+          0.0,
+          0.0,
+          1.4199999570846558
+        ],
+        "depth": {
+          "path": "camera-pan-approach/coverage-views-04-range.f32.gz",
+          "sha256": "d81c413ca5b05e36612c70e3b226b9196cb48fdfdf0c289732a9d0e68647ff1a"
+        },
+        "freeZLower": {
+          "path": "camera-pan-approach/coverage-views-04-lower.f32.gz",
+          "sha256": "87951f2a7f69222e753b2a518ebf1f881277ebae0e93e07e4250060bb83c3456"
+        },
+        "surfaceZUpper": {
+          "path": "camera-pan-approach/coverage-views-04-upper.f32.gz",
+          "sha256": "f07e8416a7184b388d6d6022ca4616f2dbf771ea1e271fd2a489003d9d4cf184"
+        },
+        "validity": {
+          "path": "camera-pan-approach/coverage-views-04-valid.u8.gz",
+          "sha256": "004cdacd6163c635e68cca086aa885f59bd894af2d01d1cda61a0ef5be30aab2"
+        }
+      },
+      "fourArraysExact": true,
+      "heightLower": {
+        "path": "camera-pan-approach/height-04-heightLower.f32.gz",
+        "sha256": "84a3d3e7177499085c511da739d23063934185df4434b47d89c7d568e4396b20"
+      },
+      "heightUpper": {
+        "path": "camera-pan-approach/height-04-heightUpper.f32.gz",
+        "sha256": "acc256fe6ff865fc7f955e99fd955cf31caee1b0292582a8a326f6bd35c15f14"
+      },
+      "firstZLower": {
+        "path": "camera-pan-approach/height-04-firstZLower.f32.gz",
+        "sha256": "23a56bfe13925993f309f3ca7c2a6438fa39c6aeabebae426550bf0fe0a47105"
+      }
+    },
+    "recomputedPixels": 806,
+    "heightLower": {
+      "path": "camera-pan-approach/height-04-heightLower.f32.gz",
+      "sha256": "75b1c84a28f5f98260d9633a9b17e729ee75463d7154b2cfe588bd2061683b45"
+    },
+    "heightUpper": {
+      "path": "camera-pan-approach/height-04-heightUpper.f32.gz",
+      "sha256": "a44c191d9a8b36c84a1141cd050a25eda87b31c680f3d96bf79c059286367f3d"
+    }
+  }
+}

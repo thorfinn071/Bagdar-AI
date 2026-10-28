@@ -1,0 +1,700 @@
+{
+  "schemaVersion": 2,
+  "corpusId": "blender-context-v3",
+  "generator": "tool/blender/generate_spatial_context_corpus.py",
+  "generatorSha256": "6b7723091eefd051b48b88107ce673b1fc4c85794d0496c379342f80a808dc25",
+  "baseGeometryGeneratorSha256": "231ae63ab6802070c98abd23c27b16ec63fa028a06b81f3e58a1504843ba0692",
+  "blender": {
+    "version": "5.2.2 LTS",
+    "versionTuple": [
+      5,
+      2,
+      2
+    ]
+  },
+  "seed": 20260923,
+  "license": "project-generated-test-fixture",
+  "consentClass": "not_applicable",
+  "handling": "public",
+  "containsRecordedMedia": false,
+  "frameCountPerScene": 3,
+  "scene": {
+    "path": "scene.blend",
+    "sha256": "01ae67a6de7adf94911cbcfdfab20bb8dd6ff33deec490969cf37be6b4920446"
+  },
+  "replayManifest": {
+    "path": "replay-manifest.json",
+    "sha256": "f120f493f309c66b3976b24e2a21c23051d3f5e10de4d22da2bbddbf76a4d716"
+  },
+  "semanticClasses": {
+    "0": "unobserved",
+    "1": "ground",
+    "2": "obstacle",
+    "3": "transparent",
+    "4": "low",
+    "5": "overhead",
+    "6": "drop",
+    "7": "stairs",
+    "8": "traversable",
+    "9": "crowd",
+    "10": "moving",
+    "11": "obstruction"
+  },
+  "assets": [
+    {
+      "sceneId": "context-thin-pole",
+      "state": "blocked",
+      "tags": [
+        "thin",
+        "obstacle",
+        "contextual-urban"
+      ],
+      "frames": [
+        {
+          "frameIndex": 0,
+          "capturedOffsetMs": 0,
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.0,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.43117,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/context-thin-pole_f0_rgb.png",
+            "sha256": "cfc8c347dd38ae0f5f0a63086d6b5a84b38aec9137db301574ea0d94a0480033"
+          },
+          "depth": {
+            "path": "renders/context-thin-pole_f0_depth_mm.pgm",
+            "sha256": "cef5ab7bd96bf56756eb467815b7763e2058847eb396d35fee8e3708c8576798",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/context-thin-pole_f0_semantic.pgm",
+            "sha256": "315bf68388c29c9fb325d24c940a89c37da0b9bf6dd6f68a5009aea0de3b9baa",
+            "encoding": "P5 uint8 class id"
+          }
+        },
+        {
+          "frameIndex": 1,
+          "capturedOffsetMs": 300,
+          "cameraPose": {
+            "locationMetres": [
+              0.03,
+              0.12,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.43117,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/context-thin-pole_f1_rgb.png",
+            "sha256": "b9183b524ddc2daf8c666e1be3d06a6582795159da8c3e3264da9f27be7843a7"
+          },
+          "depth": {
+            "path": "renders/context-thin-pole_f1_depth_mm.pgm",
+            "sha256": "8d5d3a02a0930e54c12fe5c3de6bb126edbb3c98415decc89c99306bf773d870",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/context-thin-pole_f1_semantic.pgm",
+            "sha256": "93a8ba8a67da7b30953e4c4bdd267db97bbdde1f7a21497ba8dea1bf26bd5cdd",
+            "encoding": "P5 uint8 class id"
+          }
+        },
+        {
+          "frameIndex": 2,
+          "capturedOffsetMs": 600,
+          "cameraPose": {
+            "locationMetres": [
+              0.0,
+              0.24,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.43117,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/context-thin-pole_f2_rgb.png",
+            "sha256": "63af3c6953908f8643ef4aad7ea5bbc161711ad57693442158bd9f767e2b3187"
+          },
+          "depth": {
+            "path": "renders/context-thin-pole_f2_depth_mm.pgm",
+            "sha256": "5e0009011ce1143c1e32bfbf641b915d385db1271b52eb41ad06c222327c86fe",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/context-thin-pole_f2_semantic.pgm",
+            "sha256": "a3c77bc11053181d8a4e6c73a8b370fdbacb3958dd9cb461d16a0b00288d891f",
+            "encoding": "P5 uint8 class id"
+          }
+        }
+      ],
+      "compatibleCocoClassIds": []
+    },
+    {
+      "sceneId": "context-low-obstacle",
+      "state": "blocked",
+      "tags": [
+        "low",
+        "obstacle",
+        "contextual-urban"
+      ],
+      "frames": [
+        {
+          "frameIndex": 0,
+          "capturedOffsetMs": 0,
+          "cameraPose": {
+            "locationMetres": [
+              30.0,
+              0.0,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.43117,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/context-low-obstacle_f0_rgb.png",
+            "sha256": "8379f037a12c16a7eead83687c0fd1ab880e5a00217bc025b3295ef1b3f73d66"
+          },
+          "depth": {
+            "path": "renders/context-low-obstacle_f0_depth_mm.pgm",
+            "sha256": "bf25046b2a779b6294d199d9e827f2c8161f8ddd998e0a8019a36c9f2eea0531",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/context-low-obstacle_f0_semantic.pgm",
+            "sha256": "6db0c56d7268d0035cb138955d37863dc7fe7978c60edff94c01a22e3bbd72e3",
+            "encoding": "P5 uint8 class id"
+          }
+        },
+        {
+          "frameIndex": 1,
+          "capturedOffsetMs": 300,
+          "cameraPose": {
+            "locationMetres": [
+              30.030001,
+              0.12,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.43117,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/context-low-obstacle_f1_rgb.png",
+            "sha256": "bca4254d23e6b81a19b262648109882106cc59b44ec80ab610152399363fcb1f"
+          },
+          "depth": {
+            "path": "renders/context-low-obstacle_f1_depth_mm.pgm",
+            "sha256": "ef0470bb5c4aea7e13e90b6dd520f9b4d9ad1e0c2cb26edfbf1067d8d96acfb8",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/context-low-obstacle_f1_semantic.pgm",
+            "sha256": "0d0726ef3980966f05f6b37ec70700eb950cd066af544018410d43eb6fc1c324",
+            "encoding": "P5 uint8 class id"
+          }
+        },
+        {
+          "frameIndex": 2,
+          "capturedOffsetMs": 600,
+          "cameraPose": {
+            "locationMetres": [
+              30.0,
+              0.24,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.43117,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/context-low-obstacle_f2_rgb.png",
+            "sha256": "88bc2920532eee5c615a9c4c2ab5ccaa2f4b19493bdd3263cee12b9e88a324bd"
+          },
+          "depth": {
+            "path": "renders/context-low-obstacle_f2_depth_mm.pgm",
+            "sha256": "3cd8f971acfb2e0e260a8a11663e19db40cfca8bea5599498e2006b707df049b",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/context-low-obstacle_f2_semantic.pgm",
+            "sha256": "a076840f36160a6b83f287d21a27d250ca53803e99ce14c267e0b6db8aea84b3",
+            "encoding": "P5 uint8 class id"
+          }
+        }
+      ],
+      "compatibleCocoClassIds": [
+        28
+      ]
+    },
+    {
+      "sceneId": "context-overhead",
+      "state": "blocked",
+      "tags": [
+        "overhead",
+        "obstacle",
+        "contextual-urban"
+      ],
+      "frames": [
+        {
+          "frameIndex": 0,
+          "capturedOffsetMs": 0,
+          "cameraPose": {
+            "locationMetres": [
+              60.0,
+              0.0,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.43117,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/context-overhead_f0_rgb.png",
+            "sha256": "839802df3df59e3ce924cea2ccc9089db92c6ccc3df0c35cb3f0e887737c2374"
+          },
+          "depth": {
+            "path": "renders/context-overhead_f0_depth_mm.pgm",
+            "sha256": "4c2bca333ef96806e6bc5aa62830e769b455dfac5360211b81637056f2f7546e",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/context-overhead_f0_semantic.pgm",
+            "sha256": "3f506f459cdbe51984014659c5990d04d335007e3ebdf471a89fabbdbbf94525",
+            "encoding": "P5 uint8 class id"
+          }
+        },
+        {
+          "frameIndex": 1,
+          "capturedOffsetMs": 300,
+          "cameraPose": {
+            "locationMetres": [
+              60.029999,
+              0.12,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.43117,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/context-overhead_f1_rgb.png",
+            "sha256": "73cfa6f9c26bc48581a7e4fa8cec2b08e3d3cefb2f36d6b7de3598c5e6e19df7"
+          },
+          "depth": {
+            "path": "renders/context-overhead_f1_depth_mm.pgm",
+            "sha256": "ee6cb2516c510374428215f9c435c7bc7856d4560c016d62777d6b9b3a346d77",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/context-overhead_f1_semantic.pgm",
+            "sha256": "57c812ccfad161d513818b739a49369f24c4adc587b1526dda920603102f3fb4",
+            "encoding": "P5 uint8 class id"
+          }
+        },
+        {
+          "frameIndex": 2,
+          "capturedOffsetMs": 600,
+          "cameraPose": {
+            "locationMetres": [
+              60.0,
+              0.24,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.43117,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/context-overhead_f2_rgb.png",
+            "sha256": "a05c0b3515ff7326d65714cf6e87b5d594d474ea217314fcd89846f3f07ab236"
+          },
+          "depth": {
+            "path": "renders/context-overhead_f2_depth_mm.pgm",
+            "sha256": "5822dd09e8a742c05a573df513bf94264dc848c88bf848586e9a3c886a98987e",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/context-overhead_f2_semantic.pgm",
+            "sha256": "d9f6c888ad566135e581502a8758e0eb075711874f3cb100e675b4f432ce1e5d",
+            "encoding": "P5 uint8 class id"
+          }
+        }
+      ],
+      "compatibleCocoClassIds": []
+    },
+    {
+      "sceneId": "context-crossing-rider",
+      "state": "moving",
+      "tags": [
+        "moving",
+        "rider",
+        "contextual-urban"
+      ],
+      "frames": [
+        {
+          "frameIndex": 0,
+          "capturedOffsetMs": 0,
+          "cameraPose": {
+            "locationMetres": [
+              90.0,
+              0.0,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.43117,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/context-crossing-rider_f0_rgb.png",
+            "sha256": "08683555209269ef05e5457baf0e685570af9378bbf2270ab8d71f5f79046285"
+          },
+          "depth": {
+            "path": "renders/context-crossing-rider_f0_depth_mm.pgm",
+            "sha256": "fc404c4596f5b00d718ed15c217e0d670bdc3d8fcc37fb31452030fe65cfa7b4",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/context-crossing-rider_f0_semantic.pgm",
+            "sha256": "307391a13bdbb7f535f3c1e058e4bced5a4005abf86a93ed39d2b84ec755148b",
+            "encoding": "P5 uint8 class id"
+          }
+        },
+        {
+          "frameIndex": 1,
+          "capturedOffsetMs": 300,
+          "cameraPose": {
+            "locationMetres": [
+              90.029999,
+              0.12,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.43117,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/context-crossing-rider_f1_rgb.png",
+            "sha256": "d460c5f6a3c5005fe42d7a682e98f094f88e2d7bbaf82cc06356f52908965b93"
+          },
+          "depth": {
+            "path": "renders/context-crossing-rider_f1_depth_mm.pgm",
+            "sha256": "49670c833e50fdae4982efe1fb0538db4dd6993a53767d8b63a0ee1e0254a6ef",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/context-crossing-rider_f1_semantic.pgm",
+            "sha256": "68a68ef53dbf7b8018a6496a3e7fda581cb2662e5038579212c298c5f16b403a",
+            "encoding": "P5 uint8 class id"
+          }
+        },
+        {
+          "frameIndex": 2,
+          "capturedOffsetMs": 600,
+          "cameraPose": {
+            "locationMetres": [
+              90.0,
+              0.24,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.43117,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/context-crossing-rider_f2_rgb.png",
+            "sha256": "5d4b212399b2a937983787270afeac506e5b25f771e04b61cc5783f0ce63f54c"
+          },
+          "depth": {
+            "path": "renders/context-crossing-rider_f2_depth_mm.pgm",
+            "sha256": "e668146ec6e46e4d7edab086ed9b4df9dc4853d8c74506da10ccad87bc2d6365",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/context-crossing-rider_f2_semantic.pgm",
+            "sha256": "5d18bd212ca2817b92a03fda48ac084744eb6ec3b74aba54359adba2d05a48a5",
+            "encoding": "P5 uint8 class id"
+          }
+        }
+      ],
+      "compatibleCocoClassIds": [
+        0,
+        1
+      ]
+    },
+    {
+      "sceneId": "context-ramp",
+      "state": "safe",
+      "tags": [
+        "ramp",
+        "traversable",
+        "contextual-urban"
+      ],
+      "frames": [
+        {
+          "frameIndex": 0,
+          "capturedOffsetMs": 0,
+          "cameraPose": {
+            "locationMetres": [
+              120.0,
+              0.0,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.43117,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/context-ramp_f0_rgb.png",
+            "sha256": "9867f9f3f55b238fb31a4252e12aa5c6f1a3ca7d742f777dfd8f8695892bf314"
+          },
+          "depth": {
+            "path": "renders/context-ramp_f0_depth_mm.pgm",
+            "sha256": "96e985ff2139a49ccbb23bdcdbe1e66754d9b9bed08894e4adb802e3fc43b903",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/context-ramp_f0_semantic.pgm",
+            "sha256": "29c6e292307a45d219efe9e14318d23dd92bbb3d0e4de250b5f72c851c231deb",
+            "encoding": "P5 uint8 class id"
+          }
+        },
+        {
+          "frameIndex": 1,
+          "capturedOffsetMs": 300,
+          "cameraPose": {
+            "locationMetres": [
+              120.029999,
+              0.12,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.43117,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/context-ramp_f1_rgb.png",
+            "sha256": "533e9201f71acc20460ecde79919f0adf8fd9f6b84710862125b727eaa6a136e"
+          },
+          "depth": {
+            "path": "renders/context-ramp_f1_depth_mm.pgm",
+            "sha256": "095c6a7b73f90dcc2c2238ea0565af9bb8880833080608a729372a2da1717df0",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/context-ramp_f1_semantic.pgm",
+            "sha256": "e9d59f1c21f6088406d8aa36709e7d12298169c89af4e1e0f547afb3bebe1314",
+            "encoding": "P5 uint8 class id"
+          }
+        },
+        {
+          "frameIndex": 2,
+          "capturedOffsetMs": 600,
+          "cameraPose": {
+            "locationMetres": [
+              120.0,
+              0.24,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.43117,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/context-ramp_f2_rgb.png",
+            "sha256": "54d3c31d4bbb026f4628b9f41ed424c94030b8197417e920f3d7e737a46e8641"
+          },
+          "depth": {
+            "path": "renders/context-ramp_f2_depth_mm.pgm",
+            "sha256": "a02b2bbc64a5c45f2d0331fe9c282c3eece86f4b22d19546a67eab023f736a11",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/context-ramp_f2_semantic.pgm",
+            "sha256": "24cce272691e1e35246abe6ca02f70b0941f84f0398a0dd67ecfffebc92bea89",
+            "encoding": "P5 uint8 class id"
+          }
+        }
+      ],
+      "compatibleCocoClassIds": []
+    },
+    {
+      "sceneId": "context-doorway",
+      "state": "safe",
+      "tags": [
+        "doorway",
+        "opening",
+        "contextual-urban"
+      ],
+      "frames": [
+        {
+          "frameIndex": 0,
+          "capturedOffsetMs": 0,
+          "cameraPose": {
+            "locationMetres": [
+              150.0,
+              0.0,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.43117,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/context-doorway_f0_rgb.png",
+            "sha256": "c26271d1be54d4446f84aa294cc25b37c7c51b3f22b97734658b35894a70ac65"
+          },
+          "depth": {
+            "path": "renders/context-doorway_f0_depth_mm.pgm",
+            "sha256": "91d6d6d9d165e2fcad2d85deb9670757e48e495605785a7147dd32ca83eedc5f",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/context-doorway_f0_semantic.pgm",
+            "sha256": "693e10a701d8184dc4eaa19dc705c2533398209662d6d5743c93c52dc59deb12",
+            "encoding": "P5 uint8 class id"
+          }
+        },
+        {
+          "frameIndex": 1,
+          "capturedOffsetMs": 300,
+          "cameraPose": {
+            "locationMetres": [
+              150.029999,
+              0.12,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.43117,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/context-doorway_f1_rgb.png",
+            "sha256": "d357ee8e5152f194e9b33dd2dbc9ee187545a0ffcfebbc7670663a8029c6a97b"
+          },
+          "depth": {
+            "path": "renders/context-doorway_f1_depth_mm.pgm",
+            "sha256": "d89bad993a61b9e5e91de3cd969e6125c116722b581c8017ab96ffd053edb344",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/context-doorway_f1_semantic.pgm",
+            "sha256": "ee38b9caf5282cdb7a64fdc2e46e73d629d3bf8e056f0702d4cc73b7cbed3881",
+            "encoding": "P5 uint8 class id"
+          }
+        },
+        {
+          "frameIndex": 2,
+          "capturedOffsetMs": 600,
+          "cameraPose": {
+            "locationMetres": [
+              150.0,
+              0.24,
+              1.45
+            ],
+            "rotationEulerRadians": [
+              1.43117,
+              0.0,
+              0.0
+            ],
+            "horizontalFovRadians": 1.21108937,
+            "verticalFovRadians": 0.86481553
+          },
+          "rgb": {
+            "path": "renders/context-doorway_f2_rgb.png",
+            "sha256": "29d5dfdaf93f8e799aee3ccbf815165a7ab980bc9c3dad1e8bbd3fa75c18c1ca"
+          },
+          "depth": {
+            "path": "renders/context-doorway_f2_depth_mm.pgm",
+            "sha256": "7ce628b510e7da15b2d23ab3ac9f21630a58fbe748412557a9ae11830acd0bf1",
+            "encoding": "P5 uint16 big-endian millimetres; 0=unobserved"
+          },
+          "semantic": {
+            "path": "renders/context-doorway_f2_semantic.pgm",
+            "sha256": "bdbb91bc0965ad6c128fb9b6400d2b1fc81fee22e0cb670d051cc717bfc169a7",
+            "encoding": "P5 uint8 class id"
+          }
+        }
+      ],
+      "compatibleCocoClassIds": []
+    }
+  ],
+  "parentTemporalGeneratorSha256": "e7524d4db09c3853f932d4a754bfb8edf63eb2efc93694c26a296d0c63c864eb",
+  "contextRevision": 1
+}

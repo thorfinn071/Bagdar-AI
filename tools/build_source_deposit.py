@@ -73,7 +73,8 @@ CITY = 'Астана'
 # Goal: identify the work (entry point, main UI flow).
 FILES_FIRST_PART: list[str] = [
     'lib/main.dart',
-    'lib/onboarding_screen.dart',
+    'lib/features/onboarding_v2/onboarding_entry.dart',
+    'lib/features/onboarding_v2/onboarding_screen.dart',
     'lib/gesture_tutorial_screen.dart',
     'lib/camera_screen.dart',          # very large — capped via MAX_LINES_PER_FILE
 ]

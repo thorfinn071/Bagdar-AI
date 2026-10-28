@@ -1,0 +1,24 @@
+{
+  "sceneId": "person-approach",
+  "pair": "person",
+  "physicalHazard": true,
+  "referencePassable": false,
+  "hazardOnsetMs": 0,
+  "userMoving": true,
+  "latestStopOffsetMs": 300,
+  "compatibleCocoClassIds": [
+    0
+  ],
+  "parameters": {
+    "id": "person-approach",
+    "pair": "person",
+    "hazard": true,
+    "kind": "person",
+    "personX": 0,
+    "personStartY": 3.3,
+    "personAdvanceM": 1.0,
+    "cameraAdvanceM": 0.1,
+    "appearanceSeed": 4105
+  },
+  "labelSource": "predeclared scene geometry, not model output"
+}

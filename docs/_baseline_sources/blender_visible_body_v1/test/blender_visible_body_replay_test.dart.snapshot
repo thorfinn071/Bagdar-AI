@@ -1,0 +1,519 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:bagdar/core/core_health_coordinator.dart';
+import 'package:bagdar/safety/perception/camera_passage_clearance_source.dart';
+import 'package:bagdar/safety/perception/camera_track_association.dart';
+import 'package:bagdar/safety/perception/observation_header.dart';
+import 'package:bagdar/safety/perception/passage_clearance.dart';
+import 'package:bagdar/safety/runtime/confidence_authority_spatial_runtime.dart';
+import 'package:bagdar/safety/runtime/passage_clearance_shadow.dart';
+import 'package:bagdar/safety/world/relative_polar_grid.dart';
+import 'package:bagdar/services/fall_detector.dart';
+import 'package:bagdar/services/generic_obstacle_detector.dart';
+import 'package:bagdar/tracker/generic_obstacle_tracker.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+import 'harness/blender_visible_body_fixture.dart';
+import 'harness/camera_visible_passage_fixture.dart' as visible;
+
+const _reportPath = 'docs/_baseline_logs/blender_visible_body_shadow_v1.json';
+const _write = bool.fromEnvironment('BAGDAR_WRITE_BODY_REPORT');
+const _check = bool.fromEnvironment('BAGDAR_CHECK_BODY_REPORT');
+
+PassageEvaluationContext _context(
+  String transform,
+  int frameId,
+  int captured,
+) => PassageEvaluationContext(
+  nowUs: captured + 2000,
+  timestampDomain: PassageTimestampDomain.utcEpochMicroseconds,
+  sessionGeneration: 1,
+  frameId: frameId,
+  rgbTimestampUs: captured,
+  transformId: transform,
+);
+
+CameraPassageClearanceSource _source(
+  PassageCalibration calibration,
+  List<CameraVisibleDepthFrame> frames, {
+  bool scan = false,
+}) => CameraPassageClearanceSource(
+  calibration: calibration,
+  request: pairedBodyRequest,
+  frames: frames,
+  producedAtUs: frames.last.capturedAtUs + 1000,
+  allowStaticSyntheticScan: scan,
+);
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  test(
+    'paired visible body preserves hazards and reports actual observability',
+    () {
+      final fixture = PairedBodyFixture();
+      final prior = bodyJson(
+        'docs/_baseline_logs/blender_paired_correction_shadow_v3.json',
+      );
+      final priorSequences =
+          ((prior['modes'] as List).cast<Map>().singleWhere(
+                    (m) => m['mode'] == 'midas-relative',
+                  )['sequences']
+                  as List)
+              .cast<Map>();
+      final modes = <Map<String, Object?>>[];
+      final failures = <String>[];
+      final timings = <Map<String, Object?>>[];
+      final scans = <Map<String, Object?>>[];
+      for (final augmented in [false, true]) {
+        final sequences = <Map<String, Object?>>[];
+        for (final sequence
+            in (fixture.corpus['sequences'] as List).cast<Map>()) {
+          final id = sequence['sceneId'] as String;
+          final optics = (fixture.manifest['sequences'] as List)
+              .cast<Map>()
+              .singleWhere((s) => s['sceneId'] == id);
+          final labels =
+              jsonDecode(
+                    utf8.decode(
+                      bodyAsset(pairedRgbRoot, sequence['annotations'] as Map),
+                    ),
+                  )
+                  as Map;
+          final moving = labels['userMoving'] as bool;
+          final calibration = fixture.calibration(id);
+          final detector = GenericObstacleDetector(
+            collectOpeningDiagnostics: true,
+            collectCameraSupport: augmented,
+          );
+          final tracker = GenericObstacleTracker();
+          final runtime =
+              ConfidenceAuthoritySpatialRuntime(
+                healthCoordinator: CoreHealthCoordinator(),
+                shadowPassage: augmented
+                    ? PassageClearanceShadowConfiguration(
+                        calibration: calibration,
+                        request: pairedBodyRequest,
+                        policy: pairedBodyPolicy,
+                        requireCameraEvidence: true,
+                        associateCameraTracks: true,
+                        cameraTrackModelHash: fixture.relativeHash,
+                      )
+                    : null,
+              )..beginSession(
+                1,
+                now: DateTime.fromMicrosecondsSinceEpoch(
+                  pairedBodyStamp - 1000,
+                ),
+              );
+          final rows = <Map<String, Object?>>[];
+          for (final original in (sequence['frames'] as List).cast<Map>()) {
+            final index = original['frameIndex'] as int;
+            final us =
+                pairedBodyStamp + (original['capturedOffsetMs'] as int) * 1000;
+            final frame = fixture.relative(original, id, us);
+            final timer = Stopwatch()..start();
+            final detection = detector.detect(
+              frame: frame,
+              pitchDeg: ((original['cameraPose'] as Map)['pitchDownDeg'] as num)
+                  .toDouble(),
+              rollDeg: 0,
+              motion: moving ? MotionState.walking : MotionState.stationary,
+              imageTimestampUs: us,
+            );
+            final tracks = tracker.update(
+              observations: detection.observations,
+              timestampUs: us,
+              relative: true,
+            );
+            final header = ObservationHeader(
+              providerId: 'desktop-midas',
+              modelId: frame.modelId,
+              modelHash: frame.modelHash,
+              preprocessId: frame.preprocessId,
+              sessionGeneration: 1,
+              frameId: index + 1,
+              sourceTimestampUs: us,
+              producedAtUs: us + 1000,
+              transformId: fixture.transform(id),
+              confidence: detection.detectorQuality.clamp(0.0, 1.0),
+              health: ObservationHealth.healthy,
+            );
+            CameraPassageClearanceSource? source;
+            PassageClearanceObservation? observation;
+            CameraTrackAssociationInput? cameraInput;
+            if (augmented) {
+              final packet = (optics['single'] as List)[index] as Map;
+              expect(packet['rgbSha256'], (original['rgb'] as Map)['sha256']);
+              final depth = fixture.visible(packet, id);
+              expect(depth.capturedAtUs, us);
+              source = _source(calibration, [depth]);
+              observation = source.observationFor(
+                _context(fixture.transform(id), index + 1, us),
+              );
+              cameraInput = CameraTrackAssociationInput(
+                rgbHeader: header,
+                depth: depth,
+                imageGeometry: CameraTrackImageGeometry(
+                  cameraId: depth.cameraId,
+                  width: depth.width,
+                  height: depth.height,
+                  fx: depth.fx,
+                  fy: depth.fy,
+                  cx: depth.cx,
+                  cy: depth.cy,
+                  rotation: depth.rotation,
+                  originM: depth.originM,
+                ),
+              );
+            }
+            final result = runtime.ingestGenericGeometry(
+              header: header,
+              detection: detection,
+              tracks: tracks,
+              now: DateTime.fromMicrosecondsSinceEpoch(us + 2000),
+              orientationValid: true,
+              userMoving: moving,
+              poseQuality: 1,
+              passageObservation: observation,
+              cameraTrackInput: cameraInput,
+            );
+            timer.stop();
+            expect(result.accepted, true, reason: '$id/$index');
+            expect(result.submittedAction!.delivery.name, 'shadow');
+            expect(runtime.arbiter.active, isNull);
+            final decision = result.decision!;
+            final forward = RelativePolarGrid.fromSnapshot(
+              result.snapshot,
+              orientationValid: true,
+              userMoving: moving,
+            ).sector(RelativeSectorDirection.forward);
+            if (!augmented) {
+              final previous =
+                  (priorSequences.singleWhere(
+                            (s) => s['sceneId'] == id,
+                          )['frames']
+                          as List)[index]
+                      as Map;
+              expect(decision.action.kind.name, previous['action']);
+              expect(decision.action.ruleId, previous['rule']);
+              expect(forward.unknownProbability, previous['forwardUnknown']);
+              expect(
+                forward.occupancyProbability,
+                previous['forwardOccupancy'],
+              );
+            }
+            rows.add({
+              'frameIndex': index,
+              'capturedOffsetMs': original['capturedOffsetMs'],
+              'action': decision.action.kind.name,
+              'rule': decision.action.ruleId,
+              'delivery': result.submittedAction!.delivery.name,
+              'passageApplied': result.passageClearanceApplied,
+              'passage': result.passageClearance?.toDiagnosticMap(),
+              'forwardUnknown': forward.unknownProbability,
+              'forwardOccupancy': forward.occupancyProbability,
+              'geometryObservations': detection.observations.length,
+              'observedBodyBoxes': source?.certifiedBodyBoxes,
+              'unknownBodyBoxes': source?.unknownBodyBoxes,
+              'unobservedBodyCentersM': source?.unobservedBodyCellCenters,
+              'minimumFloorObserved': observation?.sections
+                  .map((s) => s.floorObservedFraction)
+                  .reduce((a, b) => a < b ? a : b),
+              'associations': [
+                for (final entry in runtime.cameraTrackAssociations.entries)
+                  {
+                    'trackId': entry.key,
+                    'geometry': tracks
+                        .singleWhere((t) => t.id == entry.key)
+                        .last
+                        .geometry
+                        .name,
+                    'floorEnvelopeOnly':
+                        entry.value.surfaceBoundsM != null &&
+                        entry.value.surfaceBoundsM![2] >= -.05 &&
+                        entry.value.surfaceBoundsM![5] <= .05,
+                    ...entry.value.toDiagnosticMap(),
+                  },
+              ],
+            });
+            timings.add({
+              'augmented': augmented,
+              'sceneId': id,
+              'frameIndex': index,
+              'decisionComputeUs': timer.elapsedMicroseconds,
+            });
+          }
+          // Labels are scoring data and never enter the optical source/associator.
+          final hazard = labels['physicalHazard'] as bool;
+          final stops = rows.where((r) => r['action'] == 'stopNow').toList();
+          sequences.add({
+            'sceneId': id,
+            'physicalHazard': hazard,
+            'referencePassable': labels['referencePassable'],
+            'userMoving': moving,
+            'onTimeStop': hazard
+                ? stops.isNotEmpty &&
+                      (stops.first['capturedOffsetMs'] as int) <=
+                          (labels['latestStopOffsetMs'] as int)
+                : null,
+            'frames': rows,
+          });
+          if (augmented) {
+            final frames = (optics['staticScan'] as List)
+                .cast<Map>()
+                .map((p) => fixture.visible(p, id))
+                .toList();
+            final context = _context(
+              fixture.transform(id),
+              frames.last.frameId,
+              frames.last.capturedAtUs,
+            );
+            final source = _source(calibration, frames, scan: true);
+            final observation = source.observationFor(context);
+            final diagnostic =
+                const PassageClearanceEvaluator(
+                  policy: pairedBodyScanDiagnosticPolicy,
+                ).evaluate(
+                  request: pairedBodyRequest,
+                  context: context,
+                  calibration: calibration,
+                  observation: observation,
+                );
+            final strict =
+                const PassageClearanceEvaluator(
+                  policy: pairedBodyPolicy,
+                ).evaluate(
+                  request: pairedBodyRequest,
+                  context: context,
+                  calibration: calibration,
+                  observation: observation,
+                );
+            expect(strict.status, PassageClearanceStatus.unavailable);
+            expect(
+              strict.reasons,
+              contains(PassageClearanceReason.staleObservation),
+            );
+            if (hazard) {
+              expect(
+                diagnostic.status,
+                isNot(PassageClearanceStatus.measuredClear),
+                reason: id,
+              );
+            }
+            scans.add({
+              'sceneId': id,
+              'physicalHazard': hazard,
+              'scope':
+                  'frozen final-state observability; no runtime guidance authority',
+              'diagnostic': diagnostic.toDiagnosticMap(),
+              'strictFreshness': strict.toDiagnosticMap(),
+              'observedBodyBoxes': source.certifiedBodyBoxes,
+              'unknownBodyBoxes': source.unknownBodyBoxes,
+              'minimumBodyObserved': observation!.sections
+                  .map((s) => s.bodyObservedFraction)
+                  .reduce((a, b) => a < b ? a : b),
+              'minimumFloorObserved': observation.sections
+                  .map((s) => s.floorObservedFraction)
+                  .reduce((a, b) => a < b ? a : b),
+            });
+          }
+        }
+        final all = sequences
+            .expand((s) => (s['frames'] as List).cast<Map>())
+            .toList();
+        final hazards = sequences
+            .where((s) => s['physicalHazard'] == true)
+            .toList();
+        final passable = sequences
+            .where(
+              (s) => s['referencePassable'] == true && s['userMoving'] == true,
+            )
+            .expand((s) => (s['frames'] as List).cast<Map>())
+            .toList();
+        final hazardFrames = hazards
+            .expand((s) => (s['frames'] as List).cast<Map>())
+            .toList();
+        final associations = all
+            .expand((f) => (f['associations'] as List).cast<Map>())
+            .toList();
+        final summary = {
+          'frames': all.length,
+          'hazardFrames': hazardFrames.length,
+          'unsafeContinues': hazardFrames
+              .where((f) => f['action'] == 'continueForward')
+              .length,
+          'hazardFramesWithStop': hazardFrames
+              .where((f) => f['action'] == 'stopNow')
+              .length,
+          'onTimeStopSequences': hazards
+              .where((s) => s['onTimeStop'] == true)
+              .length,
+          'passableMovingFrames': passable.length,
+          'falseStopFrames': passable
+              .where((f) => f['action'] == 'stopNow')
+              .length,
+          'falseImminentFrames': passable
+              .where((f) => f['rule'] == 'SPATIAL-P0-IMMINENT')
+              .length,
+          'clearanceApplications': all
+              .where((f) => f['passageApplied'] == true)
+              .length,
+          'outsideAssociations': associations
+              .where((a) => a['relation'] == 'outsidePassage')
+              .length,
+          'floorOnlyOutsideAssociations': associations
+              .where(
+                (a) =>
+                    a['relation'] == 'outsidePassage' &&
+                    a['floorEnvelopeOnly'] == true,
+              )
+              .length,
+          'intersectingAssociations': associations
+              .where((a) => a['relation'] == 'intersectsPassage')
+              .length,
+          'unknownAssociations': associations
+              .where((a) => a['relation'] == 'unknown')
+              .length,
+        };
+        for (final gate in {
+          'frames': 132,
+          'unsafeContinues': 0,
+          'hazardFramesWithStop': 66,
+          'onTimeStopSequences': 6,
+          'falseImminentFrames': 0,
+        }.entries) {
+          if (summary[gate.key] != gate.value) {
+            failures.add(
+              '${augmented ? "metric-single" : "control"}: ${gate.key}=${summary[gate.key]}, expected ${gate.value}',
+            );
+          }
+        }
+        modes.add({
+          'mode': augmented
+              ? 'midas-plus-visible-metric-single'
+              : 'midas-confidence-control',
+          'summary': summary,
+          'sequences': sequences,
+        });
+      }
+      final report = {
+        'schemaVersion': 1,
+        'passed': failures.isEmpty,
+        'failures': failures,
+        'promotionAllowed': false,
+        'deviceRuntime': 'not_run',
+        'scope':
+            'known synthetic regression; independent renderer metric input; no neural improvement or field accuracy',
+        'corpusManifestSha256': fixture.manifest['sourceCorpusSha256'],
+        'visibleManifestSha256': fixture.modelHash,
+        'priorCorrectionSha256': bodySha(
+          'docs/_baseline_logs/blender_paired_correction_shadow_v3.json',
+        ),
+        'evaluatorSha256': bodySha(
+          'test/blender_visible_body_replay_test.dart',
+        ),
+        'modes': modes,
+        'staticScans': scans,
+      };
+      final rendered =
+          '${const JsonEncoder.withIndent('  ').convert(report)}\n';
+      if (_check) expect(File(_reportPath).readAsStringSync(), rendered);
+      if (_write) {
+        expect(
+          File(_reportPath).existsSync(),
+          false,
+          reason: 'Body report is write-once',
+        );
+        File(_reportPath).writeAsStringSync(rendered);
+      }
+      File('scratch/blender-visible-body-compute.json').writeAsStringSync(
+        jsonEncode({
+          'scope': 'desktop compute only; no artificial-clock latency claim',
+          'steps': timings,
+        }),
+      );
+      expect(
+        failures,
+        isEmpty,
+        reason: 'Decisions must pass separately from hash parity',
+      );
+    },
+    timeout: const Timeout(Duration(minutes: 15)),
+  );
+
+  for (final fault in [
+    'none',
+    'single-view',
+    'floor-bounds',
+    'holes',
+    'relative',
+  ]) {
+    test(
+      'complete visible body proof and loss of its authority: $fault',
+      () {
+        final fixture = visible.VisibleFixture();
+        final layout = (fixture.manifest['layouts'] as List)
+            .cast<Map<String, dynamic>>()
+            .singleWhere((l) => l['id'] == 'validation-covered-wide-r0-p5-v0');
+        final original = fixture.frames(layout);
+        final frames = fault == 'single-view'
+            ? [original.first]
+            : [
+                for (final f in original)
+                  visible.copyVisibleFrame(
+                    f,
+                    upper: fault == 'floor-bounds'
+                        ? List.filled(f.surfaceZUpperM.length, double.nan)
+                        : null,
+                    valid: fault == 'holes'
+                        ? List.filled(f.valid.length, false)
+                        : null,
+                    units: fault == 'relative'
+                        ? PassageUnits.relativeProximity
+                        : null,
+                  ),
+              ];
+        const request = PassageClearanceRequest(
+          referenceFrameId: 'synthetic-walking-frame-v1',
+          lateralCenterM: 0,
+          widthM: .9,
+          headroomM: 1.85,
+          forwardStartM: .2,
+          forwardEndM: 3.5,
+          maximumFloorRiseM: .05,
+          maximumFloorDropM: .05,
+        );
+        final last = frames.last;
+        final source = CameraPassageClearanceSource(
+          calibration: fixture.calibration(),
+          request: request,
+          frames: frames,
+          producedAtUs: last.capturedAtUs + 1000,
+          allowStaticSyntheticScan: frames.length > 1,
+        );
+        final context = _context(
+          last.transformId,
+          last.frameId,
+          last.capturedAtUs,
+        );
+        final result =
+            const PassageClearanceEvaluator(
+              policy: pairedBodyScanDiagnosticPolicy,
+            ).evaluate(
+              request: request,
+              context: context,
+              calibration: fixture.calibration(),
+              observation: source.observationFor(context),
+            );
+        expect(
+          result.status,
+          fault == 'none'
+              ? PassageClearanceStatus.measuredClear
+              : PassageClearanceStatus.unavailable,
+        );
+      },
+      timeout: const Timeout(Duration(minutes: 2)),
+    );
+  }
+}

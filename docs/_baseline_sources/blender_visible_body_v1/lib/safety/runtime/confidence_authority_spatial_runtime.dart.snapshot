@@ -1,0 +1,321 @@
+import '../../core/core_health_coordinator.dart';
+import '../../models/generic_obstacle.dart';
+import '../../tracker/generic_obstacle_tracker.dart';
+import '../../utils/depth_hazard.dart';
+import '../alerts/alert_arbiter.dart';
+import '../perception/camera_track_association.dart';
+import '../perception/observation_header.dart';
+import '../perception/passage_clearance.dart';
+import '../planning/guidance_state_machine.dart';
+import '../planning/safety_action.dart';
+import '../world/local_scene_model.dart';
+import '../world/local_scene_snapshot.dart';
+import '../world/relative_polar_grid.dart';
+import '../world/scene_fusion_policy.dart';
+import 'passage_clearance_shadow.dart';
+import 'spatial_safety_runtime.dart';
+
+/// A versioned camera shadow policy. The frozen runtime owns admission,
+/// sessions, clocks and arbitration; this module corrects evidence authority.
+class ConfidenceAuthoritySpatialRuntime extends SpatialSafetyRuntime {
+  final _ConfidenceSceneModel _confidenceScene;
+
+  factory ConfidenceAuthoritySpatialRuntime({
+    required CoreHealthCoordinator healthCoordinator,
+    AlertArbiter? arbiter,
+    GuidanceStateMachine? planner,
+    PassageClearanceShadowConfiguration? shadowPassage,
+  }) {
+    if (planner != null && planner is! ConfidenceAuthorityGuidance) {
+      throw ArgumentError('Confidence authority requires its matching planner');
+    }
+    return ConfidenceAuthoritySpatialRuntime._(
+      _ConfidenceSceneModel(),
+      healthCoordinator,
+      arbiter,
+      planner ?? ConfidenceAuthorityGuidance(),
+      shadowPassage,
+    );
+  }
+
+  ConfidenceAuthoritySpatialRuntime._(
+    this._confidenceScene,
+    CoreHealthCoordinator health,
+    AlertArbiter? arbiter,
+    GuidanceStateMachine planner,
+    PassageClearanceShadowConfiguration? passage,
+  ) : super(
+        healthCoordinator: health,
+        arbiter: arbiter,
+        sceneModel: _confidenceScene,
+        planner: planner,
+        shadowPassage: passage,
+      ) {
+    _confidenceScene.outside = (track) =>
+        cameraTrackAssociations[track.id]?.relation ==
+        CameraTrackRelation.outsidePassage;
+  }
+
+  @override
+  SpatialRuntimeResult ingestGenericGeometry({
+    required ObservationHeader header,
+    required GenericObstacleDetectResult detection,
+    required List<GenericObstacleTrack> tracks,
+    required DateTime now,
+    required bool orientationValid,
+    required bool userMoving,
+    required double poseQuality,
+    PassageClearanceObservation? passageObservation,
+    CameraTrackAssociationInput? cameraTrackInput,
+  }) {
+    _confidenceScene.pending = switch (detection.rejectReason) {
+      ObstacleRejectReason.none || ObstacleRejectReason.emptyCorridor => tracks,
+      _ => const [],
+    };
+    try {
+      return super.ingestGenericGeometry(
+        header: header,
+        detection: detection,
+        tracks: tracks,
+        now: now,
+        orientationValid: orientationValid,
+        userMoving: userMoving,
+        poseQuality: poseQuality,
+        passageObservation: passageObservation,
+        cameraTrackInput: cameraTrackInput,
+      );
+    } finally {
+      // Rejected observations never leave candidates for another frame/update.
+      _confidenceScene.pending = const [];
+    }
+  }
+}
+
+class _ConfidenceSceneModel extends LocalSceneModel {
+  _ConfidenceSceneModel() : super.relative();
+  List<GenericObstacleTrack> pending = const [];
+  bool Function(GenericObstacleTrack)? outside;
+
+  @override
+  LocalSceneUpdateResult update(LocalSceneUpdate update) {
+    // Only the frozen adapter emits this typed, current passage evidence,
+    // after validating its volume/context. Filled depth is never such proof.
+    final bodyVerified = update.evidence.any(
+      (e) =>
+          e.elementId == 'forward' &&
+          e.source == SpatialEvidenceSource.depth &&
+          e.sourceId.startsWith('metric-passage:') &&
+          e.observedFraction == 1 &&
+          e.traversabilityProbability == 1 &&
+          e.unknownProbability == 0,
+    );
+    final evidence = <SpatialEvidence>[];
+    for (final e in update.evidence) {
+      final generic =
+          e.source == SpatialEvidenceSource.geometry &&
+          e.sourceId.startsWith('geometry:');
+      final frameNeedsBodyProof =
+          generic &&
+          e.elementId == 'forward' &&
+          e.occupancyProbability == null &&
+          !bodyVerified;
+      evidence.add(
+        SpatialEvidence(
+          elementId: e.elementId,
+          coordinateMode: e.coordinateMode,
+          sourceId: e.sourceId,
+          source: e.source,
+          observedAt: e.observedAt,
+          validUntil: e.validUntil,
+          observedFraction: e.observedFraction,
+          confidence: e.confidence,
+          occupancyProbability: generic && e.occupancyProbability != null
+              ? e.confidence
+              : e.occupancyProbability,
+          traversabilityProbability: e.traversabilityProbability,
+          dropProbability: e.dropProbability,
+          movingThreatRisk: e.movingThreatRisk,
+          unknownProbability: frameNeedsBodyProof
+              ? ((e.unknownProbability ?? 0) < .65 ? .65 : e.unknownProbability)
+              : e.unknownProbability,
+          hazardIds: e.hazardIds,
+          motionVector: e.motionVector,
+          closingRate: e.closingRate,
+          unknownScopeId: e.unknownScopeId,
+          coverageResolution: e.coverageResolution,
+          passageContext: e.passageContext,
+        ),
+      );
+    }
+    final hazards = <HazardTrackSnapshot>[];
+    for (final hazard in update.hazardTracks) {
+      final components = update.evidence.where(
+        (e) =>
+            e.source == SpatialEvidenceSource.geometry &&
+            e.sourceId.startsWith('geometry:') &&
+            e.hazardIds.contains(hazard.id),
+      );
+      var risk = hazard.risk;
+      if (components.isNotEmpty) {
+        risk = 0;
+        for (final e in components) {
+          if (e.confidence > risk) risk = e.confidence;
+          if ((e.movingThreatRisk ?? 0) > risk) risk = e.movingThreatRisk!;
+        }
+      }
+      hazards.add(
+        HazardTrackSnapshot(
+          id: hazard.id,
+          elementId: hazard.elementId,
+          risk: risk,
+          sourceMask: hazard.sourceMask,
+          lastObservedAt: hazard.lastObservedAt,
+        ),
+      );
+    }
+    for (final track in pending) {
+      if (track.confirmed ||
+          track.misses != 0 ||
+          track.last.zone != HazardZone.center ||
+          outside?.call(track) == true) {
+        continue;
+      }
+      hazards.add(
+        HazardTrackSnapshot(
+          id: 'geometry-candidate:${track.id}',
+          elementId: 'forward',
+          risk: track.last.confidence,
+          sourceMask: {'geometry-candidate'},
+          lastObservedAt: update.at,
+        ),
+      );
+      // Even a current body proof must not cancel an unresolved central image
+      // component whose first surfaces are not demonstrated outside the body.
+      evidence.add(
+        SpatialEvidence(
+          elementId: 'forward',
+          coordinateMode: SceneCoordinateMode.relative,
+          sourceId: 'geometry-candidate:${track.id}',
+          source: SpatialEvidenceSource.geometry,
+          observedAt: update.at,
+          validUntil: update.validUntil,
+          observedFraction: 0,
+          confidence: track.last.confidence,
+          unknownProbability: .65,
+        ),
+      );
+    }
+    return super.update(
+      LocalSceneUpdate(
+        coordinateMode: update.coordinateMode,
+        at: update.at,
+        validUntil: update.validUntil,
+        poseQuality: update.poseQuality,
+        sensorHealth: update.sensorHealth,
+        evidence: evidence,
+        hazardTracks: hazards,
+        movingThreats: update.movingThreats,
+        useIndependentEvidenceClocks: update.useIndependentEvidenceClocks,
+      ),
+    );
+  }
+}
+
+/// Keep the original planner's physical-risk precedence and hysteresis. An
+/// additional stop latch represents unresolved hypotheses, without asserting
+/// that proximity rank is evidence of an imminent collision.
+class ConfidenceAuthorityGuidance extends GuidanceStateMachine {
+  bool _uncertainStop = false;
+  int _releaseRevisions = 0;
+  int? _lastRevision;
+  GuidanceState? _reportedState;
+
+  @override
+  GuidanceState get state => _reportedState ?? super.state;
+
+  @override
+  void reset() {
+    super.reset();
+    _uncertainStop = false;
+    _releaseRevisions = 0;
+    _lastRevision = null;
+    _reportedState = null;
+  }
+
+  @override
+  GuidanceDecision evaluate(RelativePolarGrid grid, {required DateTime now}) {
+    final previousState = state;
+    final decision = super.evaluate(grid, now: now);
+    final forward = decision.candidates.singleWhere(
+      (c) => c.direction.name == 'forward',
+    );
+    final sector = grid.sector(RelativeSectorDirection.forward);
+    final advancing = _lastRevision == null || grid.revision > _lastRevision!;
+    if (advancing) _lastRevision = grid.revision;
+    if (decision.action.ruleId == 'SPATIAL-P0-IMMINENT') {
+      _reportedState = decision.state;
+      return decision;
+    }
+    final unresolved =
+        sector.hazardIds.isNotEmpty && !forward.hasPositiveEvidence;
+    if (unresolved) {
+      _uncertainStop = true;
+      _releaseRevisions = 0;
+    }
+    if (!_uncertainStop) {
+      _reportedState = decision.state;
+      return decision;
+    }
+    if (!unresolved &&
+        !grid.userMoving &&
+        forward.hasPositiveEvidence &&
+        advancing) {
+      _releaseRevisions++;
+    } else if (unresolved || grid.userMoving || !forward.hasPositiveEvidence) {
+      _releaseRevisions = 0;
+    }
+    if (_releaseRevisions >= releaseConfirmationRevisions) {
+      _uncertainStop = false;
+      _reportedState = decision.state;
+      return decision;
+    }
+    final stop = unresolved || grid.userMoving;
+    _reportedState = stop
+        ? GuidanceState.emergencyStop
+        : GuidanceState.holdingForScan;
+    final old = decision.action;
+    final action = SafetyAction(
+      actionId: old.actionId,
+      kind: stop ? SafetyActionKind.stopNow : SafetyActionKind.holdAndScan,
+      cause: unresolved
+          ? 'unverified_forward_obstruction'
+          : 'unverified_stop_reconfirmation',
+      priority: unresolved
+          ? SafetyPriority.p1Correction
+          : grid.userMoving
+          ? SafetyPriority.p0Emergency
+          : SafetyPriority.p2Degraded,
+      delivery: old.delivery,
+      sceneRevision: old.sceneRevision,
+      hazardIds: old.hazardIds,
+      evidenceSummary: old.evidenceSummary,
+      direction: null,
+      confidence: old.confidence,
+      createdAt: old.createdAt,
+      validUntil: old.validUntil,
+      ruleId: unresolved
+          ? 'SPATIAL-P1-UNVERIFIED-OBSTRUCTION'
+          : grid.userMoving
+          ? 'SPATIAL-P0-AWAIT-STATIONARY'
+          : 'SPATIAL-P2-UNCERTAIN-STOP-SCAN',
+    );
+    return GuidanceDecision(
+      action: action,
+      shadowAction: decision.shadowAction,
+      proposedCorrection: decision.proposedCorrection,
+      previousState: previousState,
+      state: _reportedState!,
+      candidates: decision.candidates,
+    );
+  }
+}

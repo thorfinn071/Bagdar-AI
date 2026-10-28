@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "promotionAllowed": false,
+  "offCentreForegroundPixelsRetained": 82,
+  "sources": {
+    "tool/blender/check_scan_complete_negatives.py": "cc965de71556698f00018e538b619c0574dee893fc75bed3711d83e09ec3e76d",
+    "tool/blender/visible_complete_surface_bounds.py": "7069e6e04fa93af6bacfbff4f6b612d88651b24a91490ca6a70430455c7cb8a7",
+    "tool/blender/pixel_complete_surface_envelope.py": "e0a056b7a65856fd62119f624e5a523e83c223dd1f472762bc46a627f3e54d38",
+    "tool/blender/generate_visible_passage_corpus.py": "97d96eb474afdbd9900f11a439e8235039390f04bc8ad9ba334c1d8904d41c82"
+  }
+}

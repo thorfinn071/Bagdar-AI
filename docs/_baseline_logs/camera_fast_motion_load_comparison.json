@@ -1,0 +1,1043 @@
+{
+  "scope": "three alternating desktop trials; known synthetic regression; no phone capture",
+  "platform": "Windows-10-10.0.26300-SP0",
+  "alternatingOrder": true,
+  "measuredRounds": 3,
+  "promotionAllowed": false,
+  "newIndependentHoldout": false,
+  "timelyRiskGateMet": true,
+  "trials": {
+    "elapsed": {
+      "baseline": [
+        {
+          "report": "docs/_baseline_logs/camera_fast_motion_load_elapsed_baseline_0.json",
+          "frames": 109,
+          "admitted": 85,
+          "referenceRiskFrames": 54,
+          "freshRiskFrames": 26,
+          "testReferenceRiskFrames": 30,
+          "testFreshRiskFrames": 12,
+          "approachRiskPairs": 12,
+          "timingOrPairResetLosses": 28,
+          "freshRiskAgeMs": {
+            "count": 26,
+            "p50": 89.009,
+            "p95": 98.701,
+            "max": 99.407
+          },
+          "allOutcomeAgeMs": {
+            "count": 109,
+            "p50": 85.53,
+            "p95": 111.479
+          },
+          "nnWaitMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "max": null
+          },
+          "deadlineRepliesMissingAtOutcome": 16,
+          "returnedComputationMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "max": null
+          },
+          "lateReturnedComputations": 0,
+          "packingMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "max": null
+          },
+          "transportQueueAndDeliveryMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "max": null
+          },
+          "stageMs": {
+            "materialize": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            },
+            "features": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            },
+            "matchingAndBounds": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            },
+            "nativeMatch": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            },
+            "nativeFrameCopy": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            }
+          },
+          "preparationTotalMs": 2215.204,
+          "ownerTimerEvents": 477,
+          "diagnosticOverflow": null,
+          "staleReleases": 0,
+          "clearances": 0
+        },
+        {
+          "report": "docs/_baseline_logs/camera_fast_motion_load_elapsed_baseline_1.json",
+          "frames": 109,
+          "admitted": 80,
+          "referenceRiskFrames": 54,
+          "freshRiskFrames": 16,
+          "testReferenceRiskFrames": 30,
+          "testFreshRiskFrames": 10,
+          "approachRiskPairs": 7,
+          "timingOrPairResetLosses": 38,
+          "freshRiskAgeMs": {
+            "count": 16,
+            "p50": 85.51249999999999,
+            "p95": 99.254,
+            "max": 99.254
+          },
+          "allOutcomeAgeMs": {
+            "count": 109,
+            "p50": 81.797,
+            "p95": 112.208
+          },
+          "nnWaitMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "max": null
+          },
+          "deadlineRepliesMissingAtOutcome": 20,
+          "returnedComputationMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "max": null
+          },
+          "lateReturnedComputations": 0,
+          "packingMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "max": null
+          },
+          "transportQueueAndDeliveryMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "max": null
+          },
+          "stageMs": {
+            "materialize": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            },
+            "features": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            },
+            "matchingAndBounds": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            },
+            "nativeMatch": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            },
+            "nativeFrameCopy": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            }
+          },
+          "preparationTotalMs": 2095.848,
+          "ownerTimerEvents": 463,
+          "diagnosticOverflow": null,
+          "staleReleases": 0,
+          "clearances": 0
+        },
+        {
+          "report": "docs/_baseline_logs/camera_fast_motion_load_elapsed_baseline_2.json",
+          "frames": 109,
+          "admitted": 77,
+          "referenceRiskFrames": 54,
+          "freshRiskFrames": 11,
+          "testReferenceRiskFrames": 30,
+          "testFreshRiskFrames": 4,
+          "approachRiskPairs": 4,
+          "timingOrPairResetLosses": 43,
+          "freshRiskAgeMs": {
+            "count": 11,
+            "p50": 83.667,
+            "p95": 97.185,
+            "max": 97.185
+          },
+          "allOutcomeAgeMs": {
+            "count": 109,
+            "p50": 76.693,
+            "p95": 111.458
+          },
+          "nnWaitMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "max": null
+          },
+          "deadlineRepliesMissingAtOutcome": 24,
+          "returnedComputationMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "max": null
+          },
+          "lateReturnedComputations": 0,
+          "packingMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "max": null
+          },
+          "transportQueueAndDeliveryMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "max": null
+          },
+          "stageMs": {
+            "materialize": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            },
+            "features": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            },
+            "matchingAndBounds": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            },
+            "nativeMatch": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            },
+            "nativeFrameCopy": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            }
+          },
+          "preparationTotalMs": 2169.318,
+          "ownerTimerEvents": 422,
+          "diagnosticOverflow": null,
+          "staleReleases": 0,
+          "clearances": 0
+        }
+      ],
+      "native": [
+        {
+          "report": "docs/_baseline_logs/camera_fast_motion_load_elapsed_native_0.json",
+          "frames": 109,
+          "admitted": 109,
+          "referenceRiskFrames": 54,
+          "freshRiskFrames": 54,
+          "testReferenceRiskFrames": 30,
+          "testFreshRiskFrames": 30,
+          "approachRiskPairs": 18,
+          "timingOrPairResetLosses": 0,
+          "freshRiskAgeMs": {
+            "count": 54,
+            "p50": 52.915,
+            "p95": 68.915,
+            "max": 83.105
+          },
+          "allOutcomeAgeMs": {
+            "count": 109,
+            "p50": 51.034,
+            "p95": 68.068
+          },
+          "nnWaitMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "max": null
+          },
+          "deadlineRepliesMissingAtOutcome": 0,
+          "returnedComputationMs": {
+            "count": 109,
+            "p50": 31.844,
+            "p95": 44.728,
+            "max": 51.017
+          },
+          "lateReturnedComputations": 0,
+          "packingMs": {
+            "count": 109,
+            "p50": 6.442,
+            "p95": 12.118,
+            "max": 16.102
+          },
+          "transportQueueAndDeliveryMs": {
+            "count": 109,
+            "p50": 6.581,
+            "p95": 12.322,
+            "max": 16.293
+          },
+          "stageMs": {
+            "materialize": {
+              "count": 109,
+              "p50": 0.007,
+              "p95": 0.026,
+              "max": 8.364
+            },
+            "features": {
+              "count": 92,
+              "p50": 1.2429999999999999,
+              "p95": 1.63,
+              "max": 2.472
+            },
+            "matchingAndBounds": {
+              "count": 92,
+              "p50": 30.6025,
+              "p95": 43.007,
+              "max": 49.257
+            },
+            "nativeMatch": {
+              "count": 92,
+              "p50": 23.0545,
+              "p95": 31.482,
+              "max": 34.051
+            },
+            "nativeFrameCopy": {
+              "count": 92,
+              "p50": 5.317,
+              "p95": 8.092,
+              "max": 8.395
+            }
+          },
+          "preparationTotalMs": 873.954,
+          "ownerTimerEvents": 339,
+          "diagnosticOverflow": 0,
+          "staleReleases": 0,
+          "clearances": 0
+        },
+        {
+          "report": "docs/_baseline_logs/camera_fast_motion_load_elapsed_native_1.json",
+          "frames": 109,
+          "admitted": 109,
+          "referenceRiskFrames": 54,
+          "freshRiskFrames": 54,
+          "testReferenceRiskFrames": 30,
+          "testFreshRiskFrames": 30,
+          "approachRiskPairs": 18,
+          "timingOrPairResetLosses": 0,
+          "freshRiskAgeMs": {
+            "count": 54,
+            "p50": 53.0305,
+            "p95": 65.452,
+            "max": 72.183
+          },
+          "allOutcomeAgeMs": {
+            "count": 109,
+            "p50": 48.002,
+            "p95": 67.313
+          },
+          "nnWaitMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "max": null
+          },
+          "deadlineRepliesMissingAtOutcome": 0,
+          "returnedComputationMs": {
+            "count": 109,
+            "p50": 30.72,
+            "p95": 41.843,
+            "max": 53.462
+          },
+          "lateReturnedComputations": 0,
+          "packingMs": {
+            "count": 109,
+            "p50": 6.316,
+            "p95": 12.658,
+            "max": 16.425
+          },
+          "transportQueueAndDeliveryMs": {
+            "count": 109,
+            "p50": 6.457,
+            "p95": 12.812,
+            "max": 16.501
+          },
+          "stageMs": {
+            "materialize": {
+              "count": 109,
+              "p50": 0.007,
+              "p95": 0.012,
+              "max": 0.024
+            },
+            "features": {
+              "count": 92,
+              "p50": 1.3094999999999999,
+              "p95": 2.169,
+              "max": 2.47
+            },
+            "matchingAndBounds": {
+              "count": 92,
+              "p50": 30.058500000000002,
+              "p95": 42.406,
+              "max": 51.784
+            },
+            "nativeMatch": {
+              "count": 92,
+              "p50": 22.549999999999997,
+              "p95": 31.443,
+              "max": 39.607
+            },
+            "nativeFrameCopy": {
+              "count": 92,
+              "p50": 5.23,
+              "p95": 7.638,
+              "max": 15.259
+            }
+          },
+          "preparationTotalMs": 846.368,
+          "ownerTimerEvents": 343,
+          "diagnosticOverflow": 0,
+          "staleReleases": 0,
+          "clearances": 0
+        },
+        {
+          "report": "docs/_baseline_logs/camera_fast_motion_load_elapsed_native_2.json",
+          "frames": 109,
+          "admitted": 109,
+          "referenceRiskFrames": 54,
+          "freshRiskFrames": 54,
+          "testReferenceRiskFrames": 30,
+          "testFreshRiskFrames": 30,
+          "approachRiskPairs": 18,
+          "timingOrPairResetLosses": 0,
+          "freshRiskAgeMs": {
+            "count": 54,
+            "p50": 51.789,
+            "p95": 70.098,
+            "max": 76.285
+          },
+          "allOutcomeAgeMs": {
+            "count": 109,
+            "p50": 49.512,
+            "p95": 70.024
+          },
+          "nnWaitMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "max": null
+          },
+          "deadlineRepliesMissingAtOutcome": 0,
+          "returnedComputationMs": {
+            "count": 109,
+            "p50": 31.105,
+            "p95": 42.564,
+            "max": 48.708
+          },
+          "lateReturnedComputations": 0,
+          "packingMs": {
+            "count": 109,
+            "p50": 6.377,
+            "p95": 13.039,
+            "max": 22.21
+          },
+          "transportQueueAndDeliveryMs": {
+            "count": 109,
+            "p50": 6.525,
+            "p95": 13.263,
+            "max": 22.372
+          },
+          "stageMs": {
+            "materialize": {
+              "count": 109,
+              "p50": 0.007,
+              "p95": 0.024,
+              "max": 0.119
+            },
+            "features": {
+              "count": 92,
+              "p50": 1.2315,
+              "p95": 2.306,
+              "max": 2.657
+            },
+            "matchingAndBounds": {
+              "count": 92,
+              "p50": 30.799,
+              "p95": 40.807,
+              "max": 46.26
+            },
+            "nativeMatch": {
+              "count": 92,
+              "p50": 22.7225,
+              "p95": 30.525,
+              "max": 32.685
+            },
+            "nativeFrameCopy": {
+              "count": 92,
+              "p50": 5.2635000000000005,
+              "p95": 8.6,
+              "max": 10.046
+            }
+          },
+          "preparationTotalMs": 926.4,
+          "ownerTimerEvents": 339,
+          "diagnosticOverflow": 0,
+          "staleReleases": 0,
+          "clearances": 0
+        }
+      ]
+    },
+    "elapsed-nn": {
+      "baseline": [
+        {
+          "report": "docs/_baseline_logs/camera_fast_motion_load_elapsed-nn_baseline_0.json",
+          "frames": 109,
+          "admitted": 63,
+          "referenceRiskFrames": 54,
+          "freshRiskFrames": 0,
+          "testReferenceRiskFrames": 30,
+          "testFreshRiskFrames": 0,
+          "approachRiskPairs": 0,
+          "timingOrPairResetLosses": 54,
+          "freshRiskAgeMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "max": null
+          },
+          "allOutcomeAgeMs": {
+            "count": 109,
+            "p50": 30.727,
+            "p95": 115.183
+          },
+          "nnWaitMs": {
+            "count": 109,
+            "p50": 125.057,
+            "p95": 143.664,
+            "max": 155.21
+          },
+          "deadlineRepliesMissingAtOutcome": 38,
+          "returnedComputationMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "max": null
+          },
+          "lateReturnedComputations": 0,
+          "packingMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "max": null
+          },
+          "transportQueueAndDeliveryMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "max": null
+          },
+          "stageMs": {
+            "materialize": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            },
+            "features": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            },
+            "matchingAndBounds": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            },
+            "nativeMatch": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            },
+            "nativeFrameCopy": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            }
+          },
+          "preparationTotalMs": 3141.672,
+          "ownerTimerEvents": 383,
+          "diagnosticOverflow": null,
+          "staleReleases": 0,
+          "clearances": 0
+        },
+        {
+          "report": "docs/_baseline_logs/camera_fast_motion_load_elapsed-nn_baseline_1.json",
+          "frames": 109,
+          "admitted": 65,
+          "referenceRiskFrames": 54,
+          "freshRiskFrames": 0,
+          "testReferenceRiskFrames": 30,
+          "testFreshRiskFrames": 0,
+          "approachRiskPairs": 0,
+          "timingOrPairResetLosses": 54,
+          "freshRiskAgeMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "max": null
+          },
+          "allOutcomeAgeMs": {
+            "count": 109,
+            "p50": 27.806,
+            "p95": 112.711
+          },
+          "nnWaitMs": {
+            "count": 109,
+            "p50": 127.564,
+            "p95": 152.85,
+            "max": 161.062
+          },
+          "deadlineRepliesMissingAtOutcome": 41,
+          "returnedComputationMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "max": null
+          },
+          "lateReturnedComputations": 0,
+          "packingMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "max": null
+          },
+          "transportQueueAndDeliveryMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "max": null
+          },
+          "stageMs": {
+            "materialize": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            },
+            "features": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            },
+            "matchingAndBounds": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            },
+            "nativeMatch": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            },
+            "nativeFrameCopy": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            }
+          },
+          "preparationTotalMs": 3466.8,
+          "ownerTimerEvents": 378,
+          "diagnosticOverflow": null,
+          "staleReleases": 0,
+          "clearances": 0
+        },
+        {
+          "report": "docs/_baseline_logs/camera_fast_motion_load_elapsed-nn_baseline_2.json",
+          "frames": 109,
+          "admitted": 65,
+          "referenceRiskFrames": 54,
+          "freshRiskFrames": 0,
+          "testReferenceRiskFrames": 30,
+          "testFreshRiskFrames": 0,
+          "approachRiskPairs": 0,
+          "timingOrPairResetLosses": 54,
+          "freshRiskAgeMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "max": null
+          },
+          "allOutcomeAgeMs": {
+            "count": 109,
+            "p50": 31.064,
+            "p95": 113.148
+          },
+          "nnWaitMs": {
+            "count": 109,
+            "p50": 129.143,
+            "p95": 150.057,
+            "max": 163.512
+          },
+          "deadlineRepliesMissingAtOutcome": 42,
+          "returnedComputationMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "max": null
+          },
+          "lateReturnedComputations": 0,
+          "packingMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "max": null
+          },
+          "transportQueueAndDeliveryMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "max": null
+          },
+          "stageMs": {
+            "materialize": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            },
+            "features": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            },
+            "matchingAndBounds": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            },
+            "nativeMatch": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            },
+            "nativeFrameCopy": {
+              "count": 0,
+              "p50": null,
+              "p95": null,
+              "max": null
+            }
+          },
+          "preparationTotalMs": 3358.967,
+          "ownerTimerEvents": 380,
+          "diagnosticOverflow": null,
+          "staleReleases": 0,
+          "clearances": 0
+        }
+      ],
+      "native": [
+        {
+          "report": "docs/_baseline_logs/camera_fast_motion_load_elapsed-nn_native_0.json",
+          "frames": 109,
+          "admitted": 109,
+          "referenceRiskFrames": 54,
+          "freshRiskFrames": 54,
+          "testReferenceRiskFrames": 30,
+          "testFreshRiskFrames": 30,
+          "approachRiskPairs": 18,
+          "timingOrPairResetLosses": 0,
+          "freshRiskAgeMs": {
+            "count": 54,
+            "p50": 63.2375,
+            "p95": 82.379,
+            "max": 90.968
+          },
+          "allOutcomeAgeMs": {
+            "count": 109,
+            "p50": 60.22,
+            "p95": 76.818
+          },
+          "nnWaitMs": {
+            "count": 109,
+            "p50": 119.825,
+            "p95": 142.206,
+            "max": 148.51
+          },
+          "deadlineRepliesMissingAtOutcome": 0,
+          "returnedComputationMs": {
+            "count": 109,
+            "p50": 38.58,
+            "p95": 55.934,
+            "max": 63.685
+          },
+          "lateReturnedComputations": 0,
+          "packingMs": {
+            "count": 109,
+            "p50": 9.492,
+            "p95": 13.029,
+            "max": 18.613
+          },
+          "transportQueueAndDeliveryMs": {
+            "count": 109,
+            "p50": 9.677,
+            "p95": 13.227,
+            "max": 18.891
+          },
+          "stageMs": {
+            "materialize": {
+              "count": 109,
+              "p50": 0.009,
+              "p95": 0.019,
+              "max": 0.183
+            },
+            "features": {
+              "count": 92,
+              "p50": 1.479,
+              "p95": 2.242,
+              "max": 2.38
+            },
+            "matchingAndBounds": {
+              "count": 92,
+              "p50": 38.207,
+              "p95": 54.324,
+              "max": 61.076
+            },
+            "nativeMatch": {
+              "count": 92,
+              "p50": 27.335,
+              "p95": 41.386,
+              "max": 44.795
+            },
+            "nativeFrameCopy": {
+              "count": 92,
+              "p50": 7.298500000000001,
+              "p95": 8.904,
+              "max": 9.138
+            }
+          },
+          "preparationTotalMs": 1292.122,
+          "ownerTimerEvents": 365,
+          "diagnosticOverflow": 0,
+          "staleReleases": 0,
+          "clearances": 0
+        },
+        {
+          "report": "docs/_baseline_logs/camera_fast_motion_load_elapsed-nn_native_1.json",
+          "frames": 109,
+          "admitted": 109,
+          "referenceRiskFrames": 54,
+          "freshRiskFrames": 54,
+          "testReferenceRiskFrames": 30,
+          "testFreshRiskFrames": 30,
+          "approachRiskPairs": 18,
+          "timingOrPairResetLosses": 0,
+          "freshRiskAgeMs": {
+            "count": 54,
+            "p50": 63.358999999999995,
+            "p95": 78.317,
+            "max": 79.862
+          },
+          "allOutcomeAgeMs": {
+            "count": 109,
+            "p50": 60.021,
+            "p95": 76.89
+          },
+          "nnWaitMs": {
+            "count": 109,
+            "p50": 120.93,
+            "p95": 141.637,
+            "max": 176.043
+          },
+          "deadlineRepliesMissingAtOutcome": 0,
+          "returnedComputationMs": {
+            "count": 109,
+            "p50": 38.357,
+            "p95": 51.796,
+            "max": 64.339
+          },
+          "lateReturnedComputations": 0,
+          "packingMs": {
+            "count": 109,
+            "p50": 9.592,
+            "p95": 12.06,
+            "max": 17.746
+          },
+          "transportQueueAndDeliveryMs": {
+            "count": 109,
+            "p50": 9.739,
+            "p95": 12.289,
+            "max": 17.989
+          },
+          "stageMs": {
+            "materialize": {
+              "count": 109,
+              "p50": 0.009,
+              "p95": 0.031,
+              "max": 2.788
+            },
+            "features": {
+              "count": 92,
+              "p50": 1.6764999999999999,
+              "p95": 2.268,
+              "max": 6.228
+            },
+            "matchingAndBounds": {
+              "count": 92,
+              "p50": 38.2645,
+              "p95": 49.391,
+              "max": 62.255
+            },
+            "nativeMatch": {
+              "count": 92,
+              "p50": 27.8405,
+              "p95": 38.312,
+              "max": 50.069
+            },
+            "nativeFrameCopy": {
+              "count": 92,
+              "p50": 7.1945,
+              "p95": 8.741,
+              "max": 8.984
+            }
+          },
+          "preparationTotalMs": 1262.076,
+          "ownerTimerEvents": 354,
+          "diagnosticOverflow": 0,
+          "staleReleases": 0,
+          "clearances": 0
+        },
+        {
+          "report": "docs/_baseline_logs/camera_fast_motion_load_elapsed-nn_native_2.json",
+          "frames": 109,
+          "admitted": 109,
+          "referenceRiskFrames": 54,
+          "freshRiskFrames": 54,
+          "testReferenceRiskFrames": 30,
+          "testFreshRiskFrames": 30,
+          "approachRiskPairs": 18,
+          "timingOrPairResetLosses": 0,
+          "freshRiskAgeMs": {
+            "count": 54,
+            "p50": 63.557,
+            "p95": 79.798,
+            "max": 93.215
+          },
+          "allOutcomeAgeMs": {
+            "count": 109,
+            "p50": 59.966,
+            "p95": 77.696
+          },
+          "nnWaitMs": {
+            "count": 109,
+            "p50": 121.659,
+            "p95": 139.238,
+            "max": 147.543
+          },
+          "deadlineRepliesMissingAtOutcome": 0,
+          "returnedComputationMs": {
+            "count": 109,
+            "p50": 38.642,
+            "p95": 53.833,
+            "max": 60.955
+          },
+          "lateReturnedComputations": 0,
+          "packingMs": {
+            "count": 109,
+            "p50": 9.598,
+            "p95": 15.423,
+            "max": 16.786
+          },
+          "transportQueueAndDeliveryMs": {
+            "count": 109,
+            "p50": 9.72,
+            "p95": 15.685,
+            "max": 17.013
+          },
+          "stageMs": {
+            "materialize": {
+              "count": 109,
+              "p50": 0.009,
+              "p95": 0.034,
+              "max": 0.133
+            },
+            "features": {
+              "count": 92,
+              "p50": 1.694,
+              "p95": 2.365,
+              "max": 3.189
+            },
+            "matchingAndBounds": {
+              "count": 92,
+              "p50": 38.681,
+              "p95": 51.503,
+              "max": 57.314
+            },
+            "nativeMatch": {
+              "count": 92,
+              "p50": 28.6655,
+              "p95": 38.364,
+              "max": 43.266
+            },
+            "nativeFrameCopy": {
+              "count": 92,
+              "p50": 7.057,
+              "p95": 9.006,
+              "max": 11.006
+            }
+          },
+          "preparationTotalMs": 1334.828,
+          "ownerTimerEvents": 366,
+          "diagnosticOverflow": 0,
+          "staleReleases": 0,
+          "clearances": 0
+        }
+      ]
+    }
+  }
+}

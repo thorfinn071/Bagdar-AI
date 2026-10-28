@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "seed": 202610101,
+  "framesPerLayout": 7,
+  "intervalUs": 200000,
+  "capturedOffsetBaseUs": 172800000000,
+  "cameraHeightM": 1.53,
+  "scenes": [
+    {"id": "closed-clear-forward", "kind": "clear-forward", "width": 1.83, "portalY": 2.61, "top": 2.34, "backY": 7.31, "exposure": 0.2},
+    {"id": "closed-clear-yaw", "kind": "clear-yaw", "width": 1.69, "portalY": 3.07, "top": 2.41, "backY": 7.47, "exposure": -0.3},
+    {"id": "closed-low", "kind": "low", "width": 1.88, "portalY": 2.57, "top": 1.58, "backY": 7.39, "exposure": 0.3}
+  ]
+}

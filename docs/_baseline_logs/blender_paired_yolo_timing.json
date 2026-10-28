@@ -1,0 +1,669 @@
+{
+  "scope": "desktop CPU, one inference thread; includes file decode/preprocess/inference; excludes real capture/rendering/runtime/audio",
+  "sourceManifestSha256": "8b8a79c60ace7cbc2641f36384fda8a89d8d5af7121fc4bd6844dd9d8e944e91",
+  "warmupInferences": 3,
+  "p50Ms": 51.773849999999996,
+  "p95Ms": 61.92068999999999,
+  "frames": [
+    {
+      "sceneId": "path-clear",
+      "frameIndex": 0,
+      "totalMs": 54.5047
+    },
+    {
+      "sceneId": "path-clear",
+      "frameIndex": 1,
+      "totalMs": 52.427
+    },
+    {
+      "sceneId": "path-clear",
+      "frameIndex": 2,
+      "totalMs": 51.3227
+    },
+    {
+      "sceneId": "path-clear",
+      "frameIndex": 3,
+      "totalMs": 51.31
+    },
+    {
+      "sceneId": "path-clear",
+      "frameIndex": 4,
+      "totalMs": 52.6887
+    },
+    {
+      "sceneId": "path-clear",
+      "frameIndex": 5,
+      "totalMs": 51.9474
+    },
+    {
+      "sceneId": "path-clear",
+      "frameIndex": 6,
+      "totalMs": 50.3826
+    },
+    {
+      "sceneId": "path-clear",
+      "frameIndex": 7,
+      "totalMs": 51.3261
+    },
+    {
+      "sceneId": "path-clear",
+      "frameIndex": 8,
+      "totalMs": 52.6966
+    },
+    {
+      "sceneId": "path-clear",
+      "frameIndex": 9,
+      "totalMs": 51.095
+    },
+    {
+      "sceneId": "path-clear",
+      "frameIndex": 10,
+      "totalMs": 51.916
+    },
+    {
+      "sceneId": "path-box",
+      "frameIndex": 0,
+      "totalMs": 50.0746
+    },
+    {
+      "sceneId": "path-box",
+      "frameIndex": 1,
+      "totalMs": 53.0356
+    },
+    {
+      "sceneId": "path-box",
+      "frameIndex": 2,
+      "totalMs": 56.1974
+    },
+    {
+      "sceneId": "path-box",
+      "frameIndex": 3,
+      "totalMs": 59.0532
+    },
+    {
+      "sceneId": "path-box",
+      "frameIndex": 4,
+      "totalMs": 60.5211
+    },
+    {
+      "sceneId": "path-box",
+      "frameIndex": 5,
+      "totalMs": 59.8357
+    },
+    {
+      "sceneId": "path-box",
+      "frameIndex": 6,
+      "totalMs": 57.1031
+    },
+    {
+      "sceneId": "path-box",
+      "frameIndex": 7,
+      "totalMs": 58.5665
+    },
+    {
+      "sceneId": "path-box",
+      "frameIndex": 8,
+      "totalMs": 61.368
+    },
+    {
+      "sceneId": "path-box",
+      "frameIndex": 9,
+      "totalMs": 51.0184
+    },
+    {
+      "sceneId": "path-box",
+      "frameIndex": 10,
+      "totalMs": 50.329
+    },
+    {
+      "sceneId": "doorway-wide",
+      "frameIndex": 0,
+      "totalMs": 57.1749
+    },
+    {
+      "sceneId": "doorway-wide",
+      "frameIndex": 1,
+      "totalMs": 55.4162
+    },
+    {
+      "sceneId": "doorway-wide",
+      "frameIndex": 2,
+      "totalMs": 56.611
+    },
+    {
+      "sceneId": "doorway-wide",
+      "frameIndex": 3,
+      "totalMs": 59.3118
+    },
+    {
+      "sceneId": "doorway-wide",
+      "frameIndex": 4,
+      "totalMs": 59.1792
+    },
+    {
+      "sceneId": "doorway-wide",
+      "frameIndex": 5,
+      "totalMs": 53.7679
+    },
+    {
+      "sceneId": "doorway-wide",
+      "frameIndex": 6,
+      "totalMs": 51.4686
+    },
+    {
+      "sceneId": "doorway-wide",
+      "frameIndex": 7,
+      "totalMs": 51.2211
+    },
+    {
+      "sceneId": "doorway-wide",
+      "frameIndex": 8,
+      "totalMs": 57.0822
+    },
+    {
+      "sceneId": "doorway-wide",
+      "frameIndex": 9,
+      "totalMs": 53.811
+    },
+    {
+      "sceneId": "doorway-wide",
+      "frameIndex": 10,
+      "totalMs": 53.2751
+    },
+    {
+      "sceneId": "doorway-narrow",
+      "frameIndex": 0,
+      "totalMs": 55.6433
+    },
+    {
+      "sceneId": "doorway-narrow",
+      "frameIndex": 1,
+      "totalMs": 56.3834
+    },
+    {
+      "sceneId": "doorway-narrow",
+      "frameIndex": 2,
+      "totalMs": 57.8172
+    },
+    {
+      "sceneId": "doorway-narrow",
+      "frameIndex": 3,
+      "totalMs": 77.824
+    },
+    {
+      "sceneId": "doorway-narrow",
+      "frameIndex": 4,
+      "totalMs": 68.7619
+    },
+    {
+      "sceneId": "doorway-narrow",
+      "frameIndex": 5,
+      "totalMs": 54.7638
+    },
+    {
+      "sceneId": "doorway-narrow",
+      "frameIndex": 6,
+      "totalMs": 51.2954
+    },
+    {
+      "sceneId": "doorway-narrow",
+      "frameIndex": 7,
+      "totalMs": 52.7806
+    },
+    {
+      "sceneId": "doorway-narrow",
+      "frameIndex": 8,
+      "totalMs": 51.0209
+    },
+    {
+      "sceneId": "doorway-narrow",
+      "frameIndex": 9,
+      "totalMs": 50.984
+    },
+    {
+      "sceneId": "doorway-narrow",
+      "frameIndex": 10,
+      "totalMs": 50.6519
+    },
+    {
+      "sceneId": "headroom-high",
+      "frameIndex": 0,
+      "totalMs": 53.6049
+    },
+    {
+      "sceneId": "headroom-high",
+      "frameIndex": 1,
+      "totalMs": 52.6175
+    },
+    {
+      "sceneId": "headroom-high",
+      "frameIndex": 2,
+      "totalMs": 51.1317
+    },
+    {
+      "sceneId": "headroom-high",
+      "frameIndex": 3,
+      "totalMs": 50.8471
+    },
+    {
+      "sceneId": "headroom-high",
+      "frameIndex": 4,
+      "totalMs": 51.6849
+    },
+    {
+      "sceneId": "headroom-high",
+      "frameIndex": 5,
+      "totalMs": 52.2804
+    },
+    {
+      "sceneId": "headroom-high",
+      "frameIndex": 6,
+      "totalMs": 51.6105
+    },
+    {
+      "sceneId": "headroom-high",
+      "frameIndex": 7,
+      "totalMs": 51.7083
+    },
+    {
+      "sceneId": "headroom-high",
+      "frameIndex": 8,
+      "totalMs": 51.2377
+    },
+    {
+      "sceneId": "headroom-high",
+      "frameIndex": 9,
+      "totalMs": 50.9144
+    },
+    {
+      "sceneId": "headroom-high",
+      "frameIndex": 10,
+      "totalMs": 52.899
+    },
+    {
+      "sceneId": "headroom-low",
+      "frameIndex": 0,
+      "totalMs": 59.2942
+    },
+    {
+      "sceneId": "headroom-low",
+      "frameIndex": 1,
+      "totalMs": 66.4303
+    },
+    {
+      "sceneId": "headroom-low",
+      "frameIndex": 2,
+      "totalMs": 51.3872
+    },
+    {
+      "sceneId": "headroom-low",
+      "frameIndex": 3,
+      "totalMs": 49.4966
+    },
+    {
+      "sceneId": "headroom-low",
+      "frameIndex": 4,
+      "totalMs": 52.216
+    },
+    {
+      "sceneId": "headroom-low",
+      "frameIndex": 5,
+      "totalMs": 52.0789
+    },
+    {
+      "sceneId": "headroom-low",
+      "frameIndex": 6,
+      "totalMs": 50.939
+    },
+    {
+      "sceneId": "headroom-low",
+      "frameIndex": 7,
+      "totalMs": 51.6667
+    },
+    {
+      "sceneId": "headroom-low",
+      "frameIndex": 8,
+      "totalMs": 51.9723
+    },
+    {
+      "sceneId": "headroom-low",
+      "frameIndex": 9,
+      "totalMs": 50.6128
+    },
+    {
+      "sceneId": "headroom-low",
+      "frameIndex": 10,
+      "totalMs": 51.6056
+    },
+    {
+      "sceneId": "floor-level",
+      "frameIndex": 0,
+      "totalMs": 51.6196
+    },
+    {
+      "sceneId": "floor-level",
+      "frameIndex": 1,
+      "totalMs": 50.6663
+    },
+    {
+      "sceneId": "floor-level",
+      "frameIndex": 2,
+      "totalMs": 51.641
+    },
+    {
+      "sceneId": "floor-level",
+      "frameIndex": 3,
+      "totalMs": 50.8641
+    },
+    {
+      "sceneId": "floor-level",
+      "frameIndex": 4,
+      "totalMs": 58.0167
+    },
+    {
+      "sceneId": "floor-level",
+      "frameIndex": 5,
+      "totalMs": 50.7126
+    },
+    {
+      "sceneId": "floor-level",
+      "frameIndex": 6,
+      "totalMs": 51.182
+    },
+    {
+      "sceneId": "floor-level",
+      "frameIndex": 7,
+      "totalMs": 50.5669
+    },
+    {
+      "sceneId": "floor-level",
+      "frameIndex": 8,
+      "totalMs": 51.7659
+    },
+    {
+      "sceneId": "floor-level",
+      "frameIndex": 9,
+      "totalMs": 51.7818
+    },
+    {
+      "sceneId": "floor-level",
+      "frameIndex": 10,
+      "totalMs": 51.2116
+    },
+    {
+      "sceneId": "floor-drop",
+      "frameIndex": 0,
+      "totalMs": 51.3617
+    },
+    {
+      "sceneId": "floor-drop",
+      "frameIndex": 1,
+      "totalMs": 51.7006
+    },
+    {
+      "sceneId": "floor-drop",
+      "frameIndex": 2,
+      "totalMs": 50.2979
+    },
+    {
+      "sceneId": "floor-drop",
+      "frameIndex": 3,
+      "totalMs": 51.8043
+    },
+    {
+      "sceneId": "floor-drop",
+      "frameIndex": 4,
+      "totalMs": 50.7998
+    },
+    {
+      "sceneId": "floor-drop",
+      "frameIndex": 5,
+      "totalMs": 51.2692
+    },
+    {
+      "sceneId": "floor-drop",
+      "frameIndex": 6,
+      "totalMs": 52.2431
+    },
+    {
+      "sceneId": "floor-drop",
+      "frameIndex": 7,
+      "totalMs": 52.593
+    },
+    {
+      "sceneId": "floor-drop",
+      "frameIndex": 8,
+      "totalMs": 50.6059
+    },
+    {
+      "sceneId": "floor-drop",
+      "frameIndex": 9,
+      "totalMs": 53.0046
+    },
+    {
+      "sceneId": "floor-drop",
+      "frameIndex": 10,
+      "totalMs": 52.3656
+    },
+    {
+      "sceneId": "person-side",
+      "frameIndex": 0,
+      "totalMs": 56.3992
+    },
+    {
+      "sceneId": "person-side",
+      "frameIndex": 1,
+      "totalMs": 51.1665
+    },
+    {
+      "sceneId": "person-side",
+      "frameIndex": 2,
+      "totalMs": 50.5429
+    },
+    {
+      "sceneId": "person-side",
+      "frameIndex": 3,
+      "totalMs": 50.521
+    },
+    {
+      "sceneId": "person-side",
+      "frameIndex": 4,
+      "totalMs": 50.4725
+    },
+    {
+      "sceneId": "person-side",
+      "frameIndex": 5,
+      "totalMs": 50.9982
+    },
+    {
+      "sceneId": "person-side",
+      "frameIndex": 6,
+      "totalMs": 51.6838
+    },
+    {
+      "sceneId": "person-side",
+      "frameIndex": 7,
+      "totalMs": 52.7443
+    },
+    {
+      "sceneId": "person-side",
+      "frameIndex": 8,
+      "totalMs": 50.4813
+    },
+    {
+      "sceneId": "person-side",
+      "frameIndex": 9,
+      "totalMs": 50.9511
+    },
+    {
+      "sceneId": "person-side",
+      "frameIndex": 10,
+      "totalMs": 50.4402
+    },
+    {
+      "sceneId": "person-approach",
+      "frameIndex": 0,
+      "totalMs": 50.2488
+    },
+    {
+      "sceneId": "person-approach",
+      "frameIndex": 1,
+      "totalMs": 52.0764
+    },
+    {
+      "sceneId": "person-approach",
+      "frameIndex": 2,
+      "totalMs": 50.2659
+    },
+    {
+      "sceneId": "person-approach",
+      "frameIndex": 3,
+      "totalMs": 51.3675
+    },
+    {
+      "sceneId": "person-approach",
+      "frameIndex": 4,
+      "totalMs": 50.4229
+    },
+    {
+      "sceneId": "person-approach",
+      "frameIndex": 5,
+      "totalMs": 50.5287
+    },
+    {
+      "sceneId": "person-approach",
+      "frameIndex": 6,
+      "totalMs": 49.5827
+    },
+    {
+      "sceneId": "person-approach",
+      "frameIndex": 7,
+      "totalMs": 50.9847
+    },
+    {
+      "sceneId": "person-approach",
+      "frameIndex": 8,
+      "totalMs": 51.5966
+    },
+    {
+      "sceneId": "person-approach",
+      "frameIndex": 9,
+      "totalMs": 51.4206
+    },
+    {
+      "sceneId": "person-approach",
+      "frameIndex": 10,
+      "totalMs": 54.0824
+    },
+    {
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 0,
+      "totalMs": 62.4825
+    },
+    {
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 1,
+      "totalMs": 59.9494
+    },
+    {
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 2,
+      "totalMs": 55.5843
+    },
+    {
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 3,
+      "totalMs": 50.7442
+    },
+    {
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 4,
+      "totalMs": 54.3612
+    },
+    {
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 5,
+      "totalMs": 53.9956
+    },
+    {
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 6,
+      "totalMs": 52.8887
+    },
+    {
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 7,
+      "totalMs": 50.2893
+    },
+    {
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 8,
+      "totalMs": 53.8344
+    },
+    {
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 9,
+      "totalMs": 51.6988
+    },
+    {
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 10,
+      "totalMs": 50.8835
+    },
+    {
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 0,
+      "totalMs": 61.7064
+    },
+    {
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 1,
+      "totalMs": 51.5127
+    },
+    {
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 2,
+      "totalMs": 51.9656
+    },
+    {
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 3,
+      "totalMs": 62.1826
+    },
+    {
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 4,
+      "totalMs": 52.8647
+    },
+    {
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 5,
+      "totalMs": 50.2478
+    },
+    {
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 6,
+      "totalMs": 53.5036
+    },
+    {
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 7,
+      "totalMs": 52.6367
+    },
+    {
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 8,
+      "totalMs": 56.6566
+    },
+    {
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 9,
+      "totalMs": 70.1648
+    },
+    {
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 10,
+      "totalMs": 62.7085
+    }
+  ]
+}

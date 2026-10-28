@@ -2,6 +2,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:bagdar/models/strings.dart';
 import 'package:bagdar/services/sos_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+// ignore: depend_on_referenced_packages
+import 'package:shared_preferences_platform_interface/shared_preferences_platform_interface.dart';
+
+class RefusingContactStore extends InMemorySharedPreferencesStore {
+  RefusingContactStore() : super.empty();
+  @override
+  Future<bool> setValue(String valueType, String key, Object value) async => false;
+}
 
 void main() {
   setUp(() {
@@ -44,6 +52,14 @@ void main() {
 
       expect(saved, isTrue);
       expect(service.contactNumber, '+7 (777) 123-45-67');
+    });
+
+    test('failed persistence never replaces the active SOS contact', () async {
+      final service = SosService();
+      expect(await service.setContact('+77771234567'), isTrue);
+      SharedPreferencesStorePlatform.instance = RefusingContactStore();
+      expect(await service.setContact('+77777654321'), isFalse);
+      expect(service.contactNumber, '+77771234567');
     });
 
     test('buildMessageText flags stale position (>=2 min)', () {

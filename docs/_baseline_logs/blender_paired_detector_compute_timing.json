@@ -1,0 +1,2128 @@
+{
+  "scope": "serial desktop CPU stage timing; masks, annotations and output verification outside timed regions; not capture-to-alert or concurrent-load evidence",
+  "stage": "PIL bilinear letterbox + pinned TFLite CPU + decode/NMS",
+  "mode": "detector",
+  "toolSha256": "5c05634882b5f927002e8757be8ffa503c22b2437d46705dca4ca1170f2668b1",
+  "corpusManifestSha256": "8b8a79c60ace7cbc2641f36384fda8a89d8d5af7121fc4bd6844dd9d8e944e91",
+  "warmupInferences": 5,
+  "rounds": 2,
+  "samples": 264,
+  "outputsMatchFrozen": true,
+  "computeP50Ms": 51.5629,
+  "computeP95Ms": 58.456174999999995,
+  "computeMaxMs": 70.3389,
+  "frames": [
+    {
+      "round": 0,
+      "sceneId": "path-clear",
+      "frameIndex": 0,
+      "decodeMs": 2.8922,
+      "computeMs": 53.2312,
+      "decodeAndComputeMs": 56.1234
+    },
+    {
+      "round": 0,
+      "sceneId": "path-clear",
+      "frameIndex": 1,
+      "decodeMs": 2.5115,
+      "computeMs": 51.4015,
+      "decodeAndComputeMs": 53.913
+    },
+    {
+      "round": 0,
+      "sceneId": "path-clear",
+      "frameIndex": 2,
+      "decodeMs": 2.4482,
+      "computeMs": 51.7612,
+      "decodeAndComputeMs": 54.2094
+    },
+    {
+      "round": 0,
+      "sceneId": "path-clear",
+      "frameIndex": 3,
+      "decodeMs": 2.4367,
+      "computeMs": 51.0603,
+      "decodeAndComputeMs": 53.497
+    },
+    {
+      "round": 0,
+      "sceneId": "path-clear",
+      "frameIndex": 4,
+      "decodeMs": 2.912,
+      "computeMs": 54.956,
+      "decodeAndComputeMs": 57.868
+    },
+    {
+      "round": 0,
+      "sceneId": "path-clear",
+      "frameIndex": 5,
+      "decodeMs": 3.3868,
+      "computeMs": 59.4423,
+      "decodeAndComputeMs": 62.8291
+    },
+    {
+      "round": 0,
+      "sceneId": "path-clear",
+      "frameIndex": 6,
+      "decodeMs": 3.1404,
+      "computeMs": 62.7125,
+      "decodeAndComputeMs": 65.8529
+    },
+    {
+      "round": 0,
+      "sceneId": "path-clear",
+      "frameIndex": 7,
+      "decodeMs": 3.2327,
+      "computeMs": 62.0012,
+      "decodeAndComputeMs": 65.2339
+    },
+    {
+      "round": 0,
+      "sceneId": "path-clear",
+      "frameIndex": 8,
+      "decodeMs": 2.3904,
+      "computeMs": 52.1767,
+      "decodeAndComputeMs": 54.5671
+    },
+    {
+      "round": 0,
+      "sceneId": "path-clear",
+      "frameIndex": 9,
+      "decodeMs": 2.4753,
+      "computeMs": 49.7848,
+      "decodeAndComputeMs": 52.2601
+    },
+    {
+      "round": 0,
+      "sceneId": "path-clear",
+      "frameIndex": 10,
+      "decodeMs": 2.8945,
+      "computeMs": 56.4372,
+      "decodeAndComputeMs": 59.3317
+    },
+    {
+      "round": 0,
+      "sceneId": "path-box",
+      "frameIndex": 0,
+      "decodeMs": 3.0944,
+      "computeMs": 52.3972,
+      "decodeAndComputeMs": 55.4916
+    },
+    {
+      "round": 0,
+      "sceneId": "path-box",
+      "frameIndex": 1,
+      "decodeMs": 2.7755,
+      "computeMs": 51.8638,
+      "decodeAndComputeMs": 54.6393
+    },
+    {
+      "round": 0,
+      "sceneId": "path-box",
+      "frameIndex": 2,
+      "decodeMs": 2.5761,
+      "computeMs": 51.1783,
+      "decodeAndComputeMs": 53.7544
+    },
+    {
+      "round": 0,
+      "sceneId": "path-box",
+      "frameIndex": 3,
+      "decodeMs": 2.7744,
+      "computeMs": 51.9902,
+      "decodeAndComputeMs": 54.7646
+    },
+    {
+      "round": 0,
+      "sceneId": "path-box",
+      "frameIndex": 4,
+      "decodeMs": 2.6263,
+      "computeMs": 51.9595,
+      "decodeAndComputeMs": 54.5858
+    },
+    {
+      "round": 0,
+      "sceneId": "path-box",
+      "frameIndex": 5,
+      "decodeMs": 2.7575,
+      "computeMs": 51.6621,
+      "decodeAndComputeMs": 54.4196
+    },
+    {
+      "round": 0,
+      "sceneId": "path-box",
+      "frameIndex": 6,
+      "decodeMs": 2.473,
+      "computeMs": 51.3266,
+      "decodeAndComputeMs": 53.7996
+    },
+    {
+      "round": 0,
+      "sceneId": "path-box",
+      "frameIndex": 7,
+      "decodeMs": 2.68,
+      "computeMs": 58.4362,
+      "decodeAndComputeMs": 61.1162
+    },
+    {
+      "round": 0,
+      "sceneId": "path-box",
+      "frameIndex": 8,
+      "decodeMs": 2.4756,
+      "computeMs": 50.8613,
+      "decodeAndComputeMs": 53.3369
+    },
+    {
+      "round": 0,
+      "sceneId": "path-box",
+      "frameIndex": 9,
+      "decodeMs": 2.5419,
+      "computeMs": 50.0686,
+      "decodeAndComputeMs": 52.6105
+    },
+    {
+      "round": 0,
+      "sceneId": "path-box",
+      "frameIndex": 10,
+      "decodeMs": 2.5692,
+      "computeMs": 51.8847,
+      "decodeAndComputeMs": 54.4539
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-wide",
+      "frameIndex": 0,
+      "decodeMs": 2.4925,
+      "computeMs": 50.6642,
+      "decodeAndComputeMs": 53.1567
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-wide",
+      "frameIndex": 1,
+      "decodeMs": 2.4258,
+      "computeMs": 49.8304,
+      "decodeAndComputeMs": 52.2562
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-wide",
+      "frameIndex": 2,
+      "decodeMs": 2.374,
+      "computeMs": 51.2848,
+      "decodeAndComputeMs": 53.6588
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-wide",
+      "frameIndex": 3,
+      "decodeMs": 2.6094,
+      "computeMs": 52.5309,
+      "decodeAndComputeMs": 55.1403
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-wide",
+      "frameIndex": 4,
+      "decodeMs": 3.1455,
+      "computeMs": 50.9195,
+      "decodeAndComputeMs": 54.065
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-wide",
+      "frameIndex": 5,
+      "decodeMs": 2.4902,
+      "computeMs": 51.4684,
+      "decodeAndComputeMs": 53.9586
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-wide",
+      "frameIndex": 6,
+      "decodeMs": 2.5921,
+      "computeMs": 50.4684,
+      "decodeAndComputeMs": 53.0605
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-wide",
+      "frameIndex": 7,
+      "decodeMs": 3.2109,
+      "computeMs": 51.4582,
+      "decodeAndComputeMs": 54.6691
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-wide",
+      "frameIndex": 8,
+      "decodeMs": 2.409,
+      "computeMs": 51.2864,
+      "decodeAndComputeMs": 53.6954
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-wide",
+      "frameIndex": 9,
+      "decodeMs": 2.386,
+      "computeMs": 50.5033,
+      "decodeAndComputeMs": 52.8893
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-wide",
+      "frameIndex": 10,
+      "decodeMs": 2.9442,
+      "computeMs": 52.0748,
+      "decodeAndComputeMs": 55.019
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-narrow",
+      "frameIndex": 0,
+      "decodeMs": 2.4005,
+      "computeMs": 51.2981,
+      "decodeAndComputeMs": 53.6986
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-narrow",
+      "frameIndex": 1,
+      "decodeMs": 2.445,
+      "computeMs": 50.9438,
+      "decodeAndComputeMs": 53.3888
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-narrow",
+      "frameIndex": 2,
+      "decodeMs": 2.285,
+      "computeMs": 51.2268,
+      "decodeAndComputeMs": 53.5118
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-narrow",
+      "frameIndex": 3,
+      "decodeMs": 2.4074,
+      "computeMs": 50.4437,
+      "decodeAndComputeMs": 52.8511
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-narrow",
+      "frameIndex": 4,
+      "decodeMs": 2.5228,
+      "computeMs": 62.6901,
+      "decodeAndComputeMs": 65.2129
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-narrow",
+      "frameIndex": 5,
+      "decodeMs": 2.4019,
+      "computeMs": 52.8257,
+      "decodeAndComputeMs": 55.2276
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-narrow",
+      "frameIndex": 6,
+      "decodeMs": 3.1686,
+      "computeMs": 51.2577,
+      "decodeAndComputeMs": 54.4263
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-narrow",
+      "frameIndex": 7,
+      "decodeMs": 2.3764,
+      "computeMs": 50.5139,
+      "decodeAndComputeMs": 52.8903
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-narrow",
+      "frameIndex": 8,
+      "decodeMs": 2.7884,
+      "computeMs": 51.5053,
+      "decodeAndComputeMs": 54.2937
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-narrow",
+      "frameIndex": 9,
+      "decodeMs": 2.8769,
+      "computeMs": 50.974,
+      "decodeAndComputeMs": 53.8509
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-narrow",
+      "frameIndex": 10,
+      "decodeMs": 2.2792,
+      "computeMs": 51.2409,
+      "decodeAndComputeMs": 53.5201
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-high",
+      "frameIndex": 0,
+      "decodeMs": 2.2735,
+      "computeMs": 51.556,
+      "decodeAndComputeMs": 53.8295
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-high",
+      "frameIndex": 1,
+      "decodeMs": 2.4237,
+      "computeMs": 50.7815,
+      "decodeAndComputeMs": 53.2052
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-high",
+      "frameIndex": 2,
+      "decodeMs": 2.2952,
+      "computeMs": 50.8281,
+      "decodeAndComputeMs": 53.1233
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-high",
+      "frameIndex": 3,
+      "decodeMs": 2.3176,
+      "computeMs": 51.1957,
+      "decodeAndComputeMs": 53.5133
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-high",
+      "frameIndex": 4,
+      "decodeMs": 2.3154,
+      "computeMs": 50.1878,
+      "decodeAndComputeMs": 52.5032
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-high",
+      "frameIndex": 5,
+      "decodeMs": 2.3016,
+      "computeMs": 50.4097,
+      "decodeAndComputeMs": 52.7113
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-high",
+      "frameIndex": 6,
+      "decodeMs": 2.2849,
+      "computeMs": 51.681,
+      "decodeAndComputeMs": 53.9659
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-high",
+      "frameIndex": 7,
+      "decodeMs": 2.2423,
+      "computeMs": 52.3954,
+      "decodeAndComputeMs": 54.6377
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-high",
+      "frameIndex": 8,
+      "decodeMs": 2.3323,
+      "computeMs": 56.8232,
+      "decodeAndComputeMs": 59.1555
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-high",
+      "frameIndex": 9,
+      "decodeMs": 2.2306,
+      "computeMs": 52.6359,
+      "decodeAndComputeMs": 54.8665
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-high",
+      "frameIndex": 10,
+      "decodeMs": 2.4391,
+      "computeMs": 49.5191,
+      "decodeAndComputeMs": 51.9582
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-low",
+      "frameIndex": 0,
+      "decodeMs": 2.0433,
+      "computeMs": 54.7778,
+      "decodeAndComputeMs": 56.8211
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-low",
+      "frameIndex": 1,
+      "decodeMs": 2.7988,
+      "computeMs": 53.2619,
+      "decodeAndComputeMs": 56.0607
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-low",
+      "frameIndex": 2,
+      "decodeMs": 2.0704,
+      "computeMs": 51.1168,
+      "decodeAndComputeMs": 53.1872
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-low",
+      "frameIndex": 3,
+      "decodeMs": 2.1096,
+      "computeMs": 50.1037,
+      "decodeAndComputeMs": 52.2133
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-low",
+      "frameIndex": 4,
+      "decodeMs": 2.2173,
+      "computeMs": 51.9084,
+      "decodeAndComputeMs": 54.1257
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-low",
+      "frameIndex": 5,
+      "decodeMs": 2.6103,
+      "computeMs": 51.5891,
+      "decodeAndComputeMs": 54.1994
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-low",
+      "frameIndex": 6,
+      "decodeMs": 2.5815,
+      "computeMs": 66.7606,
+      "decodeAndComputeMs": 69.3421
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-low",
+      "frameIndex": 7,
+      "decodeMs": 2.8492,
+      "computeMs": 58.4597,
+      "decodeAndComputeMs": 61.3089
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-low",
+      "frameIndex": 8,
+      "decodeMs": 2.2975,
+      "computeMs": 49.6712,
+      "decodeAndComputeMs": 51.9687
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-low",
+      "frameIndex": 9,
+      "decodeMs": 2.1606,
+      "computeMs": 49.394,
+      "decodeAndComputeMs": 51.5546
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-low",
+      "frameIndex": 10,
+      "decodeMs": 2.1168,
+      "computeMs": 51.4672,
+      "decodeAndComputeMs": 53.584
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-level",
+      "frameIndex": 0,
+      "decodeMs": 2.4651,
+      "computeMs": 52.512,
+      "decodeAndComputeMs": 54.9771
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-level",
+      "frameIndex": 1,
+      "decodeMs": 2.4928,
+      "computeMs": 52.9017,
+      "decodeAndComputeMs": 55.3945
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-level",
+      "frameIndex": 2,
+      "decodeMs": 2.4343,
+      "computeMs": 52.7306,
+      "decodeAndComputeMs": 55.1649
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-level",
+      "frameIndex": 3,
+      "decodeMs": 2.3268,
+      "computeMs": 52.7672,
+      "decodeAndComputeMs": 55.094
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-level",
+      "frameIndex": 4,
+      "decodeMs": 2.4473,
+      "computeMs": 53.689,
+      "decodeAndComputeMs": 56.1363
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-level",
+      "frameIndex": 5,
+      "decodeMs": 3.1111,
+      "computeMs": 52.0806,
+      "decodeAndComputeMs": 55.1917
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-level",
+      "frameIndex": 6,
+      "decodeMs": 2.3988,
+      "computeMs": 50.6045,
+      "decodeAndComputeMs": 53.0033
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-level",
+      "frameIndex": 7,
+      "decodeMs": 2.8745,
+      "computeMs": 59.001,
+      "decodeAndComputeMs": 61.8755
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-level",
+      "frameIndex": 8,
+      "decodeMs": 3.4888,
+      "computeMs": 54.5754,
+      "decodeAndComputeMs": 58.0642
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-level",
+      "frameIndex": 9,
+      "decodeMs": 2.4652,
+      "computeMs": 54.0206,
+      "decodeAndComputeMs": 56.4858
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-level",
+      "frameIndex": 10,
+      "decodeMs": 3.061,
+      "computeMs": 50.7481,
+      "decodeAndComputeMs": 53.8091
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-drop",
+      "frameIndex": 0,
+      "decodeMs": 2.3575,
+      "computeMs": 53.1013,
+      "decodeAndComputeMs": 55.4588
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-drop",
+      "frameIndex": 1,
+      "decodeMs": 2.5489,
+      "computeMs": 49.8659,
+      "decodeAndComputeMs": 52.4148
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-drop",
+      "frameIndex": 2,
+      "decodeMs": 3.1771,
+      "computeMs": 54.3327,
+      "decodeAndComputeMs": 57.5098
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-drop",
+      "frameIndex": 3,
+      "decodeMs": 3.4331,
+      "computeMs": 54.0385,
+      "decodeAndComputeMs": 57.4716
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-drop",
+      "frameIndex": 4,
+      "decodeMs": 2.3668,
+      "computeMs": 61.6012,
+      "decodeAndComputeMs": 63.968
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-drop",
+      "frameIndex": 5,
+      "decodeMs": 3.5438,
+      "computeMs": 58.1148,
+      "decodeAndComputeMs": 61.6586
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-drop",
+      "frameIndex": 6,
+      "decodeMs": 2.9468,
+      "computeMs": 49.6585,
+      "decodeAndComputeMs": 52.6053
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-drop",
+      "frameIndex": 7,
+      "decodeMs": 2.5068,
+      "computeMs": 50.2277,
+      "decodeAndComputeMs": 52.7345
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-drop",
+      "frameIndex": 8,
+      "decodeMs": 2.4789,
+      "computeMs": 51.2138,
+      "decodeAndComputeMs": 53.6927
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-drop",
+      "frameIndex": 9,
+      "decodeMs": 3.3245,
+      "computeMs": 53.3525,
+      "decodeAndComputeMs": 56.677
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-drop",
+      "frameIndex": 10,
+      "decodeMs": 2.5565,
+      "computeMs": 51.6434,
+      "decodeAndComputeMs": 54.1999
+    },
+    {
+      "round": 0,
+      "sceneId": "person-side",
+      "frameIndex": 0,
+      "decodeMs": 2.7202,
+      "computeMs": 53.4608,
+      "decodeAndComputeMs": 56.181
+    },
+    {
+      "round": 0,
+      "sceneId": "person-side",
+      "frameIndex": 1,
+      "decodeMs": 2.4309,
+      "computeMs": 50.0618,
+      "decodeAndComputeMs": 52.4927
+    },
+    {
+      "round": 0,
+      "sceneId": "person-side",
+      "frameIndex": 2,
+      "decodeMs": 2.5801,
+      "computeMs": 51.7328,
+      "decodeAndComputeMs": 54.3129
+    },
+    {
+      "round": 0,
+      "sceneId": "person-side",
+      "frameIndex": 3,
+      "decodeMs": 2.4416,
+      "computeMs": 50.553,
+      "decodeAndComputeMs": 52.9946
+    },
+    {
+      "round": 0,
+      "sceneId": "person-side",
+      "frameIndex": 4,
+      "decodeMs": 2.8563,
+      "computeMs": 62.3466,
+      "decodeAndComputeMs": 65.2029
+    },
+    {
+      "round": 0,
+      "sceneId": "person-side",
+      "frameIndex": 5,
+      "decodeMs": 2.3993,
+      "computeMs": 52.6682,
+      "decodeAndComputeMs": 55.0675
+    },
+    {
+      "round": 0,
+      "sceneId": "person-side",
+      "frameIndex": 6,
+      "decodeMs": 2.6454,
+      "computeMs": 52.2006,
+      "decodeAndComputeMs": 54.846
+    },
+    {
+      "round": 0,
+      "sceneId": "person-side",
+      "frameIndex": 7,
+      "decodeMs": 2.4419,
+      "computeMs": 51.4433,
+      "decodeAndComputeMs": 53.8852
+    },
+    {
+      "round": 0,
+      "sceneId": "person-side",
+      "frameIndex": 8,
+      "decodeMs": 2.4169,
+      "computeMs": 50.6951,
+      "decodeAndComputeMs": 53.112
+    },
+    {
+      "round": 0,
+      "sceneId": "person-side",
+      "frameIndex": 9,
+      "decodeMs": 2.4969,
+      "computeMs": 50.7178,
+      "decodeAndComputeMs": 53.2147
+    },
+    {
+      "round": 0,
+      "sceneId": "person-side",
+      "frameIndex": 10,
+      "decodeMs": 2.4382,
+      "computeMs": 51.0466,
+      "decodeAndComputeMs": 53.4848
+    },
+    {
+      "round": 0,
+      "sceneId": "person-approach",
+      "frameIndex": 0,
+      "decodeMs": 2.4824,
+      "computeMs": 51.7467,
+      "decodeAndComputeMs": 54.2291
+    },
+    {
+      "round": 0,
+      "sceneId": "person-approach",
+      "frameIndex": 1,
+      "decodeMs": 2.621,
+      "computeMs": 50.0788,
+      "decodeAndComputeMs": 52.6998
+    },
+    {
+      "round": 0,
+      "sceneId": "person-approach",
+      "frameIndex": 2,
+      "decodeMs": 2.4614,
+      "computeMs": 50.5329,
+      "decodeAndComputeMs": 52.9943
+    },
+    {
+      "round": 0,
+      "sceneId": "person-approach",
+      "frameIndex": 3,
+      "decodeMs": 2.4862,
+      "computeMs": 51.6213,
+      "decodeAndComputeMs": 54.1075
+    },
+    {
+      "round": 0,
+      "sceneId": "person-approach",
+      "frameIndex": 4,
+      "decodeMs": 2.9777,
+      "computeMs": 51.5314,
+      "decodeAndComputeMs": 54.5091
+    },
+    {
+      "round": 0,
+      "sceneId": "person-approach",
+      "frameIndex": 5,
+      "decodeMs": 2.5056,
+      "computeMs": 53.1114,
+      "decodeAndComputeMs": 55.617
+    },
+    {
+      "round": 0,
+      "sceneId": "person-approach",
+      "frameIndex": 6,
+      "decodeMs": 2.5652,
+      "computeMs": 52.5771,
+      "decodeAndComputeMs": 55.1423
+    },
+    {
+      "round": 0,
+      "sceneId": "person-approach",
+      "frameIndex": 7,
+      "decodeMs": 2.7308,
+      "computeMs": 51.3214,
+      "decodeAndComputeMs": 54.0522
+    },
+    {
+      "round": 0,
+      "sceneId": "person-approach",
+      "frameIndex": 8,
+      "decodeMs": 2.6553,
+      "computeMs": 51.8271,
+      "decodeAndComputeMs": 54.4824
+    },
+    {
+      "round": 0,
+      "sceneId": "person-approach",
+      "frameIndex": 9,
+      "decodeMs": 2.657,
+      "computeMs": 50.3779,
+      "decodeAndComputeMs": 53.0349
+    },
+    {
+      "round": 0,
+      "sceneId": "person-approach",
+      "frameIndex": 10,
+      "decodeMs": 2.5628,
+      "computeMs": 53.6878,
+      "decodeAndComputeMs": 56.2506
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 0,
+      "decodeMs": 2.3424,
+      "computeMs": 51.5982,
+      "decodeAndComputeMs": 53.9406
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 1,
+      "decodeMs": 2.3977,
+      "computeMs": 53.1329,
+      "decodeAndComputeMs": 55.5306
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 2,
+      "decodeMs": 2.3541,
+      "computeMs": 53.0239,
+      "decodeAndComputeMs": 55.378
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 3,
+      "decodeMs": 2.5632,
+      "computeMs": 53.3334,
+      "decodeAndComputeMs": 55.8966
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 4,
+      "decodeMs": 2.3631,
+      "computeMs": 51.8443,
+      "decodeAndComputeMs": 54.2074
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 5,
+      "decodeMs": 2.4316,
+      "computeMs": 51.9266,
+      "decodeAndComputeMs": 54.3582
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 6,
+      "decodeMs": 2.5302,
+      "computeMs": 51.8333,
+      "decodeAndComputeMs": 54.3635
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 7,
+      "decodeMs": 2.4192,
+      "computeMs": 53.5225,
+      "decodeAndComputeMs": 55.9417
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 8,
+      "decodeMs": 2.3858,
+      "computeMs": 51.7253,
+      "decodeAndComputeMs": 54.1111
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 9,
+      "decodeMs": 2.445,
+      "computeMs": 51.0298,
+      "decodeAndComputeMs": 53.4748
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 10,
+      "decodeMs": 2.474,
+      "computeMs": 50.9683,
+      "decodeAndComputeMs": 53.4423
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 0,
+      "decodeMs": 2.3784,
+      "computeMs": 50.9664,
+      "decodeAndComputeMs": 53.3448
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 1,
+      "decodeMs": 2.4829,
+      "computeMs": 52.3684,
+      "decodeAndComputeMs": 54.8513
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 2,
+      "decodeMs": 2.6045,
+      "computeMs": 51.261,
+      "decodeAndComputeMs": 53.8655
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 3,
+      "decodeMs": 2.6338,
+      "computeMs": 52.106,
+      "decodeAndComputeMs": 54.7398
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 4,
+      "decodeMs": 3.2845,
+      "computeMs": 52.8527,
+      "decodeAndComputeMs": 56.1372
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 5,
+      "decodeMs": 2.4961,
+      "computeMs": 53.8612,
+      "decodeAndComputeMs": 56.3573
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 6,
+      "decodeMs": 2.4253,
+      "computeMs": 49.6847,
+      "decodeAndComputeMs": 52.11
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 7,
+      "decodeMs": 2.7048,
+      "computeMs": 50.5071,
+      "decodeAndComputeMs": 53.2119
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 8,
+      "decodeMs": 2.4765,
+      "computeMs": 55.6693,
+      "decodeAndComputeMs": 58.1458
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 9,
+      "decodeMs": 2.5465,
+      "computeMs": 51.9679,
+      "decodeAndComputeMs": 54.5144
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 10,
+      "decodeMs": 2.5073,
+      "computeMs": 51.6907,
+      "decodeAndComputeMs": 54.198
+    },
+    {
+      "round": 1,
+      "sceneId": "path-clear",
+      "frameIndex": 0,
+      "decodeMs": 2.9744,
+      "computeMs": 53.1821,
+      "decodeAndComputeMs": 56.1565
+    },
+    {
+      "round": 1,
+      "sceneId": "path-clear",
+      "frameIndex": 1,
+      "decodeMs": 2.3382,
+      "computeMs": 52.205,
+      "decodeAndComputeMs": 54.5432
+    },
+    {
+      "round": 1,
+      "sceneId": "path-clear",
+      "frameIndex": 2,
+      "decodeMs": 3.1328,
+      "computeMs": 51.4089,
+      "decodeAndComputeMs": 54.5417
+    },
+    {
+      "round": 1,
+      "sceneId": "path-clear",
+      "frameIndex": 3,
+      "decodeMs": 2.8467,
+      "computeMs": 52.7188,
+      "decodeAndComputeMs": 55.5655
+    },
+    {
+      "round": 1,
+      "sceneId": "path-clear",
+      "frameIndex": 4,
+      "decodeMs": 2.4019,
+      "computeMs": 54.496,
+      "decodeAndComputeMs": 56.8979
+    },
+    {
+      "round": 1,
+      "sceneId": "path-clear",
+      "frameIndex": 5,
+      "decodeMs": 3.4591,
+      "computeMs": 50.7055,
+      "decodeAndComputeMs": 54.1646
+    },
+    {
+      "round": 1,
+      "sceneId": "path-clear",
+      "frameIndex": 6,
+      "decodeMs": 2.7065,
+      "computeMs": 51.4249,
+      "decodeAndComputeMs": 54.1314
+    },
+    {
+      "round": 1,
+      "sceneId": "path-clear",
+      "frameIndex": 7,
+      "decodeMs": 2.5001,
+      "computeMs": 52.3247,
+      "decodeAndComputeMs": 54.8248
+    },
+    {
+      "round": 1,
+      "sceneId": "path-clear",
+      "frameIndex": 8,
+      "decodeMs": 2.4845,
+      "computeMs": 50.3804,
+      "decodeAndComputeMs": 52.8649
+    },
+    {
+      "round": 1,
+      "sceneId": "path-clear",
+      "frameIndex": 9,
+      "decodeMs": 2.4723,
+      "computeMs": 51.514,
+      "decodeAndComputeMs": 53.9863
+    },
+    {
+      "round": 1,
+      "sceneId": "path-clear",
+      "frameIndex": 10,
+      "decodeMs": 2.446,
+      "computeMs": 51.4979,
+      "decodeAndComputeMs": 53.9439
+    },
+    {
+      "round": 1,
+      "sceneId": "path-box",
+      "frameIndex": 0,
+      "decodeMs": 2.4167,
+      "computeMs": 51.7728,
+      "decodeAndComputeMs": 54.1895
+    },
+    {
+      "round": 1,
+      "sceneId": "path-box",
+      "frameIndex": 1,
+      "decodeMs": 2.455,
+      "computeMs": 52.56,
+      "decodeAndComputeMs": 55.015
+    },
+    {
+      "round": 1,
+      "sceneId": "path-box",
+      "frameIndex": 2,
+      "decodeMs": 3.0301,
+      "computeMs": 50.0344,
+      "decodeAndComputeMs": 53.0645
+    },
+    {
+      "round": 1,
+      "sceneId": "path-box",
+      "frameIndex": 3,
+      "decodeMs": 2.6709,
+      "computeMs": 51.2364,
+      "decodeAndComputeMs": 53.9073
+    },
+    {
+      "round": 1,
+      "sceneId": "path-box",
+      "frameIndex": 4,
+      "decodeMs": 2.5368,
+      "computeMs": 52.782,
+      "decodeAndComputeMs": 55.3188
+    },
+    {
+      "round": 1,
+      "sceneId": "path-box",
+      "frameIndex": 5,
+      "decodeMs": 2.5803,
+      "computeMs": 51.4357,
+      "decodeAndComputeMs": 54.016
+    },
+    {
+      "round": 1,
+      "sceneId": "path-box",
+      "frameIndex": 6,
+      "decodeMs": 2.4273,
+      "computeMs": 51.7996,
+      "decodeAndComputeMs": 54.2269
+    },
+    {
+      "round": 1,
+      "sceneId": "path-box",
+      "frameIndex": 7,
+      "decodeMs": 2.96,
+      "computeMs": 52.085,
+      "decodeAndComputeMs": 55.045
+    },
+    {
+      "round": 1,
+      "sceneId": "path-box",
+      "frameIndex": 8,
+      "decodeMs": 2.407,
+      "computeMs": 50.7969,
+      "decodeAndComputeMs": 53.2039
+    },
+    {
+      "round": 1,
+      "sceneId": "path-box",
+      "frameIndex": 9,
+      "decodeMs": 2.4994,
+      "computeMs": 51.9467,
+      "decodeAndComputeMs": 54.4461
+    },
+    {
+      "round": 1,
+      "sceneId": "path-box",
+      "frameIndex": 10,
+      "decodeMs": 2.4702,
+      "computeMs": 50.6205,
+      "decodeAndComputeMs": 53.0907
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-wide",
+      "frameIndex": 0,
+      "decodeMs": 2.3373,
+      "computeMs": 50.8335,
+      "decodeAndComputeMs": 53.1708
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-wide",
+      "frameIndex": 1,
+      "decodeMs": 2.2939,
+      "computeMs": 61.1075,
+      "decodeAndComputeMs": 63.4014
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-wide",
+      "frameIndex": 2,
+      "decodeMs": 3.459,
+      "computeMs": 68.9218,
+      "decodeAndComputeMs": 72.3808
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-wide",
+      "frameIndex": 3,
+      "decodeMs": 2.5201,
+      "computeMs": 64.9182,
+      "decodeAndComputeMs": 67.4383
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-wide",
+      "frameIndex": 4,
+      "decodeMs": 3.0173,
+      "computeMs": 50.1793,
+      "decodeAndComputeMs": 53.1966
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-wide",
+      "frameIndex": 5,
+      "decodeMs": 2.2594,
+      "computeMs": 49.2969,
+      "decodeAndComputeMs": 51.5563
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-wide",
+      "frameIndex": 6,
+      "decodeMs": 2.3286,
+      "computeMs": 51.2689,
+      "decodeAndComputeMs": 53.5975
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-wide",
+      "frameIndex": 7,
+      "decodeMs": 2.3241,
+      "computeMs": 52.3326,
+      "decodeAndComputeMs": 54.6567
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-wide",
+      "frameIndex": 8,
+      "decodeMs": 2.3453,
+      "computeMs": 49.6462,
+      "decodeAndComputeMs": 51.9915
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-wide",
+      "frameIndex": 9,
+      "decodeMs": 2.5182,
+      "computeMs": 49.8809,
+      "decodeAndComputeMs": 52.3991
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-wide",
+      "frameIndex": 10,
+      "decodeMs": 2.3574,
+      "computeMs": 50.1146,
+      "decodeAndComputeMs": 52.472
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-narrow",
+      "frameIndex": 0,
+      "decodeMs": 2.6654,
+      "computeMs": 50.452,
+      "decodeAndComputeMs": 53.1174
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-narrow",
+      "frameIndex": 1,
+      "decodeMs": 2.3551,
+      "computeMs": 57.1441,
+      "decodeAndComputeMs": 59.4992
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-narrow",
+      "frameIndex": 2,
+      "decodeMs": 2.4815,
+      "computeMs": 50.5819,
+      "decodeAndComputeMs": 53.0634
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-narrow",
+      "frameIndex": 3,
+      "decodeMs": 2.3495,
+      "computeMs": 51.096,
+      "decodeAndComputeMs": 53.4455
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-narrow",
+      "frameIndex": 4,
+      "decodeMs": 2.3962,
+      "computeMs": 50.7341,
+      "decodeAndComputeMs": 53.1303
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-narrow",
+      "frameIndex": 5,
+      "decodeMs": 2.4623,
+      "computeMs": 49.5481,
+      "decodeAndComputeMs": 52.0104
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-narrow",
+      "frameIndex": 6,
+      "decodeMs": 2.2835,
+      "computeMs": 50.6224,
+      "decodeAndComputeMs": 52.9059
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-narrow",
+      "frameIndex": 7,
+      "decodeMs": 2.2779,
+      "computeMs": 51.4855,
+      "decodeAndComputeMs": 53.7634
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-narrow",
+      "frameIndex": 8,
+      "decodeMs": 2.4099,
+      "computeMs": 50.5807,
+      "decodeAndComputeMs": 52.9906
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-narrow",
+      "frameIndex": 9,
+      "decodeMs": 2.3017,
+      "computeMs": 51.717,
+      "decodeAndComputeMs": 54.0187
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-narrow",
+      "frameIndex": 10,
+      "decodeMs": 2.2391,
+      "computeMs": 49.7429,
+      "decodeAndComputeMs": 51.982
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-high",
+      "frameIndex": 0,
+      "decodeMs": 2.3525,
+      "computeMs": 50.2595,
+      "decodeAndComputeMs": 52.612
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-high",
+      "frameIndex": 1,
+      "decodeMs": 2.3136,
+      "computeMs": 49.7109,
+      "decodeAndComputeMs": 52.0245
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-high",
+      "frameIndex": 2,
+      "decodeMs": 2.3742,
+      "computeMs": 49.7591,
+      "decodeAndComputeMs": 52.1333
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-high",
+      "frameIndex": 3,
+      "decodeMs": 2.1657,
+      "computeMs": 51.5023,
+      "decodeAndComputeMs": 53.668
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-high",
+      "frameIndex": 4,
+      "decodeMs": 2.6224,
+      "computeMs": 52.0487,
+      "decodeAndComputeMs": 54.6711
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-high",
+      "frameIndex": 5,
+      "decodeMs": 2.1959,
+      "computeMs": 50.7697,
+      "decodeAndComputeMs": 52.9656
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-high",
+      "frameIndex": 6,
+      "decodeMs": 2.3135,
+      "computeMs": 52.3486,
+      "decodeAndComputeMs": 54.6621
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-high",
+      "frameIndex": 7,
+      "decodeMs": 2.7865,
+      "computeMs": 52.8609,
+      "decodeAndComputeMs": 55.6474
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-high",
+      "frameIndex": 8,
+      "decodeMs": 2.81,
+      "computeMs": 52.1214,
+      "decodeAndComputeMs": 54.9314
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-high",
+      "frameIndex": 9,
+      "decodeMs": 2.2155,
+      "computeMs": 50.6889,
+      "decodeAndComputeMs": 52.9044
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-high",
+      "frameIndex": 10,
+      "decodeMs": 2.2969,
+      "computeMs": 50.646,
+      "decodeAndComputeMs": 52.9429
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-low",
+      "frameIndex": 0,
+      "decodeMs": 2.0414,
+      "computeMs": 51.6076,
+      "decodeAndComputeMs": 53.649
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-low",
+      "frameIndex": 1,
+      "decodeMs": 2.175,
+      "computeMs": 49.6893,
+      "decodeAndComputeMs": 51.8643
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-low",
+      "frameIndex": 2,
+      "decodeMs": 2.1376,
+      "computeMs": 50.2489,
+      "decodeAndComputeMs": 52.3865
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-low",
+      "frameIndex": 3,
+      "decodeMs": 2.145,
+      "computeMs": 49.9343,
+      "decodeAndComputeMs": 52.0793
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-low",
+      "frameIndex": 4,
+      "decodeMs": 2.0647,
+      "computeMs": 51.069,
+      "decodeAndComputeMs": 53.1337
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-low",
+      "frameIndex": 5,
+      "decodeMs": 2.0427,
+      "computeMs": 49.8677,
+      "decodeAndComputeMs": 51.9104
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-low",
+      "frameIndex": 6,
+      "decodeMs": 2.065,
+      "computeMs": 49.8991,
+      "decodeAndComputeMs": 51.9641
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-low",
+      "frameIndex": 7,
+      "decodeMs": 2.9174,
+      "computeMs": 52.477,
+      "decodeAndComputeMs": 55.3944
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-low",
+      "frameIndex": 8,
+      "decodeMs": 2.2368,
+      "computeMs": 53.2812,
+      "decodeAndComputeMs": 55.518
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-low",
+      "frameIndex": 9,
+      "decodeMs": 2.1136,
+      "computeMs": 52.9591,
+      "decodeAndComputeMs": 55.0727
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-low",
+      "frameIndex": 10,
+      "decodeMs": 2.0743,
+      "computeMs": 54.4258,
+      "decodeAndComputeMs": 56.5001
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-level",
+      "frameIndex": 0,
+      "decodeMs": 2.5197,
+      "computeMs": 51.9453,
+      "decodeAndComputeMs": 54.465
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-level",
+      "frameIndex": 1,
+      "decodeMs": 2.992,
+      "computeMs": 51.8247,
+      "decodeAndComputeMs": 54.8167
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-level",
+      "frameIndex": 2,
+      "decodeMs": 2.7641,
+      "computeMs": 53.448,
+      "decodeAndComputeMs": 56.2121
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-level",
+      "frameIndex": 3,
+      "decodeMs": 2.4016,
+      "computeMs": 54.9176,
+      "decodeAndComputeMs": 57.3192
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-level",
+      "frameIndex": 4,
+      "decodeMs": 2.4125,
+      "computeMs": 50.8958,
+      "decodeAndComputeMs": 53.3083
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-level",
+      "frameIndex": 5,
+      "decodeMs": 2.3871,
+      "computeMs": 51.8071,
+      "decodeAndComputeMs": 54.1942
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-level",
+      "frameIndex": 6,
+      "decodeMs": 2.5093,
+      "computeMs": 55.3581,
+      "decodeAndComputeMs": 57.8674
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-level",
+      "frameIndex": 7,
+      "decodeMs": 2.4483,
+      "computeMs": 52.3901,
+      "decodeAndComputeMs": 54.8384
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-level",
+      "frameIndex": 8,
+      "decodeMs": 2.3546,
+      "computeMs": 51.8891,
+      "decodeAndComputeMs": 54.2437
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-level",
+      "frameIndex": 9,
+      "decodeMs": 2.3583,
+      "computeMs": 51.2258,
+      "decodeAndComputeMs": 53.5841
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-level",
+      "frameIndex": 10,
+      "decodeMs": 2.4705,
+      "computeMs": 53.0355,
+      "decodeAndComputeMs": 55.506
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-drop",
+      "frameIndex": 0,
+      "decodeMs": 2.4134,
+      "computeMs": 51.6611,
+      "decodeAndComputeMs": 54.0745
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-drop",
+      "frameIndex": 1,
+      "decodeMs": 2.641,
+      "computeMs": 51.7839,
+      "decodeAndComputeMs": 54.4249
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-drop",
+      "frameIndex": 2,
+      "decodeMs": 2.5453,
+      "computeMs": 50.8378,
+      "decodeAndComputeMs": 53.3831
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-drop",
+      "frameIndex": 3,
+      "decodeMs": 2.4991,
+      "computeMs": 50.3137,
+      "decodeAndComputeMs": 52.8128
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-drop",
+      "frameIndex": 4,
+      "decodeMs": 3.6279,
+      "computeMs": 51.4251,
+      "decodeAndComputeMs": 55.053
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-drop",
+      "frameIndex": 5,
+      "decodeMs": 2.4001,
+      "computeMs": 50.3434,
+      "decodeAndComputeMs": 52.7435
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-drop",
+      "frameIndex": 6,
+      "decodeMs": 2.4265,
+      "computeMs": 50.2208,
+      "decodeAndComputeMs": 52.6473
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-drop",
+      "frameIndex": 7,
+      "decodeMs": 3.0667,
+      "computeMs": 51.9575,
+      "decodeAndComputeMs": 55.0242
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-drop",
+      "frameIndex": 8,
+      "decodeMs": 2.4246,
+      "computeMs": 51.818,
+      "decodeAndComputeMs": 54.2426
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-drop",
+      "frameIndex": 9,
+      "decodeMs": 3.2,
+      "computeMs": 52.9936,
+      "decodeAndComputeMs": 56.1936
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-drop",
+      "frameIndex": 10,
+      "decodeMs": 2.3836,
+      "computeMs": 50.4906,
+      "decodeAndComputeMs": 52.8742
+    },
+    {
+      "round": 1,
+      "sceneId": "person-side",
+      "frameIndex": 0,
+      "decodeMs": 3.1825,
+      "computeMs": 51.054,
+      "decodeAndComputeMs": 54.2365
+    },
+    {
+      "round": 1,
+      "sceneId": "person-side",
+      "frameIndex": 1,
+      "decodeMs": 2.4282,
+      "computeMs": 50.9653,
+      "decodeAndComputeMs": 53.3935
+    },
+    {
+      "round": 1,
+      "sceneId": "person-side",
+      "frameIndex": 2,
+      "decodeMs": 2.4751,
+      "computeMs": 50.3973,
+      "decodeAndComputeMs": 52.8724
+    },
+    {
+      "round": 1,
+      "sceneId": "person-side",
+      "frameIndex": 3,
+      "decodeMs": 2.4909,
+      "computeMs": 52.3533,
+      "decodeAndComputeMs": 54.8442
+    },
+    {
+      "round": 1,
+      "sceneId": "person-side",
+      "frameIndex": 4,
+      "decodeMs": 2.6453,
+      "computeMs": 52.9385,
+      "decodeAndComputeMs": 55.5838
+    },
+    {
+      "round": 1,
+      "sceneId": "person-side",
+      "frameIndex": 5,
+      "decodeMs": 2.5836,
+      "computeMs": 51.5698,
+      "decodeAndComputeMs": 54.1534
+    },
+    {
+      "round": 1,
+      "sceneId": "person-side",
+      "frameIndex": 6,
+      "decodeMs": 2.4829,
+      "computeMs": 52.6895,
+      "decodeAndComputeMs": 55.1724
+    },
+    {
+      "round": 1,
+      "sceneId": "person-side",
+      "frameIndex": 7,
+      "decodeMs": 2.5416,
+      "computeMs": 54.2357,
+      "decodeAndComputeMs": 56.7773
+    },
+    {
+      "round": 1,
+      "sceneId": "person-side",
+      "frameIndex": 8,
+      "decodeMs": 2.5567,
+      "computeMs": 50.6076,
+      "decodeAndComputeMs": 53.1643
+    },
+    {
+      "round": 1,
+      "sceneId": "person-side",
+      "frameIndex": 9,
+      "decodeMs": 2.6407,
+      "computeMs": 53.3,
+      "decodeAndComputeMs": 55.9407
+    },
+    {
+      "round": 1,
+      "sceneId": "person-side",
+      "frameIndex": 10,
+      "decodeMs": 2.5293,
+      "computeMs": 52.3376,
+      "decodeAndComputeMs": 54.8669
+    },
+    {
+      "round": 1,
+      "sceneId": "person-approach",
+      "frameIndex": 0,
+      "decodeMs": 2.605,
+      "computeMs": 58.2632,
+      "decodeAndComputeMs": 60.8682
+    },
+    {
+      "round": 1,
+      "sceneId": "person-approach",
+      "frameIndex": 1,
+      "decodeMs": 2.5805,
+      "computeMs": 70.3389,
+      "decodeAndComputeMs": 72.9194
+    },
+    {
+      "round": 1,
+      "sceneId": "person-approach",
+      "frameIndex": 2,
+      "decodeMs": 3.3115,
+      "computeMs": 59.5477,
+      "decodeAndComputeMs": 62.8592
+    },
+    {
+      "round": 1,
+      "sceneId": "person-approach",
+      "frameIndex": 3,
+      "decodeMs": 3.2691,
+      "computeMs": 52.3351,
+      "decodeAndComputeMs": 55.6042
+    },
+    {
+      "round": 1,
+      "sceneId": "person-approach",
+      "frameIndex": 4,
+      "decodeMs": 2.4536,
+      "computeMs": 49.2679,
+      "decodeAndComputeMs": 51.7215
+    },
+    {
+      "round": 1,
+      "sceneId": "person-approach",
+      "frameIndex": 5,
+      "decodeMs": 2.4375,
+      "computeMs": 50.5501,
+      "decodeAndComputeMs": 52.9876
+    },
+    {
+      "round": 1,
+      "sceneId": "person-approach",
+      "frameIndex": 6,
+      "decodeMs": 2.4782,
+      "computeMs": 51.0348,
+      "decodeAndComputeMs": 53.513
+    },
+    {
+      "round": 1,
+      "sceneId": "person-approach",
+      "frameIndex": 7,
+      "decodeMs": 2.712,
+      "computeMs": 50.7282,
+      "decodeAndComputeMs": 53.4402
+    },
+    {
+      "round": 1,
+      "sceneId": "person-approach",
+      "frameIndex": 8,
+      "decodeMs": 2.4901,
+      "computeMs": 50.6095,
+      "decodeAndComputeMs": 53.0996
+    },
+    {
+      "round": 1,
+      "sceneId": "person-approach",
+      "frameIndex": 9,
+      "decodeMs": 2.5101,
+      "computeMs": 52.1557,
+      "decodeAndComputeMs": 54.6658
+    },
+    {
+      "round": 1,
+      "sceneId": "person-approach",
+      "frameIndex": 10,
+      "decodeMs": 2.6773,
+      "computeMs": 55.8557,
+      "decodeAndComputeMs": 58.533
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 0,
+      "decodeMs": 2.6039,
+      "computeMs": 50.8563,
+      "decodeAndComputeMs": 53.4602
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 1,
+      "decodeMs": 2.3756,
+      "computeMs": 50.418,
+      "decodeAndComputeMs": 52.7936
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 2,
+      "decodeMs": 2.4681,
+      "computeMs": 50.1665,
+      "decodeAndComputeMs": 52.6346
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 3,
+      "decodeMs": 2.5757,
+      "computeMs": 50.9608,
+      "decodeAndComputeMs": 53.5365
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 4,
+      "decodeMs": 2.4038,
+      "computeMs": 51.4192,
+      "decodeAndComputeMs": 53.823
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 5,
+      "decodeMs": 2.3713,
+      "computeMs": 50.4516,
+      "decodeAndComputeMs": 52.8229
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 6,
+      "decodeMs": 2.9275,
+      "computeMs": 51.5461,
+      "decodeAndComputeMs": 54.4736
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 7,
+      "decodeMs": 2.4475,
+      "computeMs": 52.052,
+      "decodeAndComputeMs": 54.4995
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 8,
+      "decodeMs": 2.4503,
+      "computeMs": 49.7012,
+      "decodeAndComputeMs": 52.1515
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 9,
+      "decodeMs": 2.5767,
+      "computeMs": 50.4933,
+      "decodeAndComputeMs": 53.07
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 10,
+      "decodeMs": 2.3079,
+      "computeMs": 50.8103,
+      "decodeAndComputeMs": 53.1182
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 0,
+      "decodeMs": 2.421,
+      "computeMs": 50.7243,
+      "decodeAndComputeMs": 53.1453
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 1,
+      "decodeMs": 2.5827,
+      "computeMs": 49.9938,
+      "decodeAndComputeMs": 52.5765
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 2,
+      "decodeMs": 2.5099,
+      "computeMs": 56.8609,
+      "decodeAndComputeMs": 59.3708
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 3,
+      "decodeMs": 2.524,
+      "computeMs": 56.2739,
+      "decodeAndComputeMs": 58.7979
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 4,
+      "decodeMs": 2.6817,
+      "computeMs": 52.7285,
+      "decodeAndComputeMs": 55.4102
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 5,
+      "decodeMs": 2.4836,
+      "computeMs": 56.5738,
+      "decodeAndComputeMs": 59.0574
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 6,
+      "decodeMs": 3.2972,
+      "computeMs": 52.8947,
+      "decodeAndComputeMs": 56.1919
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 7,
+      "decodeMs": 2.5209,
+      "computeMs": 49.5065,
+      "decodeAndComputeMs": 52.0274
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 8,
+      "decodeMs": 2.5863,
+      "computeMs": 56.1348,
+      "decodeAndComputeMs": 58.7211
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 9,
+      "decodeMs": 2.478,
+      "computeMs": 50.2432,
+      "decodeAndComputeMs": 52.7212
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 10,
+      "decodeMs": 2.4385,
+      "computeMs": 50.806,
+      "decodeAndComputeMs": 53.2445
+    }
+  ]
+}

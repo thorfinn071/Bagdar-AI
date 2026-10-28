@@ -1,0 +1,774 @@
+{
+  "identity": "a1c4bb3889504133fb8ec4bd76b02fab27dafc67c286371fe2ba96ce61b6017e",
+  "batch": {
+    "id": "rig-portal-low",
+    "frameId": 1,
+    "sessionGeneration": 1,
+    "capturedAtUs": 1791072000000000,
+    "stationarySyntheticScene": true,
+    "zeroSkewUs": 0,
+    "sceneStateSha256": "5aa8c96702fbd7b17b020d0b8f823572063d004984238c85da885c7f33bcfb73",
+    "channels": [
+      {
+        "cameraId": "optical-channel-00",
+        "frameId": 1,
+        "capturedAtUs": 1791072000000000,
+        "sessionGeneration": 1,
+        "width": 160,
+        "height": 120,
+        "fx": 115.55555555555556,
+        "fy": 115.55555555555556,
+        "cx": 80.0,
+        "cy": 60.0,
+        "cameraToWalkingRotation": [
+          0.7986354827880859,
+          0.5211871266365051,
+          -0.30090752243995667,
+          0.6018150448799133,
+          -0.6916385889053345,
+          0.39931774139404297,
+          0.0,
+          -0.5,
+          -0.8660253882408142
+        ],
+        "cameraOriginM": [
+          0.0,
+          0.0,
+          1.4700000286102295
+        ],
+        "sceneStateSha256": "5aa8c96702fbd7b17b020d0b8f823572063d004984238c85da885c7f33bcfb73",
+        "rgb": {
+          "path": "rig-portal-low/channel-00.png",
+          "sha256": "c990c7103bd2c51fa383442bd4ff91f6bec992d9dc72dbdcb4187d3a9b953b80"
+        },
+        "rayWitnesses": 135,
+        "exactFloorPixels": 67,
+        "depth": {
+          "path": "rig-portal-low/channel-00-depth.gz",
+          "sha256": "d65be37ee4474f69c64952c24f0a0cdb79916af0abb97e5efb3d094899dde774"
+        },
+        "freeZLower": {
+          "path": "rig-portal-low/channel-00-freeZLower.gz",
+          "sha256": "d36572d6a3ec1cbcd111a9215708e8a83b781089424d116fecbb00873946646b"
+        },
+        "surfaceZUpper": {
+          "path": "rig-portal-low/channel-00-surfaceZUpper.gz",
+          "sha256": "3adbf957b32ce2160e95998df80fc5caa7d87497d41160dd29a7b2a1f8f9dd6d"
+        },
+        "validity": {
+          "path": "rig-portal-low/channel-00-validity.gz",
+          "sha256": "c24298be0d9ab7240a9471199657848d902bf420fabe2d8f516a5d3113fc3f7c"
+        },
+        "heightLower": {
+          "path": "rig-portal-low/channel-00-heightLower.gz",
+          "sha256": "5fbbb1d83fea737308bca042639192786cd3164287f844b6c94022b21aa04c5b"
+        },
+        "heightUpper": {
+          "path": "rig-portal-low/channel-00-heightUpper.gz",
+          "sha256": "2ec2c02a4c6d17592f771a6549bb6b5a65f03af2b15a4b459a9da499e1f0d607"
+        },
+        "firstZLower": {
+          "path": "rig-portal-low/channel-00-firstZLower.gz",
+          "sha256": "062647c4a05570f701139400ea0c2306fb907aabe66ebf41f11f86708d6608c3"
+        }
+      },
+      {
+        "cameraId": "optical-channel-01",
+        "frameId": 1,
+        "capturedAtUs": 1791072000000000,
+        "sessionGeneration": 1,
+        "width": 160,
+        "height": 120,
+        "fx": 115.55555555555556,
+        "fy": 115.55555555555556,
+        "cx": 80.0,
+        "cy": 60.0,
+        "cameraToWalkingRotation": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.8660253882408142,
+          0.5,
+          0.0,
+          -0.5,
+          -0.8660253882408142
+        ],
+        "cameraOriginM": [
+          0.0,
+          0.0,
+          1.4700000286102295
+        ],
+        "sceneStateSha256": "5aa8c96702fbd7b17b020d0b8f823572063d004984238c85da885c7f33bcfb73",
+        "rgb": {
+          "path": "rig-portal-low/channel-01.png",
+          "sha256": "f4863b9afea1db0894156c27964ce5fbf99d2057c16ce36b5fafefafb28ce029"
+        },
+        "rayWitnesses": 135,
+        "exactFloorPixels": 59,
+        "depth": {
+          "path": "rig-portal-low/channel-01-depth.gz",
+          "sha256": "614ca394d57a127b003bf1cee149e97ba69cabca4090f45f3090c1d745bcf0e3"
+        },
+        "freeZLower": {
+          "path": "rig-portal-low/channel-01-freeZLower.gz",
+          "sha256": "9701680dcb59a4a91b8f58c40c068ce54f0433d57fe257653717fd7e92b33fb0"
+        },
+        "surfaceZUpper": {
+          "path": "rig-portal-low/channel-01-surfaceZUpper.gz",
+          "sha256": "b53cde95a49a4c5c26691e926db0f8cfb65eac1725105d2e7f0f2b5615bbd060"
+        },
+        "validity": {
+          "path": "rig-portal-low/channel-01-validity.gz",
+          "sha256": "c24298be0d9ab7240a9471199657848d902bf420fabe2d8f516a5d3113fc3f7c"
+        },
+        "heightLower": {
+          "path": "rig-portal-low/channel-01-heightLower.gz",
+          "sha256": "df18231bfd77d20f940694c4137218258e8162c57e3fef03b259bf6bab11620a"
+        },
+        "heightUpper": {
+          "path": "rig-portal-low/channel-01-heightUpper.gz",
+          "sha256": "8113fa63849e80dd5a7137012290e9d6cc2b03a277aba9714eaee940da0f563f"
+        },
+        "firstZLower": {
+          "path": "rig-portal-low/channel-01-firstZLower.gz",
+          "sha256": "e25d4786c4dec99d02e84ce3c6b5c6fd1e15b31f22e536e9c81c1b82f08efd78"
+        }
+      },
+      {
+        "cameraId": "optical-channel-02",
+        "frameId": 1,
+        "capturedAtUs": 1791072000000000,
+        "sessionGeneration": 1,
+        "width": 160,
+        "height": 120,
+        "fx": 115.55555555555556,
+        "fy": 115.55555555555556,
+        "cx": 80.0,
+        "cy": 60.0,
+        "cameraToWalkingRotation": [
+          0.7986354827880859,
+          -0.5211871266365051,
+          0.30090752243995667,
+          -0.6018150448799133,
+          -0.6916385889053345,
+          0.39931774139404297,
+          0.0,
+          -0.5,
+          -0.8660253882408142
+        ],
+        "cameraOriginM": [
+          0.0,
+          0.0,
+          1.4700000286102295
+        ],
+        "sceneStateSha256": "5aa8c96702fbd7b17b020d0b8f823572063d004984238c85da885c7f33bcfb73",
+        "rgb": {
+          "path": "rig-portal-low/channel-02.png",
+          "sha256": "08f5b2e18f032b014a8e319eebfdbe1ede6643aeb61541bd6c329629138f62db"
+        },
+        "rayWitnesses": 135,
+        "exactFloorPixels": 19,
+        "depth": {
+          "path": "rig-portal-low/channel-02-depth.gz",
+          "sha256": "02065ce8b5f670450e5f5cc6415a48d23a236f4eb45de2f2cea73c86164d1b72"
+        },
+        "freeZLower": {
+          "path": "rig-portal-low/channel-02-freeZLower.gz",
+          "sha256": "46e85b6f8d47fd67f8f168faac1fb1fdec40d2186d26159b317828bdaaf9573c"
+        },
+        "surfaceZUpper": {
+          "path": "rig-portal-low/channel-02-surfaceZUpper.gz",
+          "sha256": "b821a69b8943b45d850e26cd668d4035be677d71a83c4a1b3cdd735d2df3cb84"
+        },
+        "validity": {
+          "path": "rig-portal-low/channel-02-validity.gz",
+          "sha256": "c24298be0d9ab7240a9471199657848d902bf420fabe2d8f516a5d3113fc3f7c"
+        },
+        "heightLower": {
+          "path": "rig-portal-low/channel-02-heightLower.gz",
+          "sha256": "48658770f35d3fb3accafea06b7dea1fe220979abb150e219d1eb6cf87b46a07"
+        },
+        "heightUpper": {
+          "path": "rig-portal-low/channel-02-heightUpper.gz",
+          "sha256": "a338c5b646662b3dd1d794e9d84c01f1479a05ff93b0b958acdb0cfb4b711842"
+        },
+        "firstZLower": {
+          "path": "rig-portal-low/channel-02-firstZLower.gz",
+          "sha256": "d9c9d34543fc14b4e73ba5239dbc623a35f67ab9878a244031c30a2947c07f32"
+        }
+      },
+      {
+        "cameraId": "optical-channel-03",
+        "frameId": 1,
+        "capturedAtUs": 1791072000000000,
+        "sessionGeneration": 1,
+        "width": 160,
+        "height": 120,
+        "fx": 115.55555555555556,
+        "fy": 115.55555555555556,
+        "cx": 80.0,
+        "cy": 60.0,
+        "cameraToWalkingRotation": [
+          0.7986354827880859,
+          0.26066702604293823,
+          -0.5424334406852722,
+          0.6018150448799133,
+          -0.3459168076515198,
+          0.7198334336280823,
+          0.0,
+          -0.9013291597366333,
+          -0.4331347942352295
+        ],
+        "cameraOriginM": [
+          0.0,
+          0.0,
+          1.4700000286102295
+        ],
+        "sceneStateSha256": "5aa8c96702fbd7b17b020d0b8f823572063d004984238c85da885c7f33bcfb73",
+        "rgb": {
+          "path": "rig-portal-low/channel-03.png",
+          "sha256": "e3e6329e9bce373b3c24a513b43e62d86d159c53054c76005212f12d298a40dd"
+        },
+        "rayWitnesses": 135,
+        "exactFloorPixels": 225,
+        "depth": {
+          "path": "rig-portal-low/channel-03-depth.gz",
+          "sha256": "4b0a863b4d26fcc3bf9ac23ad6944443a05d1245da6dc4f478f436b199e2e84e"
+        },
+        "freeZLower": {
+          "path": "rig-portal-low/channel-03-freeZLower.gz",
+          "sha256": "52992b6062fe5251b673382e5c682e1042f2a3992357880bdcaa114dec012200"
+        },
+        "surfaceZUpper": {
+          "path": "rig-portal-low/channel-03-surfaceZUpper.gz",
+          "sha256": "ac490b7efc72136bd180991be71cde2a2cf953418ed39e10aad55c10822a1108"
+        },
+        "validity": {
+          "path": "rig-portal-low/channel-03-validity.gz",
+          "sha256": "c24298be0d9ab7240a9471199657848d902bf420fabe2d8f516a5d3113fc3f7c"
+        },
+        "heightLower": {
+          "path": "rig-portal-low/channel-03-heightLower.gz",
+          "sha256": "361617ac92195974fde965976112a34e69be9799e05937ca825ec24ef59b72a4"
+        },
+        "heightUpper": {
+          "path": "rig-portal-low/channel-03-heightUpper.gz",
+          "sha256": "ecd263089105d33caccf82b20c3f7f0ec39e1855e63772e1050e579398eccfa3"
+        },
+        "firstZLower": {
+          "path": "rig-portal-low/channel-03-firstZLower.gz",
+          "sha256": "0051ac1abaa2bf9506d5a8a6f1711907eb7e660a01cc92563278e3a4f649fdf3"
+        }
+      },
+      {
+        "cameraId": "optical-channel-04",
+        "frameId": 1,
+        "capturedAtUs": 1791072000000000,
+        "sessionGeneration": 1,
+        "width": 160,
+        "height": 120,
+        "fx": 115.55555555555556,
+        "fy": 115.55555555555556,
+        "cx": 80.0,
+        "cy": 60.0,
+        "cameraToWalkingRotation": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.4331347942352295,
+          0.9013291597366333,
+          0.0,
+          -0.9013291597366333,
+          -0.4331347942352295
+        ],
+        "cameraOriginM": [
+          0.0,
+          0.0,
+          1.4700000286102295
+        ],
+        "sceneStateSha256": "5aa8c96702fbd7b17b020d0b8f823572063d004984238c85da885c7f33bcfb73",
+        "rgb": {
+          "path": "rig-portal-low/channel-04.png",
+          "sha256": "13dca202372657652beb63f05fd40432ce41a25d361d09659f1a53d2ae61cea8"
+        },
+        "rayWitnesses": 135,
+        "exactFloorPixels": 403,
+        "depth": {
+          "path": "rig-portal-low/channel-04-depth.gz",
+          "sha256": "cfff521c3dd57fe8318e5aadd714c260ed9a9da7f83c2bc336eb54480dec7768"
+        },
+        "freeZLower": {
+          "path": "rig-portal-low/channel-04-freeZLower.gz",
+          "sha256": "f5ee099963b1ce971565b7b366dbb240e70d2e28e411428f7660933f9ce02810"
+        },
+        "surfaceZUpper": {
+          "path": "rig-portal-low/channel-04-surfaceZUpper.gz",
+          "sha256": "ccec77e021ad21d8a62e1e8b640d5aa8481e53b78349c15d5b2aed992635901e"
+        },
+        "validity": {
+          "path": "rig-portal-low/channel-04-validity.gz",
+          "sha256": "c24298be0d9ab7240a9471199657848d902bf420fabe2d8f516a5d3113fc3f7c"
+        },
+        "heightLower": {
+          "path": "rig-portal-low/channel-04-heightLower.gz",
+          "sha256": "77ab843da11d0b290588e65a22977c416099e59782a9ee9778393f04aca37e45"
+        },
+        "heightUpper": {
+          "path": "rig-portal-low/channel-04-heightUpper.gz",
+          "sha256": "c67316ddaea8199afaa172335165c1d8a65d936ddbe2399bbcfd23ade82ef522"
+        },
+        "firstZLower": {
+          "path": "rig-portal-low/channel-04-firstZLower.gz",
+          "sha256": "a1947e62ebfdfa628e9d44b21d4a430372328a27fd1518c49031629a4047f6d7"
+        }
+      },
+      {
+        "cameraId": "optical-channel-05",
+        "frameId": 1,
+        "capturedAtUs": 1791072000000000,
+        "sessionGeneration": 1,
+        "width": 160,
+        "height": 120,
+        "fx": 115.55555555555556,
+        "fy": 115.55555555555556,
+        "cx": 80.0,
+        "cy": 60.0,
+        "cameraToWalkingRotation": [
+          0.7986354827880859,
+          -0.26066702604293823,
+          0.5424334406852722,
+          -0.6018150448799133,
+          -0.3459168076515198,
+          0.7198334336280823,
+          0.0,
+          -0.9013291597366333,
+          -0.4331347942352295
+        ],
+        "cameraOriginM": [
+          0.0,
+          0.0,
+          1.4700000286102295
+        ],
+        "sceneStateSha256": "5aa8c96702fbd7b17b020d0b8f823572063d004984238c85da885c7f33bcfb73",
+        "rgb": {
+          "path": "rig-portal-low/channel-05.png",
+          "sha256": "289cef691be0b55de17cff7d562cb40fea6c842887e6043d3849f582bc202d29"
+        },
+        "rayWitnesses": 135,
+        "exactFloorPixels": 268,
+        "depth": {
+          "path": "rig-portal-low/channel-05-depth.gz",
+          "sha256": "bb60e36815b25763e904c5911c0de8781912027ed174ea5a1757e270b59b1740"
+        },
+        "freeZLower": {
+          "path": "rig-portal-low/channel-05-freeZLower.gz",
+          "sha256": "356c2728c1c075e62f1b3f0743fbadb4409fce041187b2d1f44e7a326f48f198"
+        },
+        "surfaceZUpper": {
+          "path": "rig-portal-low/channel-05-surfaceZUpper.gz",
+          "sha256": "ce540b13a18d73ac0b38847260b2c998ba1bffe434a312e7665c154d1b82c780"
+        },
+        "validity": {
+          "path": "rig-portal-low/channel-05-validity.gz",
+          "sha256": "c24298be0d9ab7240a9471199657848d902bf420fabe2d8f516a5d3113fc3f7c"
+        },
+        "heightLower": {
+          "path": "rig-portal-low/channel-05-heightLower.gz",
+          "sha256": "642eafe6799a72c29be8ff9ca6453b9d1f8ffb832146b9b60d80e94118b4cc2f"
+        },
+        "heightUpper": {
+          "path": "rig-portal-low/channel-05-heightUpper.gz",
+          "sha256": "63fe2888065ad7453dc2c040d76016a7596aa47955fbac12206ef67d9b5c7656"
+        },
+        "firstZLower": {
+          "path": "rig-portal-low/channel-05-firstZLower.gz",
+          "sha256": "67649da5d657721c90f674226395d9ffe5728fd90123472c00eb222018e6d6f0"
+        }
+      },
+      {
+        "cameraId": "optical-channel-06",
+        "frameId": 1,
+        "capturedAtUs": 1791072000000000,
+        "sessionGeneration": 1,
+        "width": 160,
+        "height": 120,
+        "fx": 115.55555555555556,
+        "fy": 115.55555555555556,
+        "cx": 80.0,
+        "cy": 60.0,
+        "cameraToWalkingRotation": [
+          0.7986354827880859,
+          -0.0906849205493927,
+          -0.5949433445930481,
+          0.6018150448799133,
+          0.12034294009208679,
+          0.7895164489746094,
+          0.0,
+          -0.9885817170143127,
+          0.15068569779396057
+        ],
+        "cameraOriginM": [
+          0.0,
+          0.0,
+          1.4700000286102295
+        ],
+        "sceneStateSha256": "5aa8c96702fbd7b17b020d0b8f823572063d004984238c85da885c7f33bcfb73",
+        "rgb": {
+          "path": "rig-portal-low/channel-06.png",
+          "sha256": "7e3a05b1b94cbd579eb9496ccbb1fcf53981e6cc4166fa04896d7ff7c3e9dca9"
+        },
+        "rayWitnesses": 135,
+        "exactFloorPixels": 30,
+        "depth": {
+          "path": "rig-portal-low/channel-06-depth.gz",
+          "sha256": "c3d8df1e0d026cfdcad53b90c15f957eb98978852783cc75d675001ccefdc1c7"
+        },
+        "freeZLower": {
+          "path": "rig-portal-low/channel-06-freeZLower.gz",
+          "sha256": "528edc36b68a58678c29e9f0289c11dbf814dc6720d5098f7ae58bed843c8157"
+        },
+        "surfaceZUpper": {
+          "path": "rig-portal-low/channel-06-surfaceZUpper.gz",
+          "sha256": "37c61055d583ec3dbded6b0014ec15821350547316f968519a69644542582863"
+        },
+        "validity": {
+          "path": "rig-portal-low/channel-06-validity.gz",
+          "sha256": "c24298be0d9ab7240a9471199657848d902bf420fabe2d8f516a5d3113fc3f7c"
+        },
+        "heightLower": {
+          "path": "rig-portal-low/channel-06-heightLower.gz",
+          "sha256": "990c07c6a40c91e497c1117662491b237b7a33eb7e9d1eda6fb027a415d48f1c"
+        },
+        "heightUpper": {
+          "path": "rig-portal-low/channel-06-heightUpper.gz",
+          "sha256": "855441a4c747062619ee38b1cc38fc65ecebda0f4ab31687100af10355a00074"
+        },
+        "firstZLower": {
+          "path": "rig-portal-low/channel-06-firstZLower.gz",
+          "sha256": "0bcb0493a8acb144c4268108737ece6c16d702c4bb6bd9da17437413c2bf41cc"
+        }
+      },
+      {
+        "cameraId": "optical-channel-07",
+        "frameId": 1,
+        "capturedAtUs": 1791072000000000,
+        "sessionGeneration": 1,
+        "width": 160,
+        "height": 120,
+        "fx": 115.55555555555556,
+        "fy": 115.55555555555556,
+        "cx": 80.0,
+        "cy": 60.0,
+        "cameraToWalkingRotation": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.15068569779396057,
+          0.9885817170143127,
+          0.0,
+          -0.9885817170143127,
+          0.15068569779396057
+        ],
+        "cameraOriginM": [
+          0.0,
+          0.0,
+          1.4700000286102295
+        ],
+        "sceneStateSha256": "5aa8c96702fbd7b17b020d0b8f823572063d004984238c85da885c7f33bcfb73",
+        "rgb": {
+          "path": "rig-portal-low/channel-07.png",
+          "sha256": "6b887eeee68c3f39b4a930f97d6d6803bc6fa516d1fa4e792c7415e9f2817b45"
+        },
+        "rayWitnesses": 135,
+        "exactFloorPixels": 95,
+        "depth": {
+          "path": "rig-portal-low/channel-07-depth.gz",
+          "sha256": "8a146f69cd55d1a759f152d5bd197813bac6d4c957e707cb81c666d1b50d1b17"
+        },
+        "freeZLower": {
+          "path": "rig-portal-low/channel-07-freeZLower.gz",
+          "sha256": "62203aa5e41da1b4d6173de2c249e06673263b9cf3ac18ea1be063df4a1d027d"
+        },
+        "surfaceZUpper": {
+          "path": "rig-portal-low/channel-07-surfaceZUpper.gz",
+          "sha256": "f9ea4dc533c8dee34bdba4fcd61f7d5c28559f3e11c1945a5afae815a0f7c97a"
+        },
+        "validity": {
+          "path": "rig-portal-low/channel-07-validity.gz",
+          "sha256": "c24298be0d9ab7240a9471199657848d902bf420fabe2d8f516a5d3113fc3f7c"
+        },
+        "heightLower": {
+          "path": "rig-portal-low/channel-07-heightLower.gz",
+          "sha256": "8c200da4932225d43698148e1c87c946a1de43f107f2070eeb25f7c9113538c1"
+        },
+        "heightUpper": {
+          "path": "rig-portal-low/channel-07-heightUpper.gz",
+          "sha256": "0a1150b99c4c14a3bbe9c7b8a9cd419baca786a1edeebe335bad20299214c98d"
+        },
+        "firstZLower": {
+          "path": "rig-portal-low/channel-07-firstZLower.gz",
+          "sha256": "1f3902820ab59e039a858785f58b1539f18dc37ff2537ec67d2ec83a4eed2541"
+        }
+      },
+      {
+        "cameraId": "optical-channel-08",
+        "frameId": 1,
+        "capturedAtUs": 1791072000000000,
+        "sessionGeneration": 1,
+        "width": 160,
+        "height": 120,
+        "fx": 115.55555555555556,
+        "fy": 115.55555555555556,
+        "cx": 80.0,
+        "cy": 60.0,
+        "cameraToWalkingRotation": [
+          0.7986354827880859,
+          0.0906849205493927,
+          0.5949433445930481,
+          -0.6018150448799133,
+          0.12034294009208679,
+          0.7895164489746094,
+          0.0,
+          -0.9885817170143127,
+          0.15068569779396057
+        ],
+        "cameraOriginM": [
+          0.0,
+          0.0,
+          1.4700000286102295
+        ],
+        "sceneStateSha256": "5aa8c96702fbd7b17b020d0b8f823572063d004984238c85da885c7f33bcfb73",
+        "rgb": {
+          "path": "rig-portal-low/channel-08.png",
+          "sha256": "a3796353bc8ad69c1027724573adcf610f390028ed2636b0fb4b17a0ebe68861"
+        },
+        "rayWitnesses": 135,
+        "exactFloorPixels": 42,
+        "depth": {
+          "path": "rig-portal-low/channel-08-depth.gz",
+          "sha256": "acaf1cd66f95fc2db201a20a3ea9b4f95996dc898be2df003b3664baaf776589"
+        },
+        "freeZLower": {
+          "path": "rig-portal-low/channel-08-freeZLower.gz",
+          "sha256": "e2d430cd98c4fafdf4567b9de9523554853a7544af1a087132aed8e8ba29507a"
+        },
+        "surfaceZUpper": {
+          "path": "rig-portal-low/channel-08-surfaceZUpper.gz",
+          "sha256": "6accbc7ccde90dfa2079fd633d440555d9794db2a1ce217b25495c6dc2151794"
+        },
+        "validity": {
+          "path": "rig-portal-low/channel-08-validity.gz",
+          "sha256": "c24298be0d9ab7240a9471199657848d902bf420fabe2d8f516a5d3113fc3f7c"
+        },
+        "heightLower": {
+          "path": "rig-portal-low/channel-08-heightLower.gz",
+          "sha256": "e60870ce42dfe17fba7ab05df5acefd92454e3ddfe87682510c8b9028db35756"
+        },
+        "heightUpper": {
+          "path": "rig-portal-low/channel-08-heightUpper.gz",
+          "sha256": "c24ede1b19b2865356f0b4293d80d9de6d5ee53edae209253f55baf54f606ee8"
+        },
+        "firstZLower": {
+          "path": "rig-portal-low/channel-08-firstZLower.gz",
+          "sha256": "7f5e2b4840be9e5f49ac2c9287f4a28e865d0aaf8e1e779ec15dc0d57f496440"
+        }
+      },
+      {
+        "cameraId": "optical-channel-09",
+        "frameId": 1,
+        "capturedAtUs": 1791072000000000,
+        "sessionGeneration": 1,
+        "width": 160,
+        "height": 120,
+        "fx": 115.55555555555556,
+        "fy": 115.55555555555556,
+        "cx": 80.0,
+        "cy": 60.0,
+        "cameraToWalkingRotation": [
+          0.7986354827880859,
+          -0.41043686866760254,
+          -0.44013968110084534,
+          0.6018150448799133,
+          0.5446680784225464,
+          0.5840850472450256,
+          0.0,
+          -0.7313537001609802,
+          0.6819983124732971
+        ],
+        "cameraOriginM": [
+          0.0,
+          0.0,
+          1.4700000286102295
+        ],
+        "sceneStateSha256": "5aa8c96702fbd7b17b020d0b8f823572063d004984238c85da885c7f33bcfb73",
+        "rgb": {
+          "path": "rig-portal-low/channel-09.png",
+          "sha256": "248efbb083c5e609419ede1257dad7070830b58c9a7b697de5ab37dea6ab269f"
+        },
+        "rayWitnesses": 135,
+        "exactFloorPixels": 0,
+        "depth": {
+          "path": "rig-portal-low/channel-09-depth.gz",
+          "sha256": "2c87f4ae25ca5942aedf20fe1d31ddab2804d85a2cd7815c6ed40d6b2cbf88e4"
+        },
+        "freeZLower": {
+          "path": "rig-portal-low/channel-09-freeZLower.gz",
+          "sha256": "914feb45f875e61b35cdd4a67a2dd053156f3aeefd91e68ac53774966e564792"
+        },
+        "surfaceZUpper": {
+          "path": "rig-portal-low/channel-09-surfaceZUpper.gz",
+          "sha256": "78bea05ab2401593a69664bd5ead689978588ee69cb122d18f64ac8e23b5000a"
+        },
+        "validity": {
+          "path": "rig-portal-low/channel-09-validity.gz",
+          "sha256": "c24298be0d9ab7240a9471199657848d902bf420fabe2d8f516a5d3113fc3f7c"
+        },
+        "heightLower": {
+          "path": "rig-portal-low/channel-09-heightLower.gz",
+          "sha256": "ebd85ebffca610047fc805507c2a6643bf4f6fda849068837cf589ea7190eb27"
+        },
+        "heightUpper": {
+          "path": "rig-portal-low/channel-09-heightUpper.gz",
+          "sha256": "2abbdc6af9ed2730310b863b1eb80466c0a0804b1db07cef1611e9fe73d80ff0"
+        },
+        "firstZLower": {
+          "path": "rig-portal-low/channel-09-firstZLower.gz",
+          "sha256": "295181b42a27ffa2b30198e4d92f41e67035690a3c7e128df0eee0997ded9b11"
+        }
+      },
+      {
+        "cameraId": "optical-channel-10",
+        "frameId": 1,
+        "capturedAtUs": 1791072000000000,
+        "sessionGeneration": 1,
+        "width": 160,
+        "height": 120,
+        "fx": 115.55555555555556,
+        "fy": 115.55555555555556,
+        "cx": 80.0,
+        "cy": 60.0,
+        "cameraToWalkingRotation": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.6819983124732971,
+          0.7313537001609802,
+          0.0,
+          -0.7313537001609802,
+          0.6819983124732971
+        ],
+        "cameraOriginM": [
+          0.0,
+          0.0,
+          1.4700000286102295
+        ],
+        "sceneStateSha256": "5aa8c96702fbd7b17b020d0b8f823572063d004984238c85da885c7f33bcfb73",
+        "rgb": {
+          "path": "rig-portal-low/channel-10.png",
+          "sha256": "28b6d8e84e39e45ae5b9ab87e75347cae38d59940bfd9a16f73c429c72f6a836"
+        },
+        "rayWitnesses": 135,
+        "exactFloorPixels": 0,
+        "depth": {
+          "path": "rig-portal-low/channel-10-depth.gz",
+          "sha256": "d5f3e9275afdeb64cb61af9bd2c2df91286dfeef239d6f8d4f350e868f761c56"
+        },
+        "freeZLower": {
+          "path": "rig-portal-low/channel-10-freeZLower.gz",
+          "sha256": "fa879b5213b5957d1004dde3f89404282cca26bf9217b781b8265d13a72446ff"
+        },
+        "surfaceZUpper": {
+          "path": "rig-portal-low/channel-10-surfaceZUpper.gz",
+          "sha256": "68aa4a4cfc89bb5e6ac8c96629d7320615222f3cb31d7e604af07ac4f8ad257f"
+        },
+        "validity": {
+          "path": "rig-portal-low/channel-10-validity.gz",
+          "sha256": "c24298be0d9ab7240a9471199657848d902bf420fabe2d8f516a5d3113fc3f7c"
+        },
+        "heightLower": {
+          "path": "rig-portal-low/channel-10-heightLower.gz",
+          "sha256": "93cb7c7421d743bf2edc4090935e15c9404c4fb5b5bb4b0adbbb48a7280c2c75"
+        },
+        "heightUpper": {
+          "path": "rig-portal-low/channel-10-heightUpper.gz",
+          "sha256": "0117cd4044636fc58e51b6ba6e80f1dde3d71c23a5112009614be50ed587f299"
+        },
+        "firstZLower": {
+          "path": "rig-portal-low/channel-10-firstZLower.gz",
+          "sha256": "3c54668dcb7be80d9598b589c90fa47eb3ec57ac58fe2c83d6c4f402e54e3075"
+        }
+      },
+      {
+        "cameraId": "optical-channel-11",
+        "frameId": 1,
+        "capturedAtUs": 1791072000000000,
+        "sessionGeneration": 1,
+        "width": 160,
+        "height": 120,
+        "fx": 115.55555555555556,
+        "fy": 115.55555555555556,
+        "cx": 80.0,
+        "cy": 60.0,
+        "cameraToWalkingRotation": [
+          0.7986354827880859,
+          0.41043686866760254,
+          0.44013968110084534,
+          -0.6018150448799133,
+          0.5446680784225464,
+          0.5840850472450256,
+          0.0,
+          -0.7313537001609802,
+          0.6819983124732971
+        ],
+        "cameraOriginM": [
+          0.0,
+          0.0,
+          1.4700000286102295
+        ],
+        "sceneStateSha256": "5aa8c96702fbd7b17b020d0b8f823572063d004984238c85da885c7f33bcfb73",
+        "rgb": {
+          "path": "rig-portal-low/channel-11.png",
+          "sha256": "3f996621cab82ada81b1e3b06fec44416416859402e83d9088601497507f4bfb"
+        },
+        "rayWitnesses": 135,
+        "exactFloorPixels": 0,
+        "depth": {
+          "path": "rig-portal-low/channel-11-depth.gz",
+          "sha256": "b71c1900cb66b9de79671b3a2262974d22198380bebe748e02c163a5c91a115b"
+        },
+        "freeZLower": {
+          "path": "rig-portal-low/channel-11-freeZLower.gz",
+          "sha256": "8d8c06e830da7b27a7507f4770533617308fa866ba15037abd56b42259388170"
+        },
+        "surfaceZUpper": {
+          "path": "rig-portal-low/channel-11-surfaceZUpper.gz",
+          "sha256": "8491f2129857c2b70248acf1bd4ecc37ae140d9c70c82441223bc08ec8f9a63a"
+        },
+        "validity": {
+          "path": "rig-portal-low/channel-11-validity.gz",
+          "sha256": "c24298be0d9ab7240a9471199657848d902bf420fabe2d8f516a5d3113fc3f7c"
+        },
+        "heightLower": {
+          "path": "rig-portal-low/channel-11-heightLower.gz",
+          "sha256": "d3609d870ee00467945a0635e8701d15a12b93ec53f3fe647251c6e448737ae5"
+        },
+        "heightUpper": {
+          "path": "rig-portal-low/channel-11-heightUpper.gz",
+          "sha256": "c8d2bb169c90bc953120ae038db133b88ece97b2a1f5394ce1b7f56eff861e26"
+        },
+        "firstZLower": {
+          "path": "rig-portal-low/channel-11-firstZLower.gz",
+          "sha256": "8ddeb0ee56813237702ad8eda177e3ecfd2aae719b544c933aec8d6d2f11e65c"
+        }
+      }
+    ],
+    "scene": {
+      "path": "rig-portal-low/scene.blend",
+      "sha256": "f8849e21279617faa9c6ffb9f5f1a1597edd9b65fc069788ff14e9987b2913c9"
+    }
+  }
+}

@@ -1,0 +1,1623 @@
+{
+  "schemaVersion": 1,
+  "benchmarkId": "bagdar-blender-context-detector-diagnostic-v3",
+  "scope": "desktop synthetic frame-by-frame detector diagnostic; not camera or user-alert evidence",
+  "toolSha256": "947bd0444d51edc0cc9e2a58aeccfb06f02906d1beebcbce31cb831123cbff40",
+  "baseEvaluatorSha256": "335a2c64881466085009d04cf480b50c671e65c4a6a1aa91dd5690687d7da1c2",
+  "corpusId": "blender-context-v3",
+  "corpusManifestSha256": "3c5e9398fe5d4ed72fa4950a8d30b478fb625abe06658661975a2f01e0ebb82c",
+  "modelManifestSha256": "85192b3e676f410310847cd23e6ab6c4cf2ebb225194d342863251a9e96d7493",
+  "sequenceCount": 6,
+  "frameCount": 18,
+  "protocol": {
+    "preprocess": "PIL bilinear aspect-preserving letterbox RGB/255; TFLite NHWC, ONNX NCHW",
+    "confidenceThreshold": 0.25,
+    "classAwareNmsIou": 0.45,
+    "forwardRule": "box center in middle image third",
+    "maskOverlapRule": "at least one overlapping central hazard-mask pixel; diagnostic only",
+    "temporalRule": "presence transition between successive 300 ms frames"
+  },
+  "environment": {
+    "python": "3.11.9",
+    "numpy": "2.4.3",
+    "pillow": "12.2.0",
+    "onnxruntime": "1.26.0",
+    "tensorflow": "2.21.0",
+    "platform": "Windows-10-10.0.26200-SP0"
+  },
+  "models": [
+    {
+      "modelId": "yolov8n-int8-control-416",
+      "artifactSha256": "3f5c681641e439321ec529c26995de18a910d62a25a49ccb02da2a0a771cae02",
+      "artifactLicense": "provenance-review-required",
+      "runtime": "tflite",
+      "inputSize": 416,
+      "summary": {
+        "objectSequences": 4,
+        "objectFrames": 12,
+        "objectMaskScorableFrames": 12,
+        "objectFramesWithForwardMaskOverlap": 0,
+        "objectSequencesWithAnyForwardMaskOverlap": 0,
+        "objectPresenceTransitions": 0,
+        "traversableFrames": 6,
+        "traversableFramesWithForwardBox": 0,
+        "totalDetections": 0,
+        "classCompatibleScorableFrames": 6,
+        "classCompatibleForwardMaskOverlapFrames": 0
+      },
+      "sequences": [
+        {
+          "sceneId": "context-crossing-rider",
+          "state": "moving",
+          "category": "object_like",
+          "forwardMaskOverlapFrames": 0,
+          "presenceTransitions": 0,
+          "frames": [
+            {
+              "sceneId": "context-crossing-rider",
+              "rgbSha256": "08683555209269ef05e5457baf0e685570af9378bbf2270ab8d71f5f79046285",
+              "state": "moving",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 6877,
+              "maxRawScore": 0.105099,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [
+                0,
+                1
+              ],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 0,
+              "capturedOffsetMs": 0
+            },
+            {
+              "sceneId": "context-crossing-rider",
+              "rgbSha256": "d460c5f6a3c5005fe42d7a682e98f094f88e2d7bbaf82cc06356f52908965b93",
+              "state": "moving",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 7779,
+              "maxRawScore": 0.179855,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [
+                0,
+                1
+              ],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 1,
+              "capturedOffsetMs": 300
+            },
+            {
+              "sceneId": "context-crossing-rider",
+              "rgbSha256": "5d4b212399b2a937983787270afeac506e5b25f771e04b61cc5783f0ce63f54c",
+              "state": "moving",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 7387,
+              "maxRawScore": 0.186868,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [
+                0,
+                1
+              ],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 2,
+              "capturedOffsetMs": 600
+            }
+          ]
+        },
+        {
+          "sceneId": "context-doorway",
+          "state": "safe",
+          "category": "traversable",
+          "forwardMaskOverlapFrames": 0,
+          "presenceTransitions": 0,
+          "frames": [
+            {
+              "sceneId": "context-doorway",
+              "rgbSha256": "c26271d1be54d4446f84aa294cc25b37c7c51b3f22b97734658b35894a70ac65",
+              "state": "safe",
+              "category": "traversable",
+              "groundTruthAction": "continueForward",
+              "forwardHazardMaskPixels": 2951,
+              "maxRawScore": 0.025458,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 0,
+              "capturedOffsetMs": 0
+            },
+            {
+              "sceneId": "context-doorway",
+              "rgbSha256": "d357ee8e5152f194e9b33dd2dbc9ee187545a0ffcfebbc7670663a8029c6a97b",
+              "state": "safe",
+              "category": "traversable",
+              "groundTruthAction": "continueForward",
+              "forwardHazardMaskPixels": 2838,
+              "maxRawScore": 0.040885,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 1,
+              "capturedOffsetMs": 300
+            },
+            {
+              "sceneId": "context-doorway",
+              "rgbSha256": "29d5dfdaf93f8e799aee3ccbf815165a7ab980bc9c3dad1e8bbd3fa75c18c1ca",
+              "state": "safe",
+              "category": "traversable",
+              "groundTruthAction": "continueForward",
+              "forwardHazardMaskPixels": 2754,
+              "maxRawScore": 0.033397,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 2,
+              "capturedOffsetMs": 600
+            }
+          ]
+        },
+        {
+          "sceneId": "context-low-obstacle",
+          "state": "blocked",
+          "category": "object_like",
+          "forwardMaskOverlapFrames": 0,
+          "presenceTransitions": 0,
+          "frames": [
+            {
+              "sceneId": "context-low-obstacle",
+              "rgbSha256": "8379f037a12c16a7eead83687c0fd1ab880e5a00217bc025b3295ef1b3f73d66",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 3424,
+              "maxRawScore": 0.096836,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [
+                28
+              ],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 0,
+              "capturedOffsetMs": 0
+            },
+            {
+              "sceneId": "context-low-obstacle",
+              "rgbSha256": "bca4254d23e6b81a19b262648109882106cc59b44ec80ab610152399363fcb1f",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 3616,
+              "maxRawScore": 0.039366,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [
+                28
+              ],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 1,
+              "capturedOffsetMs": 300
+            },
+            {
+              "sceneId": "context-low-obstacle",
+              "rgbSha256": "88bc2920532eee5c615a9c4c2ab5ccaa2f4b19493bdd3263cee12b9e88a324bd",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 3897,
+              "maxRawScore": 0.014494,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [
+                28
+              ],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 2,
+              "capturedOffsetMs": 600
+            }
+          ]
+        },
+        {
+          "sceneId": "context-overhead",
+          "state": "blocked",
+          "category": "object_like",
+          "forwardMaskOverlapFrames": 0,
+          "presenceTransitions": 0,
+          "frames": [
+            {
+              "sceneId": "context-overhead",
+              "rgbSha256": "839802df3df59e3ce924cea2ccc9089db92c6ccc3df0c35cb3f0e887737c2374",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 4080,
+              "maxRawScore": 0.119562,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 0,
+              "capturedOffsetMs": 0
+            },
+            {
+              "sceneId": "context-overhead",
+              "rgbSha256": "73cfa6f9c26bc48581a7e4fa8cec2b08e3d3cefb2f36d6b7de3598c5e6e19df7",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 4420,
+              "maxRawScore": 0.062131,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 1,
+              "capturedOffsetMs": 300
+            },
+            {
+              "sceneId": "context-overhead",
+              "rgbSha256": "a05c0b3515ff7326d65714cf6e87b5d594d474ea217314fcd89846f3f07ab236",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 4760,
+              "maxRawScore": 0.193865,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 2,
+              "capturedOffsetMs": 600
+            }
+          ]
+        },
+        {
+          "sceneId": "context-ramp",
+          "state": "safe",
+          "category": "traversable",
+          "forwardMaskOverlapFrames": 0,
+          "presenceTransitions": 0,
+          "frames": [
+            {
+              "sceneId": "context-ramp",
+              "rgbSha256": "9867f9f3f55b238fb31a4252e12aa5c6f1a3ca7d742f777dfd8f8695892bf314",
+              "state": "safe",
+              "category": "traversable",
+              "groundTruthAction": "continueForward",
+              "forwardHazardMaskPixels": 0,
+              "maxRawScore": 0.193975,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 0,
+              "capturedOffsetMs": 0
+            },
+            {
+              "sceneId": "context-ramp",
+              "rgbSha256": "533e9201f71acc20460ecde79919f0adf8fd9f6b84710862125b727eaa6a136e",
+              "state": "safe",
+              "category": "traversable",
+              "groundTruthAction": "continueForward",
+              "forwardHazardMaskPixels": 0,
+              "maxRawScore": 0.204842,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 1,
+              "capturedOffsetMs": 300
+            },
+            {
+              "sceneId": "context-ramp",
+              "rgbSha256": "54d3c31d4bbb026f4628b9f41ed424c94030b8197417e920f3d7e737a46e8641",
+              "state": "safe",
+              "category": "traversable",
+              "groundTruthAction": "continueForward",
+              "forwardHazardMaskPixels": 0,
+              "maxRawScore": 0.138188,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 2,
+              "capturedOffsetMs": 600
+            }
+          ]
+        },
+        {
+          "sceneId": "context-thin-pole",
+          "state": "blocked",
+          "category": "object_like",
+          "forwardMaskOverlapFrames": 0,
+          "presenceTransitions": 0,
+          "frames": [
+            {
+              "sceneId": "context-thin-pole",
+              "rgbSha256": "cfc8c347dd38ae0f5f0a63086d6b5a84b38aec9137db301574ea0d94a0480033",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 1796,
+              "maxRawScore": 0.105559,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 0,
+              "capturedOffsetMs": 0
+            },
+            {
+              "sceneId": "context-thin-pole",
+              "rgbSha256": "b9183b524ddc2daf8c666e1be3d06a6582795159da8c3e3264da9f27be7843a7",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 1812,
+              "maxRawScore": 0.025834,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 1,
+              "capturedOffsetMs": 300
+            },
+            {
+              "sceneId": "context-thin-pole",
+              "rgbSha256": "63af3c6953908f8643ef4aad7ea5bbc161711ad57693442158bd9f767e2b3187",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 2010,
+              "maxRawScore": 0.023279,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 2,
+              "capturedOffsetMs": 600
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "modelId": "yolo11n-onnx-320-experiment",
+      "artifactSha256": "b9152829ad8ff26a0b2bd2b4a1482910c91c549d1cdcc4587fecf4444741dbe4",
+      "artifactLicense": "AGPL-3.0 License (https://ultralytics.com/license)",
+      "runtime": "onnx",
+      "inputSize": 320,
+      "summary": {
+        "objectSequences": 4,
+        "objectFrames": 12,
+        "objectMaskScorableFrames": 12,
+        "objectFramesWithForwardMaskOverlap": 0,
+        "objectSequencesWithAnyForwardMaskOverlap": 0,
+        "objectPresenceTransitions": 0,
+        "traversableFrames": 6,
+        "traversableFramesWithForwardBox": 0,
+        "totalDetections": 0,
+        "classCompatibleScorableFrames": 6,
+        "classCompatibleForwardMaskOverlapFrames": 0
+      },
+      "sequences": [
+        {
+          "sceneId": "context-crossing-rider",
+          "state": "moving",
+          "category": "object_like",
+          "forwardMaskOverlapFrames": 0,
+          "presenceTransitions": 0,
+          "frames": [
+            {
+              "sceneId": "context-crossing-rider",
+              "rgbSha256": "08683555209269ef05e5457baf0e685570af9378bbf2270ab8d71f5f79046285",
+              "state": "moving",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 6877,
+              "maxRawScore": 0.083757,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [
+                0,
+                1
+              ],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 0,
+              "capturedOffsetMs": 0
+            },
+            {
+              "sceneId": "context-crossing-rider",
+              "rgbSha256": "d460c5f6a3c5005fe42d7a682e98f094f88e2d7bbaf82cc06356f52908965b93",
+              "state": "moving",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 7779,
+              "maxRawScore": 0.052533,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [
+                0,
+                1
+              ],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 1,
+              "capturedOffsetMs": 300
+            },
+            {
+              "sceneId": "context-crossing-rider",
+              "rgbSha256": "5d4b212399b2a937983787270afeac506e5b25f771e04b61cc5783f0ce63f54c",
+              "state": "moving",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 7387,
+              "maxRawScore": 0.214963,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [
+                0,
+                1
+              ],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 2,
+              "capturedOffsetMs": 600
+            }
+          ]
+        },
+        {
+          "sceneId": "context-doorway",
+          "state": "safe",
+          "category": "traversable",
+          "forwardMaskOverlapFrames": 0,
+          "presenceTransitions": 0,
+          "frames": [
+            {
+              "sceneId": "context-doorway",
+              "rgbSha256": "c26271d1be54d4446f84aa294cc25b37c7c51b3f22b97734658b35894a70ac65",
+              "state": "safe",
+              "category": "traversable",
+              "groundTruthAction": "continueForward",
+              "forwardHazardMaskPixels": 2951,
+              "maxRawScore": 0.012382,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 0,
+              "capturedOffsetMs": 0
+            },
+            {
+              "sceneId": "context-doorway",
+              "rgbSha256": "d357ee8e5152f194e9b33dd2dbc9ee187545a0ffcfebbc7670663a8029c6a97b",
+              "state": "safe",
+              "category": "traversable",
+              "groundTruthAction": "continueForward",
+              "forwardHazardMaskPixels": 2838,
+              "maxRawScore": 0.016985,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 1,
+              "capturedOffsetMs": 300
+            },
+            {
+              "sceneId": "context-doorway",
+              "rgbSha256": "29d5dfdaf93f8e799aee3ccbf815165a7ab980bc9c3dad1e8bbd3fa75c18c1ca",
+              "state": "safe",
+              "category": "traversable",
+              "groundTruthAction": "continueForward",
+              "forwardHazardMaskPixels": 2754,
+              "maxRawScore": 0.016297,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 2,
+              "capturedOffsetMs": 600
+            }
+          ]
+        },
+        {
+          "sceneId": "context-low-obstacle",
+          "state": "blocked",
+          "category": "object_like",
+          "forwardMaskOverlapFrames": 0,
+          "presenceTransitions": 0,
+          "frames": [
+            {
+              "sceneId": "context-low-obstacle",
+              "rgbSha256": "8379f037a12c16a7eead83687c0fd1ab880e5a00217bc025b3295ef1b3f73d66",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 3424,
+              "maxRawScore": 0.021021,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [
+                28
+              ],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 0,
+              "capturedOffsetMs": 0
+            },
+            {
+              "sceneId": "context-low-obstacle",
+              "rgbSha256": "bca4254d23e6b81a19b262648109882106cc59b44ec80ab610152399363fcb1f",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 3616,
+              "maxRawScore": 0.0652,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [
+                28
+              ],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 1,
+              "capturedOffsetMs": 300
+            },
+            {
+              "sceneId": "context-low-obstacle",
+              "rgbSha256": "88bc2920532eee5c615a9c4c2ab5ccaa2f4b19493bdd3263cee12b9e88a324bd",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 3897,
+              "maxRawScore": 0.084585,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [
+                28
+              ],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 2,
+              "capturedOffsetMs": 600
+            }
+          ]
+        },
+        {
+          "sceneId": "context-overhead",
+          "state": "blocked",
+          "category": "object_like",
+          "forwardMaskOverlapFrames": 0,
+          "presenceTransitions": 0,
+          "frames": [
+            {
+              "sceneId": "context-overhead",
+              "rgbSha256": "839802df3df59e3ce924cea2ccc9089db92c6ccc3df0c35cb3f0e887737c2374",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 4080,
+              "maxRawScore": 0.015887,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 0,
+              "capturedOffsetMs": 0
+            },
+            {
+              "sceneId": "context-overhead",
+              "rgbSha256": "73cfa6f9c26bc48581a7e4fa8cec2b08e3d3cefb2f36d6b7de3598c5e6e19df7",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 4420,
+              "maxRawScore": 0.023429,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 1,
+              "capturedOffsetMs": 300
+            },
+            {
+              "sceneId": "context-overhead",
+              "rgbSha256": "a05c0b3515ff7326d65714cf6e87b5d594d474ea217314fcd89846f3f07ab236",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 4760,
+              "maxRawScore": 0.047244,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 2,
+              "capturedOffsetMs": 600
+            }
+          ]
+        },
+        {
+          "sceneId": "context-ramp",
+          "state": "safe",
+          "category": "traversable",
+          "forwardMaskOverlapFrames": 0,
+          "presenceTransitions": 0,
+          "frames": [
+            {
+              "sceneId": "context-ramp",
+              "rgbSha256": "9867f9f3f55b238fb31a4252e12aa5c6f1a3ca7d742f777dfd8f8695892bf314",
+              "state": "safe",
+              "category": "traversable",
+              "groundTruthAction": "continueForward",
+              "forwardHazardMaskPixels": 0,
+              "maxRawScore": 0.04948,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 0,
+              "capturedOffsetMs": 0
+            },
+            {
+              "sceneId": "context-ramp",
+              "rgbSha256": "533e9201f71acc20460ecde79919f0adf8fd9f6b84710862125b727eaa6a136e",
+              "state": "safe",
+              "category": "traversable",
+              "groundTruthAction": "continueForward",
+              "forwardHazardMaskPixels": 0,
+              "maxRawScore": 0.087606,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 1,
+              "capturedOffsetMs": 300
+            },
+            {
+              "sceneId": "context-ramp",
+              "rgbSha256": "54d3c31d4bbb026f4628b9f41ed424c94030b8197417e920f3d7e737a46e8641",
+              "state": "safe",
+              "category": "traversable",
+              "groundTruthAction": "continueForward",
+              "forwardHazardMaskPixels": 0,
+              "maxRawScore": 0.068107,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 2,
+              "capturedOffsetMs": 600
+            }
+          ]
+        },
+        {
+          "sceneId": "context-thin-pole",
+          "state": "blocked",
+          "category": "object_like",
+          "forwardMaskOverlapFrames": 0,
+          "presenceTransitions": 0,
+          "frames": [
+            {
+              "sceneId": "context-thin-pole",
+              "rgbSha256": "cfc8c347dd38ae0f5f0a63086d6b5a84b38aec9137db301574ea0d94a0480033",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 1796,
+              "maxRawScore": 0.007433,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 0,
+              "capturedOffsetMs": 0
+            },
+            {
+              "sceneId": "context-thin-pole",
+              "rgbSha256": "b9183b524ddc2daf8c666e1be3d06a6582795159da8c3e3264da9f27be7843a7",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 1812,
+              "maxRawScore": 0.023876,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 1,
+              "capturedOffsetMs": 300
+            },
+            {
+              "sceneId": "context-thin-pole",
+              "rgbSha256": "63af3c6953908f8643ef4aad7ea5bbc161711ad57693442158bd9f767e2b3187",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 2010,
+              "maxRawScore": 0.054455,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 2,
+              "capturedOffsetMs": 600
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "modelId": "yolo11n-onnx-416-experiment",
+      "artifactSha256": "b9c6c86aa850523b970dff6aec9683dbafb363aa52051a449d4e1651c4a580ce",
+      "artifactLicense": "AGPL-3.0 License (https://ultralytics.com/license)",
+      "runtime": "onnx",
+      "inputSize": 416,
+      "summary": {
+        "objectSequences": 4,
+        "objectFrames": 12,
+        "objectMaskScorableFrames": 12,
+        "objectFramesWithForwardMaskOverlap": 0,
+        "objectSequencesWithAnyForwardMaskOverlap": 0,
+        "objectPresenceTransitions": 0,
+        "traversableFrames": 6,
+        "traversableFramesWithForwardBox": 0,
+        "totalDetections": 0,
+        "classCompatibleScorableFrames": 6,
+        "classCompatibleForwardMaskOverlapFrames": 0
+      },
+      "sequences": [
+        {
+          "sceneId": "context-crossing-rider",
+          "state": "moving",
+          "category": "object_like",
+          "forwardMaskOverlapFrames": 0,
+          "presenceTransitions": 0,
+          "frames": [
+            {
+              "sceneId": "context-crossing-rider",
+              "rgbSha256": "08683555209269ef05e5457baf0e685570af9378bbf2270ab8d71f5f79046285",
+              "state": "moving",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 6877,
+              "maxRawScore": 0.166265,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [
+                0,
+                1
+              ],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 0,
+              "capturedOffsetMs": 0
+            },
+            {
+              "sceneId": "context-crossing-rider",
+              "rgbSha256": "d460c5f6a3c5005fe42d7a682e98f094f88e2d7bbaf82cc06356f52908965b93",
+              "state": "moving",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 7779,
+              "maxRawScore": 0.108788,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [
+                0,
+                1
+              ],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 1,
+              "capturedOffsetMs": 300
+            },
+            {
+              "sceneId": "context-crossing-rider",
+              "rgbSha256": "5d4b212399b2a937983787270afeac506e5b25f771e04b61cc5783f0ce63f54c",
+              "state": "moving",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 7387,
+              "maxRawScore": 0.235935,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [
+                0,
+                1
+              ],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 2,
+              "capturedOffsetMs": 600
+            }
+          ]
+        },
+        {
+          "sceneId": "context-doorway",
+          "state": "safe",
+          "category": "traversable",
+          "forwardMaskOverlapFrames": 0,
+          "presenceTransitions": 0,
+          "frames": [
+            {
+              "sceneId": "context-doorway",
+              "rgbSha256": "c26271d1be54d4446f84aa294cc25b37c7c51b3f22b97734658b35894a70ac65",
+              "state": "safe",
+              "category": "traversable",
+              "groundTruthAction": "continueForward",
+              "forwardHazardMaskPixels": 2951,
+              "maxRawScore": 0.058265,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 0,
+              "capturedOffsetMs": 0
+            },
+            {
+              "sceneId": "context-doorway",
+              "rgbSha256": "d357ee8e5152f194e9b33dd2dbc9ee187545a0ffcfebbc7670663a8029c6a97b",
+              "state": "safe",
+              "category": "traversable",
+              "groundTruthAction": "continueForward",
+              "forwardHazardMaskPixels": 2838,
+              "maxRawScore": 0.066523,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 1,
+              "capturedOffsetMs": 300
+            },
+            {
+              "sceneId": "context-doorway",
+              "rgbSha256": "29d5dfdaf93f8e799aee3ccbf815165a7ab980bc9c3dad1e8bbd3fa75c18c1ca",
+              "state": "safe",
+              "category": "traversable",
+              "groundTruthAction": "continueForward",
+              "forwardHazardMaskPixels": 2754,
+              "maxRawScore": 0.056335,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 2,
+              "capturedOffsetMs": 600
+            }
+          ]
+        },
+        {
+          "sceneId": "context-low-obstacle",
+          "state": "blocked",
+          "category": "object_like",
+          "forwardMaskOverlapFrames": 0,
+          "presenceTransitions": 0,
+          "frames": [
+            {
+              "sceneId": "context-low-obstacle",
+              "rgbSha256": "8379f037a12c16a7eead83687c0fd1ab880e5a00217bc025b3295ef1b3f73d66",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 3424,
+              "maxRawScore": 0.028975,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [
+                28
+              ],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 0,
+              "capturedOffsetMs": 0
+            },
+            {
+              "sceneId": "context-low-obstacle",
+              "rgbSha256": "bca4254d23e6b81a19b262648109882106cc59b44ec80ab610152399363fcb1f",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 3616,
+              "maxRawScore": 0.033903,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [
+                28
+              ],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 1,
+              "capturedOffsetMs": 300
+            },
+            {
+              "sceneId": "context-low-obstacle",
+              "rgbSha256": "88bc2920532eee5c615a9c4c2ab5ccaa2f4b19493bdd3263cee12b9e88a324bd",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 3897,
+              "maxRawScore": 0.081749,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [
+                28
+              ],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 2,
+              "capturedOffsetMs": 600
+            }
+          ]
+        },
+        {
+          "sceneId": "context-overhead",
+          "state": "blocked",
+          "category": "object_like",
+          "forwardMaskOverlapFrames": 0,
+          "presenceTransitions": 0,
+          "frames": [
+            {
+              "sceneId": "context-overhead",
+              "rgbSha256": "839802df3df59e3ce924cea2ccc9089db92c6ccc3df0c35cb3f0e887737c2374",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 4080,
+              "maxRawScore": 0.107431,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 0,
+              "capturedOffsetMs": 0
+            },
+            {
+              "sceneId": "context-overhead",
+              "rgbSha256": "73cfa6f9c26bc48581a7e4fa8cec2b08e3d3cefb2f36d6b7de3598c5e6e19df7",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 4420,
+              "maxRawScore": 0.129596,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 1,
+              "capturedOffsetMs": 300
+            },
+            {
+              "sceneId": "context-overhead",
+              "rgbSha256": "a05c0b3515ff7326d65714cf6e87b5d594d474ea217314fcd89846f3f07ab236",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 4760,
+              "maxRawScore": 0.083807,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 2,
+              "capturedOffsetMs": 600
+            }
+          ]
+        },
+        {
+          "sceneId": "context-ramp",
+          "state": "safe",
+          "category": "traversable",
+          "forwardMaskOverlapFrames": 0,
+          "presenceTransitions": 0,
+          "frames": [
+            {
+              "sceneId": "context-ramp",
+              "rgbSha256": "9867f9f3f55b238fb31a4252e12aa5c6f1a3ca7d742f777dfd8f8695892bf314",
+              "state": "safe",
+              "category": "traversable",
+              "groundTruthAction": "continueForward",
+              "forwardHazardMaskPixels": 0,
+              "maxRawScore": 0.044924,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 0,
+              "capturedOffsetMs": 0
+            },
+            {
+              "sceneId": "context-ramp",
+              "rgbSha256": "533e9201f71acc20460ecde79919f0adf8fd9f6b84710862125b727eaa6a136e",
+              "state": "safe",
+              "category": "traversable",
+              "groundTruthAction": "continueForward",
+              "forwardHazardMaskPixels": 0,
+              "maxRawScore": 0.091466,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 1,
+              "capturedOffsetMs": 300
+            },
+            {
+              "sceneId": "context-ramp",
+              "rgbSha256": "54d3c31d4bbb026f4628b9f41ed424c94030b8197417e920f3d7e737a46e8641",
+              "state": "safe",
+              "category": "traversable",
+              "groundTruthAction": "continueForward",
+              "forwardHazardMaskPixels": 0,
+              "maxRawScore": 0.071463,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 2,
+              "capturedOffsetMs": 600
+            }
+          ]
+        },
+        {
+          "sceneId": "context-thin-pole",
+          "state": "blocked",
+          "category": "object_like",
+          "forwardMaskOverlapFrames": 0,
+          "presenceTransitions": 0,
+          "frames": [
+            {
+              "sceneId": "context-thin-pole",
+              "rgbSha256": "cfc8c347dd38ae0f5f0a63086d6b5a84b38aec9137db301574ea0d94a0480033",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 1796,
+              "maxRawScore": 0.019212,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 0,
+              "capturedOffsetMs": 0
+            },
+            {
+              "sceneId": "context-thin-pole",
+              "rgbSha256": "b9183b524ddc2daf8c666e1be3d06a6582795159da8c3e3264da9f27be7843a7",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 1812,
+              "maxRawScore": 0.04632,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 1,
+              "capturedOffsetMs": 300
+            },
+            {
+              "sceneId": "context-thin-pole",
+              "rgbSha256": "63af3c6953908f8643ef4aad7ea5bbc161711ad57693442158bd9f767e2b3187",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 2010,
+              "maxRawScore": 0.049823,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 2,
+              "capturedOffsetMs": 600
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "modelId": "yolo26n-onnx-416-experiment",
+      "artifactSha256": "b0db38ca8a0fe5c8ff00391b18206e07a423f218f5a8236e1f1dbe1b8a2e1332",
+      "artifactLicense": "AGPL-3.0 License (https://ultralytics.com/license)",
+      "runtime": "onnx",
+      "inputSize": 416,
+      "summary": {
+        "objectSequences": 4,
+        "objectFrames": 12,
+        "objectMaskScorableFrames": 12,
+        "objectFramesWithForwardMaskOverlap": 2,
+        "objectSequencesWithAnyForwardMaskOverlap": 1,
+        "objectPresenceTransitions": 1,
+        "traversableFrames": 6,
+        "traversableFramesWithForwardBox": 3,
+        "totalDetections": 5,
+        "classCompatibleScorableFrames": 6,
+        "classCompatibleForwardMaskOverlapFrames": 0
+      },
+      "sequences": [
+        {
+          "sceneId": "context-crossing-rider",
+          "state": "moving",
+          "category": "object_like",
+          "forwardMaskOverlapFrames": 0,
+          "presenceTransitions": 0,
+          "frames": [
+            {
+              "sceneId": "context-crossing-rider",
+              "rgbSha256": "08683555209269ef05e5457baf0e685570af9378bbf2270ab8d71f5f79046285",
+              "state": "moving",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 6877,
+              "maxRawScore": 0.166624,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [
+                0,
+                1
+              ],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 0,
+              "capturedOffsetMs": 0
+            },
+            {
+              "sceneId": "context-crossing-rider",
+              "rgbSha256": "d460c5f6a3c5005fe42d7a682e98f094f88e2d7bbaf82cc06356f52908965b93",
+              "state": "moving",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 7779,
+              "maxRawScore": 0.110229,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [
+                0,
+                1
+              ],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 1,
+              "capturedOffsetMs": 300
+            },
+            {
+              "sceneId": "context-crossing-rider",
+              "rgbSha256": "5d4b212399b2a937983787270afeac506e5b25f771e04b61cc5783f0ce63f54c",
+              "state": "moving",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 7387,
+              "maxRawScore": 0.125016,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [
+                0,
+                1
+              ],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 2,
+              "capturedOffsetMs": 600
+            }
+          ]
+        },
+        {
+          "sceneId": "context-doorway",
+          "state": "safe",
+          "category": "traversable",
+          "forwardMaskOverlapFrames": 0,
+          "presenceTransitions": 0,
+          "frames": [
+            {
+              "sceneId": "context-doorway",
+              "rgbSha256": "c26271d1be54d4446f84aa294cc25b37c7c51b3f22b97734658b35894a70ac65",
+              "state": "safe",
+              "category": "traversable",
+              "groundTruthAction": "continueForward",
+              "forwardHazardMaskPixels": 2951,
+              "maxRawScore": 0.011177,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 0,
+              "capturedOffsetMs": 0
+            },
+            {
+              "sceneId": "context-doorway",
+              "rgbSha256": "d357ee8e5152f194e9b33dd2dbc9ee187545a0ffcfebbc7670663a8029c6a97b",
+              "state": "safe",
+              "category": "traversable",
+              "groundTruthAction": "continueForward",
+              "forwardHazardMaskPixels": 2838,
+              "maxRawScore": 0.009822,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 1,
+              "capturedOffsetMs": 300
+            },
+            {
+              "sceneId": "context-doorway",
+              "rgbSha256": "29d5dfdaf93f8e799aee3ccbf815165a7ab980bc9c3dad1e8bbd3fa75c18c1ca",
+              "state": "safe",
+              "category": "traversable",
+              "groundTruthAction": "continueForward",
+              "forwardHazardMaskPixels": 2754,
+              "maxRawScore": 0.013114,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 2,
+              "capturedOffsetMs": 600
+            }
+          ]
+        },
+        {
+          "sceneId": "context-low-obstacle",
+          "state": "blocked",
+          "category": "object_like",
+          "forwardMaskOverlapFrames": 0,
+          "presenceTransitions": 0,
+          "frames": [
+            {
+              "sceneId": "context-low-obstacle",
+              "rgbSha256": "8379f037a12c16a7eead83687c0fd1ab880e5a00217bc025b3295ef1b3f73d66",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 3424,
+              "maxRawScore": 0.137727,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [
+                28
+              ],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 0,
+              "capturedOffsetMs": 0
+            },
+            {
+              "sceneId": "context-low-obstacle",
+              "rgbSha256": "bca4254d23e6b81a19b262648109882106cc59b44ec80ab610152399363fcb1f",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 3616,
+              "maxRawScore": 0.156361,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [
+                28
+              ],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 1,
+              "capturedOffsetMs": 300
+            },
+            {
+              "sceneId": "context-low-obstacle",
+              "rgbSha256": "88bc2920532eee5c615a9c4c2ab5ccaa2f4b19493bdd3263cee12b9e88a324bd",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 3897,
+              "maxRawScore": 0.06535,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [
+                28
+              ],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 2,
+              "capturedOffsetMs": 600
+            }
+          ]
+        },
+        {
+          "sceneId": "context-overhead",
+          "state": "blocked",
+          "category": "object_like",
+          "forwardMaskOverlapFrames": 2,
+          "presenceTransitions": 1,
+          "frames": [
+            {
+              "sceneId": "context-overhead",
+              "rgbSha256": "839802df3df59e3ce924cea2ccc9089db92c6ccc3df0c35cb3f0e887737c2374",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 4080,
+              "maxRawScore": 0.426049,
+              "forwardBoxPresent": true,
+              "forwardMaskOverlapPresent": true,
+              "detections": [
+                {
+                  "classId": 13,
+                  "score": 0.426049,
+                  "boxNormalized": [
+                    0.155857,
+                    0.185447,
+                    0.84393,
+                    0.569941
+                  ],
+                  "forward": true,
+                  "hazardMaskOverlapPixels": 7270,
+                  "forwardHazardMaskOverlapPixels": 3570
+                }
+              ],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 0,
+              "capturedOffsetMs": 0
+            },
+            {
+              "sceneId": "context-overhead",
+              "rgbSha256": "73cfa6f9c26bc48581a7e4fa8cec2b08e3d3cefb2f36d6b7de3598c5e6e19df7",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 4420,
+              "maxRawScore": 0.309472,
+              "forwardBoxPresent": true,
+              "forwardMaskOverlapPresent": true,
+              "detections": [
+                {
+                  "classId": 13,
+                  "score": 0.309472,
+                  "boxNormalized": [
+                    0.115145,
+                    0.172703,
+                    0.856152,
+                    0.571101
+                  ],
+                  "forward": true,
+                  "hazardMaskOverlapPixels": 8409,
+                  "forwardHazardMaskOverlapPixels": 3825
+                }
+              ],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 1,
+              "capturedOffsetMs": 300
+            },
+            {
+              "sceneId": "context-overhead",
+              "rgbSha256": "a05c0b3515ff7326d65714cf6e87b5d594d474ea217314fcd89846f3f07ab236",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 4760,
+              "maxRawScore": 0.231146,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 2,
+              "capturedOffsetMs": 600
+            }
+          ]
+        },
+        {
+          "sceneId": "context-ramp",
+          "state": "safe",
+          "category": "traversable",
+          "forwardMaskOverlapFrames": 0,
+          "presenceTransitions": 0,
+          "frames": [
+            {
+              "sceneId": "context-ramp",
+              "rgbSha256": "9867f9f3f55b238fb31a4252e12aa5c6f1a3ca7d742f777dfd8f8695892bf314",
+              "state": "safe",
+              "category": "traversable",
+              "groundTruthAction": "continueForward",
+              "forwardHazardMaskPixels": 0,
+              "maxRawScore": 0.752036,
+              "forwardBoxPresent": true,
+              "forwardMaskOverlapPresent": false,
+              "detections": [
+                {
+                  "classId": 59,
+                  "score": 0.752036,
+                  "boxNormalized": [
+                    4.6e-05,
+                    0.52898,
+                    1.0,
+                    0.988056
+                  ],
+                  "forward": true,
+                  "hazardMaskOverlapPixels": 0,
+                  "forwardHazardMaskOverlapPixels": 0
+                }
+              ],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 0,
+              "capturedOffsetMs": 0
+            },
+            {
+              "sceneId": "context-ramp",
+              "rgbSha256": "533e9201f71acc20460ecde79919f0adf8fd9f6b84710862125b727eaa6a136e",
+              "state": "safe",
+              "category": "traversable",
+              "groundTruthAction": "continueForward",
+              "forwardHazardMaskPixels": 0,
+              "maxRawScore": 0.57778,
+              "forwardBoxPresent": true,
+              "forwardMaskOverlapPresent": false,
+              "detections": [
+                {
+                  "classId": 59,
+                  "score": 0.57778,
+                  "boxNormalized": [
+                    0.001986,
+                    0.534973,
+                    1.0,
+                    0.987882
+                  ],
+                  "forward": true,
+                  "hazardMaskOverlapPixels": 0,
+                  "forwardHazardMaskOverlapPixels": 0
+                }
+              ],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 1,
+              "capturedOffsetMs": 300
+            },
+            {
+              "sceneId": "context-ramp",
+              "rgbSha256": "54d3c31d4bbb026f4628b9f41ed424c94030b8197417e920f3d7e737a46e8641",
+              "state": "safe",
+              "category": "traversable",
+              "groundTruthAction": "continueForward",
+              "forwardHazardMaskPixels": 0,
+              "maxRawScore": 0.455653,
+              "forwardBoxPresent": true,
+              "forwardMaskOverlapPresent": false,
+              "detections": [
+                {
+                  "classId": 59,
+                  "score": 0.455653,
+                  "boxNormalized": [
+                    0.002071,
+                    0.539679,
+                    1.0,
+                    0.988302
+                  ],
+                  "forward": true,
+                  "hazardMaskOverlapPixels": 0,
+                  "forwardHazardMaskOverlapPixels": 0
+                }
+              ],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 2,
+              "capturedOffsetMs": 600
+            }
+          ]
+        },
+        {
+          "sceneId": "context-thin-pole",
+          "state": "blocked",
+          "category": "object_like",
+          "forwardMaskOverlapFrames": 0,
+          "presenceTransitions": 0,
+          "frames": [
+            {
+              "sceneId": "context-thin-pole",
+              "rgbSha256": "cfc8c347dd38ae0f5f0a63086d6b5a84b38aec9137db301574ea0d94a0480033",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 1796,
+              "maxRawScore": 0.062445,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 0,
+              "capturedOffsetMs": 0
+            },
+            {
+              "sceneId": "context-thin-pole",
+              "rgbSha256": "b9183b524ddc2daf8c666e1be3d06a6582795159da8c3e3264da9f27be7843a7",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 1812,
+              "maxRawScore": 0.030337,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 1,
+              "capturedOffsetMs": 300
+            },
+            {
+              "sceneId": "context-thin-pole",
+              "rgbSha256": "63af3c6953908f8643ef4aad7ea5bbc161711ad57693442158bd9f767e2b3187",
+              "state": "blocked",
+              "category": "object_like",
+              "groundTruthAction": "stopNow",
+              "forwardHazardMaskPixels": 2010,
+              "maxRawScore": 0.008151,
+              "forwardBoxPresent": false,
+              "forwardMaskOverlapPresent": false,
+              "detections": [],
+              "compatibleCocoClassIds": [],
+              "classCompatibleForwardMaskOverlapPresent": false,
+              "frameIndex": 2,
+              "capturedOffsetMs": 600
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "promotionAllowed": false,
+  "blockingReasons": [
+    "synthetic contextual RGB cannot establish real-camera recall or false-alert rate",
+    "replay uses synthetic scene-state sectors, not model depth or detector-derived occupancy",
+    "three frames are too few for temporal reliability or moving-direction validation",
+    "model license/provenance and named-device gates remain open"
+  ]
+}

@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "corpusId": "blender-temporal-v2",
+  "seed": 20260922,
+  "generatorId": "bagdar-blender-temporal-v2",
+  "timelineOriginUtc": "2026-09-22T00:00:00.000Z",
+  "source": {
+    "type": "blender",
+    "license": "project-generated-test-fixture",
+    "consentClass": "not_applicable"
+  },
+  "handling": "public",
+  "camera": {
+    "mount": "synthetic_chest_approach",
+    "parameters": "256x192; lens=26mm; sensor=36mm",
+    "coordinateMode": "relative"
+  },
+  "modelContract": {
+    "modelId": "blender-synthetic-scene-state-temporal-v2",
+    "modelHash": "04dc6297c140743d8b67acd70e3f6b322e0b5a778b815fd426067338b7845065",
+    "preprocessId": "blender-scene-state-sectors-temporal-v2"
+  },
+  "scenes": [
+    {
+      "id": "temporal-thin-pole",
+      "kind": "blender-temporal",
+      "frames": "scenes/temporal-thin-pole/frames.jsonl",
+      "annotations": "scenes/temporal-thin-pole/annotations.json",
+      "sha256": {
+        "frames": "40c590e1d9a5f5020225a7e03e268e4ef4b5ad63ea150a9dad16c1ee41f1dd43",
+        "annotations": "c325fd58ba53a0f391322ce9fe2118481bf248f63783634c34364c7efe812016"
+      },
+      "tags": [
+        "thin",
+        "obstacle",
+        "blender",
+        "temporal",
+        "synthetic-scene-state"
+      ],
+      "annotationRevision": 1,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "temporal-low-obstacle",
+      "kind": "blender-temporal",
+      "frames": "scenes/temporal-low-obstacle/frames.jsonl",
+      "annotations": "scenes/temporal-low-obstacle/annotations.json",
+      "sha256": {
+        "frames": "e7b13d23eae8ddc439192132f255af9f5fd9e9b6812fb098a84c044f957e930b",
+        "annotations": "60c7549edaf368a7562aaaf875ae786b93be08bd6395ddbef88007f291f6f2e7"
+      },
+      "tags": [
+        "low",
+        "obstacle",
+        "blender",
+        "temporal",
+        "synthetic-scene-state"
+      ],
+      "annotationRevision": 1,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "temporal-overhead",
+      "kind": "blender-temporal",
+      "frames": "scenes/temporal-overhead/frames.jsonl",
+      "annotations": "scenes/temporal-overhead/annotations.json",
+      "sha256": {
+        "frames": "6050cb2ddae32ed57cb352e6c1e2cc7e5f7b52407592f723f3dcf4f00108071c",
+        "annotations": "c7b323c3da3bf6ff67bc36b92b7ab9f497e6fc4f19bc38bf387bfaede4b4187d"
+      },
+      "tags": [
+        "overhead",
+        "obstacle",
+        "blender",
+        "temporal",
+        "synthetic-scene-state"
+      ],
+      "annotationRevision": 1,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "temporal-crossing-rider",
+      "kind": "blender-temporal",
+      "frames": "scenes/temporal-crossing-rider/frames.jsonl",
+      "annotations": "scenes/temporal-crossing-rider/annotations.json",
+      "sha256": {
+        "frames": "08cb707060b71b5c11b2d26c65d21f87fe629b5b73561513a28f24e16e6fe696",
+        "annotations": "04ef628ecf0ddb3b240071636e42d60ead8529421d34977e3bf24c3bd102acf4"
+      },
+      "tags": [
+        "moving",
+        "rider",
+        "blender",
+        "temporal",
+        "synthetic-scene-state"
+      ],
+      "annotationRevision": 1,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "temporal-ramp",
+      "kind": "blender-temporal",
+      "frames": "scenes/temporal-ramp/frames.jsonl",
+      "annotations": "scenes/temporal-ramp/annotations.json",
+      "sha256": {
+        "frames": "972cdefb9c097a3fe48ca4beedf21d551c47c290f3217960874c355199a3dba4",
+        "annotations": "d8b7b055dc55dd197fd428c5aea5ff135038892c3ffe1d23d52cedd2b7f3717b"
+      },
+      "tags": [
+        "ramp",
+        "traversable",
+        "blender",
+        "temporal",
+        "synthetic-scene-state"
+      ],
+      "annotationRevision": 1,
+      "requiredForRc": true,
+      "coverage": "complete"
+    },
+    {
+      "id": "temporal-doorway",
+      "kind": "blender-temporal",
+      "frames": "scenes/temporal-doorway/frames.jsonl",
+      "annotations": "scenes/temporal-doorway/annotations.json",
+      "sha256": {
+        "frames": "86044eb9cbb86b7d1c205299014fd883bf91b88f0e1f4accd458c1a3d006ddbe",
+        "annotations": "7e613add6402ebdd018ea4e1222e5e5620d59e35ca98a4831577bd3ede68ae1b"
+      },
+      "tags": [
+        "doorway",
+        "opening",
+        "blender",
+        "temporal",
+        "synthetic-scene-state"
+      ],
+      "annotationRevision": 1,
+      "requiredForRc": true,
+      "coverage": "complete"
+    }
+  ],
+  "externalCorpora": []
+}

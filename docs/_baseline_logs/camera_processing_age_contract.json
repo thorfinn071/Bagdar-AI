@@ -1,0 +1,27 @@
+{
+  "scope": "known-regression software parity and processing-age contract; no device promotion",
+  "sourceSha256": {
+    "lib/safety/perception/camera_cached_scale_metric_motion.dart": "1665f1358b0def692cd2fa165e1ec998e4a360937662afc1f8aa7cec3e705746",
+    "lib/safety/runtime/camera_processing_age_gate.dart": "3faa6c92a1c82976cd0dc4765befc50b1c59fe4792b2cb9bde2e361bb16dfa47",
+    "test/camera_processing_age_gate_test.dart": "e7448047ebe7d60580e606db4f4ecab04a97a26fa07aa1304ce6fe030e96a905",
+    "test/camera_processing_parity_test.dart": "b9d2b2cff52185a0a8c1e5459a923fed0c7d7037eebc0e189ba15183b7fcdbb5",
+    "test/camera_processing_age_replay_test.dart": "b095f5cf7073a5134c1a5dabee7f4d293c8bc3a298bd5634f21be02bae4eac77",
+    "test/harness/camera_processing_age_benchmark.dart": "3c4ddd6bd7dfa2923380c178d41a18046b9309b1a7cdfcb024dbe2f190cf53e5",
+    "tool/model_benchmark/profile_camera_processing.dart": "da4a096bb23f7bd8749875f5967fa358261aa3c946244fd667d62799ee7cddcb",
+    "tool/model_benchmark/camera_processing_ncnn_worker.py": "9fbe4c3cb46aa1da7391611800cb9a283016c6dc86958cd0e0a2b27664833039",
+    "tool/model_benchmark/evaluate_camera_processing_age.dart": "145ca0022e2e1ca46faadf4734cbbe6d995d94ef9238246c1685bf8d44dfef66",
+    "tool/model_benchmark/verify_camera_processing_age.py": "b57f652ac45e93a184034acad219945312674e9b609f93623db3af627bbac659",
+    "docs/camera-processing-age-protocol-2026-10-03.md": "0ee4ea59c30196406c33bad6a2644a1d5693ec52edf0908331e458bc83e72e8a"
+  },
+  "reportSha256": {
+    "docs/_baseline_logs/camera_processing_parity.json": "f1f55a6f69d96cab49c9bbed0932167c4f01a9ccd8f1e18a72c7728bc8e63265",
+    "docs/_baseline_logs/camera_processing_age_functional.json": "e07cd0a745f6c31ed33ea36f351a635997f3ac33bf9c86ab8c460b2a164ef910",
+    "docs/_baseline_logs/camera_processing_age_overload.json": "da8a243f01bd9ab178c685aeef96cf52acd99b6e736997ac6d758f7939e2ac5e",
+    "docs/_baseline_logs/camera_processing_age_runtime-overrun.json": "bb0fc373878f12828bc67e0e026a93c786772c5db218e7c0b8d20ba289e58991"
+  },
+  "previousFreezeSha256": "87d273b4c4eefb6177289b1869d00f993fe5b720dd11b915ba1dcb9c14038a3c",
+  "priorTestIsKnownRegression": true,
+  "newIndependentHoldout": false,
+  "promotionAllowed": false,
+  "timingsAreReproducibilityData": false
+}

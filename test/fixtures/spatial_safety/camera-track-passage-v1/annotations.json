@@ -1,0 +1,248 @@
+{
+  "schemaVersion": 1,
+  "scope": "scoring only, never an inference input",
+  "layouts": [
+    {
+      "layoutId": "validation-association-wide-00",
+      "physicalHazard": false,
+      "orientationUsable": true,
+      "idealWidthM": 1.57,
+      "idealHeadroomM": 2.11,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "validation-association-door-pass-01",
+      "physicalHazard": false,
+      "orientationUsable": true,
+      "idealWidthM": 1.43,
+      "idealHeadroomM": 2.16,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "validation-association-outside-pole-02",
+      "physicalHazard": false,
+      "orientationUsable": true,
+      "idealWidthM": 1.61,
+      "idealHeadroomM": 2.12,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "validation-association-boundary-pole-03",
+      "physicalHazard": true,
+      "orientationUsable": true,
+      "idealWidthM": 1.59,
+      "idealHeadroomM": 2.12,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": false,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "validation-association-near-box-04",
+      "physicalHazard": true,
+      "orientationUsable": true,
+      "idealWidthM": 1.63,
+      "idealHeadroomM": 2.14,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": false,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "validation-association-low-bar-05",
+      "physicalHazard": true,
+      "orientationUsable": true,
+      "idealWidthM": 1.57,
+      "idealHeadroomM": 1.49,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": false,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "test-association-wide-06",
+      "physicalHazard": false,
+      "orientationUsable": true,
+      "idealWidthM": 1.53,
+      "idealHeadroomM": 2.07,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "test-association-wide-07",
+      "physicalHazard": false,
+      "orientationUsable": true,
+      "idealWidthM": 1.67,
+      "idealHeadroomM": 2.17,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "test-association-wide-08",
+      "physicalHazard": false,
+      "orientationUsable": true,
+      "idealWidthM": 1.59,
+      "idealHeadroomM": 2.19,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "test-association-door-pass-09",
+      "physicalHazard": false,
+      "orientationUsable": true,
+      "idealWidthM": 1.4100000000000001,
+      "idealHeadroomM": 2.12,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "test-association-door-pass-10",
+      "physicalHazard": false,
+      "orientationUsable": true,
+      "idealWidthM": 1.45,
+      "idealHeadroomM": 2.18,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "test-association-outside-pole-11",
+      "physicalHazard": false,
+      "orientationUsable": true,
+      "idealWidthM": 1.65,
+      "idealHeadroomM": 2.16,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "test-association-narrow-12",
+      "physicalHazard": true,
+      "orientationUsable": true,
+      "idealWidthM": 0.77,
+      "idealHeadroomM": 2.13,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": false,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "test-association-pole-13",
+      "physicalHazard": true,
+      "orientationUsable": true,
+      "idealWidthM": 1.59,
+      "idealHeadroomM": 2.14,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": false,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "test-association-boundary-pole-14",
+      "physicalHazard": true,
+      "orientationUsable": true,
+      "idealWidthM": 1.61,
+      "idealHeadroomM": 2.14,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": false,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "test-association-low-bar-15",
+      "physicalHazard": true,
+      "orientationUsable": true,
+      "idealWidthM": 1.61,
+      "idealHeadroomM": 1.46,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": false,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "test-association-box-16",
+      "physicalHazard": true,
+      "orientationUsable": true,
+      "idealWidthM": 1.63,
+      "idealHeadroomM": 2.16,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": false,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "test-association-floor-gap-17",
+      "physicalHazard": true,
+      "orientationUsable": true,
+      "idealWidthM": 1.59,
+      "idealHeadroomM": 2.18,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": false,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "test-association-near-box-18",
+      "physicalHazard": true,
+      "orientationUsable": true,
+      "idealWidthM": 1.65,
+      "idealHeadroomM": 2.16,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": false,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "test-association-subpixel-pole-19",
+      "physicalHazard": true,
+      "orientationUsable": true,
+      "idealWidthM": 1.57,
+      "idealHeadroomM": 2.13,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": false,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "test-association-between-rays-pole-20",
+      "physicalHazard": true,
+      "orientationUsable": true,
+      "idealWidthM": 1.63,
+      "idealHeadroomM": 2.15,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": false,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    },
+    {
+      "layoutId": "test-association-occluded-pole-21",
+      "physicalHazard": true,
+      "orientationUsable": true,
+      "idealWidthM": 1.61,
+      "idealHeadroomM": 2.17,
+      "singleObservationSufficient": false,
+      "scanObservationSufficient": false,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000
+    }
+  ]
+}

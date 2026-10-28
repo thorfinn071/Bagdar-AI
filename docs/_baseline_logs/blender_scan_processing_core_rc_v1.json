@@ -1,0 +1,437 @@
+﻿{
+    "schemaVersion":  2,
+    "tool":  "tool/verify_core.ps1",
+    "generatedAtUtc":  "2026-10-04T17:21:15.1564144Z",
+    "command":  {
+                    "rc":  true,
+                    "androidBuild":  false
+                },
+    "source":  {
+                   "commitSha":  "180bd16bc7cc46f9c06936a3f6ad82f3d9da2c8d",
+                   "dirty":  true
+               },
+    "evidenceClasses":  {
+                            "desktopSoftwareRc":  "pass",
+                            "modelCorrectnessRc":  "not_established",
+                            "androidBuild":  "not_run",
+                            "namedDeviceRuntime":  "not_run",
+                            "controlledWalking":  "not_run"
+                        },
+    "stages":  [
+                   {
+                       "name":  "static analysis",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  141660
+                   },
+                   {
+                       "name":  "Flutter software tests",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  1494635
+                   },
+                   {
+                       "name":  "strict legacy safety harness",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  36989
+                   },
+                   {
+                       "name":  "procedural spatial corpus reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  2967
+                   },
+                   {
+                       "name":  "real model-output replay reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  2340
+                   },
+                   {
+                       "name":  "metric passage contract reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  2310
+                   },
+                   {
+                       "name":  "synthetic metric passage shadow replay reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  8345
+                   },
+                   {
+                       "name":  "camera-visible corpus and held-out split integrity",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  6601
+                   },
+                   {
+                       "name":  "camera-visible NCNN and frozen scale reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  59113
+                   },
+                   {
+                       "name":  "camera-visible shadow passage replay reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  215480
+                   },
+                   {
+                       "name":  "camera recovery independent corpus integrity",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  3604
+                   },
+                   {
+                       "name":  "camera recovery NCNN and original frozen calibration",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  18784
+                   },
+                   {
+                       "name":  "camera recovery shadow replay reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  58661
+                   },
+                   {
+                       "name":  "camera track association independent corpus integrity",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  4498
+                   },
+                   {
+                       "name":  "camera track association development freeze integrity",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  610
+                   },
+                   {
+                       "name":  "camera track association pinned NCNN and frozen calibration",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  25363
+                   },
+                   {
+                       "name":  "camera track association shadow replay reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  63246
+                   },
+                   {
+                       "name":  "camera temporal independent corpus integrity",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  4707
+                   },
+                   {
+                       "name":  "camera temporal development freeze integrity",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  258
+                   },
+                   {
+                       "name":  "camera temporal pinned NCNN reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  22140
+                   },
+                   {
+                       "name":  "camera temporal shadow replay reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  56593
+                   },
+                   {
+                       "name":  "camera metric motion visible corpus and observation labels",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  5756
+                   },
+                   {
+                       "name":  "camera metric motion development freeze integrity",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  221
+                   },
+                   {
+                       "name":  "camera metric motion pinned NCNN reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  15699
+                   },
+                   {
+                       "name":  "camera metric motion shadow replay reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  59837
+                   },
+                   {
+                       "name":  "camera scale motion independent visible corpus integrity",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  4160
+                   },
+                   {
+                       "name":  "camera scale motion development freeze integrity",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  273
+                   },
+                   {
+                       "name":  "camera scale motion pinned NCNN reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  14375
+                   },
+                   {
+                       "name":  "camera scale motion shadow replay reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  68917
+                   },
+                   {
+                       "name":  "camera processing age source and regression contract integrity",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  283
+                   },
+                   {
+                       "name":  "camera processing age parity, deadlines and overload shadow replay",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  125884
+                   },
+                   {
+                       "name":  "independent fast motion source and shadow contract integrity",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  337
+                   },
+                   {
+                       "name":  "independent fast motion AOT parity, worker and shadow reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  117242
+                   },
+                   {
+                       "name":  "concurrent-load motion source and earlier fast contract integrity",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  542
+                   },
+                   {
+                       "name":  "concurrent-load native motion AOT parity, worker and shadow reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  69953
+                   },
+                   {
+                       "name":  "paired Blender scene corpus, admission negatives and first baseline integrity",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  19849
+                   },
+                   {
+                       "name":  "paired Blender production YOLO control reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  32551
+                   },
+                   {
+                       "name":  "paired Blender production MiDaS NCNN reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  23020
+                   },
+                   {
+                       "name":  "paired Blender geometry and shadow runtime report reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  31023
+                   },
+                   {
+                       "name":  "paired Blender no hazardous continue, timely stops and no false imminent quality gate",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  9303
+                   },
+                   {
+                       "name":  "visible body optical packet admission and prior baseline integrity",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  14368
+                   },
+                   {
+                       "name":  "visible body single-frame replay and static scan authority reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  39581
+                   },
+                   {
+                       "name":  "complete optical surface bounds, negative coverage and prior freezes",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  25459
+                   },
+                   {
+                       "name":  "static scan coverage and complete envelope replay reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  82778
+                   },
+                   {
+                       "name":  "scan processing elapsed evidence, NCNN load and prior freezes",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  1321
+                   },
+                   {
+                       "name":  "procedural replay and external manifest integrity",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  3399
+                   },
+                   {
+                       "name":  "external Blender frame replay: test/fixtures/spatial_safety/blender-egocentric-v1/replay-manifest.json",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  2802
+                   },
+                   {
+                       "name":  "external Blender frame replay: test/fixtures/spatial_safety/blender-temporal-v2/replay-manifest.json",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  2719
+                   },
+                   {
+                       "name":  "external Blender frame replay: test/fixtures/spatial_safety/blender-context-v3/replay-manifest.json",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  2830
+                   },
+                   {
+                       "name":  "Blender oracle-depth shadow runtime replay reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  9016
+                   },
+                   {
+                       "name":  "context Blender oracle-depth shadow replay reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  9346
+                   },
+                   {
+                       "name":  "context desktop NCNN depth output reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  2513
+                   },
+                   {
+                       "name":  "context desktop NCNN depth shadow replay reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  10870
+                   },
+                   {
+                       "name":  "context oracle versus NCNN diagnostic reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  179
+                   },
+                   {
+                       "name":  "model artifact/hash/decoder contracts",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  9049
+                   },
+                   {
+                       "name":  "real ONNX candidate predictions",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  6321
+                   },
+                   {
+                       "name":  "ONNX reference vs NCNN parity",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  1847
+                   },
+                   {
+                       "name":  "working-tree whitespace check",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  315
+                   },
+                   {
+                       "name":  "Android debug compilation evidence",
+                       "required":  false,
+                       "passed":  null,
+                       "exitCode":  null,
+                       "durationMs":  0,
+                       "status":  "not_requested"
+                   }
+               ],
+    "passed":  true
+}

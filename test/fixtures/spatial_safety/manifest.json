@@ -200,6 +200,26 @@
       "manifestSha256": "5b32ec74680a38b025b576a3bba281e9cf32369ddac0c2a49e3c26816b858472"
     },
     {
+      "id": "blender-temporal-v2",
+      "source": "blender",
+      "handling": "public",
+      "consentClass": "not_applicable",
+      "requiredForRc": true,
+      "availability": "available",
+      "manifestPath": "blender-temporal-v2/corpus-manifest.json",
+      "manifestSha256": "7d599c9a3a26ab55ddcc176bee25997c87fb17fb20c738b5597febd44d20407c"
+    },
+    {
+      "id": "blender-context-v3",
+      "source": "blender",
+      "handling": "public",
+      "consentClass": "not_applicable",
+      "requiredForRc": true,
+      "availability": "available",
+      "manifestPath": "blender-context-v3/corpus-manifest.json",
+      "manifestSha256": "3c5e9398fe5d4ed72fa4950a8d30b478fb625abe06658661975a2f01e0ebb82c"
+    },
+    {
       "id": "controlled-camera-v1",
       "source": "recorded",
       "handling": "private",

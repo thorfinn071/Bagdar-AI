@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "experimentId": "bagdar-kws-human-pilot-v1",
+  "purpose": "speaker_transfer_pilot_not_product_acceptance",
+  "languages": ["ru", "kk", "en"],
+  "speakersPerLanguage": {"train": 4, "dev": 2, "test": 2},
+  "sessions": [
+    {"id": "s1", "environment": "quiet_room"},
+    {"id": "s2", "environment": "ordinary_indoor_room"}
+  ],
+  "positiveTakesPerSession": 3,
+  "sampleRate": 16000,
+  "maxClipSeconds": 8,
+  "splitPolicy": "one_anonymous_person_in_one_split_assigned_before_capture",
+  "positivePolicy": "isolated_natural_address_only",
+  "negativePolicy": "near_words_mentions_negations_and_commands_in_full_context",
+  "promotionAllowed": false,
+  "automaticCommandWired": false,
+  "phrases": {
+    "ru": {
+      "positive": "Багдар",
+      "near_word": ["Богдан", "багаж", "Багдад", "бардак"],
+      "keyword_in_context": ["не Багдар", "пример Багдар", "Багдар это название", "Багдар выключить микрофон"],
+      "ordinary_command": ["открой настройки", "говори медленнее", "повтори пожалуйста", "где находится выход"]
+    },
+    "kk": {
+      "positive": "Бағдар",
+      "near_word": ["бағдарлама", "бағдаршам", "баған", "бағалау"],
+      "keyword_in_context": ["Бағдар емес", "мысал Бағдар", "Бағдар деген атау", "Бағдар микрофонды өшір"],
+      "ordinary_command": ["баптауларды аш", "баяу сөйле", "қайтала", "шығатын есік қайда"]
+    },
+    "en": {
+      "positive": "Bagdar",
+      "near_word": ["back door", "bag dark", "Baghdad", "bad dog"],
+      "keyword_in_context": ["not Bagdar", "example Bagdar", "Bagdar is a name", "Bagdar turn off microphone"],
+      "ordinary_command": ["open settings", "speak more slowly", "please repeat", "where is the exit"]
+    }
+  }
+}

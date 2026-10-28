@@ -1,0 +1,23 @@
+{
+  "scope": "Windows x64 strict SIMD2 channel evaluation; known synthetic shadow regression",
+  "sourceSha256": {
+    "tool/model_benchmark/native/fast_motion_match_simd.c": "bcc867e3f267fe2f08aef7d37c338467818421682cdec4f0eb0617176ba54679",
+    "tool/model_benchmark/build_fast_motion_simd.ps1": "ba3528017ade2ba04ab922be28250d8ebf8923cf6ce27815e1b16727e76ba643",
+    "tool/model_benchmark/check_fast_motion_simd_parity.py": "5523e792328d2527715cbbc17e63b8bdef7d2a7f2f386f55f7a37e15931d1d63",
+    "tool/model_benchmark/evaluate_fast_camera_motion_simd.dart": "29ae42ba63e7b8c4b8c1c1e5b3fcadf6b31c1e76dd6b5788868df3f3d3c93845",
+    "tool/model_benchmark/verify_fast_camera_motion_simd.py": "8c2e8863ebffdeeed90c26eff06a77a351e2dac5c43c71a0bf3b0d1ec149147f",
+    "docs/camera-fast-motion-simd-protocol-2026-10-07.md": "7a6a9cd416338c7664b44e57ef67fe825fd84ebf00d1b8c992c1b44452317d57"
+  },
+  "previousStreamContractSha256": "db76c481d8dec548a08c886ada5f1cb2dec4d4031508617132b664307cd9641a",
+  "originalNativeSourceSha256": "b15b30b52119704990431bdb21bf8f741c4b6e42059564b278caee06615036d1",
+  "abi": 1,
+  "currentAgeLimitUs": 100000,
+  "fastMath": false,
+  "floatingPointContraction": false,
+  "decisionThresholdsUnchanged": true,
+  "promotionAllowed": false,
+  "ordinaryCameraWired": false,
+  "newIndependentHoldout": false,
+  "captureToCommandMeasured": false,
+  "timingsAreReproducibilityData": false
+}

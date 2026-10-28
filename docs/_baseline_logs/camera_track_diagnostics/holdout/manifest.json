@@ -1,0 +1,118 @@
+{
+  "scope": "post-decision camera-only diagnostic plots; no scorer labels",
+  "reportSha256": "e9ab92b1415856911980eae7da6ca7fd0c1631226e4435b1e0b1dba145bd4732",
+  "corpusManifestSha256": "40895a0bbc2b9b70692fa80bb2a361d524a64e2dd7cca552548c7991ba6b85f7",
+  "rendererSha256": "a4b41cce6945151cb1fb6ddf9b12c4ca60109197082c6c1fd188b6ba7d16aba8",
+  "plots": [
+    {
+      "layoutId": "validation-association-wide-00",
+      "path": "validation-association-wide-00.png",
+      "sha256": "7a6bf5d3a841b9ed4b5f9ed86090f63a4b680c3f4887ec0a1d1ed7c9575f47a1"
+    },
+    {
+      "layoutId": "validation-association-door-pass-01",
+      "path": "validation-association-door-pass-01.png",
+      "sha256": "372d45b24b63aeed56cb75d9e46e6a58f70f448172eba6efa0c4efceee2c78ee"
+    },
+    {
+      "layoutId": "validation-association-outside-pole-02",
+      "path": "validation-association-outside-pole-02.png",
+      "sha256": "d4d47644ca4c1101fabd8076e111c38cd16adefaa9c63d77399177feae6e3cff"
+    },
+    {
+      "layoutId": "validation-association-boundary-pole-03",
+      "path": "validation-association-boundary-pole-03.png",
+      "sha256": "161e6a6071675be41b5baa9d87915f79ec3b53ccc97e27d9cb74d8673e356e14"
+    },
+    {
+      "layoutId": "validation-association-near-box-04",
+      "path": "validation-association-near-box-04.png",
+      "sha256": "91cc1092cac7a2c411b152e7d1ef3d4fe00a9956a2458ce9d2937b70c8d18bae"
+    },
+    {
+      "layoutId": "validation-association-low-bar-05",
+      "path": "validation-association-low-bar-05.png",
+      "sha256": "4dd3bb0cf28d70621eef1d199efcbca6faf72106a037922f59d5c27abf07a059"
+    },
+    {
+      "layoutId": "test-association-wide-06",
+      "path": "test-association-wide-06.png",
+      "sha256": "d0166a16f5f3c343655aab52228ee3a2edcbed13b2fe3ffe7e4dc3609c6aa3d4"
+    },
+    {
+      "layoutId": "test-association-wide-07",
+      "path": "test-association-wide-07.png",
+      "sha256": "ee19241837396056897c1bc6048831a775502cef81553e7da779a07a9d5ccaa2"
+    },
+    {
+      "layoutId": "test-association-wide-08",
+      "path": "test-association-wide-08.png",
+      "sha256": "4d6b67e60bed0861ecfdb3e9851b3cc71ef984fd2a35e85c26b7958e0226e965"
+    },
+    {
+      "layoutId": "test-association-door-pass-09",
+      "path": "test-association-door-pass-09.png",
+      "sha256": "f557f90cc3060693e8317459a36b02b307b1f49f4b8720629368c169054280f9"
+    },
+    {
+      "layoutId": "test-association-door-pass-10",
+      "path": "test-association-door-pass-10.png",
+      "sha256": "e0fa55c999fbb8288a2eccecaca753534d1406e9f18b9433685b885ef2d2def1"
+    },
+    {
+      "layoutId": "test-association-outside-pole-11",
+      "path": "test-association-outside-pole-11.png",
+      "sha256": "485a6628ed42907eee0631632cb2472258d8b8e1eecc90baf6eb5d33a387f221"
+    },
+    {
+      "layoutId": "test-association-narrow-12",
+      "path": "test-association-narrow-12.png",
+      "sha256": "cba24796f7b98cc696f03d213aa991bb3ed6c31d96dc5d5fc0aa54a7b3583614"
+    },
+    {
+      "layoutId": "test-association-pole-13",
+      "path": "test-association-pole-13.png",
+      "sha256": "68f0398bc43cc9f45093150a0fc9bf5028332f9fb6fa21a800fb9cab443d7ac4"
+    },
+    {
+      "layoutId": "test-association-boundary-pole-14",
+      "path": "test-association-boundary-pole-14.png",
+      "sha256": "169a855d5e5b826796906e1846be5b2a4c75a60b3e79e9aefed16443898d19e8"
+    },
+    {
+      "layoutId": "test-association-low-bar-15",
+      "path": "test-association-low-bar-15.png",
+      "sha256": "3a62d1f4a2673a2d6118e998453a3509dd5b494ca0ac91dc4020b36d34f75155"
+    },
+    {
+      "layoutId": "test-association-box-16",
+      "path": "test-association-box-16.png",
+      "sha256": "4e3e8c7e34804dc4b164b5a260023242c7dbe19feb155537c9fb38d1ff7294c9"
+    },
+    {
+      "layoutId": "test-association-floor-gap-17",
+      "path": "test-association-floor-gap-17.png",
+      "sha256": "be9c9c4e777013f54523fbcc09f83217b7ff1a2b4d8e3a9a771c0da63596b538"
+    },
+    {
+      "layoutId": "test-association-near-box-18",
+      "path": "test-association-near-box-18.png",
+      "sha256": "400befa0f3da20dc66825a5f9cee1df0e3e01bc0025465efa730aca2e2c6172a"
+    },
+    {
+      "layoutId": "test-association-subpixel-pole-19",
+      "path": "test-association-subpixel-pole-19.png",
+      "sha256": "619335af8af30430623edbfe846a9a5765dd7b29f7e613fb85987021cbf043cb"
+    },
+    {
+      "layoutId": "test-association-between-rays-pole-20",
+      "path": "test-association-between-rays-pole-20.png",
+      "sha256": "0114a876342b68cc0339c46a845ee9036b2abafa1914b68ebbf2ea5ee17daaf1"
+    },
+    {
+      "layoutId": "test-association-occluded-pole-21",
+      "path": "test-association-occluded-pole-21.png",
+      "sha256": "d57b85252d7513d9555a4e324b507bcbfb75157d44322b956019dbcac1c64e7f"
+    }
+  ]
+}

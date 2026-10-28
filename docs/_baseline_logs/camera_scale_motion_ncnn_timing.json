@@ -1,0 +1,718 @@
+{
+  "scope": "measured desktop CPU serial pinned inference; excludes rendering and scan",
+  "warmupInferences": 10,
+  "preprocessingP50Ms": 33.70415,
+  "preprocessingP95Ms": 86.65487499999995,
+  "inferenceP50Ms": 154.6021,
+  "inferenceP95Ms": 162.879915,
+  "frames": [
+    {
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 1,
+      "preprocessingMs": 17.9483,
+      "inferenceMs": 100.596
+    },
+    {
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 2,
+      "preprocessingMs": 21.9525,
+      "inferenceMs": 101.7003
+    },
+    {
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 3,
+      "preprocessingMs": 17.1994,
+      "inferenceMs": 105.301
+    },
+    {
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 4,
+      "preprocessingMs": 21.5017,
+      "inferenceMs": 103.6786
+    },
+    {
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 5,
+      "preprocessingMs": 18.204,
+      "inferenceMs": 98.5033
+    },
+    {
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 6,
+      "preprocessingMs": 18.9917,
+      "inferenceMs": 101.4476
+    },
+    {
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 7,
+      "preprocessingMs": 22.416,
+      "inferenceMs": 99.9312
+    },
+    {
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 1,
+      "preprocessingMs": 18.1381,
+      "inferenceMs": 106.1312
+    },
+    {
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 2,
+      "preprocessingMs": 21.7363,
+      "inferenceMs": 114.5656
+    },
+    {
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 3,
+      "preprocessingMs": 36.9234,
+      "inferenceMs": 160.9955
+    },
+    {
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 4,
+      "preprocessingMs": 33.8466,
+      "inferenceMs": 151.4949
+    },
+    {
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 5,
+      "preprocessingMs": 31.3252,
+      "inferenceMs": 150.3046
+    },
+    {
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 6,
+      "preprocessingMs": 33.8863,
+      "inferenceMs": 147.5203
+    },
+    {
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 7,
+      "preprocessingMs": 31.6611,
+      "inferenceMs": 156.0734
+    },
+    {
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 1,
+      "preprocessingMs": 30.8798,
+      "inferenceMs": 156.0807
+    },
+    {
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 2,
+      "preprocessingMs": 35.1075,
+      "inferenceMs": 160.8046
+    },
+    {
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 3,
+      "preprocessingMs": 30.3721,
+      "inferenceMs": 154.2508
+    },
+    {
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 4,
+      "preprocessingMs": 35.8994,
+      "inferenceMs": 148.9039
+    },
+    {
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 5,
+      "preprocessingMs": 39.6979,
+      "inferenceMs": 156.8445
+    },
+    {
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 6,
+      "preprocessingMs": 32.6474,
+      "inferenceMs": 142.8928
+    },
+    {
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 7,
+      "preprocessingMs": 29.2849,
+      "inferenceMs": 138.5556
+    },
+    {
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 1,
+      "preprocessingMs": 34.4595,
+      "inferenceMs": 150.6075
+    },
+    {
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 2,
+      "preprocessingMs": 36.8284,
+      "inferenceMs": 147.1532
+    },
+    {
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 3,
+      "preprocessingMs": 34.8797,
+      "inferenceMs": 162.8262
+    },
+    {
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 4,
+      "preprocessingMs": 30.2769,
+      "inferenceMs": 161.1384
+    },
+    {
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 5,
+      "preprocessingMs": 31.734,
+      "inferenceMs": 162.8694
+    },
+    {
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 6,
+      "preprocessingMs": 33.6278,
+      "inferenceMs": 152.3261
+    },
+    {
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 7,
+      "preprocessingMs": 27.9651,
+      "inferenceMs": 160.9481
+    },
+    {
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 1,
+      "preprocessingMs": 32.4278,
+      "inferenceMs": 154.1644
+    },
+    {
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 2,
+      "preprocessingMs": 39.0624,
+      "inferenceMs": 163.9513
+    },
+    {
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 3,
+      "preprocessingMs": 41.3117,
+      "inferenceMs": 150.6039
+    },
+    {
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 4,
+      "preprocessingMs": 39.0625,
+      "inferenceMs": 145.5104
+    },
+    {
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 5,
+      "preprocessingMs": 37.9177,
+      "inferenceMs": 141.0304
+    },
+    {
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 6,
+      "preprocessingMs": 34.6472,
+      "inferenceMs": 155.0383
+    },
+    {
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 7,
+      "preprocessingMs": 31.2632,
+      "inferenceMs": 155.0808
+    },
+    {
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 1,
+      "preprocessingMs": 36.4716,
+      "inferenceMs": 162.1509
+    },
+    {
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 2,
+      "preprocessingMs": 36.0328,
+      "inferenceMs": 155.6484
+    },
+    {
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 3,
+      "preprocessingMs": 32.6403,
+      "inferenceMs": 161.7198
+    },
+    {
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 4,
+      "preprocessingMs": 33.2061,
+      "inferenceMs": 157.9709
+    },
+    {
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 5,
+      "preprocessingMs": 39.7981,
+      "inferenceMs": 150.4768
+    },
+    {
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 6,
+      "preprocessingMs": 35.9992,
+      "inferenceMs": 159.9963
+    },
+    {
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 7,
+      "preprocessingMs": 33.8767,
+      "inferenceMs": 157.4309
+    },
+    {
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 1,
+      "preprocessingMs": 28.7932,
+      "inferenceMs": 158.0276
+    },
+    {
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 2,
+      "preprocessingMs": 35.5667,
+      "inferenceMs": 157.7515
+    },
+    {
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 3,
+      "preprocessingMs": 34.2824,
+      "inferenceMs": 148.7796
+    },
+    {
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 4,
+      "preprocessingMs": 27.3335,
+      "inferenceMs": 162.9395
+    },
+    {
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 5,
+      "preprocessingMs": 29.4776,
+      "inferenceMs": 160.1569
+    },
+    {
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 6,
+      "preprocessingMs": 32.3712,
+      "inferenceMs": 158.8184
+    },
+    {
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 7,
+      "preprocessingMs": 31.5745,
+      "inferenceMs": 152.0868
+    },
+    {
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 1,
+      "preprocessingMs": 36.3399,
+      "inferenceMs": 163.3411
+    },
+    {
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 2,
+      "preprocessingMs": 35.7595,
+      "inferenceMs": 155.5989
+    },
+    {
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 3,
+      "preprocessingMs": 29.7941,
+      "inferenceMs": 155.7216
+    },
+    {
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 4,
+      "preprocessingMs": 35.3607,
+      "inferenceMs": 143.3958
+    },
+    {
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 5,
+      "preprocessingMs": 32.9537,
+      "inferenceMs": 147.8586
+    },
+    {
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 6,
+      "preprocessingMs": 33.7805,
+      "inferenceMs": 154.6181
+    },
+    {
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 7,
+      "preprocessingMs": 36.9181,
+      "inferenceMs": 155.6802
+    },
+    {
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 1,
+      "preprocessingMs": 31.4506,
+      "inferenceMs": 151.6711
+    },
+    {
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 2,
+      "preprocessingMs": 30.6536,
+      "inferenceMs": 166.3319
+    },
+    {
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 3,
+      "preprocessingMs": 31.7612,
+      "inferenceMs": 147.8954
+    },
+    {
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 4,
+      "preprocessingMs": 32.9436,
+      "inferenceMs": 155.0974
+    },
+    {
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 5,
+      "preprocessingMs": 36.1584,
+      "inferenceMs": 142.7117
+    },
+    {
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 6,
+      "preprocessingMs": 36.0372,
+      "inferenceMs": 155.5823
+    },
+    {
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 7,
+      "preprocessingMs": 29.6859,
+      "inferenceMs": 156.4177
+    },
+    {
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 1,
+      "preprocessingMs": 36.7335,
+      "inferenceMs": 153.7897
+    },
+    {
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 2,
+      "preprocessingMs": 31.3162,
+      "inferenceMs": 153.9668
+    },
+    {
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 3,
+      "preprocessingMs": 29.5759,
+      "inferenceMs": 156.6525
+    },
+    {
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 4,
+      "preprocessingMs": 34.9969,
+      "inferenceMs": 154.3471
+    },
+    {
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 5,
+      "preprocessingMs": 33.0839,
+      "inferenceMs": 155.6909
+    },
+    {
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 6,
+      "preprocessingMs": 31.526,
+      "inferenceMs": 145.4339
+    },
+    {
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 7,
+      "preprocessingMs": 27.2388,
+      "inferenceMs": 153.4337
+    },
+    {
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 1,
+      "preprocessingMs": 28.6853,
+      "inferenceMs": 155.0162
+    },
+    {
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 2,
+      "preprocessingMs": 35.3248,
+      "inferenceMs": 157.9592
+    },
+    {
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 3,
+      "preprocessingMs": 36.9178,
+      "inferenceMs": 153.8798
+    },
+    {
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 4,
+      "preprocessingMs": 35.1362,
+      "inferenceMs": 156.8388
+    },
+    {
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 5,
+      "preprocessingMs": 39.4399,
+      "inferenceMs": 154.2252
+    },
+    {
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 6,
+      "preprocessingMs": 32.369,
+      "inferenceMs": 162.866
+    },
+    {
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 7,
+      "preprocessingMs": 35.5056,
+      "inferenceMs": 147.3898
+    },
+    {
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 1,
+      "preprocessingMs": 29.5461,
+      "inferenceMs": 158.0082
+    },
+    {
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 2,
+      "preprocessingMs": 37.1705,
+      "inferenceMs": 151.472
+    },
+    {
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 3,
+      "preprocessingMs": 31.6578,
+      "inferenceMs": 156.3557
+    },
+    {
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 4,
+      "preprocessingMs": 31.3185,
+      "inferenceMs": 147.1031
+    },
+    {
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 5,
+      "preprocessingMs": 38.1384,
+      "inferenceMs": 165.3712
+    },
+    {
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 6,
+      "preprocessingMs": 38.8106,
+      "inferenceMs": 154.8333
+    },
+    {
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 7,
+      "preprocessingMs": 29.5774,
+      "inferenceMs": 159.7949
+    },
+    {
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 1,
+      "preprocessingMs": 34.0015,
+      "inferenceMs": 147.2204
+    },
+    {
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 2,
+      "preprocessingMs": 39.9429,
+      "inferenceMs": 149.6789
+    },
+    {
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 3,
+      "preprocessingMs": 35.7427,
+      "inferenceMs": 154.5861
+    },
+    {
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 4,
+      "preprocessingMs": 39.7902,
+      "inferenceMs": 156.5767
+    },
+    {
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 5,
+      "preprocessingMs": 35.4705,
+      "inferenceMs": 150.3036
+    },
+    {
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 6,
+      "preprocessingMs": 39.1693,
+      "inferenceMs": 158.2966
+    },
+    {
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 7,
+      "preprocessingMs": 32.9371,
+      "inferenceMs": 152.3652
+    },
+    {
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 1,
+      "preprocessingMs": 27.3052,
+      "inferenceMs": 152.6156
+    },
+    {
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 2,
+      "preprocessingMs": 29.8792,
+      "inferenceMs": 147.2163
+    },
+    {
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 3,
+      "preprocessingMs": 36.0033,
+      "inferenceMs": 150.6539
+    },
+    {
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 4,
+      "preprocessingMs": 32.2613,
+      "inferenceMs": 148.4421
+    },
+    {
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 5,
+      "preprocessingMs": 25.8651,
+      "inferenceMs": 156.8338
+    },
+    {
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 6,
+      "preprocessingMs": 32.8535,
+      "inferenceMs": 151.2844
+    },
+    {
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 7,
+      "preprocessingMs": 33.8966,
+      "inferenceMs": 152.2251
+    },
+    {
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 1,
+      "preprocessingMs": 93.2928,
+      "inferenceMs": 151.0351
+    },
+    {
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 2,
+      "preprocessingMs": 77.7112,
+      "inferenceMs": 165.3205
+    },
+    {
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 3,
+      "preprocessingMs": 85.6195,
+      "inferenceMs": 159.3934
+    },
+    {
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 4,
+      "preprocessingMs": 92.522,
+      "inferenceMs": 155.178
+    },
+    {
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 5,
+      "preprocessingMs": 95.2244,
+      "inferenceMs": 162.0659
+    },
+    {
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 6,
+      "preprocessingMs": 83.8395,
+      "inferenceMs": 159.7947
+    },
+    {
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 7,
+      "preprocessingMs": 85.0817,
+      "inferenceMs": 156.0051
+    },
+    {
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 1,
+      "preprocessingMs": 26.4461,
+      "inferenceMs": 157.2583
+    },
+    {
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 2,
+      "preprocessingMs": 12.627,
+      "inferenceMs": 155.1864
+    },
+    {
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 3,
+      "preprocessingMs": 10.0603,
+      "inferenceMs": 156.4998
+    },
+    {
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 4,
+      "preprocessingMs": 10.7554,
+      "inferenceMs": 148.2144
+    },
+    {
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 5,
+      "preprocessingMs": 49.0943,
+      "inferenceMs": 145.344
+    },
+    {
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 6,
+      "preprocessingMs": 28.75,
+      "inferenceMs": 156.9295
+    },
+    {
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 7,
+      "preprocessingMs": 52.7073,
+      "inferenceMs": 161.3741
+    },
+    {
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 8,
+      "preprocessingMs": 450.0631,
+      "inferenceMs": 152.281
+    },
+    {
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 9,
+      "preprocessingMs": 388.2292,
+      "inferenceMs": 159.8858
+    },
+    {
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 10,
+      "preprocessingMs": 436.3695,
+      "inferenceMs": 155.2154
+    },
+    {
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 11,
+      "preprocessingMs": 28.091,
+      "inferenceMs": 153.9736
+    },
+    {
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 12,
+      "preprocessingMs": 30.7767,
+      "inferenceMs": 151.5672
+    },
+    {
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 13,
+      "preprocessingMs": 34.8633,
+      "inferenceMs": 146.2358
+    }
+  ]
+}

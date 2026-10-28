@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "passed": true,
+  "runtimeWired": false,
+  "promotionAllowed": false,
+  "scope": "known desktop static geometry and elapsed CPU competition; capture gate remains unmet",
+  "priorContractSha256": "1b333ebecbe722fd4ce0c83e353e0e281a243bbe1234db1e05896c6b727724d6",
+  "priorCoreSha256": "bed0a3fbf1b192bc0f2f8ace0a46abc8b5ab6aa08e0e3f704397caa719bdb3e0",
+  "previousFrozenSources": 99,
+  "profiles": {
+    "blender_scan_processing_elapsed_v1.json": {
+      "sha256": "62cf2688050ac4c52854ee3b58807abd065d6eb7ae6a791ebd1098d06a8b19dd",
+      "samplesPerImplementation": 36,
+      "strictStaleRejectedPerImplementation": 36,
+      "unsafeContinue": 0
+    },
+    "blender_scan_processing_elapsed-nn_v1.json": {
+      "sha256": "9803eee5d3ec32164bd799ff6f01db304a0528d5d1bbc041a37850551698e1e0",
+      "samplesPerImplementation": 36,
+      "strictStaleRejectedPerImplementation": 36,
+      "unsafeContinue": 0
+    }
+  },
+  "sources": {
+    "lib/safety/perception/camera_indexed_height_envelope_passage_source.dart": "9c9142a3d4c366a1f019aa615b79586fd06002a460508f789fb64dff6875040f",
+    "lib/safety/runtime/camera_scan_age_gate.dart": "8c65a06299d8da0136acac0b8ee73dc0a92bf032bfafb59c23a188d315587ad8",
+    "tool/model_benchmark/scan_processing_support.dart": "7b5767e0479ff563c5076fb90680d18341844b83858c622f94919b69724604fc",
+    "tool/model_benchmark/profile_scan_processing.dart": "c4d369c09ae9a10f29b8448a7d7a0887d27236f99ccf4bde061b16650f60fec9",
+    "tool/model_benchmark/scan_processing_ncnn_load.py": "5b5ae72ca9a36067c0abebf777d876ca4216bac28f622faafafef3eef149400b",
+    "tool/model_benchmark/verify_scan_processing.py": "a3998ec3fd2966ade2e5f198ef0c1f2d0cbcebccc6de52f8d4cbfbe032fffdba",
+    "test/camera_indexed_scan_replay_test.dart": "d10f45ff712e51fcc59758cf8036936367962c42861c75b412a11e8c8a0508b1",
+    "test/camera_scan_age_gate_test.dart": "7be33583156a98e9431374f374c09aa84ea2378e1c15f17cae34b0223c8b3c2f",
+    "docs/blender-scan-processing-protocol-2026-10-04.md": "f84dd7b2529d4532a4c0a98f7e812315c53956c65bd6efbcb3120bb1ec4747f1"
+  }
+}

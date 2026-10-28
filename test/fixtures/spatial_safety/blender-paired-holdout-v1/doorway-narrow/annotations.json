@@ -1,0 +1,22 @@
+{
+  "sceneId": "doorway-narrow",
+  "pair": "doorway",
+  "physicalHazard": true,
+  "referencePassable": false,
+  "hazardOnsetMs": 0,
+  "userMoving": true,
+  "latestStopOffsetMs": 300,
+  "compatibleCocoClassIds": [],
+  "parameters": {
+    "id": "doorway-narrow",
+    "pair": "doorway",
+    "hazard": true,
+    "kind": "doorway",
+    "openingWidthM": 0.62,
+    "openingHeightM": 2.3,
+    "planeY": 2.8,
+    "cameraAdvanceM": 0.4,
+    "appearanceSeed": 4102
+  },
+  "labelSource": "predeclared scene geometry, not model output"
+}

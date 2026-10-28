@@ -1,0 +1,4751 @@
+{
+  "schemaVersion": 2,
+  "benchmarkId": "blender-temporal-oracle-depth-shadow-runtime-v2",
+  "toolSha256": "b4729732646d2fda190a7823c9406588222d3debdb7a7c0acd57cf938e593d26",
+  "corpusManifestSha256": "7d599c9a3a26ab55ddcc176bee25997c87fb17fb20c738b5597febd44d20407c",
+  "detectorDiagnosticSha256": "a240904844373a16c21f5e9002258fb1be1855d04fcde9073826b93e597f0e05",
+  "depthSource": "Blender raycast PGM16 metric oracle, not phone depth inference",
+  "rgbSource": "hash-pinned precomputed TFLite/ONNX detector predictions",
+  "semanticDistanceAssumption": "all boxes close; upper bound on associations",
+  "runtimeScope": "GenericObstacleDetector -> GenericObstacleTracker -> SpatialSafetyRuntime; no CameraImage/NCNN/TTS/device",
+  "models": [
+    {
+      "modelId": "yolov8n-int8-control-416",
+      "artifactSha256": "3f5c681641e439321ec529c26995de18a910d62a25a49ccb02da2a0a771cae02",
+      "summary": {
+        "hazardFrames": 12,
+        "hazardFramesWithStop": 12,
+        "hazardFramesWithContinueForward": 0,
+        "hazardFramesWithImminentRule": 10,
+        "traversableFrames": 6,
+        "traversableFramesWithStop": 6,
+        "traversableFramesWithImminentRule": 0,
+        "possibleSemanticMatches": 0
+      },
+      "sequences": [
+        {
+          "sceneId": "temporal-crossing-rider",
+          "state": "moving",
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.4925373134328358,
+              "geometryUnknownFloor": 0.65,
+              "geometryUnknownReasons": [
+                "groundModelDisagreement"
+              ],
+              "groundDisagreementPixels": 5389,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.13575348248205993,
+              "centralLowerDepthCoverage": 0.8244861934182323,
+              "surfaceEvidence": {
+                "observedFraction": 0.8080168776371308,
+                "continuity": 0.4911517261386713,
+                "confidence": 0.4925373134328358
+              },
+              "geometryObservations": 3,
+              "geometryComponents": [
+                {
+                  "geometry": "unknown",
+                  "zone": "center",
+                  "confidence": 0.6533998756951525,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.39732770745428975,
+                  "pixelCount": 5260,
+                  "bounds": [
+                    0.2890625,
+                    0.4114583333333333,
+                    0.5234375,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "lowObstacle",
+                  "zone": "center",
+                  "confidence": 0.39661064892288644,
+                  "relativeProximity": 0.8323783874511719,
+                  "corridorOverlap": 0.008204406938584154,
+                  "pixelCount": 129,
+                  "bounds": [
+                    0.5390625,
+                    0.9270833333333334,
+                    0.578125,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.9711571421715242,
+                  "relativeProximity": 0.9711571421715242,
+                  "corridorOverlap": 1.0,
+                  "pixelCount": 2643,
+                  "bounds": [
+                    0.2890625,
+                    0.17708333333333334,
+                    0.7109375,
+                    0.71875
+                  ]
+                }
+              ],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.9711571421715242,
+              "forwardTraversability": 0.2419105516802411,
+              "forwardUnknown": 0.8756145526057031,
+              "forwardObservedFraction": 0.12438544739429691,
+              "forwardConfidence": 0.9711571421715242,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 1,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.559322033898305,
+              "geometryUnknownFloor": 0.65,
+              "geometryUnknownReasons": [
+                "groundModelDisagreement"
+              ],
+              "groundDisagreementPixels": 5664,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.14892359645420009,
+              "centralLowerDepthCoverage": 0.826629680998613,
+              "surfaceEvidence": {
+                "observedFraction": 0.810126582278481,
+                "continuity": 0.5481770833333334,
+                "confidence": 0.559322033898305
+              },
+              "geometryObservations": 4,
+              "geometryComponents": [
+                {
+                  "geometry": "unknown",
+                  "zone": "center",
+                  "confidence": 0.6202143269031285,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.3206751054852321,
+                  "pixelCount": 5460,
+                  "bounds": [
+                    0.39453125,
+                    0.40625,
+                    0.58203125,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "lowObstacle",
+                  "zone": "centerLeft",
+                  "confidence": 0.36513503757057497,
+                  "relativeProximity": 0.7729517817497253,
+                  "corridorOverlap": 0.007383966244725738,
+                  "pixelCount": 105,
+                  "bounds": [
+                    0.3359375,
+                    0.953125,
+                    0.390625,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "lowObstacle",
+                  "zone": "centerRight",
+                  "confidence": 0.36804761562617255,
+                  "relativeProximity": 0.7778449654579163,
+                  "corridorOverlap": 0.006856540084388186,
+                  "pixelCount": 99,
+                  "bounds": [
+                    0.58984375,
+                    0.953125,
+                    0.640625,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.9673565794276061,
+                  "relativeProximity": 0.9673565794276061,
+                  "corridorOverlap": 1.0,
+                  "pixelCount": 2868,
+                  "bounds": [
+                    0.2890625,
+                    0.17708333333333334,
+                    0.7109375,
+                    0.71875
+                  ]
+                }
+              ],
+              "confirmedTracks": 3,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 1.0,
+              "forwardTraversability": 0.3066075211864407,
+              "forwardUnknown": 0.8756145526057031,
+              "forwardObservedFraction": 0.12438544739429691,
+              "forwardConfidence": 0.9711571421715242,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 2,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.5544554455445545,
+              "geometryUnknownFloor": 0.65,
+              "geometryUnknownReasons": [
+                "groundModelDisagreement"
+              ],
+              "groundDisagreementPixels": 5938,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.16521739130434782,
+              "centralLowerDepthCoverage": 0.8295296936073635,
+              "surfaceEvidence": {
+                "observedFraction": 0.8129395218002813,
+                "continuity": 0.5700692041522492,
+                "confidence": 0.5544554455445545
+              },
+              "geometryObservations": 3,
+              "geometryComponents": [
+                {
+                  "geometry": "unknown",
+                  "zone": "center",
+                  "confidence": 0.6613131041392476,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.4078762306610408,
+                  "pixelCount": 5910,
+                  "bounds": [
+                    0.4765625,
+                    0.3958333333333333,
+                    0.7109375,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "lowObstacle",
+                  "zone": "center",
+                  "confidence": 0.3563463470037979,
+                  "relativeProximity": 0.7340577244758606,
+                  "corridorOverlap": 0.0017580872011251757,
+                  "pixelCount": 28,
+                  "bounds": [
+                    0.41796875,
+                    0.984375,
+                    0.45703125,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.9677213369467007,
+                  "relativeProximity": 0.9677213369467007,
+                  "corridorOverlap": 1.0,
+                  "pixelCount": 3130,
+                  "bounds": [
+                    0.2890625,
+                    0.17708333333333334,
+                    0.7109375,
+                    0.71875
+                  ]
+                }
+              ],
+              "confirmedTracks": 3,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 1.0,
+              "forwardTraversability": 0.3160779745794649,
+              "forwardUnknown": 0.8756145526057031,
+              "forwardObservedFraction": 0.12438544739429691,
+              "forwardConfidence": 0.9711571421715242,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            }
+          ]
+        },
+        {
+          "sceneId": "temporal-doorway",
+          "state": "safe",
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "continueForward",
+              "geometryReject": "emptyCorridor",
+              "groundConfidence": 0.679372197309417,
+              "geometryUnknownFloor": 0.65,
+              "geometryUnknownReasons": [
+                "unverifiedAperture",
+                "groundModelDisagreement"
+              ],
+              "groundDisagreementPixels": 5174,
+              "openingDiagnostics": {
+                "authority": "diagnostic_only",
+                "bounds": [
+                  0.41015625,
+                  0.0,
+                  0.58984375,
+                  1.0
+                ],
+                "imageWidthFraction": 0.1796875,
+                "widthM": null,
+                "headroomM": null,
+                "upperObservedFraction": 0.23008849557522124,
+                "lowerObservedFraction": 0.6708860759493671,
+                "upperNearFraction": 1.0,
+                "lowerNearFraction": null,
+                "surfaceObservedFraction": 0.6708860759493671,
+                "surfaceContinuity": 0.8847415914684167,
+                "surfaceConfidence": 0.6708860759493671,
+                "groundDisagreementPixels": 1082
+              },
+              "centralUpperDepthCoverage": 0.45707049387927395,
+              "centralLowerDepthCoverage": 0.8607993947799774,
+              "surfaceEvidence": {
+                "observedFraction": 0.8598218471636193,
+                "continuity": 0.6346782988004362,
+                "confidence": 0.679372197309417
+              },
+              "geometryObservations": 0,
+              "geometryComponents": [],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.4311827904406551,
+              "forwardUnknown": 0.65,
+              "forwardObservedFraction": 0.35,
+              "forwardConfidence": 0.6926930973526252,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 1,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "continueForward",
+              "geometryReject": "emptyCorridor",
+              "groundConfidence": 0.6620689655172414,
+              "geometryUnknownFloor": 0.65,
+              "geometryUnknownReasons": [
+                "unverifiedAperture",
+                "groundModelDisagreement"
+              ],
+              "groundDisagreementPixels": 351,
+              "openingDiagnostics": {
+                "authority": "diagnostic_only",
+                "bounds": [
+                  0.3984375,
+                  0.0,
+                  0.5859375,
+                  1.0
+                ],
+                "imageWidthFraction": 0.1875,
+                "widthM": null,
+                "headroomM": null,
+                "upperObservedFraction": 0.23893805309734514,
+                "lowerObservedFraction": 0.6582278481012658,
+                "upperNearFraction": 1.0,
+                "lowerNearFraction": null,
+                "surfaceObservedFraction": 0.6582278481012658,
+                "surfaceContinuity": 0.9643429487179487,
+                "surfaceConfidence": 0.6582278481012658,
+                "groundDisagreementPixels": 0
+              },
+              "centralUpperDepthCoverage": 0.46694807935837906,
+              "centralLowerDepthCoverage": 0.8486949943260623,
+              "surfaceEvidence": {
+                "observedFraction": 0.8481012658227848,
+                "continuity": 0.6127694859038143,
+                "confidence": 0.6620689655172414
+              },
+              "geometryObservations": 0,
+              "geometryComponents": [],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.4311827904406551,
+              "forwardUnknown": 0.65,
+              "forwardObservedFraction": 0.35,
+              "forwardConfidence": 0.6954550556752874,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 2,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "continueForward",
+              "geometryReject": "emptyCorridor",
+              "groundConfidence": 0.5981308411214953,
+              "geometryUnknownFloor": 0.65,
+              "geometryUnknownReasons": [
+                "unverifiedAperture",
+                "groundModelDisagreement"
+              ],
+              "groundDisagreementPixels": 1016,
+              "openingDiagnostics": {
+                "authority": "diagnostic_only",
+                "bounds": [
+                  0.40234375,
+                  0.0,
+                  0.59765625,
+                  1.0
+                ],
+                "imageWidthFraction": 0.1953125,
+                "widthM": null,
+                "headroomM": null,
+                "upperObservedFraction": 0.24778761061946902,
+                "lowerObservedFraction": 0.6455696202531646,
+                "upperNearFraction": 1.0,
+                "lowerNearFraction": null,
+                "surfaceObservedFraction": 0.6455696202531646,
+                "surfaceContinuity": 0.9945098039215686,
+                "surfaceConfidence": 0.6455696202531646,
+                "groundDisagreementPixels": 0
+              },
+              "centralUpperDepthCoverage": 0.4716758125791473,
+              "centralLowerDepthCoverage": 0.8360862438532342,
+              "surfaceEvidence": {
+                "observedFraction": 0.835911861228317,
+                "continuity": 0.5981491867638811,
+                "confidence": 0.5981308411214953
+              },
+              "geometryObservations": 0,
+              "geometryComponents": [],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.4311827904406551,
+              "forwardUnknown": 0.65,
+              "forwardObservedFraction": 0.35,
+              "forwardConfidence": 0.6954550556752874,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            }
+          ]
+        },
+        {
+          "sceneId": "temporal-low-obstacle",
+          "state": "blocked",
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.6994047619047619,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.0,
+              "centralLowerDepthCoverage": 0.6883116883116883,
+              "surfaceEvidence": {
+                "observedFraction": 0.6708860759493671,
+                "continuity": 0.6792452830188679,
+                "confidence": 0.6708860759493671
+              },
+              "geometryObservations": 1,
+              "geometryComponents": [
+                {
+                  "geometry": "lowObstacle",
+                  "zone": "center",
+                  "confidence": 0.5199250470282085,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.11814345991561181,
+                  "pixelCount": 1836,
+                  "bounds": [
+                    0.3125,
+                    0.890625,
+                    0.6875,
+                    1.0
+                  ]
+                }
+              ],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.45569620253164556,
+              "forwardUnknown": 1.0,
+              "forwardObservedFraction": 0.0,
+              "forwardConfidence": 0.6708860759493671,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 1,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.7351190476190477,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.0,
+              "centralLowerDepthCoverage": 0.6753246753246753,
+              "surfaceEvidence": {
+                "observedFraction": 0.6582278481012658,
+                "continuity": 0.7145655270655271,
+                "confidence": 0.6582278481012658
+              },
+              "geometryObservations": 1,
+              "geometryComponents": [
+                {
+                  "geometry": "lowObstacle",
+                  "zone": "center",
+                  "confidence": 0.5229445940796985,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.10337552742616034,
+                  "pixelCount": 1603,
+                  "bounds": [
+                    0.30078125,
+                    0.90625,
+                    0.68359375,
+                    1.0
+                  ]
+                }
+              ],
+              "confirmedTracks": 1,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 1.0,
+              "forwardTraversability": 0.4703469292076887,
+              "forwardUnknown": 1.0,
+              "forwardObservedFraction": 0.0,
+              "forwardConfidence": 0.6708860759493671,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 2,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.759375,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.0,
+              "centralLowerDepthCoverage": 0.6623376623376623,
+              "surfaceEvidence": {
+                "observedFraction": 0.6455696202531646,
+                "continuity": 0.7687000726216412,
+                "confidence": 0.6455696202531646
+              },
+              "geometryObservations": 1,
+              "geometryComponents": [
+                {
+                  "geometry": "lowObstacle",
+                  "zone": "center",
+                  "confidence": 0.5248005758404695,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.08040318799812471,
+                  "pixelCount": 1274,
+                  "bounds": [
+                    0.30859375,
+                    0.9270833333333334,
+                    0.69140625,
+                    1.0
+                  ]
+                }
+              ],
+              "confirmedTracks": 1,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 1.0,
+              "forwardTraversability": 0.4962494139709329,
+              "forwardUnknown": 1.0,
+              "forwardObservedFraction": 0.0,
+              "forwardConfidence": 0.6708860759493671,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            }
+          ]
+        },
+        {
+          "sceneId": "temporal-overhead",
+          "state": "blocked",
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 1.0,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.4,
+              "centralLowerDepthCoverage": 0.6883116883116883,
+              "surfaceEvidence": {
+                "observedFraction": 0.6708860759493671,
+                "continuity": 1.0,
+                "confidence": 0.6708860759493671
+              },
+              "geometryObservations": 1,
+              "geometryComponents": [
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.6349008571437861,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.2911392405063291,
+                  "pixelCount": 4968,
+                  "bounds": [
+                    0.2890625,
+                    0.3125,
+                    0.7109375,
+                    0.5520833333333334
+                  ]
+                }
+              ],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.6708860759493671,
+              "forwardUnknown": 0.5929203539823009,
+              "forwardObservedFraction": 0.4070796460176991,
+              "forwardConfidence": 0.71600341796875,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 1,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 1.0,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.43478260869565216,
+              "centralLowerDepthCoverage": 0.6753246753246753,
+              "surfaceEvidence": {
+                "observedFraction": 0.6582278481012658,
+                "continuity": 1.0,
+                "confidence": 0.6582278481012658
+              },
+              "geometryObservations": 1,
+              "geometryComponents": [
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.647308307950395,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.31645569620253167,
+                  "pixelCount": 5400,
+                  "bounds": [
+                    0.2890625,
+                    0.296875,
+                    0.7109375,
+                    0.5572916666666666
+                  ]
+                }
+              ],
+              "confirmedTracks": 1,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 1.0,
+              "forwardTraversability": 0.6708860759493671,
+              "forwardUnknown": 0.5929203539823009,
+              "forwardObservedFraction": 0.4070796460176991,
+              "forwardConfidence": 0.7276407877604166,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 2,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 1.0,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.46956521739130436,
+              "centralLowerDepthCoverage": 0.6623376623376623,
+              "surfaceEvidence": {
+                "observedFraction": 0.6455696202531646,
+                "continuity": 1.0,
+                "confidence": 0.6455696202531646
+              },
+              "geometryObservations": 1,
+              "geometryComponents": [
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.6592509956688133,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.34177215189873417,
+                  "pixelCount": 5832,
+                  "bounds": [
+                    0.2890625,
+                    0.28125,
+                    0.7109375,
+                    0.5625
+                  ]
+                }
+              ],
+              "confirmedTracks": 1,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 1.0,
+              "forwardTraversability": 0.6708860759493671,
+              "forwardUnknown": 0.5929203539823009,
+              "forwardObservedFraction": 0.4070796460176991,
+              "forwardConfidence": 0.74127197265625,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            }
+          ]
+        },
+        {
+          "sceneId": "temporal-ramp",
+          "state": "safe",
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "continueForward",
+              "geometryReject": "emptyCorridor",
+              "groundConfidence": 1.0,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.0,
+              "centralLowerDepthCoverage": 0.7532467532467533,
+              "surfaceEvidence": {
+                "observedFraction": 0.7341772151898734,
+                "continuity": 1.0,
+                "confidence": 0.7341772151898734
+              },
+              "geometryObservations": 0,
+              "geometryComponents": [],
+              "confirmedTracks": 0,
+              "yoloBoxes": 1,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.7341772151898734,
+              "forwardUnknown": 1.0,
+              "forwardObservedFraction": 0.0,
+              "forwardConfidence": 0.7341772151898734,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 1,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "continueForward",
+              "geometryReject": "emptyCorridor",
+              "groundConfidence": 1.0,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.0,
+              "centralLowerDepthCoverage": 0.7402597402597403,
+              "surfaceEvidence": {
+                "observedFraction": 0.7215189873417721,
+                "continuity": 1.0,
+                "confidence": 0.7215189873417721
+              },
+              "geometryObservations": 0,
+              "geometryComponents": [],
+              "confirmedTracks": 0,
+              "yoloBoxes": 1,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.7341772151898734,
+              "forwardUnknown": 1.0,
+              "forwardObservedFraction": 0.0,
+              "forwardConfidence": 0.7341772151898734,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 2,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "continueForward",
+              "geometryReject": "emptyCorridor",
+              "groundConfidence": 1.0,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.0,
+              "centralLowerDepthCoverage": 0.7272727272727273,
+              "surfaceEvidence": {
+                "observedFraction": 0.7088607594936709,
+                "continuity": 1.0,
+                "confidence": 0.7088607594936709
+              },
+              "geometryObservations": 0,
+              "geometryComponents": [],
+              "confirmedTracks": 0,
+              "yoloBoxes": 1,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.7341772151898734,
+              "forwardUnknown": 1.0,
+              "forwardObservedFraction": 0.0,
+              "forwardConfidence": 0.7341772151898734,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            }
+          ]
+        },
+        {
+          "sceneId": "temporal-thin-pole",
+          "state": "blocked",
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.8212290502793296,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.05453777965386239,
+              "centralLowerDepthCoverage": 0.7185726894464759,
+              "surfaceEvidence": {
+                "observedFraction": 0.7013595874355368,
+                "continuity": 0.86798128342246,
+                "confidence": 0.8212290502793296
+              },
+              "geometryObservations": 2,
+              "geometryComponents": [
+                {
+                  "geometry": "thinVertical",
+                  "zone": "center",
+                  "confidence": 0.26498284375110726,
+                  "relativeProximity": 0.9785040566476725,
+                  "corridorOverlap": 0.08321612751992499,
+                  "pixelCount": 1416,
+                  "bounds": [
+                    0.48046875,
+                    0.2604166666666667,
+                    0.51953125,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.9985103611260244,
+                  "relativeProximity": 0.9985103611260244,
+                  "corridorOverlap": 1.0,
+                  "pixelCount": 876,
+                  "bounds": [
+                    0.2890625,
+                    0.17708333333333334,
+                    0.7109375,
+                    0.71875
+                  ]
+                }
+              ],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.9985103611260244,
+              "forwardTraversability": 0.7128114450452604,
+              "forwardUnknown": 0.9487053425106522,
+              "forwardObservedFraction": 0.051294657489347806,
+              "forwardConfidence": 0.9985103611260244,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 1,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.9077809798270894,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.05690164626424652,
+              "centralLowerDepthCoverage": 0.7068465515067457,
+              "surfaceEvidence": {
+                "observedFraction": 0.689873417721519,
+                "continuity": 0.8657832144070676,
+                "confidence": 0.9077809798270894
+              },
+              "geometryObservations": 2,
+              "geometryComponents": [
+                {
+                  "geometry": "thinVertical",
+                  "zone": "center",
+                  "confidence": 0.2654811275202584,
+                  "relativeProximity": 0.97875552770999,
+                  "corridorOverlap": 0.08497421472105017,
+                  "pixelCount": 1444,
+                  "bounds": [
+                    0.46875,
+                    0.24479166666666666,
+                    0.5078125,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.9980827832380227,
+                  "relativeProximity": 0.9980827832380227,
+                  "corridorOverlap": 1.0,
+                  "pixelCount": 904,
+                  "bounds": [
+                    0.2890625,
+                    0.17708333333333334,
+                    0.7109375,
+                    0.71875
+                  ]
+                }
+              ],
+              "confirmedTracks": 2,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.9985103611260244,
+              "forwardTraversability": 0.7859415346922949,
+              "forwardUnknown": 0.9487053425106522,
+              "forwardObservedFraction": 0.051294657489347806,
+              "forwardConfidence": 0.9985103611260244,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 2,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.813953488372093,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.05960320810468552,
+              "centralLowerDepthCoverage": 0.6951204135670155,
+              "surfaceEvidence": {
+                "observedFraction": 0.6783872480075012,
+                "continuity": 0.8635107118175536,
+                "confidence": 0.813953488372093
+              },
+              "geometryObservations": 2,
+              "geometryComponents": [
+                {
+                  "geometry": "thinVertical",
+                  "zone": "center",
+                  "confidence": 0.2660140380181106,
+                  "relativeProximity": 0.9791336377784812,
+                  "corridorOverlap": 0.08673230192217533,
+                  "pixelCount": 1476,
+                  "bounds": [
+                    0.48046875,
+                    0.22916666666666666,
+                    0.51953125,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.9976173415143266,
+                  "relativeProximity": 0.9976173415143266,
+                  "corridorOverlap": 1.0,
+                  "pixelCount": 936,
+                  "bounds": [
+                    0.2890625,
+                    0.17708333333333334,
+                    0.7109375,
+                    0.71875
+                  ]
+                }
+              ],
+              "confirmedTracks": 2,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.9985103611260244,
+              "forwardTraversability": 0.7859415346922949,
+              "forwardUnknown": 0.9487053425106522,
+              "forwardObservedFraction": 0.051294657489347806,
+              "forwardConfidence": 0.9985103611260244,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "modelId": "yolo11n-onnx-320-experiment",
+      "artifactSha256": "b9152829ad8ff26a0b2bd2b4a1482910c91c549d1cdcc4587fecf4444741dbe4",
+      "summary": {
+        "hazardFrames": 12,
+        "hazardFramesWithStop": 12,
+        "hazardFramesWithContinueForward": 0,
+        "hazardFramesWithImminentRule": 10,
+        "traversableFrames": 6,
+        "traversableFramesWithStop": 6,
+        "traversableFramesWithImminentRule": 0,
+        "possibleSemanticMatches": 0
+      },
+      "sequences": [
+        {
+          "sceneId": "temporal-crossing-rider",
+          "state": "moving",
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.4925373134328358,
+              "geometryUnknownFloor": 0.65,
+              "geometryUnknownReasons": [
+                "groundModelDisagreement"
+              ],
+              "groundDisagreementPixels": 5389,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.13575348248205993,
+              "centralLowerDepthCoverage": 0.8244861934182323,
+              "surfaceEvidence": {
+                "observedFraction": 0.8080168776371308,
+                "continuity": 0.4911517261386713,
+                "confidence": 0.4925373134328358
+              },
+              "geometryObservations": 3,
+              "geometryComponents": [
+                {
+                  "geometry": "unknown",
+                  "zone": "center",
+                  "confidence": 0.6533998756951525,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.39732770745428975,
+                  "pixelCount": 5260,
+                  "bounds": [
+                    0.2890625,
+                    0.4114583333333333,
+                    0.5234375,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "lowObstacle",
+                  "zone": "center",
+                  "confidence": 0.39661064892288644,
+                  "relativeProximity": 0.8323783874511719,
+                  "corridorOverlap": 0.008204406938584154,
+                  "pixelCount": 129,
+                  "bounds": [
+                    0.5390625,
+                    0.9270833333333334,
+                    0.578125,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.9711571421715242,
+                  "relativeProximity": 0.9711571421715242,
+                  "corridorOverlap": 1.0,
+                  "pixelCount": 2643,
+                  "bounds": [
+                    0.2890625,
+                    0.17708333333333334,
+                    0.7109375,
+                    0.71875
+                  ]
+                }
+              ],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.9711571421715242,
+              "forwardTraversability": 0.2419105516802411,
+              "forwardUnknown": 0.8756145526057031,
+              "forwardObservedFraction": 0.12438544739429691,
+              "forwardConfidence": 0.9711571421715242,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 1,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.559322033898305,
+              "geometryUnknownFloor": 0.65,
+              "geometryUnknownReasons": [
+                "groundModelDisagreement"
+              ],
+              "groundDisagreementPixels": 5664,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.14892359645420009,
+              "centralLowerDepthCoverage": 0.826629680998613,
+              "surfaceEvidence": {
+                "observedFraction": 0.810126582278481,
+                "continuity": 0.5481770833333334,
+                "confidence": 0.559322033898305
+              },
+              "geometryObservations": 4,
+              "geometryComponents": [
+                {
+                  "geometry": "unknown",
+                  "zone": "center",
+                  "confidence": 0.6202143269031285,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.3206751054852321,
+                  "pixelCount": 5460,
+                  "bounds": [
+                    0.39453125,
+                    0.40625,
+                    0.58203125,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "lowObstacle",
+                  "zone": "centerLeft",
+                  "confidence": 0.36513503757057497,
+                  "relativeProximity": 0.7729517817497253,
+                  "corridorOverlap": 0.007383966244725738,
+                  "pixelCount": 105,
+                  "bounds": [
+                    0.3359375,
+                    0.953125,
+                    0.390625,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "lowObstacle",
+                  "zone": "centerRight",
+                  "confidence": 0.36804761562617255,
+                  "relativeProximity": 0.7778449654579163,
+                  "corridorOverlap": 0.006856540084388186,
+                  "pixelCount": 99,
+                  "bounds": [
+                    0.58984375,
+                    0.953125,
+                    0.640625,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.9673565794276061,
+                  "relativeProximity": 0.9673565794276061,
+                  "corridorOverlap": 1.0,
+                  "pixelCount": 2868,
+                  "bounds": [
+                    0.2890625,
+                    0.17708333333333334,
+                    0.7109375,
+                    0.71875
+                  ]
+                }
+              ],
+              "confirmedTracks": 3,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 1.0,
+              "forwardTraversability": 0.3066075211864407,
+              "forwardUnknown": 0.8756145526057031,
+              "forwardObservedFraction": 0.12438544739429691,
+              "forwardConfidence": 0.9711571421715242,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 2,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.5544554455445545,
+              "geometryUnknownFloor": 0.65,
+              "geometryUnknownReasons": [
+                "groundModelDisagreement"
+              ],
+              "groundDisagreementPixels": 5938,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.16521739130434782,
+              "centralLowerDepthCoverage": 0.8295296936073635,
+              "surfaceEvidence": {
+                "observedFraction": 0.8129395218002813,
+                "continuity": 0.5700692041522492,
+                "confidence": 0.5544554455445545
+              },
+              "geometryObservations": 3,
+              "geometryComponents": [
+                {
+                  "geometry": "unknown",
+                  "zone": "center",
+                  "confidence": 0.6613131041392476,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.4078762306610408,
+                  "pixelCount": 5910,
+                  "bounds": [
+                    0.4765625,
+                    0.3958333333333333,
+                    0.7109375,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "lowObstacle",
+                  "zone": "center",
+                  "confidence": 0.3563463470037979,
+                  "relativeProximity": 0.7340577244758606,
+                  "corridorOverlap": 0.0017580872011251757,
+                  "pixelCount": 28,
+                  "bounds": [
+                    0.41796875,
+                    0.984375,
+                    0.45703125,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.9677213369467007,
+                  "relativeProximity": 0.9677213369467007,
+                  "corridorOverlap": 1.0,
+                  "pixelCount": 3130,
+                  "bounds": [
+                    0.2890625,
+                    0.17708333333333334,
+                    0.7109375,
+                    0.71875
+                  ]
+                }
+              ],
+              "confirmedTracks": 3,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 1.0,
+              "forwardTraversability": 0.3160779745794649,
+              "forwardUnknown": 0.8756145526057031,
+              "forwardObservedFraction": 0.12438544739429691,
+              "forwardConfidence": 0.9711571421715242,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            }
+          ]
+        },
+        {
+          "sceneId": "temporal-doorway",
+          "state": "safe",
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "continueForward",
+              "geometryReject": "emptyCorridor",
+              "groundConfidence": 0.679372197309417,
+              "geometryUnknownFloor": 0.65,
+              "geometryUnknownReasons": [
+                "unverifiedAperture",
+                "groundModelDisagreement"
+              ],
+              "groundDisagreementPixels": 5174,
+              "openingDiagnostics": {
+                "authority": "diagnostic_only",
+                "bounds": [
+                  0.41015625,
+                  0.0,
+                  0.58984375,
+                  1.0
+                ],
+                "imageWidthFraction": 0.1796875,
+                "widthM": null,
+                "headroomM": null,
+                "upperObservedFraction": 0.23008849557522124,
+                "lowerObservedFraction": 0.6708860759493671,
+                "upperNearFraction": 1.0,
+                "lowerNearFraction": null,
+                "surfaceObservedFraction": 0.6708860759493671,
+                "surfaceContinuity": 0.8847415914684167,
+                "surfaceConfidence": 0.6708860759493671,
+                "groundDisagreementPixels": 1082
+              },
+              "centralUpperDepthCoverage": 0.45707049387927395,
+              "centralLowerDepthCoverage": 0.8607993947799774,
+              "surfaceEvidence": {
+                "observedFraction": 0.8598218471636193,
+                "continuity": 0.6346782988004362,
+                "confidence": 0.679372197309417
+              },
+              "geometryObservations": 0,
+              "geometryComponents": [],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.4311827904406551,
+              "forwardUnknown": 0.65,
+              "forwardObservedFraction": 0.35,
+              "forwardConfidence": 0.6926930973526252,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 1,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "continueForward",
+              "geometryReject": "emptyCorridor",
+              "groundConfidence": 0.6620689655172414,
+              "geometryUnknownFloor": 0.65,
+              "geometryUnknownReasons": [
+                "unverifiedAperture",
+                "groundModelDisagreement"
+              ],
+              "groundDisagreementPixels": 351,
+              "openingDiagnostics": {
+                "authority": "diagnostic_only",
+                "bounds": [
+                  0.3984375,
+                  0.0,
+                  0.5859375,
+                  1.0
+                ],
+                "imageWidthFraction": 0.1875,
+                "widthM": null,
+                "headroomM": null,
+                "upperObservedFraction": 0.23893805309734514,
+                "lowerObservedFraction": 0.6582278481012658,
+                "upperNearFraction": 1.0,
+                "lowerNearFraction": null,
+                "surfaceObservedFraction": 0.6582278481012658,
+                "surfaceContinuity": 0.9643429487179487,
+                "surfaceConfidence": 0.6582278481012658,
+                "groundDisagreementPixels": 0
+              },
+              "centralUpperDepthCoverage": 0.46694807935837906,
+              "centralLowerDepthCoverage": 0.8486949943260623,
+              "surfaceEvidence": {
+                "observedFraction": 0.8481012658227848,
+                "continuity": 0.6127694859038143,
+                "confidence": 0.6620689655172414
+              },
+              "geometryObservations": 0,
+              "geometryComponents": [],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.4311827904406551,
+              "forwardUnknown": 0.65,
+              "forwardObservedFraction": 0.35,
+              "forwardConfidence": 0.6954550556752874,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 2,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "continueForward",
+              "geometryReject": "emptyCorridor",
+              "groundConfidence": 0.5981308411214953,
+              "geometryUnknownFloor": 0.65,
+              "geometryUnknownReasons": [
+                "unverifiedAperture",
+                "groundModelDisagreement"
+              ],
+              "groundDisagreementPixels": 1016,
+              "openingDiagnostics": {
+                "authority": "diagnostic_only",
+                "bounds": [
+                  0.40234375,
+                  0.0,
+                  0.59765625,
+                  1.0
+                ],
+                "imageWidthFraction": 0.1953125,
+                "widthM": null,
+                "headroomM": null,
+                "upperObservedFraction": 0.24778761061946902,
+                "lowerObservedFraction": 0.6455696202531646,
+                "upperNearFraction": 1.0,
+                "lowerNearFraction": null,
+                "surfaceObservedFraction": 0.6455696202531646,
+                "surfaceContinuity": 0.9945098039215686,
+                "surfaceConfidence": 0.6455696202531646,
+                "groundDisagreementPixels": 0
+              },
+              "centralUpperDepthCoverage": 0.4716758125791473,
+              "centralLowerDepthCoverage": 0.8360862438532342,
+              "surfaceEvidence": {
+                "observedFraction": 0.835911861228317,
+                "continuity": 0.5981491867638811,
+                "confidence": 0.5981308411214953
+              },
+              "geometryObservations": 0,
+              "geometryComponents": [],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.4311827904406551,
+              "forwardUnknown": 0.65,
+              "forwardObservedFraction": 0.35,
+              "forwardConfidence": 0.6954550556752874,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            }
+          ]
+        },
+        {
+          "sceneId": "temporal-low-obstacle",
+          "state": "blocked",
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.6994047619047619,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.0,
+              "centralLowerDepthCoverage": 0.6883116883116883,
+              "surfaceEvidence": {
+                "observedFraction": 0.6708860759493671,
+                "continuity": 0.6792452830188679,
+                "confidence": 0.6708860759493671
+              },
+              "geometryObservations": 1,
+              "geometryComponents": [
+                {
+                  "geometry": "lowObstacle",
+                  "zone": "center",
+                  "confidence": 0.5199250470282085,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.11814345991561181,
+                  "pixelCount": 1836,
+                  "bounds": [
+                    0.3125,
+                    0.890625,
+                    0.6875,
+                    1.0
+                  ]
+                }
+              ],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.45569620253164556,
+              "forwardUnknown": 1.0,
+              "forwardObservedFraction": 0.0,
+              "forwardConfidence": 0.6708860759493671,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 1,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.7351190476190477,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.0,
+              "centralLowerDepthCoverage": 0.6753246753246753,
+              "surfaceEvidence": {
+                "observedFraction": 0.6582278481012658,
+                "continuity": 0.7145655270655271,
+                "confidence": 0.6582278481012658
+              },
+              "geometryObservations": 1,
+              "geometryComponents": [
+                {
+                  "geometry": "lowObstacle",
+                  "zone": "center",
+                  "confidence": 0.5229445940796985,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.10337552742616034,
+                  "pixelCount": 1603,
+                  "bounds": [
+                    0.30078125,
+                    0.90625,
+                    0.68359375,
+                    1.0
+                  ]
+                }
+              ],
+              "confirmedTracks": 1,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 1.0,
+              "forwardTraversability": 0.4703469292076887,
+              "forwardUnknown": 1.0,
+              "forwardObservedFraction": 0.0,
+              "forwardConfidence": 0.6708860759493671,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 2,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.759375,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.0,
+              "centralLowerDepthCoverage": 0.6623376623376623,
+              "surfaceEvidence": {
+                "observedFraction": 0.6455696202531646,
+                "continuity": 0.7687000726216412,
+                "confidence": 0.6455696202531646
+              },
+              "geometryObservations": 1,
+              "geometryComponents": [
+                {
+                  "geometry": "lowObstacle",
+                  "zone": "center",
+                  "confidence": 0.5248005758404695,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.08040318799812471,
+                  "pixelCount": 1274,
+                  "bounds": [
+                    0.30859375,
+                    0.9270833333333334,
+                    0.69140625,
+                    1.0
+                  ]
+                }
+              ],
+              "confirmedTracks": 1,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 1.0,
+              "forwardTraversability": 0.4962494139709329,
+              "forwardUnknown": 1.0,
+              "forwardObservedFraction": 0.0,
+              "forwardConfidence": 0.6708860759493671,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            }
+          ]
+        },
+        {
+          "sceneId": "temporal-overhead",
+          "state": "blocked",
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 1.0,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.4,
+              "centralLowerDepthCoverage": 0.6883116883116883,
+              "surfaceEvidence": {
+                "observedFraction": 0.6708860759493671,
+                "continuity": 1.0,
+                "confidence": 0.6708860759493671
+              },
+              "geometryObservations": 1,
+              "geometryComponents": [
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.6349008571437861,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.2911392405063291,
+                  "pixelCount": 4968,
+                  "bounds": [
+                    0.2890625,
+                    0.3125,
+                    0.7109375,
+                    0.5520833333333334
+                  ]
+                }
+              ],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.6708860759493671,
+              "forwardUnknown": 0.5929203539823009,
+              "forwardObservedFraction": 0.4070796460176991,
+              "forwardConfidence": 0.71600341796875,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 1,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 1.0,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.43478260869565216,
+              "centralLowerDepthCoverage": 0.6753246753246753,
+              "surfaceEvidence": {
+                "observedFraction": 0.6582278481012658,
+                "continuity": 1.0,
+                "confidence": 0.6582278481012658
+              },
+              "geometryObservations": 1,
+              "geometryComponents": [
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.647308307950395,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.31645569620253167,
+                  "pixelCount": 5400,
+                  "bounds": [
+                    0.2890625,
+                    0.296875,
+                    0.7109375,
+                    0.5572916666666666
+                  ]
+                }
+              ],
+              "confirmedTracks": 1,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 1.0,
+              "forwardTraversability": 0.6708860759493671,
+              "forwardUnknown": 0.5929203539823009,
+              "forwardObservedFraction": 0.4070796460176991,
+              "forwardConfidence": 0.7276407877604166,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 2,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 1.0,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.46956521739130436,
+              "centralLowerDepthCoverage": 0.6623376623376623,
+              "surfaceEvidence": {
+                "observedFraction": 0.6455696202531646,
+                "continuity": 1.0,
+                "confidence": 0.6455696202531646
+              },
+              "geometryObservations": 1,
+              "geometryComponents": [
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.6592509956688133,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.34177215189873417,
+                  "pixelCount": 5832,
+                  "bounds": [
+                    0.2890625,
+                    0.28125,
+                    0.7109375,
+                    0.5625
+                  ]
+                }
+              ],
+              "confirmedTracks": 1,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 1.0,
+              "forwardTraversability": 0.6708860759493671,
+              "forwardUnknown": 0.5929203539823009,
+              "forwardObservedFraction": 0.4070796460176991,
+              "forwardConfidence": 0.74127197265625,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            }
+          ]
+        },
+        {
+          "sceneId": "temporal-ramp",
+          "state": "safe",
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "continueForward",
+              "geometryReject": "emptyCorridor",
+              "groundConfidence": 1.0,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.0,
+              "centralLowerDepthCoverage": 0.7532467532467533,
+              "surfaceEvidence": {
+                "observedFraction": 0.7341772151898734,
+                "continuity": 1.0,
+                "confidence": 0.7341772151898734
+              },
+              "geometryObservations": 0,
+              "geometryComponents": [],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.7341772151898734,
+              "forwardUnknown": 1.0,
+              "forwardObservedFraction": 0.0,
+              "forwardConfidence": 0.7341772151898734,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 1,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "continueForward",
+              "geometryReject": "emptyCorridor",
+              "groundConfidence": 1.0,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.0,
+              "centralLowerDepthCoverage": 0.7402597402597403,
+              "surfaceEvidence": {
+                "observedFraction": 0.7215189873417721,
+                "continuity": 1.0,
+                "confidence": 0.7215189873417721
+              },
+              "geometryObservations": 0,
+              "geometryComponents": [],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.7341772151898734,
+              "forwardUnknown": 1.0,
+              "forwardObservedFraction": 0.0,
+              "forwardConfidence": 0.7341772151898734,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 2,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "continueForward",
+              "geometryReject": "emptyCorridor",
+              "groundConfidence": 1.0,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.0,
+              "centralLowerDepthCoverage": 0.7272727272727273,
+              "surfaceEvidence": {
+                "observedFraction": 0.7088607594936709,
+                "continuity": 1.0,
+                "confidence": 0.7088607594936709
+              },
+              "geometryObservations": 0,
+              "geometryComponents": [],
+              "confirmedTracks": 0,
+              "yoloBoxes": 1,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.7341772151898734,
+              "forwardUnknown": 1.0,
+              "forwardObservedFraction": 0.0,
+              "forwardConfidence": 0.7341772151898734,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            }
+          ]
+        },
+        {
+          "sceneId": "temporal-thin-pole",
+          "state": "blocked",
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.8212290502793296,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.05453777965386239,
+              "centralLowerDepthCoverage": 0.7185726894464759,
+              "surfaceEvidence": {
+                "observedFraction": 0.7013595874355368,
+                "continuity": 0.86798128342246,
+                "confidence": 0.8212290502793296
+              },
+              "geometryObservations": 2,
+              "geometryComponents": [
+                {
+                  "geometry": "thinVertical",
+                  "zone": "center",
+                  "confidence": 0.26498284375110726,
+                  "relativeProximity": 0.9785040566476725,
+                  "corridorOverlap": 0.08321612751992499,
+                  "pixelCount": 1416,
+                  "bounds": [
+                    0.48046875,
+                    0.2604166666666667,
+                    0.51953125,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.9985103611260244,
+                  "relativeProximity": 0.9985103611260244,
+                  "corridorOverlap": 1.0,
+                  "pixelCount": 876,
+                  "bounds": [
+                    0.2890625,
+                    0.17708333333333334,
+                    0.7109375,
+                    0.71875
+                  ]
+                }
+              ],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.9985103611260244,
+              "forwardTraversability": 0.7128114450452604,
+              "forwardUnknown": 0.9487053425106522,
+              "forwardObservedFraction": 0.051294657489347806,
+              "forwardConfidence": 0.9985103611260244,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 1,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.9077809798270894,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.05690164626424652,
+              "centralLowerDepthCoverage": 0.7068465515067457,
+              "surfaceEvidence": {
+                "observedFraction": 0.689873417721519,
+                "continuity": 0.8657832144070676,
+                "confidence": 0.9077809798270894
+              },
+              "geometryObservations": 2,
+              "geometryComponents": [
+                {
+                  "geometry": "thinVertical",
+                  "zone": "center",
+                  "confidence": 0.2654811275202584,
+                  "relativeProximity": 0.97875552770999,
+                  "corridorOverlap": 0.08497421472105017,
+                  "pixelCount": 1444,
+                  "bounds": [
+                    0.46875,
+                    0.24479166666666666,
+                    0.5078125,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.9980827832380227,
+                  "relativeProximity": 0.9980827832380227,
+                  "corridorOverlap": 1.0,
+                  "pixelCount": 904,
+                  "bounds": [
+                    0.2890625,
+                    0.17708333333333334,
+                    0.7109375,
+                    0.71875
+                  ]
+                }
+              ],
+              "confirmedTracks": 2,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.9985103611260244,
+              "forwardTraversability": 0.7859415346922949,
+              "forwardUnknown": 0.9487053425106522,
+              "forwardObservedFraction": 0.051294657489347806,
+              "forwardConfidence": 0.9985103611260244,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 2,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.813953488372093,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.05960320810468552,
+              "centralLowerDepthCoverage": 0.6951204135670155,
+              "surfaceEvidence": {
+                "observedFraction": 0.6783872480075012,
+                "continuity": 0.8635107118175536,
+                "confidence": 0.813953488372093
+              },
+              "geometryObservations": 2,
+              "geometryComponents": [
+                {
+                  "geometry": "thinVertical",
+                  "zone": "center",
+                  "confidence": 0.2660140380181106,
+                  "relativeProximity": 0.9791336377784812,
+                  "corridorOverlap": 0.08673230192217533,
+                  "pixelCount": 1476,
+                  "bounds": [
+                    0.48046875,
+                    0.22916666666666666,
+                    0.51953125,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.9976173415143266,
+                  "relativeProximity": 0.9976173415143266,
+                  "corridorOverlap": 1.0,
+                  "pixelCount": 936,
+                  "bounds": [
+                    0.2890625,
+                    0.17708333333333334,
+                    0.7109375,
+                    0.71875
+                  ]
+                }
+              ],
+              "confirmedTracks": 2,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.9985103611260244,
+              "forwardTraversability": 0.7859415346922949,
+              "forwardUnknown": 0.9487053425106522,
+              "forwardObservedFraction": 0.051294657489347806,
+              "forwardConfidence": 0.9985103611260244,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "modelId": "yolo11n-onnx-416-experiment",
+      "artifactSha256": "b9c6c86aa850523b970dff6aec9683dbafb363aa52051a449d4e1651c4a580ce",
+      "summary": {
+        "hazardFrames": 12,
+        "hazardFramesWithStop": 12,
+        "hazardFramesWithContinueForward": 0,
+        "hazardFramesWithImminentRule": 10,
+        "traversableFrames": 6,
+        "traversableFramesWithStop": 6,
+        "traversableFramesWithImminentRule": 0,
+        "possibleSemanticMatches": 0
+      },
+      "sequences": [
+        {
+          "sceneId": "temporal-crossing-rider",
+          "state": "moving",
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.4925373134328358,
+              "geometryUnknownFloor": 0.65,
+              "geometryUnknownReasons": [
+                "groundModelDisagreement"
+              ],
+              "groundDisagreementPixels": 5389,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.13575348248205993,
+              "centralLowerDepthCoverage": 0.8244861934182323,
+              "surfaceEvidence": {
+                "observedFraction": 0.8080168776371308,
+                "continuity": 0.4911517261386713,
+                "confidence": 0.4925373134328358
+              },
+              "geometryObservations": 3,
+              "geometryComponents": [
+                {
+                  "geometry": "unknown",
+                  "zone": "center",
+                  "confidence": 0.6533998756951525,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.39732770745428975,
+                  "pixelCount": 5260,
+                  "bounds": [
+                    0.2890625,
+                    0.4114583333333333,
+                    0.5234375,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "lowObstacle",
+                  "zone": "center",
+                  "confidence": 0.39661064892288644,
+                  "relativeProximity": 0.8323783874511719,
+                  "corridorOverlap": 0.008204406938584154,
+                  "pixelCount": 129,
+                  "bounds": [
+                    0.5390625,
+                    0.9270833333333334,
+                    0.578125,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.9711571421715242,
+                  "relativeProximity": 0.9711571421715242,
+                  "corridorOverlap": 1.0,
+                  "pixelCount": 2643,
+                  "bounds": [
+                    0.2890625,
+                    0.17708333333333334,
+                    0.7109375,
+                    0.71875
+                  ]
+                }
+              ],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.9711571421715242,
+              "forwardTraversability": 0.2419105516802411,
+              "forwardUnknown": 0.8756145526057031,
+              "forwardObservedFraction": 0.12438544739429691,
+              "forwardConfidence": 0.9711571421715242,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 1,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.559322033898305,
+              "geometryUnknownFloor": 0.65,
+              "geometryUnknownReasons": [
+                "groundModelDisagreement"
+              ],
+              "groundDisagreementPixels": 5664,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.14892359645420009,
+              "centralLowerDepthCoverage": 0.826629680998613,
+              "surfaceEvidence": {
+                "observedFraction": 0.810126582278481,
+                "continuity": 0.5481770833333334,
+                "confidence": 0.559322033898305
+              },
+              "geometryObservations": 4,
+              "geometryComponents": [
+                {
+                  "geometry": "unknown",
+                  "zone": "center",
+                  "confidence": 0.6202143269031285,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.3206751054852321,
+                  "pixelCount": 5460,
+                  "bounds": [
+                    0.39453125,
+                    0.40625,
+                    0.58203125,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "lowObstacle",
+                  "zone": "centerLeft",
+                  "confidence": 0.36513503757057497,
+                  "relativeProximity": 0.7729517817497253,
+                  "corridorOverlap": 0.007383966244725738,
+                  "pixelCount": 105,
+                  "bounds": [
+                    0.3359375,
+                    0.953125,
+                    0.390625,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "lowObstacle",
+                  "zone": "centerRight",
+                  "confidence": 0.36804761562617255,
+                  "relativeProximity": 0.7778449654579163,
+                  "corridorOverlap": 0.006856540084388186,
+                  "pixelCount": 99,
+                  "bounds": [
+                    0.58984375,
+                    0.953125,
+                    0.640625,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.9673565794276061,
+                  "relativeProximity": 0.9673565794276061,
+                  "corridorOverlap": 1.0,
+                  "pixelCount": 2868,
+                  "bounds": [
+                    0.2890625,
+                    0.17708333333333334,
+                    0.7109375,
+                    0.71875
+                  ]
+                }
+              ],
+              "confirmedTracks": 3,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 1.0,
+              "forwardTraversability": 0.3066075211864407,
+              "forwardUnknown": 0.8756145526057031,
+              "forwardObservedFraction": 0.12438544739429691,
+              "forwardConfidence": 0.9711571421715242,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 2,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.5544554455445545,
+              "geometryUnknownFloor": 0.65,
+              "geometryUnknownReasons": [
+                "groundModelDisagreement"
+              ],
+              "groundDisagreementPixels": 5938,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.16521739130434782,
+              "centralLowerDepthCoverage": 0.8295296936073635,
+              "surfaceEvidence": {
+                "observedFraction": 0.8129395218002813,
+                "continuity": 0.5700692041522492,
+                "confidence": 0.5544554455445545
+              },
+              "geometryObservations": 3,
+              "geometryComponents": [
+                {
+                  "geometry": "unknown",
+                  "zone": "center",
+                  "confidence": 0.6613131041392476,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.4078762306610408,
+                  "pixelCount": 5910,
+                  "bounds": [
+                    0.4765625,
+                    0.3958333333333333,
+                    0.7109375,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "lowObstacle",
+                  "zone": "center",
+                  "confidence": 0.3563463470037979,
+                  "relativeProximity": 0.7340577244758606,
+                  "corridorOverlap": 0.0017580872011251757,
+                  "pixelCount": 28,
+                  "bounds": [
+                    0.41796875,
+                    0.984375,
+                    0.45703125,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.9677213369467007,
+                  "relativeProximity": 0.9677213369467007,
+                  "corridorOverlap": 1.0,
+                  "pixelCount": 3130,
+                  "bounds": [
+                    0.2890625,
+                    0.17708333333333334,
+                    0.7109375,
+                    0.71875
+                  ]
+                }
+              ],
+              "confirmedTracks": 3,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 1.0,
+              "forwardTraversability": 0.3160779745794649,
+              "forwardUnknown": 0.8756145526057031,
+              "forwardObservedFraction": 0.12438544739429691,
+              "forwardConfidence": 0.9711571421715242,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            }
+          ]
+        },
+        {
+          "sceneId": "temporal-doorway",
+          "state": "safe",
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "continueForward",
+              "geometryReject": "emptyCorridor",
+              "groundConfidence": 0.679372197309417,
+              "geometryUnknownFloor": 0.65,
+              "geometryUnknownReasons": [
+                "unverifiedAperture",
+                "groundModelDisagreement"
+              ],
+              "groundDisagreementPixels": 5174,
+              "openingDiagnostics": {
+                "authority": "diagnostic_only",
+                "bounds": [
+                  0.41015625,
+                  0.0,
+                  0.58984375,
+                  1.0
+                ],
+                "imageWidthFraction": 0.1796875,
+                "widthM": null,
+                "headroomM": null,
+                "upperObservedFraction": 0.23008849557522124,
+                "lowerObservedFraction": 0.6708860759493671,
+                "upperNearFraction": 1.0,
+                "lowerNearFraction": null,
+                "surfaceObservedFraction": 0.6708860759493671,
+                "surfaceContinuity": 0.8847415914684167,
+                "surfaceConfidence": 0.6708860759493671,
+                "groundDisagreementPixels": 1082
+              },
+              "centralUpperDepthCoverage": 0.45707049387927395,
+              "centralLowerDepthCoverage": 0.8607993947799774,
+              "surfaceEvidence": {
+                "observedFraction": 0.8598218471636193,
+                "continuity": 0.6346782988004362,
+                "confidence": 0.679372197309417
+              },
+              "geometryObservations": 0,
+              "geometryComponents": [],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.4311827904406551,
+              "forwardUnknown": 0.65,
+              "forwardObservedFraction": 0.35,
+              "forwardConfidence": 0.6926930973526252,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 1,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "continueForward",
+              "geometryReject": "emptyCorridor",
+              "groundConfidence": 0.6620689655172414,
+              "geometryUnknownFloor": 0.65,
+              "geometryUnknownReasons": [
+                "unverifiedAperture",
+                "groundModelDisagreement"
+              ],
+              "groundDisagreementPixels": 351,
+              "openingDiagnostics": {
+                "authority": "diagnostic_only",
+                "bounds": [
+                  0.3984375,
+                  0.0,
+                  0.5859375,
+                  1.0
+                ],
+                "imageWidthFraction": 0.1875,
+                "widthM": null,
+                "headroomM": null,
+                "upperObservedFraction": 0.23893805309734514,
+                "lowerObservedFraction": 0.6582278481012658,
+                "upperNearFraction": 1.0,
+                "lowerNearFraction": null,
+                "surfaceObservedFraction": 0.6582278481012658,
+                "surfaceContinuity": 0.9643429487179487,
+                "surfaceConfidence": 0.6582278481012658,
+                "groundDisagreementPixels": 0
+              },
+              "centralUpperDepthCoverage": 0.46694807935837906,
+              "centralLowerDepthCoverage": 0.8486949943260623,
+              "surfaceEvidence": {
+                "observedFraction": 0.8481012658227848,
+                "continuity": 0.6127694859038143,
+                "confidence": 0.6620689655172414
+              },
+              "geometryObservations": 0,
+              "geometryComponents": [],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.4311827904406551,
+              "forwardUnknown": 0.65,
+              "forwardObservedFraction": 0.35,
+              "forwardConfidence": 0.6954550556752874,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 2,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "continueForward",
+              "geometryReject": "emptyCorridor",
+              "groundConfidence": 0.5981308411214953,
+              "geometryUnknownFloor": 0.65,
+              "geometryUnknownReasons": [
+                "unverifiedAperture",
+                "groundModelDisagreement"
+              ],
+              "groundDisagreementPixels": 1016,
+              "openingDiagnostics": {
+                "authority": "diagnostic_only",
+                "bounds": [
+                  0.40234375,
+                  0.0,
+                  0.59765625,
+                  1.0
+                ],
+                "imageWidthFraction": 0.1953125,
+                "widthM": null,
+                "headroomM": null,
+                "upperObservedFraction": 0.24778761061946902,
+                "lowerObservedFraction": 0.6455696202531646,
+                "upperNearFraction": 1.0,
+                "lowerNearFraction": null,
+                "surfaceObservedFraction": 0.6455696202531646,
+                "surfaceContinuity": 0.9945098039215686,
+                "surfaceConfidence": 0.6455696202531646,
+                "groundDisagreementPixels": 0
+              },
+              "centralUpperDepthCoverage": 0.4716758125791473,
+              "centralLowerDepthCoverage": 0.8360862438532342,
+              "surfaceEvidence": {
+                "observedFraction": 0.835911861228317,
+                "continuity": 0.5981491867638811,
+                "confidence": 0.5981308411214953
+              },
+              "geometryObservations": 0,
+              "geometryComponents": [],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.4311827904406551,
+              "forwardUnknown": 0.65,
+              "forwardObservedFraction": 0.35,
+              "forwardConfidence": 0.6954550556752874,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            }
+          ]
+        },
+        {
+          "sceneId": "temporal-low-obstacle",
+          "state": "blocked",
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.6994047619047619,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.0,
+              "centralLowerDepthCoverage": 0.6883116883116883,
+              "surfaceEvidence": {
+                "observedFraction": 0.6708860759493671,
+                "continuity": 0.6792452830188679,
+                "confidence": 0.6708860759493671
+              },
+              "geometryObservations": 1,
+              "geometryComponents": [
+                {
+                  "geometry": "lowObstacle",
+                  "zone": "center",
+                  "confidence": 0.5199250470282085,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.11814345991561181,
+                  "pixelCount": 1836,
+                  "bounds": [
+                    0.3125,
+                    0.890625,
+                    0.6875,
+                    1.0
+                  ]
+                }
+              ],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.45569620253164556,
+              "forwardUnknown": 1.0,
+              "forwardObservedFraction": 0.0,
+              "forwardConfidence": 0.6708860759493671,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 1,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.7351190476190477,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.0,
+              "centralLowerDepthCoverage": 0.6753246753246753,
+              "surfaceEvidence": {
+                "observedFraction": 0.6582278481012658,
+                "continuity": 0.7145655270655271,
+                "confidence": 0.6582278481012658
+              },
+              "geometryObservations": 1,
+              "geometryComponents": [
+                {
+                  "geometry": "lowObstacle",
+                  "zone": "center",
+                  "confidence": 0.5229445940796985,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.10337552742616034,
+                  "pixelCount": 1603,
+                  "bounds": [
+                    0.30078125,
+                    0.90625,
+                    0.68359375,
+                    1.0
+                  ]
+                }
+              ],
+              "confirmedTracks": 1,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 1.0,
+              "forwardTraversability": 0.4703469292076887,
+              "forwardUnknown": 1.0,
+              "forwardObservedFraction": 0.0,
+              "forwardConfidence": 0.6708860759493671,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 2,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.759375,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.0,
+              "centralLowerDepthCoverage": 0.6623376623376623,
+              "surfaceEvidence": {
+                "observedFraction": 0.6455696202531646,
+                "continuity": 0.7687000726216412,
+                "confidence": 0.6455696202531646
+              },
+              "geometryObservations": 1,
+              "geometryComponents": [
+                {
+                  "geometry": "lowObstacle",
+                  "zone": "center",
+                  "confidence": 0.5248005758404695,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.08040318799812471,
+                  "pixelCount": 1274,
+                  "bounds": [
+                    0.30859375,
+                    0.9270833333333334,
+                    0.69140625,
+                    1.0
+                  ]
+                }
+              ],
+              "confirmedTracks": 1,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 1.0,
+              "forwardTraversability": 0.4962494139709329,
+              "forwardUnknown": 1.0,
+              "forwardObservedFraction": 0.0,
+              "forwardConfidence": 0.6708860759493671,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            }
+          ]
+        },
+        {
+          "sceneId": "temporal-overhead",
+          "state": "blocked",
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 1.0,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.4,
+              "centralLowerDepthCoverage": 0.6883116883116883,
+              "surfaceEvidence": {
+                "observedFraction": 0.6708860759493671,
+                "continuity": 1.0,
+                "confidence": 0.6708860759493671
+              },
+              "geometryObservations": 1,
+              "geometryComponents": [
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.6349008571437861,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.2911392405063291,
+                  "pixelCount": 4968,
+                  "bounds": [
+                    0.2890625,
+                    0.3125,
+                    0.7109375,
+                    0.5520833333333334
+                  ]
+                }
+              ],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.6708860759493671,
+              "forwardUnknown": 0.5929203539823009,
+              "forwardObservedFraction": 0.4070796460176991,
+              "forwardConfidence": 0.71600341796875,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 1,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 1.0,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.43478260869565216,
+              "centralLowerDepthCoverage": 0.6753246753246753,
+              "surfaceEvidence": {
+                "observedFraction": 0.6582278481012658,
+                "continuity": 1.0,
+                "confidence": 0.6582278481012658
+              },
+              "geometryObservations": 1,
+              "geometryComponents": [
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.647308307950395,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.31645569620253167,
+                  "pixelCount": 5400,
+                  "bounds": [
+                    0.2890625,
+                    0.296875,
+                    0.7109375,
+                    0.5572916666666666
+                  ]
+                }
+              ],
+              "confirmedTracks": 1,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 1.0,
+              "forwardTraversability": 0.6708860759493671,
+              "forwardUnknown": 0.5929203539823009,
+              "forwardObservedFraction": 0.4070796460176991,
+              "forwardConfidence": 0.7276407877604166,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 2,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 1.0,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.46956521739130436,
+              "centralLowerDepthCoverage": 0.6623376623376623,
+              "surfaceEvidence": {
+                "observedFraction": 0.6455696202531646,
+                "continuity": 1.0,
+                "confidence": 0.6455696202531646
+              },
+              "geometryObservations": 1,
+              "geometryComponents": [
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.6592509956688133,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.34177215189873417,
+                  "pixelCount": 5832,
+                  "bounds": [
+                    0.2890625,
+                    0.28125,
+                    0.7109375,
+                    0.5625
+                  ]
+                }
+              ],
+              "confirmedTracks": 1,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 1.0,
+              "forwardTraversability": 0.6708860759493671,
+              "forwardUnknown": 0.5929203539823009,
+              "forwardObservedFraction": 0.4070796460176991,
+              "forwardConfidence": 0.74127197265625,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            }
+          ]
+        },
+        {
+          "sceneId": "temporal-ramp",
+          "state": "safe",
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "continueForward",
+              "geometryReject": "emptyCorridor",
+              "groundConfidence": 1.0,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.0,
+              "centralLowerDepthCoverage": 0.7532467532467533,
+              "surfaceEvidence": {
+                "observedFraction": 0.7341772151898734,
+                "continuity": 1.0,
+                "confidence": 0.7341772151898734
+              },
+              "geometryObservations": 0,
+              "geometryComponents": [],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.7341772151898734,
+              "forwardUnknown": 1.0,
+              "forwardObservedFraction": 0.0,
+              "forwardConfidence": 0.7341772151898734,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 1,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "continueForward",
+              "geometryReject": "emptyCorridor",
+              "groundConfidence": 1.0,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.0,
+              "centralLowerDepthCoverage": 0.7402597402597403,
+              "surfaceEvidence": {
+                "observedFraction": 0.7215189873417721,
+                "continuity": 1.0,
+                "confidence": 0.7215189873417721
+              },
+              "geometryObservations": 0,
+              "geometryComponents": [],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.7341772151898734,
+              "forwardUnknown": 1.0,
+              "forwardObservedFraction": 0.0,
+              "forwardConfidence": 0.7341772151898734,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 2,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "continueForward",
+              "geometryReject": "emptyCorridor",
+              "groundConfidence": 1.0,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.0,
+              "centralLowerDepthCoverage": 0.7272727272727273,
+              "surfaceEvidence": {
+                "observedFraction": 0.7088607594936709,
+                "continuity": 1.0,
+                "confidence": 0.7088607594936709
+              },
+              "geometryObservations": 0,
+              "geometryComponents": [],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.7341772151898734,
+              "forwardUnknown": 1.0,
+              "forwardObservedFraction": 0.0,
+              "forwardConfidence": 0.7341772151898734,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            }
+          ]
+        },
+        {
+          "sceneId": "temporal-thin-pole",
+          "state": "blocked",
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.8212290502793296,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.05453777965386239,
+              "centralLowerDepthCoverage": 0.7185726894464759,
+              "surfaceEvidence": {
+                "observedFraction": 0.7013595874355368,
+                "continuity": 0.86798128342246,
+                "confidence": 0.8212290502793296
+              },
+              "geometryObservations": 2,
+              "geometryComponents": [
+                {
+                  "geometry": "thinVertical",
+                  "zone": "center",
+                  "confidence": 0.26498284375110726,
+                  "relativeProximity": 0.9785040566476725,
+                  "corridorOverlap": 0.08321612751992499,
+                  "pixelCount": 1416,
+                  "bounds": [
+                    0.48046875,
+                    0.2604166666666667,
+                    0.51953125,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.9985103611260244,
+                  "relativeProximity": 0.9985103611260244,
+                  "corridorOverlap": 1.0,
+                  "pixelCount": 876,
+                  "bounds": [
+                    0.2890625,
+                    0.17708333333333334,
+                    0.7109375,
+                    0.71875
+                  ]
+                }
+              ],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.9985103611260244,
+              "forwardTraversability": 0.7128114450452604,
+              "forwardUnknown": 0.9487053425106522,
+              "forwardObservedFraction": 0.051294657489347806,
+              "forwardConfidence": 0.9985103611260244,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 1,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.9077809798270894,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.05690164626424652,
+              "centralLowerDepthCoverage": 0.7068465515067457,
+              "surfaceEvidence": {
+                "observedFraction": 0.689873417721519,
+                "continuity": 0.8657832144070676,
+                "confidence": 0.9077809798270894
+              },
+              "geometryObservations": 2,
+              "geometryComponents": [
+                {
+                  "geometry": "thinVertical",
+                  "zone": "center",
+                  "confidence": 0.2654811275202584,
+                  "relativeProximity": 0.97875552770999,
+                  "corridorOverlap": 0.08497421472105017,
+                  "pixelCount": 1444,
+                  "bounds": [
+                    0.46875,
+                    0.24479166666666666,
+                    0.5078125,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.9980827832380227,
+                  "relativeProximity": 0.9980827832380227,
+                  "corridorOverlap": 1.0,
+                  "pixelCount": 904,
+                  "bounds": [
+                    0.2890625,
+                    0.17708333333333334,
+                    0.7109375,
+                    0.71875
+                  ]
+                }
+              ],
+              "confirmedTracks": 2,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.9985103611260244,
+              "forwardTraversability": 0.7859415346922949,
+              "forwardUnknown": 0.9487053425106522,
+              "forwardObservedFraction": 0.051294657489347806,
+              "forwardConfidence": 0.9985103611260244,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 2,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.813953488372093,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.05960320810468552,
+              "centralLowerDepthCoverage": 0.6951204135670155,
+              "surfaceEvidence": {
+                "observedFraction": 0.6783872480075012,
+                "continuity": 0.8635107118175536,
+                "confidence": 0.813953488372093
+              },
+              "geometryObservations": 2,
+              "geometryComponents": [
+                {
+                  "geometry": "thinVertical",
+                  "zone": "center",
+                  "confidence": 0.2660140380181106,
+                  "relativeProximity": 0.9791336377784812,
+                  "corridorOverlap": 0.08673230192217533,
+                  "pixelCount": 1476,
+                  "bounds": [
+                    0.48046875,
+                    0.22916666666666666,
+                    0.51953125,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.9976173415143266,
+                  "relativeProximity": 0.9976173415143266,
+                  "corridorOverlap": 1.0,
+                  "pixelCount": 936,
+                  "bounds": [
+                    0.2890625,
+                    0.17708333333333334,
+                    0.7109375,
+                    0.71875
+                  ]
+                }
+              ],
+              "confirmedTracks": 2,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.9985103611260244,
+              "forwardTraversability": 0.7859415346922949,
+              "forwardUnknown": 0.9487053425106522,
+              "forwardObservedFraction": 0.051294657489347806,
+              "forwardConfidence": 0.9985103611260244,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "modelId": "yolo26n-onnx-416-experiment",
+      "artifactSha256": "b0db38ca8a0fe5c8ff00391b18206e07a423f218f5a8236e1f1dbe1b8a2e1332",
+      "summary": {
+        "hazardFrames": 12,
+        "hazardFramesWithStop": 12,
+        "hazardFramesWithContinueForward": 0,
+        "hazardFramesWithImminentRule": 10,
+        "traversableFrames": 6,
+        "traversableFramesWithStop": 6,
+        "traversableFramesWithImminentRule": 0,
+        "possibleSemanticMatches": 0
+      },
+      "sequences": [
+        {
+          "sceneId": "temporal-crossing-rider",
+          "state": "moving",
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.4925373134328358,
+              "geometryUnknownFloor": 0.65,
+              "geometryUnknownReasons": [
+                "groundModelDisagreement"
+              ],
+              "groundDisagreementPixels": 5389,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.13575348248205993,
+              "centralLowerDepthCoverage": 0.8244861934182323,
+              "surfaceEvidence": {
+                "observedFraction": 0.8080168776371308,
+                "continuity": 0.4911517261386713,
+                "confidence": 0.4925373134328358
+              },
+              "geometryObservations": 3,
+              "geometryComponents": [
+                {
+                  "geometry": "unknown",
+                  "zone": "center",
+                  "confidence": 0.6533998756951525,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.39732770745428975,
+                  "pixelCount": 5260,
+                  "bounds": [
+                    0.2890625,
+                    0.4114583333333333,
+                    0.5234375,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "lowObstacle",
+                  "zone": "center",
+                  "confidence": 0.39661064892288644,
+                  "relativeProximity": 0.8323783874511719,
+                  "corridorOverlap": 0.008204406938584154,
+                  "pixelCount": 129,
+                  "bounds": [
+                    0.5390625,
+                    0.9270833333333334,
+                    0.578125,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.9711571421715242,
+                  "relativeProximity": 0.9711571421715242,
+                  "corridorOverlap": 1.0,
+                  "pixelCount": 2643,
+                  "bounds": [
+                    0.2890625,
+                    0.17708333333333334,
+                    0.7109375,
+                    0.71875
+                  ]
+                }
+              ],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.9711571421715242,
+              "forwardTraversability": 0.2419105516802411,
+              "forwardUnknown": 0.8756145526057031,
+              "forwardObservedFraction": 0.12438544739429691,
+              "forwardConfidence": 0.9711571421715242,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 1,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.559322033898305,
+              "geometryUnknownFloor": 0.65,
+              "geometryUnknownReasons": [
+                "groundModelDisagreement"
+              ],
+              "groundDisagreementPixels": 5664,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.14892359645420009,
+              "centralLowerDepthCoverage": 0.826629680998613,
+              "surfaceEvidence": {
+                "observedFraction": 0.810126582278481,
+                "continuity": 0.5481770833333334,
+                "confidence": 0.559322033898305
+              },
+              "geometryObservations": 4,
+              "geometryComponents": [
+                {
+                  "geometry": "unknown",
+                  "zone": "center",
+                  "confidence": 0.6202143269031285,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.3206751054852321,
+                  "pixelCount": 5460,
+                  "bounds": [
+                    0.39453125,
+                    0.40625,
+                    0.58203125,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "lowObstacle",
+                  "zone": "centerLeft",
+                  "confidence": 0.36513503757057497,
+                  "relativeProximity": 0.7729517817497253,
+                  "corridorOverlap": 0.007383966244725738,
+                  "pixelCount": 105,
+                  "bounds": [
+                    0.3359375,
+                    0.953125,
+                    0.390625,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "lowObstacle",
+                  "zone": "centerRight",
+                  "confidence": 0.36804761562617255,
+                  "relativeProximity": 0.7778449654579163,
+                  "corridorOverlap": 0.006856540084388186,
+                  "pixelCount": 99,
+                  "bounds": [
+                    0.58984375,
+                    0.953125,
+                    0.640625,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.9673565794276061,
+                  "relativeProximity": 0.9673565794276061,
+                  "corridorOverlap": 1.0,
+                  "pixelCount": 2868,
+                  "bounds": [
+                    0.2890625,
+                    0.17708333333333334,
+                    0.7109375,
+                    0.71875
+                  ]
+                }
+              ],
+              "confirmedTracks": 3,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 1.0,
+              "forwardTraversability": 0.3066075211864407,
+              "forwardUnknown": 0.8756145526057031,
+              "forwardObservedFraction": 0.12438544739429691,
+              "forwardConfidence": 0.9711571421715242,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 2,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.5544554455445545,
+              "geometryUnknownFloor": 0.65,
+              "geometryUnknownReasons": [
+                "groundModelDisagreement"
+              ],
+              "groundDisagreementPixels": 5938,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.16521739130434782,
+              "centralLowerDepthCoverage": 0.8295296936073635,
+              "surfaceEvidence": {
+                "observedFraction": 0.8129395218002813,
+                "continuity": 0.5700692041522492,
+                "confidence": 0.5544554455445545
+              },
+              "geometryObservations": 3,
+              "geometryComponents": [
+                {
+                  "geometry": "unknown",
+                  "zone": "center",
+                  "confidence": 0.6613131041392476,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.4078762306610408,
+                  "pixelCount": 5910,
+                  "bounds": [
+                    0.4765625,
+                    0.3958333333333333,
+                    0.7109375,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "lowObstacle",
+                  "zone": "center",
+                  "confidence": 0.3563463470037979,
+                  "relativeProximity": 0.7340577244758606,
+                  "corridorOverlap": 0.0017580872011251757,
+                  "pixelCount": 28,
+                  "bounds": [
+                    0.41796875,
+                    0.984375,
+                    0.45703125,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.9677213369467007,
+                  "relativeProximity": 0.9677213369467007,
+                  "corridorOverlap": 1.0,
+                  "pixelCount": 3130,
+                  "bounds": [
+                    0.2890625,
+                    0.17708333333333334,
+                    0.7109375,
+                    0.71875
+                  ]
+                }
+              ],
+              "confirmedTracks": 3,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 1.0,
+              "forwardTraversability": 0.3160779745794649,
+              "forwardUnknown": 0.8756145526057031,
+              "forwardObservedFraction": 0.12438544739429691,
+              "forwardConfidence": 0.9711571421715242,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            }
+          ]
+        },
+        {
+          "sceneId": "temporal-doorway",
+          "state": "safe",
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "continueForward",
+              "geometryReject": "emptyCorridor",
+              "groundConfidence": 0.679372197309417,
+              "geometryUnknownFloor": 0.65,
+              "geometryUnknownReasons": [
+                "unverifiedAperture",
+                "groundModelDisagreement"
+              ],
+              "groundDisagreementPixels": 5174,
+              "openingDiagnostics": {
+                "authority": "diagnostic_only",
+                "bounds": [
+                  0.41015625,
+                  0.0,
+                  0.58984375,
+                  1.0
+                ],
+                "imageWidthFraction": 0.1796875,
+                "widthM": null,
+                "headroomM": null,
+                "upperObservedFraction": 0.23008849557522124,
+                "lowerObservedFraction": 0.6708860759493671,
+                "upperNearFraction": 1.0,
+                "lowerNearFraction": null,
+                "surfaceObservedFraction": 0.6708860759493671,
+                "surfaceContinuity": 0.8847415914684167,
+                "surfaceConfidence": 0.6708860759493671,
+                "groundDisagreementPixels": 1082
+              },
+              "centralUpperDepthCoverage": 0.45707049387927395,
+              "centralLowerDepthCoverage": 0.8607993947799774,
+              "surfaceEvidence": {
+                "observedFraction": 0.8598218471636193,
+                "continuity": 0.6346782988004362,
+                "confidence": 0.679372197309417
+              },
+              "geometryObservations": 0,
+              "geometryComponents": [],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.4311827904406551,
+              "forwardUnknown": 0.65,
+              "forwardObservedFraction": 0.35,
+              "forwardConfidence": 0.6926930973526252,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 1,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "continueForward",
+              "geometryReject": "emptyCorridor",
+              "groundConfidence": 0.6620689655172414,
+              "geometryUnknownFloor": 0.65,
+              "geometryUnknownReasons": [
+                "unverifiedAperture",
+                "groundModelDisagreement"
+              ],
+              "groundDisagreementPixels": 351,
+              "openingDiagnostics": {
+                "authority": "diagnostic_only",
+                "bounds": [
+                  0.3984375,
+                  0.0,
+                  0.5859375,
+                  1.0
+                ],
+                "imageWidthFraction": 0.1875,
+                "widthM": null,
+                "headroomM": null,
+                "upperObservedFraction": 0.23893805309734514,
+                "lowerObservedFraction": 0.6582278481012658,
+                "upperNearFraction": 1.0,
+                "lowerNearFraction": null,
+                "surfaceObservedFraction": 0.6582278481012658,
+                "surfaceContinuity": 0.9643429487179487,
+                "surfaceConfidence": 0.6582278481012658,
+                "groundDisagreementPixels": 0
+              },
+              "centralUpperDepthCoverage": 0.46694807935837906,
+              "centralLowerDepthCoverage": 0.8486949943260623,
+              "surfaceEvidence": {
+                "observedFraction": 0.8481012658227848,
+                "continuity": 0.6127694859038143,
+                "confidence": 0.6620689655172414
+              },
+              "geometryObservations": 0,
+              "geometryComponents": [],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.4311827904406551,
+              "forwardUnknown": 0.65,
+              "forwardObservedFraction": 0.35,
+              "forwardConfidence": 0.6954550556752874,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 2,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "continueForward",
+              "geometryReject": "emptyCorridor",
+              "groundConfidence": 0.5981308411214953,
+              "geometryUnknownFloor": 0.65,
+              "geometryUnknownReasons": [
+                "unverifiedAperture",
+                "groundModelDisagreement"
+              ],
+              "groundDisagreementPixels": 1016,
+              "openingDiagnostics": {
+                "authority": "diagnostic_only",
+                "bounds": [
+                  0.40234375,
+                  0.0,
+                  0.59765625,
+                  1.0
+                ],
+                "imageWidthFraction": 0.1953125,
+                "widthM": null,
+                "headroomM": null,
+                "upperObservedFraction": 0.24778761061946902,
+                "lowerObservedFraction": 0.6455696202531646,
+                "upperNearFraction": 1.0,
+                "lowerNearFraction": null,
+                "surfaceObservedFraction": 0.6455696202531646,
+                "surfaceContinuity": 0.9945098039215686,
+                "surfaceConfidence": 0.6455696202531646,
+                "groundDisagreementPixels": 0
+              },
+              "centralUpperDepthCoverage": 0.4716758125791473,
+              "centralLowerDepthCoverage": 0.8360862438532342,
+              "surfaceEvidence": {
+                "observedFraction": 0.835911861228317,
+                "continuity": 0.5981491867638811,
+                "confidence": 0.5981308411214953
+              },
+              "geometryObservations": 0,
+              "geometryComponents": [],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.4311827904406551,
+              "forwardUnknown": 0.65,
+              "forwardObservedFraction": 0.35,
+              "forwardConfidence": 0.6954550556752874,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            }
+          ]
+        },
+        {
+          "sceneId": "temporal-low-obstacle",
+          "state": "blocked",
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.6994047619047619,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.0,
+              "centralLowerDepthCoverage": 0.6883116883116883,
+              "surfaceEvidence": {
+                "observedFraction": 0.6708860759493671,
+                "continuity": 0.6792452830188679,
+                "confidence": 0.6708860759493671
+              },
+              "geometryObservations": 1,
+              "geometryComponents": [
+                {
+                  "geometry": "lowObstacle",
+                  "zone": "center",
+                  "confidence": 0.5199250470282085,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.11814345991561181,
+                  "pixelCount": 1836,
+                  "bounds": [
+                    0.3125,
+                    0.890625,
+                    0.6875,
+                    1.0
+                  ]
+                }
+              ],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.45569620253164556,
+              "forwardUnknown": 1.0,
+              "forwardObservedFraction": 0.0,
+              "forwardConfidence": 0.6708860759493671,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 1,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.7351190476190477,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.0,
+              "centralLowerDepthCoverage": 0.6753246753246753,
+              "surfaceEvidence": {
+                "observedFraction": 0.6582278481012658,
+                "continuity": 0.7145655270655271,
+                "confidence": 0.6582278481012658
+              },
+              "geometryObservations": 1,
+              "geometryComponents": [
+                {
+                  "geometry": "lowObstacle",
+                  "zone": "center",
+                  "confidence": 0.5229445940796985,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.10337552742616034,
+                  "pixelCount": 1603,
+                  "bounds": [
+                    0.30078125,
+                    0.90625,
+                    0.68359375,
+                    1.0
+                  ]
+                }
+              ],
+              "confirmedTracks": 1,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 1.0,
+              "forwardTraversability": 0.4703469292076887,
+              "forwardUnknown": 1.0,
+              "forwardObservedFraction": 0.0,
+              "forwardConfidence": 0.6708860759493671,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 2,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.759375,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.0,
+              "centralLowerDepthCoverage": 0.6623376623376623,
+              "surfaceEvidence": {
+                "observedFraction": 0.6455696202531646,
+                "continuity": 0.7687000726216412,
+                "confidence": 0.6455696202531646
+              },
+              "geometryObservations": 1,
+              "geometryComponents": [
+                {
+                  "geometry": "lowObstacle",
+                  "zone": "center",
+                  "confidence": 0.5248005758404695,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.08040318799812471,
+                  "pixelCount": 1274,
+                  "bounds": [
+                    0.30859375,
+                    0.9270833333333334,
+                    0.69140625,
+                    1.0
+                  ]
+                }
+              ],
+              "confirmedTracks": 1,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 1.0,
+              "forwardTraversability": 0.4962494139709329,
+              "forwardUnknown": 1.0,
+              "forwardObservedFraction": 0.0,
+              "forwardConfidence": 0.6708860759493671,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle",
+                "surfaceNotContinuous"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            }
+          ]
+        },
+        {
+          "sceneId": "temporal-overhead",
+          "state": "blocked",
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 1.0,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.4,
+              "centralLowerDepthCoverage": 0.6883116883116883,
+              "surfaceEvidence": {
+                "observedFraction": 0.6708860759493671,
+                "continuity": 1.0,
+                "confidence": 0.6708860759493671
+              },
+              "geometryObservations": 1,
+              "geometryComponents": [
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.6349008571437861,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.2911392405063291,
+                  "pixelCount": 4968,
+                  "bounds": [
+                    0.2890625,
+                    0.3125,
+                    0.7109375,
+                    0.5520833333333334
+                  ]
+                }
+              ],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.6708860759493671,
+              "forwardUnknown": 0.5929203539823009,
+              "forwardObservedFraction": 0.4070796460176991,
+              "forwardConfidence": 0.71600341796875,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 1,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 1.0,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.43478260869565216,
+              "centralLowerDepthCoverage": 0.6753246753246753,
+              "surfaceEvidence": {
+                "observedFraction": 0.6582278481012658,
+                "continuity": 1.0,
+                "confidence": 0.6582278481012658
+              },
+              "geometryObservations": 1,
+              "geometryComponents": [
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.647308307950395,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.31645569620253167,
+                  "pixelCount": 5400,
+                  "bounds": [
+                    0.2890625,
+                    0.296875,
+                    0.7109375,
+                    0.5572916666666666
+                  ]
+                }
+              ],
+              "confirmedTracks": 1,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 1.0,
+              "forwardTraversability": 0.6708860759493671,
+              "forwardUnknown": 0.5929203539823009,
+              "forwardObservedFraction": 0.4070796460176991,
+              "forwardConfidence": 0.7276407877604166,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 2,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 1.0,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.46956521739130436,
+              "centralLowerDepthCoverage": 0.6623376623376623,
+              "surfaceEvidence": {
+                "observedFraction": 0.6455696202531646,
+                "continuity": 1.0,
+                "confidence": 0.6455696202531646
+              },
+              "geometryObservations": 1,
+              "geometryComponents": [
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.6592509956688133,
+                  "relativeProximity": 1.0,
+                  "corridorOverlap": 0.34177215189873417,
+                  "pixelCount": 5832,
+                  "bounds": [
+                    0.2890625,
+                    0.28125,
+                    0.7109375,
+                    0.5625
+                  ]
+                }
+              ],
+              "confirmedTracks": 1,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 1.0,
+              "forwardTraversability": 0.6708860759493671,
+              "forwardUnknown": 0.5929203539823009,
+              "forwardObservedFraction": 0.4070796460176991,
+              "forwardConfidence": 0.74127197265625,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            }
+          ]
+        },
+        {
+          "sceneId": "temporal-ramp",
+          "state": "safe",
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "continueForward",
+              "geometryReject": "emptyCorridor",
+              "groundConfidence": 1.0,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.0,
+              "centralLowerDepthCoverage": 0.7532467532467533,
+              "surfaceEvidence": {
+                "observedFraction": 0.7341772151898734,
+                "continuity": 1.0,
+                "confidence": 0.7341772151898734
+              },
+              "geometryObservations": 0,
+              "geometryComponents": [],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.7341772151898734,
+              "forwardUnknown": 1.0,
+              "forwardObservedFraction": 0.0,
+              "forwardConfidence": 0.7341772151898734,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 1,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "continueForward",
+              "geometryReject": "emptyCorridor",
+              "groundConfidence": 1.0,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.0,
+              "centralLowerDepthCoverage": 0.7402597402597403,
+              "surfaceEvidence": {
+                "observedFraction": 0.7215189873417721,
+                "continuity": 1.0,
+                "confidence": 0.7215189873417721
+              },
+              "geometryObservations": 0,
+              "geometryComponents": [],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.7341772151898734,
+              "forwardUnknown": 1.0,
+              "forwardObservedFraction": 0.0,
+              "forwardConfidence": 0.7341772151898734,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 2,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "continueForward",
+              "geometryReject": "emptyCorridor",
+              "groundConfidence": 1.0,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.0,
+              "centralLowerDepthCoverage": 0.7272727272727273,
+              "surfaceEvidence": {
+                "observedFraction": 0.7088607594936709,
+                "continuity": 1.0,
+                "confidence": 0.7088607594936709
+              },
+              "geometryObservations": 0,
+              "geometryComponents": [],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.0,
+              "forwardTraversability": 0.7341772151898734,
+              "forwardUnknown": 1.0,
+              "forwardObservedFraction": 0.0,
+              "forwardConfidence": 0.7341772151898734,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            }
+          ]
+        },
+        {
+          "sceneId": "temporal-thin-pole",
+          "state": "blocked",
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.8212290502793296,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.05453777965386239,
+              "centralLowerDepthCoverage": 0.7185726894464759,
+              "surfaceEvidence": {
+                "observedFraction": 0.7013595874355368,
+                "continuity": 0.86798128342246,
+                "confidence": 0.8212290502793296
+              },
+              "geometryObservations": 2,
+              "geometryComponents": [
+                {
+                  "geometry": "thinVertical",
+                  "zone": "center",
+                  "confidence": 0.26498284375110726,
+                  "relativeProximity": 0.9785040566476725,
+                  "corridorOverlap": 0.08321612751992499,
+                  "pixelCount": 1416,
+                  "bounds": [
+                    0.48046875,
+                    0.2604166666666667,
+                    0.51953125,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.9985103611260244,
+                  "relativeProximity": 0.9985103611260244,
+                  "corridorOverlap": 1.0,
+                  "pixelCount": 876,
+                  "bounds": [
+                    0.2890625,
+                    0.17708333333333334,
+                    0.7109375,
+                    0.71875
+                  ]
+                }
+              ],
+              "confirmedTracks": 0,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.9985103611260244,
+              "forwardTraversability": 0.7128114450452604,
+              "forwardUnknown": 0.9487053425106522,
+              "forwardObservedFraction": 0.051294657489347806,
+              "forwardConfidence": 0.9985103611260244,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 1,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.9077809798270894,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.05690164626424652,
+              "centralLowerDepthCoverage": 0.7068465515067457,
+              "surfaceEvidence": {
+                "observedFraction": 0.689873417721519,
+                "continuity": 0.8657832144070676,
+                "confidence": 0.9077809798270894
+              },
+              "geometryObservations": 2,
+              "geometryComponents": [
+                {
+                  "geometry": "thinVertical",
+                  "zone": "center",
+                  "confidence": 0.2654811275202584,
+                  "relativeProximity": 0.97875552770999,
+                  "corridorOverlap": 0.08497421472105017,
+                  "pixelCount": 1444,
+                  "bounds": [
+                    0.46875,
+                    0.24479166666666666,
+                    0.5078125,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.9980827832380227,
+                  "relativeProximity": 0.9980827832380227,
+                  "corridorOverlap": 1.0,
+                  "pixelCount": 904,
+                  "bounds": [
+                    0.2890625,
+                    0.17708333333333334,
+                    0.7109375,
+                    0.71875
+                  ]
+                }
+              ],
+              "confirmedTracks": 2,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.9985103611260244,
+              "forwardTraversability": 0.7859415346922949,
+              "forwardUnknown": 0.9487053425106522,
+              "forwardObservedFraction": 0.051294657489347806,
+              "forwardConfidence": 0.9985103611260244,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            },
+            {
+              "frameIndex": 2,
+              "cameraPitchDeg": 0.000018723968324252382,
+              "expectedAction": "stopNow",
+              "geometryReject": "none",
+              "groundConfidence": 0.813953488372093,
+              "geometryUnknownFloor": 0.0,
+              "geometryUnknownReasons": [],
+              "groundDisagreementPixels": 0,
+              "openingDiagnostics": null,
+              "centralUpperDepthCoverage": 0.05960320810468552,
+              "centralLowerDepthCoverage": 0.6951204135670155,
+              "surfaceEvidence": {
+                "observedFraction": 0.6783872480075012,
+                "continuity": 0.8635107118175536,
+                "confidence": 0.813953488372093
+              },
+              "geometryObservations": 2,
+              "geometryComponents": [
+                {
+                  "geometry": "thinVertical",
+                  "zone": "center",
+                  "confidence": 0.2660140380181106,
+                  "relativeProximity": 0.9791336377784812,
+                  "corridorOverlap": 0.08673230192217533,
+                  "pixelCount": 1476,
+                  "bounds": [
+                    0.48046875,
+                    0.22916666666666666,
+                    0.51953125,
+                    1.0
+                  ]
+                },
+                {
+                  "geometry": "broadSurface",
+                  "zone": "center",
+                  "confidence": 0.9976173415143266,
+                  "relativeProximity": 0.9976173415143266,
+                  "corridorOverlap": 1.0,
+                  "pixelCount": 936,
+                  "bounds": [
+                    0.2890625,
+                    0.17708333333333334,
+                    0.7109375,
+                    0.71875
+                  ]
+                }
+              ],
+              "confirmedTracks": 2,
+              "yoloBoxes": 0,
+              "possibleSemanticMatches": 0,
+              "runtimeStatus": "accepted",
+              "plannedAction": "stopNow",
+              "plannedRuleId": "SPATIAL-P0-IMMINENT",
+              "submittedDelivery": "shadow",
+              "arbiterEvent": "suppressed",
+              "arbiterReason": "shadow_action_not_deliverable",
+              "forwardOccupancy": 0.9985103611260244,
+              "forwardTraversability": 0.7859415346922949,
+              "forwardUnknown": 0.9487053425106522,
+              "forwardObservedFraction": 0.051294657489347806,
+              "forwardConfidence": 0.9985103611260244,
+              "forwardRejectionReasons": [
+                "insufficientObservedWidth",
+                "unknownArea",
+                "confirmedObstacle"
+              ],
+              "forwardPositiveEvidencePassed": false,
+              "shadowCorrection": null
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "promotionAllowed": false,
+  "blockingReasons": [
+    "Blender raycast depth bypasses camera capture and phone depth inference",
+    "RGB model boxes are precomputed desktop predictions, not on-device tracks",
+    "synthetic coverage and conservative stops do not establish hazard recognition or route usability"
+  ]
+}

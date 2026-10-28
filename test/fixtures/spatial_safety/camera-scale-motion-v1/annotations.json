@@ -1,0 +1,2035 @@
+{
+  "schemaVersion": 1,
+  "scope": "scoring only",
+  "layouts": [
+    {
+      "layoutId": "validation-scale-motion-approach-00",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "approach"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.1000001430511475,
+            0.0
+          ],
+          "motionKind": "approach"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.1000001430511475,
+            0.0
+          ],
+          "motionKind": "approach"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.1000001430511475,
+            0.0
+          ],
+          "motionKind": "approach"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.1000001430511475,
+            0.0
+          ],
+          "motionKind": "approach"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.099998950958252,
+            0.0
+          ],
+          "motionKind": "approach"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.1000007390975952,
+            0.0
+          ],
+          "motionKind": "approach"
+        }
+      ],
+      "visibleObjectFrames": [
+        {
+          "frameId": 1,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-approach-00/0-scorer-object.u8.gz",
+            "sha256": "616073ad0476d604028fd9931bce26dfbd09d1d1129024a155cced4ade73f522"
+          }
+        },
+        {
+          "frameId": 2,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-approach-00/1-scorer-object.u8.gz",
+            "sha256": "8e755280ac3f1bf2a2db6c70c206bbf8721f218f98b5cfecd96467e3d1f74221"
+          }
+        },
+        {
+          "frameId": 3,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-approach-00/2-scorer-object.u8.gz",
+            "sha256": "ae684cbbf86483bcb4c8b67d91d09f11f7d640c3c195933ed701f9dcfeb9ac5a"
+          }
+        },
+        {
+          "frameId": 4,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-approach-00/3-scorer-object.u8.gz",
+            "sha256": "bdd8e1e5e2d29bef2d60caa4135a779ff23fe9e25dc9119e0edec443e046f5d0"
+          }
+        },
+        {
+          "frameId": 5,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-approach-00/4-scorer-object.u8.gz",
+            "sha256": "b80ca431366f7abfdf747a7e1ee41de7a305e5ad8a0d773f10ca664a33c08292"
+          }
+        },
+        {
+          "frameId": 6,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-approach-00/5-scorer-object.u8.gz",
+            "sha256": "aeb57204177dcf4faa7a9ad03d462b615de38a1c85db2f30f6624c7248491a0f"
+          }
+        },
+        {
+          "frameId": 7,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-approach-00/6-scorer-object.u8.gz",
+            "sha256": "e94ce0cfec5724d9306dbd40e584aef99b72db4343d1844c06620585d94e1d66"
+          }
+        }
+      ]
+    },
+    {
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "approach-fast"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.4499998092651367,
+            0.0
+          ],
+          "motionKind": "approach-fast"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.4499998092651367,
+            0.0
+          ],
+          "motionKind": "approach-fast"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.4499998092651367,
+            0.0
+          ],
+          "motionKind": "approach-fast"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.4500010013580322,
+            0.0
+          ],
+          "motionKind": "approach-fast"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.4499998092651367,
+            0.0
+          ],
+          "motionKind": "approach-fast"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.4499998092651367,
+            0.0
+          ],
+          "motionKind": "approach-fast"
+        }
+      ],
+      "visibleObjectFrames": [
+        {
+          "frameId": 1,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-approach-fast-01/0-scorer-object.u8.gz",
+            "sha256": "20146bf7966153bdffd32ea2fb87b44b21c36c936b8eba6690d65f67364ce78c"
+          }
+        },
+        {
+          "frameId": 2,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-approach-fast-01/1-scorer-object.u8.gz",
+            "sha256": "3ab83345b2d71c580900ced9d71e6fa96817020d5cbb80b6e23d5ee818e62432"
+          }
+        },
+        {
+          "frameId": 3,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-approach-fast-01/2-scorer-object.u8.gz",
+            "sha256": "519709f47564cb8ed8e586d0f14afd9a5242cc53f10fa919cefcb48e40d55b86"
+          }
+        },
+        {
+          "frameId": 4,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-approach-fast-01/3-scorer-object.u8.gz",
+            "sha256": "4ca6a754c2292a479b80d597662732e28860178a0adae92f03094f3bc4569825"
+          }
+        },
+        {
+          "frameId": 5,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-approach-fast-01/4-scorer-object.u8.gz",
+            "sha256": "c2fad7b0f73b2fd02eb6ada3dee4ce01693c701ad2bfc8fe595d0690cde768ab"
+          }
+        },
+        {
+          "frameId": 6,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-approach-fast-01/5-scorer-object.u8.gz",
+            "sha256": "6226443aa9f743869c697d3f75a0bc9f9aada791ece87c061791f9278c0f0e3d"
+          }
+        },
+        {
+          "frameId": 7,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-approach-fast-01/6-scorer-object.u8.gz",
+            "sha256": "74528b30451b123b6d6c94bbb07da70d423b91ade0673e1bfdc9b9ec62074e25"
+          }
+        }
+      ]
+    },
+    {
+      "layoutId": "validation-scale-motion-receding-02",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "receding"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "receding"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "receding"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "receding"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "receding"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "receding"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "receding"
+        }
+      ],
+      "visibleObjectFrames": [
+        {
+          "frameId": 1,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-receding-02/0-scorer-object.u8.gz",
+            "sha256": "f32687aef6adb5e38df83a63cf1903c1c9ee78e8a82b41657881ba4fa270f612"
+          }
+        },
+        {
+          "frameId": 2,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-receding-02/1-scorer-object.u8.gz",
+            "sha256": "a8dc776bdd9199b20f2733d8ae39296ca7794b37f071d8482d51e106dc6e530d"
+          }
+        },
+        {
+          "frameId": 3,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-receding-02/2-scorer-object.u8.gz",
+            "sha256": "d32656d93daaa0b8abe65d5173394e00cb2aafc7a290b0db04c4183eaf97ffcf"
+          }
+        },
+        {
+          "frameId": 4,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-receding-02/3-scorer-object.u8.gz",
+            "sha256": "a2156d56ffe6e550aa4dfef03bca92cfc4e675856f5106acc9029216d17c3c4a"
+          }
+        },
+        {
+          "frameId": 5,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-receding-02/4-scorer-object.u8.gz",
+            "sha256": "18fd80fc5a16ca72b119135dc7be000e5b4573a71cfe287b4c12fbd952a6bece"
+          }
+        },
+        {
+          "frameId": 6,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-receding-02/5-scorer-object.u8.gz",
+            "sha256": "44e71d8219a14b3d9f5f2290b6d7c7ab7590a03b7cc442e25e6d8121ba9971e4"
+          }
+        },
+        {
+          "frameId": 7,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-receding-02/6-scorer-object.u8.gz",
+            "sha256": "57210433be73b38d9a0b14aae12fa318353cc9e8265d0100f511c4b4f7f35a7d"
+          }
+        }
+      ]
+    },
+    {
+      "layoutId": "validation-scale-motion-stationary-03",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "stationary"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "stationary"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "stationary"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "stationary"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "stationary"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "stationary"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "stationary"
+        }
+      ],
+      "visibleObjectFrames": [
+        {
+          "frameId": 1,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-stationary-03/0-scorer-object.u8.gz",
+            "sha256": "c4cd084c871a47cfbe8cff87e06f11062b5de4042134ca3e6da2deff45001310"
+          }
+        },
+        {
+          "frameId": 2,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-stationary-03/1-scorer-object.u8.gz",
+            "sha256": "09372bbf16ebfcb31c82add1ae91ca02f08ba72fd58947133dafe8a4d0ca5b56"
+          }
+        },
+        {
+          "frameId": 3,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-stationary-03/2-scorer-object.u8.gz",
+            "sha256": "48f2b34124fb6995da976fd424bd8943dcea490f19f02a9a51324b7dc12de515"
+          }
+        },
+        {
+          "frameId": 4,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-stationary-03/3-scorer-object.u8.gz",
+            "sha256": "8112066a7b93e3078db2582f08b47699827f9cb28563e46a175a12c2a713df69"
+          }
+        },
+        {
+          "frameId": 5,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-stationary-03/4-scorer-object.u8.gz",
+            "sha256": "d4c958bb10e3458e6210e4eb42e2cee5cf0f57705902f83e884ab79f0b4c57db"
+          }
+        },
+        {
+          "frameId": 6,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-stationary-03/5-scorer-object.u8.gz",
+            "sha256": "e5871270f1e6216dae367f16ce8c0accea0d5d69cd22f8fd40fd5ffafc961d44"
+          }
+        },
+        {
+          "frameId": 7,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-stationary-03/6-scorer-object.u8.gz",
+            "sha256": "1e7183702ce738f8a7ed8e9451a5d69aa644afc2ef21d499e4eeb5ddc92aaee0"
+          }
+        }
+      ]
+    },
+    {
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "camera-yaw"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-yaw"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-yaw"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-yaw"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-yaw"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-yaw"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-yaw"
+        }
+      ],
+      "visibleObjectFrames": [
+        {
+          "frameId": 1,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-camera-yaw-04/0-scorer-object.u8.gz",
+            "sha256": "2f36cd2c319b30718bbca80500970037489f4f912a7fb2e34779631bae83efb6"
+          }
+        },
+        {
+          "frameId": 2,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-camera-yaw-04/1-scorer-object.u8.gz",
+            "sha256": "58df0b8f551291c33de6908e41c9d6ea2823076d087d7327e199ddf09182e325"
+          }
+        },
+        {
+          "frameId": 3,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-camera-yaw-04/2-scorer-object.u8.gz",
+            "sha256": "fdfc8877fa3945f8d14cdf6b4eb5521cf487ebf3a3d0334ebdd034de413d2263"
+          }
+        },
+        {
+          "frameId": 4,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-camera-yaw-04/3-scorer-object.u8.gz",
+            "sha256": "363160430dfa81d12c7bd66cdd89b5f37bf21e071d123569994d1c3cd8b65966"
+          }
+        },
+        {
+          "frameId": 5,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-camera-yaw-04/4-scorer-object.u8.gz",
+            "sha256": "09b0edf8fb1b1a055281d2ab3b9144466e9cf16317cf26baccfb56019253c018"
+          }
+        },
+        {
+          "frameId": 6,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-camera-yaw-04/5-scorer-object.u8.gz",
+            "sha256": "a5c43c382db230e510123c40ce0d3444596e6d1ebfc60abee7081adc3d18d339"
+          }
+        },
+        {
+          "frameId": 7,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-camera-yaw-04/6-scorer-object.u8.gz",
+            "sha256": "64722ffb90446c69ffd523beb9a1c95ccb761947d9e1aad0cef532562b5e4dde"
+          }
+        }
+      ]
+    },
+    {
+      "layoutId": "validation-scale-motion-crossing-05",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 600000,
+      "latestStopOffsetUs": 900000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": false,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "crossing"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": false,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.8000004291534424,
+            0.0,
+            0.0
+          ],
+          "motionKind": "crossing"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": false,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.7999998331069946,
+            0.0,
+            0.0
+          ],
+          "motionKind": "crossing"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.7999998331069946,
+            0.0,
+            0.0
+          ],
+          "motionKind": "crossing"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.8000001311302185,
+            0.0,
+            0.0
+          ],
+          "motionKind": "crossing"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.7999999821186066,
+            0.0,
+            0.0
+          ],
+          "motionKind": "crossing"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.7999999821186066,
+            0.0,
+            0.0
+          ],
+          "motionKind": "crossing"
+        }
+      ],
+      "visibleObjectFrames": [
+        {
+          "frameId": 1,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-crossing-05/0-scorer-object.u8.gz",
+            "sha256": "322d2adfe90759e1fd13bd1f731f6832854410335456c915720e580263af4470"
+          }
+        },
+        {
+          "frameId": 2,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-crossing-05/1-scorer-object.u8.gz",
+            "sha256": "95fc475da4a1c40ffc1ee8cace0c8136e12d280b556ebeb6c0e007c049e6a579"
+          }
+        },
+        {
+          "frameId": 3,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-crossing-05/2-scorer-object.u8.gz",
+            "sha256": "9fc07a8d4d7af8b8376dcfc5efdeaacec633631a2e1f705cc1eeec52ee1c7203"
+          }
+        },
+        {
+          "frameId": 4,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-crossing-05/3-scorer-object.u8.gz",
+            "sha256": "dacec7ecf8ff4455e4dbaaefa951d9e0ab186f08dc46c90f6a99bca6e197d6c5"
+          }
+        },
+        {
+          "frameId": 5,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-crossing-05/4-scorer-object.u8.gz",
+            "sha256": "6744ef43bee53e01f56e29eecc9606dc5c018dbef84d64776f17f3c1693e7f45"
+          }
+        },
+        {
+          "frameId": 6,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-crossing-05/5-scorer-object.u8.gz",
+            "sha256": "d8f858fd8c42bfeae63a1976fbf8bc739aff5532b94e7b169140833398ee9e17"
+          }
+        },
+        {
+          "frameId": 7,
+          "visibleObjectMask": {
+            "path": "validation-scale-motion-crossing-05/6-scorer-object.u8.gz",
+            "sha256": "940c43f77358a26a5f66bf2f412eb23e8a4519ee4e6bcb362cee0a364bc7c036"
+          }
+        }
+      ]
+    },
+    {
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "approach-slow"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -0.700000524520874,
+            0.0
+          ],
+          "motionKind": "approach-slow"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -0.6999993324279785,
+            0.0
+          ],
+          "motionKind": "approach-slow"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -0.700000524520874,
+            0.0
+          ],
+          "motionKind": "approach-slow"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -0.700000524520874,
+            0.0
+          ],
+          "motionKind": "approach-slow"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -0.6999993324279785,
+            0.0
+          ],
+          "motionKind": "approach-slow"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -0.700000524520874,
+            0.0
+          ],
+          "motionKind": "approach-slow"
+        }
+      ],
+      "visibleObjectFrames": [
+        {
+          "frameId": 1,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-approach-slow-06/0-scorer-object.u8.gz",
+            "sha256": "691c62d290cfd2f437b31e132a5ab2df0fc46df8a47cc36a543183c463d009c3"
+          }
+        },
+        {
+          "frameId": 2,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-approach-slow-06/1-scorer-object.u8.gz",
+            "sha256": "dd75aa755feee0a521ab40d526fdb3cca6f196a13b6fc177f14b89c5150694ea"
+          }
+        },
+        {
+          "frameId": 3,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-approach-slow-06/2-scorer-object.u8.gz",
+            "sha256": "d280d14e3347a5a063e4850005c16e332735bc5f4d4d7a7bbce3db373aa9b4d4"
+          }
+        },
+        {
+          "frameId": 4,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-approach-slow-06/3-scorer-object.u8.gz",
+            "sha256": "f5655ce31b73fe66ff3287f101c729f2bd8c09773d3e2a2a2a2a899f6f2a4191"
+          }
+        },
+        {
+          "frameId": 5,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-approach-slow-06/4-scorer-object.u8.gz",
+            "sha256": "889119dc908925804db9e69cb647e1b51578f6326a8141fa0695d3e4f1e6ca08"
+          }
+        },
+        {
+          "frameId": 6,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-approach-slow-06/5-scorer-object.u8.gz",
+            "sha256": "57c106d645385161c13d1a4f43ad5001bc0ddca41547444bfe6609a94237c039"
+          }
+        },
+        {
+          "frameId": 7,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-approach-slow-06/6-scorer-object.u8.gz",
+            "sha256": "1cf7095a355af161111e88947dbf73866c634363722bcb64c0e954c2f364a762"
+          }
+        }
+      ]
+    },
+    {
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "approach-fast"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.4499998092651367,
+            0.0
+          ],
+          "motionKind": "approach-fast"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.4500010013580322,
+            0.0
+          ],
+          "motionKind": "approach-fast"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.4499998092651367,
+            0.0
+          ],
+          "motionKind": "approach-fast"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.4499998092651367,
+            0.0
+          ],
+          "motionKind": "approach-fast"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.4499998092651367,
+            0.0
+          ],
+          "motionKind": "approach-fast"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.4499998092651367,
+            0.0
+          ],
+          "motionKind": "approach-fast"
+        }
+      ],
+      "visibleObjectFrames": [
+        {
+          "frameId": 1,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-approach-fast-07/0-scorer-object.u8.gz",
+            "sha256": "d3a0db439d0bd75dbae6b0c1379a47bc1416904107e6b0ea845f9ff5bd50437e"
+          }
+        },
+        {
+          "frameId": 2,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-approach-fast-07/1-scorer-object.u8.gz",
+            "sha256": "4a96cf69db609b938207fac1f3aa66c61d419415bb5fca33256fcc1f49b35730"
+          }
+        },
+        {
+          "frameId": 3,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-approach-fast-07/2-scorer-object.u8.gz",
+            "sha256": "8155779a4d2dfd57686825577cd71ee861eec01ea2cf75b62b2dc318a901738b"
+          }
+        },
+        {
+          "frameId": 4,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-approach-fast-07/3-scorer-object.u8.gz",
+            "sha256": "7ee1dd2f89f09f113eaf31b30f6171b5538d8b48b5c65e640ead8a0cbd376042"
+          }
+        },
+        {
+          "frameId": 5,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-approach-fast-07/4-scorer-object.u8.gz",
+            "sha256": "f9106b68388a7eab855dc725a19912bc43f88538209b178985528f4ed61fb3a4"
+          }
+        },
+        {
+          "frameId": 6,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-approach-fast-07/5-scorer-object.u8.gz",
+            "sha256": "b095eb3628cc1817516ceb5f1a86b989df62df18335b8b5b8f5e6c4e68bb5153"
+          }
+        },
+        {
+          "frameId": 7,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-approach-fast-07/6-scorer-object.u8.gz",
+            "sha256": "cbb213bd61bfacc2b5fe4292e4e855a18c65b855f8940af577cc278ceb4f716d"
+          }
+        }
+      ]
+    },
+    {
+      "layoutId": "test-scale-motion-approach-small-08",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "approach-small"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.0500001907348633,
+            0.0
+          ],
+          "motionKind": "approach-small"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.0500001907348633,
+            0.0
+          ],
+          "motionKind": "approach-small"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.0500001907348633,
+            0.0
+          ],
+          "motionKind": "approach-small"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.0499989986419678,
+            0.0
+          ],
+          "motionKind": "approach-small"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.0500001907348633,
+            0.0
+          ],
+          "motionKind": "approach-small"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.0500001907348633,
+            0.0
+          ],
+          "motionKind": "approach-small"
+        }
+      ],
+      "visibleObjectFrames": [
+        {
+          "frameId": 1,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-approach-small-08/0-scorer-object.u8.gz",
+            "sha256": "1bcc35475db06ba46f25fec1143d7a4e431c202dc343c1e42d51af80dcb8c0ff"
+          }
+        },
+        {
+          "frameId": 2,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-approach-small-08/1-scorer-object.u8.gz",
+            "sha256": "aa01c852ac61253c2890b5579c34f8ad8fd415785208ba15f83a1613ae45904a"
+          }
+        },
+        {
+          "frameId": 3,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-approach-small-08/2-scorer-object.u8.gz",
+            "sha256": "30e55f7c9958f8ff4f4581246e7831acb71241e944f884838f8167fa3639cc16"
+          }
+        },
+        {
+          "frameId": 4,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-approach-small-08/3-scorer-object.u8.gz",
+            "sha256": "2ea5895812ddbf27ac149585c9b493575a0e8adaca639c94af88d57661cb53e9"
+          }
+        },
+        {
+          "frameId": 5,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-approach-small-08/4-scorer-object.u8.gz",
+            "sha256": "c73c0435130d9472b93f5d0df92b305ef153e24127b1d9d1a1d7e2ef2019dc8d"
+          }
+        },
+        {
+          "frameId": 6,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-approach-small-08/5-scorer-object.u8.gz",
+            "sha256": "1b12bafb7c927e820fed73574697faff10e19ce389e3cd183eba765a1930deea"
+          }
+        },
+        {
+          "frameId": 7,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-approach-small-08/6-scorer-object.u8.gz",
+            "sha256": "f34a69e189b224a4fc32b45af0d0ac9051db3ec6643ceb15b7698c667506883f"
+          }
+        }
+      ]
+    },
+    {
+      "layoutId": "test-scale-motion-receding-09",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "receding"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "receding"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "receding"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            1.1499994993209839,
+            0.0
+          ],
+          "motionKind": "receding"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "receding"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "receding"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "receding"
+        }
+      ],
+      "visibleObjectFrames": [
+        {
+          "frameId": 1,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-receding-09/0-scorer-object.u8.gz",
+            "sha256": "6c8f67934cf6639d588ffdc8a1cd5b3b87abaadff9dd2dc58e52bccbebe2602c"
+          }
+        },
+        {
+          "frameId": 2,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-receding-09/1-scorer-object.u8.gz",
+            "sha256": "fa8146de49c7acb1eee8b92ec867f88c18900b453d114a87b4c389cff5e521fc"
+          }
+        },
+        {
+          "frameId": 3,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-receding-09/2-scorer-object.u8.gz",
+            "sha256": "29742f95efe14497be61206c3a6f7c30846610fe439ba6ab6fd728b7abf54fa4"
+          }
+        },
+        {
+          "frameId": 4,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-receding-09/3-scorer-object.u8.gz",
+            "sha256": "c01c7d868036756bd5e78bd2aea107544a628e46fc6f9a0e40da85f1bd8253c5"
+          }
+        },
+        {
+          "frameId": 5,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-receding-09/4-scorer-object.u8.gz",
+            "sha256": "62186bc6912485051555f0da2c9ffa55c9b375b6c456270d3a93b17396ca0969"
+          }
+        },
+        {
+          "frameId": 6,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-receding-09/5-scorer-object.u8.gz",
+            "sha256": "d45e8e393e1d65a4a6280a80875ae8a2e12fd32f37cbc0e2863da0592b010b84"
+          }
+        },
+        {
+          "frameId": 7,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-receding-09/6-scorer-object.u8.gz",
+            "sha256": "f63801e5f93f027f7ebc0ca8ad8fab304990dd57b42c552f71e72345da80e138"
+          }
+        }
+      ]
+    },
+    {
+      "layoutId": "test-scale-motion-stationary-10",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "stationary"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "stationary"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "stationary"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "stationary"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "stationary"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "stationary"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "stationary"
+        }
+      ],
+      "visibleObjectFrames": [
+        {
+          "frameId": 1,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-stationary-10/0-scorer-object.u8.gz",
+            "sha256": "3b02019b62b430407a3a6b9c66eff3a4e22ddb4aaf1e0b6f3dcc70143ad6059f"
+          }
+        },
+        {
+          "frameId": 2,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-stationary-10/1-scorer-object.u8.gz",
+            "sha256": "fa3c01a187e0a74a920fc80a03ce375695c647335081f6f939fe9b793a41ccee"
+          }
+        },
+        {
+          "frameId": 3,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-stationary-10/2-scorer-object.u8.gz",
+            "sha256": "bb4a943f6ad4a38aab31b6887c36e56213e01b2bb9af6f489243093e619648c8"
+          }
+        },
+        {
+          "frameId": 4,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-stationary-10/3-scorer-object.u8.gz",
+            "sha256": "512d0b5f19af331e7a1ab03fa2e1767ad97014bae9b0b7c66c9e6689d9e14e63"
+          }
+        },
+        {
+          "frameId": 5,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-stationary-10/4-scorer-object.u8.gz",
+            "sha256": "43b2f19364acbd0816c634ed9e23f62cca8c0bee69c49c0cd8e7b89018f7c378"
+          }
+        },
+        {
+          "frameId": 6,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-stationary-10/5-scorer-object.u8.gz",
+            "sha256": "4c502d12cb1c554f3f96f1ce4fe0a90d96ce777f73ad8bc0d08cc68435a1578d"
+          }
+        },
+        {
+          "frameId": 7,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-stationary-10/6-scorer-object.u8.gz",
+            "sha256": "5134ab2236ab29414fa92034bc6f35ff41e1462bc9b0715c1fa618ef51a2e76d"
+          }
+        }
+      ]
+    },
+    {
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "camera-yaw"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-yaw"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-yaw"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-yaw"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-yaw"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-yaw"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-yaw"
+        }
+      ],
+      "visibleObjectFrames": [
+        {
+          "frameId": 1,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-camera-yaw-11/0-scorer-object.u8.gz",
+            "sha256": "8ea9bc80dbf975815fd714f543b72b162756169a5afca20490f5b2a7aba12f46"
+          }
+        },
+        {
+          "frameId": 2,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-camera-yaw-11/1-scorer-object.u8.gz",
+            "sha256": "906baa54b428d8b7b5e9d05ef677bcbb568dfed85f415bc02e5f01c339a7416f"
+          }
+        },
+        {
+          "frameId": 3,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-camera-yaw-11/2-scorer-object.u8.gz",
+            "sha256": "e69b394c1e3b0cbf5b72e58fbcc28ed596860096d654abaa4769708ba6ce9906"
+          }
+        },
+        {
+          "frameId": 4,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-camera-yaw-11/3-scorer-object.u8.gz",
+            "sha256": "b6f8909e94401f7b09413345101ca1be0e82b5901736dbf99eaf6736f03818d7"
+          }
+        },
+        {
+          "frameId": 5,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-camera-yaw-11/4-scorer-object.u8.gz",
+            "sha256": "054f3ad3ba0e61cc0f389820943fd90514743d8836dad520ec1698b7255bfbe0"
+          }
+        },
+        {
+          "frameId": 6,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-camera-yaw-11/5-scorer-object.u8.gz",
+            "sha256": "b2257cf23b1a0f1978fbcf6e76c8cf0f7925c6f6083ce72ba6f7d563c06c7bbf"
+          }
+        },
+        {
+          "frameId": 7,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-camera-yaw-11/6-scorer-object.u8.gz",
+            "sha256": "ff0346ed076cace1ceb5b190f577195de52f3d2e0ec22a8254f8ed49b2f273a6"
+          }
+        }
+      ]
+    },
+    {
+      "layoutId": "test-scale-motion-mixed-12",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 600000,
+      "latestStopOffsetUs": 900000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": false,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "mixed"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": false,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.6999999284744263,
+            -0.7499992847442627,
+            0.0
+          ],
+          "motionKind": "mixed"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": false,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.6999999284744263,
+            -0.7500004768371582,
+            0.0
+          ],
+          "motionKind": "mixed"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.7000002264976501,
+            -0.7499992847442627,
+            0.0
+          ],
+          "motionKind": "mixed"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.6999999284744263,
+            -0.7500004768371582,
+            0.0
+          ],
+          "motionKind": "mixed"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.6999999284744263,
+            -0.7500004768371582,
+            0.0
+          ],
+          "motionKind": "mixed"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.7000000774860382,
+            -0.7499992847442627,
+            0.0
+          ],
+          "motionKind": "mixed"
+        }
+      ],
+      "visibleObjectFrames": [
+        {
+          "frameId": 1,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-mixed-12/0-scorer-object.u8.gz",
+            "sha256": "ae22a4575c258d4be0fb83c0161d728bf66e4641fd44439f0a7f962a5a5c0210"
+          }
+        },
+        {
+          "frameId": 2,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-mixed-12/1-scorer-object.u8.gz",
+            "sha256": "b13067917763211d4fff8eb240b3d0d8d2a54c6105ef951245c0d1fe759af5d9"
+          }
+        },
+        {
+          "frameId": 3,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-mixed-12/2-scorer-object.u8.gz",
+            "sha256": "642f67562c99d7c998161326b6469cf9102a235de27bac2ca1221aa8d640a46d"
+          }
+        },
+        {
+          "frameId": 4,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-mixed-12/3-scorer-object.u8.gz",
+            "sha256": "5a540946a3fc76925064fe1e8259de6985ac8086a8ed550cb00f6ca029fa9179"
+          }
+        },
+        {
+          "frameId": 5,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-mixed-12/4-scorer-object.u8.gz",
+            "sha256": "94a8db03ef631a29c20b96dd91aae2ead3534f3091ad1dbdb0bad1f22cd33869"
+          }
+        },
+        {
+          "frameId": 6,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-mixed-12/5-scorer-object.u8.gz",
+            "sha256": "fd90d0dbb1525532f427c1d5eac7ed02cbc83e511a57362f940f792960af07f6"
+          }
+        },
+        {
+          "frameId": 7,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-mixed-12/6-scorer-object.u8.gz",
+            "sha256": "9715a81ccec8b72ee5ae81da55ab1e370919a022659caf13767cbca90ff89212"
+          }
+        }
+      ]
+    },
+    {
+      "layoutId": "test-scale-motion-occluded-13",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "occluded"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.7000002264976501,
+            0.0,
+            0.0
+          ],
+          "motionKind": "occluded"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.6999999284744263,
+            0.0,
+            0.0
+          ],
+          "motionKind": "occluded"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.6999999284744263,
+            0.0,
+            0.0
+          ],
+          "motionKind": "occluded"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.7000000774860382,
+            0.0,
+            0.0
+          ],
+          "motionKind": "occluded"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.6999999284744263,
+            0.0,
+            0.0
+          ],
+          "motionKind": "occluded"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.7000000309199095,
+            0.0,
+            0.0
+          ],
+          "motionKind": "occluded"
+        }
+      ],
+      "visibleObjectFrames": [
+        {
+          "frameId": 1,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-occluded-13/0-scorer-object.u8.gz",
+            "sha256": "298e77c59a192fd9ad83d227bffd5bc78f8ba50c2b7e5db6b698e442a3bc646f"
+          }
+        },
+        {
+          "frameId": 2,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-occluded-13/1-scorer-object.u8.gz",
+            "sha256": "aac7e27cbf6d9940ab67b692900d1f54f85317a10285126c0a026977f7e0464b"
+          }
+        },
+        {
+          "frameId": 3,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-occluded-13/2-scorer-object.u8.gz",
+            "sha256": "e8eadac5be833c94578d2b6e2b69c76fe7545a2866c2b7bc43fb2dc3a589d10d"
+          }
+        },
+        {
+          "frameId": 4,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-occluded-13/3-scorer-object.u8.gz",
+            "sha256": "839980acfb6006d1058f8b1775a5f411e2e90933fca39bbaaa51c5f835342246"
+          }
+        },
+        {
+          "frameId": 5,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-occluded-13/4-scorer-object.u8.gz",
+            "sha256": "cc1f357cbfadaba1170fc88f74bcc5ac61313afc141610334891c55674909035"
+          }
+        },
+        {
+          "frameId": 6,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-occluded-13/5-scorer-object.u8.gz",
+            "sha256": "47fccb362e9be3ae8f4d7be6c0b46e7e59162f4940f9ed7b98a7b7a29a9ce6f2"
+          }
+        },
+        {
+          "frameId": 7,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-occluded-13/6-scorer-object.u8.gz",
+            "sha256": "1c885b5ed8d6e4c18e2dc374cce0f33a6ae8e3709204511675e79a1b8eb1212a"
+          }
+        }
+      ]
+    },
+    {
+      "layoutId": "test-scale-motion-textureless-14",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "textureless"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "textureless"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "textureless"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "textureless"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "textureless"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "textureless"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "textureless"
+        }
+      ],
+      "visibleObjectFrames": [
+        {
+          "frameId": 1,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-textureless-14/0-scorer-object.u8.gz",
+            "sha256": "67ade532e8486287162d233036dc86deb4371fe37e6dd40b3e16315034d63c79"
+          }
+        },
+        {
+          "frameId": 2,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-textureless-14/1-scorer-object.u8.gz",
+            "sha256": "10d8e2f15822fb17eb577f960aea271153731405b365aee16d54d3730706e4cd"
+          }
+        },
+        {
+          "frameId": 3,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-textureless-14/2-scorer-object.u8.gz",
+            "sha256": "62060eddbd6ea12f22fd158b2e9a7e2ee65707c66383c34cc90bfba48fea7857"
+          }
+        },
+        {
+          "frameId": 4,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-textureless-14/3-scorer-object.u8.gz",
+            "sha256": "a220aaf40a831a6f9f20d95a074bc82c99e494f253359f2ea47888fffba6ee17"
+          }
+        },
+        {
+          "frameId": 5,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-textureless-14/4-scorer-object.u8.gz",
+            "sha256": "4272d48998864e441977bd98827ed0d917154058582bca7f8c06bac0d7acae89"
+          }
+        },
+        {
+          "frameId": 6,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-textureless-14/5-scorer-object.u8.gz",
+            "sha256": "265b2d585917882372e1fcbb972da3331522038e1f759edf73211a62e9cd2374"
+          }
+        },
+        {
+          "frameId": 7,
+          "visibleObjectMask": {
+            "path": "test-scale-motion-textureless-14/6-scorer-object.u8.gz",
+            "sha256": "15e5ce7113a6f5d60a5099c28b4bfd30fa8e384476428beaf1f97fd03b35c0e1"
+          }
+        }
+      ]
+    },
+    {
+      "layoutId": "test-scale-motion-wide-15",
+      "physicalHazard": false,
+      "criticalOnsetOffsetUs": null,
+      "latestStopOffsetUs": null,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": false,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "wide"
+        },
+        {
+          "frameId": 11,
+          "physicalHazard": false,
+          "observationSufficient": true,
+          "objectVelocityMps": [
+            0,
+            0,
+            0
+          ],
+          "motionKind": "wide"
+        },
+        {
+          "frameId": 12,
+          "physicalHazard": false,
+          "observationSufficient": true,
+          "objectVelocityMps": [
+            0,
+            0,
+            0
+          ],
+          "motionKind": "wide"
+        },
+        {
+          "frameId": 13,
+          "physicalHazard": false,
+          "observationSufficient": true,
+          "objectVelocityMps": [
+            0,
+            0,
+            0
+          ],
+          "motionKind": "wide"
+        }
+      ],
+      "visibleObjectFrames": []
+    }
+  ]
+}

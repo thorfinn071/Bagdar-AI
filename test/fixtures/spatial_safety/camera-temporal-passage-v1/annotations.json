@@ -1,0 +1,651 @@
+{
+  "schemaVersion": 1,
+  "scope": "scoring only, never an inference input",
+  "layouts": [
+    {
+      "layoutId": "validation-temporal-wide-00",
+      "physicalHazard": false,
+      "idealWidthM": 1.58,
+      "idealHeadroomM": 2.13,
+      "criticalOnsetOffsetUs": null,
+      "latestStopOffsetUs": null,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": false,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 11,
+          "physicalHazard": false,
+          "observationSufficient": true
+        },
+        {
+          "frameId": 12,
+          "physicalHazard": false,
+          "observationSufficient": true
+        },
+        {
+          "frameId": 13,
+          "physicalHazard": false,
+          "observationSufficient": true
+        }
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-door-pass-01",
+      "physicalHazard": false,
+      "idealWidthM": 1.46,
+      "idealHeadroomM": 2.18,
+      "criticalOnsetOffsetUs": null,
+      "latestStopOffsetUs": null,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": false,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 11,
+          "physicalHazard": false,
+          "observationSufficient": true
+        },
+        {
+          "frameId": 12,
+          "physicalHazard": false,
+          "observationSufficient": true
+        },
+        {
+          "frameId": 13,
+          "physicalHazard": false,
+          "observationSufficient": true
+        }
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-outside-pole-02",
+      "physicalHazard": false,
+      "idealWidthM": 1.62,
+      "idealHeadroomM": 2.15,
+      "criticalOnsetOffsetUs": null,
+      "latestStopOffsetUs": null,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": false,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 11,
+          "physicalHazard": false,
+          "observationSufficient": true
+        },
+        {
+          "frameId": 12,
+          "physicalHazard": false,
+          "observationSufficient": true
+        },
+        {
+          "frameId": 13,
+          "physicalHazard": false,
+          "observationSufficient": true
+        }
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-low-bar-03",
+      "physicalHazard": true,
+      "idealWidthM": 1.6,
+      "idealHeadroomM": 1.48,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 11,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 12,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 13,
+          "physicalHazard": true,
+          "observationSufficient": false
+        }
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-approach-04",
+      "physicalHazard": true,
+      "idealWidthM": 1.64,
+      "idealHeadroomM": 2.16,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false
+        }
+      ]
+    },
+    {
+      "layoutId": "validation-temporal-crossing-05",
+      "physicalHazard": true,
+      "idealWidthM": 1.6,
+      "idealHeadroomM": 2.12,
+      "criticalOnsetOffsetUs": 600000,
+      "latestStopOffsetUs": 900000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": false,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": false,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": false,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false
+        }
+      ]
+    },
+    {
+      "layoutId": "test-temporal-wide-06",
+      "physicalHazard": false,
+      "idealWidthM": 1.56,
+      "idealHeadroomM": 2.09,
+      "criticalOnsetOffsetUs": null,
+      "latestStopOffsetUs": null,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": false,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 11,
+          "physicalHazard": false,
+          "observationSufficient": true
+        },
+        {
+          "frameId": 12,
+          "physicalHazard": false,
+          "observationSufficient": true
+        },
+        {
+          "frameId": 13,
+          "physicalHazard": false,
+          "observationSufficient": true
+        }
+      ]
+    },
+    {
+      "layoutId": "test-temporal-wide-07",
+      "physicalHazard": false,
+      "idealWidthM": 1.68,
+      "idealHeadroomM": 2.2,
+      "criticalOnsetOffsetUs": null,
+      "latestStopOffsetUs": null,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": false,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 11,
+          "physicalHazard": false,
+          "observationSufficient": true
+        },
+        {
+          "frameId": 12,
+          "physicalHazard": false,
+          "observationSufficient": true
+        },
+        {
+          "frameId": 13,
+          "physicalHazard": false,
+          "observationSufficient": true
+        }
+      ]
+    },
+    {
+      "layoutId": "test-temporal-door-pass-08",
+      "physicalHazard": false,
+      "idealWidthM": 1.44,
+      "idealHeadroomM": 2.17,
+      "criticalOnsetOffsetUs": null,
+      "latestStopOffsetUs": null,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": false,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 11,
+          "physicalHazard": false,
+          "observationSufficient": true
+        },
+        {
+          "frameId": 12,
+          "physicalHazard": false,
+          "observationSufficient": true
+        },
+        {
+          "frameId": 13,
+          "physicalHazard": false,
+          "observationSufficient": true
+        }
+      ]
+    },
+    {
+      "layoutId": "test-temporal-outside-pole-09",
+      "physicalHazard": false,
+      "idealWidthM": 1.6,
+      "idealHeadroomM": 2.14,
+      "criticalOnsetOffsetUs": null,
+      "latestStopOffsetUs": null,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": false,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 11,
+          "physicalHazard": false,
+          "observationSufficient": true
+        },
+        {
+          "frameId": 12,
+          "physicalHazard": false,
+          "observationSufficient": true
+        },
+        {
+          "frameId": 13,
+          "physicalHazard": false,
+          "observationSufficient": true
+        }
+      ]
+    },
+    {
+      "layoutId": "test-temporal-low-bar-10",
+      "physicalHazard": true,
+      "idealWidthM": 1.62,
+      "idealHeadroomM": 1.47,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 11,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 12,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 13,
+          "physicalHazard": true,
+          "observationSufficient": false
+        }
+      ]
+    },
+    {
+      "layoutId": "test-temporal-pole-11",
+      "physicalHazard": true,
+      "idealWidthM": 1.6,
+      "idealHeadroomM": 2.15,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 11,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 12,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 13,
+          "physicalHazard": true,
+          "observationSufficient": false
+        }
+      ]
+    },
+    {
+      "layoutId": "test-temporal-subpixel-pole-12",
+      "physicalHazard": true,
+      "idealWidthM": 1.58,
+      "idealHeadroomM": 2.14,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 11,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 12,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 13,
+          "physicalHazard": true,
+          "observationSufficient": false
+        }
+      ]
+    },
+    {
+      "layoutId": "test-temporal-approach-13",
+      "physicalHazard": true,
+      "idealWidthM": 1.66,
+      "idealHeadroomM": 2.18,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false
+        }
+      ]
+    },
+    {
+      "layoutId": "test-temporal-crossing-14",
+      "physicalHazard": true,
+      "idealWidthM": 1.62,
+      "idealHeadroomM": 2.16,
+      "criticalOnsetOffsetUs": 600000,
+      "latestStopOffsetUs": 900000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": false,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": false,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": false,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false
+        }
+      ]
+    },
+    {
+      "layoutId": "test-temporal-receding-15",
+      "physicalHazard": true,
+      "idealWidthM": 1.64,
+      "idealHeadroomM": 2.19,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false
+        }
+      ]
+    },
+    {
+      "layoutId": "test-temporal-camera-yaw-16",
+      "physicalHazard": true,
+      "idealWidthM": 1.62,
+      "idealHeadroomM": 2.13,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false
+        }
+      ]
+    },
+    {
+      "layoutId": "test-temporal-camera-translation-17",
+      "physicalHazard": true,
+      "idealWidthM": 1.66,
+      "idealHeadroomM": 2.16,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false
+        }
+      ]
+    }
+  ]
+}

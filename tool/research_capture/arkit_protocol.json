@@ -1,0 +1,626 @@
+{
+  "schemaVersion": 1,
+  "protocolId": "iphone-spatial-feasibility-v1",
+  "scope": "stationary-operator-recorded-offline-research",
+  "targetDevice": "iPhone 13 Pro Max",
+  "cameraOwner": "native_arkit_only",
+  "source": "ARKIT_SCENE_DEPTH_ESTIMATE",
+  "humanCollectionStatus": "not_run",
+  "request": {
+    "widthM": 0.9,
+    "headroomM": 1.85,
+    "forwardStartM": 0.2,
+    "forwardEndM": 3.5,
+    "maximumFloorRiseM": 0.05,
+    "maximumFloorDropM": 0.05
+  },
+  "maximumAgeUs": 100000,
+  "minimumConfidence": 0.99,
+  "calibrationDistancesM": [
+    0.25,
+    0.5,
+    1,
+    2,
+    3.5
+  ],
+  "calibrationRegions": [
+    "centre",
+    "left-edge",
+    "right-edge"
+  ],
+  "collectionPrecondition": "physical-provider-feasibility-gates-pass-before-behavioural-collection",
+  "holdoutPolicy": "freeze-candidate-before-session-2; no-retuning-after-unblinding",
+  "acceptance": {
+    "maximumUnsafeContinues": 0,
+    "maximumHazardNonStops": 0,
+    "minimumRelativeFalseStopReduction": 0.5,
+    "allContinuesRequireCurrentWholeVolumeProof": true
+  },
+  "recordings": [
+    {
+      "planId": "s1-wide-corridor-r1",
+      "session": 1,
+      "split": "development",
+      "scenario": "wide-corridor",
+      "plannedClass": "passable",
+      "repeat": 1
+    },
+    {
+      "planId": "s1-wide-corridor-r2",
+      "session": 1,
+      "split": "development",
+      "scenario": "wide-corridor",
+      "plannedClass": "passable",
+      "repeat": 2
+    },
+    {
+      "planId": "s1-wide-corridor-r3",
+      "session": 1,
+      "split": "development",
+      "scenario": "wide-corridor",
+      "plannedClass": "passable",
+      "repeat": 3
+    },
+    {
+      "planId": "s1-wide-doorway-r1",
+      "session": 1,
+      "split": "development",
+      "scenario": "wide-doorway",
+      "plannedClass": "passable",
+      "repeat": 1
+    },
+    {
+      "planId": "s1-wide-doorway-r2",
+      "session": 1,
+      "split": "development",
+      "scenario": "wide-doorway",
+      "plannedClass": "passable",
+      "repeat": 2
+    },
+    {
+      "planId": "s1-wide-doorway-r3",
+      "session": 1,
+      "split": "development",
+      "scenario": "wide-doorway",
+      "plannedClass": "passable",
+      "repeat": 3
+    },
+    {
+      "planId": "s1-obstacle-outside-path-r1",
+      "session": 1,
+      "split": "development",
+      "scenario": "obstacle-outside-path",
+      "plannedClass": "passable",
+      "repeat": 1
+    },
+    {
+      "planId": "s1-obstacle-outside-path-r2",
+      "session": 1,
+      "split": "development",
+      "scenario": "obstacle-outside-path",
+      "plannedClass": "passable",
+      "repeat": 2
+    },
+    {
+      "planId": "s1-obstacle-outside-path-r3",
+      "session": 1,
+      "split": "development",
+      "scenario": "obstacle-outside-path",
+      "plannedClass": "passable",
+      "repeat": 3
+    },
+    {
+      "planId": "s1-plain-floor-r1",
+      "session": 1,
+      "split": "development",
+      "scenario": "plain-floor",
+      "plannedClass": "passable",
+      "repeat": 1
+    },
+    {
+      "planId": "s1-plain-floor-r2",
+      "session": 1,
+      "split": "development",
+      "scenario": "plain-floor",
+      "plannedClass": "passable",
+      "repeat": 2
+    },
+    {
+      "planId": "s1-plain-floor-r3",
+      "session": 1,
+      "split": "development",
+      "scenario": "plain-floor",
+      "plannedClass": "passable",
+      "repeat": 3
+    },
+    {
+      "planId": "s1-dark-floor-r1",
+      "session": 1,
+      "split": "development",
+      "scenario": "dark-floor",
+      "plannedClass": "passable",
+      "repeat": 1
+    },
+    {
+      "planId": "s1-dark-floor-r2",
+      "session": 1,
+      "split": "development",
+      "scenario": "dark-floor",
+      "plannedClass": "passable",
+      "repeat": 2
+    },
+    {
+      "planId": "s1-dark-floor-r3",
+      "session": 1,
+      "split": "development",
+      "scenario": "dark-floor",
+      "plannedClass": "passable",
+      "repeat": 3
+    },
+    {
+      "planId": "s1-open-space-no-near-return-r1",
+      "session": 1,
+      "split": "development",
+      "scenario": "open-space-no-near-return",
+      "plannedClass": "passable",
+      "repeat": 1
+    },
+    {
+      "planId": "s1-open-space-no-near-return-r2",
+      "session": 1,
+      "split": "development",
+      "scenario": "open-space-no-near-return",
+      "plannedClass": "passable",
+      "repeat": 2
+    },
+    {
+      "planId": "s1-open-space-no-near-return-r3",
+      "session": 1,
+      "split": "development",
+      "scenario": "open-space-no-near-return",
+      "plannedClass": "passable",
+      "repeat": 3
+    },
+    {
+      "planId": "s1-box-in-path-r1",
+      "session": 1,
+      "split": "development",
+      "scenario": "box-in-path",
+      "plannedClass": "hazard",
+      "repeat": 1
+    },
+    {
+      "planId": "s1-box-in-path-r2",
+      "session": 1,
+      "split": "development",
+      "scenario": "box-in-path",
+      "plannedClass": "hazard",
+      "repeat": 2
+    },
+    {
+      "planId": "s1-box-in-path-r3",
+      "session": 1,
+      "split": "development",
+      "scenario": "box-in-path",
+      "plannedClass": "hazard",
+      "repeat": 3
+    },
+    {
+      "planId": "s1-thin-pole-r1",
+      "session": 1,
+      "split": "development",
+      "scenario": "thin-pole",
+      "plannedClass": "hazard",
+      "repeat": 1
+    },
+    {
+      "planId": "s1-thin-pole-r2",
+      "session": 1,
+      "split": "development",
+      "scenario": "thin-pole",
+      "plannedClass": "hazard",
+      "repeat": 2
+    },
+    {
+      "planId": "s1-thin-pole-r3",
+      "session": 1,
+      "split": "development",
+      "scenario": "thin-pole",
+      "plannedClass": "hazard",
+      "repeat": 3
+    },
+    {
+      "planId": "s1-low-beam-r1",
+      "session": 1,
+      "split": "development",
+      "scenario": "low-beam",
+      "plannedClass": "hazard",
+      "repeat": 1
+    },
+    {
+      "planId": "s1-low-beam-r2",
+      "session": 1,
+      "split": "development",
+      "scenario": "low-beam",
+      "plannedClass": "hazard",
+      "repeat": 2
+    },
+    {
+      "planId": "s1-low-beam-r3",
+      "session": 1,
+      "split": "development",
+      "scenario": "low-beam",
+      "plannedClass": "hazard",
+      "repeat": 3
+    },
+    {
+      "planId": "s1-narrow-doorway-r1",
+      "session": 1,
+      "split": "development",
+      "scenario": "narrow-doorway",
+      "plannedClass": "hazard",
+      "repeat": 1
+    },
+    {
+      "planId": "s1-narrow-doorway-r2",
+      "session": 1,
+      "split": "development",
+      "scenario": "narrow-doorway",
+      "plannedClass": "hazard",
+      "repeat": 2
+    },
+    {
+      "planId": "s1-narrow-doorway-r3",
+      "session": 1,
+      "split": "development",
+      "scenario": "narrow-doorway",
+      "plannedClass": "hazard",
+      "repeat": 3
+    },
+    {
+      "planId": "s1-floor-discontinuity-r1",
+      "session": 1,
+      "split": "development",
+      "scenario": "floor-discontinuity",
+      "plannedClass": "hazard",
+      "repeat": 1
+    },
+    {
+      "planId": "s1-floor-discontinuity-r2",
+      "session": 1,
+      "split": "development",
+      "scenario": "floor-discontinuity",
+      "plannedClass": "hazard",
+      "repeat": 2
+    },
+    {
+      "planId": "s1-floor-discontinuity-r3",
+      "session": 1,
+      "split": "development",
+      "scenario": "floor-discontinuity",
+      "plannedClass": "hazard",
+      "repeat": 3
+    },
+    {
+      "planId": "s1-crossing-object-r1",
+      "session": 1,
+      "split": "development",
+      "scenario": "crossing-object",
+      "plannedClass": "hazard",
+      "repeat": 1
+    },
+    {
+      "planId": "s1-crossing-object-r2",
+      "session": 1,
+      "split": "development",
+      "scenario": "crossing-object",
+      "plannedClass": "hazard",
+      "repeat": 2
+    },
+    {
+      "planId": "s1-crossing-object-r3",
+      "session": 1,
+      "split": "development",
+      "scenario": "crossing-object",
+      "plannedClass": "hazard",
+      "repeat": 3
+    },
+    {
+      "planId": "s2-wide-corridor-r1",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "wide-corridor",
+      "plannedClass": "passable",
+      "repeat": 1
+    },
+    {
+      "planId": "s2-wide-corridor-r2",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "wide-corridor",
+      "plannedClass": "passable",
+      "repeat": 2
+    },
+    {
+      "planId": "s2-wide-corridor-r3",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "wide-corridor",
+      "plannedClass": "passable",
+      "repeat": 3
+    },
+    {
+      "planId": "s2-wide-doorway-r1",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "wide-doorway",
+      "plannedClass": "passable",
+      "repeat": 1
+    },
+    {
+      "planId": "s2-wide-doorway-r2",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "wide-doorway",
+      "plannedClass": "passable",
+      "repeat": 2
+    },
+    {
+      "planId": "s2-wide-doorway-r3",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "wide-doorway",
+      "plannedClass": "passable",
+      "repeat": 3
+    },
+    {
+      "planId": "s2-obstacle-outside-path-r1",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "obstacle-outside-path",
+      "plannedClass": "passable",
+      "repeat": 1
+    },
+    {
+      "planId": "s2-obstacle-outside-path-r2",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "obstacle-outside-path",
+      "plannedClass": "passable",
+      "repeat": 2
+    },
+    {
+      "planId": "s2-obstacle-outside-path-r3",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "obstacle-outside-path",
+      "plannedClass": "passable",
+      "repeat": 3
+    },
+    {
+      "planId": "s2-plain-floor-r1",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "plain-floor",
+      "plannedClass": "passable",
+      "repeat": 1
+    },
+    {
+      "planId": "s2-plain-floor-r2",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "plain-floor",
+      "plannedClass": "passable",
+      "repeat": 2
+    },
+    {
+      "planId": "s2-plain-floor-r3",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "plain-floor",
+      "plannedClass": "passable",
+      "repeat": 3
+    },
+    {
+      "planId": "s2-dark-floor-r1",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "dark-floor",
+      "plannedClass": "passable",
+      "repeat": 1
+    },
+    {
+      "planId": "s2-dark-floor-r2",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "dark-floor",
+      "plannedClass": "passable",
+      "repeat": 2
+    },
+    {
+      "planId": "s2-dark-floor-r3",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "dark-floor",
+      "plannedClass": "passable",
+      "repeat": 3
+    },
+    {
+      "planId": "s2-open-space-no-near-return-r1",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "open-space-no-near-return",
+      "plannedClass": "passable",
+      "repeat": 1
+    },
+    {
+      "planId": "s2-open-space-no-near-return-r2",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "open-space-no-near-return",
+      "plannedClass": "passable",
+      "repeat": 2
+    },
+    {
+      "planId": "s2-open-space-no-near-return-r3",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "open-space-no-near-return",
+      "plannedClass": "passable",
+      "repeat": 3
+    },
+    {
+      "planId": "s2-box-in-path-r1",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "box-in-path",
+      "plannedClass": "hazard",
+      "repeat": 1
+    },
+    {
+      "planId": "s2-box-in-path-r2",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "box-in-path",
+      "plannedClass": "hazard",
+      "repeat": 2
+    },
+    {
+      "planId": "s2-box-in-path-r3",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "box-in-path",
+      "plannedClass": "hazard",
+      "repeat": 3
+    },
+    {
+      "planId": "s2-thin-pole-r1",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "thin-pole",
+      "plannedClass": "hazard",
+      "repeat": 1
+    },
+    {
+      "planId": "s2-thin-pole-r2",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "thin-pole",
+      "plannedClass": "hazard",
+      "repeat": 2
+    },
+    {
+      "planId": "s2-thin-pole-r3",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "thin-pole",
+      "plannedClass": "hazard",
+      "repeat": 3
+    },
+    {
+      "planId": "s2-low-beam-r1",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "low-beam",
+      "plannedClass": "hazard",
+      "repeat": 1
+    },
+    {
+      "planId": "s2-low-beam-r2",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "low-beam",
+      "plannedClass": "hazard",
+      "repeat": 2
+    },
+    {
+      "planId": "s2-low-beam-r3",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "low-beam",
+      "plannedClass": "hazard",
+      "repeat": 3
+    },
+    {
+      "planId": "s2-narrow-doorway-r1",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "narrow-doorway",
+      "plannedClass": "hazard",
+      "repeat": 1
+    },
+    {
+      "planId": "s2-narrow-doorway-r2",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "narrow-doorway",
+      "plannedClass": "hazard",
+      "repeat": 2
+    },
+    {
+      "planId": "s2-narrow-doorway-r3",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "narrow-doorway",
+      "plannedClass": "hazard",
+      "repeat": 3
+    },
+    {
+      "planId": "s2-floor-discontinuity-r1",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "floor-discontinuity",
+      "plannedClass": "hazard",
+      "repeat": 1
+    },
+    {
+      "planId": "s2-floor-discontinuity-r2",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "floor-discontinuity",
+      "plannedClass": "hazard",
+      "repeat": 2
+    },
+    {
+      "planId": "s2-floor-discontinuity-r3",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "floor-discontinuity",
+      "plannedClass": "hazard",
+      "repeat": 3
+    },
+    {
+      "planId": "s2-crossing-object-r1",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "crossing-object",
+      "plannedClass": "hazard",
+      "repeat": 1
+    },
+    {
+      "planId": "s2-crossing-object-r2",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "crossing-object",
+      "plannedClass": "hazard",
+      "repeat": 2
+    },
+    {
+      "planId": "s2-crossing-object-r3",
+      "session": 2,
+      "split": "holdout",
+      "scenario": "crossing-object",
+      "plannedClass": "hazard",
+      "repeat": 3
+    }
+  ],
+  "genericObstacleDelivery": "shadow",
+  "physicalAlignmentValidated": false,
+  "metricErrorBoundsValidated": false,
+  "floorReferenceValidated": false,
+  "clockBindingValidated": false,
+  "bodyVolumeCoverageEstablished": false,
+  "safetyReplayReady": false,
+  "ordinaryCameraWired": false,
+  "promotionAllowed": false
+}

@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "verifiedMaps": 180,
+  "verifiedConversionComparisons": 108,
+  "verifiedShadowFrames": 90,
+  "minimumParityRho": 0.9998040169223318,
+  "maximumParityNormalizedMAE": 0.0012577639427036047,
+  "maximumParityNormalizedP99": 0.006811419036239386,
+  "inferenceReportSha256": "cb5ff9595ce9c3f7705b063679f6cd9985cd22ef224ea4b8f4c639959c8ebdaf",
+  "shadowReportSha256": "1214dc98ee352e8efd045d88589b6a7604a49fa1b7061b71137ed6cdb7a15eb3",
+  "verifierSha256": "b85265edf2cdd8b22ca47042d36b79e3af3b4d63b511f20ad3af50d3109ea08e",
+  "productionControlsUnchanged": true,
+  "promotionAllowed": false,
+  "androidDevice": "not_run",
+  "comparison": [
+    {
+      "variantId": "midas_ncnn_control",
+      "hazardFrames": 12,
+      "hazardFramesWithStop": 12,
+      "hazardFramesWithoutStop": 0,
+      "unsafeContinueFrames": 0,
+      "passableFrames": 6,
+      "falseStopFrames": 3,
+      "completedFrames": 18,
+      "failedFrames": 0,
+      "meanFrameRankRho": 0.7068661866639152,
+      "boundaryOrderingAccuracy": 0.8939549180327869,
+      "imageToMapP50Ms": 113.1337,
+      "imageToMapP95Ms": 138.0873,
+      "inferenceP50Ms": 109.0526,
+      "inferenceP95Ms": 133.5271,
+      "conversionParityPassed": true,
+      "qualityAdmission": {
+        "passed": true,
+        "rejectionReasons": [],
+        "policy": "zero unsafe continue, hazard stops >= control, false stops <= control"
+      }
+    },
+    {
+      "variantId": "dav2_ncnn_short280_fp32",
+      "hazardFrames": 12,
+      "hazardFramesWithStop": 10,
+      "hazardFramesWithoutStop": 2,
+      "unsafeContinueFrames": 2,
+      "passableFrames": 6,
+      "falseStopFrames": 6,
+      "completedFrames": 18,
+      "failedFrames": 0,
+      "meanFrameRankRho": 0.7453908850541827,
+      "boundaryOrderingAccuracy": 0.8897925204918032,
+      "imageToMapP50Ms": 524.9998,
+      "imageToMapP95Ms": 560.3268,
+      "inferenceP50Ms": 514.8928,
+      "inferenceP95Ms": 551.3132,
+      "conversionParityPassed": true,
+      "qualityAdmission": {
+        "passed": false,
+        "rejectionReasons": [
+          "unsafe-continue-on-hazard",
+          "hazard-stop-regression",
+          "false-stop-regression"
+        ],
+        "policy": "zero unsafe continue, hazard stops >= control, false stops <= control"
+      }
+    },
+    {
+      "variantId": "dav2_ncnn_short280_fp16",
+      "hazardFrames": 12,
+      "hazardFramesWithStop": 10,
+      "hazardFramesWithoutStop": 2,
+      "unsafeContinueFrames": 2,
+      "passableFrames": 6,
+      "falseStopFrames": 6,
+      "completedFrames": 18,
+      "failedFrames": 0,
+      "meanFrameRankRho": 0.7455982468196976,
+      "boundaryOrderingAccuracy": 0.8889600409836066,
+      "imageToMapP50Ms": 522.5089,
+      "imageToMapP95Ms": 740.7492,
+      "inferenceP50Ms": 514.1119,
+      "inferenceP95Ms": 733.141,
+      "conversionParityPassed": true,
+      "qualityAdmission": {
+        "passed": false,
+        "rejectionReasons": [
+          "unsafe-continue-on-hazard",
+          "hazard-stop-regression",
+          "false-stop-regression"
+        ],
+        "policy": "zero unsafe continue, hazard stops >= control, false stops <= control"
+      }
+    },
+    {
+      "variantId": "dav2_ncnn_short336_fp32",
+      "hazardFrames": 12,
+      "hazardFramesWithStop": 12,
+      "hazardFramesWithoutStop": 0,
+      "unsafeContinueFrames": 0,
+      "passableFrames": 6,
+      "falseStopFrames": 6,
+      "completedFrames": 18,
+      "failedFrames": 0,
+      "meanFrameRankRho": 0.7708683198906099,
+      "boundaryOrderingAccuracy": 0.8856301229508197,
+      "imageToMapP50Ms": 814.605,
+      "imageToMapP95Ms": 928.0663,
+      "inferenceP50Ms": 803.6134,
+      "inferenceP95Ms": 914.6008,
+      "conversionParityPassed": true,
+      "qualityAdmission": {
+        "passed": false,
+        "rejectionReasons": [
+          "false-stop-regression"
+        ],
+        "policy": "zero unsafe continue, hazard stops >= control, false stops <= control"
+      }
+    },
+    {
+      "variantId": "dav2_ncnn_short336_fp16",
+      "hazardFrames": 12,
+      "hazardFramesWithStop": 12,
+      "hazardFramesWithoutStop": 0,
+      "unsafeContinueFrames": 0,
+      "passableFrames": 6,
+      "falseStopFrames": 6,
+      "completedFrames": 18,
+      "failedFrames": 0,
+      "meanFrameRankRho": 0.7700780345514429,
+      "boundaryOrderingAccuracy": 0.8849257172131147,
+      "imageToMapP50Ms": 800.6429,
+      "imageToMapP95Ms": 840.4123,
+      "inferenceP50Ms": 791.735,
+      "inferenceP95Ms": 830.1017,
+      "conversionParityPassed": true,
+      "qualityAdmission": {
+        "passed": false,
+        "rejectionReasons": [
+          "false-stop-regression"
+        ],
+        "policy": "zero unsafe continue, hazard stops >= control, false stops <= control"
+      }
+    }
+  ]
+}

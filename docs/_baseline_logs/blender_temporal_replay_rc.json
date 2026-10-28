@@ -1,0 +1,267 @@
+{
+  "corpusId": "blender-temporal-v2",
+  "schemaVersion": 1,
+  "seed": 20260922,
+  "mode": "releaseCandidate",
+  "passed": true,
+  "metrics": {
+    "unsafeGuidanceCount": 0,
+    "guidanceIntoUnknownCount": 0,
+    "staleActionEmissionCount": 0,
+    "expectedActionMismatchCount": 0,
+    "healthMismatchCount": 0,
+    "alertMismatchCount": 0
+  },
+  "missingExternalCorpora": [],
+  "missingPrivateCorpora": [],
+  "invalidExternalCorpora": [],
+  "blockingReasons": [],
+  "scenarios": [
+    {
+      "sceneId": "temporal-crossing-rider",
+      "requiredForRc": true,
+      "status": "pass",
+      "violations": [],
+      "frames": [
+        {
+          "frameIndex": 0,
+          "evaluateOffsetMs": 0,
+          "action": "stopNow",
+          "health": "healthy",
+          "alertEvent": "emitted",
+          "interruptCurrent": false,
+          "shadowDirection": "none",
+          "violations": []
+        },
+        {
+          "frameIndex": 1,
+          "evaluateOffsetMs": 300,
+          "action": "stopNow",
+          "health": "healthy",
+          "alertEvent": "suppressed",
+          "interruptCurrent": false,
+          "shadowDirection": "none",
+          "violations": []
+        },
+        {
+          "frameIndex": 2,
+          "evaluateOffsetMs": 600,
+          "action": "stopNow",
+          "health": "healthy",
+          "alertEvent": "suppressed",
+          "interruptCurrent": false,
+          "shadowDirection": "left",
+          "violations": []
+        }
+      ]
+    },
+    {
+      "sceneId": "temporal-doorway",
+      "requiredForRc": true,
+      "status": "pass",
+      "violations": [],
+      "frames": [
+        {
+          "frameIndex": 0,
+          "evaluateOffsetMs": 0,
+          "action": "continueForward",
+          "health": "healthy",
+          "alertEvent": "suppressed",
+          "interruptCurrent": false,
+          "shadowDirection": "none",
+          "violations": []
+        },
+        {
+          "frameIndex": 1,
+          "evaluateOffsetMs": 300,
+          "action": "continueForward",
+          "health": "healthy",
+          "alertEvent": "suppressed",
+          "interruptCurrent": false,
+          "shadowDirection": "none",
+          "violations": []
+        },
+        {
+          "frameIndex": 2,
+          "evaluateOffsetMs": 600,
+          "action": "continueForward",
+          "health": "healthy",
+          "alertEvent": "suppressed",
+          "interruptCurrent": false,
+          "shadowDirection": "none",
+          "violations": []
+        }
+      ]
+    },
+    {
+      "sceneId": "temporal-low-obstacle",
+      "requiredForRc": true,
+      "status": "pass",
+      "violations": [],
+      "frames": [
+        {
+          "frameIndex": 0,
+          "evaluateOffsetMs": 0,
+          "action": "stopNow",
+          "health": "healthy",
+          "alertEvent": "emitted",
+          "interruptCurrent": false,
+          "shadowDirection": "none",
+          "violations": []
+        },
+        {
+          "frameIndex": 1,
+          "evaluateOffsetMs": 300,
+          "action": "stopNow",
+          "health": "healthy",
+          "alertEvent": "suppressed",
+          "interruptCurrent": false,
+          "shadowDirection": "none",
+          "violations": []
+        },
+        {
+          "frameIndex": 2,
+          "evaluateOffsetMs": 600,
+          "action": "stopNow",
+          "health": "healthy",
+          "alertEvent": "suppressed",
+          "interruptCurrent": false,
+          "shadowDirection": "left",
+          "violations": []
+        }
+      ]
+    },
+    {
+      "sceneId": "temporal-overhead",
+      "requiredForRc": true,
+      "status": "pass",
+      "violations": [],
+      "frames": [
+        {
+          "frameIndex": 0,
+          "evaluateOffsetMs": 0,
+          "action": "stopNow",
+          "health": "healthy",
+          "alertEvent": "emitted",
+          "interruptCurrent": false,
+          "shadowDirection": "none",
+          "violations": []
+        },
+        {
+          "frameIndex": 1,
+          "evaluateOffsetMs": 300,
+          "action": "stopNow",
+          "health": "healthy",
+          "alertEvent": "suppressed",
+          "interruptCurrent": false,
+          "shadowDirection": "none",
+          "violations": []
+        },
+        {
+          "frameIndex": 2,
+          "evaluateOffsetMs": 600,
+          "action": "stopNow",
+          "health": "healthy",
+          "alertEvent": "suppressed",
+          "interruptCurrent": false,
+          "shadowDirection": "left",
+          "violations": []
+        }
+      ]
+    },
+    {
+      "sceneId": "temporal-ramp",
+      "requiredForRc": true,
+      "status": "pass",
+      "violations": [],
+      "frames": [
+        {
+          "frameIndex": 0,
+          "evaluateOffsetMs": 0,
+          "action": "continueForward",
+          "health": "healthy",
+          "alertEvent": "suppressed",
+          "interruptCurrent": false,
+          "shadowDirection": "none",
+          "violations": []
+        },
+        {
+          "frameIndex": 1,
+          "evaluateOffsetMs": 300,
+          "action": "continueForward",
+          "health": "healthy",
+          "alertEvent": "suppressed",
+          "interruptCurrent": false,
+          "shadowDirection": "none",
+          "violations": []
+        },
+        {
+          "frameIndex": 2,
+          "evaluateOffsetMs": 600,
+          "action": "continueForward",
+          "health": "healthy",
+          "alertEvent": "suppressed",
+          "interruptCurrent": false,
+          "shadowDirection": "none",
+          "violations": []
+        }
+      ]
+    },
+    {
+      "sceneId": "temporal-thin-pole",
+      "requiredForRc": true,
+      "status": "pass",
+      "violations": [],
+      "frames": [
+        {
+          "frameIndex": 0,
+          "evaluateOffsetMs": 0,
+          "action": "stopNow",
+          "health": "healthy",
+          "alertEvent": "emitted",
+          "interruptCurrent": false,
+          "shadowDirection": "none",
+          "violations": []
+        },
+        {
+          "frameIndex": 1,
+          "evaluateOffsetMs": 300,
+          "action": "stopNow",
+          "health": "healthy",
+          "alertEvent": "suppressed",
+          "interruptCurrent": false,
+          "shadowDirection": "none",
+          "violations": []
+        },
+        {
+          "frameIndex": 2,
+          "evaluateOffsetMs": 600,
+          "action": "stopNow",
+          "health": "healthy",
+          "alertEvent": "suppressed",
+          "interruptCurrent": false,
+          "shadowDirection": "left",
+          "violations": []
+        }
+      ]
+    }
+  ],
+  "evidence": {
+    "tool": "tool/report_spatial_metrics.dart",
+    "toolSchemaVersion": 2,
+    "generatedAtUtc": "2026-09-22T12:36:42.825935Z",
+    "commitSha": "180bd16bc7cc46f9c06936a3f6ad82f3d9da2c8d",
+    "dirty": true,
+    "command": [
+      "dart",
+      "run",
+      "tool/report_spatial_metrics.dart",
+      "--manifest",
+      "test/fixtures/spatial_safety/blender-temporal-v2/replay-manifest.json",
+      "--rc",
+      "--output",
+      "docs/_baseline_logs/blender_temporal_replay_rc.json"
+    ],
+    "manifestPath": "test/fixtures/spatial_safety/blender-temporal-v2/replay-manifest.json"
+  }
+}

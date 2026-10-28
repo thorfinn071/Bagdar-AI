@@ -1,0 +1,122 @@
+﻿{
+    "schemaVersion":  2,
+    "tool":  "tool/verify_core.ps1",
+    "generatedAtUtc":  "2026-09-22T17:35:31.0397716Z",
+    "command":  {
+                    "rc":  true,
+                    "androidBuild":  false
+                },
+    "source":  {
+                   "commitSha":  "180bd16bc7cc46f9c06936a3f6ad82f3d9da2c8d",
+                   "dirty":  true
+               },
+    "evidenceClasses":  {
+                            "desktopSoftwareRc":  "pass",
+                            "modelCorrectnessRc":  "not_established",
+                            "androidBuild":  "not_run",
+                            "namedDeviceRuntime":  "not_run",
+                            "controlledWalking":  "not_run"
+                        },
+    "stages":  [
+                   {
+                       "name":  "static analysis",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  95601
+                   },
+                   {
+                       "name":  "Flutter software tests",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  49751
+                   },
+                   {
+                       "name":  "strict legacy safety harness",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  7781
+                   },
+                   {
+                       "name":  "procedural spatial corpus reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  3333
+                   },
+                   {
+                       "name":  "real model-output replay reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  2670
+                   },
+                   {
+                       "name":  "procedural replay and external manifest integrity",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  3245
+                   },
+                   {
+                       "name":  "external Blender frame replay: test/fixtures/spatial_safety/blender-egocentric-v1/replay-manifest.json",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  3136
+                   },
+                   {
+                       "name":  "external Blender frame replay: test/fixtures/spatial_safety/blender-temporal-v2/replay-manifest.json",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  3212
+                   },
+                   {
+                       "name":  "Blender oracle-depth shadow runtime replay reproducibility",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  9623
+                   },
+                   {
+                       "name":  "model artifact/hash/decoder contracts",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  10329
+                   },
+                   {
+                       "name":  "real ONNX candidate predictions",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  6698
+                   },
+                   {
+                       "name":  "ONNX reference vs NCNN parity",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  2095
+                   },
+                   {
+                       "name":  "working-tree whitespace check",
+                       "required":  true,
+                       "passed":  true,
+                       "exitCode":  0,
+                       "durationMs":  237
+                   },
+                   {
+                       "name":  "Android debug compilation evidence",
+                       "required":  false,
+                       "passed":  null,
+                       "exitCode":  null,
+                       "durationMs":  0,
+                       "status":  "not_requested"
+                   }
+               ],
+    "passed":  true
+}

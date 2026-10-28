@@ -1,0 +1,25 @@
+{
+  "sceneId": "camera-pan-approach",
+  "pair": "camera-pan",
+  "physicalHazard": true,
+  "referencePassable": false,
+  "hazardOnsetMs": 0,
+  "userMoving": false,
+  "latestStopOffsetMs": 300,
+  "compatibleCocoClassIds": [
+    0
+  ],
+  "parameters": {
+    "id": "camera-pan-approach",
+    "pair": "camera-pan",
+    "hazard": true,
+    "kind": "person",
+    "personX": 0,
+    "personStartY": 3.3,
+    "personAdvanceM": 1.0,
+    "cameraAdvanceM": 0,
+    "cameraYawAmplitudeDeg": 6,
+    "appearanceSeed": 4106
+  },
+  "labelSource": "predeclared scene geometry, not model output"
+}

@@ -1,0 +1,71 @@
+{
+  "identity": "a81dab8fcde1b6536678983651f71430d8930a903ef94eca2ef3c86ca9342603",
+  "frame": {
+    "priorPacket": {
+      "axisPacket": {
+        "width": 320,
+        "height": 240,
+        "frameId": 212,
+        "capturedOffsetMs": 2200,
+        "fx": 231.1111068725586,
+        "fy": 231.11111640930176,
+        "cx": 160.0,
+        "cy": 120.0,
+        "cameraToWalkingRotation": [
+          0.7986354827880859,
+          0.4255475103855133,
+          0.4255475103855133,
+          -0.6018150448799133,
+          0.5647205710411072,
+          0.5647205710411072,
+          0.0,
+          -0.7071067690849304,
+          0.7071067690849304
+        ],
+        "cameraOriginM": [
+          0.0,
+          0.0,
+          1.4199999570846558
+        ],
+        "depth": {
+          "path": "camera-pan-approach/coverage-views-11-range.f32.gz",
+          "sha256": "dee9b62caa17f14c2404bc75cd49ae24a97f3bb18ea4689d5a12f1de284bf318"
+        },
+        "freeZLower": {
+          "path": "camera-pan-approach/coverage-views-11-lower.f32.gz",
+          "sha256": "e3dbe3ad0ed713ebf3ff78fa4c7d23c4cacb34506b6197bd7a503ac6f6fd352a"
+        },
+        "surfaceZUpper": {
+          "path": "camera-pan-approach/coverage-views-11-upper.f32.gz",
+          "sha256": "51c20f41a2f107a20c723c5f2dbbc5df4899cfc8bb206f74944dba0ff19737e3"
+        },
+        "validity": {
+          "path": "camera-pan-approach/coverage-views-11-valid.u8.gz",
+          "sha256": "004cdacd6163c635e68cca086aa885f59bd894af2d01d1cda61a0ef5be30aab2"
+        }
+      },
+      "fourArraysExact": true,
+      "heightLower": {
+        "path": "camera-pan-approach/height-11-heightLower.f32.gz",
+        "sha256": "b0d9b829424ae5e8ab08b8a0347941bafcfa3e85ec9464fbcde534413f67f8df"
+      },
+      "heightUpper": {
+        "path": "camera-pan-approach/height-11-heightUpper.f32.gz",
+        "sha256": "57e42c311af3c107629cc5b9c8618660c6f400f210f3da04e2231f2fd16cba06"
+      },
+      "firstZLower": {
+        "path": "camera-pan-approach/height-11-firstZLower.f32.gz",
+        "sha256": "cfa181f866a273c4c6f8c8bcf98ceb0c2fd39f43382587a2706ffa92441c3fa3"
+      }
+    },
+    "recomputedPixels": 0,
+    "heightLower": {
+      "path": "camera-pan-approach/height-11-heightLower.f32.gz",
+      "sha256": "b0d9b829424ae5e8ab08b8a0347941bafcfa3e85ec9464fbcde534413f67f8df"
+    },
+    "heightUpper": {
+      "path": "camera-pan-approach/height-11-heightUpper.f32.gz",
+      "sha256": "57e42c311af3c107629cc5b9c8618660c6f400f210f3da04e2231f2fd16cba06"
+    }
+  }
+}

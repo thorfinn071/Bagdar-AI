@@ -1,0 +1,24 @@
+{
+  "sceneId": "person-side",
+  "pair": "person",
+  "physicalHazard": false,
+  "referencePassable": true,
+  "hazardOnsetMs": null,
+  "userMoving": true,
+  "latestStopOffsetMs": null,
+  "compatibleCocoClassIds": [
+    0
+  ],
+  "parameters": {
+    "id": "person-side",
+    "pair": "person",
+    "hazard": false,
+    "kind": "person",
+    "personX": 1.3,
+    "personStartY": 3.3,
+    "personAdvanceM": 1.0,
+    "cameraAdvanceM": 0.1,
+    "appearanceSeed": 4105
+  },
+  "labelSource": "predeclared scene geometry, not model output"
+}

@@ -1,0 +1,962 @@
+﻿
+=== GROUP obstacle_depth ===
+
+00:00 +0: loading C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_detector_test.dart                                                                                                           
+00:01 +0: loading C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_detector_test.dart                                                                                                           
+00:02 +0: loading C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_detector_test.dart                                                                                                           
+00:03 +0: loading C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_detector_test.dart                                                                                                           
+00:03 +0: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_detector_test.dart: flat open corridor produces no warning observation                                                               
+00:03 +1: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_detector_test.dart: flat open corridor produces no warning observation                                                               
+00:03 +1: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_detector_test.dart: wide wall is a broad surface without YOLO                                                                        
+00:03 +2: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_detector_test.dart: wide wall is a broad surface without YOLO                                                                        
+00:03 +2: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_detector_test.dart: center pole is thinVertical and does not use wall coverage                                                       
+00:03 +3: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_detector_test.dart: center pole is thinVertical and does not use wall coverage                                                       
+00:03 +3: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_detector_test.dart: aligned luma edge promotes a depth-backed pole beyond monitor-only                                               
+00:03 +4: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_detector_test.dart: aligned luma edge promotes a depth-backed pole beyond monitor-only                                               
+00:03 +4: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_detector_test.dart: low box/chair is a lowObstacle or unknown near the feet                                                          
+00:03 +5: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_detector_test.dart: low box/chair is a lowObstacle or unknown near the feet                                                          
+00:03 +5: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_detector_test.dart: overhead component is classified overhead                                                                        
+00:03 +6: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_detector_test.dart: overhead component is classified overhead                                                                        
+00:03 +6: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_detector_test.dart: coherent planar near wall is detected without residual discontinuity                                             
+00:03 +7: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_detector_test.dart: coherent planar near wall is detected without residual discontinuity                                             
+00:03 +7: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_detector_test.dart: crop metadata remaps component bounds into the full upright frame                                                
+00:03 +8: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_detector_test.dart: crop metadata remaps component bounds into the full upright frame                                                
+00:03 +8: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_detector_test.dart: stale image/depth timestamp pairs reject fail-closed                                                             
+00:03 +9: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_detector_test.dart: stale image/depth timestamp pairs reject fail-closed                                                             
+00:03 +9: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_detector_test.dart: low-quality and excessive-roll frames reject fail-closed                                                         
+00:03 +10: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_detector_test.dart: low-quality and excessive-roll frames reject fail-closed                                                        
+00:03 +10: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_detector_test.dart: unaligned frames are rejected, not a healthy empty scene                                                        
+00:03 +11: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_detector_test.dart: unaligned frames are rejected, not a healthy empty scene                                                        
+00:03 +11: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_detector_test.dart: all-NaN map is low coverage, not path-clear                                                                     
+00:03 +12: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_detector_test.dart: all-NaN map is low coverage, not path-clear                                                                     
+00:03 +12: loading C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_tracker_test.dart                                                                                                           
+00:03 +12: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_tracker_test.dart: N-of-M confirmation and stable IDs                                                                               
+00:03 +13: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_tracker_test.dart: N-of-M confirmation and stable IDs                                                                               
+00:03 +13: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_tracker_test.dart: new hazard gets a new id (cooldown independence)                                                                 
+00:03 +14: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_tracker_test.dart: new hazard gets a new id (cooldown independence)                                                                 
+00:03 +14: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_tracker_test.dart: short miss does not immediately expire; long miss does                                                           
+00:03 +15: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_tracker_test.dart: short miss does not immediately expire; long miss does                                                           
+00:03 +15: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_tracker_test.dart: approach trend is positive when proximity increases                                                              
+00:03 +16: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_tracker_test.dart: approach trend is positive when proximity increases                                                              
+00:03 +16: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_tracker_test.dart: lifetime hits outside the rolling N-of-M window do not confirm                                                   
+00:03 +17: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_tracker_test.dart: lifetime hits outside the rolling N-of-M window do not confirm                                                   
+00:03 +17: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_tracker_test.dart: zero-IoU replacement in the same coarse zone gets a new id                                                       
+00:03 +18: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_tracker_test.dart: zero-IoU replacement in the same coarse zone gets a new id                                                       
+00:04 +18: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_tracker_test.dart: zero-IoU replacement in the same coarse zone gets a new id                                                       
+00:04 +18: loading C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_alert_test.dart                                                                                                             
+00:04 +18: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_alert_test.dart: new generic-obstacle track is not hidden by another track cooldown                                                 
+00:04 +19: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_alert_test.dart: new generic-obstacle track is not hidden by another track cooldown                                                 
+00:04 +19: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_alert_test.dart: same generic track is cooled down                                                                                  
+00:04 +20: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_alert_test.dart: same generic track is cooled down                                                                                  
+00:04 +20: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_alert_test.dart: no language claims the path is clear                                                                               
+00:04 +21: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_alert_test.dart: no language claims the path is clear                                                                               
+00:04 +21: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_alert_test.dart: generic copy exists in RU/KK/EN                                                                                    
+00:04 +22: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_alert_test.dart: generic copy exists in RU/KK/EN                                                                                    
+00:04 +22: loading C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_semantic_fusion_test.dart                                                                                                   
+00:04 +22: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_semantic_fusion_test.dart: semantic fusion uses one fresh spatially matched YOLO track                                              
+00:04 +23: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_semantic_fusion_test.dart: semantic fusion uses one fresh spatially matched YOLO track                                              
+00:05 +23: C:/Users/Nurik/Desktop/bagdar_app/test/generic_obstacle_semantic_fusion_test.dart: semantic fusion uses one fresh spatially matched YOLO track                                              
+00:05 +23: loading C:/Users/Nurik/Desktop/bagdar_app/test/collision_risk_engine_test.dart                                                                                                              
+00:05 +23: C:/Users/Nurik/Desktop/bagdar_app/test/collision_risk_engine_test.dart: YOLO absence does not reduce geometric warning                                                                      
+00:05 +24: C:/Users/Nurik/Desktop/bagdar_app/test/collision_risk_engine_test.dart: YOLO absence does not reduce geometric warning                                                                      
+00:05 +24: C:/Users/Nurik/Desktop/bagdar_app/test/collision_risk_engine_test.dart: receding suppresses critical/warning                                                                                
+00:05 +25: C:/Users/Nurik/Desktop/bagdar_app/test/collision_risk_engine_test.dart: receding suppresses critical/warning                                                                                
+00:05 +25: C:/Users/Nurik/Desktop/bagdar_app/test/collision_risk_engine_test.dart: low-quality depth never creates a critical alert                                                                    
+00:05 +26: C:/Users/Nurik/Desktop/bagdar_app/test/collision_risk_engine_test.dart: low-quality depth never creates a critical alert                                                                    
+00:05 +26: C:/Users/Nurik/Desktop/bagdar_app/test/collision_risk_engine_test.dart: shadow mode logs but does not emit user alerts                                                                      
+00:05 +27: C:/Users/Nurik/Desktop/bagdar_app/test/collision_risk_engine_test.dart: shadow mode logs but does not emit user alerts                                                                      
+00:05 +27: C:/Users/Nurik/Desktop/bagdar_app/test/collision_risk_engine_test.dart: matched vehicle may raise urgency; label only above threshold                                                       
+00:05 +28: C:/Users/Nurik/Desktop/bagdar_app/test/collision_risk_engine_test.dart: matched vehicle may raise urgency; label only above threshold                                                       
+00:05 +28: C:/Users/Nurik/Desktop/bagdar_app/test/collision_risk_engine_test.dart: relative critical requires centered near-field evidence                                                             
+00:05 +29: C:/Users/Nurik/Desktop/bagdar_app/test/collision_risk_engine_test.dart: relative critical requires centered near-field evidence                                                             
+00:05 +29: loading C:/Users/Nurik/Desktop/bagdar_app/test/depth_health_contract_test.dart                                                                                                              
+00:05 +29: C:/Users/Nurik/Desktop/bagdar_app/test/depth_health_contract_test.dart: focal fallback is generic-obstacle unavailable, not a healthy empty scene                                           
+00:05 +30: C:/Users/Nurik/Desktop/bagdar_app/test/depth_health_contract_test.dart: focal fallback is generic-obstacle unavailable, not a healthy empty scene                                           
+00:05 +30: C:/Users/Nurik/Desktop/bagdar_app/test/depth_health_contract_test.dart: DepthFrame rejects mismatched confidence length                                                                     
+00:05 +31: C:/Users/Nurik/Desktop/bagdar_app/test/depth_health_contract_test.dart: DepthFrame rejects mismatched confidence length                                                                     
+00:05 +31: loading C:/Users/Nurik/Desktop/bagdar_app/test/depth_pipeline_analyze_exception_test.dart                                                                                                   
+00:05 +31: C:/Users/Nurik/Desktop/bagdar_app/test/depth_pipeline_analyze_exception_test.dart: ... transitions to lowConfidence after 3 consecutive analyze() calls and fires onStatusChanged once      
+00:06 +31: C:/Users/Nurik/Desktop/bagdar_app/test/depth_pipeline_analyze_exception_test.dart: ... transitions to lowConfidence after 3 consecutive analyze() calls and fires onStatusChanged once      
+00:06 +31: C:/Users/Nurik/Desktop/bagdar_app/test/depth_pipeline_analyze_exception_test.dart: Safety audit 2026-06: analyze() exceptions surface depth_degraded a permanently throwing provider transitions to lowConfidence after 3 consecutive analyze() calls and fires onStatusChanged once
+DeviceCapabilityProbe: ╨╖╨╛╨╜╨┤╨╕╤А╨╛╨▓╨░╨╜╨╕╨╡ ╨╖╨░╨▓╨╡╤А╤И╨╡╨╜╨╛ тАФ DeviceCapabilities(tier=DepthTier.focalLength, sdk=0, model=, hw=HardwareCapabilities(bleCentral=false, blePeripheral=false, mic48k=false, hiFreq=null, charging=false, freeMb=-1))
+Depth analysis error: Bad state: permanent analyze failure
+Depth analysis error: Bad state: permanent analyze failure
+Depth analysis error: Bad state: permanent analyze failure
+Depth analysis error: Bad state: permanent analyze failure
+
+00:06 +32: C:/Users/Nurik/Desktop/bagdar_app/test/depth_pipeline_analyze_exception_test.dart: ... transitions to lowConfidence after 3 consecutive analyze() calls and fires onStatusChanged once      
+00:06 +32: C:/Users/Nurik/Desktop/bagdar_app/test/depth_pipeline_analyze_exception_test.dart: ... consecutive-exception counter so transient errors do not falsely accumulate to a degradation notice  
+00:06 +32: C:/Users/Nurik/Desktop/bagdar_app/test/depth_pipeline_analyze_exception_test.dart: Safety audit 2026-06: analyze() exceptions surface depth_degraded a single successful analyze() resets the consecutive-exception counter so transient errors do not falsely accumulate to a degradation notice
+Depth analysis error: Bad state: transient analyze failure
+Depth analysis error: Bad state: transient analyze failure
+Depth analysis error: Bad state: transient analyze failure
+Depth analysis error: Bad state: transient analyze failure
+Depth analysis error: Bad state: transient analyze failure
+
+00:06 +33: C:/Users/Nurik/Desktop/bagdar_app/test/depth_pipeline_analyze_exception_test.dart: ... consecutive-exception counter so transient errors do not falsely accumulate to a degradation notice  
+00:06 +33: loading C:/Users/Nurik/Desktop/bagdar_app/test/depth_pipeline_session_disable_test.dart                                                                                                     
+00:06 +33: C:/Users/Nurik/Desktop/bagdar_app/test/depth_pipeline_session_disable_test.dart: ... onNcnnSessionDisabled() immediately transitions to lowConfidence and fires onStatusChanged             
+00:06 +33: C:/Users/Nurik/Desktop/bagdar_app/test/depth_pipeline_session_disable_test.dart: Safety audit 2026-06: NCNN session-disable surfaces depth_degraded onNcnnSessionDisabled() immediately transitions to lowConfidence and fires onStatusChanged
+DeviceCapabilityProbe: ╨╖╨╛╨╜╨┤╨╕╤А╨╛╨▓╨░╨╜╨╕╨╡ ╨╖╨░╨▓╨╡╤А╤И╨╡╨╜╨╛ тАФ DeviceCapabilities(tier=DepthTier.focalLength, sdk=0, model=, hw=HardwareCapabilities(bleCentral=false, blePeripheral=false, mic48k=false, hiFreq=null, charging=false, freeMb=-1))
+
+00:06 +34: C:/Users/Nurik/Desktop/bagdar_app/test/depth_pipeline_session_disable_test.dart: ... onNcnnSessionDisabled() immediately transitions to lowConfidence and fires onStatusChanged             
+00:06 +34: C:/Users/Nurik/Desktop/bagdar_app/test/depth_pipeline_session_disable_test.dart: ... is idempotent тАФ repeated calls do not re-fire onStatusChanged once already lowConfidence               
+00:06 +35: C:/Users/Nurik/Desktop/bagdar_app/test/depth_pipeline_session_disable_test.dart: ... is idempotent тАФ repeated calls do not re-fire onStatusChanged once already lowConfidence               
+00:06 +35: C:/Users/Nurik/Desktop/bagdar_app/test/depth_pipeline_session_disable_test.dart: ... provider counts degraded frames and announces lowConfidence after _kDegradedFramesToAnnounce calls     
+00:06 +36: C:/Users/Nurik/Desktop/bagdar_app/test/depth_pipeline_session_disable_test.dart: ... provider counts degraded frames and announces lowConfidence after _kDegradedFramesToAnnounce calls     
+00:06 +36: C:/Users/Nurik/Desktop/bagdar_app/test/depth_pipeline_session_disable_test.dart: ... analyze() with a null provider also counts degraded frames (no NPE, announces after threshold)         
+00:06 +37: C:/Users/Nurik/Desktop/bagdar_app/test/depth_pipeline_session_disable_test.dart: ... analyze() with a null provider also counts degraded frames (no NPE, announces after threshold)         
+00:06 +37: loading C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_depth_output_contract_test.dart                                                                                                         
+00:06 +37: C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_depth_output_contract_test.dart: depth map ops resize is spatial, not zero-padded flatten                                                       
+00:06 +38: C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_depth_output_contract_test.dart: depth map ops resize is spatial, not zero-padded flatten                                                       
+00:06 +38: C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_depth_output_contract_test.dart: depth map ops NaN and Inf become NaN and do not look like empty scene zeros                                    
+00:06 +39: C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_depth_output_contract_test.dart: depth map ops NaN and Inf become NaN and do not look like empty scene zeros                                    
+00:06 +39: C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_depth_output_contract_test.dart: depth map ops constant map normalizes to all-NaN (degenerate)                                                  
+00:06 +40: C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_depth_output_contract_test.dart: depth map ops constant map normalizes to all-NaN (degenerate)                                                  
+00:06 +40: C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_depth_output_contract_test.dart: depth map ops relative normalize keeps larger = nearer                                                         
+00:06 +41: C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_depth_output_contract_test.dart: depth map ops relative normalize keeps larger = nearer                                                         
+00:06 +41: C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_depth_output_contract_test.dart: depth map ops metric conversion is inverse-depth, not an arbitrary metre scale                                 
+00:06 +42: C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_depth_output_contract_test.dart: depth map ops metric conversion is inverse-depth, not an arbitrary metre scale                                 
+00:06 +42: C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_depth_output_contract_test.dart: depth map ops inferSquareLayout rejects non-square lengths                                                     
+00:06 +43: C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_depth_output_contract_test.dart: depth map ops inferSquareLayout rejects non-square lengths                                                     
+00:06 +43: C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_depth_output_contract_test.dart: depth map ops debug dump is off without explicit consent                                                       
+00:06 +44: C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_depth_output_contract_test.dart: depth map ops debug dump is off without explicit consent                                                       
+00:07 +44: C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_depth_output_contract_test.dart: depth map ops debug dump is off without explicit consent                                                       
+00:07 +44: loading C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_depth_preprocess_test.dart                                                                                                              
+00:07 +44: C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_depth_preprocess_test.dart: NCNN preprocess contract in-graph mean/std are ImageNet RGB and must not be re-applied                              
+00:07 +45: C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_depth_preprocess_test.dart: NCNN preprocess contract in-graph mean/std are ImageNet RGB and must not be re-applied                              
+00:07 +45: C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_depth_preprocess_test.dart: NCNN preprocess contract solid red I420 round-trips to RGB with R dominant                                          
+00:07 +46: C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_depth_preprocess_test.dart: NCNN preprocess contract solid red I420 round-trips to RGB with R dominant                                          
+00:07 +46: C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_depth_preprocess_test.dart: NCNN preprocess contract cropTopFrac drops the top of the frame                                                     
+00:07 +47: C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_depth_preprocess_test.dart: NCNN preprocess contract cropTopFrac drops the top of the frame                                                     
+00:07 +47: C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_depth_preprocess_test.dart: NCNN preprocess contract chroma pixel stride 2 is sampled, not treated as planar                                    
+00:07 +48: C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_depth_preprocess_test.dart: NCNN preprocess contract chroma pixel stride 2 is sampled, not treated as planar                                    
+00:07 +48: C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_depth_preprocess_test.dart: NCNN preprocess contract rotation and mirror are applied before crop/resize                                         
+00:07 +49: C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_depth_preprocess_test.dart: NCNN preprocess contract rotation and mirror are applied before crop/resize                                         
+00:07 +49: loading C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_reference_correlation_test.dart                                                                                                         
+00:07 +49: C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_reference_correlation_test.dart: recorded native/reference NCNN maps have matching depth rank                                                   
+00:07 +49 ~1: C:/Users/Nurik/Desktop/bagdar_app/test/ncnn_reference_correlation_test.dart: recorded native/reference NCNN maps have matching depth rank                                                
+00:07 +49 ~1: loading C:/Users/Nurik/Desktop/bagdar_app/test/hardware_depth_aggressive_close_test.dart                                                                                                 
+00:07 +49 ~1: C:/Users/Nurik/Desktop/bagdar_app/test/hardware_depth_aggressive_close_test.dart: ... B-3 тАФ aggressive fallback close high-confidence streak >= 30s disposes the NCNN fallback           
+00:07 +49 ~1: C:/Users/Nurik/Desktop/bagdar_app/test/hardware_depth_aggressive_close_test.dart: HardwareDepthProvider B-3 тАФ aggressive fallback close high-confidence streak >= 30s disposes the NCNN fallback
+HardwareDepthProvider: 30s high-conf streak тАФ disposing NCNN fallback to save battery (B-3)
+
+00:07 +50 ~1: C:/Users/Nurik/Desktop/bagdar_app/test/hardware_depth_aggressive_close_test.dart: ... B-3 тАФ aggressive fallback close high-confidence streak >= 30s disposes the NCNN fallback           
+00:07 +50 ~1: C:/Users/Nurik/Desktop/bagdar_app/test/hardware_depth_aggressive_close_test.dart: HardwareDepthProvider B-3 тАФ aggressive fallback close confidence drop resets the streak                
+00:07 +51 ~1: C:/Users/Nurik/Desktop/bagdar_app/test/hardware_depth_aggressive_close_test.dart: HardwareDepthProvider B-3 тАФ aggressive fallback close confidence drop resets the streak                
+00:07 +51 ~1: C:/Users/Nurik/Desktop/bagdar_app/test/hardware_depth_aggressive_close_test.dart: ... тАФ aggressive fallback close low confidence (< kHardwareDepthMinConfidence) triggers fallback reinit
+00:07 +51 ~1: C:/Users/Nurik/Desktop/bagdar_app/test/hardware_depth_aggressive_close_test.dart: HardwareDepthProvider B-3 тАФ aggressive fallback close low confidence (< kHardwareDepthMinConfidence) triggers fallback reinit
+HardwareDepthProvider: 30s high-conf streak тАФ disposing NCNN fallback to save battery (B-3)
+HardwareDepthProvider: low-conf detected тАФ reinitializing NCNN fallback (B-3)
+
+00:07 +52 ~1: C:/Users/Nurik/Desktop/bagdar_app/test/hardware_depth_aggressive_close_test.dart: ... тАФ aggressive fallback close low confidence (< kHardwareDepthMinConfidence) triggers fallback reinit
+00:07 +53 ~1: C:/Users/Nurik/Desktop/bagdar_app/test/hardware_depth_aggressive_close_test.dart: ... тАФ aggressive fallback close low confidence (< kHardwareDepthMinConfidence) triggers fallback reinit
+00:07 +54 ~1: C:/Users/Nurik/Desktop/bagdar_app/test/hardware_depth_aggressive_close_test.dart: ... тАФ aggressive fallback close low confidence (< kHardwareDepthMinConfidence) triggers fallback reinit
+00:07 +55 ~1: C:/Users/Nurik/Desktop/bagdar_app/test/hardware_depth_aggressive_close_test.dart: ... тАФ aggressive fallback close low confidence (< kHardwareDepthMinConfidence) triggers fallback reinit
+00:07 +56 ~1: C:/Users/Nurik/Desktop/bagdar_app/test/hardware_depth_aggressive_close_test.dart: ... тАФ aggressive fallback close low confidence (< kHardwareDepthMinConfidence) triggers fallback reinit
+00:07 +57 ~1: C:/Users/Nurik/Desktop/bagdar_app/test/hardware_depth_aggressive_close_test.dart: ... тАФ aggressive fallback close low confidence (< kHardwareDepthMinConfidence) triggers fallback reinit
+00:07 +58 ~1: C:/Users/Nurik/Desktop/bagdar_app/test/hardware_depth_aggressive_close_test.dart: ... тАФ aggressive fallback close low confidence (< kHardwareDepthMinConfidence) triggers fallback reinit
+00:07 +59 ~1: C:/Users/Nurik/Desktop/bagdar_app/test/hardware_depth_aggressive_close_test.dart: ... тАФ aggressive fallback close low confidence (< kHardwareDepthMinConfidence) triggers fallback reinit
+00:08 +59 ~1: C:/Users/Nurik/Desktop/bagdar_app/test/hardware_depth_aggressive_close_test.dart: ... тАФ aggressive fallback close low confidence (< kHardwareDepthMinConfidence) triggers fallback reinit
+00:08 +60 ~1: C:/Users/Nurik/Desktop/bagdar_app/test/hardware_depth_aggressive_close_test.dart: ... тАФ aggressive fallback close low confidence (< kHardwareDepthMinConfidence) triggers fallback reinit
+00:08 +60 ~1: C:/Users/Nurik/Desktop/bagdar_app/test/hardware_depth_aggressive_close_test.dart: ... B-3 тАФ aggressive fallback close high confidence below threshold (0.7) does NOT start streak        
+00:08 +61 ~1: C:/Users/Nurik/Desktop/bagdar_app/test/hardware_depth_aggressive_close_test.dart: ... B-3 тАФ aggressive fallback close high confidence below threshold (0.7) does NOT start streak        
+00:08 +61 ~1: 1 skipped test.                                                                                                                                                                          
+
+00:08 +61 ~1: All other tests passed!                                                                                                                                                                  
+
+GROUP_EXIT=0
+=== GROUP alerts_tts ===
+
+00:00 +0: loading C:/Users/Nurik/Desktop/bagdar_app/test/alert_filter_same_category_critical_test.dart                                                                                                 
+00:01 +0: loading C:/Users/Nurik/Desktop/bagdar_app/test/alert_filter_same_category_critical_test.dart                                                                                                 
+00:02 +0: loading C:/Users/Nurik/Desktop/bagdar_app/test/alert_filter_same_category_critical_test.dart                                                                                                 
+00:02 +0: C:/Users/Nurik/Desktop/bagdar_app/test/alert_filter_same_category_critical_test.dart: ... two critical approachingVehicle candidates on OPPOSITE sides (pan signs differ) are BOTH announced 
+00:03 +0: C:/Users/Nurik/Desktop/bagdar_app/test/alert_filter_same_category_critical_test.dart: ... two critical approachingVehicle candidates on OPPOSITE sides (pan signs differ) are BOTH announced 
+00:03 +1: C:/Users/Nurik/Desktop/bagdar_app/test/alert_filter_same_category_critical_test.dart: ... two critical approachingVehicle candidates on OPPOSITE sides (pan signs differ) are BOTH announced 
+00:03 +1: C:/Users/Nurik/Desktop/bagdar_app/test/alert_filter_same_category_critical_test.dart: ... candidates on the SAME side (pan signs match) тАФ only the higher-urgency one is announced           
+00:03 +2: C:/Users/Nurik/Desktop/bagdar_app/test/alert_filter_same_category_critical_test.dart: ... candidates on the SAME side (pan signs match) тАФ only the higher-urgency one is announced           
+00:03 +2: C:/Users/Nurik/Desktop/bagdar_app/test/alert_filter_same_category_critical_test.dart: ... of the same category тАФ only the critical wins (non-critical same-category exclusion is unchanged)  
+00:03 +3: C:/Users/Nurik/Desktop/bagdar_app/test/alert_filter_same_category_critical_test.dart: ... of the same category тАФ only the critical wins (non-critical same-category exclusion is unchanged)  
+00:03 +3: C:/Users/Nurik/Desktop/bagdar_app/test/alert_filter_same_category_critical_test.dart: ... and a different-category candidate still both win (existing cross-category behavior is unaffected) 
+00:03 +4: C:/Users/Nurik/Desktop/bagdar_app/test/alert_filter_same_category_critical_test.dart: ... and a different-category candidate still both win (existing cross-category behavior is unaffected) 
+00:03 +4: loading C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_critical_cooldown_test.dart                                                                                                     
+00:03 +4: C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_critical_cooldown_test.dart: ... is NOT scaled by AlertFrequency.rare (multiplier 2.0 must not delay safety-critical alerts to 2.8 s)   
+00:03 +4: C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_critical_cooldown_test.dart: AlertManager critical cooldown тАФ Safety A-1 critical "╨б╨в╨Ю╨Я" cooldown is NOT scaled by AlertFrequency.rare (multiplier 2.0 must not delay safety-critical alerts to 2.8 s)
+DeviceCapabilityProbe: ╨╖╨╛╨╜╨┤╨╕╤А╨╛╨▓╨░╨╜╨╕╨╡ ╨╖╨░╨▓╨╡╤А╤И╨╡╨╜╨╛ тАФ DeviceCapabilities(tier=DepthTier.focalLength, sdk=0, model=, hw=HardwareCapabilities(bleCentral=false, blePeripheral=false, mic48k=false, hiFreq=null, charging=false, freeMb=-1))
+
+00:03 +5: C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_critical_cooldown_test.dart: ... is NOT scaled by AlertFrequency.rare (multiplier 2.0 must not delay safety-critical alerts to 2.8 s)   
+00:03 +5: C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_critical_cooldown_test.dart: ... cooldown тАФ Safety A-1 critical fires every kCriticalCooldown across all AlertFrequency settings        
+00:03 +6: C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_critical_cooldown_test.dart: ... cooldown тАФ Safety A-1 critical fires every kCriticalCooldown across all AlertFrequency settings        
+00:03 +6: C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_critical_cooldown_test.dart: ... cooldown тАФ Safety A-1 critical respects true cooldown floor (1400 ms) when frames arrive too fast      
+00:03 +7: C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_critical_cooldown_test.dart: ... cooldown тАФ Safety A-1 critical respects true cooldown floor (1400 ms) when frames arrive too fast      
+00:04 +7: C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_critical_cooldown_test.dart: ... cooldown тАФ Safety A-1 critical respects true cooldown floor (1400 ms) when frames arrive too fast      
+00:04 +7: loading C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_crowd_escalation_test.dart                                                                                                      
+00:04 +7: C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_crowd_escalation_test.dart: ... audit 2.4 5 outdoor persons emit one grouped "group ahead" alert, no individual person close warnings   
+00:04 +7: C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_crowd_escalation_test.dart: AlertManager outdoor crowd grouping тАФ Safety audit 2.4 5 outdoor persons emit one grouped "group ahead" alert, no individual person close warnings
+DeviceCapabilityProbe: ╨╖╨╛╨╜╨┤╨╕╤А╨╛╨▓╨░╨╜╨╕╨╡ ╨╖╨░╨▓╨╡╤А╤И╨╡╨╜╨╛ тАФ DeviceCapabilities(tier=DepthTier.focalLength, sdk=0, model=, hw=HardwareCapabilities(bleCentral=false, blePeripheral=false, mic48k=false, hiFreq=null, charging=false, freeMb=-1))
+
+00:04 +8: C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_crowd_escalation_test.dart: ... audit 2.4 5 outdoor persons emit one grouped "group ahead" alert, no individual person close warnings   
+00:04 +8: C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_crowd_escalation_test.dart: ... grouping тАФ Safety audit 2.4 crowd alert respects kCrowdAlertCooldown (~10 s) across repeated frames     
+00:04 +9: C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_crowd_escalation_test.dart: ... grouping тАФ Safety audit 2.4 crowd alert respects kCrowdAlertCooldown (~10 s) across repeated frames     
+00:04 +9: C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_crowd_escalation_test.dart: ... (< kIndoorCrowdPersonThreshold) do not trigger crowd suppression тАФ individual close warnings still fire 
+00:04 +10: C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_crowd_escalation_test.dart: ... (< kIndoorCrowdPersonThreshold) do not trigger crowd suppression тАФ individual close warnings still fire
+00:04 +10: C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_crowd_escalation_test.dart: ... escalation тАФ Safety audit 6.1 close-warning track whose distM drops by тЙе30 % is promoted to critical   
+00:04 +11: C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_crowd_escalation_test.dart: ... escalation тАФ Safety audit 6.1 close-warning track whose distM drops by тЙе30 % is promoted to critical   
+00:04 +11: C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_crowd_escalation_test.dart: ... escalation тАФ Safety audit 6.1 close-warning track whose distM drops by <30 % stays at warning          
+00:04 +12: C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_crowd_escalation_test.dart: ... escalation тАФ Safety audit 6.1 close-warning track whose distM drops by <30 % stays at warning          
+00:04 +12: C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_crowd_escalation_test.dart: ... baseline advances with each announcement тАФ successive <30 % drops do not escalate even over long time  
+00:04 +13: C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_crowd_escalation_test.dart: ... baseline advances with each announcement тАФ successive <30 % drops do not escalate even over long time  
+00:04 +13: loading C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_reset_test.dart                                                                                                                
+00:04 +13: C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_reset_test.dart: ... that previously survived indefinitely (AlertManager.reset() was dead code тАФ never called anywhere in lib/)        
+00:04 +13: C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_reset_test.dart: AlertManager.reset() тАФ Safety audit C-2 reset() clears the AlertFilter per-category critical cooldown that previously survived indefinitely (AlertManager.reset() was dead code тАФ never called anywhere in lib/)
+DeviceCapabilityProbe: ╨╖╨╛╨╜╨┤╨╕╤А╨╛╨▓╨░╨╜╨╕╨╡ ╨╖╨░╨▓╨╡╤А╤И╨╡╨╜╨╛ тАФ DeviceCapabilities(tier=DepthTier.focalLength, sdk=0, model=, hw=HardwareCapabilities(bleCentral=false, blePeripheral=false, mic48k=false, hiFreq=null, charging=false, freeMb=-1))
+
+00:04 +14: C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_reset_test.dart: ... that previously survived indefinitely (AlertManager.reset() was dead code тАФ never called anywhere in lib/)        
+00:04 +14: C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_reset_test.dart: ... alertMgr.reset() (previously only markModeSwitch ran, leaving AlertFilter cooldowns from the old mode active)     
+00:04 +15: C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_reset_test.dart: ... alertMgr.reset() (previously only markModeSwitch ran, leaving AlertFilter cooldowns from the old mode active)     
+00:05 +15: C:/Users/Nurik/Desktop/bagdar_app/test/alert_manager_reset_test.dart: ... alertMgr.reset() (previously only markModeSwitch ran, leaving AlertFilter cooldowns from the old mode active)     
+00:05 +15: loading C:/Users/Nurik/Desktop/bagdar_app/test/alert_system_audit_fixes_test.dart                                                                                                           
+00:05 +15: C:/Users/Nurik/Desktop/bagdar_app/test/alert_system_audit_fixes_test.dart: ... Fixes - Regression Tests D1 - Critical-cooldown bypass via distance escalation is capped by safety floor     
+00:05 +15: C:/Users/Nurik/Desktop/bagdar_app/test/alert_system_audit_fixes_test.dart: Alert System UX/A11y Audit Fixes - Regression Tests D1 - Critical-cooldown bypass via distance escalation is capped by safety floor
+DeviceCapabilityProbe: ╨╖╨╛╨╜╨┤╨╕╤А╨╛╨▓╨░╨╜╨╕╨╡ ╨╖╨░╨▓╨╡╤А╤И╨╡╨╜╨╛ тАФ DeviceCapabilities(tier=DepthTier.focalLength, sdk=0, model=, hw=HardwareCapabilities(bleCentral=false, blePeripheral=false, mic48k=false, hiFreq=null, charging=false, freeMb=-1))
+
+00:05 +16: C:/Users/Nurik/Desktop/bagdar_app/test/alert_system_audit_fixes_test.dart: ... Fixes - Regression Tests D1 - Critical-cooldown bypass via distance escalation is capped by safety floor     
+00:05 +16: C:/Users/Nurik/Desktop/bagdar_app/test/alert_system_audit_fixes_test.dart: ... Fixes - Regression Tests D2 - obstacleClose and approachingVehicle category states are coordinated in filter 
+00:05 +17: C:/Users/Nurik/Desktop/bagdar_app/test/alert_system_audit_fixes_test.dart: ... Fixes - Regression Tests D2 - obstacleClose and approachingVehicle category states are coordinated in filter 
+00:05 +17: C:/Users/Nurik/Desktop/bagdar_app/test/alert_system_audit_fixes_test.dart: ... UX/A11y Audit Fixes - Regression Tests D3 - approachingVehicle does not bypass post-critical suppression     
+00:05 +18: C:/Users/Nurik/Desktop/bagdar_app/test/alert_system_audit_fixes_test.dart: ... UX/A11y Audit Fixes - Regression Tests D3 - approachingVehicle does not bypass post-critical suppression     
+00:05 +18: C:/Users/Nurik/Desktop/bagdar_app/test/alert_system_audit_fixes_test.dart: Alert System UX/A11y Audit Fixes - Regression Tests D7 - Vehicle size sanity escalation is lowered to 0.35       
+00:05 +19: C:/Users/Nurik/Desktop/bagdar_app/test/alert_system_audit_fixes_test.dart: Alert System UX/A11y Audit Fixes - Regression Tests D7 - Vehicle size sanity escalation is lowered to 0.35       
+00:05 +19: C:/Users/Nurik/Desktop/bagdar_app/test/alert_system_audit_fixes_test.dart: Alert System UX/A11y Audit Fixes - Regression Tests D8 - Depth confirmation constants are fast-response optimized
+00:05 +20: C:/Users/Nurik/Desktop/bagdar_app/test/alert_system_audit_fixes_test.dart: Alert System UX/A11y Audit Fixes - Regression Tests D8 - Depth confirmation constants are fast-response optimized
+00:05 +20: C:/Users/Nurik/Desktop/bagdar_app/test/alert_system_audit_fixes_test.dart: ... UX/A11y Audit Fixes - Regression Tests D9 - Depth hazards are funneled through AlertManager filter pipeline  
+00:05 +21: C:/Users/Nurik/Desktop/bagdar_app/test/alert_system_audit_fixes_test.dart: ... UX/A11y Audit Fixes - Regression Tests D9 - Depth hazards are funneled through AlertManager filter pipeline  
+00:05 +21: C:/Users/Nurik/Desktop/bagdar_app/test/alert_system_audit_fixes_test.dart: Alert System UX/A11y Audit Fixes - Regression Tests D10 - skipHaptic is supported in SpeechJob and TtsService    
+00:05 +22: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_test.dart: TtsService queue тАФ OPT-07 critical preservation two distinct critical alerts coexist in the queue                             
+00:05 +23: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_test.dart: TtsService queue тАФ OPT-07 critical preservation two distinct critical alerts coexist in the queue                             
+00:05 +24: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_test.dart: TtsService queue тАФ OPT-07 critical preservation two distinct critical alerts coexist in the queue                             
+00:05 +25: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_test.dart: TtsService queue тАФ OPT-07 critical preservation two distinct critical alerts coexist in the queue                             
+00:05 +25: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_test.dart: TtsService queue тАФ OPT-07 critical preservation critical drops pending warning and info jobs                                  
+00:05 +26: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_test.dart: TtsService queue тАФ OPT-07 critical preservation critical drops pending warning and info jobs                                  
+00:05 +26: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_test.dart: TtsService queue тАФ OPT-07 critical preservation duplicate critical text does not inflate the queue                            
+00:05 +27: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_test.dart: TtsService queue тАФ OPT-07 critical preservation duplicate critical text does not inflate the queue                            
+00:05 +27: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_test.dart: TtsService queue тАФ OPT-07 critical preservation critical preserves older critical even when warnings arrive between them      
+00:05 +28: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_test.dart: TtsService queue тАФ OPT-07 critical preservation critical preserves older critical even when warnings arrive between them      
+00:05 +28: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_test.dart: TtsService queue тАФ priority ordering warning drops info but leaves critical alone                                             
+00:05 +29: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_test.dart: TtsService queue тАФ priority ordering warning drops info but leaves critical alone                                             
+00:05 +29: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_test.dart: TtsService queue тАФ priority ordering queue stays sorted by priority descending after mixed enqueue                            
+00:05 +30: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_test.dart: TtsService queue тАФ priority ordering queue stays sorted by priority descending after mixed enqueue                            
+00:05 +30: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_test.dart: TtsService queue тАФ priority ordering info stream bounded by queue overflow policy                                             
+00:05 +31: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_test.dart: TtsService queue тАФ priority ordering info stream bounded by queue overflow policy                                             
+00:05 +31: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_test.dart: ... follow-up stale eviction pruneStaleCriticals drops only the critical that has outlived the supplied freshness window      
+00:05 +32: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_test.dart: ... follow-up stale eviction pruneStaleCriticals drops only the critical that has outlived the supplied freshness window      
+00:05 +32: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_test.dart: TtsService queue тАФ OPT-07 follow-up stale eviction pruneStaleCriticals never removes non-critical jobs                        
+00:05 +33: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_test.dart: TtsService queue тАФ OPT-07 follow-up stale eviction pruneStaleCriticals never removes non-critical jobs                        
+00:05 +33: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_test.dart: ... audit 1.2: pruneStaleCriticals without an explicit maxAge is a no-op тАФ life-threatening alerts are never silently dropped 
+00:05 +34: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_test.dart: ... audit 1.2: pruneStaleCriticals without an explicit maxAge is a no-op тАФ life-threatening alerts are never silently dropped 
+00:05 +34: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_test.dart: TtsService queue тАФ trackId eviction evictTrack removes non-critical jobs for that track                                       
+00:05 +34: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_test.dart: TtsService queue тАФ trackId eviction evictTrack removes non-critical jobs for that track                                       
+TtsService: evicted 1 job(s) for track 42
+
+00:05 +35: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_test.dart: TtsService queue тАФ trackId eviction evictTrack removes non-critical jobs for that track                                       
+00:05 +35: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_test.dart: TtsService queue тАФ trackId eviction evictTrack preserves critical jobs even for the evicted track                             
+00:05 +36: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_test.dart: TtsService queue тАФ trackId eviction evictTrack preserves critical jobs even for the evicted track                             
+00:05 +36: loading C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_kk_engine_selection_test.dart                                                                                                    
+00:05 +36: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_kk_engine_selection_test.dart: ... тАФ Phase 2 priority chain system TTS engine is preferred when the device exposes a kk voice            
+00:05 +36: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_kk_engine_selection_test.dart: TtsService._resolveKkEngine тАФ Phase 2 priority chain system TTS engine is preferred when the device exposes a kk voice
+DeviceCapabilityProbe: ╨╖╨╛╨╜╨┤╨╕╤А╨╛╨▓╨░╨╜╨╕╨╡ ╨╖╨░╨▓╨╡╤А╤И╨╡╨╜╨╛ тАФ DeviceCapabilities(tier=DepthTier.focalLength, sdk=0, model=, hw=HardwareCapabilities(bleCentral=false, blePeripheral=false, mic48k=false, hiFreq=null, charging=false, freeMb=-1))
+
+00:05 +37: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_kk_engine_selection_test.dart: ... тАФ Phase 2 priority chain system TTS engine is preferred when the device exposes a kk voice            
+00:05 +37: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_kk_engine_selection_test.dart: ... priority chain RHVoice wins over espeak when both natives are available (v2 flag on, no system voice) 
+00:05 +38: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_kk_engine_selection_test.dart: ... priority chain RHVoice wins over espeak when both natives are available (v2 flag on, no system voice) 
+00:05 +38: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_kk_engine_selection_test.dart: TtsService._resolveKkEngine тАФ Phase 2 priority chain espeak is picked when RHVoice is missing but v2 is on
+00:05 +39: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_kk_engine_selection_test.dart: TtsService._resolveKkEngine тАФ Phase 2 priority chain espeak is picked when RHVoice is missing but v2 is on
+00:05 +39: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_kk_engine_selection_test.dart: ... тАФ Phase 2 priority chain russianFallback is the last resort when no native engines are available      
+00:05 +39: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_kk_engine_selection_test.dart: TtsService._resolveKkEngine тАФ Phase 2 priority chain russianFallback is the last resort when no native engines are available
+TtsService: no kk voice тАФ falling back to ru-RU for Kazakh text
+
+00:05 +40: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_kk_engine_selection_test.dart: ... тАФ Phase 2 priority chain russianFallback is the last resort when no native engines are available      
+00:05 +40: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_kk_engine_selection_test.dart: ... тАФ Phase 2 priority chain native engines are bypassed entirely when the v2 feature flag is off         
+00:05 +40: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_kk_engine_selection_test.dart: TtsService._resolveKkEngine тАФ Phase 2 priority chain native engines are bypassed entirely when the v2 feature flag is off
+TtsService: no kk voice тАФ falling back to ru-RU for Kazakh text
+
+00:05 +41: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_kk_engine_selection_test.dart: ... тАФ Phase 2 priority chain native engines are bypassed entirely when the v2 feature flag is off         
+00:05 +41: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_kk_engine_selection_test.dart: ... тАФ Phase 2 priority chain system voice is still preferred even when the v2 flag is off                 
+00:05 +42: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_kk_engine_selection_test.dart: ... тАФ Phase 2 priority chain system voice is still preferred even when the v2 flag is off                 
+00:05 +42: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_kk_engine_selection_test.dart: ... тАФ Phase 2 priority chain onKazakhEngineResolved fires exactly once per resolution                     
+00:05 +43: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_kk_engine_selection_test.dart: ... тАФ Phase 2 priority chain onKazakhEngineResolved fires exactly once per resolution                     
+00:05 +43: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_kk_engine_selection_test.dart: ... тАФ Phase 2 priority chain onKazakhVoiceMissing fires only on the russianFallback branch                
+00:05 +43: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_kk_engine_selection_test.dart: TtsService._resolveKkEngine тАФ Phase 2 priority chain onKazakhVoiceMissing fires only on the russianFallback branch
+TtsService: no kk voice тАФ falling back to ru-RU for Kazakh text
+
+00:05 +44: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_kk_engine_selection_test.dart: ... тАФ Phase 2 priority chain onKazakhVoiceMissing fires only on the russianFallback branch                
+00:05 +44: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_kk_engine_selection_test.dart: KkTtsEngine helpers usesNativeBridge is true only for rhvoice + espeak                                    
+00:05 +45: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_kk_engine_selection_test.dart: KkTtsEngine helpers usesNativeBridge is true only for rhvoice + espeak                                    
+00:05 +45: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_kk_engine_selection_test.dart: KkTtsEngine helpers usesFlutterTts is true for system + russianFallback                                   
+00:05 +46: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_kk_engine_selection_test.dart: KkTtsEngine helpers usesFlutterTts is true for system + russianFallback                                   
+00:05 +46: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_kk_engine_selection_test.dart: KkTtsEngine helpers id round-trips through kkTtsEngineFromId                                              
+00:05 +47: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_kk_engine_selection_test.dart: KkTtsEngine helpers id round-trips through kkTtsEngineFromId                                              
+00:06 +47: C:/Users/Nurik/Desktop/bagdar_app/test/tts_service_kk_engine_selection_test.dart: KkTtsEngine helpers id round-trips through kkTtsEngineFromId                                              
+00:06 +47: loading C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart                                                                                                                 
+00:06 +47: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: Safety audit 2.1: COCO class whitelist (lib/models/constants.dart) whitelist contains every danger-critical class      
+00:06 +48: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: Safety audit 2.1: COCO class whitelist (lib/models/constants.dart) whitelist contains every danger-critical class      
+00:06 +48: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... class whitelist (lib/models/constants.dart) whitelist excludes COCO classes that produce absurd alerts on a street 
+00:06 +49: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... class whitelist (lib/models/constants.dart) whitelist excludes COCO classes that produce absurd alerts on a street 
+00:06 +49: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: Safety audit 2.1: COCO class whitelist (lib/models/constants.dart) whitelist contains exactly the audited 20 entries   
+00:06 +50: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: Safety audit 2.1: COCO class whitelist (lib/models/constants.dart) whitelist contains exactly the audited 20 entries   
+00:06 +50: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... pedestrians and vehicles have a 0.40 floor тАФ high enough to gate noise, low enough to catch them at distance       
+00:06 +51: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... pedestrians and vehicles have a 0.40 floor тАФ high enough to gate noise, low enough to catch them at distance       
+00:06 +51: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... hazards have a higher floor than people and vehicles (false positives more costly than missed detection)           
+00:06 +52: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... hazards have a higher floor than people and vehicles (false positives more costly than missed detection)           
+00:06 +52: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... (kClassMinConf, minConfFor) unknown / non-whitelisted labels fall back to a conservative default тАФ never below 0.40
+00:06 +53: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... (kClassMinConf, minConfFor) unknown / non-whitelisted labels fall back to a conservative default тАФ never below 0.40
+00:06 +53: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... critical suppression a critical in one category does NOT suppress a different critical category 1 second later     
+00:06 +54: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... critical suppression a critical in one category does NOT suppress a different critical category 1 second later     
+00:06 +54: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... suppression a critical DOES still suppress a same-category warning for ~2 s (per-category suppression, not blanket)
+00:06 +55: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... suppression a critical DOES still suppress a same-category warning for ~2 s (per-category suppression, not blanket)
+00:06 +55: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... 1 s later тАФ the vehicle/obstacle coupling must not cross-suppress DIFFERENT critical hazards (Safety audit 1.4 fix)
+00:06 +56: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... 1 s later тАФ the vehicle/obstacle coupling must not cross-suppress DIFFERENT critical hazards (Safety audit 1.4 fix)
+00:06 +56: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... warning via the vehicle/obstacle coupling (double-fire suppression preserved after the 1.4 critical fix)           
+00:06 +57: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... warning via the vehicle/obstacle coupling (double-fire suppression preserved after the 1.4 critical fix)           
+00:06 +57: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... (DepthPipelineController.isHazardCriticalForTesting) stairsDown stays critical (existing behaviour preserved)      
+00:06 +58: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... (DepthPipelineController.isHazardCriticalForTesting) stairsDown stays critical (existing behaviour preserved)      
+00:06 +58: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... 3.1: depth-hazard critical promotion (DepthPipelineController.isHazardCriticalForTesting) overhead stays critical  
+00:06 +59: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... 3.1: depth-hazard critical promotion (DepthPipelineController.isHazardCriticalForTesting) overhead stays critical  
+00:06 +59: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... pothole in the centre zone with high score is critical (was a warning before тАФ Safety audit 3.1)                   
+00:06 +60: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... pothole in the centre zone with high score is critical (was a warning before тАФ Safety audit 3.1)                   
+00:06 +60: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... the periphery (left/right zone) stays a warning even at high score тАФ only the user's walking corridor is critical  
+00:06 +61: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... the periphery (left/right zone) stays a warning even at high score тАФ only the user's walking corridor is critical  
+00:06 +61: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... (DepthPipelineController.isHazardCriticalForTesting) stepDown center-zone with high score is critical (3.1)        
+00:06 +62: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... (DepthPipelineController.isHazardCriticalForTesting) stepDown center-zone with high score is critical (3.1)        
+00:06 +62: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... (DepthPipelineController.isHazardCriticalForTesting) glassDoor center-zone with high score is critical (3.1)       
+00:06 +63: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... (DepthPipelineController.isHazardCriticalForTesting) glassDoor center-zone with high score is critical (3.1)       
+00:06 +63: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... nearFieldIntrusion is critical regardless of zone whenever the score is high (object materialised at foot range)   
+00:06 +64: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... nearFieldIntrusion is critical regardless of zone whenever the score is high (object materialised at foot range)   
+00:06 +64: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... low-score hazards (just above the warning floor) stay as warnings, not critical                                    
+00:06 +65: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... low-score hazards (just above the warning floor) stay as warnings, not critical                                    
+00:06 +65: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... rollExcessive does NOT demote hazards whose detection is independent of plane geometry (Safety follow-up H5)       
+00:06 +66: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... rollExcessive does NOT demote hazards whose detection is independent of plane geometry (Safety follow-up H5)       
+00:06 +66: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... rollExcessive DOES demote hazards that depend on plane geometry (pothole, stepDown тАФ Safety follow-up H5)          
+00:06 +67: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... rollExcessive DOES demote hazards that depend on plane geometry (pothole, stepDown тАФ Safety follow-up H5)          
+00:06 +67: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... curb / lowCurb / stepUp / deadZone never become critical via this path (they remain warnings)                      
+00:06 +68: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... curb / lowCurb / stepUp / deadZone never become critical via this path (they remain warnings)                      
+00:06 +68: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... slippery in the centre walking corridor while moving is critical                                                   
+00:06 +69: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... slippery in the centre walking corridor while moving is critical                                                   
+00:06 +69: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... (DepthPipelineController.isHazardCriticalForTesting) slippery off-corridor stays warning even at high score        
+00:06 +70: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... (DepthPipelineController.isHazardCriticalForTesting) slippery off-corridor stays warning even at high score        
+00:06 +70: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... slippery while user is stationary stays warning regardless of score                                                
+00:06 +71: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... slippery while user is stationary stays warning regardless of score                                                
+00:06 +71: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... promotion (DepthPipelineController.isHazardCriticalForTesting) slippery below the score floor stays warning        
+00:06 +72: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... promotion (DepthPipelineController.isHazardCriticalForTesting) slippery below the score floor stays warning        
+00:06 +72: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... (e.g. brief blur) does NOT erase the approaching flag on re-match тАФ was the dominant false-negative in audit 2.5   
+00:06 +73: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... (e.g. brief blur) does NOT erase the approaching flag on re-match тАФ was the dominant false-negative in audit 2.5   
+00:06 +73: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... the 3-frame preservation window predict-only clears approaching to avoid stale alerts on a drifted predicted box   
+00:06 +74: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... the 3-frame preservation window predict-only clears approaching to avoid stale alerts on a drifted predicted box   
+00:06 +74: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... at 0.75 conf is suppressed without an audio corroboration тАФ was firing a critical on 1 frame before audit 2.6      
+00:06 +75: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... at 0.75 conf is suppressed without an audio corroboration тАФ was firing a critical on 1 frame before audit 2.6      
+00:06 +75: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... detection at conf 0.75 fires when the acoustic model has emitted vehicleApproaching within the last 1 s            
+00:06 +76: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... detection at conf 0.75 fires when the acoustic model has emitted vehicleApproaching within the last 1 s            
+00:06 +76: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... acoustic event older than 1 s does NOT corroborate (window is short on purpose тАФ stale audio is not a valid signal)
+00:06 +77: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... acoustic event older than 1 s does NOT corroborate (window is short on purpose тАФ stale audio is not a valid signal)
+00:06 +77: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... alone does not bypass the conf 0.75 floor тАФ a lower-conf vision detection still needs 2-frame confirmation         
+00:06 +78: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... alone does not bypass the conf 0.75 floor тАФ a lower-conf vision detection still needs 2-frame confirmation         
+00:06 +78: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... returns null without processing тАФ sunтЖТshade auto-exposure flips no longer leak as motion events                    
+00:06 +79: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... returns null without processing тАФ sunтЖТshade auto-exposure flips no longer leak as motion events                    
+00:06 +79: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... an AE-transition skip, the next non-AE frame compares against the pre-AE baseline so no spurious event leaks out   
+00:06 +80: C:/Users/Nurik/Desktop/bagdar_app/test/safety_audit_fixes_test.dart: ... an AE-transition skip, the next non-AE frame compares against the pre-AE baseline so no spurious event leaks out   
+00:06 +80: All tests passed!                                                                                                                                                                           
+
+GROUP_EXIT=0
+=== GROUP camera_lifecycle ===
+
+00:00 +0: loading C:/Users/Nurik/Desktop/bagdar_app/test/stall_watchdog_test.dart                                                                                                                      
+00:01 +0: loading C:/Users/Nurik/Desktop/bagdar_app/test/stall_watchdog_test.dart                                                                                                                      
+00:02 +0: loading C:/Users/Nurik/Desktop/bagdar_app/test/stall_watchdog_test.dart                                                                                                                      
+00:03 +0: loading C:/Users/Nurik/Desktop/bagdar_app/test/stall_watchdog_test.dart                                                                                                                      
+00:03 +0: C:/Users/Nurik/Desktop/bagdar_app/test/stall_watchdog_test.dart: StallWatchdog fires onStall once when gap exceeds threshold                                                                 
+00:03 +1: C:/Users/Nurik/Desktop/bagdar_app/test/stall_watchdog_test.dart: StallWatchdog fires onStall once when gap exceeds threshold                                                                 
+00:03 +1: C:/Users/Nurik/Desktop/bagdar_app/test/stall_watchdog_test.dart: StallWatchdog does not fire when inactive                                                                                   
+00:03 +2: C:/Users/Nurik/Desktop/bagdar_app/test/stall_watchdog_test.dart: StallWatchdog does not fire when inactive                                                                                   
+00:03 +2: C:/Users/Nurik/Desktop/bagdar_app/test/stall_watchdog_test.dart: StallWatchdog clearWarning allows next stall to fire                                                                        
+00:03 +3: C:/Users/Nurik/Desktop/bagdar_app/test/stall_watchdog_test.dart: StallWatchdog clearWarning allows next stall to fire                                                                        
+00:03 +3: C:/Users/Nurik/Desktop/bagdar_app/test/stall_watchdog_test.dart: StallWatchdog notifyFrameArrived resets gap                                                                                 
+00:03 +4: C:/Users/Nurik/Desktop/bagdar_app/test/stall_watchdog_test.dart: StallWatchdog notifyFrameArrived resets gap                                                                                 
+00:03 +4: C:/Users/Nurik/Desktop/bagdar_app/test/stall_watchdog_test.dart: StallWatchdog stop() clears warning                                                                                         
+00:03 +5: C:/Users/Nurik/Desktop/bagdar_app/test/stall_watchdog_test.dart: StallWatchdog stop() clears warning                                                                                         
+00:03 +5: loading C:/Users/Nurik/Desktop/bagdar_app/test/frame_quality_guard_test.dart                                                                                                                 
+00:03 +5: C:/Users/Nurik/Desktop/bagdar_app/test/frame_quality_guard_test.dart: FrameQualityGuard AE transition emits aeStarted on first bright uniform frame, aeTransitioning after 2                 
+00:03 +6: C:/Users/Nurik/Desktop/bagdar_app/test/frame_quality_guard_test.dart: FrameQualityGuard AE transition emits aeStarted on first bright uniform frame, aeTransitioning after 2                 
+00:03 +6: C:/Users/Nurik/Desktop/bagdar_app/test/frame_quality_guard_test.dart: FrameQualityGuard AE transition emits aeEnded event and stays frozen within 3-second guard window                      
+00:03 +7: C:/Users/Nurik/Desktop/bagdar_app/test/frame_quality_guard_test.dart: FrameQualityGuard AE transition emits aeEnded event and stays frozen within 3-second guard window                      
+00:03 +7: C:/Users/Nurik/Desktop/bagdar_app/test/frame_quality_guard_test.dart: FrameQualityGuard camera blocked emits cameraBlocked after kLowLuminosityStreak consecutive dark frames                
+00:03 +8: C:/Users/Nurik/Desktop/bagdar_app/test/frame_quality_guard_test.dart: FrameQualityGuard camera blocked emits cameraBlocked after kLowLuminosityStreak consecutive dark frames                
+00:03 +8: C:/Users/Nurik/Desktop/bagdar_app/test/frame_quality_guard_test.dart: FrameQualityGuard camera blocked leaky integrator: single bright frame does not clear warning                          
+00:03 +9: C:/Users/Nurik/Desktop/bagdar_app/test/frame_quality_guard_test.dart: FrameQualityGuard camera blocked leaky integrator: single bright frame does not clear warning                          
+00:03 +9: C:/Users/Nurik/Desktop/bagdar_app/test/frame_quality_guard_test.dart: FrameQualityGuard camera blocked leaky integrator: sustained bright frames clear warning                               
+00:04 +9: C:/Users/Nurik/Desktop/bagdar_app/test/frame_quality_guard_test.dart: FrameQualityGuard camera blocked leaky integrator: sustained bright frames clear warning                               
+00:04 +10: C:/Users/Nurik/Desktop/bagdar_app/test/frame_quality_guard_test.dart: FrameQualityGuard camera blocked leaky integrator: sustained bright frames clear warning                              
+00:04 +10: C:/Users/Nurik/Desktop/bagdar_app/test/frame_quality_guard_test.dart: FrameQualityGuard droplet detection emits dropletDetected after sustained low-variance grid cells                     
+00:04 +11: C:/Users/Nurik/Desktop/bagdar_app/test/frame_quality_guard_test.dart: FrameQualityGuard droplet detection emits dropletDetected after sustained low-variance grid cells                     
+00:04 +11: C:/Users/Nurik/Desktop/bagdar_app/test/frame_quality_guard_test.dart: FrameQualityGuard frozen frame emits cameraFrozen when hash unchanged for > 5 seconds                                 
+00:04 +12: C:/Users/Nurik/Desktop/bagdar_app/test/frame_quality_guard_test.dart: FrameQualityGuard frozen frame emits cameraFrozen when hash unchanged for > 5 seconds                                 
+00:04 +12: C:/Users/Nurik/Desktop/bagdar_app/test/frame_quality_guard_test.dart: FrameQualityGuard frozen frame does not re-emit frozen event while still frozen                                       
+00:04 +13: C:/Users/Nurik/Desktop/bagdar_app/test/frame_quality_guard_test.dart: FrameQualityGuard frozen frame does not re-emit frozen event while still frozen                                       
+00:04 +13: loading C:/Users/Nurik/Desktop/bagdar_app/test/motion_prealert_ae_test.dart                                                                                                                 
+00:04 +13: C:/Users/Nurik/Desktop/bagdar_app/test/motion_prealert_ae_test.dart: ... act on), which is why that call was removed in favor of a direct user notification (earcon + TTS) on every AE start
+00:04 +14: C:/Users/Nurik/Desktop/bagdar_app/test/motion_prealert_ae_test.dart: ... act on), which is why that call was removed in favor of a direct user notification (earcon + TTS) on every AE start
+00:04 +14: C:/Users/Nurik/Desktop/bagdar_app/test/motion_prealert_ae_test.dart: ... is false again тАФ proving the detector itself is healthy and only the AE-transitioning branch is gated off          
+00:04 +15: C:/Users/Nurik/Desktop/bagdar_app/test/motion_prealert_ae_test.dart: ... is false again тАФ proving the detector itself is healthy and only the AE-transitioning branch is gated off          
+00:04 +15: loading C:/Users/Nurik/Desktop/bagdar_app/test/blur_detector_test.dart                                                                                                                      
+00:04 +15: C:/Users/Nurik/Desktop/bagdar_app/test/blur_detector_test.dart: BlurDetector.sharpnessScore uniform gray frame scores ~0 and is treated as blurry                                           
+00:04 +16: C:/Users/Nurik/Desktop/bagdar_app/test/blur_detector_test.dart: BlurDetector.sharpnessScore uniform gray frame scores ~0 and is treated as blurry                                           
+00:04 +16: C:/Users/Nurik/Desktop/bagdar_app/test/blur_detector_test.dart: BlurDetector.sharpnessScore sharp random noise scores strictly higher than its 3x3 box-blurred version                      
+00:04 +17: C:/Users/Nurik/Desktop/bagdar_app/test/blur_detector_test.dart: BlurDetector.sharpnessScore sharp random noise scores strictly higher than its 3x3 box-blurred version                      
+00:04 +17: C:/Users/Nurik/Desktop/bagdar_app/test/blur_detector_test.dart: BlurDetector.sharpnessScore random high-contrast noise scores above the blur threshold                                      
+00:04 +18: C:/Users/Nurik/Desktop/bagdar_app/test/blur_detector_test.dart: BlurDetector.sharpnessScore random high-contrast noise scores above the blur threshold                                      
+00:04 +18: C:/Users/Nurik/Desktop/bagdar_app/test/blur_detector_test.dart: BlurDetector.sharpnessScore tiny frame returns 0 without crashing                                                           
+00:04 +19: C:/Users/Nurik/Desktop/bagdar_app/test/blur_detector_test.dart: BlurDetector.sharpnessScore tiny frame returns 0 without crashing                                                           
+00:04 +19: C:/Users/Nurik/Desktop/bagdar_app/test/blur_detector_test.dart: BlurDetector.sharpnessScore buffer shorter than rowStride*height returns 0 defensively                                      
+00:04 +20: C:/Users/Nurik/Desktop/bagdar_app/test/blur_detector_test.dart: BlurDetector.sharpnessScore buffer shorter than rowStride*height returns 0 defensively                                      
+00:04 +20: C:/Users/Nurik/Desktop/bagdar_app/test/blur_detector_test.dart: BlurDetector.sharpnessScore rowStride smaller than width is rejected                                                        
+00:04 +21: C:/Users/Nurik/Desktop/bagdar_app/test/blur_detector_test.dart: BlurDetector.sharpnessScore rowStride smaller than width is rejected                                                        
+00:04 +21: C:/Users/Nurik/Desktop/bagdar_app/test/blur_detector_test.dart: BlurDetector.sharpnessScore stride < 1 is clamped internally and does not infinite-loop                                     
+00:04 +22: C:/Users/Nurik/Desktop/bagdar_app/test/blur_detector_test.dart: BlurDetector.sharpnessScore stride < 1 is clamped internally and does not infinite-loop                                     
+00:04 +22: All tests passed!                                                                                                                                                                           
+
+GROUP_EXIT=0
+=== GROUP misalignment ===
+
+00:00 +0: loading C:/Users/Nurik/Desktop/bagdar_app/test/misalignment_watchdog_test.dart                                                                                                               
+00:01 +0: loading C:/Users/Nurik/Desktop/bagdar_app/test/misalignment_watchdog_test.dart                                                                                                               
+00:02 +0: loading C:/Users/Nurik/Desktop/bagdar_app/test/misalignment_watchdog_test.dart                                                                                                               
+00:03 +0: loading C:/Users/Nurik/Desktop/bagdar_app/test/misalignment_watchdog_test.dart                                                                                                               
+00:03 +0: MisalignmentWatchdog (Safety follow-up H6) stationary user with optimal pitch never triggers                                                                                                 
+00:03 +1: MisalignmentWatchdog (Safety follow-up H6) stationary user with optimal pitch never triggers                                                                                                 
+00:03 +1: MisalignmentWatchdog (Safety follow-up H6) sustained-but-short (<10s) misalignment fires neither haptic nor speech                                                                           
+00:03 +1 -1: MisalignmentWatchdog (Safety follow-up H6) sustained-but-short (<10s) misalignment fires neither haptic nor speech [E]                                                                    
+  Expected: false
+    Actual: <true>
+  no announce before 10 s threshold
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\misalignment_watchdog_test.dart 42:11          main.<fn>.<fn>
+  
+
+To run this test again: C:\src\flutter\bin\cache\dart-sdk\bin\dart.exe test C:/Users/Nurik/Desktop/bagdar_app/test/misalignment_watchdog_test.dart -p vm --plain-name "MisalignmentWatchdog (Safety follow-up H6) sustained-but-short (<10s) misalignment fires neither haptic nor speech"
+
+00:03 +1 -1: MisalignmentWatchdog (Safety follow-up H6) empty-scene path: 25 s sustained misalignment with depth OK fires haptic but NOT verbal (audit point 2)                                        
+00:03 +1 -2: MisalignmentWatchdog (Safety follow-up H6) empty-scene path: 25 s sustained misalignment with depth OK fires haptic but NOT verbal (audit point 2) [E]                                    
+  Expected: <0>
+    Actual: <1>
+  depth OK = empty scene, no verbal alert
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\misalignment_watchdog_test.dart 64:9           main.<fn>.<fn>
+  
+
+To run this test again: C:\src\flutter\bin\cache\dart-sdk\bin\dart.exe test C:/Users/Nurik/Desktop/bagdar_app/test/misalignment_watchdog_test.dart -p vm --plain-name "MisalignmentWatchdog (Safety follow-up H6) empty-scene path: 25 s sustained misalignment with depth OK fires haptic but NOT verbal (audit point 2)"
+
+00:03 +1 -2: MisalignmentWatchdog (Safety follow-up H6) misaligned + walking + depth low тЙе15 s + sustained тЙе10 s fires warning verbal alert exactly once                                               
+00:03 +1 -3: MisalignmentWatchdog (Safety follow-up H6) misaligned + walking + depth low тЙе15 s + sustained тЙе10 s fires warning verbal alert exactly once [E]                                           
+  Expected: 'pitch_misaligned_blind'
+    Actual: 'misalign_no_detections'
+     Which: is different.
+            Expected: pitch_misa ...
+              Actual: misalign_n ...
+                      ^
+             Differ at offset 0
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\misalignment_watchdog_test.dart 87:13          main.<fn>.<fn>
+  
+
+To run this test again: C:\src\flutter\bin\cache\dart-sdk\bin\dart.exe test C:/Users/Nurik/Desktop/bagdar_app/test/misalignment_watchdog_test.dart -p vm --plain-name "MisalignmentWatchdog (Safety follow-up H6) misaligned + walking + depth low тЙе15 s + sustained тЙе10 s fires warning verbal alert exactly once"
+
+00:03 +1 -3: MisalignmentWatchdog (Safety follow-up H6) reaches critical priority at 35 s with depth-low confirmation                                                                                  
+00:03 +2 -3: MisalignmentWatchdog (Safety follow-up H6) reaches critical priority at 35 s with depth-low confirmation                                                                                  
+00:03 +2 -3: MisalignmentWatchdog (Safety follow-up H6) a detection arrival inside the window resets the sustained timer                                                                               
+00:03 +3 -3: MisalignmentWatchdog (Safety follow-up H6) a detection arrival inside the window resets the sustained timer                                                                               
+00:03 +3 -3: MisalignmentWatchdog (Safety follow-up H6) haptic re-fires every 15 s while sustained                                                                                                     
+00:03 +4 -3: MisalignmentWatchdog (Safety follow-up H6) haptic re-fires every 15 s while sustained                                                                                                     
+00:03 +4 -3: MisalignmentWatchdog (Safety follow-up H6) returning to optimal pitch resets the watchdog and warning can re-announce on a fresh episode                                                  
+00:03 +4 -4: MisalignmentWatchdog (Safety follow-up H6) returning to optimal pitch resets the watchdog and warning can re-announce on a fresh episode [E]                                              
+  Expected: <1>
+    Actual: <2>
+  a fresh sustained episode should produce another warning announcement
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\misalignment_watchdog_test.dart 193:9          main.<fn>.<fn>
+  
+
+To run this test again: C:\src\flutter\bin\cache\dart-sdk\bin\dart.exe test C:/Users/Nurik/Desktop/bagdar_app/test/misalignment_watchdog_test.dart -p vm --plain-name "MisalignmentWatchdog (Safety follow-up H6) returning to optimal pitch resets the watchdog and warning can re-announce on a fresh episode"
+
+00:03 +4 -4: Some tests failed.                                                                                                                                                                        
+
+GROUP_EXIT=1
+=== GROUP fall_sos ===
+
+00:00 +0: loading C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart                                                                                                               
+00:01 +0: loading C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart                                                                                                               
+00:02 +0: loading C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart                                                                                                               
+00:03 +0: loading C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart                                                                                                               
+00:04 +0: loading C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart                                                                                                               
+00:04 +0: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... during an active countdown does NOT cancel тАФ it only prompts sos_cancel_confirm, and the countdown keeps running 
+00:04 +1: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... during an active countdown does NOT cancel тАФ it only prompts sos_cancel_confirm, and the countdown keeps running 
+00:04 +1: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... audit C-3: single accidental tap must not cancel SOS a second tap within kCancelConfirmWindow confirms the cancel
+00:04 +2: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... audit C-3: single accidental tap must not cancel SOS a second tap within kCancelConfirmWindow confirms the cancel
+00:04 +2: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling)  
+00:04 +3: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling)  
+00:04 +4: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling)  
+00:04 +5: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling)  
+00:04 +6: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling)  
+00:04 +6: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_dazed_test.dart: Safety audit 4.2: dazed-user SOS path stationary unresponsive user triggers early SOS at secondsLeft==7               
+SosService: native sendSms error: MissingPluginException(No implementation found for method checkPermissionStatus on channel flutter.baseflow.com/permissions/methods)
+SosService: delivery error to 112: MissingPluginException(No implementation found for method launch on channel plugins.flutter.io/url_launcher)
+
+00:04 +7: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling)  
+00:04 +8: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling)  
+00:04 +8: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_dazed_test.dart: Safety audit 4.2: dazed-user SOS path no motionStateProvider тЖТ stationary path taken (null treated as stationary)     
+SosService: native sendSms error: MissingPluginException(No implementation found for method checkPermissionStatus on channel flutter.baseflow.com/permissions/methods)
+SosService: delivery error to 112: MissingPluginException(No implementation found for method launch on channel plugins.flutter.io/url_launcher)
+
+00:04 +9: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling)  
+00:04 +10: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:04 +10: C:/Users/Nurik/Desktop/bagdar_app/test/fall_detector_gyro_unavailable_test.dart: FallDetector gyro-unavailable degraded profile Class A tumble is confirmed via degraded profile (freefall + impact without gyro rotational peak) when gyro never produces events
+FallDetector: motion тЖТ MotionState.walking
+FallDetector: impact detected (40.0 m/s┬▓, FF=true, gyro=0.00)
+FallDetector: motion тЖТ MotionState.stationary
+FallDetector: FALL CONFIRMED тАФ triggering callback
+
+00:04 +11: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:04 +11: C:/Users/Nurik/Desktop/bagdar_app/test/fall_detector_gyro_unavailable_test.dart: FallDetector gyro-unavailable degraded profile staleness watchdog switches to degraded profile after > 2 s without gyro events and fires onGyroUnavailable exactly once
+FallDetector: gyroscope unavailable тАФ switching to degraded Class A profile
+
+00:04 +12: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:04 +12: C:/Users/Nurik/Desktop/bagdar_app/test/fall_detector_gyro_unavailable_test.dart: FallDetector gyro-unavailable degraded profile full profile still rejects tumble when gyro reports no rotational impact (degradation is not silently weakening the normal path)
+FallDetector: motion тЖТ MotionState.walking
+FallDetector: impact detected (40.0 m/s┬▓, FF=true, gyro=0.10)
+FallDetector: motion тЖТ MotionState.stationary
+FallDetector: stillness reached but no rotational impact (peak=0.10) тАФ ignoring.
+
+00:04 +13: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:04 +14: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:04 +15: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:04 +16: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:04 +17: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:05 +17: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:05 +18: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:05 +19: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:05 +20: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:05 +21: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:05 +22: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:05 +23: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:05 +24: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:05 +24: C:/Users/Nurik/Desktop/bagdar_app/test/sos_service_test.dart: SosService helpers setContact trims formatted input                                                                           
+SosService: contact set to +7 (777) 123-45-67
+
+00:05 +25: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:05 +26: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:05 +27: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:05 +28: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:05 +29: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:05 +30: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:05 +31: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:05 +32: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:05 +33: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:05 +34: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:05 +35: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:05 +36: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:05 +37: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:05 +38: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:05 +39: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:05 +40: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:05 +41: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:05 +42: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:05 +43: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:05 +44: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:06 +44: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:07 +44: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:07 +45: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... a tap after kCancelConfirmWindow has elapsed is treated as a fresh first tap (re-prompts instead of cancelling) 
+00:07 +45: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... accidental tap must not cancel SOS notifyTouch() while inactive only records the timestamp and does nothing else
+00:07 +46: C:/Users/Nurik/Desktop/bagdar_app/test/fall_countdown_cancel_test.dart: ... accidental tap must not cancel SOS notifyTouch() while inactive only records the timestamp and does nothing else
+00:07 +46: All tests passed!                                                                                                                                                                           
+
+GROUP_EXIT=0
+=== GROUP accessibility_widget ===
+
+00:00 +0: loading C:/Users/Nurik/Desktop/bagdar_app/test/widget_test.dart                                                                                                                              
+00:01 +0: loading C:/Users/Nurik/Desktop/bagdar_app/test/widget_test.dart                                                                                                                              
+00:02 +0: loading C:/Users/Nurik/Desktop/bagdar_app/test/widget_test.dart                                                                                                                              
+00:03 +0: loading C:/Users/Nurik/Desktop/bagdar_app/test/widget_test.dart                                                                                                                              
+00:03 +0: C:/Users/Nurik/Desktop/bagdar_app/test/widget_test.dart: BagdarApp builds with a provided home widget                                                                                        
+00:04 +0: C:/Users/Nurik/Desktop/bagdar_app/test/widget_test.dart: BagdarApp builds with a provided home widget                                                                                        
+00:04 +1: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                         
+00:04 +2: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                         
+00:04 +3: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                         
+00:04 +4: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                         
+00:04 +5: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                         
+00:04 +6: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                         
+00:04 +7: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                         
+00:04 +8: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                         
+00:04 +9: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                         
+00:04 +10: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                        
+00:04 +11: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                        
+00:04 +12: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                        
+00:04 +13: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                        
+00:04 +13: C:/Users/Nurik/Desktop/bagdar_app/test/strings_completeness_test.dart: VoiceCommand.restartPipeline triggers Russian phrases                                                                
+VoiceCommandService recognized: "╨┐╨╡╤А╨╡╨╖╨░╨┐╤Г╤Б╤В╨╕"
+VoiceCommandService recognized: "╨┐╨╡╤А╨╡╨╖╨░╨┐╤Г╤Б╤В╨╕ ╤А╨░╤Б╨┐╨╛╨╖╨╜╨░╨▓╨░╨╜╨╕╨╡"
+VoiceCommandService recognized: "╤Б╨▒╤А╨╛╤Б╤М"
+
+00:04 +14: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                        
+00:04 +14: C:/Users/Nurik/Desktop/bagdar_app/test/strings_completeness_test.dart: VoiceCommand.restartPipeline triggers Kazakh phrases                                                                 
+VoiceCommandService recognized: "╥Ы╨░╨╣╤В╨░ ╥Ы╨╛╤Б╤Г"
+VoiceCommandService recognized: "╤В╨░╨╜╤Г╨┤╤Л ╥Ы╨░╨╣╤В╨░ ╥Ы╨╛╤Б"
+VoiceCommandService recognized: "╥Ы╨░╨╣╤В╨░ ╨▒╨░╤Б╤В╨░╤Г"
+
+00:04 +15: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                        
+00:04 +15: C:/Users/Nurik/Desktop/bagdar_app/test/strings_completeness_test.dart: VoiceCommand.restartPipeline triggers English phrases                                                                
+VoiceCommandService recognized: "restart"
+VoiceCommandService recognized: "restart recognition"
+VoiceCommandService recognized: "reset"
+
+00:04 +16: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                        
+00:04 +16: C:/Users/Nurik/Desktop/bagdar_app/test/strings_completeness_test.dart: VoiceCommand.restartPipeline triggers restart command does not collide with existing commands                        
+VoiceCommandService recognized: "reset"
+VoiceCommandService recognized: "restart"
+
+00:04 +17: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                        
+00:04 +17: C:/Users/Nurik/Desktop/bagdar_app/test/strings_completeness_test.dart: Theme voice commands trigger correct VoiceCommand "╤В╤С╨╝╨╜╨░╤П ╤В╨╡╨╝╨░" (ru-RU) -> themeDark                                 
+VoiceCommandService recognized: "╤В╤С╨╝╨╜╨░╤П ╤В╨╡╨╝╨░"
+
+00:04 +18: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                        
+00:04 +18: C:/Users/Nurik/Desktop/bagdar_app/test/strings_completeness_test.dart: Theme voice commands trigger correct VoiceCommand "╤В╨╡╨╝╨╜╨░╤П ╤В╨╡╨╝╨░" (ru-RU) -> themeDark                                 
+VoiceCommandService recognized: "╤В╨╡╨╝╨╜╨░╤П ╤В╨╡╨╝╨░"
+
+00:04 +19: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                        
+00:04 +19: C:/Users/Nurik/Desktop/bagdar_app/test/strings_completeness_test.dart: Theme voice commands trigger correct VoiceCommand "╤Б╨▓╨╡╤В╨╗╨░╤П ╤В╨╡╨╝╨░" (ru-RU) -> themeLight                               
+VoiceCommandService recognized: "╤Б╨▓╨╡╤В╨╗╨░╤П ╤В╨╡╨╝╨░"
+
+00:04 +20: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                        
+00:04 +20: C:/Users/Nurik/Desktop/bagdar_app/test/strings_completeness_test.dart: Theme voice commands trigger correct VoiceCommand "╨▓╤Л╤Б╨╛╨║╨╕╨╣ ╨║╨╛╨╜╤В╤А╨░╤Б╤В" (ru-RU) -> themeHighContrast                    
+VoiceCommandService recognized: "╨▓╤Л╤Б╨╛╨║╨╕╨╣ ╨║╨╛╨╜╤В╤А╨░╤Б╤В"
+
+00:04 +21: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                        
+00:04 +21: C:/Users/Nurik/Desktop/bagdar_app/test/strings_completeness_test.dart: Theme voice commands trigger correct VoiceCommand "╤В╤С╨┐╨╗╨░╤П ╤В╨╡╨╝╨░" (ru-RU) -> themeWarm                                 
+VoiceCommandService recognized: "╤В╤С╨┐╨╗╨░╤П ╤В╨╡╨╝╨░"
+
+00:04 +22: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                        
+00:04 +22: C:/Users/Nurik/Desktop/bagdar_app/test/strings_completeness_test.dart: Theme voice commands trigger correct VoiceCommand "╥Ы╨░╤А╨░ ╤В╨░╥Ы╤Л╤А╤Л╨┐" (kk-KZ) -> themeDark                                
+VoiceCommandService recognized: "╥Ы╨░╤А╨░ ╤В╨░╥Ы╤Л╤А╤Л╨┐"
+
+00:04 +23: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                        
+00:04 +23: C:/Users/Nurik/Desktop/bagdar_app/test/strings_completeness_test.dart: Theme voice commands trigger correct VoiceCommand "╨░╤И╤Л╥Ы ╤В╨░╥Ы╤Л╤А╤Л╨┐" (kk-KZ) -> themeLight                               
+VoiceCommandService recognized: "╨░╤И╤Л╥Ы ╤В╨░╥Ы╤Л╤А╤Л╨┐"
+
+00:04 +24: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                        
+00:04 +24: C:/Users/Nurik/Desktop/bagdar_app/test/strings_completeness_test.dart: Theme voice commands trigger correct VoiceCommand "╨╢╨╛╥У╨░╤А╤Л ╨║╨╛╨╜╤В╤А╨░╤Б╤В" (kk-KZ) -> themeHighContrast                     
+VoiceCommandService recognized: "╨╢╨╛╥У╨░╤А╤Л ╨║╨╛╨╜╤В╤А╨░╤Б╤В"
+
+00:04 +25: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                        
+00:04 +25: C:/Users/Nurik/Desktop/bagdar_app/test/strings_completeness_test.dart: Theme voice commands trigger correct VoiceCommand "╨╢╤Л╨╗╤Л ╤В╨░╥Ы╤Л╤А╤Л╨┐" (kk-KZ) -> themeWarm                                
+VoiceCommandService recognized: "╨╢╤Л╨╗╤Л ╤В╨░╥Ы╤Л╤А╤Л╨┐"
+
+00:04 +26: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                        
+00:04 +26: C:/Users/Nurik/Desktop/bagdar_app/test/strings_completeness_test.dart: Theme voice commands trigger correct VoiceCommand "dark theme" (en-US) -> themeDark                                  
+VoiceCommandService recognized: "dark theme"
+
+00:04 +27: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                        
+00:04 +27: C:/Users/Nurik/Desktop/bagdar_app/test/strings_completeness_test.dart: Theme voice commands trigger correct VoiceCommand "light theme" (en-US) -> themeLight                                
+VoiceCommandService recognized: "light theme"
+
+00:04 +28: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                        
+00:04 +28: C:/Users/Nurik/Desktop/bagdar_app/test/strings_completeness_test.dart: Theme voice commands trigger correct VoiceCommand "high contrast" (en-US) -> themeHighContrast                       
+VoiceCommandService recognized: "high contrast"
+
+00:04 +29: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                        
+00:04 +29: C:/Users/Nurik/Desktop/bagdar_app/test/strings_completeness_test.dart: Theme voice commands trigger correct VoiceCommand "warm theme" (en-US) -> themeWarm                                  
+VoiceCommandService recognized: "warm theme"
+
+00:04 +30: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf rendering renders three tabs with short visible labels (RU)                                                        
+00:04 +31: C:/Users/Nurik/Desktop/bagdar_app/test/stepper_field_test.dart: StepperField rendering shows label, current value, and ┬▒ buttons                                                            
+00:04 +32: C:/Users/Nurik/Desktop/bagdar_app/test/stepper_field_test.dart: StepperField rendering shows label, current value, and ┬▒ buttons                                                            
+00:04 +33: C:/Users/Nurik/Desktop/bagdar_app/test/stepper_field_test.dart: StepperField rendering shows label, current value, and ┬▒ buttons                                                            
+00:04 +34: C:/Users/Nurik/Desktop/bagdar_app/test/stepper_field_test.dart: StepperField rendering shows label, current value, and ┬▒ buttons                                                            
+00:05 +34: C:/Users/Nurik/Desktop/bagdar_app/test/stepper_field_test.dart: StepperField rendering shows label, current value, and ┬▒ buttons                                                            
+00:05 +35: C:/Users/Nurik/Desktop/bagdar_app/test/stepper_field_test.dart: StepperField rendering shows label, current value, and ┬▒ buttons                                                            
+00:05 +36: C:/Users/Nurik/Desktop/bagdar_app/test/stepper_field_test.dart: StepperField rendering shows label, current value, and ┬▒ buttons                                                            
+00:05 +37: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf interaction tapping Camera tab fires onTaskSelected(camera)                                                        
+00:05 +38: C:/Users/Nurik/Desktop/bagdar_app/test/stepper_field_test.dart: StepperField rendering progress bar reflects normalized value                                                               
+00:05 +39: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf size constraints shelf height equals BagdarSpacing.shelfHeight                                                     
+00:05 +40: C:/Users/Nurik/Desktop/bagdar_app/test/stepper_field_test.dart: StepperField interaction + button increments by one step and snaps                                                          
+00:05 +41: C:/Users/Nurik/Desktop/bagdar_app/test/stepper_field_test.dart: StepperField interaction + button increments by one step and snaps                                                          
+00:05 +42: C:/Users/Nurik/Desktop/bagdar_app/test/quick_shelf_test.dart: QuickShelf in different themes renders without errors under all 4 themes                                                      
+00:05 +43: C:/Users/Nurik/Desktop/bagdar_app/test/stepper_field_test.dart: StepperField interaction тИТ button decrements by one step                                                                    
+00:05 +44: C:/Users/Nurik/Desktop/bagdar_app/test/stepper_field_test.dart: StepperField interaction тИТ button decrements by one step                                                                    
+00:05 +44: C:/Users/Nurik/Desktop/bagdar_app/test/stepper_field_test.dart: StepperField interaction + at max does NOT fire onChanged                                                                   
+00:05 +45: C:/Users/Nurik/Desktop/bagdar_app/test/stepper_field_test.dart: StepperField interaction + at max does NOT fire onChanged                                                                   
+00:05 +45: C:/Users/Nurik/Desktop/bagdar_app/test/stepper_field_test.dart: StepperField interaction тИТ at min does NOT fire onChanged                                                                   
+00:05 +46: C:/Users/Nurik/Desktop/bagdar_app/test/stepper_field_test.dart: StepperField interaction тИТ at min does NOT fire onChanged                                                                   
+00:05 +46: C:/Users/Nurik/Desktop/bagdar_app/test/stepper_field_test.dart: StepperField semantics renders human-readable label and formatted value                                                     
+00:05 +47: C:/Users/Nurik/Desktop/bagdar_app/test/stepper_field_test.dart: StepperField semantics renders human-readable label and formatted value                                                     
+00:05 +47: C:/Users/Nurik/Desktop/bagdar_app/test/stepper_field_test.dart: StepperField semantics +/- buttons expose accessibility-friendly button semantics                                           
+00:05 +48: C:/Users/Nurik/Desktop/bagdar_app/test/stepper_field_test.dart: StepperField semantics +/- buttons expose accessibility-friendly button semantics                                           
+00:05 +48: All tests passed!                                                                                                                                                                           
+
+GROUP_EXIT=0
+=== GROUP navigation ===
+
+00:00 +0: loading C:/Users/Nurik/Desktop/bagdar_app/test/navigation_gps_gate_test.dart                                                                                                                 
+00:01 +0: loading C:/Users/Nurik/Desktop/bagdar_app/test/navigation_gps_gate_test.dart                                                                                                                 
+00:02 +0: loading C:/Users/Nurik/Desktop/bagdar_app/test/navigation_gps_gate_test.dart                                                                                                                 
+00:02 +0: C:/Users/Nurik/Desktop/bagdar_app/test/navigation_gps_gate_test.dart: NavigationService.isGpsBad (Safety follow-up M11) clean fix passes the gate (accuracy <= 25 m, age < 30 s)             
+00:02 +1: C:/Users/Nurik/Desktop/bagdar_app/test/navigation_gps_gate_test.dart: NavigationService.isGpsBad (Safety follow-up M11) clean fix passes the gate (accuracy <= 25 m, age < 30 s)             
+00:02 +1: C:/Users/Nurik/Desktop/bagdar_app/test/navigation_gps_gate_test.dart: NavigationService.isGpsBad (Safety follow-up M11) accuracy worse than 25 m trips the gate                              
+00:02 +2: C:/Users/Nurik/Desktop/bagdar_app/test/navigation_gps_gate_test.dart: NavigationService.isGpsBad (Safety follow-up M11) accuracy worse than 25 m trips the gate                              
+00:02 +2: C:/Users/Nurik/Desktop/bagdar_app/test/navigation_gps_gate_test.dart: NavigationService.isGpsBad (Safety follow-up M11) stale fix (timestamp age > 30 s) trips the gate even at good accuracy
+00:02 +3: C:/Users/Nurik/Desktop/bagdar_app/test/navigation_gps_gate_test.dart: NavigationService.isGpsBad (Safety follow-up M11) stale fix (timestamp age > 30 s) trips the gate even at good accuracy
+00:02 +3: C:/Users/Nurik/Desktop/bagdar_app/test/navigation_gps_gate_test.dart: NavigationService.isGpsBad (Safety follow-up M11) boundary: 30 s age is still accepted, 31 s is not                    
+00:02 +4: C:/Users/Nurik/Desktop/bagdar_app/test/navigation_gps_gate_test.dart: NavigationService.isGpsBad (Safety follow-up M11) boundary: 30 s age is still accepted, 31 s is not                    
+00:02 +4: C:/Users/Nurik/Desktop/bagdar_app/test/navigation_gps_gate_test.dart: NavigationService.isGpsBad (Safety follow-up M11) constants match the documented audit thresholds                      
+00:02 +5: C:/Users/Nurik/Desktop/bagdar_app/test/navigation_gps_gate_test.dart: NavigationService.isGpsBad (Safety follow-up M11) constants match the documented audit thresholds                      
+00:03 +5: C:/Users/Nurik/Desktop/bagdar_app/test/navigation_gps_gate_test.dart: NavigationService.isGpsBad (Safety follow-up M11) constants match the documented audit thresholds                      
+00:03 +5: loading C:/Users/Nurik/Desktop/bagdar_app/test/turn_prediction_test.dart                                                                                                                     
+00:03 +5: C:/Users/Nurik/Desktop/bagdar_app/test/turn_prediction_test.dart: OPT-17 Turn classification straight-line motion leaves turning=false and angular velocity тЙИ 0                              
+00:03 +6: C:/Users/Nurik/Desktop/bagdar_app/test/turn_prediction_test.dart: OPT-17 Turn classification straight-line motion leaves turning=false and angular velocity тЙИ 0                              
+00:03 +6: C:/Users/Nurik/Desktop/bagdar_app/test/turn_prediction_test.dart: ... classification sharp counter-clockwise turn sets turning=true with positive angular velocity (image coords, y-down)    
+00:03 +7: C:/Users/Nurik/Desktop/bagdar_app/test/turn_prediction_test.dart: ... classification sharp counter-clockwise turn sets turning=true with positive angular velocity (image coords, y-down)    
+00:03 +7: C:/Users/Nurik/Desktop/bagdar_app/test/turn_prediction_test.dart: ... clockwise turn sets turning=true with negative angular velocity тАФ sign preserves left/right distinction downstream     
+00:03 +8: C:/Users/Nurik/Desktop/bagdar_app/test/turn_prediction_test.dart: ... clockwise turn sets turning=true with negative angular velocity тАФ sign preserves left/right distinction downstream     
+00:03 +8: C:/Users/Nurik/Desktop/bagdar_app/test/turn_prediction_test.dart: OPT-17 Turn classification two-frame history is not enough тАФ turning stays false until the third sample is accumulated     
+00:03 +9: C:/Users/Nurik/Desktop/bagdar_app/test/turn_prediction_test.dart: OPT-17 Turn classification two-frame history is not enough тАФ turning stays false until the third sample is accumulated     
+00:03 +9: C:/Users/Nurik/Desktop/bagdar_app/test/turn_prediction_test.dart: ... vehicles turning car at 4.5 m flips approaching=true even when areaRate sits under the default vehicle gate (0.22)     
+00:03 +10: C:/Users/Nurik/Desktop/bagdar_app/test/turn_prediction_test.dart: ... vehicles turning car at 4.5 m flips approaching=true even when areaRate sits under the default vehicle gate (0.22)    
+00:03 +10: C:/Users/Nurik/Desktop/bagdar_app/test/turn_prediction_test.dart: ... vehicles straight car with the SAME area growth does NOT fire approaching тАФ pins OPT-17 as the root cause of the flip 
+00:03 +11: C:/Users/Nurik/Desktop/bagdar_app/test/turn_prediction_test.dart: ... vehicles straight car with the SAME area growth does NOT fire approaching тАФ pins OPT-17 as the root cause of the flip 
+00:03 +11: C:/Users/Nurik/Desktop/bagdar_app/test/turn_prediction_test.dart: ... boost for turning vehicles turning car at 8 m (beyond kVehTurnDistThreshold = 5 m) does NOT get the approach boost    
+00:03 +12: C:/Users/Nurik/Desktop/bagdar_app/test/turn_prediction_test.dart: ... boost for turning vehicles turning car at 8 m (beyond kVehTurnDistThreshold = 5 m) does NOT get the approach boost    
+00:03 +12: C:/Users/Nurik/Desktop/bagdar_app/test/turn_prediction_test.dart: ... vehicles turning non-vehicle label (skateboard) never gets the vehicle approach boost тАФ OPT-17 is vehicle-scoped      
+00:03 +13: C:/Users/Nurik/Desktop/bagdar_app/test/turn_prediction_test.dart: ... vehicles turning non-vehicle label (skateboard) never gets the vehicle approach boost тАФ OPT-17 is vehicle-scoped      
+00:03 +13: C:/Users/Nurik/Desktop/bagdar_app/test/turn_prediction_test.dart: ... close-range AND OPT-17 turn-range) still fires approaching тАФ the two optimizations compose without double-counting    
+00:03 +14: C:/Users/Nurik/Desktop/bagdar_app/test/turn_prediction_test.dart: ... close-range AND OPT-17 turn-range) still fires approaching тАФ the two optimizations compose without double-counting    
+00:03 +14: loading C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart                                                                                                                         
+00:03 +14: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: posFromCx far left тЖТ "left"                                                                                                    
+00:03 +15: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: posFromCx far left тЖТ "left"                                                                                                    
+00:03 +15: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: posFromCx centre band тЖТ "center"                                                                                               
+00:03 +16: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: posFromCx centre band тЖТ "center"                                                                                               
+00:03 +16: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: posFromCx far right тЖТ "right"                                                                                                  
+00:03 +17: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: posFromCx far right тЖТ "right"                                                                                                  
+00:03 +17: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: posFromCx zero-width frame тЖТ "center" (no crash)                                                                               
+00:03 +18: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: posFromCx zero-width frame тЖТ "center" (no crash)                                                                               
+00:03 +18: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: clockDir extreme left (<10%) тЖТ 9-o-clock                                                                                       
+00:03 +19: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: clockDir extreme left (<10%) тЖТ 9-o-clock                                                                                       
+00:03 +19: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: clockDir left side (10-35%) тЖТ 10-o-clock                                                                                       
+00:03 +20: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: clockDir left side (10-35%) тЖТ 10-o-clock                                                                                       
+00:03 +20: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: clockDir centre тЖТ forward (12-o-clock key is "forward")                                                                        
+00:03 +21: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: clockDir centre тЖТ forward (12-o-clock key is "forward")                                                                        
+00:03 +21: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: clockDir right side (78-90%) тЖТ 2-o-clock                                                                                       
+00:03 +22: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: clockDir right side (78-90%) тЖТ 2-o-clock                                                                                       
+00:03 +22: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: clockDir right-centre (62-78%) тЖТ 1-o-clock                                                                                     
+00:03 +23: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: clockDir right-centre (62-78%) тЖТ 1-o-clock                                                                                     
+00:03 +23: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: clockDir extreme right (>90%) тЖТ 3-o-clock                                                                                      
+00:03 +24: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: clockDir extreme right (>90%) тЖТ 3-o-clock                                                                                      
+00:03 +24: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: clockDir zero-width frame тЖТ forward (no crash)                                                                                 
+00:03 +25: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: clockDir zero-width frame тЖТ forward (no crash)                                                                                 
+00:03 +25: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: threatScore very-close object scores higher than close                                                                         
+00:03 +26: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: threatScore very-close object scores higher than close                                                                         
+00:03 +26: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: threatScore close scores higher than far                                                                                       
+00:03 +27: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: threatScore close scores higher than far                                                                                       
+00:03 +27: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: threatScore centre position scores higher than side (equal dist)                                                               
+00:03 +28: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: threatScore centre position scores higher than side (equal dist)                                                               
+00:03 +28: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: threatScore high-weight class (car) > low-weight class (backpack) at same dist                                                 
+00:03 +29: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: threatScore high-weight class (car) > low-weight class (backpack) at same dist                                                 
+00:03 +29: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: threatScore larger area ratio increases score                                                                                  
+00:03 +30: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: threatScore larger area ratio increases score                                                                                  
+00:03 +30: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: threatScore score is always non-negative                                                                                       
+00:03 +31: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: threatScore score is always non-negative                                                                                       
+00:03 +31: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: SOS phone number validation (digit count) standard KZ number тЖТ valid                                                           
+00:03 +32: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: SOS phone number validation (digit count) standard KZ number тЖТ valid                                                           
+00:03 +32: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: SOS phone number validation (digit count) short local number with 7 digits тЖТ valid                                             
+00:03 +33: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: SOS phone number validation (digit count) short local number with 7 digits тЖТ valid                                             
+00:03 +33: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: SOS phone number validation (digit count) 6-digit number тЖТ invalid                                                             
+00:03 +34: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: SOS phone number validation (digit count) 6-digit number тЖТ invalid                                                             
+00:03 +34: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: SOS phone number validation (digit count) empty string тЖТ invalid                                                               
+00:03 +35: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: SOS phone number validation (digit count) empty string тЖТ invalid                                                               
+00:03 +35: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: SOS phone number validation (digit count) letters only тЖТ invalid                                                               
+00:03 +36: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: SOS phone number validation (digit count) letters only тЖТ invalid                                                               
+00:03 +36: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: SOS phone number validation (digit count) formatted number with dashes тЖТ valid                                                 
+00:03 +37: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: SOS phone number validation (digit count) formatted number with dashes тЖТ valid                                                 
+00:03 +37: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: GroundPlaneAnalyzer all-zeros map тЖТ empty result (no crash)                                                                    
+00:03 +38: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: GroundPlaneAnalyzer all-zeros map тЖТ empty result (no crash)                                                                    
+00:03 +38: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: GroundPlaneAnalyzer perfectly flat map тЖТ empty result (no anomalies)                                                           
+00:03 +39: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: GroundPlaneAnalyzer perfectly flat map тЖТ empty result (no anomalies)                                                           
+00:03 +39: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: GroundPlaneAnalyzer linear plane map тЖТ empty or minimal anomalies                                                              
+00:03 +40: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: GroundPlaneAnalyzer linear plane map тЖТ empty or minimal anomalies                                                              
+00:03 +40: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: GroundPlaneAnalyzer bottom-band depth noise triggers a dead-zone hazard                                                        
+00:03 +41: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: GroundPlaneAnalyzer bottom-band depth noise triggers a dead-zone hazard                                                        
+00:03 +41: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: GroundPlaneAnalyzer calling analyze twice reuses buffers (no crash)                                                            
+00:03 +42: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: GroundPlaneAnalyzer calling analyze twice reuses buffers (no crash)                                                            
+00:03 +42: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: GroundPlaneAnalyzer map has correct size assertion                                                                             
+00:03 +43: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: GroundPlaneAnalyzer map has correct size assertion                                                                             
+00:03 +43: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: BatteryMonitor battery level thresholds map to the intended throttle tiers                                                     
+00:03 +44: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: BatteryMonitor battery level thresholds map to the intended throttle tiers                                                     
+00:03 +44: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter empty filter returns null                                                                                          
+00:03 +45: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter empty filter returns null                                                                                          
+00:03 +45: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter single candidate returned after cooldown                                                                           
+00:03 +46: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter single candidate returned after cooldown                                                                           
+00:03 +46: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter highest priority wins                                                                                              
+00:03 +47: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter highest priority wins                                                                                              
+00:03 +47: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter same priority тАФ higher urgency wins                                                                                
+00:03 +48: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter same priority тАФ higher urgency wins                                                                                
+00:03 +48: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter critical alerts bypass cooldown and suppression                                                                    
+00:03 +49: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter critical alerts bypass cooldown and suppression                                                                    
+00:03 +49: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter after critical, warning suppressed for 2 s                                                                         
+00:03 +50: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter after critical, warning suppressed for 2 s                                                                         
+00:03 +50: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter after critical, warning passes after 2 s suppression                                                               
+00:03 +51: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter after critical, warning passes after 2 s suppression                                                               
+00:03 +51: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter dense scene (5+ tracks) suppresses low-urgency info alerts                                                         
+00:03 +52: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter dense scene (5+ tracks) suppresses low-urgency info alerts                                                         
+00:03 +52: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter dense scene (5+ tracks) does not suppress high-urgency info                                                        
+00:03 +53: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter dense scene (5+ tracks) does not suppress high-urgency info                                                        
+00:03 +53: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter dense scene (5+ tracks) does not suppress warning                                                                  
+00:03 +54: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter dense scene (5+ tracks) does not suppress warning                                                                  
+00:03 +54: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter navigationHint suppressed when 3+ tracks                                                                           
+00:03 +55: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter navigationHint suppressed when 3+ tracks                                                                           
+00:03 +55: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter reset clears state тАФ candidate fires immediately after reset                                                       
+00:03 +56: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter reset clears state тАФ candidate fires immediately after reset                                                       
+00:03 +56: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter per-category cooldown: same category blocked, different category passes                                            
+00:03 +57: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter per-category cooldown: same category blocked, different category passes                                            
+00:03 +57: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter per-category cooldown: crowd scene does not silence an approaching vehicle                                         
+00:03 +58: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter per-category cooldown: crowd scene does not silence an approaching vehicle                                         
+00:03 +58: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter critical bypasses per-category cooldown                                                                            
+00:03 +59: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter critical bypasses per-category cooldown                                                                            
+00:03 +59: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter when top-priority candidate is on cooldown, lower-priority candidate in a different category is picked             
+00:03 +60: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AlertFilter when top-priority candidate is on cooldown, lower-priority candidate in a different category is picked             
+00:03 +60: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: FusionEngine score below warning threshold тЖТ null                                                                              
+00:03 +61: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: FusionEngine score below warning threshold тЖТ null                                                                              
+00:03 +61: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: FusionEngine score at warning threshold тЖТ warning result                                                                       
+00:03 +62: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: FusionEngine score at warning threshold тЖТ warning result                                                                       
+00:03 +62: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: FusionEngine score at critical threshold but only 1 frame тЖТ warning (not critical)                                             
+00:03 +63: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: FusionEngine score at critical threshold but only 1 frame тЖТ warning (not critical)                                             
+00:03 +63: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: FusionEngine score at critical for kTemporalFrames consecutive frames тЖТ critical                                               
+00:03 +64: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: FusionEngine score at critical for kTemporalFrames consecutive frames тЖТ critical                                               
+00:03 +64: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: FusionEngine cooldown: second call within 3 s returns null                                                                     
+00:03 +65: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: FusionEngine cooldown: second call within 3 s returns null                                                                     
+00:03 +65: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: FusionEngine zone change clears history тАФ critical resets to 1 frame                                                           
+00:03 +66: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: FusionEngine zone change clears history тАФ critical resets to 1 frame                                                           
+00:03 +66: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: FusionEngine reset clears history тАФ critical no longer fires                                                                   
+00:03 +67: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: FusionEngine reset clears history тАФ critical no longer fires                                                                   
+00:03 +67: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: FusionEngine fusionScore clamped to 1.0                                                                                        
+00:03 +68: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: FusionEngine fusionScore clamped to 1.0                                                                                        
+00:03 +68: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DeviceCapabilities hardware tier is preserved                                                                                  
+00:03 +69: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DeviceCapabilities hardware tier is preserved                                                                                  
+00:03 +69: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DeviceCapabilities ncnnVulkan tier preserved                                                                                   
+00:03 +70: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DeviceCapabilities ncnnVulkan tier preserved                                                                                   
+00:03 +70: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DeviceCapabilities ncnnCpu tier preserved                                                                                      
+00:03 +71: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DeviceCapabilities ncnnCpu tier preserved                                                                                      
+00:03 +71: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DeviceCapabilities focalLength tier preserved                                                                                  
+00:03 +72: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DeviceCapabilities focalLength tier preserved                                                                                  
+00:03 +72: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DeviceCapabilities toString includes all key fields                                                                            
+00:03 +73: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DeviceCapabilities toString includes all key fields                                                                            
+00:03 +73: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DepthProviderFactory hardware caps тЖТ HardwareDepthProvider                                                                     
+00:03 +73: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DepthProviderFactory hardware caps тЖТ HardwareDepthProvider                                                                     
+DepthProviderFactory: HardwareDepthProvider
+
+00:03 +74: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DepthProviderFactory hardware caps тЖТ HardwareDepthProvider                                                                     
+00:03 +74: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DepthProviderFactory ncnn caps тЖТ FocalLength placeholder via legacy create()                                                   
+00:03 +74: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DepthProviderFactory ncnn caps тЖТ FocalLength placeholder via legacy create()                                                   
+DepthProviderFactory: NCNN tier requested via legacy create(); use createAndInit() instead. Returning FocalLength placeholder.
+
+00:03 +75: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DepthProviderFactory ncnn caps тЖТ FocalLength placeholder via legacy create()                                                   
+00:03 +75: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DepthProviderFactory focalLength caps тЖТ FocalLengthDepthProvider                                                               
+00:03 +75: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DepthProviderFactory focalLength caps тЖТ FocalLengthDepthProvider                                                               
+DepthProviderFactory: FocalLengthDepthProvider
+
+00:03 +76: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DepthProviderFactory focalLength caps тЖТ FocalLengthDepthProvider                                                               
+00:03 +76: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DepthProviderFactory hardware tier createWithTier тЖТ HardwareDepthProvider                                                      
+00:03 +77: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DepthProviderFactory hardware tier createWithTier тЖТ HardwareDepthProvider                                                      
+00:03 +77: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DepthProviderFactory hardware provider keeps hardware tier when native bridge starts                                           
+00:03 +77: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DepthProviderFactory hardware provider keeps hardware tier when native bridge starts                                           
+HardwareDepthProvider: hardware depth active; NCNN fallback ready
+
+00:03 +78: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DepthProviderFactory hardware provider keeps hardware tier when native bridge starts                                           
+00:03 +78: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DepthProviderFactory hardware provider falls back to NCNN when native bridge is unavailable                                    
+00:03 +78: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DepthProviderFactory hardware provider falls back to NCNN when native bridge is unavailable                                    
+HardwareDepthProvider: hardware depth unavailable, using NCNN fallback
+
+00:03 +79: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DepthProviderFactory hardware provider falls back to NCNN when native bridge is unavailable                                    
+00:03 +79: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DepthProviderFactory FocalLengthDepthProvider.init returns true immediately                                                    
+00:03 +80: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DepthProviderFactory FocalLengthDepthProvider.init returns true immediately                                                    
+00:03 +80: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DepthProviderFactory FocalLengthDepthProvider.analyze always returns empty list                                                
+00:03 +81: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DepthProviderFactory FocalLengthDepthProvider.analyze always returns empty list                                                
+00:03 +81: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DepthProviderFactory createWithTier(focalLength) тЖТ FocalLengthDepthProvider                                                    
+00:03 +82: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DepthProviderFactory createWithTier(focalLength) тЖТ FocalLengthDepthProvider                                                    
+00:03 +82: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DepthProviderFactory createWithTier(ncnn) тЖТ FocalLength placeholder                                                            
+00:03 +82: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DepthProviderFactory createWithTier(ncnn) тЖТ FocalLength placeholder                                                            
+DepthProviderFactory: createWithTier called with NCNN tier; NCNN must be created via NcnnDepthProvider.tryCreate(). Returning FocalLength placeholder.
+
+00:03 +83: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: DepthProviderFactory createWithTier(ncnn) тЖТ FocalLength placeholder                                                            
+00:03 +83: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AccessibilityInfo default weight is ~1.05 (unknown surface)                                                                    
+00:03 +84: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AccessibilityInfo default weight is ~1.05 (unknown surface)                                                                    
+00:03 +84: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AccessibilityInfo footway + asphalt + tactile тЖТ low weight                                                                     
+00:03 +85: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AccessibilityInfo footway + asphalt + tactile тЖТ low weight                                                                     
+00:03 +85: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AccessibilityInfo motorway тЖТ very high weight                                                                                  
+00:03 +86: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AccessibilityInfo motorway тЖТ very high weight                                                                                  
+00:03 +86: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AccessibilityInfo gravel surface тЖТ higher weight                                                                               
+00:04 +87: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AccessibilityInfo gravel surface тЖТ higher weight                                                                               
+00:04 +87: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AccessibilityInfo sidewalk + lit reduce weight                                                                                 
+00:04 +88: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AccessibilityInfo sidewalk + lit reduce weight                                                                                 
+00:04 +88: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AccessibilityInfo steps тЖТ weight > 1.3                                                                                         
+00:04 +89: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: AccessibilityInfo steps тЖТ weight > 1.3                                                                                         
+00:04 +89: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: MapPackage toJson/fromJson roundtrip                                                                                           
+00:04 +90: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: MapPackage toJson/fromJson roundtrip                                                                                           
+00:04 +90: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: MapPackage sizeMb formats correctly                                                                                            
+00:04 +91: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: MapPackage sizeMb formats correctly                                                                                            
+00:04 +91: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: MapPackage copyWith preserves unmodified fields                                                                                
+00:04 +92: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: MapPackage copyWith preserves unmodified fields                                                                                
+00:04 +92: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: MapPackage fromJson with missing fields uses defaults                                                                          
+00:04 +93: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: MapPackage fromJson with missing fields uses defaults                                                                          
+00:04 +93: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: MapPackage isStale becomes true after 90 days                                                                                  
+00:04 +94: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: MapPackage isStale becomes true after 90 days                                                                                  
+00:04 +94: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: GTFS freshness timestamp older than 90 days is stale                                                                           
+00:04 +95: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: GTFS freshness timestamp older than 90 days is stale                                                                           
+00:04 +95: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: MapPackageManifest fromJson parses packages list                                                                               
+00:04 +96: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: MapPackageManifest fromJson parses packages list                                                                               
+00:04 +96: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: MapPackageManifest fromJson with empty packages                                                                                
+00:04 +97: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: MapPackageManifest fromJson with empty packages                                                                                
+00:04 +97: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: MapPackageManifest relative downloadUrl resolves against manifest directory                                                    
+00:04 +98: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: MapPackageManifest relative downloadUrl resolves against manifest directory                                                    
+00:04 +98: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: MapPackageManifest relative downloadUrl resolves against manifest baseUrl                                                      
+00:04 +99: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: MapPackageManifest relative downloadUrl resolves against manifest baseUrl                                                      
+00:04 +99: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: MapPackageManifest absolute downloadUrl stays unchanged                                                                        
+00:04 +100: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: MapPackageManifest absolute downloadUrl stays unchanged                                                                       
+00:04 +100: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: CHGraph containsPoint checks bounds                                                                                           
+00:04 +101: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: CHGraph containsPoint checks bounds                                                                                           
+00:04 +101: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: CHGraph findNearestNode returns closest                                                                                       
+00:04 +102: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: CHGraph findNearestNode returns closest                                                                                       
+00:04 +102: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: CHGraph streetName returns empty for invalid index                                                                            
+00:04 +103: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: CHGraph streetName returns empty for invalid index                                                                            
+00:04 +103: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: CHGraph outEdges/inEdges return empty for isolated node                                                                       
+00:04 +104: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: CHGraph outEdges/inEdges return empty for isolated node                                                                       
+00:04 +104: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: VoiceCommand enum contains GTFS commands                                                                                      
+00:04 +105: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: VoiceCommand enum contains GTFS commands                                                                                      
+00:04 +105: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: Maneuver maneuverFromAngle straight                                                                                           
+00:04 +106: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: Maneuver maneuverFromAngle straight                                                                                           
+00:04 +106: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: Maneuver maneuverFromAngle right turn                                                                                         
+00:04 +107: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: Maneuver maneuverFromAngle right turn                                                                                         
+00:04 +107: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: Maneuver maneuverFromAngle left turn                                                                                          
+00:04 +108: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: Maneuver maneuverFromAngle left turn                                                                                          
+00:04 +108: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: Maneuver maneuverFromAngle u-turn                                                                                             
+00:04 +109: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: Maneuver maneuverFromAngle u-turn                                                                                             
+00:04 +109: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: Maneuver maneuverFromAngle slight right                                                                                       
+00:04 +110: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: Maneuver maneuverFromAngle slight right                                                                                       
+00:04 +110: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: Maneuver maneuverFromAngle slight left                                                                                        
+00:04 +111: C:/Users/Nurik/Desktop/bagdar_app/test/core_logic_test.dart: Maneuver maneuverFromAngle slight left                                                                                        
+00:04 +111: All tests passed!                                                                                                                                                                          
+
+GROUP_EXIT=0

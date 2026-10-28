@@ -1,0 +1,5785 @@
+{
+  "schemaVersion": 1,
+  "scope": "synthetic_full_scene_geometry_not_camera_visibility",
+  "sceneSha256": "01ae67a6de7adf94911cbcfdfab20bb8dd6ff33deec490969cf37be6b4920446",
+  "corpusManifestSha256": "3c5e9398fe5d4ed72fa4950a8d30b478fb625abe06658661975a2f01e0ebb82c",
+  "exporterSha256": "b9cbc8fe1da424c24f1ee963f6fff66e456a8f14b9d22b54a17f629df0b587a0",
+  "frames": [
+    {
+      "sceneId": "context-thin-pole",
+      "frameIndex": 0,
+      "capturedOffsetMs": 0,
+      "rgbSha256": "cfc8c347dd38ae0f5f0a63086d6b5a84b38aec9137db301574ea0d94a0480033",
+      "geometry": {
+        "scope": "complete_scene_geometry_oracle",
+        "measurementErrorM": 0.001,
+        "domain": {
+          "leftM": -2.0,
+          "rightM": 2.0,
+          "startM": 0.15,
+          "endM": 4.0,
+          "topM": 3.0
+        },
+        "occupiedBounds": [
+          {
+            "leftM": -0.075,
+            "rightM": 0.075,
+            "startM": 2.025,
+            "endM": 2.175,
+            "bottomM": 1.885,
+            "topM": 1.935
+          },
+          {
+            "leftM": -0.055,
+            "rightM": 0.055,
+            "startM": 2.045,
+            "endM": 2.155,
+            "bottomM": 0.0,
+            "topM": 1.9
+          }
+        ],
+        "floorBounds": [
+          {
+            "leftM": -4.0,
+            "rightM": 4.0,
+            "startM": 0.0,
+            "endM": 7.0,
+            "bottomM": -0.11,
+            "topM": -0.01
+          },
+          {
+            "leftM": -2.903092,
+            "rightM": 2.896908,
+            "startM": -0.009,
+            "endM": 0.509,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.904141,
+            "rightM": 2.895859,
+            "startM": 0.531,
+            "endM": 1.049,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.894286,
+            "rightM": 2.905714,
+            "startM": 1.071,
+            "endM": 1.589,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.905084,
+            "rightM": 2.894917,
+            "startM": 1.611,
+            "endM": 2.129,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.900128,
+            "rightM": 2.899872,
+            "startM": 2.151,
+            "endM": 2.669,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.909455,
+            "rightM": 2.890545,
+            "startM": 2.691,
+            "endM": 3.209,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.897135,
+            "rightM": 2.902865,
+            "startM": 3.231,
+            "endM": 3.749,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.899625,
+            "rightM": 2.900375,
+            "startM": 3.771,
+            "endM": 4.289,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -1.467,
+            "rightM": -1.453,
+            "startM": -0.008,
+            "endM": 0.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453,
+            "rightM": 1.467,
+            "startM": -0.008,
+            "endM": 0.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467,
+            "rightM": -1.453,
+            "startM": 0.532,
+            "endM": 1.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453,
+            "rightM": 1.467,
+            "startM": 0.532,
+            "endM": 1.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467,
+            "rightM": -1.453,
+            "startM": 1.072,
+            "endM": 1.588,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453,
+            "rightM": 1.467,
+            "startM": 1.072,
+            "endM": 1.588,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467,
+            "rightM": -1.453,
+            "startM": 1.612,
+            "endM": 2.128,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453,
+            "rightM": 1.467,
+            "startM": 1.612,
+            "endM": 2.128,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467,
+            "rightM": -1.453,
+            "startM": 2.152,
+            "endM": 2.668,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453,
+            "rightM": 1.467,
+            "startM": 2.152,
+            "endM": 2.668,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467,
+            "rightM": -1.453,
+            "startM": 2.692,
+            "endM": 3.208,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453,
+            "rightM": 1.467,
+            "startM": 2.692,
+            "endM": 3.208,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467,
+            "rightM": -1.453,
+            "startM": 3.232,
+            "endM": 3.748,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453,
+            "rightM": 1.467,
+            "startM": 3.232,
+            "endM": 3.748,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467,
+            "rightM": -1.453,
+            "startM": 3.772,
+            "endM": 4.288,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453,
+            "rightM": 1.467,
+            "startM": 3.772,
+            "endM": 4.288,
+            "bottomM": 0.001,
+            "topM": 0.007
+          }
+        ]
+      }
+    },
+    {
+      "sceneId": "context-thin-pole",
+      "frameIndex": 1,
+      "capturedOffsetMs": 300,
+      "rgbSha256": "b9183b524ddc2daf8c666e1be3d06a6582795159da8c3e3264da9f27be7843a7",
+      "geometry": {
+        "scope": "complete_scene_geometry_oracle",
+        "measurementErrorM": 0.001,
+        "domain": {
+          "leftM": -2.0,
+          "rightM": 2.0,
+          "startM": 0.15,
+          "endM": 4.0,
+          "topM": 3.0
+        },
+        "occupiedBounds": [
+          {
+            "leftM": -0.105,
+            "rightM": 0.045,
+            "startM": 1.905,
+            "endM": 2.055,
+            "bottomM": 1.885,
+            "topM": 1.935
+          },
+          {
+            "leftM": -0.085,
+            "rightM": 0.025,
+            "startM": 1.925,
+            "endM": 2.035,
+            "bottomM": 0.0,
+            "topM": 1.9
+          }
+        ],
+        "floorBounds": [
+          {
+            "leftM": -4.03,
+            "rightM": 3.97,
+            "startM": -0.12,
+            "endM": 6.88,
+            "bottomM": -0.11,
+            "topM": -0.01
+          },
+          {
+            "leftM": -2.933092,
+            "rightM": 2.866908,
+            "startM": -0.129,
+            "endM": 0.389,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.934141,
+            "rightM": 2.865859,
+            "startM": 0.411,
+            "endM": 0.929,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.924286,
+            "rightM": 2.875714,
+            "startM": 0.951,
+            "endM": 1.469,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.935084,
+            "rightM": 2.864917,
+            "startM": 1.491,
+            "endM": 2.009,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.930128,
+            "rightM": 2.869872,
+            "startM": 2.031,
+            "endM": 2.549,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.939455,
+            "rightM": 2.860545,
+            "startM": 2.571,
+            "endM": 3.089,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.927135,
+            "rightM": 2.872865,
+            "startM": 3.111,
+            "endM": 3.629,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.929625,
+            "rightM": 2.870375,
+            "startM": 3.651,
+            "endM": 4.169,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -1.497,
+            "rightM": -1.483,
+            "startM": -0.128,
+            "endM": 0.388,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.423,
+            "rightM": 1.437,
+            "startM": -0.128,
+            "endM": 0.388,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497,
+            "rightM": -1.483,
+            "startM": 0.412,
+            "endM": 0.928,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.423,
+            "rightM": 1.437,
+            "startM": 0.412,
+            "endM": 0.928,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497,
+            "rightM": -1.483,
+            "startM": 0.952,
+            "endM": 1.468,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.423,
+            "rightM": 1.437,
+            "startM": 0.952,
+            "endM": 1.468,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497,
+            "rightM": -1.483,
+            "startM": 1.492,
+            "endM": 2.008,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.423,
+            "rightM": 1.437,
+            "startM": 1.492,
+            "endM": 2.008,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497,
+            "rightM": -1.483,
+            "startM": 2.032,
+            "endM": 2.548,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.423,
+            "rightM": 1.437,
+            "startM": 2.032,
+            "endM": 2.548,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497,
+            "rightM": -1.483,
+            "startM": 2.572,
+            "endM": 3.088,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.423,
+            "rightM": 1.437,
+            "startM": 2.572,
+            "endM": 3.088,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497,
+            "rightM": -1.483,
+            "startM": 3.112,
+            "endM": 3.628,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.423,
+            "rightM": 1.437,
+            "startM": 3.112,
+            "endM": 3.628,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497,
+            "rightM": -1.483,
+            "startM": 3.652,
+            "endM": 4.168,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.423,
+            "rightM": 1.437,
+            "startM": 3.652,
+            "endM": 4.168,
+            "bottomM": 0.001,
+            "topM": 0.007
+          }
+        ]
+      }
+    },
+    {
+      "sceneId": "context-thin-pole",
+      "frameIndex": 2,
+      "capturedOffsetMs": 600,
+      "rgbSha256": "63af3c6953908f8643ef4aad7ea5bbc161711ad57693442158bd9f767e2b3187",
+      "geometry": {
+        "scope": "complete_scene_geometry_oracle",
+        "measurementErrorM": 0.001,
+        "domain": {
+          "leftM": -2.0,
+          "rightM": 2.0,
+          "startM": 0.15,
+          "endM": 4.0,
+          "topM": 3.0
+        },
+        "occupiedBounds": [
+          {
+            "leftM": -0.075,
+            "rightM": 0.075,
+            "startM": 1.785,
+            "endM": 1.935,
+            "bottomM": 1.885,
+            "topM": 1.935
+          },
+          {
+            "leftM": -0.055,
+            "rightM": 0.055,
+            "startM": 1.805,
+            "endM": 1.915,
+            "bottomM": 0.0,
+            "topM": 1.9
+          }
+        ],
+        "floorBounds": [
+          {
+            "leftM": -4.0,
+            "rightM": 4.0,
+            "startM": -0.24,
+            "endM": 6.76,
+            "bottomM": -0.11,
+            "topM": -0.01
+          },
+          {
+            "leftM": -2.903092,
+            "rightM": 2.896908,
+            "startM": -0.249,
+            "endM": 0.269,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.904141,
+            "rightM": 2.895859,
+            "startM": 0.291,
+            "endM": 0.809,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.894286,
+            "rightM": 2.905714,
+            "startM": 0.831,
+            "endM": 1.349,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.905084,
+            "rightM": 2.894917,
+            "startM": 1.371,
+            "endM": 1.889,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.900128,
+            "rightM": 2.899872,
+            "startM": 1.911,
+            "endM": 2.429,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.909455,
+            "rightM": 2.890545,
+            "startM": 2.451,
+            "endM": 2.969,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.897135,
+            "rightM": 2.902865,
+            "startM": 2.991,
+            "endM": 3.509,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.899625,
+            "rightM": 2.900375,
+            "startM": 3.531,
+            "endM": 4.049,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -1.467,
+            "rightM": -1.453,
+            "startM": -0.248,
+            "endM": 0.268,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453,
+            "rightM": 1.467,
+            "startM": -0.248,
+            "endM": 0.268,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467,
+            "rightM": -1.453,
+            "startM": 0.292,
+            "endM": 0.808,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453,
+            "rightM": 1.467,
+            "startM": 0.292,
+            "endM": 0.808,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467,
+            "rightM": -1.453,
+            "startM": 0.832,
+            "endM": 1.348,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453,
+            "rightM": 1.467,
+            "startM": 0.832,
+            "endM": 1.348,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467,
+            "rightM": -1.453,
+            "startM": 1.372,
+            "endM": 1.888,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453,
+            "rightM": 1.467,
+            "startM": 1.372,
+            "endM": 1.888,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467,
+            "rightM": -1.453,
+            "startM": 1.912,
+            "endM": 2.428,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453,
+            "rightM": 1.467,
+            "startM": 1.912,
+            "endM": 2.428,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467,
+            "rightM": -1.453,
+            "startM": 2.452,
+            "endM": 2.968,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453,
+            "rightM": 1.467,
+            "startM": 2.452,
+            "endM": 2.968,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467,
+            "rightM": -1.453,
+            "startM": 2.992,
+            "endM": 3.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453,
+            "rightM": 1.467,
+            "startM": 2.992,
+            "endM": 3.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467,
+            "rightM": -1.453,
+            "startM": 3.532,
+            "endM": 4.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453,
+            "rightM": 1.467,
+            "startM": 3.532,
+            "endM": 4.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          }
+        ]
+      }
+    },
+    {
+      "sceneId": "context-low-obstacle",
+      "frameIndex": 0,
+      "capturedOffsetMs": 0,
+      "rgbSha256": "8379f037a12c16a7eead83687c0fd1ab880e5a00217bc025b3295ef1b3f73d66",
+      "geometry": {
+        "scope": "complete_scene_geometry_oracle",
+        "measurementErrorM": 0.001,
+        "domain": {
+          "leftM": -2.0,
+          "rightM": 2.0,
+          "startM": 0.15,
+          "endM": 4.0,
+          "topM": 3.0
+        },
+        "occupiedBounds": [
+          {
+            "leftM": -0.65,
+            "rightM": 0.65,
+            "startM": 2.48,
+            "endM": 3.12,
+            "bottomM": 0.0,
+            "topM": 0.32
+          },
+          {
+            "leftM": -0.15,
+            "rightM": 0.15,
+            "startM": 2.775,
+            "endM": 2.825,
+            "bottomM": 0.345,
+            "topM": 0.415
+          },
+          {
+            "leftM": -0.5075,
+            "rightM": -0.452499,
+            "startM": 2.725,
+            "endM": 2.875,
+            "bottomM": -0.0,
+            "topM": 0.15
+          },
+          {
+            "leftM": 0.452499,
+            "rightM": 0.5075,
+            "startM": 2.725,
+            "endM": 2.875,
+            "bottomM": -0.0,
+            "topM": 0.15
+          }
+        ],
+        "floorBounds": [
+          {
+            "leftM": -4.0,
+            "rightM": 4.0,
+            "startM": 0.0,
+            "endM": 7.0,
+            "bottomM": -0.11,
+            "topM": -0.01
+          },
+          {
+            "leftM": -2.900736,
+            "rightM": 2.899265,
+            "startM": -0.009,
+            "endM": 0.509,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.898855,
+            "rightM": 2.901146,
+            "startM": 0.531,
+            "endM": 1.049,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.899885,
+            "rightM": 2.900116,
+            "startM": 1.071,
+            "endM": 1.589,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.905453,
+            "rightM": 2.894547,
+            "startM": 1.611,
+            "endM": 2.129,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.905138,
+            "rightM": 2.894863,
+            "startM": 2.151,
+            "endM": 2.669,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.891514,
+            "rightM": 2.908485,
+            "startM": 2.691,
+            "endM": 3.209,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.891062,
+            "rightM": 2.908939,
+            "startM": 3.231,
+            "endM": 3.749,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.896334,
+            "rightM": 2.903667,
+            "startM": 3.771,
+            "endM": 4.289,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": -0.008,
+            "endM": 0.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": -0.008,
+            "endM": 0.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": 0.532,
+            "endM": 1.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": 0.532,
+            "endM": 1.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": 1.072,
+            "endM": 1.588,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": 1.072,
+            "endM": 1.588,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": 1.612,
+            "endM": 2.128,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": 1.612,
+            "endM": 2.128,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": 2.152,
+            "endM": 2.668,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": 2.152,
+            "endM": 2.668,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": 2.692,
+            "endM": 3.208,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": 2.692,
+            "endM": 3.208,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": 3.232,
+            "endM": 3.748,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": 3.232,
+            "endM": 3.748,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": 3.772,
+            "endM": 4.288,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": 3.772,
+            "endM": 4.288,
+            "bottomM": 0.001,
+            "topM": 0.007
+          }
+        ]
+      }
+    },
+    {
+      "sceneId": "context-low-obstacle",
+      "frameIndex": 1,
+      "capturedOffsetMs": 300,
+      "rgbSha256": "bca4254d23e6b81a19b262648109882106cc59b44ec80ab610152399363fcb1f",
+      "geometry": {
+        "scope": "complete_scene_geometry_oracle",
+        "measurementErrorM": 0.001,
+        "domain": {
+          "leftM": -2.0,
+          "rightM": 2.0,
+          "startM": 0.15,
+          "endM": 4.0,
+          "topM": 3.0
+        },
+        "occupiedBounds": [
+          {
+            "leftM": -0.680001,
+            "rightM": 0.619999,
+            "startM": 2.36,
+            "endM": 3.0,
+            "bottomM": 0.0,
+            "topM": 0.32
+          },
+          {
+            "leftM": -0.180001,
+            "rightM": 0.119999,
+            "startM": 2.655,
+            "endM": 2.705,
+            "bottomM": 0.345,
+            "topM": 0.415
+          },
+          {
+            "leftM": -0.537501,
+            "rightM": -0.4825,
+            "startM": 2.605,
+            "endM": 2.755,
+            "bottomM": -0.0,
+            "topM": 0.15
+          },
+          {
+            "leftM": 0.422498,
+            "rightM": 0.477499,
+            "startM": 2.605,
+            "endM": 2.755,
+            "bottomM": -0.0,
+            "topM": 0.15
+          }
+        ],
+        "floorBounds": [
+          {
+            "leftM": -4.030001,
+            "rightM": 3.969999,
+            "startM": -0.12,
+            "endM": 6.88,
+            "bottomM": -0.11,
+            "topM": -0.01
+          },
+          {
+            "leftM": -2.930737,
+            "rightM": 2.869264,
+            "startM": -0.129,
+            "endM": 0.389,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.928856,
+            "rightM": 2.871145,
+            "startM": 0.411,
+            "endM": 0.929,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.929886,
+            "rightM": 2.870115,
+            "startM": 0.951,
+            "endM": 1.469,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.935454,
+            "rightM": 2.864546,
+            "startM": 1.491,
+            "endM": 2.009,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.935139,
+            "rightM": 2.864862,
+            "startM": 2.031,
+            "endM": 2.549,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.921515,
+            "rightM": 2.878484,
+            "startM": 2.571,
+            "endM": 3.089,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.921063,
+            "rightM": 2.878938,
+            "startM": 3.111,
+            "endM": 3.629,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.926335,
+            "rightM": 2.873666,
+            "startM": 3.651,
+            "endM": 4.169,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -1.497,
+            "rightM": -1.483,
+            "startM": -0.128,
+            "endM": 0.388,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.422998,
+            "rightM": 1.436998,
+            "startM": -0.128,
+            "endM": 0.388,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497,
+            "rightM": -1.483,
+            "startM": 0.412,
+            "endM": 0.928,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.422998,
+            "rightM": 1.436998,
+            "startM": 0.412,
+            "endM": 0.928,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497,
+            "rightM": -1.483,
+            "startM": 0.952,
+            "endM": 1.468,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.422998,
+            "rightM": 1.436998,
+            "startM": 0.952,
+            "endM": 1.468,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497,
+            "rightM": -1.483,
+            "startM": 1.492,
+            "endM": 2.008,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.422998,
+            "rightM": 1.436998,
+            "startM": 1.492,
+            "endM": 2.008,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497,
+            "rightM": -1.483,
+            "startM": 2.032,
+            "endM": 2.548,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.422998,
+            "rightM": 1.436998,
+            "startM": 2.032,
+            "endM": 2.548,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497,
+            "rightM": -1.483,
+            "startM": 2.572,
+            "endM": 3.088,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.422998,
+            "rightM": 1.436998,
+            "startM": 2.572,
+            "endM": 3.088,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497,
+            "rightM": -1.483,
+            "startM": 3.112,
+            "endM": 3.628,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.422998,
+            "rightM": 1.436998,
+            "startM": 3.112,
+            "endM": 3.628,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497,
+            "rightM": -1.483,
+            "startM": 3.652,
+            "endM": 4.168,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.422998,
+            "rightM": 1.436998,
+            "startM": 3.652,
+            "endM": 4.168,
+            "bottomM": 0.001,
+            "topM": 0.007
+          }
+        ]
+      }
+    },
+    {
+      "sceneId": "context-low-obstacle",
+      "frameIndex": 2,
+      "capturedOffsetMs": 600,
+      "rgbSha256": "88bc2920532eee5c615a9c4c2ab5ccaa2f4b19493bdd3263cee12b9e88a324bd",
+      "geometry": {
+        "scope": "complete_scene_geometry_oracle",
+        "measurementErrorM": 0.001,
+        "domain": {
+          "leftM": -2.0,
+          "rightM": 2.0,
+          "startM": 0.15,
+          "endM": 4.0,
+          "topM": 3.0
+        },
+        "occupiedBounds": [
+          {
+            "leftM": -0.65,
+            "rightM": 0.65,
+            "startM": 2.24,
+            "endM": 2.88,
+            "bottomM": 0.0,
+            "topM": 0.32
+          },
+          {
+            "leftM": -0.15,
+            "rightM": 0.15,
+            "startM": 2.535,
+            "endM": 2.585,
+            "bottomM": 0.345,
+            "topM": 0.415
+          },
+          {
+            "leftM": -0.5075,
+            "rightM": -0.452499,
+            "startM": 2.485,
+            "endM": 2.635,
+            "bottomM": -0.0,
+            "topM": 0.15
+          },
+          {
+            "leftM": 0.452499,
+            "rightM": 0.5075,
+            "startM": 2.485,
+            "endM": 2.635,
+            "bottomM": -0.0,
+            "topM": 0.15
+          }
+        ],
+        "floorBounds": [
+          {
+            "leftM": -4.0,
+            "rightM": 4.0,
+            "startM": -0.24,
+            "endM": 6.76,
+            "bottomM": -0.11,
+            "topM": -0.01
+          },
+          {
+            "leftM": -2.900736,
+            "rightM": 2.899265,
+            "startM": -0.249,
+            "endM": 0.269,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.898855,
+            "rightM": 2.901146,
+            "startM": 0.291,
+            "endM": 0.809,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.899885,
+            "rightM": 2.900116,
+            "startM": 0.831,
+            "endM": 1.349,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.905453,
+            "rightM": 2.894547,
+            "startM": 1.371,
+            "endM": 1.889,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.905138,
+            "rightM": 2.894863,
+            "startM": 1.911,
+            "endM": 2.429,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.891514,
+            "rightM": 2.908485,
+            "startM": 2.451,
+            "endM": 2.969,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.891062,
+            "rightM": 2.908939,
+            "startM": 2.991,
+            "endM": 3.509,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.896334,
+            "rightM": 2.903667,
+            "startM": 3.531,
+            "endM": 4.049,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": -0.248,
+            "endM": 0.268,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": -0.248,
+            "endM": 0.268,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": 0.292,
+            "endM": 0.808,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": 0.292,
+            "endM": 0.808,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": 0.832,
+            "endM": 1.348,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": 0.832,
+            "endM": 1.348,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": 1.372,
+            "endM": 1.888,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": 1.372,
+            "endM": 1.888,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": 1.912,
+            "endM": 2.428,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": 1.912,
+            "endM": 2.428,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": 2.452,
+            "endM": 2.968,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": 2.452,
+            "endM": 2.968,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": 2.992,
+            "endM": 3.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": 2.992,
+            "endM": 3.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": 3.532,
+            "endM": 4.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": 3.532,
+            "endM": 4.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          }
+        ]
+      }
+    },
+    {
+      "sceneId": "context-overhead",
+      "frameIndex": 0,
+      "capturedOffsetMs": 0,
+      "rgbSha256": "839802df3df59e3ce924cea2ccc9089db92c6ccc3df0c35cb3f0e887737c2374",
+      "geometry": {
+        "scope": "complete_scene_geometry_oracle",
+        "measurementErrorM": 0.001,
+        "domain": {
+          "leftM": -2.0,
+          "rightM": 2.0,
+          "startM": 0.15,
+          "endM": 4.0,
+          "topM": 3.0
+        },
+        "occupiedBounds": [
+          {
+            "leftM": -0.75,
+            "rightM": 0.75,
+            "startM": 1.62,
+            "endM": 2.18,
+            "bottomM": 1.37,
+            "topM": 1.73
+          }
+        ],
+        "floorBounds": [
+          {
+            "leftM": -4.0,
+            "rightM": 4.0,
+            "startM": 0.0,
+            "endM": 7.0,
+            "bottomM": -0.11,
+            "topM": -0.01
+          },
+          {
+            "leftM": -2.902748,
+            "rightM": 2.897255,
+            "startM": -0.009,
+            "endM": 0.509,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.890331,
+            "rightM": 2.909672,
+            "startM": 0.531,
+            "endM": 1.049,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.898399,
+            "rightM": 2.901604,
+            "startM": 1.071,
+            "endM": 1.589,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.89716,
+            "rightM": 2.902843,
+            "startM": 1.611,
+            "endM": 2.129,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.89175,
+            "rightM": 2.908253,
+            "startM": 2.151,
+            "endM": 2.669,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.906929,
+            "rightM": 2.893074,
+            "startM": 2.691,
+            "endM": 3.209,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.905979,
+            "rightM": 2.894024,
+            "startM": 3.231,
+            "endM": 3.749,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.897816,
+            "rightM": 2.902187,
+            "startM": 3.771,
+            "endM": 4.289,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": -0.008,
+            "endM": 0.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": -0.008,
+            "endM": 0.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": 0.532,
+            "endM": 1.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": 0.532,
+            "endM": 1.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": 1.072,
+            "endM": 1.588,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": 1.072,
+            "endM": 1.588,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": 1.612,
+            "endM": 2.128,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": 1.612,
+            "endM": 2.128,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": 2.152,
+            "endM": 2.668,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": 2.152,
+            "endM": 2.668,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": 2.692,
+            "endM": 3.208,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": 2.692,
+            "endM": 3.208,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": 3.232,
+            "endM": 3.748,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": 3.232,
+            "endM": 3.748,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": 3.772,
+            "endM": 4.288,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": 3.772,
+            "endM": 4.288,
+            "bottomM": 0.001,
+            "topM": 0.007
+          }
+        ]
+      }
+    },
+    {
+      "sceneId": "context-overhead",
+      "frameIndex": 1,
+      "capturedOffsetMs": 300,
+      "rgbSha256": "73cfa6f9c26bc48581a7e4fa8cec2b08e3d3cefb2f36d6b7de3598c5e6e19df7",
+      "geometry": {
+        "scope": "complete_scene_geometry_oracle",
+        "measurementErrorM": 0.001,
+        "domain": {
+          "leftM": -2.0,
+          "rightM": 2.0,
+          "startM": 0.15,
+          "endM": 4.0,
+          "topM": 3.0
+        },
+        "occupiedBounds": [
+          {
+            "leftM": -0.779999,
+            "rightM": 0.720001,
+            "startM": 1.5,
+            "endM": 2.06,
+            "bottomM": 1.37,
+            "topM": 1.73
+          }
+        ],
+        "floorBounds": [
+          {
+            "leftM": -4.029999,
+            "rightM": 3.970001,
+            "startM": -0.12,
+            "endM": 6.88,
+            "bottomM": -0.11,
+            "topM": -0.01
+          },
+          {
+            "leftM": -2.932747,
+            "rightM": 2.867256,
+            "startM": -0.129,
+            "endM": 0.389,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.92033,
+            "rightM": 2.879673,
+            "startM": 0.411,
+            "endM": 0.929,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.928398,
+            "rightM": 2.871605,
+            "startM": 0.951,
+            "endM": 1.469,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.927159,
+            "rightM": 2.872844,
+            "startM": 1.491,
+            "endM": 2.009,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.921749,
+            "rightM": 2.878254,
+            "startM": 2.031,
+            "endM": 2.549,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.936928,
+            "rightM": 2.863075,
+            "startM": 2.571,
+            "endM": 3.089,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.935978,
+            "rightM": 2.864025,
+            "startM": 3.111,
+            "endM": 3.629,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.927815,
+            "rightM": 2.872188,
+            "startM": 3.651,
+            "endM": 4.169,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -1.496998,
+            "rightM": -1.482998,
+            "startM": -0.128,
+            "endM": 0.388,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.423,
+            "rightM": 1.437,
+            "startM": -0.128,
+            "endM": 0.388,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.496998,
+            "rightM": -1.482998,
+            "startM": 0.412,
+            "endM": 0.928,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.423,
+            "rightM": 1.437,
+            "startM": 0.412,
+            "endM": 0.928,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.496998,
+            "rightM": -1.482998,
+            "startM": 0.952,
+            "endM": 1.468,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.423,
+            "rightM": 1.437,
+            "startM": 0.952,
+            "endM": 1.468,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.496998,
+            "rightM": -1.482998,
+            "startM": 1.492,
+            "endM": 2.008,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.423,
+            "rightM": 1.437,
+            "startM": 1.492,
+            "endM": 2.008,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.496998,
+            "rightM": -1.482998,
+            "startM": 2.032,
+            "endM": 2.548,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.423,
+            "rightM": 1.437,
+            "startM": 2.032,
+            "endM": 2.548,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.496998,
+            "rightM": -1.482998,
+            "startM": 2.572,
+            "endM": 3.088,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.423,
+            "rightM": 1.437,
+            "startM": 2.572,
+            "endM": 3.088,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.496998,
+            "rightM": -1.482998,
+            "startM": 3.112,
+            "endM": 3.628,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.423,
+            "rightM": 1.437,
+            "startM": 3.112,
+            "endM": 3.628,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.496998,
+            "rightM": -1.482998,
+            "startM": 3.652,
+            "endM": 4.168,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.423,
+            "rightM": 1.437,
+            "startM": 3.652,
+            "endM": 4.168,
+            "bottomM": 0.001,
+            "topM": 0.007
+          }
+        ]
+      }
+    },
+    {
+      "sceneId": "context-overhead",
+      "frameIndex": 2,
+      "capturedOffsetMs": 600,
+      "rgbSha256": "a05c0b3515ff7326d65714cf6e87b5d594d474ea217314fcd89846f3f07ab236",
+      "geometry": {
+        "scope": "complete_scene_geometry_oracle",
+        "measurementErrorM": 0.001,
+        "domain": {
+          "leftM": -2.0,
+          "rightM": 2.0,
+          "startM": 0.15,
+          "endM": 4.0,
+          "topM": 3.0
+        },
+        "occupiedBounds": [
+          {
+            "leftM": -0.75,
+            "rightM": 0.75,
+            "startM": 1.38,
+            "endM": 1.94,
+            "bottomM": 1.37,
+            "topM": 1.73
+          }
+        ],
+        "floorBounds": [
+          {
+            "leftM": -4.0,
+            "rightM": 4.0,
+            "startM": -0.24,
+            "endM": 6.76,
+            "bottomM": -0.11,
+            "topM": -0.01
+          },
+          {
+            "leftM": -2.902748,
+            "rightM": 2.897255,
+            "startM": -0.249,
+            "endM": 0.269,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.890331,
+            "rightM": 2.909672,
+            "startM": 0.291,
+            "endM": 0.809,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.898399,
+            "rightM": 2.901604,
+            "startM": 0.831,
+            "endM": 1.349,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.89716,
+            "rightM": 2.902843,
+            "startM": 1.371,
+            "endM": 1.889,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.89175,
+            "rightM": 2.908253,
+            "startM": 1.911,
+            "endM": 2.429,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.906929,
+            "rightM": 2.893074,
+            "startM": 2.451,
+            "endM": 2.969,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.905979,
+            "rightM": 2.894024,
+            "startM": 2.991,
+            "endM": 3.509,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.897816,
+            "rightM": 2.902187,
+            "startM": 3.531,
+            "endM": 4.049,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": -0.248,
+            "endM": 0.268,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": -0.248,
+            "endM": 0.268,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": 0.292,
+            "endM": 0.808,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": 0.292,
+            "endM": 0.808,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": 0.832,
+            "endM": 1.348,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": 0.832,
+            "endM": 1.348,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": 1.372,
+            "endM": 1.888,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": 1.372,
+            "endM": 1.888,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": 1.912,
+            "endM": 2.428,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": 1.912,
+            "endM": 2.428,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": 2.452,
+            "endM": 2.968,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": 2.452,
+            "endM": 2.968,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": 2.992,
+            "endM": 3.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": 2.992,
+            "endM": 3.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.466999,
+            "rightM": -1.452999,
+            "startM": 3.532,
+            "endM": 4.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452999,
+            "rightM": 1.466999,
+            "startM": 3.532,
+            "endM": 4.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          }
+        ]
+      }
+    },
+    {
+      "sceneId": "context-crossing-rider",
+      "frameIndex": 0,
+      "capturedOffsetMs": 0,
+      "rgbSha256": "08683555209269ef05e5457baf0e685570af9378bbf2270ab8d71f5f79046285",
+      "geometry": {
+        "scope": "complete_scene_geometry_oracle",
+        "measurementErrorM": 0.001,
+        "domain": {
+          "leftM": -2.0,
+          "rightM": 2.0,
+          "startM": 0.15,
+          "endM": 4.0,
+          "topM": 3.0
+        },
+        "occupiedBounds": [
+          {
+            "leftM": -0.419998,
+            "rightM": 0.059998,
+            "startM": 1.76,
+            "endM": 2.24,
+            "bottomM": 0.045,
+            "topM": 1.595
+          },
+          {
+            "leftM": -0.559998,
+            "rightM": -0.479996,
+            "startM": 1.71,
+            "endM": 2.29,
+            "bottomM": 0.06,
+            "topM": 0.64
+          },
+          {
+            "leftM": 0.119995,
+            "rightM": 0.199997,
+            "startM": 1.71,
+            "endM": 2.29,
+            "bottomM": 0.06,
+            "topM": 0.64
+          }
+        ],
+        "floorBounds": [
+          {
+            "leftM": -4.0,
+            "rightM": 4.0,
+            "startM": 0.0,
+            "endM": 7.0,
+            "bottomM": -0.11,
+            "topM": -0.01
+          },
+          {
+            "leftM": -2.897797,
+            "rightM": 2.902206,
+            "startM": -0.009,
+            "endM": 0.509,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.906136,
+            "rightM": 2.893867,
+            "startM": 0.531,
+            "endM": 1.049,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.892418,
+            "rightM": 2.907585,
+            "startM": 1.071,
+            "endM": 1.589,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.891777,
+            "rightM": 2.908226,
+            "startM": 1.611,
+            "endM": 2.129,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.903442,
+            "rightM": 2.896561,
+            "startM": 2.151,
+            "endM": 2.669,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.900528,
+            "rightM": 2.899475,
+            "startM": 2.691,
+            "endM": 3.209,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.901703,
+            "rightM": 2.8983,
+            "startM": 3.231,
+            "endM": 3.749,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.897636,
+            "rightM": 2.902367,
+            "startM": 3.771,
+            "endM": 4.289,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": -0.008,
+            "endM": 0.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": -0.008,
+            "endM": 0.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": 0.532,
+            "endM": 1.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": 0.532,
+            "endM": 1.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": 1.072,
+            "endM": 1.588,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": 1.072,
+            "endM": 1.588,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": 1.612,
+            "endM": 2.128,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": 1.612,
+            "endM": 2.128,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": 2.152,
+            "endM": 2.668,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": 2.152,
+            "endM": 2.668,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": 2.692,
+            "endM": 3.208,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": 2.692,
+            "endM": 3.208,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": 3.232,
+            "endM": 3.748,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": 3.232,
+            "endM": 3.748,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": 3.772,
+            "endM": 4.288,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": 3.772,
+            "endM": 4.288,
+            "bottomM": 0.001,
+            "topM": 0.007
+          }
+        ]
+      }
+    },
+    {
+      "sceneId": "context-crossing-rider",
+      "frameIndex": 1,
+      "capturedOffsetMs": 300,
+      "rgbSha256": "d460c5f6a3c5005fe42d7a682e98f094f88e2d7bbaf82cc06356f52908965b93",
+      "geometry": {
+        "scope": "complete_scene_geometry_oracle",
+        "measurementErrorM": 0.001,
+        "domain": {
+          "leftM": -2.0,
+          "rightM": 2.0,
+          "startM": 0.15,
+          "endM": 4.0,
+          "topM": 3.0
+        },
+        "occupiedBounds": [
+          {
+            "leftM": -0.269997,
+            "rightM": 0.209999,
+            "startM": 1.64,
+            "endM": 2.12,
+            "bottomM": 0.045,
+            "topM": 1.595
+          },
+          {
+            "leftM": -0.409996,
+            "rightM": -0.329994,
+            "startM": 1.59,
+            "endM": 2.17,
+            "bottomM": 0.06,
+            "topM": 0.64
+          },
+          {
+            "leftM": 0.269996,
+            "rightM": 0.349998,
+            "startM": 1.59,
+            "endM": 2.17,
+            "bottomM": 0.06,
+            "topM": 0.64
+          }
+        ],
+        "floorBounds": [
+          {
+            "leftM": -4.029999,
+            "rightM": 3.970001,
+            "startM": -0.12,
+            "endM": 6.88,
+            "bottomM": -0.11,
+            "topM": -0.01
+          },
+          {
+            "leftM": -2.927796,
+            "rightM": 2.872207,
+            "startM": -0.129,
+            "endM": 0.389,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.936135,
+            "rightM": 2.863868,
+            "startM": 0.411,
+            "endM": 0.929,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.922417,
+            "rightM": 2.877586,
+            "startM": 0.951,
+            "endM": 1.469,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.921776,
+            "rightM": 2.878227,
+            "startM": 1.491,
+            "endM": 2.009,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.933441,
+            "rightM": 2.866562,
+            "startM": 2.031,
+            "endM": 2.549,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.930527,
+            "rightM": 2.869476,
+            "startM": 2.571,
+            "endM": 3.089,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.931702,
+            "rightM": 2.868301,
+            "startM": 3.111,
+            "endM": 3.629,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.927635,
+            "rightM": 2.872368,
+            "startM": 3.651,
+            "endM": 4.169,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -1.497002,
+            "rightM": -1.482994,
+            "startM": -0.128,
+            "endM": 0.388,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.422996,
+            "rightM": 1.437004,
+            "startM": -0.128,
+            "endM": 0.388,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497002,
+            "rightM": -1.482994,
+            "startM": 0.412,
+            "endM": 0.928,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.422996,
+            "rightM": 1.437004,
+            "startM": 0.412,
+            "endM": 0.928,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497002,
+            "rightM": -1.482994,
+            "startM": 0.952,
+            "endM": 1.468,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.422996,
+            "rightM": 1.437004,
+            "startM": 0.952,
+            "endM": 1.468,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497002,
+            "rightM": -1.482994,
+            "startM": 1.492,
+            "endM": 2.008,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.422996,
+            "rightM": 1.437004,
+            "startM": 1.492,
+            "endM": 2.008,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497002,
+            "rightM": -1.482994,
+            "startM": 2.032,
+            "endM": 2.548,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.422996,
+            "rightM": 1.437004,
+            "startM": 2.032,
+            "endM": 2.548,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497002,
+            "rightM": -1.482994,
+            "startM": 2.572,
+            "endM": 3.088,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.422996,
+            "rightM": 1.437004,
+            "startM": 2.572,
+            "endM": 3.088,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497002,
+            "rightM": -1.482994,
+            "startM": 3.112,
+            "endM": 3.628,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.422996,
+            "rightM": 1.437004,
+            "startM": 3.112,
+            "endM": 3.628,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497002,
+            "rightM": -1.482994,
+            "startM": 3.652,
+            "endM": 4.168,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.422996,
+            "rightM": 1.437004,
+            "startM": 3.652,
+            "endM": 4.168,
+            "bottomM": 0.001,
+            "topM": 0.007
+          }
+        ]
+      }
+    },
+    {
+      "sceneId": "context-crossing-rider",
+      "frameIndex": 2,
+      "capturedOffsetMs": 600,
+      "rgbSha256": "5d4b212399b2a937983787270afeac506e5b25f771e04b61cc5783f0ce63f54c",
+      "geometry": {
+        "scope": "complete_scene_geometry_oracle",
+        "measurementErrorM": 0.001,
+        "domain": {
+          "leftM": -2.0,
+          "rightM": 2.0,
+          "startM": 0.15,
+          "endM": 4.0,
+          "topM": 3.0
+        },
+        "occupiedBounds": [
+          {
+            "leftM": -0.059998,
+            "rightM": 0.419998,
+            "startM": 1.52,
+            "endM": 2.0,
+            "bottomM": 0.045,
+            "topM": 1.595
+          },
+          {
+            "leftM": -0.199997,
+            "rightM": -0.119995,
+            "startM": 1.47,
+            "endM": 2.05,
+            "bottomM": 0.06,
+            "topM": 0.64
+          },
+          {
+            "leftM": 0.479996,
+            "rightM": 0.559998,
+            "startM": 1.47,
+            "endM": 2.05,
+            "bottomM": 0.06,
+            "topM": 0.64
+          }
+        ],
+        "floorBounds": [
+          {
+            "leftM": -4.0,
+            "rightM": 4.0,
+            "startM": -0.24,
+            "endM": 6.76,
+            "bottomM": -0.11,
+            "topM": -0.01
+          },
+          {
+            "leftM": -2.897797,
+            "rightM": 2.902206,
+            "startM": -0.249,
+            "endM": 0.269,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.906136,
+            "rightM": 2.893867,
+            "startM": 0.291,
+            "endM": 0.809,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.892418,
+            "rightM": 2.907585,
+            "startM": 0.831,
+            "endM": 1.349,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.891777,
+            "rightM": 2.908226,
+            "startM": 1.371,
+            "endM": 1.889,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.903442,
+            "rightM": 2.896561,
+            "startM": 1.911,
+            "endM": 2.429,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.900528,
+            "rightM": 2.899475,
+            "startM": 2.451,
+            "endM": 2.969,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.901703,
+            "rightM": 2.8983,
+            "startM": 2.991,
+            "endM": 3.509,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.897636,
+            "rightM": 2.902367,
+            "startM": 3.531,
+            "endM": 4.049,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": -0.248,
+            "endM": 0.268,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": -0.248,
+            "endM": 0.268,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": 0.292,
+            "endM": 0.808,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": 0.292,
+            "endM": 0.808,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": 0.832,
+            "endM": 1.348,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": 0.832,
+            "endM": 1.348,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": 1.372,
+            "endM": 1.888,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": 1.372,
+            "endM": 1.888,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": 1.912,
+            "endM": 2.428,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": 1.912,
+            "endM": 2.428,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": 2.452,
+            "endM": 2.968,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": 2.452,
+            "endM": 2.968,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": 2.992,
+            "endM": 3.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": 2.992,
+            "endM": 3.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": 3.532,
+            "endM": 4.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": 3.532,
+            "endM": 4.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          }
+        ]
+      }
+    },
+    {
+      "sceneId": "context-ramp",
+      "frameIndex": 0,
+      "capturedOffsetMs": 0,
+      "rgbSha256": "9867f9f3f55b238fb31a4252e12aa5c6f1a3ca7d742f777dfd8f8695892bf314",
+      "geometry": {
+        "scope": "complete_scene_geometry_oracle",
+        "measurementErrorM": 0.001,
+        "domain": {
+          "leftM": -2.0,
+          "rightM": 2.0,
+          "startM": 0.15,
+          "endM": 4.0,
+          "topM": 3.0
+        },
+        "occupiedBounds": [
+          {
+            "leftM": -1.5,
+            "rightM": 1.5,
+            "startM": 1.206384,
+            "endM": 4.793616,
+            "bottomM": -0.079733,
+            "topM": 0.579733
+          }
+        ],
+        "floorBounds": [
+          {
+            "leftM": -4.0,
+            "rightM": 4.0,
+            "startM": 0.0,
+            "endM": 7.0,
+            "bottomM": -0.11,
+            "topM": -0.01
+          },
+          {
+            "leftM": -2.898132,
+            "rightM": 2.901871,
+            "startM": -0.009,
+            "endM": 0.509,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.904945,
+            "rightM": 2.895058,
+            "startM": 0.531,
+            "endM": 1.049,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.899544,
+            "rightM": 2.900459,
+            "startM": 1.071,
+            "endM": 1.589,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.897057,
+            "rightM": 2.902946,
+            "startM": 1.611,
+            "endM": 2.129,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.906799,
+            "rightM": 2.893204,
+            "startM": 2.151,
+            "endM": 2.669,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.896454,
+            "rightM": 2.903549,
+            "startM": 2.691,
+            "endM": 3.209,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.896042,
+            "rightM": 2.903961,
+            "startM": 3.231,
+            "endM": 3.749,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.905045,
+            "rightM": 2.894958,
+            "startM": 3.771,
+            "endM": 4.289,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": -0.008,
+            "endM": 0.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": -0.008,
+            "endM": 0.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": 0.532,
+            "endM": 1.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": 0.532,
+            "endM": 1.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": 1.072,
+            "endM": 1.588,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": 1.072,
+            "endM": 1.588,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": 1.612,
+            "endM": 2.128,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": 1.612,
+            "endM": 2.128,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": 2.152,
+            "endM": 2.668,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": 2.152,
+            "endM": 2.668,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": 2.692,
+            "endM": 3.208,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": 2.692,
+            "endM": 3.208,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": 3.232,
+            "endM": 3.748,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": 3.232,
+            "endM": 3.748,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": 3.772,
+            "endM": 4.288,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": 3.772,
+            "endM": 4.288,
+            "bottomM": 0.001,
+            "topM": 0.007
+          }
+        ]
+      }
+    },
+    {
+      "sceneId": "context-ramp",
+      "frameIndex": 1,
+      "capturedOffsetMs": 300,
+      "rgbSha256": "533e9201f71acc20460ecde79919f0adf8fd9f6b84710862125b727eaa6a136e",
+      "geometry": {
+        "scope": "complete_scene_geometry_oracle",
+        "measurementErrorM": 0.001,
+        "domain": {
+          "leftM": -2.0,
+          "rightM": 2.0,
+          "startM": 0.15,
+          "endM": 4.0,
+          "topM": 3.0
+        },
+        "occupiedBounds": [
+          {
+            "leftM": -1.529999,
+            "rightM": 1.470001,
+            "startM": 1.086384,
+            "endM": 4.673616,
+            "bottomM": -0.079733,
+            "topM": 0.579733
+          }
+        ],
+        "floorBounds": [
+          {
+            "leftM": -4.029999,
+            "rightM": 3.970001,
+            "startM": -0.12,
+            "endM": 6.88,
+            "bottomM": -0.11,
+            "topM": -0.01
+          },
+          {
+            "leftM": -2.928131,
+            "rightM": 2.871872,
+            "startM": -0.129,
+            "endM": 0.389,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.934944,
+            "rightM": 2.865059,
+            "startM": 0.411,
+            "endM": 0.929,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.929543,
+            "rightM": 2.87046,
+            "startM": 0.951,
+            "endM": 1.469,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.927056,
+            "rightM": 2.872947,
+            "startM": 1.491,
+            "endM": 2.009,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.936798,
+            "rightM": 2.863205,
+            "startM": 2.031,
+            "endM": 2.549,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.926453,
+            "rightM": 2.87355,
+            "startM": 2.571,
+            "endM": 3.089,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.926041,
+            "rightM": 2.873962,
+            "startM": 3.111,
+            "endM": 3.629,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.935044,
+            "rightM": 2.864959,
+            "startM": 3.651,
+            "endM": 4.169,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -1.497002,
+            "rightM": -1.482994,
+            "startM": -0.128,
+            "endM": 0.388,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.422996,
+            "rightM": 1.437004,
+            "startM": -0.128,
+            "endM": 0.388,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497002,
+            "rightM": -1.482994,
+            "startM": 0.412,
+            "endM": 0.928,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.422996,
+            "rightM": 1.437004,
+            "startM": 0.412,
+            "endM": 0.928,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497002,
+            "rightM": -1.482994,
+            "startM": 0.952,
+            "endM": 1.468,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.422996,
+            "rightM": 1.437004,
+            "startM": 0.952,
+            "endM": 1.468,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497002,
+            "rightM": -1.482994,
+            "startM": 1.492,
+            "endM": 2.008,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.422996,
+            "rightM": 1.437004,
+            "startM": 1.492,
+            "endM": 2.008,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497002,
+            "rightM": -1.482994,
+            "startM": 2.032,
+            "endM": 2.548,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.422996,
+            "rightM": 1.437004,
+            "startM": 2.032,
+            "endM": 2.548,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497002,
+            "rightM": -1.482994,
+            "startM": 2.572,
+            "endM": 3.088,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.422996,
+            "rightM": 1.437004,
+            "startM": 2.572,
+            "endM": 3.088,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497002,
+            "rightM": -1.482994,
+            "startM": 3.112,
+            "endM": 3.628,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.422996,
+            "rightM": 1.437004,
+            "startM": 3.112,
+            "endM": 3.628,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497002,
+            "rightM": -1.482994,
+            "startM": 3.652,
+            "endM": 4.168,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.422996,
+            "rightM": 1.437004,
+            "startM": 3.652,
+            "endM": 4.168,
+            "bottomM": 0.001,
+            "topM": 0.007
+          }
+        ]
+      }
+    },
+    {
+      "sceneId": "context-ramp",
+      "frameIndex": 2,
+      "capturedOffsetMs": 600,
+      "rgbSha256": "54d3c31d4bbb026f4628b9f41ed424c94030b8197417e920f3d7e737a46e8641",
+      "geometry": {
+        "scope": "complete_scene_geometry_oracle",
+        "measurementErrorM": 0.001,
+        "domain": {
+          "leftM": -2.0,
+          "rightM": 2.0,
+          "startM": 0.15,
+          "endM": 4.0,
+          "topM": 3.0
+        },
+        "occupiedBounds": [
+          {
+            "leftM": -1.5,
+            "rightM": 1.5,
+            "startM": 0.966384,
+            "endM": 4.553616,
+            "bottomM": -0.079733,
+            "topM": 0.579733
+          }
+        ],
+        "floorBounds": [
+          {
+            "leftM": -4.0,
+            "rightM": 4.0,
+            "startM": -0.24,
+            "endM": 6.76,
+            "bottomM": -0.11,
+            "topM": -0.01
+          },
+          {
+            "leftM": -2.898132,
+            "rightM": 2.901871,
+            "startM": -0.249,
+            "endM": 0.269,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.904945,
+            "rightM": 2.895058,
+            "startM": 0.291,
+            "endM": 0.809,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.899544,
+            "rightM": 2.900459,
+            "startM": 0.831,
+            "endM": 1.349,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.897057,
+            "rightM": 2.902946,
+            "startM": 1.371,
+            "endM": 1.889,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.906799,
+            "rightM": 2.893204,
+            "startM": 1.911,
+            "endM": 2.429,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.896454,
+            "rightM": 2.903549,
+            "startM": 2.451,
+            "endM": 2.969,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.896042,
+            "rightM": 2.903961,
+            "startM": 2.991,
+            "endM": 3.509,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.905045,
+            "rightM": 2.894958,
+            "startM": 3.531,
+            "endM": 4.049,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": -0.248,
+            "endM": 0.268,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": -0.248,
+            "endM": 0.268,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": 0.292,
+            "endM": 0.808,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": 0.292,
+            "endM": 0.808,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": 0.832,
+            "endM": 1.348,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": 0.832,
+            "endM": 1.348,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": 1.372,
+            "endM": 1.888,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": 1.372,
+            "endM": 1.888,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": 1.912,
+            "endM": 2.428,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": 1.912,
+            "endM": 2.428,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": 2.452,
+            "endM": 2.968,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": 2.452,
+            "endM": 2.968,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": 2.992,
+            "endM": 3.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": 2.992,
+            "endM": 3.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.467003,
+            "rightM": -1.452995,
+            "startM": 3.532,
+            "endM": 4.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.452995,
+            "rightM": 1.467003,
+            "startM": 3.532,
+            "endM": 4.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          }
+        ]
+      }
+    },
+    {
+      "sceneId": "context-doorway",
+      "frameIndex": 0,
+      "capturedOffsetMs": 0,
+      "rgbSha256": "c26271d1be54d4446f84aa294cc25b37c7c51b3f22b97734658b35894a70ac65",
+      "geometry": {
+        "scope": "complete_scene_geometry_oracle",
+        "measurementErrorM": 0.001,
+        "domain": {
+          "leftM": -2.0,
+          "rightM": 2.0,
+          "startM": 0.15,
+          "endM": 4.0,
+          "topM": 3.0
+        },
+        "occupiedBounds": [
+          {
+            "leftM": -0.720001,
+            "rightM": 0.720001,
+            "startM": 2.82,
+            "endM": 3.18,
+            "bottomM": 1.9,
+            "topM": 2.2
+          },
+          {
+            "leftM": -2.199997,
+            "rightM": -0.699997,
+            "startM": 2.82,
+            "endM": 3.18,
+            "bottomM": 0.0,
+            "topM": 2.2
+          },
+          {
+            "leftM": 0.699997,
+            "rightM": 2.199997,
+            "startM": 2.82,
+            "endM": 3.18,
+            "bottomM": 0.0,
+            "topM": 2.2
+          }
+        ],
+        "floorBounds": [
+          {
+            "leftM": -4.0,
+            "rightM": 4.0,
+            "startM": 0.0,
+            "endM": 7.0,
+            "bottomM": -0.11,
+            "topM": -0.01
+          },
+          {
+            "leftM": -2.909195,
+            "rightM": 2.890793,
+            "startM": -0.009,
+            "endM": 0.509,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.896393,
+            "rightM": 2.903595,
+            "startM": 0.531,
+            "endM": 1.049,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.904663,
+            "rightM": 2.895325,
+            "startM": 1.071,
+            "endM": 1.589,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.890274,
+            "rightM": 2.909714,
+            "startM": 1.611,
+            "endM": 2.129,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.895493,
+            "rightM": 2.904495,
+            "startM": 2.151,
+            "endM": 2.669,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.89537,
+            "rightM": 2.904617,
+            "startM": 2.691,
+            "endM": 3.209,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.909714,
+            "rightM": 2.890274,
+            "startM": 3.231,
+            "endM": 3.749,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.895264,
+            "rightM": 2.904724,
+            "startM": 3.771,
+            "endM": 4.289,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": -0.008,
+            "endM": 0.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": -0.008,
+            "endM": 0.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 0.532,
+            "endM": 1.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 0.532,
+            "endM": 1.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 1.072,
+            "endM": 1.588,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 1.072,
+            "endM": 1.588,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 1.612,
+            "endM": 2.128,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 1.612,
+            "endM": 2.128,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 2.152,
+            "endM": 2.668,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 2.152,
+            "endM": 2.668,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 2.692,
+            "endM": 3.208,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 2.692,
+            "endM": 3.208,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 3.232,
+            "endM": 3.748,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 3.232,
+            "endM": 3.748,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 3.772,
+            "endM": 4.288,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 3.772,
+            "endM": 4.288,
+            "bottomM": 0.001,
+            "topM": 0.007
+          }
+        ]
+      }
+    },
+    {
+      "sceneId": "context-doorway",
+      "frameIndex": 1,
+      "capturedOffsetMs": 300,
+      "rgbSha256": "d357ee8e5152f194e9b33dd2dbc9ee187545a0ffcfebbc7670663a8029c6a97b",
+      "geometry": {
+        "scope": "complete_scene_geometry_oracle",
+        "measurementErrorM": 0.001,
+        "domain": {
+          "leftM": -2.0,
+          "rightM": 2.0,
+          "startM": 0.15,
+          "endM": 4.0,
+          "topM": 3.0
+        },
+        "occupiedBounds": [
+          {
+            "leftM": -0.75,
+            "rightM": 0.690002,
+            "startM": 2.7,
+            "endM": 3.06,
+            "bottomM": 1.9,
+            "topM": 2.2
+          },
+          {
+            "leftM": -2.229996,
+            "rightM": -0.729996,
+            "startM": 2.7,
+            "endM": 3.06,
+            "bottomM": 0.0,
+            "topM": 2.2
+          },
+          {
+            "leftM": 0.669998,
+            "rightM": 2.169998,
+            "startM": 2.7,
+            "endM": 3.06,
+            "bottomM": 0.0,
+            "topM": 2.2
+          }
+        ],
+        "floorBounds": [
+          {
+            "leftM": -4.029999,
+            "rightM": 3.970001,
+            "startM": -0.12,
+            "endM": 6.88,
+            "bottomM": -0.11,
+            "topM": -0.01
+          },
+          {
+            "leftM": -2.939194,
+            "rightM": 2.860794,
+            "startM": -0.129,
+            "endM": 0.389,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.926392,
+            "rightM": 2.873596,
+            "startM": 0.411,
+            "endM": 0.929,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.934662,
+            "rightM": 2.865326,
+            "startM": 0.951,
+            "endM": 1.469,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.920273,
+            "rightM": 2.879715,
+            "startM": 1.491,
+            "endM": 2.009,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.925492,
+            "rightM": 2.874496,
+            "startM": 2.031,
+            "endM": 2.549,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.925369,
+            "rightM": 2.874618,
+            "startM": 2.571,
+            "endM": 3.089,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.939713,
+            "rightM": 2.860275,
+            "startM": 3.111,
+            "endM": 3.629,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.925263,
+            "rightM": 2.874725,
+            "startM": 3.651,
+            "endM": 4.169,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -1.497009,
+            "rightM": -1.483002,
+            "startM": -0.128,
+            "endM": 0.388,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.423004,
+            "rightM": 1.437011,
+            "startM": -0.128,
+            "endM": 0.388,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497009,
+            "rightM": -1.483002,
+            "startM": 0.412,
+            "endM": 0.928,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.423004,
+            "rightM": 1.437011,
+            "startM": 0.412,
+            "endM": 0.928,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497009,
+            "rightM": -1.483002,
+            "startM": 0.952,
+            "endM": 1.468,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.423004,
+            "rightM": 1.437011,
+            "startM": 0.952,
+            "endM": 1.468,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497009,
+            "rightM": -1.483002,
+            "startM": 1.492,
+            "endM": 2.008,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.423004,
+            "rightM": 1.437011,
+            "startM": 1.492,
+            "endM": 2.008,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497009,
+            "rightM": -1.483002,
+            "startM": 2.032,
+            "endM": 2.548,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.423004,
+            "rightM": 1.437011,
+            "startM": 2.032,
+            "endM": 2.548,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497009,
+            "rightM": -1.483002,
+            "startM": 2.572,
+            "endM": 3.088,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.423004,
+            "rightM": 1.437011,
+            "startM": 2.572,
+            "endM": 3.088,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497009,
+            "rightM": -1.483002,
+            "startM": 3.112,
+            "endM": 3.628,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.423004,
+            "rightM": 1.437011,
+            "startM": 3.112,
+            "endM": 3.628,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.497009,
+            "rightM": -1.483002,
+            "startM": 3.652,
+            "endM": 4.168,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.423004,
+            "rightM": 1.437011,
+            "startM": 3.652,
+            "endM": 4.168,
+            "bottomM": 0.001,
+            "topM": 0.007
+          }
+        ]
+      }
+    },
+    {
+      "sceneId": "context-doorway",
+      "frameIndex": 2,
+      "capturedOffsetMs": 600,
+      "rgbSha256": "29d5dfdaf93f8e799aee3ccbf815165a7ab980bc9c3dad1e8bbd3fa75c18c1ca",
+      "geometry": {
+        "scope": "complete_scene_geometry_oracle",
+        "measurementErrorM": 0.001,
+        "domain": {
+          "leftM": -2.0,
+          "rightM": 2.0,
+          "startM": 0.15,
+          "endM": 4.0,
+          "topM": 3.0
+        },
+        "occupiedBounds": [
+          {
+            "leftM": -0.720001,
+            "rightM": 0.720001,
+            "startM": 2.58,
+            "endM": 2.94,
+            "bottomM": 1.9,
+            "topM": 2.2
+          },
+          {
+            "leftM": -2.199997,
+            "rightM": -0.699997,
+            "startM": 2.58,
+            "endM": 2.94,
+            "bottomM": 0.0,
+            "topM": 2.2
+          },
+          {
+            "leftM": 0.699997,
+            "rightM": 2.199997,
+            "startM": 2.58,
+            "endM": 2.94,
+            "bottomM": 0.0,
+            "topM": 2.2
+          }
+        ],
+        "floorBounds": [
+          {
+            "leftM": -4.0,
+            "rightM": 4.0,
+            "startM": -0.24,
+            "endM": 6.76,
+            "bottomM": -0.11,
+            "topM": -0.01
+          },
+          {
+            "leftM": -2.909195,
+            "rightM": 2.890793,
+            "startM": -0.249,
+            "endM": 0.269,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.896393,
+            "rightM": 2.903595,
+            "startM": 0.291,
+            "endM": 0.809,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.904663,
+            "rightM": 2.895325,
+            "startM": 0.831,
+            "endM": 1.349,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.890274,
+            "rightM": 2.909714,
+            "startM": 1.371,
+            "endM": 1.889,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.895493,
+            "rightM": 2.904495,
+            "startM": 1.911,
+            "endM": 2.429,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.89537,
+            "rightM": 2.904617,
+            "startM": 2.451,
+            "endM": 2.969,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.909714,
+            "rightM": 2.890274,
+            "startM": 2.991,
+            "endM": 3.509,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.895264,
+            "rightM": 2.904724,
+            "startM": 3.531,
+            "endM": 4.049,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": -0.248,
+            "endM": 0.268,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": -0.248,
+            "endM": 0.268,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 0.292,
+            "endM": 0.808,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 0.292,
+            "endM": 0.808,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 0.832,
+            "endM": 1.348,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 0.832,
+            "endM": 1.348,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 1.372,
+            "endM": 1.888,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 1.372,
+            "endM": 1.888,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 1.912,
+            "endM": 2.428,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 1.912,
+            "endM": 2.428,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 2.452,
+            "endM": 2.968,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 2.452,
+            "endM": 2.968,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 2.992,
+            "endM": 3.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 2.992,
+            "endM": 3.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 3.532,
+            "endM": 4.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 3.532,
+            "endM": 4.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          }
+        ]
+      }
+    }
+  ],
+  "contrasts": [
+    {
+      "id": "narrow",
+      "geometry": {
+        "scope": "complete_scene_geometry_oracle",
+        "measurementErrorM": 0.001,
+        "domain": {
+          "leftM": -2.0,
+          "rightM": 2.0,
+          "startM": 0.15,
+          "endM": 4.0,
+          "topM": 3.0
+        },
+        "occupiedBounds": [
+          {
+            "leftM": -0.720001,
+            "rightM": 0.720001,
+            "startM": 2.82,
+            "endM": 3.18,
+            "bottomM": 1.9,
+            "topM": 2.2
+          },
+          {
+            "leftM": -1.899994,
+            "rightM": -0.399994,
+            "startM": 2.82,
+            "endM": 3.18,
+            "bottomM": 0.0,
+            "topM": 2.2
+          },
+          {
+            "leftM": 0.399994,
+            "rightM": 1.899994,
+            "startM": 2.82,
+            "endM": 3.18,
+            "bottomM": 0.0,
+            "topM": 2.2
+          }
+        ],
+        "floorBounds": [
+          {
+            "leftM": -4.0,
+            "rightM": 4.0,
+            "startM": 0.0,
+            "endM": 7.0,
+            "bottomM": -0.11,
+            "topM": -0.01
+          },
+          {
+            "leftM": -2.909195,
+            "rightM": 2.890793,
+            "startM": -0.009,
+            "endM": 0.509,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.896393,
+            "rightM": 2.903595,
+            "startM": 0.531,
+            "endM": 1.049,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.904663,
+            "rightM": 2.895325,
+            "startM": 1.071,
+            "endM": 1.589,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.890274,
+            "rightM": 2.909714,
+            "startM": 1.611,
+            "endM": 2.129,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.895493,
+            "rightM": 2.904495,
+            "startM": 2.151,
+            "endM": 2.669,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.89537,
+            "rightM": 2.904617,
+            "startM": 2.691,
+            "endM": 3.209,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.909714,
+            "rightM": 2.890274,
+            "startM": 3.231,
+            "endM": 3.749,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.895264,
+            "rightM": 2.904724,
+            "startM": 3.771,
+            "endM": 4.289,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": -0.008,
+            "endM": 0.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": -0.008,
+            "endM": 0.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 0.532,
+            "endM": 1.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 0.532,
+            "endM": 1.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 1.072,
+            "endM": 1.588,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 1.072,
+            "endM": 1.588,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 1.612,
+            "endM": 2.128,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 1.612,
+            "endM": 2.128,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 2.152,
+            "endM": 2.668,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 2.152,
+            "endM": 2.668,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 2.692,
+            "endM": 3.208,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 2.692,
+            "endM": 3.208,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 3.232,
+            "endM": 3.748,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 3.232,
+            "endM": 3.748,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 3.772,
+            "endM": 4.288,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 3.772,
+            "endM": 4.288,
+            "bottomM": 0.001,
+            "topM": 0.007
+          }
+        ]
+      }
+    },
+    {
+      "id": "low-lintel",
+      "geometry": {
+        "scope": "complete_scene_geometry_oracle",
+        "measurementErrorM": 0.001,
+        "domain": {
+          "leftM": -2.0,
+          "rightM": 2.0,
+          "startM": 0.15,
+          "endM": 4.0,
+          "topM": 3.0
+        },
+        "occupiedBounds": [
+          {
+            "leftM": -0.720001,
+            "rightM": 0.720001,
+            "startM": 2.82,
+            "endM": 3.18,
+            "bottomM": 1.4,
+            "topM": 1.7
+          },
+          {
+            "leftM": -2.199997,
+            "rightM": -0.699997,
+            "startM": 2.82,
+            "endM": 3.18,
+            "bottomM": 0.0,
+            "topM": 2.2
+          },
+          {
+            "leftM": 0.699997,
+            "rightM": 2.199997,
+            "startM": 2.82,
+            "endM": 3.18,
+            "bottomM": 0.0,
+            "topM": 2.2
+          }
+        ],
+        "floorBounds": [
+          {
+            "leftM": -4.0,
+            "rightM": 4.0,
+            "startM": 0.0,
+            "endM": 7.0,
+            "bottomM": -0.11,
+            "topM": -0.01
+          },
+          {
+            "leftM": -2.909195,
+            "rightM": 2.890793,
+            "startM": -0.009,
+            "endM": 0.509,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.896393,
+            "rightM": 2.903595,
+            "startM": 0.531,
+            "endM": 1.049,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.904663,
+            "rightM": 2.895325,
+            "startM": 1.071,
+            "endM": 1.589,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.890274,
+            "rightM": 2.909714,
+            "startM": 1.611,
+            "endM": 2.129,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.895493,
+            "rightM": 2.904495,
+            "startM": 2.151,
+            "endM": 2.669,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.89537,
+            "rightM": 2.904617,
+            "startM": 2.691,
+            "endM": 3.209,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.909714,
+            "rightM": 2.890274,
+            "startM": 3.231,
+            "endM": 3.749,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.895264,
+            "rightM": 2.904724,
+            "startM": 3.771,
+            "endM": 4.289,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": -0.008,
+            "endM": 0.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": -0.008,
+            "endM": 0.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 0.532,
+            "endM": 1.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 0.532,
+            "endM": 1.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 1.072,
+            "endM": 1.588,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 1.072,
+            "endM": 1.588,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 1.612,
+            "endM": 2.128,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 1.612,
+            "endM": 2.128,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 2.152,
+            "endM": 2.668,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 2.152,
+            "endM": 2.668,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 2.692,
+            "endM": 3.208,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 2.692,
+            "endM": 3.208,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 3.232,
+            "endM": 3.748,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 3.232,
+            "endM": 3.748,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 3.772,
+            "endM": 4.288,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 3.772,
+            "endM": 4.288,
+            "bottomM": 0.001,
+            "topM": 0.007
+          }
+        ]
+      }
+    },
+    {
+      "id": "offset",
+      "geometry": {
+        "scope": "complete_scene_geometry_oracle",
+        "measurementErrorM": 0.001,
+        "domain": {
+          "leftM": -2.0,
+          "rightM": 2.0,
+          "startM": 0.15,
+          "endM": 4.0,
+          "topM": 3.0
+        },
+        "occupiedBounds": [
+          {
+            "leftM": 0.080002,
+            "rightM": 1.520004,
+            "startM": 2.82,
+            "endM": 3.18,
+            "bottomM": 1.9,
+            "topM": 2.2
+          },
+          {
+            "leftM": -1.399994,
+            "rightM": 0.100006,
+            "startM": 2.82,
+            "endM": 3.18,
+            "bottomM": 0.0,
+            "topM": 2.2
+          },
+          {
+            "leftM": 1.5,
+            "rightM": 3.0,
+            "startM": 2.82,
+            "endM": 3.18,
+            "bottomM": 0.0,
+            "topM": 2.2
+          }
+        ],
+        "floorBounds": [
+          {
+            "leftM": -4.0,
+            "rightM": 4.0,
+            "startM": 0.0,
+            "endM": 7.0,
+            "bottomM": -0.11,
+            "topM": -0.01
+          },
+          {
+            "leftM": -2.909195,
+            "rightM": 2.890793,
+            "startM": -0.009,
+            "endM": 0.509,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.896393,
+            "rightM": 2.903595,
+            "startM": 0.531,
+            "endM": 1.049,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.904663,
+            "rightM": 2.895325,
+            "startM": 1.071,
+            "endM": 1.589,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.890274,
+            "rightM": 2.909714,
+            "startM": 1.611,
+            "endM": 2.129,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.895493,
+            "rightM": 2.904495,
+            "startM": 2.151,
+            "endM": 2.669,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.89537,
+            "rightM": 2.904617,
+            "startM": 2.691,
+            "endM": 3.209,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.909714,
+            "rightM": 2.890274,
+            "startM": 3.231,
+            "endM": 3.749,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.895264,
+            "rightM": 2.904724,
+            "startM": 3.771,
+            "endM": 4.289,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": -0.008,
+            "endM": 0.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": -0.008,
+            "endM": 0.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 0.532,
+            "endM": 1.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 0.532,
+            "endM": 1.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 1.072,
+            "endM": 1.588,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 1.072,
+            "endM": 1.588,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 1.612,
+            "endM": 2.128,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 1.612,
+            "endM": 2.128,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 2.152,
+            "endM": 2.668,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 2.152,
+            "endM": 2.668,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 2.692,
+            "endM": 3.208,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 2.692,
+            "endM": 3.208,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 3.232,
+            "endM": 3.748,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 3.232,
+            "endM": 3.748,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 3.772,
+            "endM": 4.288,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 3.772,
+            "endM": 4.288,
+            "bottomM": 0.001,
+            "topM": 0.007
+          }
+        ]
+      }
+    },
+    {
+      "id": "interior-pole",
+      "geometry": {
+        "scope": "complete_scene_geometry_oracle",
+        "measurementErrorM": 0.001,
+        "domain": {
+          "leftM": -2.0,
+          "rightM": 2.0,
+          "startM": 0.15,
+          "endM": 4.0,
+          "topM": 3.0
+        },
+        "occupiedBounds": [
+          {
+            "leftM": -0.039993,
+            "rightM": 0.039993,
+            "startM": 2.96,
+            "endM": 3.04,
+            "bottomM": 0.0,
+            "topM": 1.6
+          },
+          {
+            "leftM": -0.720001,
+            "rightM": 0.720001,
+            "startM": 2.82,
+            "endM": 3.18,
+            "bottomM": 1.9,
+            "topM": 2.2
+          },
+          {
+            "leftM": -2.199997,
+            "rightM": -0.699997,
+            "startM": 2.82,
+            "endM": 3.18,
+            "bottomM": 0.0,
+            "topM": 2.2
+          },
+          {
+            "leftM": 0.699997,
+            "rightM": 2.199997,
+            "startM": 2.82,
+            "endM": 3.18,
+            "bottomM": 0.0,
+            "topM": 2.2
+          }
+        ],
+        "floorBounds": [
+          {
+            "leftM": -4.0,
+            "rightM": 4.0,
+            "startM": 0.0,
+            "endM": 7.0,
+            "bottomM": -0.11,
+            "topM": -0.01
+          },
+          {
+            "leftM": -2.909195,
+            "rightM": 2.890793,
+            "startM": -0.009,
+            "endM": 0.509,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.896393,
+            "rightM": 2.903595,
+            "startM": 0.531,
+            "endM": 1.049,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.904663,
+            "rightM": 2.895325,
+            "startM": 1.071,
+            "endM": 1.589,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.890274,
+            "rightM": 2.909714,
+            "startM": 1.611,
+            "endM": 2.129,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.895493,
+            "rightM": 2.904495,
+            "startM": 2.151,
+            "endM": 2.669,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.89537,
+            "rightM": 2.904617,
+            "startM": 2.691,
+            "endM": 3.209,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.909714,
+            "rightM": 2.890274,
+            "startM": 3.231,
+            "endM": 3.749,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.895264,
+            "rightM": 2.904724,
+            "startM": 3.771,
+            "endM": 4.289,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": -0.008,
+            "endM": 0.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": -0.008,
+            "endM": 0.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 0.532,
+            "endM": 1.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 0.532,
+            "endM": 1.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 1.072,
+            "endM": 1.588,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 1.072,
+            "endM": 1.588,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 1.612,
+            "endM": 2.128,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 1.612,
+            "endM": 2.128,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 2.152,
+            "endM": 2.668,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 2.152,
+            "endM": 2.668,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 2.692,
+            "endM": 3.208,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 2.692,
+            "endM": 3.208,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 3.232,
+            "endM": 3.748,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 3.232,
+            "endM": 3.748,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 3.772,
+            "endM": 4.288,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 3.772,
+            "endM": 4.288,
+            "bottomM": 0.001,
+            "topM": 0.007
+          }
+        ]
+      }
+    },
+    {
+      "id": "floor-box",
+      "geometry": {
+        "scope": "complete_scene_geometry_oracle",
+        "measurementErrorM": 0.001,
+        "domain": {
+          "leftM": -2.0,
+          "rightM": 2.0,
+          "startM": 0.15,
+          "endM": 4.0,
+          "topM": 3.0
+        },
+        "occupiedBounds": [
+          {
+            "leftM": -0.350006,
+            "rightM": 0.350006,
+            "startM": 2.8,
+            "endM": 3.2,
+            "bottomM": 0.0,
+            "topM": 0.3
+          },
+          {
+            "leftM": -0.720001,
+            "rightM": 0.720001,
+            "startM": 2.82,
+            "endM": 3.18,
+            "bottomM": 1.9,
+            "topM": 2.2
+          },
+          {
+            "leftM": -2.199997,
+            "rightM": -0.699997,
+            "startM": 2.82,
+            "endM": 3.18,
+            "bottomM": 0.0,
+            "topM": 2.2
+          },
+          {
+            "leftM": 0.699997,
+            "rightM": 2.199997,
+            "startM": 2.82,
+            "endM": 3.18,
+            "bottomM": 0.0,
+            "topM": 2.2
+          }
+        ],
+        "floorBounds": [
+          {
+            "leftM": -4.0,
+            "rightM": 4.0,
+            "startM": 0.0,
+            "endM": 7.0,
+            "bottomM": -0.11,
+            "topM": -0.01
+          },
+          {
+            "leftM": -2.909195,
+            "rightM": 2.890793,
+            "startM": -0.009,
+            "endM": 0.509,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.896393,
+            "rightM": 2.903595,
+            "startM": 0.531,
+            "endM": 1.049,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.904663,
+            "rightM": 2.895325,
+            "startM": 1.071,
+            "endM": 1.589,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.890274,
+            "rightM": 2.909714,
+            "startM": 1.611,
+            "endM": 2.129,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.895493,
+            "rightM": 2.904495,
+            "startM": 2.151,
+            "endM": 2.669,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.89537,
+            "rightM": 2.904617,
+            "startM": 2.691,
+            "endM": 3.209,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.909714,
+            "rightM": 2.890274,
+            "startM": 3.231,
+            "endM": 3.749,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.895264,
+            "rightM": 2.904724,
+            "startM": 3.771,
+            "endM": 4.289,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": -0.008,
+            "endM": 0.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": -0.008,
+            "endM": 0.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 0.532,
+            "endM": 1.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 0.532,
+            "endM": 1.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 1.072,
+            "endM": 1.588,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 1.072,
+            "endM": 1.588,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 1.612,
+            "endM": 2.128,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 1.612,
+            "endM": 2.128,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 2.152,
+            "endM": 2.668,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 2.152,
+            "endM": 2.668,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 2.692,
+            "endM": 3.208,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 2.692,
+            "endM": 3.208,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 3.232,
+            "endM": 3.748,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 3.232,
+            "endM": 3.748,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 3.772,
+            "endM": 4.288,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 3.772,
+            "endM": 4.288,
+            "bottomM": 0.001,
+            "topM": 0.007
+          }
+        ]
+      }
+    },
+    {
+      "id": "missing-floor-face",
+      "geometry": {
+        "scope": "complete_scene_geometry_oracle",
+        "measurementErrorM": 0.001,
+        "domain": {
+          "leftM": -2.0,
+          "rightM": 2.0,
+          "startM": 0.15,
+          "endM": 4.0,
+          "topM": 3.0
+        },
+        "occupiedBounds": [
+          {
+            "leftM": -0.720001,
+            "rightM": 0.720001,
+            "startM": 2.82,
+            "endM": 3.18,
+            "bottomM": 1.9,
+            "topM": 2.2
+          },
+          {
+            "leftM": -2.199997,
+            "rightM": -0.699997,
+            "startM": 2.82,
+            "endM": 3.18,
+            "bottomM": 0.0,
+            "topM": 2.2
+          },
+          {
+            "leftM": 0.699997,
+            "rightM": 2.199997,
+            "startM": 2.82,
+            "endM": 3.18,
+            "bottomM": 0.0,
+            "topM": 2.2
+          }
+        ],
+        "floorBounds": [
+          {
+            "leftM": -2.909195,
+            "rightM": 2.890793,
+            "startM": -0.009,
+            "endM": 0.509,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.896393,
+            "rightM": 2.903595,
+            "startM": 0.531,
+            "endM": 1.049,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.904663,
+            "rightM": 2.895325,
+            "startM": 1.071,
+            "endM": 1.589,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.890274,
+            "rightM": 2.909714,
+            "startM": 1.611,
+            "endM": 2.129,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.895493,
+            "rightM": 2.904495,
+            "startM": 2.151,
+            "endM": 2.669,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.89537,
+            "rightM": 2.904617,
+            "startM": 2.691,
+            "endM": 3.209,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.909714,
+            "rightM": 2.890274,
+            "startM": 3.231,
+            "endM": 3.749,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -2.895264,
+            "rightM": 2.904724,
+            "startM": 3.771,
+            "endM": 4.289,
+            "bottomM": -0.001,
+            "topM": 0.003
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": -0.008,
+            "endM": 0.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": -0.008,
+            "endM": 0.508,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 0.532,
+            "endM": 1.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 0.532,
+            "endM": 1.048,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 1.072,
+            "endM": 1.588,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 1.072,
+            "endM": 1.588,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 1.612,
+            "endM": 2.128,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 1.612,
+            "endM": 2.128,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 2.152,
+            "endM": 2.668,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 2.152,
+            "endM": 2.668,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 2.692,
+            "endM": 3.208,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 2.692,
+            "endM": 3.208,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 3.232,
+            "endM": 3.748,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 3.232,
+            "endM": 3.748,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": -1.46701,
+            "rightM": -1.453003,
+            "startM": 3.772,
+            "endM": 4.288,
+            "bottomM": 0.001,
+            "topM": 0.007
+          },
+          {
+            "leftM": 1.453003,
+            "rightM": 1.46701,
+            "startM": 3.772,
+            "endM": 4.288,
+            "bottomM": 0.001,
+            "topM": 0.007
+          }
+        ]
+      }
+    }
+  ]
+}

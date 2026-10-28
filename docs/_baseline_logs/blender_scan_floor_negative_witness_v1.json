@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "promotionAllowed": false,
+  "isolatedOffCentreForegroundPixels": 10,
+  "incorrectlyCertifiedFloorPixels": 0,
+  "sources": {
+    "tool/blender/check_scan_floor_negative_witness.py": "8b30f95fedc958c5e5afaba0fd53e271d086de9b9882d6dae67069dff780a9f9",
+    "tool/blender/visible_exact_floor_height_bounds.py": "0037cac76a1867a8d6db3663cf35d890f98d68a755c3dd9a9cc0c994f9bc5e05",
+    "tool/blender/pixel_exact_surface_envelope.py": "b153893a86076a485ae44829646d38dae3937155e62bbdb5e7bb522bbe018c37",
+    "tool/blender/watertight_surface_projection.py": "bcb4671a217f3afcd9922d8c99ee9b4ed295bb33bb493e69975e020b6eedf1f1",
+    "tool/blender/visible_complete_surface_bounds.py": "7069e6e04fa93af6bacfbff4f6b612d88651b24a91490ca6a70430455c7cb8a7",
+    "tool/blender/generate_visible_passage_corpus.py": "97d96eb474afdbd9900f11a439e8235039390f04bc8ad9ba334c1d8904d41c82"
+  }
+}

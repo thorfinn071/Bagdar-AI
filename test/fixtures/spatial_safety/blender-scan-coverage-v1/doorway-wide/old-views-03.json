@@ -1,0 +1,46 @@
+{
+  "checkpointIdentity": "ad2405c345ead0dd5192d7d2b33ab9a453361926bd1bf42d9582f6a0ef816411",
+  "packet": {
+    "width": 320,
+    "height": 240,
+    "frameId": 104,
+    "capturedOffsetMs": 600,
+    "fx": 231.1111068725586,
+    "fy": 231.11111640930176,
+    "cx": 160.0,
+    "cy": 120.0,
+    "cameraToWalkingRotation": [
+      0.4999999701976776,
+      0.2241438925266266,
+      -0.8365163207054138,
+      0.866025447845459,
+      -0.129409521818161,
+      0.48296287655830383,
+      0.0,
+      -0.9659258127212524,
+      -0.2588190734386444
+    ],
+    "cameraOriginM": [
+      0.0,
+      0.0,
+      1.4199999570846558
+    ],
+    "oldPacketUpperSha256": "4a61bd394729dc077d8df8728be360cbe2a9c5cb8349d49d66137ebc244b24b5",
+    "depth": {
+      "path": "doorway-wide/old-views-03-range.f32.gz",
+      "sha256": "948f06eba7972328c3a3c14a96a3e69c18858d08ab664f1532ba2f7b75ba612e"
+    },
+    "freeZLower": {
+      "path": "doorway-wide/old-views-03-lower.f32.gz",
+      "sha256": "2511a4979606dc5a22cdbdb4d585ee6d1e47f309189efdb6d95a9590b61bcfe4"
+    },
+    "surfaceZUpper": {
+      "path": "doorway-wide/old-views-03-upper.f32.gz",
+      "sha256": "394ed4599a15de9c675cf7c9daa0735cb2474a955188b10a92e1afd54a3837db"
+    },
+    "validity": {
+      "path": "doorway-wide/old-views-03-valid.u8.gz",
+      "sha256": "004cdacd6163c635e68cca086aa885f59bd894af2d01d1cda61a0ef5be30aab2"
+    }
+  }
+}

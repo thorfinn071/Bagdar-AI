@@ -1,0 +1,45 @@
+{
+  "labels": [
+    {
+      "id": "rig-room-clear",
+      "physicalHazardAtCapture": false,
+      "dynamic": false
+    },
+    {
+      "id": "rig-room-box",
+      "physicalHazardAtCapture": true,
+      "dynamic": false
+    },
+    {
+      "id": "rig-portal-high",
+      "physicalHazardAtCapture": false,
+      "dynamic": false
+    },
+    {
+      "id": "rig-portal-low",
+      "physicalHazardAtCapture": true,
+      "dynamic": false
+    },
+    {
+      "id": "rig-floor-flat",
+      "physicalHazardAtCapture": false,
+      "dynamic": false
+    },
+    {
+      "id": "rig-floor-drop",
+      "physicalHazardAtCapture": true,
+      "dynamic": false
+    },
+    {
+      "id": "rig-moving-before",
+      "physicalHazardAtCapture": false,
+      "dynamic": true
+    },
+    {
+      "id": "rig-moving-after",
+      "physicalHazardAtCapture": true,
+      "dynamic": true
+    }
+  ],
+  "consumerInput": false
+}

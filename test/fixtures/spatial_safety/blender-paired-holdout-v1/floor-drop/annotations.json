@@ -1,0 +1,21 @@
+{
+  "sceneId": "floor-drop",
+  "pair": "floor",
+  "physicalHazard": true,
+  "referencePassable": false,
+  "hazardOnsetMs": 0,
+  "userMoving": true,
+  "latestStopOffsetMs": 300,
+  "compatibleCocoClassIds": [],
+  "parameters": {
+    "id": "floor-drop",
+    "pair": "floor",
+    "hazard": true,
+    "kind": "drop",
+    "edgeY": 2.3,
+    "dropM": 0.36,
+    "cameraAdvanceM": 0.4,
+    "appearanceSeed": 4104
+  },
+  "labelSource": "predeclared scene geometry, not model output"
+}

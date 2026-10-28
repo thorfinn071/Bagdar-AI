@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "passed": true,
+  "runtimeWired": false,
+  "promotionAllowed": false,
+  "fullFlutterTests": {
+    "passed": 1636,
+    "skipped": 1
+  },
+  "focusedTests": 45,
+  "analysis": "pass",
+  "exactPolygonUnitTests": 7,
+  "fullCoreRc": "not_run",
+  "androidBuild": "not_run",
+  "namedDeviceRuntime": "not_run",
+  "controlledWalking": "not_run",
+  "modelCorrectnessRc": "not_established",
+  "artifacts": {
+    "scratch/synchronized-rig-full-flutter-v3.log": "f2530c2394d81f43406138d7bf782efed9bf8b65bc3b68740f73315571f889ea",
+    "scratch/synchronized-rig-focused-v3.log": "7bdfbf58d84a785247d06494bf66c7944e92b8d063473bb4e70fc7fca55490d9",
+    "scratch/synchronized-rig-analysis-v3.log": "04c35b83be3d3ae9e9d73eddd7e65724d5738913d083b0a412ff22b6e3e6f461",
+    "docs/_baseline_logs/blender_synchronized_rig_contract_v3.json": "a02647180938a7ddfe01f99fda9744e6e9b2322b1bf8af35a576b4da9513164c"
+  }
+}

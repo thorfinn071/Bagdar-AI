@@ -1,0 +1,29 @@
+{
+  "scope": "versioned independent synthetic callback feed and real app depth-lane admission",
+  "sourceSha256": {
+    "tool/model_benchmark/independent_replay_feed.dart": "57a0e4464a5269d4403eba78e6993133abc1534f86fbb058fa264514f7947e91",
+    "tool/model_benchmark/replay_depth_load_lane.dart": "f4d1a4567d80e704b63fc2e5ba776c42913fadf0455e6611c97fca8ac09020dd",
+    "tool/model_benchmark/pinned_depth_load_worker.dart": "4ea76960a84a91ba1077163e6c25e1e2fd15effee45c3ccc10e34ac526c3819d",
+    "tool/model_benchmark/replay_fast_camera_motion_stream.dart": "99cbe327de1ea4c1db0d37b404affe4f9a422eb1f034aba9596a3e93c317bc8e",
+    "tool/model_benchmark/evaluate_fast_camera_motion_stream.dart": "f556fa09e649200b43c4196e5260d77c633bd79566fc21c61d276b1f7781d381",
+    "tool/model_benchmark/verify_fast_camera_motion_stream.py": "3d6900aedc2839e45ae2993cdee0d5d2a8cb9a099e326960af44b59f4d9e1bb9",
+    "test/independent_replay_feed_test.dart": "de11ae361c2b74b791ddc193bf5c5bd3f10df45745252113020726511d23d39a",
+    "lib/core/performance/perception_scheduler.dart": "ee6d8b89df7bb7f31c8e1408b0b132c66b8ceba04b998916a372e1c16bf6561c",
+    "lib/core/performance/perception_performance.dart": "0808c7543f426c336b5585597f173696dfad0c93419c505b8e1eef350360c8c1",
+    "tool/model_benchmark/camera_processing_ncnn_worker.py": "9fbe4c3cb46aa1da7391611800cb9a283016c6dc86958cd0e0a2b27664833039",
+    "docs/camera-fast-motion-stream-protocol-2026-10-07.md": "6a5bee99bba7014911adbf75745b5d1979c7b316c1f210fd88e75a0c9bb9fec9"
+  },
+  "previousPackedContractSha256": "6eb3224643290443b02723e74350f04f81674179b1f6285d670057f680ac6db2",
+  "previousLoadContractSha256": "3cab85ea97f39bbcc2936eb58ab1c98998335042b354861294a6da7d77be77d1",
+  "currentAgeLimitUs": 100000,
+  "captureDeliveryWaitsForNeural": false,
+  "depthLoadModels": [
+    "midas-small-ncnn"
+  ],
+  "depthQueueCapacity": 0,
+  "promotionAllowed": false,
+  "ordinaryCameraWired": false,
+  "newIndependentHoldout": false,
+  "captureToCommandMeasured": false,
+  "timingsAreReproducibilityData": false
+}

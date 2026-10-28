@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "experimentId": "bagdar-kws-cnn-synthetic-v1",
+  "seed": 20261013,
+  "sampleRate": 16000,
+  "windowSamples": 32000,
+  "speechMinSeconds": 0.16,
+  "speechMaxSeconds": 1.8,
+  "trainingExamplesPerClass": 2048,
+  "epochs": 25,
+  "batchSize": 64,
+  "learningRate": 0.001,
+  "thresholdGrid": [0.5, 0.6, 0.7, 0.8, 0.85, 0.9, 0.95, 0.97, 0.99, 0.995],
+  "splitPolicy": "speaker_disjoint_before_augmentation",
+  "corpusEvidence": "synthetic_speech_plus_public_english_digits",
+  "promotionAllowed": false,
+  "automaticCommandWired": false,
+  "voices": [
+    {"key": "ru_RU-dmitri-medium", "split": "train", "language": "ru", "speakerGroup": "piper-dmitri"},
+    {"key": "kk_KZ-iseke-x_low", "split": "train", "language": "kk", "speakerGroup": "piper-issai-iseke"},
+    {"key": "en_US-ljspeech-high", "split": "train", "language": "en", "speakerGroup": "piper-ljspeech"},
+    {"key": "ru_RU-denis-medium", "split": "dev", "language": "ru", "speakerGroup": "piper-denis"},
+    {"key": "kk_KZ-raya-x_low", "split": "dev", "language": "kk", "speakerGroup": "piper-issai-raya"},
+    {"key": "en_US-joe-medium", "split": "dev", "language": "en", "speakerGroup": "piper-joe"},
+    {"key": "kk_KZ-issai-high", "speakerId": 0, "split": "test", "language": "kk", "speakerGroup": "piper-issai-tts2-m2"}
+  ],
+  "positivePhrases": {"ru": ["Багдар", "Багда́р", "Ба́гдар"], "kk": ["Бағдар"], "en": ["Bagdar", "Bag dar"]},
+  "negativePhrases": {
+    "ru": {
+      "train": ["багаж", "Багдад", "благодарю", "дар", "богат", "не Багдар", "пример Багдар", "Багдар выключить микрофон", "Багдар это название", "проверь состояние камеры", "тишина вокруг", "говори медленнее", "открой настройки", "помощь", "спасибо", "багет", "богатырь", "базар", "благодарность", "Богдан", "батарея", "бардак", "подарок", "давай"],
+      "dev": ["багаж", "не Багдар", "пример Багдар", "помощь", "багет", "базар", "Богдан", "бардак", "подарок", "давай", "дорога", "светофор"],
+      "test": ["багаж", "Багдад", "благодарю", "богат", "не Багдар", "пример Багдар", "Багдар выключить микрофон", "багровый", "багира", "банкир", "бугор", "дарование", "бархат", "багряный", "передай", "забор", "облака", "добрый день", "где находится выход", "остановка автобуса"]
+    },
+    "kk": {
+      "train": ["бағдарлама", "бағдаршам", "багаж", "базар", "дар", "баға", "балдар", "бағдар емес", "мысал Бағдар", "Бағдар микрофонды өшір", "күйі", "көмек", "баптаулар", "қайтала", "рахмет", "жол", "алға", "артқа", "солға", "оңға", "адам", "жақсы", "Багдад", "сәлем"],
+      "dev": ["бағдарлама", "бағдаршам", "бағдар емес", "мысал Бағдар", "көмек", "қайтала", "жол", "артқа", "адам", "жақсы", "жарық", "қала"],
+      "test": ["бағдарлама", "бағдаршам", "багаж", "бағдар емес", "мысал Бағдар", "Бағдар микрофонды өшір", "балалар", "балдыр", "бағалау", "баған", "бағыт", "бақша", "дастарқан", "көшеде", "қайырлы күн", "автобус аялдамасы", "қадам", "қауіп", "дыбыс", "есікті аш"]
+    },
+    "en": {
+      "train": ["bag", "dark", "bag dark", "Baghdad", "back door", "big dog", "not Bagdar", "example Bagdar", "Bagdar turn off microphone", "status", "help", "settings", "repeat", "thank you", "good morning", "bad day", "backyard", "baggage", "garden", "battery", "camera", "stop", "door", "weather"],
+      "dev": ["bag dark", "Baghdad", "not Bagdar", "example Bagdar", "help", "settings", "bad day", "backyard", "garden", "camera", "yellow", "outside"],
+      "test": ["bag", "bag dark", "Baghdad", "back door", "big dog", "not Bagdar", "example Bagdar", "Bagdar turn off microphone", "backwards", "bagger", "bad dog", "bargain", "barcode", "garbage", "together", "open the door", "bus station", "the camera is ready", "hello there", "please wait"]
+    }
+  },
+  "fsddSpeakers": {"train": ["george", "jackson", "lucas", "nicolas"], "dev": ["theo"], "test": ["yweweler"]},
+  "humanPositiveEvidence": "not_available",
+  "androidEvidence": "not_run"
+}

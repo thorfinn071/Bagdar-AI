@@ -1,0 +1,1509 @@
+{
+  "scope": "desktop elapsed replay with live pinned NCNN, preloaded RGB/depth; excludes phone capture/transport/feedback",
+  "mode": "measured",
+  "promotionAllowed": false,
+  "priorTestIsKnownRegression": true,
+  "freshTestUsedForTuning": false,
+  "newIndependentHoldout": false,
+  "captureToCommandMeasured": false,
+  "currentAgeLimitUs": 100000,
+  "pairIntervalUs": [
+    50000,
+    300000
+  ],
+  "fixtureLoadMs": 4071.923,
+  "worker": {
+    "ready": true,
+    "warmupInferences": 10,
+    "fixtureLoadMs": 822.8843,
+    "numThreads": 1,
+    "runtime": "ncnn-1.0.20260114-cpu-threads1"
+  },
+  "summary": {
+    "sequences": 10,
+    "processedFrames": 67,
+    "identityMatches": 0,
+    "staleApplications": 0,
+    "unsafeContinueSteps": 0,
+    "unjustifiedClearances": 0,
+    "expiredResults": 67,
+    "queueReplaced": 0,
+    "queueExpired": 0,
+    "motionAppliedFrames": 0,
+    "discardedClearDecisions": 0,
+    "hazardSequences": 9,
+    "onTimeStops": 9,
+    "lateStops": 0,
+    "missedStops": 0,
+    "freshHazardEvidenceStops": 0,
+    "stopsFromUnavailable": 20,
+    "sufficientPassableSequences": 1,
+    "falseStopSequences": 1,
+    "falseHoldSequences": 0
+  },
+  "sequences": [
+    {
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "mode": "measured",
+      "identityMatches": 0,
+      "staleApplications": 0,
+      "unsafeContinueSteps": 0,
+      "unjustifiedClearances": 0,
+      "queueReplaced": 0,
+      "queueExpired": 0,
+      "discardedClearDecisions": 0,
+      "frames": [
+        {
+          "frameId": 1,
+          "capturedOffsetUs": 0,
+          "startedOffsetUs": 2119,
+          "releasedOffsetUs": 101064,
+          "ageAtReleaseUs": 101064,
+          "rejection": "expired_after_nn",
+          "action": "stopNow",
+          "physicalHazard": true,
+          "userMoving": true,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 98.944,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 1.919,
+            "inferenceMs": 94.7919
+          }
+        },
+        {
+          "frameId": 2,
+          "capturedOffsetUs": 200000,
+          "startedOffsetUs": 203710,
+          "releasedOffsetUs": 312597,
+          "ageAtReleaseUs": 112597,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 108.881,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.3416,
+            "inferenceMs": 105.0246
+          }
+        },
+        {
+          "frameId": 3,
+          "capturedOffsetUs": 400000,
+          "startedOffsetUs": 402860,
+          "releasedOffsetUs": 511217,
+          "ageAtReleaseUs": 111217,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 108.353,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 1.8212,
+            "inferenceMs": 105.3227
+          }
+        },
+        {
+          "frameId": 4,
+          "capturedOffsetUs": 600000,
+          "startedOffsetUs": 603511,
+          "releasedOffsetUs": 719371,
+          "ageAtReleaseUs": 119371,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 115.855,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.224,
+            "inferenceMs": 112.2872
+          }
+        },
+        {
+          "frameId": 5,
+          "capturedOffsetUs": 800000,
+          "startedOffsetUs": 802271,
+          "releasedOffsetUs": 911517,
+          "ageAtReleaseUs": 111517,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 109.24,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.0608,
+            "inferenceMs": 105.8751
+          }
+        },
+        {
+          "frameId": 6,
+          "capturedOffsetUs": 1000000,
+          "startedOffsetUs": 1002262,
+          "releasedOffsetUs": 1111475,
+          "ageAtReleaseUs": 111475,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 109.208,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 1.9904,
+            "inferenceMs": 105.8671
+          }
+        },
+        {
+          "frameId": 7,
+          "capturedOffsetUs": 1200000,
+          "startedOffsetUs": 1203130,
+          "releasedOffsetUs": 1314173,
+          "ageAtReleaseUs": 114173,
+          "rejection": "expired_after_nn",
+          "action": "stopNow",
+          "physicalHazard": true,
+          "userMoving": true,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 111.038,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 1.9119,
+            "inferenceMs": 107.707
+          }
+        }
+      ],
+      "physicalHazard": true,
+      "firstStopWhileHazardOffsetUs": 101064,
+      "hazardOnsetAlreadyStopped": false,
+      "criticalOnsetOffsetUs": 0,
+      "sufficientPassable": false,
+      "finalAction": "stopNow"
+    },
+    {
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "mode": "measured",
+      "identityMatches": 0,
+      "staleApplications": 0,
+      "unsafeContinueSteps": 0,
+      "unjustifiedClearances": 0,
+      "queueReplaced": 0,
+      "queueExpired": 0,
+      "discardedClearDecisions": 0,
+      "frames": [
+        {
+          "frameId": 1,
+          "capturedOffsetUs": 0,
+          "startedOffsetUs": 2076,
+          "releasedOffsetUs": 122884,
+          "ageAtReleaseUs": 122884,
+          "rejection": "expired_after_nn",
+          "action": "stopNow",
+          "physicalHazard": true,
+          "userMoving": true,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 120.806,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.2674,
+            "inferenceMs": 117.3296
+          }
+        },
+        {
+          "frameId": 2,
+          "capturedOffsetUs": 200000,
+          "startedOffsetUs": 203831,
+          "releasedOffsetUs": 327925,
+          "ageAtReleaseUs": 127925,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 124.089,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.9893,
+            "inferenceMs": 119.6884
+          }
+        },
+        {
+          "frameId": 3,
+          "capturedOffsetUs": 400000,
+          "startedOffsetUs": 402636,
+          "releasedOffsetUs": 514170,
+          "ageAtReleaseUs": 114170,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 111.53,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.1684,
+            "inferenceMs": 107.9968
+          }
+        },
+        {
+          "frameId": 4,
+          "capturedOffsetUs": 600000,
+          "startedOffsetUs": 602452,
+          "releasedOffsetUs": 710454,
+          "ageAtReleaseUs": 110454,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 107.997,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 1.9891,
+            "inferenceMs": 104.7583
+          }
+        },
+        {
+          "frameId": 5,
+          "capturedOffsetUs": 800000,
+          "startedOffsetUs": 803778,
+          "releasedOffsetUs": 916803,
+          "ageAtReleaseUs": 116803,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 113.02,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.2727,
+            "inferenceMs": 109.4469
+          }
+        },
+        {
+          "frameId": 6,
+          "capturedOffsetUs": 1000000,
+          "startedOffsetUs": 1002890,
+          "releasedOffsetUs": 1111029,
+          "ageAtReleaseUs": 111029,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 108.135,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.0399,
+            "inferenceMs": 104.7835
+          }
+        },
+        {
+          "frameId": 7,
+          "capturedOffsetUs": 1200000,
+          "startedOffsetUs": 1202203,
+          "releasedOffsetUs": 1313736,
+          "ageAtReleaseUs": 113736,
+          "rejection": "expired_after_nn",
+          "action": "stopNow",
+          "physicalHazard": true,
+          "userMoving": true,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 111.527,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.9442,
+            "inferenceMs": 107.1032
+          }
+        }
+      ],
+      "physicalHazard": true,
+      "firstStopWhileHazardOffsetUs": 122884,
+      "hazardOnsetAlreadyStopped": false,
+      "criticalOnsetOffsetUs": 0,
+      "sufficientPassable": false,
+      "finalAction": "stopNow"
+    },
+    {
+      "layoutId": "test-scale-motion-approach-small-08",
+      "mode": "measured",
+      "identityMatches": 0,
+      "staleApplications": 0,
+      "unsafeContinueSteps": 0,
+      "unjustifiedClearances": 0,
+      "queueReplaced": 0,
+      "queueExpired": 0,
+      "discardedClearDecisions": 0,
+      "frames": [
+        {
+          "frameId": 1,
+          "capturedOffsetUs": 0,
+          "startedOffsetUs": 2078,
+          "releasedOffsetUs": 110728,
+          "ageAtReleaseUs": 110728,
+          "rejection": "expired_after_nn",
+          "action": "stopNow",
+          "physicalHazard": true,
+          "userMoving": true,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 108.649,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.2908,
+            "inferenceMs": 105.0103
+          }
+        },
+        {
+          "frameId": 2,
+          "capturedOffsetUs": 200000,
+          "startedOffsetUs": 203737,
+          "releasedOffsetUs": 316100,
+          "ageAtReleaseUs": 116100,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 112.357,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.4181,
+            "inferenceMs": 108.73
+          }
+        },
+        {
+          "frameId": 3,
+          "capturedOffsetUs": 400000,
+          "startedOffsetUs": 401695,
+          "releasedOffsetUs": 510259,
+          "ageAtReleaseUs": 110259,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 108.557,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.2136,
+            "inferenceMs": 104.9288
+          }
+        },
+        {
+          "frameId": 4,
+          "capturedOffsetUs": 600000,
+          "startedOffsetUs": 602590,
+          "releasedOffsetUs": 712560,
+          "ageAtReleaseUs": 112560,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 109.964,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.2551,
+            "inferenceMs": 106.0467
+          }
+        },
+        {
+          "frameId": 5,
+          "capturedOffsetUs": 800000,
+          "startedOffsetUs": 803097,
+          "releasedOffsetUs": 912963,
+          "ageAtReleaseUs": 112963,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 109.86,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.0677,
+            "inferenceMs": 106.1576
+          }
+        },
+        {
+          "frameId": 6,
+          "capturedOffsetUs": 1000000,
+          "startedOffsetUs": 1003332,
+          "releasedOffsetUs": 1117889,
+          "ageAtReleaseUs": 117889,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 114.552,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.1386,
+            "inferenceMs": 111.0395
+          }
+        },
+        {
+          "frameId": 7,
+          "capturedOffsetUs": 1200000,
+          "startedOffsetUs": 1203191,
+          "releasedOffsetUs": 1310616,
+          "ageAtReleaseUs": 110616,
+          "rejection": "expired_after_nn",
+          "action": "stopNow",
+          "physicalHazard": true,
+          "userMoving": true,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 107.42,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.0113,
+            "inferenceMs": 104.1049
+          }
+        }
+      ],
+      "physicalHazard": true,
+      "firstStopWhileHazardOffsetUs": 110728,
+      "hazardOnsetAlreadyStopped": false,
+      "criticalOnsetOffsetUs": 0,
+      "sufficientPassable": false,
+      "finalAction": "stopNow"
+    },
+    {
+      "layoutId": "test-scale-motion-receding-09",
+      "mode": "measured",
+      "identityMatches": 0,
+      "staleApplications": 0,
+      "unsafeContinueSteps": 0,
+      "unjustifiedClearances": 0,
+      "queueReplaced": 0,
+      "queueExpired": 0,
+      "discardedClearDecisions": 0,
+      "frames": [
+        {
+          "frameId": 1,
+          "capturedOffsetUs": 0,
+          "startedOffsetUs": 2078,
+          "releasedOffsetUs": 112559,
+          "ageAtReleaseUs": 112559,
+          "rejection": "expired_after_nn",
+          "action": "stopNow",
+          "physicalHazard": true,
+          "userMoving": true,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 110.479,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 1.9857,
+            "inferenceMs": 107.2372
+          }
+        },
+        {
+          "frameId": 2,
+          "capturedOffsetUs": 200000,
+          "startedOffsetUs": 202270,
+          "releasedOffsetUs": 312513,
+          "ageAtReleaseUs": 112513,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 110.238,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.2237,
+            "inferenceMs": 106.5825
+          }
+        },
+        {
+          "frameId": 3,
+          "capturedOffsetUs": 400000,
+          "startedOffsetUs": 403430,
+          "releasedOffsetUs": 517254,
+          "ageAtReleaseUs": 117254,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 113.819,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.7063,
+            "inferenceMs": 109.8468
+          }
+        },
+        {
+          "frameId": 4,
+          "capturedOffsetUs": 600000,
+          "startedOffsetUs": 603210,
+          "releasedOffsetUs": 712042,
+          "ageAtReleaseUs": 112042,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 108.826,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.285,
+            "inferenceMs": 105.2674
+          }
+        },
+        {
+          "frameId": 5,
+          "capturedOffsetUs": 800000,
+          "startedOffsetUs": 802431,
+          "releasedOffsetUs": 910098,
+          "ageAtReleaseUs": 110098,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 107.648,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.1222,
+            "inferenceMs": 104.2563
+          }
+        },
+        {
+          "frameId": 6,
+          "capturedOffsetUs": 1000000,
+          "startedOffsetUs": 1002755,
+          "releasedOffsetUs": 1112426,
+          "ageAtReleaseUs": 112426,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 109.664,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.2866,
+            "inferenceMs": 106.1034
+          }
+        },
+        {
+          "frameId": 7,
+          "capturedOffsetUs": 1200000,
+          "startedOffsetUs": 1203278,
+          "releasedOffsetUs": 1323161,
+          "ageAtReleaseUs": 123161,
+          "rejection": "expired_after_nn",
+          "action": "stopNow",
+          "physicalHazard": true,
+          "userMoving": true,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 119.877,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.1822,
+            "inferenceMs": 116.1601
+          }
+        }
+      ],
+      "physicalHazard": true,
+      "firstStopWhileHazardOffsetUs": 112559,
+      "hazardOnsetAlreadyStopped": false,
+      "criticalOnsetOffsetUs": 0,
+      "sufficientPassable": false,
+      "finalAction": "stopNow"
+    },
+    {
+      "layoutId": "test-scale-motion-stationary-10",
+      "mode": "measured",
+      "identityMatches": 0,
+      "staleApplications": 0,
+      "unsafeContinueSteps": 0,
+      "unjustifiedClearances": 0,
+      "queueReplaced": 0,
+      "queueExpired": 0,
+      "discardedClearDecisions": 0,
+      "frames": [
+        {
+          "frameId": 1,
+          "capturedOffsetUs": 0,
+          "startedOffsetUs": 2099,
+          "releasedOffsetUs": 124539,
+          "ageAtReleaseUs": 124539,
+          "rejection": "expired_after_nn",
+          "action": "stopNow",
+          "physicalHazard": true,
+          "userMoving": true,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 122.438,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.2405,
+            "inferenceMs": 118.5755
+          }
+        },
+        {
+          "frameId": 2,
+          "capturedOffsetUs": 200000,
+          "startedOffsetUs": 203012,
+          "releasedOffsetUs": 312952,
+          "ageAtReleaseUs": 112952,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 109.933,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.1294,
+            "inferenceMs": 106.498
+          }
+        },
+        {
+          "frameId": 3,
+          "capturedOffsetUs": 400000,
+          "startedOffsetUs": 403319,
+          "releasedOffsetUs": 515020,
+          "ageAtReleaseUs": 115020,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 111.694,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 1.9182,
+            "inferenceMs": 108.4378
+          }
+        },
+        {
+          "frameId": 4,
+          "capturedOffsetUs": 600000,
+          "startedOffsetUs": 602765,
+          "releasedOffsetUs": 713812,
+          "ageAtReleaseUs": 113812,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 111.041,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.2061,
+            "inferenceMs": 107.2525
+          }
+        },
+        {
+          "frameId": 5,
+          "capturedOffsetUs": 800000,
+          "startedOffsetUs": 803240,
+          "releasedOffsetUs": 908863,
+          "ageAtReleaseUs": 108863,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 105.617,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.1722,
+            "inferenceMs": 102.1598
+          }
+        },
+        {
+          "frameId": 6,
+          "capturedOffsetUs": 1000000,
+          "startedOffsetUs": 1003304,
+          "releasedOffsetUs": 1114891,
+          "ageAtReleaseUs": 114891,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 111.581,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 1.9779,
+            "inferenceMs": 108.315
+          }
+        },
+        {
+          "frameId": 7,
+          "capturedOffsetUs": 1200000,
+          "startedOffsetUs": 1203121,
+          "releasedOffsetUs": 1328795,
+          "ageAtReleaseUs": 128795,
+          "rejection": "expired_after_nn",
+          "action": "stopNow",
+          "physicalHazard": true,
+          "userMoving": true,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 125.667,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.172,
+            "inferenceMs": 121.9104
+          }
+        }
+      ],
+      "physicalHazard": true,
+      "firstStopWhileHazardOffsetUs": 124539,
+      "hazardOnsetAlreadyStopped": false,
+      "criticalOnsetOffsetUs": 0,
+      "sufficientPassable": false,
+      "finalAction": "stopNow"
+    },
+    {
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "mode": "measured",
+      "identityMatches": 0,
+      "staleApplications": 0,
+      "unsafeContinueSteps": 0,
+      "unjustifiedClearances": 0,
+      "queueReplaced": 0,
+      "queueExpired": 0,
+      "discardedClearDecisions": 0,
+      "frames": [
+        {
+          "frameId": 1,
+          "capturedOffsetUs": 0,
+          "startedOffsetUs": 2077,
+          "releasedOffsetUs": 112664,
+          "ageAtReleaseUs": 112664,
+          "rejection": "expired_after_nn",
+          "action": "stopNow",
+          "physicalHazard": true,
+          "userMoving": true,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 110.585,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 1.9384,
+            "inferenceMs": 107.4641
+          }
+        },
+        {
+          "frameId": 2,
+          "capturedOffsetUs": 200000,
+          "startedOffsetUs": 203256,
+          "releasedOffsetUs": 310069,
+          "ageAtReleaseUs": 110069,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 106.808,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 1.942,
+            "inferenceMs": 103.6164
+          }
+        },
+        {
+          "frameId": 3,
+          "capturedOffsetUs": 400000,
+          "startedOffsetUs": 402122,
+          "releasedOffsetUs": 509512,
+          "ageAtReleaseUs": 109512,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 107.383,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.2024,
+            "inferenceMs": 103.7027
+          }
+        },
+        {
+          "frameId": 4,
+          "capturedOffsetUs": 600000,
+          "startedOffsetUs": 603268,
+          "releasedOffsetUs": 713461,
+          "ageAtReleaseUs": 113461,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 110.186,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.63,
+            "inferenceMs": 106.0673
+          }
+        },
+        {
+          "frameId": 5,
+          "capturedOffsetUs": 800000,
+          "startedOffsetUs": 803497,
+          "releasedOffsetUs": 933888,
+          "ageAtReleaseUs": 133888,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 130.385,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.5016,
+            "inferenceMs": 126.4708
+          }
+        },
+        {
+          "frameId": 6,
+          "capturedOffsetUs": 1000000,
+          "startedOffsetUs": 1003575,
+          "releasedOffsetUs": 1112200,
+          "ageAtReleaseUs": 112200,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 108.62,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.3329,
+            "inferenceMs": 104.9311
+          }
+        },
+        {
+          "frameId": 7,
+          "capturedOffsetUs": 1200000,
+          "startedOffsetUs": 1202045,
+          "releasedOffsetUs": 1311861,
+          "ageAtReleaseUs": 111861,
+          "rejection": "expired_after_nn",
+          "action": "stopNow",
+          "physicalHazard": true,
+          "userMoving": true,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 109.811,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.1376,
+            "inferenceMs": 106.0918
+          }
+        }
+      ],
+      "physicalHazard": true,
+      "firstStopWhileHazardOffsetUs": 112664,
+      "hazardOnsetAlreadyStopped": false,
+      "criticalOnsetOffsetUs": 0,
+      "sufficientPassable": false,
+      "finalAction": "stopNow"
+    },
+    {
+      "layoutId": "test-scale-motion-mixed-12",
+      "mode": "measured",
+      "identityMatches": 0,
+      "staleApplications": 0,
+      "unsafeContinueSteps": 0,
+      "unjustifiedClearances": 0,
+      "queueReplaced": 0,
+      "queueExpired": 0,
+      "discardedClearDecisions": 0,
+      "frames": [
+        {
+          "frameId": 1,
+          "capturedOffsetUs": 0,
+          "startedOffsetUs": 2077,
+          "releasedOffsetUs": 110881,
+          "ageAtReleaseUs": 110881,
+          "rejection": "expired_after_nn",
+          "action": "stopNow",
+          "physicalHazard": false,
+          "userMoving": true,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 108.802,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.0034,
+            "inferenceMs": 105.5919
+          }
+        },
+        {
+          "frameId": 2,
+          "capturedOffsetUs": 200000,
+          "startedOffsetUs": 203542,
+          "releasedOffsetUs": 312151,
+          "ageAtReleaseUs": 112151,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": false,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 108.605,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.0638,
+            "inferenceMs": 105.3091
+          }
+        },
+        {
+          "frameId": 3,
+          "capturedOffsetUs": 400000,
+          "startedOffsetUs": 402807,
+          "releasedOffsetUs": 509573,
+          "ageAtReleaseUs": 109573,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": false,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 106.761,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.1494,
+            "inferenceMs": 103.3601
+          }
+        },
+        {
+          "frameId": 4,
+          "capturedOffsetUs": 600000,
+          "startedOffsetUs": 602815,
+          "releasedOffsetUs": 712183,
+          "ageAtReleaseUs": 112183,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 109.362,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.2338,
+            "inferenceMs": 105.8029
+          }
+        },
+        {
+          "frameId": 5,
+          "capturedOffsetUs": 800000,
+          "startedOffsetUs": 802719,
+          "releasedOffsetUs": 912874,
+          "ageAtReleaseUs": 112874,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 110.149,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.3111,
+            "inferenceMs": 106.5636
+          }
+        },
+        {
+          "frameId": 6,
+          "capturedOffsetUs": 1000000,
+          "startedOffsetUs": 1003882,
+          "releasedOffsetUs": 1113753,
+          "ageAtReleaseUs": 113753,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 109.867,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.4475,
+            "inferenceMs": 106.2094
+          }
+        },
+        {
+          "frameId": 7,
+          "capturedOffsetUs": 1200000,
+          "startedOffsetUs": 1203065,
+          "releasedOffsetUs": 1310858,
+          "ageAtReleaseUs": 110858,
+          "rejection": "expired_after_nn",
+          "action": "stopNow",
+          "physicalHazard": true,
+          "userMoving": true,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 107.788,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 1.9598,
+            "inferenceMs": 104.5985
+          }
+        }
+      ],
+      "physicalHazard": true,
+      "firstStopWhileHazardOffsetUs": 712183,
+      "hazardOnsetAlreadyStopped": true,
+      "criticalOnsetOffsetUs": 600000,
+      "sufficientPassable": false,
+      "finalAction": "stopNow"
+    },
+    {
+      "layoutId": "test-scale-motion-occluded-13",
+      "mode": "measured",
+      "identityMatches": 0,
+      "staleApplications": 0,
+      "unsafeContinueSteps": 0,
+      "unjustifiedClearances": 0,
+      "queueReplaced": 0,
+      "queueExpired": 0,
+      "discardedClearDecisions": 0,
+      "frames": [
+        {
+          "frameId": 1,
+          "capturedOffsetUs": 0,
+          "startedOffsetUs": 2069,
+          "releasedOffsetUs": 110981,
+          "ageAtReleaseUs": 110981,
+          "rejection": "expired_after_nn",
+          "action": "stopNow",
+          "physicalHazard": true,
+          "userMoving": true,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 108.91,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 1.9531,
+            "inferenceMs": 105.6817
+          }
+        },
+        {
+          "frameId": 2,
+          "capturedOffsetUs": 200000,
+          "startedOffsetUs": 202940,
+          "releasedOffsetUs": 312368,
+          "ageAtReleaseUs": 112368,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 109.423,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.1343,
+            "inferenceMs": 105.9983
+          }
+        },
+        {
+          "frameId": 3,
+          "capturedOffsetUs": 400000,
+          "startedOffsetUs": 402274,
+          "releasedOffsetUs": 515143,
+          "ageAtReleaseUs": 115143,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 112.862,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.2268,
+            "inferenceMs": 109.3067
+          }
+        },
+        {
+          "frameId": 4,
+          "capturedOffsetUs": 600000,
+          "startedOffsetUs": 602721,
+          "releasedOffsetUs": 712037,
+          "ageAtReleaseUs": 112037,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 109.309,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.0294,
+            "inferenceMs": 105.7905
+          }
+        },
+        {
+          "frameId": 5,
+          "capturedOffsetUs": 800000,
+          "startedOffsetUs": 801987,
+          "releasedOffsetUs": 914056,
+          "ageAtReleaseUs": 114056,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 112.064,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.0438,
+            "inferenceMs": 108.8273
+          }
+        },
+        {
+          "frameId": 6,
+          "capturedOffsetUs": 1000000,
+          "startedOffsetUs": 1002742,
+          "releasedOffsetUs": 1112295,
+          "ageAtReleaseUs": 112295,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 109.546,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.3321,
+            "inferenceMs": 105.7657
+          }
+        },
+        {
+          "frameId": 7,
+          "capturedOffsetUs": 1200000,
+          "startedOffsetUs": 1202025,
+          "releasedOffsetUs": 1316714,
+          "ageAtReleaseUs": 116714,
+          "rejection": "expired_after_nn",
+          "action": "stopNow",
+          "physicalHazard": true,
+          "userMoving": true,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 114.683,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.1397,
+            "inferenceMs": 111.1419
+          }
+        }
+      ],
+      "physicalHazard": true,
+      "firstStopWhileHazardOffsetUs": 110981,
+      "hazardOnsetAlreadyStopped": false,
+      "criticalOnsetOffsetUs": 0,
+      "sufficientPassable": false,
+      "finalAction": "stopNow"
+    },
+    {
+      "layoutId": "test-scale-motion-textureless-14",
+      "mode": "measured",
+      "identityMatches": 0,
+      "staleApplications": 0,
+      "unsafeContinueSteps": 0,
+      "unjustifiedClearances": 0,
+      "queueReplaced": 0,
+      "queueExpired": 0,
+      "discardedClearDecisions": 0,
+      "frames": [
+        {
+          "frameId": 1,
+          "capturedOffsetUs": 0,
+          "startedOffsetUs": 2148,
+          "releasedOffsetUs": 127034,
+          "ageAtReleaseUs": 127034,
+          "rejection": "expired_after_nn",
+          "action": "stopNow",
+          "physicalHazard": true,
+          "userMoving": true,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 124.883,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.3081,
+            "inferenceMs": 121.2267
+          }
+        },
+        {
+          "frameId": 2,
+          "capturedOffsetUs": 200000,
+          "startedOffsetUs": 202608,
+          "releasedOffsetUs": 321476,
+          "ageAtReleaseUs": 121476,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 118.862,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.8091,
+            "inferenceMs": 114.6719
+          }
+        },
+        {
+          "frameId": 3,
+          "capturedOffsetUs": 400000,
+          "startedOffsetUs": 403043,
+          "releasedOffsetUs": 512797,
+          "ageAtReleaseUs": 112797,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 109.744,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.2255,
+            "inferenceMs": 106.0073
+          }
+        },
+        {
+          "frameId": 4,
+          "capturedOffsetUs": 600000,
+          "startedOffsetUs": 602769,
+          "releasedOffsetUs": 714344,
+          "ageAtReleaseUs": 114344,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 111.569,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.0065,
+            "inferenceMs": 108.3393
+          }
+        },
+        {
+          "frameId": 5,
+          "capturedOffsetUs": 800000,
+          "startedOffsetUs": 802859,
+          "releasedOffsetUs": 910997,
+          "ageAtReleaseUs": 110997,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 108.133,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.0181,
+            "inferenceMs": 104.8816
+          }
+        },
+        {
+          "frameId": 6,
+          "capturedOffsetUs": 1000000,
+          "startedOffsetUs": 1003678,
+          "releasedOffsetUs": 1113707,
+          "ageAtReleaseUs": 113707,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": true,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 110.025,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.0215,
+            "inferenceMs": 106.3719
+          }
+        },
+        {
+          "frameId": 7,
+          "capturedOffsetUs": 1200000,
+          "startedOffsetUs": 1203315,
+          "releasedOffsetUs": 1311254,
+          "ageAtReleaseUs": 111254,
+          "rejection": "expired_after_nn",
+          "action": "stopNow",
+          "physicalHazard": true,
+          "userMoving": true,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 107.933,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 1.9466,
+            "inferenceMs": 104.4381
+          }
+        }
+      ],
+      "physicalHazard": true,
+      "firstStopWhileHazardOffsetUs": 127034,
+      "hazardOnsetAlreadyStopped": false,
+      "criticalOnsetOffsetUs": 0,
+      "sufficientPassable": false,
+      "finalAction": "stopNow"
+    },
+    {
+      "layoutId": "test-scale-motion-wide-15",
+      "mode": "measured",
+      "identityMatches": 0,
+      "staleApplications": 0,
+      "unsafeContinueSteps": 0,
+      "unjustifiedClearances": 0,
+      "queueReplaced": 0,
+      "queueExpired": 0,
+      "discardedClearDecisions": 0,
+      "frames": [
+        {
+          "frameId": 1,
+          "capturedOffsetUs": 0,
+          "startedOffsetUs": 2081,
+          "releasedOffsetUs": 110765,
+          "ageAtReleaseUs": 110765,
+          "rejection": "expired_after_nn",
+          "action": "stopNow",
+          "physicalHazard": false,
+          "userMoving": true,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 108.682,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 2.3009,
+            "inferenceMs": 105.2085
+          }
+        },
+        {
+          "frameId": 11,
+          "capturedOffsetUs": 2000000,
+          "startedOffsetUs": 2003414,
+          "releasedOffsetUs": 2109778,
+          "ageAtReleaseUs": 109778,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": false,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 106.358,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 1.9457,
+            "inferenceMs": 102.9753
+          }
+        },
+        {
+          "frameId": 12,
+          "capturedOffsetUs": 2200000,
+          "startedOffsetUs": 2203555,
+          "releasedOffsetUs": 2312120,
+          "ageAtReleaseUs": 112120,
+          "rejection": "expired_after_nn",
+          "action": "holdAndScan",
+          "physicalHazard": false,
+          "userMoving": false,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 108.56,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 1.9625,
+            "inferenceMs": 105.1432
+          }
+        },
+        {
+          "frameId": 13,
+          "capturedOffsetUs": 2400000,
+          "startedOffsetUs": 2403859,
+          "releasedOffsetUs": 2512928,
+          "ageAtReleaseUs": 112928,
+          "rejection": "expired_after_nn",
+          "action": "stopNow",
+          "physicalHazard": false,
+          "userMoving": true,
+          "motionApplied": false,
+          "passageApplied": false,
+          "computeWallMs": 109.064,
+          "injectedComputeUs": 0,
+          "timing": {
+            "preprocessingMs": 1.9961,
+            "inferenceMs": 105.8649
+          }
+        }
+      ],
+      "physicalHazard": false,
+      "firstStopWhileHazardOffsetUs": null,
+      "hazardOnsetAlreadyStopped": false,
+      "criticalOnsetOffsetUs": null,
+      "sufficientPassable": true,
+      "finalAction": "stopNow"
+    }
+  ]
+}

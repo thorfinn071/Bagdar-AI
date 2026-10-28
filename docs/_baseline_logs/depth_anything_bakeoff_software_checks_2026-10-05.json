@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-05",
+  "promotionAllowed": false,
+  "androidDevice": "not_run",
+  "flutterFullSuite": {
+    "passed": 1697,
+    "skipped": 1,
+    "exitCode": 0,
+    "lastLine": "24:53 +1697 ~1: All tests passed!",
+    "logSha256": "a63a6849b1940c58427c7cfd28632657e2b6fa18db277c9fdb183d1894ec8dc1"
+  },
+  "flutterTargeted": {
+    "passed": 5,
+    "exitCode": 0,
+    "logSha256": "5b043a1c55fded62cc59cd8e47aa74664d36088bd16b8f3e7f5670a12e3bb92d"
+  },
+  "analyzer": {
+    "issues": 0,
+    "exitCode": 0,
+    "logSha256": "cd2ff49c040dc46869e03443404fdbdf25edbf51dbb99d225df8f519a54904aa"
+  },
+  "pythonHelpers": {
+    "passed": 5,
+    "exitCode": 0
+  },
+  "candidateAdmission": {
+    "status": "rejected",
+    "exitCode": 1,
+    "logSha256": "593155d6bb06bc7a5131c875c09560f88b1853324befe76caa4894971e8f11a9"
+  },
+  "verificationReceiptSha256": "49b8d7cb9e797df9abb0a308d9f04b545059a1bcc22e10958f9006483dbcd157",
+  "coreRc": "not_run_in_this_stage",
+  "androidBuild": "not_run_in_this_stage"
+}

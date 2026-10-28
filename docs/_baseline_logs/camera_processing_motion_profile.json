@@ -1,0 +1,4682 @@
+{
+  "scope": "warmed preloaded Dart matcher; excludes input IO/construction and NN/runtime",
+  "dartVersion": "3.11.1 (stable) (Tue Feb 24 00:03:07 2026 -0800) on \"windows_x64\"",
+  "executable": "C:\\src\\flutter\\bin\\cache\\artifacts\\engine\\windows-x64\\flutter_tester.exe",
+  "warmupTraversals": 1,
+  "measuredRounds": 3,
+  "alternatingOrder": true,
+  "fixtureLoads": [
+    {
+      "layoutId": "validation-scale-motion-approach-00",
+      "frames": 7,
+      "fixtureLoadMs": 380.859
+    },
+    {
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frames": 7,
+      "fixtureLoadMs": 334.807
+    },
+    {
+      "layoutId": "validation-scale-motion-receding-02",
+      "frames": 7,
+      "fixtureLoadMs": 352.926
+    },
+    {
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frames": 7,
+      "fixtureLoadMs": 341.395
+    },
+    {
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frames": 7,
+      "fixtureLoadMs": 419.75
+    },
+    {
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frames": 7,
+      "fixtureLoadMs": 346.667
+    },
+    {
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frames": 7,
+      "fixtureLoadMs": 300.135
+    },
+    {
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frames": 7,
+      "fixtureLoadMs": 307.489
+    },
+    {
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frames": 7,
+      "fixtureLoadMs": 351.235
+    },
+    {
+      "layoutId": "test-scale-motion-receding-09",
+      "frames": 7,
+      "fixtureLoadMs": 261.674
+    },
+    {
+      "layoutId": "test-scale-motion-stationary-10",
+      "frames": 7,
+      "fixtureLoadMs": 367.929
+    },
+    {
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frames": 7,
+      "fixtureLoadMs": 388.823
+    },
+    {
+      "layoutId": "test-scale-motion-mixed-12",
+      "frames": 7,
+      "fixtureLoadMs": 386.771
+    },
+    {
+      "layoutId": "test-scale-motion-occluded-13",
+      "frames": 7,
+      "fixtureLoadMs": 374.606
+    },
+    {
+      "layoutId": "test-scale-motion-textureless-14",
+      "frames": 7,
+      "fixtureLoadMs": 273.989
+    },
+    {
+      "layoutId": "test-scale-motion-wide-15",
+      "frames": 4,
+      "fixtureLoadMs": 591.335
+    }
+  ],
+  "summaries": {
+    "frozen": {
+      "count": 327,
+      "p50": 278.998,
+      "p95": 312.285
+    },
+    "cached": {
+      "count": 327,
+      "p50": 166.866,
+      "p95": 186.096
+    }
+  },
+  "frames": [
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.448
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 2.226
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 288.76
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 174.496
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 282.376
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 173.977
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 281.195
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 175.857
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 283.738
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 164.445
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 275.718
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 170.883
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 278.64
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 168.278
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.722
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.367
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 298.328
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 173.446
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 311.875
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 185.224
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 333.289
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 176.255
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 295.407
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 168.756
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 283.656
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 162.544
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 269.375
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 160.966
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.888
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.45
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 282.742
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 170.427
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 288.865
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 173.327
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 290.328
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 170.422
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 281.323
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 170.303
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 296.76
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 177.675
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 296.067
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 187.767
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.655
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.56
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 302.487
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 173.217
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 292.367
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 173.142
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 296.164
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 172.952
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 298.985
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 174.937
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 298.523
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 172.783
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 297.678
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 174.462
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.355
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.409
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 270.013
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 160.678
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 283.244
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 166.668
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 291.557
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 173.723
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 282.246
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 167.019
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 272.886
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 170.807
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 245.883
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 149.155
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 2.068
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.678
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 279.64
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 160.852
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 287.912
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 218.063
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 397.513
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 165.942
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 290.237
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 172.155
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 292.321
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 177.439
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 300.073
+    },
+    {
+      "round": 0,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 173.692
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.376
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.59
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 270.768
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 157.722
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 269.342
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 158.748
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 278.676
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 168.217
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 272.675
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 167.921
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 274.746
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 159.104
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 266.876
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 161.678
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.766
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 2.067
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 288.163
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 179.904
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 293.01
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 178.785
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 293.579
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 174.656
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 306.466
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 181.586
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 290.76
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 173.767
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 267.293
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 158.052
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.482
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.486
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 310.489
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 190.152
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 312.285
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 180.004
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 286.362
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 176.956
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 299.657
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 176.27
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 290.479
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 168.163
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 275.672
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 162.051
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.435
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.814
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 278.294
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 171.547
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 285.17
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 180.649
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 280.419
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 174.626
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 278.611
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 168.499
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 280.929
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 168.518
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 283.963
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 173.601
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.643
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.44
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 295.164
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 171.923
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 296.848
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 177.314
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 287.247
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 171.356
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 294.47
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 173.604
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 290.321
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 170.664
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 287.946
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 181.738
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.703
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.941
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 267.93
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 168.704
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 296.237
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 169.934
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 275.063
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 169.05
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 323.027
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 174.188
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 277.469
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 163.807
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 263.643
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 150.595
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.667
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.441
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 285.755
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 181.219
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 280.979
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 174.608
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 298.938
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 180.266
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 293.022
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 194.049
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 296.211
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 176.727
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 302.161
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 186.096
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 2.182
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.62
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 241.758
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 142.968
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 251.058
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 143.415
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 227.133
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 142.546
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 242.25
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 141.549
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 232.061
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 141.94
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 230.641
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 145.977
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 2.219
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 2.31
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 297.558
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 164.344
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 282.314
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 168.342
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 285.145
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 165.987
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 287.044
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 162.981
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 291.465
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 165.534
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 288.272
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 167.692
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 2.0
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.369
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 11,
+      "mode": "frozen",
+      "computeMs": 1.927
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 11,
+      "mode": "cached",
+      "computeMs": 1.829
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 12,
+      "mode": "frozen",
+      "computeMs": 304.394
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 12,
+      "mode": "cached",
+      "computeMs": 172.746
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 13,
+      "mode": "frozen",
+      "computeMs": 300.688
+    },
+    {
+      "round": 0,
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 13,
+      "mode": "cached",
+      "computeMs": 171.743
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 2.233
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 2.456
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 171.098
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 306.488
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 195.968
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 316.019
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 175.481
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 282.671
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 172.635
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 280.769
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 169.283
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 291.882
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 179.481
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 289.181
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 2.072
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.357
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 173.586
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 299.395
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 168.17
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 287.462
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 171.536
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 286.13
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 169.407
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 290.982
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 162.161
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 275.778
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 168.024
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 277.353
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 2.267
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 2.008
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 168.884
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 279.362
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 170.96
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 292.413
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 177.85
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 284.999
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 167.448
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 279.476
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 174.721
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 296.382
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 181.535
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 290.81
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.54
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.393
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 169.659
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 294.595
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 208.241
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 275.916
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 175.384
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 276.997
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 170.21
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 282.04
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 175.182
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 346.911
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 194.065
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 361.237
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 2.367
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 2.435
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 179.316
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 299.426
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 190.436
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 314.879
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 166.866
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 293.947
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 184.219
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 280.734
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 163.047
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 282.827
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 142.572
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 242.89
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.426
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.354
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 159.543
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 266.496
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 175.976
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 287.424
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 168.779
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 290.656
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 168.319
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 294.229
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 170.268
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 287.479
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 169.825
+    },
+    {
+      "round": 1,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 296.912
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.889
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.364
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 158.992
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 259.256
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 159.268
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 265.513
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 172.563
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 267.253
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 162.696
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 264.945
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 155.677
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 261.968
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 151.608
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 269.3
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.358
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.644
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 168.519
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 284.223
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 181.31
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 284.56
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 172.48
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 288.843
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 175.657
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 294.181
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 169.246
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 277.179
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 162.355
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 266.111
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.335
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.358
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 170.056
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 284.264
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 177.995
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 292.61
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 173.587
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 282.756
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 178.448
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 294.611
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 166.397
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 276.364
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 153.742
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 266.679
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.655
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.605
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 166.65
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 275.56
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 164.213
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 272.337
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 169.003
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 301.307
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 162.029
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 273.901
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 172.592
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 264.86
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 170.312
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 273.505
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.721
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.381
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 163.477
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 281.989
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 172.992
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 278.836
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 237.938
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 425.873
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 201.818
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 320.191
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 198.283
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 321.529
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 206.623
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 376.12
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 2.54
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 2.683
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 201.29
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 335.869
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 189.942
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 311.429
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 155.922
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 264.676
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 165.265
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 275.059
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 163.115
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 266.967
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 149.768
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 251.809
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.362
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.896
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 161.998
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 284.708
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 166.52
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 280.028
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 173.378
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 293.22
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 172.145
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 286.45
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 168.076
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 290.317
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 183.289
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 282.618
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.751
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.587
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 147.116
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 258.703
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 154.984
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 228.335
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 129.256
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 227.22
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 144.234
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 218.503
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 132.902
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 230.398
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 135.304
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 219.672
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.471
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.373
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 164.225
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 286.401
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 161.482
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 272.389
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 163.585
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 285.232
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 170.58
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 282.168
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 157.038
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 289.917
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 161.658
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 280.043
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.352
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 2.093
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 11,
+      "mode": "cached",
+      "computeMs": 1.331
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 11,
+      "mode": "frozen",
+      "computeMs": 1.383
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 12,
+      "mode": "cached",
+      "computeMs": 169.183
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 12,
+      "mode": "frozen",
+      "computeMs": 296.138
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 13,
+      "mode": "cached",
+      "computeMs": 182.427
+    },
+    {
+      "round": 1,
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 13,
+      "mode": "frozen",
+      "computeMs": 288.474
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.518
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.39
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 277.72
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 168.133
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 277.585
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 168.787
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 279.037
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 168.623
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 270.567
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 165.021
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 317.48
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 164.722
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 270.497
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 163.207
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.333
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.332
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 283.655
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 169.313
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 278.057
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 162.171
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 285.015
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 164.955
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 273.839
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 166.276
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 278.953
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 160.306
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 257.327
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 154.55
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.843
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.293
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 266.892
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 159.001
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 272.977
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 190.244
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 281.873
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 164.665
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 278.592
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 162.066
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 277.132
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 173.96
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 291.5
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 171.632
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.581
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.658
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 278.15
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 168.456
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 275.757
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 163.107
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 273.178
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 161.624
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 282.012
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 164.754
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 282.479
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 177.993
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 298.792
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 172.737
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.602
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.388
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 277.294
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 157.134
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 272.83
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 162.537
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 276.643
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 163.151
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 270.105
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 162.421
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 258.386
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 159.477
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 238.179
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 145.422
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.291
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.38
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 262.46
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 154.706
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 283.971
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 165.294
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 286.379
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 176.21
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 282.567
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 167.419
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 286.874
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 167.848
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 279.518
+    },
+    {
+      "round": 2,
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 170.916
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.84
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.471
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 257.885
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 154.437
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 257.827
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 156.194
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 270.764
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 159.285
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 258.536
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 158.821
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 265.762
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 154.653
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 249.248
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 152.586
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.8
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.842
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 300.657
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 167.028
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 284.383
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 166.465
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 284.503
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 167.667
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 285.051
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 170.514
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 284.227
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 164.179
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 256.382
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 156.653
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.844
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.501
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 279.308
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 168.755
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 278.379
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 167.822
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 287.238
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 168.765
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 288.757
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 175.615
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 296.605
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 170.011
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 269.635
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 163.127
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.539
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.396
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 274.929
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 162.382
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 276.695
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 161.393
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 277.634
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 171.489
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 271.484
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 162.224
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 269.742
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 160.521
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 278.315
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 162.558
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.39
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.33
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 284.272
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 167.722
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 283.443
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 177.797
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 319.239
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 190.033
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 308.141
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 173.112
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 301.481
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 177.76
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 295.705
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 177.946
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.42
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.46
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 251.507
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 156.019
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 284.179
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 172.814
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 278.998
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 167.88
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 278.486
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 168.281
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 267.67
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 167.917
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 268.276
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 146.11
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.346
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.301
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 278.832
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 165.802
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 285.029
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 172.811
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 292.487
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 177.311
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 287.945
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 173.481
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 277.434
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 176.553
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 327.449
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 184.318
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.429
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.737
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 260.558
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 132.692
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 220.599
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 130.432
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 254.353
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 136.56
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 223.033
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 132.798
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 224.276
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 140.406
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 229.058
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 131.144
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.329
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.336
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 2,
+      "mode": "frozen",
+      "computeMs": 280.958
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 2,
+      "mode": "cached",
+      "computeMs": 161.117
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 3,
+      "mode": "frozen",
+      "computeMs": 277.047
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 3,
+      "mode": "cached",
+      "computeMs": 152.261
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 4,
+      "mode": "frozen",
+      "computeMs": 279.876
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 4,
+      "mode": "cached",
+      "computeMs": 168.772
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 5,
+      "mode": "frozen",
+      "computeMs": 273.043
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 5,
+      "mode": "cached",
+      "computeMs": 157.671
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 6,
+      "mode": "frozen",
+      "computeMs": 278.55
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 6,
+      "mode": "cached",
+      "computeMs": 164.191
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 7,
+      "mode": "frozen",
+      "computeMs": 274.452
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 7,
+      "mode": "cached",
+      "computeMs": 161.135
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 1,
+      "mode": "frozen",
+      "computeMs": 1.535
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 1,
+      "mode": "cached",
+      "computeMs": 1.352
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 11,
+      "mode": "frozen",
+      "computeMs": 1.394
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 11,
+      "mode": "cached",
+      "computeMs": 1.479
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 12,
+      "mode": "frozen",
+      "computeMs": 316.623
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 12,
+      "mode": "cached",
+      "computeMs": 164.591
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 13,
+      "mode": "frozen",
+      "computeMs": 289.121
+    },
+    {
+      "round": 2,
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 13,
+      "mode": "cached",
+      "computeMs": 164.795
+    }
+  ]
+}

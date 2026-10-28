@@ -111,6 +111,39 @@ void main() {
     expect(result.snapshot.hazardTracks.single.id, 'geometry:7');
   });
 
+  test(
+    'ground surface evidence raises traversability without hiding unknown',
+    () {
+      final at = DateTime.utc(2026, 9, 19);
+      final result = LocalSceneModel.relative().ingestGenericGeometry(
+        header: _header(),
+        detection: const GenericObstacleDetectResult(
+          observations: <GenericObstacleObservation>[],
+          rejectReason: ObstacleRejectReason.emptyCorridor,
+          detectorQuality: 0.5,
+          groundConfidence: 0.8,
+          surfaceEvidence: CorridorSurfaceEvidence(
+            observedFraction: 0.75,
+            continuity: 1,
+            confidence: 0.8,
+          ),
+          unknownProbabilityFloor: 0.65,
+        ),
+        tracks: const <GenericObstacleTrack>[],
+        at: at,
+        validUntil: at.add(const Duration(milliseconds: 900)),
+        poseQuality: 0.9,
+      );
+      final forward = result.snapshot.polarSectors.singleWhere(
+        (element) => element.id == 'forward',
+      );
+
+      expect(forward.traversabilityProbability, 0.8);
+      expect(forward.unknownProbability, 0.65);
+      expect(forward.sourceMask, contains('surface:generic-depth'));
+    },
+  );
+
   test('approaching confirmed track populates moving-threat state', () {
     final at = DateTime.utc(2026, 9, 19);
     final result = LocalSceneModel.relative().ingestGenericGeometry(
@@ -154,6 +187,165 @@ void main() {
 
     expect(ordinaryResult.snapshot.hazardTracks, isEmpty);
     expect(imminentResult.snapshot.hazardTracks.single.id, 'geometry:7');
+  });
+
+  test('close central hazard survives first-frame track confirmation', () {
+    final at = DateTime.utc(2026, 9, 23);
+    final close = _track(confirmed: false, proximity: const <double>[0.99]);
+    close.last = close.last.copyWith(relativeProximity: 0.99, confidence: 0.60);
+    final weak = _track(confirmed: false, proximity: const <double>[0.99]);
+    weak.last = weak.last.copyWith(relativeProximity: 0.99, confidence: 0.54);
+
+    LocalSceneUpdateResult ingest(GenericObstacleTrack track) =>
+        LocalSceneModel.relative().ingestGenericGeometry(
+          header: _header(),
+          detection: _detection(),
+          tracks: <GenericObstacleTrack>[track],
+          at: at,
+          validUntil: at.add(const Duration(milliseconds: 900)),
+          poseQuality: 0.9,
+        );
+
+    final admitted = ingest(close);
+    final excluded = ingest(weak);
+    expect(admitted.snapshot.hazardTracks, hasLength(1));
+    expect(
+      admitted.snapshot.polarSectors
+          .singleWhere((sector) => sector.id == 'forward')
+          .occupancyProbability,
+      greaterThanOrEqualTo(0.95),
+    );
+    expect(excluded.snapshot.hazardTracks, isEmpty);
+    expect(
+      excluded.snapshot.polarSectors
+          .singleWhere((sector) => sector.id == 'forward')
+          .unknownProbability,
+      0.65,
+    );
+  });
+
+  test('unconfirmed close central evidence cannot make forward look clear', () {
+    final at = DateTime.utc(2026, 9, 23);
+
+    LocalSceneUpdateResult ingest({
+      required double confidence,
+      required double proximity,
+      required double overlap,
+      required HazardZone zone,
+      int misses = 0,
+    }) {
+      final track = _track(confirmed: false, proximity: <double>[proximity]);
+      track.last = GenericObstacleObservation(
+        trackId: track.id,
+        geometry: ObstacleGeometry.broadSurface,
+        zone: zone,
+        normalizedBounds: const Rect.fromLTWH(0.3, 0.1, 0.4, 0.8),
+        corridorOverlap: overlap,
+        confidence: confidence,
+        relativeProximity: proximity,
+        source: DepthProviderKind.ncnnRelative,
+        pixelCount: 9000,
+      );
+      track.misses = misses;
+      return LocalSceneModel.relative().ingestGenericGeometry(
+        header: _header(),
+        detection: const GenericObstacleDetectResult(
+          observations: <GenericObstacleObservation>[],
+          rejectReason: ObstacleRejectReason.none,
+          detectorQuality: 0.98,
+          groundConfidence: 0.95,
+          surfaceEvidence: CorridorSurfaceEvidence(
+            observedFraction: 1,
+            continuity: 0.9,
+            confidence: 0.95,
+          ),
+        ),
+        tracks: <GenericObstacleTrack>[track],
+        at: at,
+        validUntil: at.add(const Duration(milliseconds: 900)),
+        poseQuality: 1,
+      );
+    }
+
+    double forwardUnknown(LocalSceneUpdateResult result) => result
+        .snapshot
+        .polarSectors
+        .singleWhere((sector) => sector.id == 'forward')
+        .unknownProbability;
+
+    for (final confidence in <double>[0.30, 0.54]) {
+      final unresolved = ingest(
+        confidence: confidence,
+        proximity: 1,
+        overlap: 0.95,
+        zone: HazardZone.center,
+      );
+      expect(unresolved.accepted, isTrue);
+      expect(unresolved.snapshot.hazardTracks, isEmpty);
+      expect(forwardUnknown(unresolved), 0.65);
+      expect(
+        unresolved.snapshot.polarSectors
+            .singleWhere((sector) => sector.id == 'forward')
+            .occupancyProbability,
+        0,
+      );
+    }
+
+    for (final negative
+        in <
+          ({
+            double confidence,
+            double proximity,
+            double overlap,
+            HazardZone zone,
+            int misses,
+          })
+        >[
+          (
+            confidence: 0.20,
+            proximity: 1,
+            overlap: 0.95,
+            zone: HazardZone.center,
+            misses: 0,
+          ),
+          (
+            confidence: 0.40,
+            proximity: 0.8,
+            overlap: 0.95,
+            zone: HazardZone.center,
+            misses: 0,
+          ),
+          (
+            confidence: 0.40,
+            proximity: 1,
+            overlap: 0.2,
+            zone: HazardZone.center,
+            misses: 0,
+          ),
+          (
+            confidence: 0.40,
+            proximity: 1,
+            overlap: 0.95,
+            zone: HazardZone.right,
+            misses: 0,
+          ),
+          (
+            confidence: 0.40,
+            proximity: 1,
+            overlap: 0.95,
+            zone: HazardZone.center,
+            misses: 1,
+          ),
+        ]) {
+      final result = ingest(
+        confidence: negative.confidence,
+        proximity: negative.proximity,
+        overlap: negative.overlap,
+        zone: negative.zone,
+        misses: negative.misses,
+      );
+      expect(forwardUnknown(result), closeTo(0.02, 1e-9));
+    }
   });
 
   test('stale cells lose authority and become unknown', () {

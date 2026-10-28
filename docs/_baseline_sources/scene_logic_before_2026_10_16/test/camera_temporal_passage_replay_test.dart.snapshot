@@ -1,0 +1,21 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'harness/camera_temporal_passage_benchmark.dart';
+
+void main() {
+  test(
+    'frozen temporal holdout, real NCNN frames and shadow decisions',
+    () async {
+      final report = await runTemporalPassageBenchmark(
+        write: const bool.fromEnvironment('BAGDAR_WRITE_TEMPORAL_REPORT'),
+        check: const bool.fromEnvironment('BAGDAR_CHECK_TEMPORAL_REPORT'),
+      );
+      final summary = (report['summaries'] as Map)['associated-stable'] as Map;
+      expect(summary['sequences'], 12);
+      expect(summary['hazardSequences'], 8);
+      expect(summary['unsafeContinueSteps'], 0);
+      expect(summary['unjustifiedClearances'], 0);
+      expect(report['promotionAllowed'], false);
+    },
+    timeout: const Timeout(Duration(minutes: 10)),
+  );
+}

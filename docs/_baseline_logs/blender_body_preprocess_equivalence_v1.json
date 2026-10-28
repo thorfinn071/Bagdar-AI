@@ -1,0 +1,809 @@
+{
+  "schemaVersion": 1,
+  "passed": true,
+  "exactInputFrames": 132,
+  "scope": "actual RGB01/nearest/CHW tensor equivalence on known pinned RGB; no inference or metric conversion",
+  "fromId": "pinned-RGB01-CHW-256-nearest-stretch-v1",
+  "toId": "rgb01-chw-256-nearest-stretch-no-crop-v1",
+  "corpusManifestSha256": "8b8a79c60ace7cbc2641f36384fda8a89d8d5af7121fc4bd6844dd9d8e944e91",
+  "sources": {
+    "tool/model_benchmark/evaluate_paired_scene_models.py": "39fa723e9569fb14ee7775e4fb878e13710b6e1ff5ad95d29842be8727fdf1b2",
+    "tool/model_benchmark/generate_visible_passage_ncnn.py": "544e5475f5662e7495600706ec9ace1bd3faf59a749168e0786f33df8053ab7e",
+    "tool/model_benchmark/generate_context_ncnn_depth.py": "fd8b28236f016fc5faed4e7cfcb65848b19e71421076931a65007b3f9b4a86ce",
+    "tool/model_benchmark/verify_body_preprocess_equivalence.py": "19b4877a88d28facfee9ba376c85385999730d066378a881050c95c1cb623b31"
+  },
+  "frames": [
+    {
+      "sceneId": "path-clear",
+      "frameIndex": 0,
+      "rgbSha256": "2ec2dc1a211ab1d8dc4273a74af50fdebbb72d197c12be13ae1defd324df3c64",
+      "inputTensorSha256": "5827ddbb47c161cf67b1f2f3fe39ce4c75a036350634c42759500446136c8ef1"
+    },
+    {
+      "sceneId": "path-clear",
+      "frameIndex": 1,
+      "rgbSha256": "2a19ce5a8138d20f12956131acefebc2c58c1b76ce7095d4bca6372ede661ee8",
+      "inputTensorSha256": "f60e70259e13d3476d8345bc16732516f19894895511f9c7b1dd30ffa664d10c"
+    },
+    {
+      "sceneId": "path-clear",
+      "frameIndex": 2,
+      "rgbSha256": "82917a494bac646c3809232c5330788554fbce65acba1ed613a23ee1044bd1b4",
+      "inputTensorSha256": "8464ea1791f5a94c0eb6861adcffaac111ee3cfbdbc386a7267e4b3d4dd67792"
+    },
+    {
+      "sceneId": "path-clear",
+      "frameIndex": 3,
+      "rgbSha256": "73f7d8f34297e26579840b1ba97f9ecf3120add98136935822c241374e0a8a3b",
+      "inputTensorSha256": "a428562250a0d86a993c35474a939bf303848be2eba71d3b351b4d9f5ab49398"
+    },
+    {
+      "sceneId": "path-clear",
+      "frameIndex": 4,
+      "rgbSha256": "a0b4ebf855e6aeb6e62d0e9c4c205bf76e75e45feaf6570e5258a9b7cd09cb56",
+      "inputTensorSha256": "f7807c55571ed5f474c98ddce380e2bb9c0c1ecfc195e65a5e32ea50b3ab959f"
+    },
+    {
+      "sceneId": "path-clear",
+      "frameIndex": 5,
+      "rgbSha256": "4946aec0f930543fa037015735065057a2dc04ca2150f3059b96686f613a7cf7",
+      "inputTensorSha256": "dcdc21e3d595255211ba114c8a3d00af836821e5a350cd931d489d77290e4f2f"
+    },
+    {
+      "sceneId": "path-clear",
+      "frameIndex": 6,
+      "rgbSha256": "5812dd3e2cbc757f8601e92d4f49c7e4f67f378d6e91663dc6aaf48da0d742cb",
+      "inputTensorSha256": "ee3b9f049686a4ae5a94fcd20842a473fd9d0fd24931d2b22a01d42613266aaa"
+    },
+    {
+      "sceneId": "path-clear",
+      "frameIndex": 7,
+      "rgbSha256": "12cf5b9945c027498ee75bfed663dd07b169c3cf9addaf7cfe8f16cff02bfce5",
+      "inputTensorSha256": "da56c09e480495d3de30a1c2b3a5a5e258d23593dc9f96f8318a868689f255a9"
+    },
+    {
+      "sceneId": "path-clear",
+      "frameIndex": 8,
+      "rgbSha256": "e03e96b000f03e14d0a86017a8426d71ebbbf2ddbfb2c9ed2d62b61bfc80983d",
+      "inputTensorSha256": "70c45cba03d2122e8a01fef765e3905944c67d153129519d8dd9a7e85877c43f"
+    },
+    {
+      "sceneId": "path-clear",
+      "frameIndex": 9,
+      "rgbSha256": "9ee2937171b7ddd662a8d6b2dc03b28214e095869f32bb88c404b65405dd4689",
+      "inputTensorSha256": "df3b2d3d1c9930e9ee45bd199cd9145982dd1af375fbafd89c19b58f639dfd02"
+    },
+    {
+      "sceneId": "path-clear",
+      "frameIndex": 10,
+      "rgbSha256": "d5159cbfa5d264fecab123af98007b74ed136961f1971dfb6a37f633918c0b57",
+      "inputTensorSha256": "fd0bd996d8fa43177cfb85cc759c3960d81a33a49a31af0c1803c98af1efa4d0"
+    },
+    {
+      "sceneId": "path-box",
+      "frameIndex": 0,
+      "rgbSha256": "abdf98b072fe0e16150e473d0dd1d88886458005a85a2678932acc44cd3f89f7",
+      "inputTensorSha256": "b61e1cdacc46e7ffb125e189c8f538b05c7322f7e97ae8ffc9c4e1f310883370"
+    },
+    {
+      "sceneId": "path-box",
+      "frameIndex": 1,
+      "rgbSha256": "429a1cd0917ed5253e4619ccff10d8ca9c8e4fec8bf7c959dc9a5a4a5ff9f9b8",
+      "inputTensorSha256": "db1a94dff3966e92892f7ec96d8b2657737027f704a9280382a2e2000d1327ac"
+    },
+    {
+      "sceneId": "path-box",
+      "frameIndex": 2,
+      "rgbSha256": "095d4f430257a87593cd4dbcd2fb9bd27aa181341dbe3ccb5ad2e94623ac12ee",
+      "inputTensorSha256": "79f01db3d15a8f2d15e098cb288eb639c6c041ce6e987cc3fdb7f2edf347723d"
+    },
+    {
+      "sceneId": "path-box",
+      "frameIndex": 3,
+      "rgbSha256": "847c391dcfd3629b8051e8944e2ba94cf4ab96be3127c6b8dc6a283274832fea",
+      "inputTensorSha256": "3cb51786a64e6cefca80f13036ec0d940ee19bce30162411eedea32160dd8ee8"
+    },
+    {
+      "sceneId": "path-box",
+      "frameIndex": 4,
+      "rgbSha256": "58f1e685d4322cf6ed9a764c11607c5beac0e998bdf282e7eb934706d72a46e6",
+      "inputTensorSha256": "1a0688eaeef02b84ae2e0965da075bd0cd64eecc05c528525f1fda9d1fec90ce"
+    },
+    {
+      "sceneId": "path-box",
+      "frameIndex": 5,
+      "rgbSha256": "a2d0023550147f26892e135e062db32512cefe58d9dc8bb7f404b1309e6a6719",
+      "inputTensorSha256": "02f09502dd1412d7b0e094339cd16218ce81b05b45d37593378d6ddc7b366122"
+    },
+    {
+      "sceneId": "path-box",
+      "frameIndex": 6,
+      "rgbSha256": "9d7cbe83beb3ed32779e60809df1e3705d0c96089a925f3e4fdd5545bfed06ba",
+      "inputTensorSha256": "5a166a36e786aba41638b3ca4538f605f67469d6ae9e49a6c79a52032171db29"
+    },
+    {
+      "sceneId": "path-box",
+      "frameIndex": 7,
+      "rgbSha256": "98697269093a86c990057769933671146c5d09ececf409c8d3b538189197cb97",
+      "inputTensorSha256": "80a09bbeee5beefac059f1bc84ab768ffcb05eb7119fdff8576c99ebc3fb72d4"
+    },
+    {
+      "sceneId": "path-box",
+      "frameIndex": 8,
+      "rgbSha256": "7bcc80f125bfac3a0facee1ec88912028d0c175bf64ec4d995f7ca8526282f49",
+      "inputTensorSha256": "07ab1e607e1066d00e50457f7272a1dbf07da68e19d39f0ad102ef79ad57ef89"
+    },
+    {
+      "sceneId": "path-box",
+      "frameIndex": 9,
+      "rgbSha256": "cf40830ff822ed9276c42a0c688ff7289a0f638bf837bdfc5481531300299497",
+      "inputTensorSha256": "a4b5d796dbbc47b84ac5620084c3c946c328cbe751cb7e5ea8a91bc32755d331"
+    },
+    {
+      "sceneId": "path-box",
+      "frameIndex": 10,
+      "rgbSha256": "9dfb1511dd8f8de4896a7977644c2a906f70b497dc304d7aa538822076fd90e1",
+      "inputTensorSha256": "773e0c53b94cdc4798e6842b29b7e9384c02485d85319741dfd13b9b1174cb69"
+    },
+    {
+      "sceneId": "doorway-wide",
+      "frameIndex": 0,
+      "rgbSha256": "c5de9b6ec6608b5d887e3314030cdb0b4ded9f32c5a6947a785bf61b959e67fc",
+      "inputTensorSha256": "5d8eb8723655f67721aefc100a2ecd30b58a1ce47b8e48c65ea1e9c929608bdf"
+    },
+    {
+      "sceneId": "doorway-wide",
+      "frameIndex": 1,
+      "rgbSha256": "42673facac3e239b95709744d967c495d8d26ada477d6543b55763d1d8fa5e5c",
+      "inputTensorSha256": "88faebe2601298c3493dfeba58efcdbc97ff41caacea9a1c8ca26b3127007438"
+    },
+    {
+      "sceneId": "doorway-wide",
+      "frameIndex": 2,
+      "rgbSha256": "1ccada12f37235c0472667a6b1129099b857264944d87f015c0bcbadffee29a0",
+      "inputTensorSha256": "5b189fc2165294989e538d1fc2692d012b26b8b0500ca0e6cd26b4f058b3bbd4"
+    },
+    {
+      "sceneId": "doorway-wide",
+      "frameIndex": 3,
+      "rgbSha256": "9a93c61547edbf61791a04d28b93ab0f8acaa72d4ce1041bf389b0aa5dacb898",
+      "inputTensorSha256": "2aeca789689f99fc2706875c67575c29fec33a27fac0f0c0b3ccc1a4a3f1cd17"
+    },
+    {
+      "sceneId": "doorway-wide",
+      "frameIndex": 4,
+      "rgbSha256": "98a0aecfd28fd9743a04f5dcc196a7590681e11cb10844b997f892db47d36635",
+      "inputTensorSha256": "63aa42dafbc502402d5bf48eb60a51d2da583a40eb7577e5777df2356d70db47"
+    },
+    {
+      "sceneId": "doorway-wide",
+      "frameIndex": 5,
+      "rgbSha256": "6ac0fbb42533510a6202cb63317935cb7de8f3be08a25841b0e6d055e37a22bc",
+      "inputTensorSha256": "b41037277dd8959417e33eeb1638e70c8fa012dd2c1ff39dcb802fe4bf80689e"
+    },
+    {
+      "sceneId": "doorway-wide",
+      "frameIndex": 6,
+      "rgbSha256": "a523a46320f047661a49f05dbeefc6c4215a3487bbed0df897bc35cc5a25937f",
+      "inputTensorSha256": "ab6d914f23a26b2bb1f45055c2e40e7c92d6d770136a1a792e578d2fb30ccd43"
+    },
+    {
+      "sceneId": "doorway-wide",
+      "frameIndex": 7,
+      "rgbSha256": "9ed8dfd1d30baefac93e1899361e6b586df6f1021b7a2db86eb23c1a130e52ba",
+      "inputTensorSha256": "43f851d617d4cc2861023acb11e94378417204e46eaba0b85709f1c33f78d032"
+    },
+    {
+      "sceneId": "doorway-wide",
+      "frameIndex": 8,
+      "rgbSha256": "18900a6b390bfb9baa62100736b57031f95d17982237937a5673714aff49cfe8",
+      "inputTensorSha256": "40dd7c44e08c884894face43568b5441fd638aea87dfbcc686c3c0884874bf06"
+    },
+    {
+      "sceneId": "doorway-wide",
+      "frameIndex": 9,
+      "rgbSha256": "87064bcf781711c016bad578fa7652760eb96ea684263daf28ba961fa1718a23",
+      "inputTensorSha256": "f28cc3f5b354d2e9c134c92590e891dce36140d214ec3ed9b55ba25c1d6669af"
+    },
+    {
+      "sceneId": "doorway-wide",
+      "frameIndex": 10,
+      "rgbSha256": "c9e00df86fba4651fe1d3aa64fee0f9bd773caa54b739e90a418c33327bb7f15",
+      "inputTensorSha256": "dfd49625b99c07e06c2960852ce6cb4ef692b346e3f544e9145bc418e7bfa2b3"
+    },
+    {
+      "sceneId": "doorway-narrow",
+      "frameIndex": 0,
+      "rgbSha256": "fe4909de8b8b02b3afe08c74a98568eb23f3928bfda279b6480b6172685807be",
+      "inputTensorSha256": "4a1b771d3270527edf7d3ce6a67196a9d6065df7b3f613d9bdc8fa6b0c227a4c"
+    },
+    {
+      "sceneId": "doorway-narrow",
+      "frameIndex": 1,
+      "rgbSha256": "96002e633742575d334a4b38ef1b60fd3afe3a107387a0b5b50f9088e81aa744",
+      "inputTensorSha256": "41e59085a153301c7ea0eefcbf310d60ea8aa490bcdcabd1ff6392b963f33d6d"
+    },
+    {
+      "sceneId": "doorway-narrow",
+      "frameIndex": 2,
+      "rgbSha256": "77536f99a41c0d2cbafc1530a6baccb55575b70b0ae270e3a3bbc02f8d69023d",
+      "inputTensorSha256": "fd5fb377a25680a7bd562654cf14315fdc95a9bd9c529ad9ed425bb97767a88a"
+    },
+    {
+      "sceneId": "doorway-narrow",
+      "frameIndex": 3,
+      "rgbSha256": "d5cb0959d990abb50ab839fb19d1368a3b8ddf8ce2495496698fbf2bd1fe9be4",
+      "inputTensorSha256": "2ed0eb742ec3a66c6a0e1d865b881c4825ce29e3166aaf663300b1eff60660d6"
+    },
+    {
+      "sceneId": "doorway-narrow",
+      "frameIndex": 4,
+      "rgbSha256": "52376c28618328f8dc11f96cb6f59da967dffea5db644871a54e30b38f1c3f6d",
+      "inputTensorSha256": "23c89b3059470d5a57bb2876365a96b5d72b057fa005776f7030c1af18d8a80c"
+    },
+    {
+      "sceneId": "doorway-narrow",
+      "frameIndex": 5,
+      "rgbSha256": "276b6ee990d060e041d2334c20c90a0e7bf3e978f7485f626598586fdcb3c7eb",
+      "inputTensorSha256": "12f82c2328862c457b414b49e691d3e0022db81c1f09b0098946b815bc706f62"
+    },
+    {
+      "sceneId": "doorway-narrow",
+      "frameIndex": 6,
+      "rgbSha256": "7376f495128bae29eeb530c0021b3bf1b7a674466d4a9ce54afebbf32c65aa4c",
+      "inputTensorSha256": "cc088f291e8cf0e6a5f9809d802eed4d5d6750d72cea7ac6e034e04024426af3"
+    },
+    {
+      "sceneId": "doorway-narrow",
+      "frameIndex": 7,
+      "rgbSha256": "26d31480c9d56495db972fbb83d60efcfb5e8d7f5dfa495ea234918435185f79",
+      "inputTensorSha256": "17d72ac6b8de4d8c4c3d0108b2cb27af61e74ac487ab90cda574993d6a8af0c4"
+    },
+    {
+      "sceneId": "doorway-narrow",
+      "frameIndex": 8,
+      "rgbSha256": "95c87c8151718f7ce0f6b761eb7ee9a17e446c8eeaf1e4fae9bc803d6ca7c14c",
+      "inputTensorSha256": "d8ce5856405591dd9818d5d609aaab090bb44408cd0a24a87335424d383f6d1a"
+    },
+    {
+      "sceneId": "doorway-narrow",
+      "frameIndex": 9,
+      "rgbSha256": "cc39fc56311088e10362715e9899aca919e894694c4a4247afabdafd10152a6b",
+      "inputTensorSha256": "d2a4fe9a1cfce851fb4c44a58d999fe9caac15a9c2b84e086e912fcc7e74533e"
+    },
+    {
+      "sceneId": "doorway-narrow",
+      "frameIndex": 10,
+      "rgbSha256": "55ee66794c1c04198938fee99564972bc3f08c58b73128a9080e96e746f45c23",
+      "inputTensorSha256": "a7cc0ccd4860daef9bea8bcaf77d974879a79b1b65ab6a70ae1655832a4e7bb7"
+    },
+    {
+      "sceneId": "headroom-high",
+      "frameIndex": 0,
+      "rgbSha256": "927725037fdbe3596c3fa05e1eb26bfe022156b5fa1cc2b19b1212bb31de214c",
+      "inputTensorSha256": "43f220de8b87dce39194e4cbb24149f5f9a20208511f9d8e43fd9723ced059e6"
+    },
+    {
+      "sceneId": "headroom-high",
+      "frameIndex": 1,
+      "rgbSha256": "51409622c8de2dd74cc41260bdd9b04fb32e2d30c52c05f37d6df63bcb776f1f",
+      "inputTensorSha256": "8757136821fc7a2ff239dafa4a35ed0b045bd59d02aa23bd39b3b55484f51b2e"
+    },
+    {
+      "sceneId": "headroom-high",
+      "frameIndex": 2,
+      "rgbSha256": "5069716230bc8e2f01e2eeb65cfdf4f6816ac7a43aaa9ca3bfaae491c23b1a8d",
+      "inputTensorSha256": "6a98955098bfa668a077fa6b32f015ad15c24ef530981a11966e9b131d6f352e"
+    },
+    {
+      "sceneId": "headroom-high",
+      "frameIndex": 3,
+      "rgbSha256": "6c704df0d58fc888725174a60f78f4ff53d276295d88d400631e046c851b073c",
+      "inputTensorSha256": "cc662ea596b57edba7869a36d341402f38daa8d010ae503ddefe68d5e247f542"
+    },
+    {
+      "sceneId": "headroom-high",
+      "frameIndex": 4,
+      "rgbSha256": "12dcf426f567ac603846c27c67f353686d7f28bddcfa111f7711ced6c9ffdce3",
+      "inputTensorSha256": "b632da9c3973497a1d532be9a57c6eab7c17d98d0e5f635bbf8bdebf44a065fc"
+    },
+    {
+      "sceneId": "headroom-high",
+      "frameIndex": 5,
+      "rgbSha256": "47d4747b32f15d86b7ac11dd294c2d02e0c10bc88053f71e13a50001876f5e99",
+      "inputTensorSha256": "b7e09dba695adb58dffdde7eb0718b2faf3a23f29caef53167d20363ad78b463"
+    },
+    {
+      "sceneId": "headroom-high",
+      "frameIndex": 6,
+      "rgbSha256": "38caf248af96b4b7b05466626a32310f089351cf178d00b5ff502eb28c5e48ed",
+      "inputTensorSha256": "ade6b87e53cdaa9f610e92a52a71766d2ae833e45fdeb244801a4141f760cc4c"
+    },
+    {
+      "sceneId": "headroom-high",
+      "frameIndex": 7,
+      "rgbSha256": "673fa76d4c2628263436c76d8bed1347b36411d13c26c00810f160f9251e7c14",
+      "inputTensorSha256": "417a529c96baac34e7f2c8a9c5ef6f5e3c59a31c13e8ef3f20d25b2a4d67a984"
+    },
+    {
+      "sceneId": "headroom-high",
+      "frameIndex": 8,
+      "rgbSha256": "825dbb76ede4ffa6ca88287882763aa8fd43f2b26fcf0ab2bd479d11833a34b8",
+      "inputTensorSha256": "5b1e9cbbe69c7d7e0cc3f91c9cef4f104b68b86c029869c84c710149b55d0771"
+    },
+    {
+      "sceneId": "headroom-high",
+      "frameIndex": 9,
+      "rgbSha256": "6054101b010215dda572d1a66d4c1b1c310d21a9e4b0c27ce8d62ee75ea9a1a4",
+      "inputTensorSha256": "da22dec62b5cb064e5123e934d6d6f318db1fc8a89b4fd166d52dd32ae0ee972"
+    },
+    {
+      "sceneId": "headroom-high",
+      "frameIndex": 10,
+      "rgbSha256": "95db6a110eeab2851f6d9c5186e20741f54897d6b1fe671db2ca7025df0a16b4",
+      "inputTensorSha256": "8008d451a60f891e2346a8fa3b1da8d0e250072bdb41189417c8a59da4c44991"
+    },
+    {
+      "sceneId": "headroom-low",
+      "frameIndex": 0,
+      "rgbSha256": "aa63fff50b6998e67e97d915b22d0ce5a38959a082daaa0148aae7ae2d3ae2ad",
+      "inputTensorSha256": "9df142787f82448e3f970f819ea6c2a0f9bd9714f68b95b5452dc1b688639378"
+    },
+    {
+      "sceneId": "headroom-low",
+      "frameIndex": 1,
+      "rgbSha256": "e1e6d508491aacd6b81cf09e4b743a9b5b72dd4fb1d4e58634f0391c0d939ee1",
+      "inputTensorSha256": "852b7816f782a7404ea41a199363d009528c37c96aeb3276b4003180cea7899a"
+    },
+    {
+      "sceneId": "headroom-low",
+      "frameIndex": 2,
+      "rgbSha256": "2855972d7e5c446ab20bab06a6eb959b7f872f6c3903b1ccfd8df34f94a2e6b2",
+      "inputTensorSha256": "673c24f389ce2f9ed630633cd76fd71a9bf25fda304d0e129dbdeb78185bb434"
+    },
+    {
+      "sceneId": "headroom-low",
+      "frameIndex": 3,
+      "rgbSha256": "a6fc56673ed77f551788af5aec481e9b7dd2cb10a3e7498bee382cd058aa7361",
+      "inputTensorSha256": "8fa08a84523f2f194e3e857a8ff44e42241519f26e9fdf2fd38e71cc0d9c041c"
+    },
+    {
+      "sceneId": "headroom-low",
+      "frameIndex": 4,
+      "rgbSha256": "800d389f6f6411fa8b82b26d6920163bcaee3e562f6423a9fb6b642f69c6b59a",
+      "inputTensorSha256": "e8bb917a7b706489eee9370a8988c6d189be28e66581e843a7423704f0a897ee"
+    },
+    {
+      "sceneId": "headroom-low",
+      "frameIndex": 5,
+      "rgbSha256": "094c142d1bad9dcafd03b3c66dd71d4f92b653ae7c446d13ec70e88009a3afa5",
+      "inputTensorSha256": "9b9db1bad551740260cb27efddd63d8b6b3ed715d233ba2b43dd3b17f0183815"
+    },
+    {
+      "sceneId": "headroom-low",
+      "frameIndex": 6,
+      "rgbSha256": "9f4a0167d18aca79d2ee5043db3b66c83ef1d8850784ccd341ffcb59e9dadc47",
+      "inputTensorSha256": "f52898ac299ffefa97e5c158683fe27ca1ce52da70e997710960d80f62466062"
+    },
+    {
+      "sceneId": "headroom-low",
+      "frameIndex": 7,
+      "rgbSha256": "c7235842677ff05db29e68274ed2b170e4c286696114b177a98563081f85b53f",
+      "inputTensorSha256": "0571754f399ab792eeb18b7f67df51c40ea9842da0213f09d0d607068ce8531d"
+    },
+    {
+      "sceneId": "headroom-low",
+      "frameIndex": 8,
+      "rgbSha256": "1287cc905997558a0ff8969c28fa115a02afcb7f4c19434349e85e4207617d3d",
+      "inputTensorSha256": "1abb874bb45ca8d8289ed4d2523f148996803f0562201f2708190d487d7a5b81"
+    },
+    {
+      "sceneId": "headroom-low",
+      "frameIndex": 9,
+      "rgbSha256": "5fa122d240ccbc4c067e76f1190cf14b8b5685e57b3fb08d998e9c091045d765",
+      "inputTensorSha256": "71f6d3aa23670d85c3d7ef8b87351534e484b90a5d1ae0d94678f801b5708f4b"
+    },
+    {
+      "sceneId": "headroom-low",
+      "frameIndex": 10,
+      "rgbSha256": "32b6b626a80c958f25c6ae6bedfc02dc0a5794bd02ea607d853a036d434da9c5",
+      "inputTensorSha256": "66751832baf522852f971954001ea506b7b2925e6d6f09f7585b04143e7028a0"
+    },
+    {
+      "sceneId": "floor-level",
+      "frameIndex": 0,
+      "rgbSha256": "59661546f46cc4f44c76b8bcf80eba1c765c83d0be43af9115f65681d61675e6",
+      "inputTensorSha256": "a0cd32a174f5da9bd0a67962811f53d018c791baae08dcb6fad2ccde735257f8"
+    },
+    {
+      "sceneId": "floor-level",
+      "frameIndex": 1,
+      "rgbSha256": "449ce6a1d88e4b930ddf1537bf95aa0121b20dbffac1d9bc8d1436919d2d577d",
+      "inputTensorSha256": "3eeb716f0ada15db81452bf4918c80bc184b8e2035946a7207afae90278ad113"
+    },
+    {
+      "sceneId": "floor-level",
+      "frameIndex": 2,
+      "rgbSha256": "03d84ecaccf5d9098ee8c4be07c4f8fb4ccba08905714a35491f9b5e1c096feb",
+      "inputTensorSha256": "8e00b39a3c9874f2befde25282c476a4da07345d70b15ccc6f30d0ce1e47df40"
+    },
+    {
+      "sceneId": "floor-level",
+      "frameIndex": 3,
+      "rgbSha256": "5ebdc6f6305db2fecdf8132c6be479f30da46f86560d83c5f640821f2cad155e",
+      "inputTensorSha256": "24bb83b8ee4b3e096dec180b6d069981944250f2ccab52657228fd687f19f631"
+    },
+    {
+      "sceneId": "floor-level",
+      "frameIndex": 4,
+      "rgbSha256": "9dd1c7dccc5460d819384fd98160b44c63a687a55b507bef6b8a1498e2dbedfc",
+      "inputTensorSha256": "e15fe750f7949c2e6d32a3ae35d41a7c3a451d5a43ad7c12f3c213ef1abb7cc8"
+    },
+    {
+      "sceneId": "floor-level",
+      "frameIndex": 5,
+      "rgbSha256": "cc5c546482ac14e531356424edcd188273ac34c5829710b0c1aa50e4a5900491",
+      "inputTensorSha256": "1502638d93e3f7866acbbe2f3c648642ca055a489964006c17a7960d7000a2d3"
+    },
+    {
+      "sceneId": "floor-level",
+      "frameIndex": 6,
+      "rgbSha256": "2c00cd17ec1e3a6e7a61c63b3be8f5069b89db4fb298d9f5220f76cde440473c",
+      "inputTensorSha256": "443d0ec7b915159fd355e89f8e4865a52841c890d744444daf3ff3174066b56c"
+    },
+    {
+      "sceneId": "floor-level",
+      "frameIndex": 7,
+      "rgbSha256": "4fca81d75be68b81e45940827cb5cb54a7cf640b7c6a0d54576891f10ef96232",
+      "inputTensorSha256": "3c02c00d8e85df8b6e695c5943d9582f22f98d1817bfe829d956b9aa4e22da21"
+    },
+    {
+      "sceneId": "floor-level",
+      "frameIndex": 8,
+      "rgbSha256": "765e787ac50afd60206bf8bf6f80f30bea7d5abc67875e1721ab5362b3b3feb4",
+      "inputTensorSha256": "b25dbf93b20c7a4e502002b1ca79ce71f7cf47d0194db57823ea1b5c5514d254"
+    },
+    {
+      "sceneId": "floor-level",
+      "frameIndex": 9,
+      "rgbSha256": "f6ae3750f8d1648828d032c6dfc33703f8d4ffaf80f64e2e0d092905571a2e75",
+      "inputTensorSha256": "a32193ab9748e0aad1964f599b3312500939f0eb2c471ac782cd5f7f9933fee1"
+    },
+    {
+      "sceneId": "floor-level",
+      "frameIndex": 10,
+      "rgbSha256": "e5e1b644c4026e5c68877a48d1412cc73d45e277b05654c42942cdb39ac7b616",
+      "inputTensorSha256": "00d23d6ab49b43424d4cfd4894d7400bb85f73778d118d1f1f203d51ada5f9a8"
+    },
+    {
+      "sceneId": "floor-drop",
+      "frameIndex": 0,
+      "rgbSha256": "d4d7edad1251d350ae0a1c55051709073e598d5d61cc5d976ca02b3ba572468b",
+      "inputTensorSha256": "46994c9e92e4c02a52619d70eab430f85a1802f5d4f6d3f321c8f138b4dbb4a9"
+    },
+    {
+      "sceneId": "floor-drop",
+      "frameIndex": 1,
+      "rgbSha256": "b73bf0651ac1bb569cd35277f1f3ab9139e1be5cd4708ad2817de4d8b3dd987a",
+      "inputTensorSha256": "750d57a56ce9e142611cfed7093673fdfb325d5f65325cbede72f8063d578cca"
+    },
+    {
+      "sceneId": "floor-drop",
+      "frameIndex": 2,
+      "rgbSha256": "e2608d3f19cb8cdb4c79f06c0a6abb42f4a1834c9cb063657886f0e91b02e249",
+      "inputTensorSha256": "a89902802865feba23f563b0f00badcb23c7dcd7c23d5499988abc3acd264f6e"
+    },
+    {
+      "sceneId": "floor-drop",
+      "frameIndex": 3,
+      "rgbSha256": "a04e2e5d8b65dda89c1c8078cb574c22bc199d4bed515297eb338c1e6233ef08",
+      "inputTensorSha256": "3320524d6e342647947515cc121303c65a48943a7ba5e75085fa5ad7fc97aa61"
+    },
+    {
+      "sceneId": "floor-drop",
+      "frameIndex": 4,
+      "rgbSha256": "68cdd16b2cc8e24e3382de7881fdbfae45e1f1ad6f3f08bdd5f177502c5a90b4",
+      "inputTensorSha256": "b1e41c45964123a7997c881e835ea994a71ad1498c261d0244d9cada396a73bb"
+    },
+    {
+      "sceneId": "floor-drop",
+      "frameIndex": 5,
+      "rgbSha256": "2aa3e926249a0b7663fb5366a56f804af99f1ff2d8216f15927905df2c80d206",
+      "inputTensorSha256": "614deff779f83cfe546adcac16a1742ffd2d2217022b8c47f54205090f8ea64a"
+    },
+    {
+      "sceneId": "floor-drop",
+      "frameIndex": 6,
+      "rgbSha256": "354d06ee4bc8258ce3cf65209af38b79b1ca341c908b0cad0d47e429f0c6c984",
+      "inputTensorSha256": "3c89d22e06bf1e288939d6e78b92f126c0ab41ffb21370e990ab7d458c50d73b"
+    },
+    {
+      "sceneId": "floor-drop",
+      "frameIndex": 7,
+      "rgbSha256": "5caca74692afa34c6d504c46db57b33d2e1c6dbc9ba33636ddecf36be2417575",
+      "inputTensorSha256": "c231dc88bbe2275a13321f97cfbf9b9976936e18cf524e0b314cae122de12ce7"
+    },
+    {
+      "sceneId": "floor-drop",
+      "frameIndex": 8,
+      "rgbSha256": "f6f554924d805d908ff62e2c8864c45e2c12d1dc0848d765d3eb079f183b800a",
+      "inputTensorSha256": "59014cf7a907d96ec14667dc64408ea552173e48f15eb14bf1f7842825684881"
+    },
+    {
+      "sceneId": "floor-drop",
+      "frameIndex": 9,
+      "rgbSha256": "8c4cacb36ec613bff8d9bef70705300112e153dabdad2ec4c78e695c16979aba",
+      "inputTensorSha256": "0e8854966770a42c51a4a7f9b2abcbea6fa5957d0de4ac2b70181fe7afd03e04"
+    },
+    {
+      "sceneId": "floor-drop",
+      "frameIndex": 10,
+      "rgbSha256": "598be74409549725fed63314b11fac069f9a071156f58393979890f5533fa6f6",
+      "inputTensorSha256": "6ecfe874f15cca5dfe580fd0eb4458e456bae3d100cbe13575f6451daf863183"
+    },
+    {
+      "sceneId": "person-side",
+      "frameIndex": 0,
+      "rgbSha256": "2784bede92486f3a0d5d4546a5cb7d045280b9f56ba927832b0561d6577cb7d8",
+      "inputTensorSha256": "1c3ca3fed861b6855a3724f8fef56f56e4cf25a7192b4f69ba98b5c2469e1a06"
+    },
+    {
+      "sceneId": "person-side",
+      "frameIndex": 1,
+      "rgbSha256": "413d76db58e01b2979bdcb29edb981c85acea1d9a98774015710cff368c04e03",
+      "inputTensorSha256": "3b6ef8264f69ca4de5dc01720def246868f3fa7ccd7703e37852b291f9a197ef"
+    },
+    {
+      "sceneId": "person-side",
+      "frameIndex": 2,
+      "rgbSha256": "65361d265fb90f59af679fffe38d75dacbd9438f3257062503448b6d5f0ee94f",
+      "inputTensorSha256": "6bdd786adaed9c7d6b1c88f85476fdb564437ac3700d34cd6406d32f150adbcb"
+    },
+    {
+      "sceneId": "person-side",
+      "frameIndex": 3,
+      "rgbSha256": "87681b936c3667e279d4527be977a9df37a3667e6c131e2475b97b09bf1e365f",
+      "inputTensorSha256": "ff2cf026b43fa3ac156b06893712091a2a412808c04f73e71a47b3ab5660e10f"
+    },
+    {
+      "sceneId": "person-side",
+      "frameIndex": 4,
+      "rgbSha256": "f0fcd52190914f32c5daabeb54f8a6aa964c30601f9a1e5767de1a5e2fe7fe88",
+      "inputTensorSha256": "decd105f5ac0fb790e8eaafc74c3e3dfb7e7254c2e161d84d11b716c4eb5114f"
+    },
+    {
+      "sceneId": "person-side",
+      "frameIndex": 5,
+      "rgbSha256": "e852168a5afc3fcdee7a4cca002f881f589eb85767ff03dc532ca3164f901a96",
+      "inputTensorSha256": "cfd9267de7b14205746828f445c0d030a6904601b7b7685f860e33f206219ed7"
+    },
+    {
+      "sceneId": "person-side",
+      "frameIndex": 6,
+      "rgbSha256": "dbc6eded3154dc93a2cf4855b7ebebd841a69d98c7758c174d1283755afb79f6",
+      "inputTensorSha256": "81e1d2a72633b872418d1a4731ff08b47be5749f68d03efe6914a61b360c7b49"
+    },
+    {
+      "sceneId": "person-side",
+      "frameIndex": 7,
+      "rgbSha256": "b1d06bcb941155d960fc7603177c7bcd7aa7a02ad856be47ea56c34309e4e790",
+      "inputTensorSha256": "7a8507110843da30092b98db63ae5ed3aac3fec673651be3c90961891966f542"
+    },
+    {
+      "sceneId": "person-side",
+      "frameIndex": 8,
+      "rgbSha256": "8dd283e4cee0fe2697a59363fbf277c97b69de1335b137f8c1c1d76fd7f32751",
+      "inputTensorSha256": "756701bae3566b6c42ccedbdac36bfe49e2813644c582c8dfaeb411fc9861654"
+    },
+    {
+      "sceneId": "person-side",
+      "frameIndex": 9,
+      "rgbSha256": "badd1f3cae54de3f1e5cfd055410595d7ea76031ea8c743f7069b7fdb3aa872d",
+      "inputTensorSha256": "82969a06ca8cce10111d60e6f60b3781167a8fdfaf96283466a49ec0bb537bef"
+    },
+    {
+      "sceneId": "person-side",
+      "frameIndex": 10,
+      "rgbSha256": "1498b6458ab5fd499b6b7be5d057bf04e7a22cadf7ef80d362d580d08efe3932",
+      "inputTensorSha256": "256939a32e162c2f6206f3b2b44753795fa14d0d1ce46b03c591cd0a6060881c"
+    },
+    {
+      "sceneId": "person-approach",
+      "frameIndex": 0,
+      "rgbSha256": "b9b18b623b82383c3f36a120cbc284f231951a3920d2aade2b726865ffdab7c5",
+      "inputTensorSha256": "c83c59e205d7f4be2857bd80dbe1430bb863328f74eba6d403809d8c09da2f1c"
+    },
+    {
+      "sceneId": "person-approach",
+      "frameIndex": 1,
+      "rgbSha256": "ac17cb5f7b81aca36e27c70b774f3bced4362d4ace823d1271bb519a66a03f7a",
+      "inputTensorSha256": "63e45318863018250a5d4e16c140bcfe0aafbed8f1efb3c8272103f4cf82e95d"
+    },
+    {
+      "sceneId": "person-approach",
+      "frameIndex": 2,
+      "rgbSha256": "8e2b641c78fb0f8333e77d1f469f042bc4c4a25c5558dae791496f8300a2d6aa",
+      "inputTensorSha256": "bdde29e95a4a61efa1b2f41a619088c75ef574f0c19f45247f2beab5448c34ab"
+    },
+    {
+      "sceneId": "person-approach",
+      "frameIndex": 3,
+      "rgbSha256": "3e96c8e4cb797c751a59d2a1d29881458b3ff3afc1ef79936e9b50b487bd17e2",
+      "inputTensorSha256": "b4f5671bd393bcd92ebda9d5120ed62120eeb55f2d41146aa3ae4611d1295cad"
+    },
+    {
+      "sceneId": "person-approach",
+      "frameIndex": 4,
+      "rgbSha256": "912cf0a9e92a42dad0c6fcfc4b5ff9324379ffbef76092eaf9f5bbf25d7d75db",
+      "inputTensorSha256": "01edabca6753cc280d3e7f039b97a40de293ebfaba6ce29f77b72151075e9c30"
+    },
+    {
+      "sceneId": "person-approach",
+      "frameIndex": 5,
+      "rgbSha256": "336332c7fd04e13f5cbdc3332b59b30e1a263bcbd138e74d7e1a8ee297bdab58",
+      "inputTensorSha256": "39050c179fd75172f83884eacea013cbb8dc233b2bf9b71ca3fbfab6ed2fbe71"
+    },
+    {
+      "sceneId": "person-approach",
+      "frameIndex": 6,
+      "rgbSha256": "348370218047ebdea4ebea1dc29e946c6587b53ec5207d848d2b8b06e1e284b3",
+      "inputTensorSha256": "c27494aed16fa5d746fb1d204d14375e24eb352977bf789fd7bc7bfe514bc519"
+    },
+    {
+      "sceneId": "person-approach",
+      "frameIndex": 7,
+      "rgbSha256": "ccf62ed7d52582f57cbb025f71a456d0cdffd82a95a7a0dd3bfe90a3bb17c1f7",
+      "inputTensorSha256": "a717ec172162fa1445c8cda3b84946cbc13eaa77809d16d4ece40aa9cf6e7553"
+    },
+    {
+      "sceneId": "person-approach",
+      "frameIndex": 8,
+      "rgbSha256": "5e49653deeed74b40940ac07924751dad58ce636d4ea51e9fae5dbe367050661",
+      "inputTensorSha256": "e351a0a9f9671ae5d87000a7a6404a6f8c6fa94172920ab098951a2ecdf25aec"
+    },
+    {
+      "sceneId": "person-approach",
+      "frameIndex": 9,
+      "rgbSha256": "1bb99db4b45fdc2a05bbc14e6489a505354ffb8c121086a801f23c3c1d0bf49c",
+      "inputTensorSha256": "3396f257c99097f6bae7b0a81ad15a507c9a5dc8296b496d2cd5016267258620"
+    },
+    {
+      "sceneId": "person-approach",
+      "frameIndex": 10,
+      "rgbSha256": "fe53eb20087acf9f8e938ef7943d42eb2cbb8d94d7f0f644d2cbd263c6b819ae",
+      "inputTensorSha256": "c2725611958e11dd8fbd6cff7c12d342b510a81f7ea76f6430708812cbb43f74"
+    },
+    {
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 0,
+      "rgbSha256": "ea80e439a14bac9a1695250826b038cd042f01434d11057d425071ecae16301b",
+      "inputTensorSha256": "ec0a074f3418be5805d8a89aa0cfdeebb21a8dee4723282639e85d94eb02eee7"
+    },
+    {
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 1,
+      "rgbSha256": "657910d79e8cf6101170e29a58dd51cd3934dd5eb7843a61d3f29976c01536f0",
+      "inputTensorSha256": "465d54e529dd3f1fd78c9cee7cf982e01b1732b8650b2d3e0ecbf5822790e281"
+    },
+    {
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 2,
+      "rgbSha256": "00f7347a1ad444fdd3bf05ef40778dd3c7dc092dbbfc15112f2e73facc64b39b",
+      "inputTensorSha256": "e6299765e3123a4bdb0f8701ee3b6a3368c630057a960f54a224aa1f1de0a041"
+    },
+    {
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 3,
+      "rgbSha256": "700828c4478ba83ce8a06791db40c9dd2e3eae8d5560f0ed8deb5920a6baa1f1",
+      "inputTensorSha256": "e6299765e3123a4bdb0f8701ee3b6a3368c630057a960f54a224aa1f1de0a041"
+    },
+    {
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 4,
+      "rgbSha256": "ff29db3241336aa909441f4edca2f74a111968834bc8ddb0a9162dc46f4409b4",
+      "inputTensorSha256": "465d54e529dd3f1fd78c9cee7cf982e01b1732b8650b2d3e0ecbf5822790e281"
+    },
+    {
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 5,
+      "rgbSha256": "8c349c71a052b4fc4f702c62f49e1b0bb9ffce6e58a67c1637c1a43d12967abb",
+      "inputTensorSha256": "ec0a074f3418be5805d8a89aa0cfdeebb21a8dee4723282639e85d94eb02eee7"
+    },
+    {
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 6,
+      "rgbSha256": "d39789f6ed540fb55813303cdc0f5a3a14c6dad2bfcbf09b3eb12b8085c74ffa",
+      "inputTensorSha256": "93dcd164aaf3b2bd575f1814d6d05fecaeeee1cd3c82383c3affe941d6494f7a"
+    },
+    {
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 7,
+      "rgbSha256": "810cb9a9345b3fbffd6fa810f03f45e60bffff3b97a7512af8771671d4ad24fe",
+      "inputTensorSha256": "9f083e9bdfe84d7de5bbe9b9019c604c9ad185e1122ba14a6d78af0a9b656a86"
+    },
+    {
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 8,
+      "rgbSha256": "9d7aee199b0a0a109a752e1f0becf5cb1aba06da61746772c3bf3f7e8ffa1fa7",
+      "inputTensorSha256": "9f083e9bdfe84d7de5bbe9b9019c604c9ad185e1122ba14a6d78af0a9b656a86"
+    },
+    {
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 9,
+      "rgbSha256": "d1c9a9c941780dbcb0af5280e34901f6e5002f7c0e13a3496bedd9d135421e25",
+      "inputTensorSha256": "93dcd164aaf3b2bd575f1814d6d05fecaeeee1cd3c82383c3affe941d6494f7a"
+    },
+    {
+      "sceneId": "camera-pan-clear",
+      "frameIndex": 10,
+      "rgbSha256": "1d0e5039c823cd627b41593c0b20e197c7222d8b14b9f9767852609a091a5ad7",
+      "inputTensorSha256": "ec0a074f3418be5805d8a89aa0cfdeebb21a8dee4723282639e85d94eb02eee7"
+    },
+    {
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 0,
+      "rgbSha256": "1a49afb3408b5c7b15f8b77e0a8619b139567680680d4daa4ce93632a8ed08da",
+      "inputTensorSha256": "63495c1b598e647f36ccabea7f02b7427b79947bf71c48d9cdea654c57347ee7"
+    },
+    {
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 1,
+      "rgbSha256": "57678d72e9b6e0dea10b3497815dfbb1913a56daf074a155195c23b46f291a77",
+      "inputTensorSha256": "53ab256cabfb06b913085e6269aba226e19c6e8850111d4beffaad6e61f8a80e"
+    },
+    {
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 2,
+      "rgbSha256": "5b483f4621911fb2f708bd7f3397824b9e4e5ce95b2f99994b014fd03dc718e1",
+      "inputTensorSha256": "5b23f3ef2dcaf87d12bd54516c8f42787c06c823f0d6376c46bfb5a971456220"
+    },
+    {
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 3,
+      "rgbSha256": "735d9e25a250172bc752a9c48d54473fc002b158c24ec86976416f0700ab856b",
+      "inputTensorSha256": "b552370537a666efe0a04204ed9eec908e0f76c044a0e1591e63b1b8b0b26873"
+    },
+    {
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 4,
+      "rgbSha256": "23d21721e439af9bbdd486895c328b2f38b5b9240d8691959636991caf775da3",
+      "inputTensorSha256": "d9c2266c7d17dc0fb4131aa3fa3b5c685b1155ff5f4028cfaa6a0b00693c5294"
+    },
+    {
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 5,
+      "rgbSha256": "8c58e80cb837728bd175a4f8cae0f3cece44353a0cb912690cca09e1c9c6497e",
+      "inputTensorSha256": "f57d677106036dc6f10e1ca61e0c9dcd67940e608d929e826936454c563d9857"
+    },
+    {
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 6,
+      "rgbSha256": "eb8dfd64a826964aaf4b8afc774811711ce9b387d3f9eae12a7aecbb7dd2b7a0",
+      "inputTensorSha256": "6367ea4b7bcbcd7b840aadeb40ec7e9150d0df4d906aefd56c25580b4f1abaf1"
+    },
+    {
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 7,
+      "rgbSha256": "9118622054e120605f78a600e39cdffbeb3c018ca70713903ba40a7fd5009e5d",
+      "inputTensorSha256": "95cd54d851ffb84bee02ff6c1519c06c80c641168144d4da701ce2a14091c623"
+    },
+    {
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 8,
+      "rgbSha256": "e3116c9150066f808a8757f53f1710eaeee6bbe520d4ead3c57086adb03384a9",
+      "inputTensorSha256": "aca905e7b69987f07d283a63bd4b03525fb44e85a2f71a71529f72238f313de4"
+    },
+    {
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 9,
+      "rgbSha256": "b622ac33ebdbee171c02e4e299117f49be11c8786b9ec2164abce4a670e7dadc",
+      "inputTensorSha256": "a17c576c1a1fe80d31369ac43b9c20fe003c1ce2bdd8d99126ee4122358b407c"
+    },
+    {
+      "sceneId": "camera-pan-approach",
+      "frameIndex": 10,
+      "rgbSha256": "068a973309a3caab28d3c74ec81924b28cf5e424731eb979ece61790de2a583f",
+      "inputTensorSha256": "e313df0a7701707bffdcf22fc12505560474e9a56e50fca83231777cf1b3c30d"
+    }
+  ]
+}

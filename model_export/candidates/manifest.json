@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "generator": "model_export/export_candidates.py",
+  "environment": {
+    "ultralytics": "8.4.41",
+    "onnx": "1.22.0"
+  },
+  "controls": [
+    {
+      "modelId": "yolov8n-int8-control-416",
+      "status": "productionControl",
+      "artifactPath": "assets/yolov8n_int8.tflite",
+      "artifactSha256": "3f5c681641e439321ec529c26995de18a910d62a25a49ccb02da2a0a771cae02",
+      "artifactBytes": 3382280,
+      "format": "tflite-float-io-int8-weights",
+      "input": {
+        "name": "images",
+        "shape": [
+          1,
+          416,
+          416,
+          3
+        ]
+      },
+      "output": {
+        "name": "Identity",
+        "shape": [
+          1,
+          84,
+          3549
+        ]
+      },
+      "decoderId": "flutter-vision-yolov8-bcn-v1",
+      "license": "provenance-review-required"
+    },
+    {
+      "modelId": "midas-small-ncnn",
+      "status": "productionControl",
+      "artifactPaths": [
+        "assets/midas_small.ncnn.param",
+        "assets/midas_small.ncnn.bin"
+      ],
+      "artifactSha256": {
+        "param": "d618bb98777ff7e7adeeef1c8cf50ede79c97c754876681d6a0b26330708e8d3",
+        "bin": "324412b094f3309c0c7acd506a06ccdc60296749ac382dc58431efdde0f13242"
+      },
+      "input": {
+        "name": "0",
+        "shape": [
+          1,
+          3,
+          256,
+          256
+        ]
+      },
+      "output": {
+        "name": "797",
+        "shape": [
+          256,
+          256
+        ]
+      },
+      "semantics": "relativeProximity",
+      "preprocessId": "yuv420-rgb01-chw-256-rotate-mirror-crop-stretch-v1",
+      "license": "checkpoint-provenance-review-required"
+    }
+  ],
+  "candidates": [
+    {
+      "modelId": "yolo11n-onnx-320-experiment",
+      "status": "exportedExperiment",
+      "sourcePath": "model_export/yolo11n.pt",
+      "sourceSha256": "0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1",
+      "artifactPath": "model_export/candidates/yolo11n_320.onnx",
+      "artifactSha256": "b9152829ad8ff26a0b2bd2b4a1482910c91c549d1cdcc4587fecf4444741dbe4",
+      "artifactBytes": 10615231,
+      "format": "onnx",
+      "opset": 17,
+      "input": {
+        "name": "images",
+        "shape": [
+          1,
+          3,
+          320,
+          320
+        ]
+      },
+      "output": {
+        "name": "output0",
+        "shape": [
+          1,
+          84,
+          2100
+        ]
+      },
+      "decoderId": "yolov8-v11-bcn-v1",
+      "license": "AGPL-3.0 License (https://ultralytics.com/license)",
+      "exportCommand": "yolo export model=model_export/yolo11n.pt format=onnx imgsz=320 opset=17 simplify=True dynamic=False nms=False device=cpu",
+      "ultralyticsVersion": "8.4.41"
+    },
+    {
+      "modelId": "yolo11n-onnx-416-experiment",
+      "status": "exportedExperiment",
+      "sourcePath": "model_export/yolo11n.pt",
+      "sourceSha256": "0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1",
+      "artifactPath": "model_export/candidates/yolo11n_416.onnx",
+      "artifactSha256": "b9c6c86aa850523b970dff6aec9683dbafb363aa52051a449d4e1651c4a580ce",
+      "artifactBytes": 10644243,
+      "format": "onnx",
+      "opset": 17,
+      "input": {
+        "name": "images",
+        "shape": [
+          1,
+          3,
+          416,
+          416
+        ]
+      },
+      "output": {
+        "name": "output0",
+        "shape": [
+          1,
+          84,
+          3549
+        ]
+      },
+      "decoderId": "yolov8-v11-bcn-v1",
+      "license": "AGPL-3.0 License (https://ultralytics.com/license)",
+      "exportCommand": "yolo export model=model_export/yolo11n.pt format=onnx imgsz=416 opset=17 simplify=True dynamic=False nms=False device=cpu",
+      "ultralyticsVersion": "8.4.41"
+    },
+    {
+      "modelId": "yolo26n-onnx-416-experiment",
+      "status": "exportedExperiment",
+      "sourcePath": "model_export/yolo26n.pt",
+      "sourceSha256": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef",
+      "artifactPath": "model_export/candidates/yolo26n_416.onnx",
+      "artifactSha256": "b0db38ca8a0fe5c8ff00391b18206e07a423f218f5a8236e1f1dbe1b8a2e1332",
+      "artifactBytes": 9844846,
+      "format": "onnx",
+      "opset": 17,
+      "input": {
+        "name": "images",
+        "shape": [
+          1,
+          3,
+          416,
+          416
+        ]
+      },
+      "output": {
+        "name": "output0",
+        "shape": [
+          1,
+          300,
+          6
+        ]
+      },
+      "decoderId": "yolo26-end2end-bnc-v1",
+      "license": "AGPL-3.0 License (https://ultralytics.com/license)",
+      "exportCommand": "yolo export model=model_export/yolo26n.pt format=onnx imgsz=416 opset=17 simplify=True dynamic=False nms=False device=cpu",
+      "ultralyticsVersion": "8.4.41"
+    }
+  ]
+}

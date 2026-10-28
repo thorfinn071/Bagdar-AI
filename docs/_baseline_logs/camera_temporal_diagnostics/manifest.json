@@ -1,0 +1,68 @@
+{
+  "scope": "posthoc report visualization; reads no scoring annotations",
+  "reportSha256": "1716dd834b1f611f9da382bf0efbea28e695a53bc9dcad79b81a06d4040c3608",
+  "corpusManifestSha256": "53d3da6dd1ea013136028a6d5bdd03cc02b791c13acc9ddea329454f224eba29",
+  "generatorSha256": "b6730e9209c2eb68cffbdbbab56bf1e375422444256107c6760223331847aa41",
+  "images": [
+    {
+      "layoutId": "test-temporal-wide-06",
+      "path": "docs/_baseline_logs/camera_temporal_diagnostics/test-temporal-wide-06.png",
+      "sha256": "139a05758bacf76b5e48593150cd1ee16fe40ee8db3ae7a138c77fb49b1b96fe"
+    },
+    {
+      "layoutId": "test-temporal-wide-07",
+      "path": "docs/_baseline_logs/camera_temporal_diagnostics/test-temporal-wide-07.png",
+      "sha256": "88df8f873eb51dc99a2e7c81ecb7a72c218be36384c79f6b6cad3285b7a4d91f"
+    },
+    {
+      "layoutId": "test-temporal-door-pass-08",
+      "path": "docs/_baseline_logs/camera_temporal_diagnostics/test-temporal-door-pass-08.png",
+      "sha256": "5e8f563dbf1a50e60e520715ace9bb825bfa98f166fa3851606be57b1d9b383d"
+    },
+    {
+      "layoutId": "test-temporal-outside-pole-09",
+      "path": "docs/_baseline_logs/camera_temporal_diagnostics/test-temporal-outside-pole-09.png",
+      "sha256": "4183a2741d2cc114b026710c7f954b88f75edab0301bc4e98c8246b22fc87efc"
+    },
+    {
+      "layoutId": "test-temporal-low-bar-10",
+      "path": "docs/_baseline_logs/camera_temporal_diagnostics/test-temporal-low-bar-10.png",
+      "sha256": "059246532498621f20669a57191c2c17c2860c17228e84e9bbfc7d9f15f544d6"
+    },
+    {
+      "layoutId": "test-temporal-pole-11",
+      "path": "docs/_baseline_logs/camera_temporal_diagnostics/test-temporal-pole-11.png",
+      "sha256": "46d967f71ce8215639b4aac805d3f5cef8eaf030dd7cf13b9f7fc3779ad92ecc"
+    },
+    {
+      "layoutId": "test-temporal-subpixel-pole-12",
+      "path": "docs/_baseline_logs/camera_temporal_diagnostics/test-temporal-subpixel-pole-12.png",
+      "sha256": "62e77cfc58d0121b231ce2fe24e055beaf62e82a7b1766fe40ffbb4c25ea27b5"
+    },
+    {
+      "layoutId": "test-temporal-approach-13",
+      "path": "docs/_baseline_logs/camera_temporal_diagnostics/test-temporal-approach-13.png",
+      "sha256": "36970b44322e02d1cc6dd13bdad578a15baa794e6bbdd02a220f741f0ab813d6"
+    },
+    {
+      "layoutId": "test-temporal-crossing-14",
+      "path": "docs/_baseline_logs/camera_temporal_diagnostics/test-temporal-crossing-14.png",
+      "sha256": "a122c28027ac344c2e9be8a7b791eafa772584b767b61dd7891b91a1116f6d2e"
+    },
+    {
+      "layoutId": "test-temporal-receding-15",
+      "path": "docs/_baseline_logs/camera_temporal_diagnostics/test-temporal-receding-15.png",
+      "sha256": "9187572c31be57f25b8b6d258194bd1bfbedb5859a7621f644786473bc6c4b03"
+    },
+    {
+      "layoutId": "test-temporal-camera-yaw-16",
+      "path": "docs/_baseline_logs/camera_temporal_diagnostics/test-temporal-camera-yaw-16.png",
+      "sha256": "3d676f4051779c6259362aacf5a328e75f38eab9dfa354343c97ffde8ba8dc4d"
+    },
+    {
+      "layoutId": "test-temporal-camera-translation-17",
+      "path": "docs/_baseline_logs/camera_temporal_diagnostics/test-temporal-camera-translation-17.png",
+      "sha256": "a8c3c6b028418265a5ab144e061475cef0ed319b92be25294a6c574e15870e2c"
+    }
+  ]
+}

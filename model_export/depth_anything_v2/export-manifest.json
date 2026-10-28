@@ -1,0 +1,207 @@
+{
+  "schemaVersion": 1,
+  "checkpointSha256": "715fade13be8f229f8a70cc02066f656f2423a59effd0579197bbf57860e1378",
+  "sourceManifestSha256": "d6f2980371cdf20b213f4fb9882d344cbc8bd83832b46b0d4e1725ad98208a2e",
+  "versions": {
+    "torch": "2.11.0",
+    "onnx": "1.22.0",
+    "onnxruntime": "1.30.0",
+    "pnnx": "20260526",
+    "ncnn": "1.0.20260526"
+  },
+  "preprocessId": "official-RGB-ImageNet-aspect-preserving-cubic-multiple14-full-FOV-alignCornersTrue-v1",
+  "conversionRecipe": "explicit-MHA-folded-LayerScale-equivalent-v2",
+  "artifacts": {
+    "dav2_small_short280_weightsfp32": {
+      "paramPath": "model_export/depth_anything_v2/dav2_small_short280_mha_ls_v2_weightsfp32.param",
+      "paramSha256": "4e42701ab577da6c10188480f10c76eb22d4083c6828bfe7f5d6548bbec79c10",
+      "binPath": "model_export/depth_anything_v2/dav2_small_short280_mha_ls_v2_weightsfp32.bin",
+      "binSha256": "d76fcecf70659e6f18a9a71b3b48db6b37a71548844d3a3b200fa7e7e28c44ed",
+      "binBytes": 97542920,
+      "command": [
+        "C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\conversion_env\\Lib\\site-packages\\pnnx\\pnnx.exe",
+        "C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\dav2_small_short280_mha_ls_v2.pt",
+        "inputshape=[1,3,280,378]",
+        "fp16=0",
+        "ncnnparam=C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\dav2_small_short280_mha_ls_v2_weightsfp32.param",
+        "ncnnbin=C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\dav2_small_short280_mha_ls_v2_weightsfp32.bin",
+        "pnnxparam=C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\dav2_small_short280_mha_ls_v2_weightsfp32.pnnx.param",
+        "pnnxbin=C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\dav2_small_short280_mha_ls_v2_weightsfp32.pnnx.bin",
+        "pnnxpy=C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\dav2_small_short280_mha_ls_v2_weightsfp32_pnnx.py",
+        "ncnnpy=C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\dav2_small_short280_mha_ls_v2_weightsfp32_ncnn.py"
+      ],
+      "conversionLogSha256": "72bd626b37c3f0d3c2da8058ee76647108a3fb95ffebae5996f2dc16caf5a2bd",
+      "inputShape": [
+        1,
+        3,
+        280,
+        378
+      ],
+      "outputShape": [
+        1,
+        280,
+        378
+      ],
+      "fp16Weights": false,
+      "mobileRuntimeValidated": false,
+      "conversionRecipe": "explicit-MHA-folded-LayerScale-equivalent-v2",
+      "attentionAdapterParity": {
+        "rankRho": 0.999999999920938,
+        "normalizedMeanAbsoluteError": 5.8131814029138695e-08,
+        "normalizedP99AbsoluteError": 4.76837158203125e-07,
+        "normalizedMaxAbsoluteError": 2.60770320892334e-06,
+        "passed": true
+      }
+    },
+    "dav2_small_short280_weightsfp16": {
+      "paramPath": "model_export/depth_anything_v2/dav2_small_short280_mha_ls_v2_weightsfp16.param",
+      "paramSha256": "4e42701ab577da6c10188480f10c76eb22d4083c6828bfe7f5d6548bbec79c10",
+      "binPath": "model_export/depth_anything_v2/dav2_small_short280_mha_ls_v2_weightsfp16.bin",
+      "binSha256": "66fb95e3cc69ba08cc63415b094a164ba463fc79be3a11bdec64088ea0e16f7a",
+      "binBytes": 49273544,
+      "command": [
+        "C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\conversion_env\\Lib\\site-packages\\pnnx\\pnnx.exe",
+        "C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\dav2_small_short280_mha_ls_v2.pt",
+        "inputshape=[1,3,280,378]",
+        "fp16=1",
+        "ncnnparam=C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\dav2_small_short280_mha_ls_v2_weightsfp16.param",
+        "ncnnbin=C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\dav2_small_short280_mha_ls_v2_weightsfp16.bin",
+        "pnnxparam=C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\dav2_small_short280_mha_ls_v2_weightsfp16.pnnx.param",
+        "pnnxbin=C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\dav2_small_short280_mha_ls_v2_weightsfp16.pnnx.bin",
+        "pnnxpy=C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\dav2_small_short280_mha_ls_v2_weightsfp16_pnnx.py",
+        "ncnnpy=C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\dav2_small_short280_mha_ls_v2_weightsfp16_ncnn.py"
+      ],
+      "conversionLogSha256": "bb742d5a359079b2db8c2a19aa9112d7bc72bec6a1af3322fa388571357acfe5",
+      "inputShape": [
+        1,
+        3,
+        280,
+        378
+      ],
+      "outputShape": [
+        1,
+        280,
+        378
+      ],
+      "fp16Weights": true,
+      "mobileRuntimeValidated": false,
+      "conversionRecipe": "explicit-MHA-folded-LayerScale-equivalent-v2",
+      "attentionAdapterParity": {
+        "rankRho": 0.999999999920938,
+        "normalizedMeanAbsoluteError": 5.8131814029138695e-08,
+        "normalizedP99AbsoluteError": 4.76837158203125e-07,
+        "normalizedMaxAbsoluteError": 2.60770320892334e-06,
+        "passed": true
+      }
+    },
+    "dav2_small_short280_onnx": {
+      "path": "model_export/depth_anything_v2/dav2_small_short280.onnx",
+      "sha256": "005689f8bdefb883f558732d448eb7408e28ab42f83e9257be2a38e53ac226ee",
+      "bytes": 98940316,
+      "inputShape": [
+        1,
+        3,
+        280,
+        378
+      ],
+      "opset": 17,
+      "mobileRuntimeValidated": false
+    },
+    "dav2_small_short336_weightsfp32": {
+      "paramPath": "model_export/depth_anything_v2/dav2_small_short336_mha_ls_v2_weightsfp32.param",
+      "paramSha256": "c5e14f4d6e136bc5b88f60255426f7f6998aab64f1d89a8794e4d1ec4b4ed69f",
+      "binPath": "model_export/depth_anything_v2/dav2_small_short336_mha_ls_v2_weightsfp32.bin",
+      "binSha256": "042e58299d60722b4ea82359709edc8541ee4bdc10a6b0398ddc663b041963e3",
+      "binBytes": 97893128,
+      "command": [
+        "C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\conversion_env\\Lib\\site-packages\\pnnx\\pnnx.exe",
+        "C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\dav2_small_short336_mha_ls_v2.pt",
+        "inputshape=[1,3,336,448]",
+        "fp16=0",
+        "ncnnparam=C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\dav2_small_short336_mha_ls_v2_weightsfp32.param",
+        "ncnnbin=C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\dav2_small_short336_mha_ls_v2_weightsfp32.bin",
+        "pnnxparam=C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\dav2_small_short336_mha_ls_v2_weightsfp32.pnnx.param",
+        "pnnxbin=C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\dav2_small_short336_mha_ls_v2_weightsfp32.pnnx.bin",
+        "pnnxpy=C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\dav2_small_short336_mha_ls_v2_weightsfp32_pnnx.py",
+        "ncnnpy=C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\dav2_small_short336_mha_ls_v2_weightsfp32_ncnn.py"
+      ],
+      "conversionLogSha256": "e3a9cd203baa367fa55513dda7cf1e7c1961cb7018c18277e578846710c75c2c",
+      "inputShape": [
+        1,
+        3,
+        336,
+        448
+      ],
+      "outputShape": [
+        1,
+        336,
+        448
+      ],
+      "fp16Weights": false,
+      "mobileRuntimeValidated": false,
+      "conversionRecipe": "explicit-MHA-folded-LayerScale-equivalent-v2",
+      "attentionAdapterParity": {
+        "rankRho": 0.9999999999445672,
+        "normalizedMeanAbsoluteError": 6.636156513195601e-08,
+        "normalizedP99AbsoluteError": 4.76837158203125e-07,
+        "normalizedMaxAbsoluteError": 2.682209014892578e-06,
+        "passed": true
+      }
+    },
+    "dav2_small_short336_weightsfp16": {
+      "paramPath": "model_export/depth_anything_v2/dav2_small_short336_mha_ls_v2_weightsfp16.param",
+      "paramSha256": "c5e14f4d6e136bc5b88f60255426f7f6998aab64f1d89a8794e4d1ec4b4ed69f",
+      "binPath": "model_export/depth_anything_v2/dav2_small_short336_mha_ls_v2_weightsfp16.bin",
+      "binSha256": "b9be76b7836e8b4c2de26c1b8d21e5103a3a38c9e7f98dc1bcb696a32a35c9aa",
+      "binBytes": 49623752,
+      "command": [
+        "C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\conversion_env\\Lib\\site-packages\\pnnx\\pnnx.exe",
+        "C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\dav2_small_short336_mha_ls_v2.pt",
+        "inputshape=[1,3,336,448]",
+        "fp16=1",
+        "ncnnparam=C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\dav2_small_short336_mha_ls_v2_weightsfp16.param",
+        "ncnnbin=C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\dav2_small_short336_mha_ls_v2_weightsfp16.bin",
+        "pnnxparam=C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\dav2_small_short336_mha_ls_v2_weightsfp16.pnnx.param",
+        "pnnxbin=C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\dav2_small_short336_mha_ls_v2_weightsfp16.pnnx.bin",
+        "pnnxpy=C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\dav2_small_short336_mha_ls_v2_weightsfp16_pnnx.py",
+        "ncnnpy=C:\\Users\\Nurik\\Desktop\\bagdar_app\\model_export\\depth_anything_v2\\dav2_small_short336_mha_ls_v2_weightsfp16_ncnn.py"
+      ],
+      "conversionLogSha256": "ee2aa649beda5bc20e68535d19302d5ae84a12a06bbab0f18e33a3a9346e9f06",
+      "inputShape": [
+        1,
+        3,
+        336,
+        448
+      ],
+      "outputShape": [
+        1,
+        336,
+        448
+      ],
+      "fp16Weights": true,
+      "mobileRuntimeValidated": false,
+      "conversionRecipe": "explicit-MHA-folded-LayerScale-equivalent-v2",
+      "attentionAdapterParity": {
+        "rankRho": 0.9999999999445672,
+        "normalizedMeanAbsoluteError": 6.636156513195601e-08,
+        "normalizedP99AbsoluteError": 4.76837158203125e-07,
+        "normalizedMaxAbsoluteError": 2.682209014892578e-06,
+        "passed": true
+      }
+    },
+    "dav2_small_short336_onnx": {
+      "path": "model_export/depth_anything_v2/dav2_small_short336.onnx",
+      "sha256": "b24da4cbdeea9251ef5a03ee8963a61ce39d08c200336dfb94a32a0a5bf0b285",
+      "bytes": 98940316,
+      "inputShape": [
+        1,
+        3,
+        336,
+        448
+      ],
+      "opset": 17,
+      "mobileRuntimeValidated": false
+    }
+  },
+  "promotionAllowed": false
+}

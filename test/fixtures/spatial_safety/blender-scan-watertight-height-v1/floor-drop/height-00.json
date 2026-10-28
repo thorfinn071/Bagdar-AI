@@ -1,0 +1,71 @@
+{
+  "identity": "1ff5579f656f88a214f8f33e43e120ba355076476c339568c0d2e681661dfb59",
+  "frame": {
+    "priorPacket": {
+      "axisPacket": {
+        "width": 320,
+        "height": 240,
+        "frameId": 201,
+        "capturedOffsetMs": 0,
+        "fx": 231.1111068725586,
+        "fy": 231.11111640930176,
+        "cx": 160.0,
+        "cy": 120.0,
+        "cameraToWalkingRotation": [
+          0.7986354827880859,
+          0.5211871266365051,
+          -0.30090752243995667,
+          0.6018150448799133,
+          -0.6916385889053345,
+          0.39931774139404297,
+          0.0,
+          -0.5,
+          -0.8660253882408142
+        ],
+        "cameraOriginM": [
+          0.0,
+          0.0,
+          1.4199999570846558
+        ],
+        "depth": {
+          "path": "floor-drop/coverage-views-00-range.f32.gz",
+          "sha256": "4790746a556252df8fd7d7f2c1e84c95ed6a45ee2b829226dcf33edd0156e9cc"
+        },
+        "freeZLower": {
+          "path": "floor-drop/coverage-views-00-lower.f32.gz",
+          "sha256": "3517bae6aefd48273513df313cebb1f4af8a92992fcaa87cf52ee5d20f4a0bbe"
+        },
+        "surfaceZUpper": {
+          "path": "floor-drop/coverage-views-00-upper.f32.gz",
+          "sha256": "8de013b81b75d4dbe4b8b42a615bb718a1175ebb451b78bba2f51364145ef83a"
+        },
+        "validity": {
+          "path": "floor-drop/coverage-views-00-valid.u8.gz",
+          "sha256": "004cdacd6163c635e68cca086aa885f59bd894af2d01d1cda61a0ef5be30aab2"
+        }
+      },
+      "fourArraysExact": true,
+      "heightLower": {
+        "path": "floor-drop/height-00-heightLower.f32.gz",
+        "sha256": "dbafbf06c428270a6f6adbaa86dc480604b911f7482476b08ba48ad64f1b25f0"
+      },
+      "heightUpper": {
+        "path": "floor-drop/height-00-heightUpper.f32.gz",
+        "sha256": "eee473d1d622b3e751908c1a8a56a112d447c1ae469f5b70b6b518d1306c8a0c"
+      },
+      "firstZLower": {
+        "path": "floor-drop/height-00-firstZLower.f32.gz",
+        "sha256": "f68fde51eb761c756270bd22a416530fbe463fe30294cae1496f9885f3402ba1"
+      }
+    },
+    "recomputedPixels": 219,
+    "heightLower": {
+      "path": "floor-drop/height-00-heightLower.f32.gz",
+      "sha256": "52562b8329206dbcd3de0e121c86907736c8cf2ff132cfeaa3071acb8ff82c19"
+    },
+    "heightUpper": {
+      "path": "floor-drop/height-00-heightUpper.f32.gz",
+      "sha256": "eee473d1d622b3e751908c1a8a56a112d447c1ae469f5b70b6b518d1306c8a0c"
+    }
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "scope": "desktop-synthetic-smoke",
+  "host": {
+    "system": "Windows",
+    "machine": "AMD64",
+    "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+    "python": "3.11.9",
+    "onnxruntime": "1.30.0",
+    "executionProvider": "CPUExecutionProvider",
+    "threads": 1
+  },
+  "models": [
+    {
+      "modelId": "yolo11n-onnx-320-experiment",
+      "artifactSha256": "b9152829ad8ff26a0b2bd2b4a1482910c91c549d1cdcc4587fecf4444741dbe4",
+      "seed": 20260920,
+      "warmupIterations": 3,
+      "measuredIterations": 20,
+      "latencyMs": {
+        "p50": 23.709,
+        "p95": 28.154,
+        "min": 22.197,
+        "max": 28.197
+      },
+      "processRssDeltaBytes": 19804160,
+      "checks": {
+        "shapeMatches": true,
+        "allFinite": true
+      },
+      "passed": true,
+      "correctnessScope": "synthetic tensor smoke only"
+    },
+    {
+      "modelId": "yolo11n-onnx-416-experiment",
+      "artifactSha256": "b9c6c86aa850523b970dff6aec9683dbafb363aa52051a449d4e1651c4a580ce",
+      "seed": 20260920,
+      "warmupIterations": 3,
+      "measuredIterations": 20,
+      "latencyMs": {
+        "p50": 37.861,
+        "p95": 39.451,
+        "min": 35.95,
+        "max": 40.363
+      },
+      "processRssDeltaBytes": 30814208,
+      "checks": {
+        "shapeMatches": true,
+        "allFinite": true
+      },
+      "passed": true,
+      "correctnessScope": "synthetic tensor smoke only"
+    },
+    {
+      "modelId": "yolo26n-onnx-416-experiment",
+      "artifactSha256": "b0db38ca8a0fe5c8ff00391b18206e07a423f218f5a8236e1f1dbe1b8a2e1332",
+      "seed": 20260920,
+      "warmupIterations": 3,
+      "measuredIterations": 20,
+      "latencyMs": {
+        "p50": 31.522,
+        "p95": 46.068,
+        "min": 30.765,
+        "max": 52.174
+      },
+      "processRssDeltaBytes": 32509952,
+      "checks": {
+        "shapeMatches": true,
+        "allFinite": true,
+        "scoresIn01": true,
+        "classesIntegral": true,
+        "classesInCocoRange": true
+      },
+      "passed": true,
+      "correctnessScope": "synthetic tensor smoke only"
+    }
+  ],
+  "productionReplay": {
+    "selection": "YOLOv8n control + MiDaS control",
+    "passed": true,
+    "metrics": {
+      "unsafeGuidanceCount": 0,
+      "guidanceIntoUnknownCount": 0,
+      "staleActionEmissionCount": 0,
+      "expectedActionMismatchCount": 0,
+      "healthMismatchCount": 0,
+      "alertMismatchCount": 0
+    },
+    "candidatePredictionsUsed": false
+  },
+  "blockedGates": [
+    "recorded detector correctness corpus",
+    "candidate downstream replay using real predictions",
+    "native/reference MiDaS parity fixture",
+    "Depth Anything V2 converted checkpoints",
+    "traversability artifacts and boundary-labelled corpus",
+    "named-device latency, memory, battery and thermal",
+    "candidate license/provenance approval"
+  ],
+  "selectionDecision": {
+    "detector": "keep yolov8n-int8-control-416",
+    "relativeDepth": "keep midas-small-ncnn",
+    "traversability": "deferred",
+    "candidatePromotion": false
+  },
+  "passed": true
+}

@@ -1,0 +1,90 @@
+{
+  "scope": "post-hoc audit exposes nominal and conservative scoring; labels and frozen decisions unchanged",
+  "fundamentalCameraInsufficiencyProvenForNominal1_8m": false,
+  "summaries": {
+    "associated-stable": {
+      "nominalSufficientPassableSequences": 1,
+      "nominalFalseStops": 1,
+      "conservativeSufficientPassableSequences": 0
+    },
+    "metric-motion": {
+      "nominalSufficientPassableSequences": 1,
+      "nominalFalseStops": 1,
+      "conservativeSufficientPassableSequences": 0
+    }
+  },
+  "witnesses": [
+    {
+      "layoutId": "validation-metric-motion-wide-06",
+      "split": "validation",
+      "unseenRayWitnessesAtHeightsM": {
+        "1.8": [],
+        "1.85": [
+          [
+            -0.09999999999999998,
+            0.2,
+            1.85
+          ],
+          [
+            -0.04999999999999999,
+            0.2,
+            1.85
+          ],
+          [
+            0.0,
+            0.2,
+            1.85
+          ],
+          [
+            0.04999999999999999,
+            0.2,
+            1.85
+          ],
+          [
+            0.10000000000000003,
+            0.2,
+            1.85
+          ]
+        ]
+      },
+      "seeingWitnessPointsCertifiesVolume": false,
+      "floorRiseRefinementImplemented": false
+    },
+    {
+      "layoutId": "test-metric-motion-wide-16",
+      "split": "test",
+      "unseenRayWitnessesAtHeightsM": {
+        "1.8": [],
+        "1.85": [
+          [
+            -0.09999999999999998,
+            0.2,
+            1.85
+          ],
+          [
+            -0.04999999999999999,
+            0.2,
+            1.85
+          ],
+          [
+            0.0,
+            0.2,
+            1.85
+          ],
+          [
+            0.04999999999999999,
+            0.2,
+            1.85
+          ],
+          [
+            0.10000000000000003,
+            0.2,
+            1.85
+          ]
+        ]
+      },
+      "seeingWitnessPointsCertifiesVolume": false,
+      "floorRiseRefinementImplemented": false
+    }
+  ]
+}

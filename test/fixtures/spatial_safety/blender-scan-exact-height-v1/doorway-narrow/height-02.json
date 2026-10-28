@@ -1,0 +1,82 @@
+{
+  "identity": "4bad4e1bfbb3fdd4b8ec3c447128f92d2f04737b15adc0337ad9f271bd42b639",
+  "frame": {
+    "priorPacket": {
+      "priorPacket": {
+        "axisPacket": {
+          "width": 320,
+          "height": 240,
+          "frameId": 203,
+          "capturedOffsetMs": 400,
+          "fx": 231.1111068725586,
+          "fy": 231.11111640930176,
+          "cx": 160.0,
+          "cy": 120.0,
+          "cameraToWalkingRotation": [
+            0.7986354827880859,
+            -0.5211871266365051,
+            0.30090752243995667,
+            -0.6018150448799133,
+            -0.6916385889053345,
+            0.39931774139404297,
+            0.0,
+            -0.5,
+            -0.8660253882408142
+          ],
+          "cameraOriginM": [
+            0.0,
+            0.0,
+            1.4199999570846558
+          ],
+          "depth": {
+            "path": "doorway-narrow/coverage-views-02-range.f32.gz",
+            "sha256": "1ee94c4c5db04c55186a9de55ed6e46fdb88e30065a344c9b0486e691a4a4431"
+          },
+          "freeZLower": {
+            "path": "doorway-narrow/coverage-views-02-lower.f32.gz",
+            "sha256": "3716baad99f02e4bdd19e101e934a2632993ff8c0a1784c2525699eaa83c3a43"
+          },
+          "surfaceZUpper": {
+            "path": "doorway-narrow/coverage-views-02-upper.f32.gz",
+            "sha256": "1ba6c0247e0fcd381e8e146564a6122cb3c54f39613404b4e4c0c94b3eb19985"
+          },
+          "validity": {
+            "path": "doorway-narrow/coverage-views-02-valid.u8.gz",
+            "sha256": "004cdacd6163c635e68cca086aa885f59bd894af2d01d1cda61a0ef5be30aab2"
+          }
+        },
+        "fourArraysExact": true,
+        "heightLower": {
+          "path": "doorway-narrow/height-02-heightLower.f32.gz",
+          "sha256": "2c27df5b556042a44698e9cb3ff60a516bce358343781304edc96d48e15a002e"
+        },
+        "heightUpper": {
+          "path": "doorway-narrow/height-02-heightUpper.f32.gz",
+          "sha256": "c4809ff5f4591ca9c7a2406de9c49d2114f36d21c12499feb3f0a7a0c050d4bf"
+        },
+        "firstZLower": {
+          "path": "doorway-narrow/height-02-firstZLower.f32.gz",
+          "sha256": "5f16274892e1a818138c4c319d6233a704665baec4dc73bf1ca54eea6120fdea"
+        }
+      },
+      "recomputedPixels": 25,
+      "heightLower": {
+        "path": "doorway-narrow/height-02-heightLower.f32.gz",
+        "sha256": "2c27df5b556042a44698e9cb3ff60a516bce358343781304edc96d48e15a002e"
+      },
+      "heightUpper": {
+        "path": "doorway-narrow/height-02-heightUpper.f32.gz",
+        "sha256": "c4809ff5f4591ca9c7a2406de9c49d2114f36d21c12499feb3f0a7a0c050d4bf"
+      }
+    },
+    "recomputedPixels": 25,
+    "heightLower": {
+      "path": "doorway-narrow/height-02-heightLower.f32.gz",
+      "sha256": "2c27df5b556042a44698e9cb3ff60a516bce358343781304edc96d48e15a002e"
+    },
+    "heightUpper": {
+      "path": "doorway-narrow/height-02-heightUpper.f32.gz",
+      "sha256": "c4809ff5f4591ca9c7a2406de9c49d2114f36d21c12499feb3f0a7a0c050d4bf"
+    }
+  }
+}

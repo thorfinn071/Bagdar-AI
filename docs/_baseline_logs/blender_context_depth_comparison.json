@@ -1,0 +1,800 @@
+{
+  "schemaVersion": 1,
+  "benchmarkId": "blender-context-oracle-vs-desktop-ncnn-shadow-v1",
+  "toolSha256": "b616f4b6d8e261adc6b54f143a7e923e8f74bb98877bc611bda9814bd3f3ff5a",
+  "oracleReportSha256": "f427f645c1cbec11ed88704493129e72ca83d0ecfabe2b8009fc323f44ec904a",
+  "ncnnReportSha256": "24211ca375d63453376e40394a1b9e29c4632b9e50193da278f44155eeeab628",
+  "ncnnDepthManifestSha256": "61c10f5c214653e7daf5cd77758653112e20fd30710ba9ba32b8be1e6ac90e3a",
+  "sceneMeanFramewideDepthRankRho": {
+    "context-crossing-rider": 0.9376519987609737,
+    "context-doorway": 0.15615886434480628,
+    "context-low-obstacle": 0.9691187745629688,
+    "context-overhead": 0.23739247595749266,
+    "context-ramp": 0.9817462163320276,
+    "context-thin-pole": 0.9601006133067059
+  },
+  "models": [
+    {
+      "modelId": "yolov8n-int8-control-416",
+      "oracleSummary": {
+        "hazardFrames": 12,
+        "hazardFramesWithStop": 12,
+        "hazardFramesWithContinueForward": 0,
+        "hazardFramesWithImminentRule": 11,
+        "traversableFrames": 6,
+        "traversableFramesWithStop": 6,
+        "traversableFramesWithImminentRule": 0,
+        "possibleSemanticMatches": 0
+      },
+      "ncnnSummary": {
+        "hazardFrames": 12,
+        "hazardFramesWithStop": 12,
+        "hazardFramesWithContinueForward": 0,
+        "hazardFramesWithImminentRule": 4,
+        "traversableFrames": 6,
+        "traversableFramesWithStop": 3,
+        "traversableFramesWithImminentRule": 0,
+        "possibleSemanticMatches": 0
+      },
+      "changedActionCount": 3,
+      "changedRuleCount": 10,
+      "changedFrames": [
+        {
+          "sceneId": "context-crossing-rider",
+          "frameIndex": 0,
+          "expectedAction": "stopNow",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-IMMINENT",
+          "oracleGeometry": [
+            "broadSurface"
+          ],
+          "ncnnAction": "stopNow",
+          "ncnnRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "ncnnGeometry": [
+            "broadSurface"
+          ],
+          "ncnnGroundConfidence": 0.57421875,
+          "ncnnForwardUnknown": 0.65
+        },
+        {
+          "sceneId": "context-low-obstacle",
+          "frameIndex": 1,
+          "expectedAction": "stopNow",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-IMMINENT",
+          "oracleGeometry": [
+            "lowObstacle"
+          ],
+          "ncnnAction": "stopNow",
+          "ncnnRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "ncnnGeometry": [
+            "broadSurface",
+            "lowObstacle"
+          ],
+          "ncnnGroundConfidence": 0.970703125,
+          "ncnnForwardUnknown": 0.65
+        },
+        {
+          "sceneId": "context-overhead",
+          "frameIndex": 0,
+          "expectedAction": "stopNow",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-IMMINENT",
+          "oracleGeometry": [
+            "broadSurface"
+          ],
+          "ncnnAction": "stopNow",
+          "ncnnRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "ncnnGeometry": [
+            "broadSurface",
+            "lowObstacle"
+          ],
+          "ncnnGroundConfidence": 1.0,
+          "ncnnForwardUnknown": 0.65
+        },
+        {
+          "sceneId": "context-overhead",
+          "frameIndex": 1,
+          "expectedAction": "stopNow",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-IMMINENT",
+          "oracleGeometry": [
+            "broadSurface"
+          ],
+          "ncnnAction": "stopNow",
+          "ncnnRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "ncnnGeometry": [
+            "broadSurface"
+          ],
+          "ncnnGroundConfidence": 1.0,
+          "ncnnForwardUnknown": 0.65
+        },
+        {
+          "sceneId": "context-overhead",
+          "frameIndex": 2,
+          "expectedAction": "stopNow",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-IMMINENT",
+          "oracleGeometry": [
+            "broadSurface",
+            "lowObstacle"
+          ],
+          "ncnnAction": "stopNow",
+          "ncnnRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "ncnnGeometry": [
+            "broadSurface"
+          ],
+          "ncnnGroundConfidence": 1.0,
+          "ncnnForwardUnknown": 0.65
+        },
+        {
+          "sceneId": "context-ramp",
+          "frameIndex": 0,
+          "expectedAction": "continueForward",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "oracleGeometry": [],
+          "ncnnAction": "continueForward",
+          "ncnnRuleId": "SPATIAL-P3-NO-CHANGE",
+          "ncnnGeometry": [
+            "broadSurface",
+            "unknown"
+          ],
+          "ncnnGroundConfidence": 1.0,
+          "ncnnForwardUnknown": 0.0
+        },
+        {
+          "sceneId": "context-ramp",
+          "frameIndex": 1,
+          "expectedAction": "continueForward",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "oracleGeometry": [],
+          "ncnnAction": "continueForward",
+          "ncnnRuleId": "SPATIAL-P3-NO-CHANGE",
+          "ncnnGeometry": [
+            "broadSurface"
+          ],
+          "ncnnGroundConfidence": 1.0,
+          "ncnnForwardUnknown": 0.0
+        },
+        {
+          "sceneId": "context-ramp",
+          "frameIndex": 2,
+          "expectedAction": "continueForward",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "oracleGeometry": [],
+          "ncnnAction": "continueForward",
+          "ncnnRuleId": "SPATIAL-P3-NO-CHANGE",
+          "ncnnGeometry": [
+            "broadSurface"
+          ],
+          "ncnnGroundConfidence": 1.0,
+          "ncnnForwardUnknown": 0.0
+        },
+        {
+          "sceneId": "context-thin-pole",
+          "frameIndex": 0,
+          "expectedAction": "stopNow",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-IMMINENT",
+          "oracleGeometry": [
+            "broadSurface"
+          ],
+          "ncnnAction": "stopNow",
+          "ncnnRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "ncnnGeometry": [
+            "broadSurface"
+          ],
+          "ncnnGroundConfidence": 0.923828125,
+          "ncnnForwardUnknown": 0.65
+        },
+        {
+          "sceneId": "context-thin-pole",
+          "frameIndex": 1,
+          "expectedAction": "stopNow",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-IMMINENT",
+          "oracleGeometry": [
+            "thinVertical"
+          ],
+          "ncnnAction": "stopNow",
+          "ncnnRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "ncnnGeometry": [
+            "broadSurface"
+          ],
+          "ncnnGroundConfidence": 0.953125,
+          "ncnnForwardUnknown": 0.65
+        }
+      ]
+    },
+    {
+      "modelId": "yolo11n-onnx-320-experiment",
+      "oracleSummary": {
+        "hazardFrames": 12,
+        "hazardFramesWithStop": 12,
+        "hazardFramesWithContinueForward": 0,
+        "hazardFramesWithImminentRule": 11,
+        "traversableFrames": 6,
+        "traversableFramesWithStop": 6,
+        "traversableFramesWithImminentRule": 0,
+        "possibleSemanticMatches": 0
+      },
+      "ncnnSummary": {
+        "hazardFrames": 12,
+        "hazardFramesWithStop": 12,
+        "hazardFramesWithContinueForward": 0,
+        "hazardFramesWithImminentRule": 4,
+        "traversableFrames": 6,
+        "traversableFramesWithStop": 3,
+        "traversableFramesWithImminentRule": 0,
+        "possibleSemanticMatches": 0
+      },
+      "changedActionCount": 3,
+      "changedRuleCount": 10,
+      "changedFrames": [
+        {
+          "sceneId": "context-crossing-rider",
+          "frameIndex": 0,
+          "expectedAction": "stopNow",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-IMMINENT",
+          "oracleGeometry": [
+            "broadSurface"
+          ],
+          "ncnnAction": "stopNow",
+          "ncnnRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "ncnnGeometry": [
+            "broadSurface"
+          ],
+          "ncnnGroundConfidence": 0.57421875,
+          "ncnnForwardUnknown": 0.65
+        },
+        {
+          "sceneId": "context-low-obstacle",
+          "frameIndex": 1,
+          "expectedAction": "stopNow",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-IMMINENT",
+          "oracleGeometry": [
+            "lowObstacle"
+          ],
+          "ncnnAction": "stopNow",
+          "ncnnRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "ncnnGeometry": [
+            "broadSurface",
+            "lowObstacle"
+          ],
+          "ncnnGroundConfidence": 0.970703125,
+          "ncnnForwardUnknown": 0.65
+        },
+        {
+          "sceneId": "context-overhead",
+          "frameIndex": 0,
+          "expectedAction": "stopNow",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-IMMINENT",
+          "oracleGeometry": [
+            "broadSurface"
+          ],
+          "ncnnAction": "stopNow",
+          "ncnnRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "ncnnGeometry": [
+            "broadSurface",
+            "lowObstacle"
+          ],
+          "ncnnGroundConfidence": 1.0,
+          "ncnnForwardUnknown": 0.65
+        },
+        {
+          "sceneId": "context-overhead",
+          "frameIndex": 1,
+          "expectedAction": "stopNow",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-IMMINENT",
+          "oracleGeometry": [
+            "broadSurface"
+          ],
+          "ncnnAction": "stopNow",
+          "ncnnRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "ncnnGeometry": [
+            "broadSurface"
+          ],
+          "ncnnGroundConfidence": 1.0,
+          "ncnnForwardUnknown": 0.65
+        },
+        {
+          "sceneId": "context-overhead",
+          "frameIndex": 2,
+          "expectedAction": "stopNow",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-IMMINENT",
+          "oracleGeometry": [
+            "broadSurface",
+            "lowObstacle"
+          ],
+          "ncnnAction": "stopNow",
+          "ncnnRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "ncnnGeometry": [
+            "broadSurface"
+          ],
+          "ncnnGroundConfidence": 1.0,
+          "ncnnForwardUnknown": 0.65
+        },
+        {
+          "sceneId": "context-ramp",
+          "frameIndex": 0,
+          "expectedAction": "continueForward",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "oracleGeometry": [],
+          "ncnnAction": "continueForward",
+          "ncnnRuleId": "SPATIAL-P3-NO-CHANGE",
+          "ncnnGeometry": [
+            "broadSurface",
+            "unknown"
+          ],
+          "ncnnGroundConfidence": 1.0,
+          "ncnnForwardUnknown": 0.0
+        },
+        {
+          "sceneId": "context-ramp",
+          "frameIndex": 1,
+          "expectedAction": "continueForward",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "oracleGeometry": [],
+          "ncnnAction": "continueForward",
+          "ncnnRuleId": "SPATIAL-P3-NO-CHANGE",
+          "ncnnGeometry": [
+            "broadSurface"
+          ],
+          "ncnnGroundConfidence": 1.0,
+          "ncnnForwardUnknown": 0.0
+        },
+        {
+          "sceneId": "context-ramp",
+          "frameIndex": 2,
+          "expectedAction": "continueForward",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "oracleGeometry": [],
+          "ncnnAction": "continueForward",
+          "ncnnRuleId": "SPATIAL-P3-NO-CHANGE",
+          "ncnnGeometry": [
+            "broadSurface"
+          ],
+          "ncnnGroundConfidence": 1.0,
+          "ncnnForwardUnknown": 0.0
+        },
+        {
+          "sceneId": "context-thin-pole",
+          "frameIndex": 0,
+          "expectedAction": "stopNow",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-IMMINENT",
+          "oracleGeometry": [
+            "broadSurface"
+          ],
+          "ncnnAction": "stopNow",
+          "ncnnRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "ncnnGeometry": [
+            "broadSurface"
+          ],
+          "ncnnGroundConfidence": 0.923828125,
+          "ncnnForwardUnknown": 0.65
+        },
+        {
+          "sceneId": "context-thin-pole",
+          "frameIndex": 1,
+          "expectedAction": "stopNow",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-IMMINENT",
+          "oracleGeometry": [
+            "thinVertical"
+          ],
+          "ncnnAction": "stopNow",
+          "ncnnRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "ncnnGeometry": [
+            "broadSurface"
+          ],
+          "ncnnGroundConfidence": 0.953125,
+          "ncnnForwardUnknown": 0.65
+        }
+      ]
+    },
+    {
+      "modelId": "yolo11n-onnx-416-experiment",
+      "oracleSummary": {
+        "hazardFrames": 12,
+        "hazardFramesWithStop": 12,
+        "hazardFramesWithContinueForward": 0,
+        "hazardFramesWithImminentRule": 11,
+        "traversableFrames": 6,
+        "traversableFramesWithStop": 6,
+        "traversableFramesWithImminentRule": 0,
+        "possibleSemanticMatches": 0
+      },
+      "ncnnSummary": {
+        "hazardFrames": 12,
+        "hazardFramesWithStop": 12,
+        "hazardFramesWithContinueForward": 0,
+        "hazardFramesWithImminentRule": 4,
+        "traversableFrames": 6,
+        "traversableFramesWithStop": 3,
+        "traversableFramesWithImminentRule": 0,
+        "possibleSemanticMatches": 0
+      },
+      "changedActionCount": 3,
+      "changedRuleCount": 10,
+      "changedFrames": [
+        {
+          "sceneId": "context-crossing-rider",
+          "frameIndex": 0,
+          "expectedAction": "stopNow",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-IMMINENT",
+          "oracleGeometry": [
+            "broadSurface"
+          ],
+          "ncnnAction": "stopNow",
+          "ncnnRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "ncnnGeometry": [
+            "broadSurface"
+          ],
+          "ncnnGroundConfidence": 0.57421875,
+          "ncnnForwardUnknown": 0.65
+        },
+        {
+          "sceneId": "context-low-obstacle",
+          "frameIndex": 1,
+          "expectedAction": "stopNow",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-IMMINENT",
+          "oracleGeometry": [
+            "lowObstacle"
+          ],
+          "ncnnAction": "stopNow",
+          "ncnnRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "ncnnGeometry": [
+            "broadSurface",
+            "lowObstacle"
+          ],
+          "ncnnGroundConfidence": 0.970703125,
+          "ncnnForwardUnknown": 0.65
+        },
+        {
+          "sceneId": "context-overhead",
+          "frameIndex": 0,
+          "expectedAction": "stopNow",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-IMMINENT",
+          "oracleGeometry": [
+            "broadSurface"
+          ],
+          "ncnnAction": "stopNow",
+          "ncnnRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "ncnnGeometry": [
+            "broadSurface",
+            "lowObstacle"
+          ],
+          "ncnnGroundConfidence": 1.0,
+          "ncnnForwardUnknown": 0.65
+        },
+        {
+          "sceneId": "context-overhead",
+          "frameIndex": 1,
+          "expectedAction": "stopNow",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-IMMINENT",
+          "oracleGeometry": [
+            "broadSurface"
+          ],
+          "ncnnAction": "stopNow",
+          "ncnnRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "ncnnGeometry": [
+            "broadSurface"
+          ],
+          "ncnnGroundConfidence": 1.0,
+          "ncnnForwardUnknown": 0.65
+        },
+        {
+          "sceneId": "context-overhead",
+          "frameIndex": 2,
+          "expectedAction": "stopNow",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-IMMINENT",
+          "oracleGeometry": [
+            "broadSurface",
+            "lowObstacle"
+          ],
+          "ncnnAction": "stopNow",
+          "ncnnRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "ncnnGeometry": [
+            "broadSurface"
+          ],
+          "ncnnGroundConfidence": 1.0,
+          "ncnnForwardUnknown": 0.65
+        },
+        {
+          "sceneId": "context-ramp",
+          "frameIndex": 0,
+          "expectedAction": "continueForward",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "oracleGeometry": [],
+          "ncnnAction": "continueForward",
+          "ncnnRuleId": "SPATIAL-P3-NO-CHANGE",
+          "ncnnGeometry": [
+            "broadSurface",
+            "unknown"
+          ],
+          "ncnnGroundConfidence": 1.0,
+          "ncnnForwardUnknown": 0.0
+        },
+        {
+          "sceneId": "context-ramp",
+          "frameIndex": 1,
+          "expectedAction": "continueForward",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "oracleGeometry": [],
+          "ncnnAction": "continueForward",
+          "ncnnRuleId": "SPATIAL-P3-NO-CHANGE",
+          "ncnnGeometry": [
+            "broadSurface"
+          ],
+          "ncnnGroundConfidence": 1.0,
+          "ncnnForwardUnknown": 0.0
+        },
+        {
+          "sceneId": "context-ramp",
+          "frameIndex": 2,
+          "expectedAction": "continueForward",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "oracleGeometry": [],
+          "ncnnAction": "continueForward",
+          "ncnnRuleId": "SPATIAL-P3-NO-CHANGE",
+          "ncnnGeometry": [
+            "broadSurface"
+          ],
+          "ncnnGroundConfidence": 1.0,
+          "ncnnForwardUnknown": 0.0
+        },
+        {
+          "sceneId": "context-thin-pole",
+          "frameIndex": 0,
+          "expectedAction": "stopNow",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-IMMINENT",
+          "oracleGeometry": [
+            "broadSurface"
+          ],
+          "ncnnAction": "stopNow",
+          "ncnnRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "ncnnGeometry": [
+            "broadSurface"
+          ],
+          "ncnnGroundConfidence": 0.923828125,
+          "ncnnForwardUnknown": 0.65
+        },
+        {
+          "sceneId": "context-thin-pole",
+          "frameIndex": 1,
+          "expectedAction": "stopNow",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-IMMINENT",
+          "oracleGeometry": [
+            "thinVertical"
+          ],
+          "ncnnAction": "stopNow",
+          "ncnnRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "ncnnGeometry": [
+            "broadSurface"
+          ],
+          "ncnnGroundConfidence": 0.953125,
+          "ncnnForwardUnknown": 0.65
+        }
+      ]
+    },
+    {
+      "modelId": "yolo26n-onnx-416-experiment",
+      "oracleSummary": {
+        "hazardFrames": 12,
+        "hazardFramesWithStop": 12,
+        "hazardFramesWithContinueForward": 0,
+        "hazardFramesWithImminentRule": 11,
+        "traversableFrames": 6,
+        "traversableFramesWithStop": 6,
+        "traversableFramesWithImminentRule": 0,
+        "possibleSemanticMatches": 0
+      },
+      "ncnnSummary": {
+        "hazardFrames": 12,
+        "hazardFramesWithStop": 12,
+        "hazardFramesWithContinueForward": 0,
+        "hazardFramesWithImminentRule": 4,
+        "traversableFrames": 6,
+        "traversableFramesWithStop": 3,
+        "traversableFramesWithImminentRule": 0,
+        "possibleSemanticMatches": 0
+      },
+      "changedActionCount": 3,
+      "changedRuleCount": 10,
+      "changedFrames": [
+        {
+          "sceneId": "context-crossing-rider",
+          "frameIndex": 0,
+          "expectedAction": "stopNow",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-IMMINENT",
+          "oracleGeometry": [
+            "broadSurface"
+          ],
+          "ncnnAction": "stopNow",
+          "ncnnRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "ncnnGeometry": [
+            "broadSurface"
+          ],
+          "ncnnGroundConfidence": 0.57421875,
+          "ncnnForwardUnknown": 0.65
+        },
+        {
+          "sceneId": "context-low-obstacle",
+          "frameIndex": 1,
+          "expectedAction": "stopNow",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-IMMINENT",
+          "oracleGeometry": [
+            "lowObstacle"
+          ],
+          "ncnnAction": "stopNow",
+          "ncnnRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "ncnnGeometry": [
+            "broadSurface",
+            "lowObstacle"
+          ],
+          "ncnnGroundConfidence": 0.970703125,
+          "ncnnForwardUnknown": 0.65
+        },
+        {
+          "sceneId": "context-overhead",
+          "frameIndex": 0,
+          "expectedAction": "stopNow",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-IMMINENT",
+          "oracleGeometry": [
+            "broadSurface"
+          ],
+          "ncnnAction": "stopNow",
+          "ncnnRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "ncnnGeometry": [
+            "broadSurface",
+            "lowObstacle"
+          ],
+          "ncnnGroundConfidence": 1.0,
+          "ncnnForwardUnknown": 0.65
+        },
+        {
+          "sceneId": "context-overhead",
+          "frameIndex": 1,
+          "expectedAction": "stopNow",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-IMMINENT",
+          "oracleGeometry": [
+            "broadSurface"
+          ],
+          "ncnnAction": "stopNow",
+          "ncnnRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "ncnnGeometry": [
+            "broadSurface"
+          ],
+          "ncnnGroundConfidence": 1.0,
+          "ncnnForwardUnknown": 0.65
+        },
+        {
+          "sceneId": "context-overhead",
+          "frameIndex": 2,
+          "expectedAction": "stopNow",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-IMMINENT",
+          "oracleGeometry": [
+            "broadSurface",
+            "lowObstacle"
+          ],
+          "ncnnAction": "stopNow",
+          "ncnnRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "ncnnGeometry": [
+            "broadSurface"
+          ],
+          "ncnnGroundConfidence": 1.0,
+          "ncnnForwardUnknown": 0.65
+        },
+        {
+          "sceneId": "context-ramp",
+          "frameIndex": 0,
+          "expectedAction": "continueForward",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "oracleGeometry": [],
+          "ncnnAction": "continueForward",
+          "ncnnRuleId": "SPATIAL-P3-NO-CHANGE",
+          "ncnnGeometry": [
+            "broadSurface",
+            "unknown"
+          ],
+          "ncnnGroundConfidence": 1.0,
+          "ncnnForwardUnknown": 0.0
+        },
+        {
+          "sceneId": "context-ramp",
+          "frameIndex": 1,
+          "expectedAction": "continueForward",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "oracleGeometry": [],
+          "ncnnAction": "continueForward",
+          "ncnnRuleId": "SPATIAL-P3-NO-CHANGE",
+          "ncnnGeometry": [
+            "broadSurface"
+          ],
+          "ncnnGroundConfidence": 1.0,
+          "ncnnForwardUnknown": 0.0
+        },
+        {
+          "sceneId": "context-ramp",
+          "frameIndex": 2,
+          "expectedAction": "continueForward",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "oracleGeometry": [],
+          "ncnnAction": "continueForward",
+          "ncnnRuleId": "SPATIAL-P3-NO-CHANGE",
+          "ncnnGeometry": [
+            "broadSurface"
+          ],
+          "ncnnGroundConfidence": 1.0,
+          "ncnnForwardUnknown": 0.0
+        },
+        {
+          "sceneId": "context-thin-pole",
+          "frameIndex": 0,
+          "expectedAction": "stopNow",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-IMMINENT",
+          "oracleGeometry": [
+            "broadSurface"
+          ],
+          "ncnnAction": "stopNow",
+          "ncnnRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "ncnnGeometry": [
+            "broadSurface"
+          ],
+          "ncnnGroundConfidence": 0.923828125,
+          "ncnnForwardUnknown": 0.65
+        },
+        {
+          "sceneId": "context-thin-pole",
+          "frameIndex": 1,
+          "expectedAction": "stopNow",
+          "oracleAction": "stopNow",
+          "oracleRuleId": "SPATIAL-P0-IMMINENT",
+          "oracleGeometry": [
+            "thinVertical"
+          ],
+          "ncnnAction": "stopNow",
+          "ncnnRuleId": "SPATIAL-P0-DEGRADED-MOVING",
+          "ncnnGeometry": [
+            "broadSurface"
+          ],
+          "ncnnGroundConfidence": 0.953125,
+          "ncnnForwardUnknown": 0.65
+        }
+      ]
+    }
+  ],
+  "interpretationLimit": "framewide depth rank and synthetic shadow action agreement are diagnostics, not phone hazard recall or assistive authorization",
+  "promotionAllowed": false
+}

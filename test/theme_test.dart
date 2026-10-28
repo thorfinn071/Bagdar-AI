@@ -20,10 +20,10 @@ void main() {
       );
     });
 
-    test('Light theme uses deep navy on white', () {
+    test('Light theme shares the selected onboarding palette', () {
       const c = BagdarColors.light;
-      expect(c.surfaceBg, const Color(0xFFFFFFFF));
-      expect(c.textPrimary, const Color(0xFF0A1628));
+      expect(c.surfaceBg, const Color(0xFFF6F6F3));
+      expect(c.textPrimary, const Color(0xFF25252A));
       expect(_contrast(c.textPrimary, c.surfaceBg), greaterThanOrEqualTo(7.0));
     });
 
@@ -56,6 +56,15 @@ void main() {
           greaterThanOrEqualTo(7.0),
           reason: 'Theme $name fails AAA for accentOnPrimary on accentPrimary',
         );
+        for (final surface in [c.surfaceBg, c.surfaceElevated, c.surfaceSelected]) {
+          expect(_contrast(c.textPrimary, surface), greaterThanOrEqualTo(7));
+          expect(_contrast(c.textSecondary, surface), greaterThanOrEqualTo(4.5));
+          expect(_contrast(c.controlBorder, surface), greaterThanOrEqualTo(3));
+        }
+        for (final level in BagdarStatusLevel.values) {
+          final status = bagdarStatusStyle(level, c);
+          expect(_contrast(status.onFill, status.fill), greaterThanOrEqualTo(4.5));
+        }
       }
     });
   });

@@ -7,6 +7,12 @@ import 'harness/spatial_replay_fixture.dart';
 import 'harness/spatial_scenario_runner.dart';
 
 const _manifestPath = 'test/fixtures/spatial_safety/manifest.json';
+const _blenderV1Manifest =
+    'test/fixtures/spatial_safety/blender-egocentric-v1/replay-manifest.json';
+const _blenderTemporalManifest =
+    'test/fixtures/spatial_safety/blender-temporal-v2/replay-manifest.json';
+const _blenderContextManifest =
+    'test/fixtures/spatial_safety/blender-context-v3/replay-manifest.json';
 
 void main() {
   group('spatial replay manifest', () {
@@ -54,44 +60,68 @@ void main() {
   });
 
   group('spatial scenario runner', () {
-    test(
-      'procedural and integrity-pinned Blender corpora pass RC',
-      () {
-        final fixture = SpatialReplayFixture.load(_manifestPath);
-        final developer = SpatialScenarioRunner(
-          fixture: fixture,
-          mode: SpatialRunMode.developer,
-        ).runAll();
-        final rc = SpatialScenarioRunner(
-          fixture: fixture,
+    test('procedural and external manifest hashes pass RC', () {
+      final fixture = SpatialReplayFixture.load(_manifestPath);
+      final developer = SpatialScenarioRunner(
+        fixture: fixture,
+        mode: SpatialRunMode.developer,
+      ).runAll();
+      final rc = SpatialScenarioRunner(
+        fixture: fixture,
+        mode: SpatialRunMode.releaseCandidate,
+      ).runAll();
+
+      expect(developer.passed, isTrue);
+      expect(rc.passed, isTrue);
+      expect(rc.blockingReasons, isEmpty);
+      expect(
+        developer.scenarios.every(
+          (scenario) => scenario.status == SpatialScenarioStatus.pass,
+        ),
+        isTrue,
+      );
+      expect(developer.metrics.unsafeGuidanceCount, 0);
+      expect(developer.metrics.guidanceIntoUnknownCount, 0);
+      expect(developer.metrics.staleActionEmissionCount, 0);
+      expect(developer.metrics.expectedActionMismatchCount, 0);
+      expect(developer.metrics.healthMismatchCount, 0);
+      expect(developer.metrics.alertMismatchCount, 0);
+      expect(developer.missingExternalCorpora, isEmpty);
+      expect(developer.missingPrivateCorpora, ['controlled-camera-v1']);
+      expect(developer.invalidExternalCorpora, isEmpty);
+    });
+
+    test('all Blender corpora execute every replay scene in RC mode', () {
+      for (final (path, sceneCount, frameCount) in <(String, int, int)>[
+        (_blenderV1Manifest, 21, 1),
+        (_blenderTemporalManifest, 6, 3),
+        (_blenderContextManifest, 6, 3),
+      ]) {
+        final report = SpatialScenarioRunner(
+          fixture: SpatialReplayFixture.load(path),
           mode: SpatialRunMode.releaseCandidate,
         ).runAll();
-
-        expect(developer.passed, isTrue);
-        expect(rc.passed, isTrue);
-        expect(rc.blockingReasons, isEmpty);
-        expect(
-          developer.scenarios.every(
-            (scenario) => scenario.status == SpatialScenarioStatus.pass,
-          ),
-          isTrue,
-        );
-        expect(developer.metrics.unsafeGuidanceCount, 0);
-        expect(developer.metrics.guidanceIntoUnknownCount, 0);
-        expect(developer.metrics.staleActionEmissionCount, 0);
-        expect(developer.metrics.expectedActionMismatchCount, 0);
-        expect(developer.metrics.healthMismatchCount, 0);
-        expect(developer.metrics.alertMismatchCount, 0);
-        expect(developer.missingExternalCorpora, isEmpty);
-        expect(developer.missingPrivateCorpora, ['controlled-camera-v1']);
-        expect(developer.invalidExternalCorpora, isEmpty);
-      },
-    );
+        expect(report.passed, isTrue, reason: path);
+        expect(report.scenarios, hasLength(sceneCount), reason: path);
+        for (final scene in report.scenarios) {
+          expect(
+            scene.status,
+            SpatialScenarioStatus.pass,
+            reason: scene.sceneId,
+          );
+          expect(scene.frames, hasLength(frameCount), reason: scene.sceneId);
+        }
+        expect(report.metrics.unsafeGuidanceCount, 0, reason: path);
+        expect(report.metrics.guidanceIntoUnknownCount, 0, reason: path);
+        expect(report.metrics.staleActionEmissionCount, 0, reason: path);
+      }
+    });
 
     test('available external corpus fails closed on manifest hash drift', () {
       final json = _manifestJson();
-      final external = (json['externalCorpora']! as List<dynamic>).first
-          as Map<String, dynamic>;
+      final external =
+          (json['externalCorpora']! as List<dynamic>).first
+              as Map<String, dynamic>;
       external['manifestSha256'] = List<String>.filled(64, '0').join();
 
       final report = _run(json, SpatialRunMode.releaseCandidate);

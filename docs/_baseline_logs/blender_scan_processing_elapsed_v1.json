@@ -1,0 +1,2011 @@
+{
+  "schemaVersion": 1,
+  "passed": true,
+  "mode": "elapsed",
+  "runtime": "3.11.1 (stable) (Tue Feb 24 00:03:07 2026 -0800) on \"windows_x64\"",
+  "executableSha256": "c182501ab7982b8722c0859989218798716f68a3f0973335609344c434251db2",
+  "scope": "preloaded known frozen Blender geometry; source construction + one observation + strict evaluation + shadow dispatch guard; original 2.2 s capture span; excludes physical capture, decode/hash loading, phone transport, active planner/audio/haptics",
+  "captureToCommandMeasured": false,
+  "runtimeWired": false,
+  "promotionAllowed": false,
+  "deviceRuntime": "not_run",
+  "controlledWalking": "not_run",
+  "currentAgeLimitUs": 100000,
+  "rounds": 3,
+  "fixtureLoadUs": 9660202,
+  "manifestSha256": "9ac0c485109504e37d399868e04b1eee2d83470a5db440ee3a0434ed2306367f",
+  "baselineCoreSha256": "bed0a3fbf1b192bc0f2f8ace0a46abc8b5ab6aa08e0e3f704397caa719bdb3e0",
+  "sources": {
+    "lib/safety/perception/camera_indexed_height_envelope_passage_source.dart": "9c9142a3d4c366a1f019aa615b79586fd06002a460508f789fb64dff6875040f",
+    "lib/safety/runtime/camera_scan_age_gate.dart": "8c65a06299d8da0136acac0b8ee73dc0a92bf032bfafb59c23a188d315587ad8",
+    "tool/model_benchmark/scan_processing_support.dart": "7b5767e0479ff563c5076fb90680d18341844b83858c622f94919b69724604fc",
+    "tool/model_benchmark/profile_scan_processing.dart": "c4d369c09ae9a10f29b8448a7d7a0887d27236f99ccf4bde061b16650f60fec9",
+    "tool/model_benchmark/scan_processing_ncnn_load.py": "5b5ae72ca9a36067c0abebf777d876ca4216bac28f622faafafef3eef149400b",
+    "test/camera_indexed_scan_replay_test.dart": "d10f45ff712e51fcc59758cf8036936367962c42861c75b412a11e8c8a0508b1",
+    "test/camera_scan_age_gate_test.dart": "7be33583156a98e9431374f374c09aa84ea2378e1c15f17cae34b0223c8b3c2f",
+    "docs/blender-scan-processing-protocol-2026-10-04.md": "f84dd7b2529d4532a4c0a98f7e812315c53956c65bd6efbcb3120bb1ec4747f1"
+  },
+  "neuralLoad": null,
+  "geometryParity": [
+    {
+      "sceneId": "path-clear",
+      "physicalHazard": false,
+      "identicalObservation": true,
+      "geometryStatus": "measuredClear",
+      "captureSpanUs": 2200000,
+      "currentWindowViews": 1,
+      "currentWindowGeometryStatus": "unavailable"
+    },
+    {
+      "sceneId": "path-box",
+      "physicalHazard": true,
+      "identicalObservation": true,
+      "geometryStatus": "blocked",
+      "captureSpanUs": 2200000,
+      "currentWindowViews": 1,
+      "currentWindowGeometryStatus": "unavailable"
+    },
+    {
+      "sceneId": "doorway-wide",
+      "physicalHazard": false,
+      "identicalObservation": true,
+      "geometryStatus": "measuredClear",
+      "captureSpanUs": 2200000,
+      "currentWindowViews": 1,
+      "currentWindowGeometryStatus": "unavailable"
+    },
+    {
+      "sceneId": "doorway-narrow",
+      "physicalHazard": true,
+      "identicalObservation": true,
+      "geometryStatus": "blocked",
+      "captureSpanUs": 2200000,
+      "currentWindowViews": 1,
+      "currentWindowGeometryStatus": "unavailable"
+    },
+    {
+      "sceneId": "headroom-high",
+      "physicalHazard": false,
+      "identicalObservation": true,
+      "geometryStatus": "measuredClear",
+      "captureSpanUs": 2200000,
+      "currentWindowViews": 1,
+      "currentWindowGeometryStatus": "unavailable"
+    },
+    {
+      "sceneId": "headroom-low",
+      "physicalHazard": true,
+      "identicalObservation": true,
+      "geometryStatus": "blocked",
+      "captureSpanUs": 2200000,
+      "currentWindowViews": 1,
+      "currentWindowGeometryStatus": "unavailable"
+    },
+    {
+      "sceneId": "floor-level",
+      "physicalHazard": false,
+      "identicalObservation": true,
+      "geometryStatus": "measuredClear",
+      "captureSpanUs": 2200000,
+      "currentWindowViews": 1,
+      "currentWindowGeometryStatus": "unavailable"
+    },
+    {
+      "sceneId": "floor-drop",
+      "physicalHazard": true,
+      "identicalObservation": true,
+      "geometryStatus": "blocked",
+      "captureSpanUs": 2200000,
+      "currentWindowViews": 1,
+      "currentWindowGeometryStatus": "unavailable"
+    },
+    {
+      "sceneId": "person-side",
+      "physicalHazard": false,
+      "identicalObservation": true,
+      "geometryStatus": "measuredClear",
+      "captureSpanUs": 2200000,
+      "currentWindowViews": 1,
+      "currentWindowGeometryStatus": "unavailable"
+    },
+    {
+      "sceneId": "person-approach",
+      "physicalHazard": true,
+      "identicalObservation": true,
+      "geometryStatus": "blocked",
+      "captureSpanUs": 2200000,
+      "currentWindowViews": 1,
+      "currentWindowGeometryStatus": "unavailable"
+    },
+    {
+      "sceneId": "camera-pan-clear",
+      "physicalHazard": false,
+      "identicalObservation": true,
+      "geometryStatus": "measuredClear",
+      "captureSpanUs": 2200000,
+      "currentWindowViews": 1,
+      "currentWindowGeometryStatus": "unavailable"
+    },
+    {
+      "sceneId": "camera-pan-approach",
+      "physicalHazard": true,
+      "identicalObservation": true,
+      "geometryStatus": "blocked",
+      "captureSpanUs": 2200000,
+      "currentWindowViews": 1,
+      "currentWindowGeometryStatus": "unavailable"
+    }
+  ],
+  "summaries": {
+    "frozen": {
+      "pipeline": {
+        "samples": 36,
+        "p50Ms": 685.2595,
+        "p95Ms": 1122.859,
+        "maximumMs": 1342.092
+      },
+      "sourceBuild": {
+        "samples": 36,
+        "p50Ms": 681.205,
+        "p95Ms": 1118.3315,
+        "maximumMs": 1338.957
+      },
+      "oldestAgeAtDispatch": {
+        "samples": 36,
+        "p50Ms": 2887.26,
+        "p95Ms": 3324.85975,
+        "maximumMs": 3544.093
+      },
+      "latestAgeAtDispatch": {
+        "samples": 36,
+        "p50Ms": 687.26,
+        "p95Ms": 1124.85975,
+        "maximumMs": 1344.093
+      },
+      "strictStaleRejected": 36,
+      "hazardDecisions": 18,
+      "missedTimelyGeometricHazardDecisions": 18,
+      "fallbackStopsOnHazards": 18,
+      "falseStopsOnPassable": 18,
+      "unsafeContinue": 0,
+      "captureGateReached": false,
+      "computeWithin100ms": 0
+    },
+    "indexed": {
+      "pipeline": {
+        "samples": 36,
+        "p50Ms": 325.0805,
+        "p95Ms": 741.3215,
+        "maximumMs": 913.04
+      },
+      "sourceBuild": {
+        "samples": 36,
+        "p50Ms": 325.0655,
+        "p95Ms": 741.304,
+        "maximumMs": 913.019
+      },
+      "oldestAgeAtDispatch": {
+        "samples": 36,
+        "p50Ms": 2527.0805,
+        "p95Ms": 2943.3215,
+        "maximumMs": 3115.041
+      },
+      "latestAgeAtDispatch": {
+        "samples": 36,
+        "p50Ms": 327.0805,
+        "p95Ms": 743.3215,
+        "maximumMs": 915.041
+      },
+      "strictStaleRejected": 36,
+      "hazardDecisions": 18,
+      "missedTimelyGeometricHazardDecisions": 18,
+      "fallbackStopsOnHazards": 18,
+      "falseStopsOnPassable": 18,
+      "unsafeContinue": 0,
+      "captureGateReached": false,
+      "computeWithin100ms": 0
+    }
+  },
+  "samples": [
+    {
+      "round": 0,
+      "sceneId": "path-clear",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 540163,
+      "observationUs": 2642,
+      "evaluationUs": 27,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 542833,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2744834,
+      "latestAgeAtDispatchUs": 544834,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 0,
+      "sceneId": "path-clear",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 321419,
+      "observationUs": 4,
+      "evaluationUs": 8,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 321433,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2523433,
+      "latestAgeAtDispatchUs": 323433,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 13,
+        "pixelIndexAndEnvelopeValidation": 219520,
+        "coverage": 101877
+      }
+    },
+    {
+      "round": 0,
+      "sceneId": "path-box",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 761911,
+      "observationUs": 4171,
+      "evaluationUs": 8,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 766091,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2968092,
+      "latestAgeAtDispatchUs": 768092,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 0,
+      "sceneId": "path-box",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 355795,
+      "observationUs": 5,
+      "evaluationUs": 10,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 355811,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2557811,
+      "latestAgeAtDispatchUs": 357811,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 10,
+        "pixelIndexAndEnvelopeValidation": 171720,
+        "coverage": 184056
+      }
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-wide",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 1338957,
+      "observationUs": 3122,
+      "evaluationUs": 12,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 1342092,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 3544093,
+      "latestAgeAtDispatchUs": 1344093,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-wide",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 291204,
+      "observationUs": 5,
+      "evaluationUs": 10,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 291221,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2493221,
+      "latestAgeAtDispatchUs": 293221,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 17,
+        "pixelIndexAndEnvelopeValidation": 195505,
+        "coverage": 95670
+      }
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-narrow",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 707736,
+      "observationUs": 3187,
+      "evaluationUs": 8,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 710932,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2912932,
+      "latestAgeAtDispatchUs": 712932,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 0,
+      "sceneId": "doorway-narrow",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 332066,
+      "observationUs": 6,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 332085,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2534085,
+      "latestAgeAtDispatchUs": 334085,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 11,
+        "pixelIndexAndEnvelopeValidation": 194554,
+        "coverage": 137492
+      }
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-high",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 536600,
+      "observationUs": 2169,
+      "evaluationUs": 10,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 538781,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2740782,
+      "latestAgeAtDispatchUs": 540782,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-high",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 284510,
+      "observationUs": 4,
+      "evaluationUs": 9,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 284525,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2486525,
+      "latestAgeAtDispatchUs": 286525,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 15,
+        "pixelIndexAndEnvelopeValidation": 192278,
+        "coverage": 92205
+      }
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-low",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 688608,
+      "observationUs": 2556,
+      "evaluationUs": 8,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 691173,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2893174,
+      "latestAgeAtDispatchUs": 693174,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 0,
+      "sceneId": "headroom-low",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 293233,
+      "observationUs": 4,
+      "evaluationUs": 9,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 293247,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2495247,
+      "latestAgeAtDispatchUs": 295247,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 13,
+        "pixelIndexAndEnvelopeValidation": 172175,
+        "coverage": 121036
+      }
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-level",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 517489,
+      "observationUs": 1997,
+      "evaluationUs": 8,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 519495,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2721496,
+      "latestAgeAtDispatchUs": 521496,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-level",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 592922,
+      "observationUs": 5,
+      "evaluationUs": 509,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 593438,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2795438,
+      "latestAgeAtDispatchUs": 595438,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 11,
+        "pixelIndexAndEnvelopeValidation": 240315,
+        "coverage": 352586
+      }
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-drop",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 1102172,
+      "observationUs": 4350,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 1106534,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 3308535,
+      "latestAgeAtDispatchUs": 1108535,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 0,
+      "sceneId": "floor-drop",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 394067,
+      "observationUs": 3,
+      "evaluationUs": 7,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 394078,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2596078,
+      "latestAgeAtDispatchUs": 396078,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 16,
+        "pixelIndexAndEnvelopeValidation": 214356,
+        "coverage": 179686
+      }
+    },
+    {
+      "round": 0,
+      "sceneId": "person-side",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 632237,
+      "observationUs": 4059,
+      "evaluationUs": 14,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 636312,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2838312,
+      "latestAgeAtDispatchUs": 638312,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 0,
+      "sceneId": "person-side",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 293593,
+      "observationUs": 4,
+      "evaluationUs": 10,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 293609,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2495609,
+      "latestAgeAtDispatchUs": 295609,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 23,
+        "pixelIndexAndEnvelopeValidation": 205673,
+        "coverage": 87883
+      }
+    },
+    {
+      "round": 0,
+      "sceneId": "person-approach",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 860260,
+      "observationUs": 3513,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 863786,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 3065787,
+      "latestAgeAtDispatchUs": 865787,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 0,
+      "sceneId": "person-approach",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 391081,
+      "observationUs": 4,
+      "evaluationUs": 9,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 391096,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2593096,
+      "latestAgeAtDispatchUs": 393096,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 14,
+        "pixelIndexAndEnvelopeValidation": 212234,
+        "coverage": 178823
+      }
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-clear",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 517074,
+      "observationUs": 2477,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 519564,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2721565,
+      "latestAgeAtDispatchUs": 521565,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-clear",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 303842,
+      "observationUs": 3,
+      "evaluationUs": 8,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 303854,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2505854,
+      "latestAgeAtDispatchUs": 305854,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 16,
+        "pixelIndexAndEnvelopeValidation": 196014,
+        "coverage": 107801
+      }
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-approach",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 789671,
+      "observationUs": 4295,
+      "evaluationUs": 10,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 793978,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2995979,
+      "latestAgeAtDispatchUs": 795979,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 0,
+      "sceneId": "camera-pan-approach",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 812281,
+      "observationUs": 6,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 812300,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 3014300,
+      "latestAgeAtDispatchUs": 814300,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 15,
+        "pixelIndexAndEnvelopeValidation": 210899,
+        "coverage": 601356
+      }
+    },
+    {
+      "round": 1,
+      "sceneId": "path-clear",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 443382,
+      "observationUs": 5,
+      "evaluationUs": 9,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 443398,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2645399,
+      "latestAgeAtDispatchUs": 445399,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 860,
+        "pixelIndexAndEnvelopeValidation": 306527,
+        "coverage": 135980
+      }
+    },
+    {
+      "round": 1,
+      "sceneId": "path-clear",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 583650,
+      "observationUs": 3150,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 586813,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2788813,
+      "latestAgeAtDispatchUs": 588813,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 1,
+      "sceneId": "path-box",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 383622,
+      "observationUs": 4,
+      "evaluationUs": 10,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 383638,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2585639,
+      "latestAgeAtDispatchUs": 385639,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 19,
+        "pixelIndexAndEnvelopeValidation": 221654,
+        "coverage": 161938
+      }
+    },
+    {
+      "round": 1,
+      "sceneId": "path-box",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 728895,
+      "observationUs": 5391,
+      "evaluationUs": 9,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 734297,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2936297,
+      "latestAgeAtDispatchUs": 736297,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-wide",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 299987,
+      "observationUs": 3,
+      "evaluationUs": 8,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 299999,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2502000,
+      "latestAgeAtDispatchUs": 302000,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 16,
+        "pixelIndexAndEnvelopeValidation": 210364,
+        "coverage": 89596
+      }
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-wide",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 502786,
+      "observationUs": 3439,
+      "evaluationUs": 10,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 506237,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2708237,
+      "latestAgeAtDispatchUs": 508237,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-narrow",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 359798,
+      "observationUs": 6,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 359817,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2561818,
+      "latestAgeAtDispatchUs": 361818,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 20,
+        "pixelIndexAndEnvelopeValidation": 201958,
+        "coverage": 157780
+      }
+    },
+    {
+      "round": 1,
+      "sceneId": "doorway-narrow",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 673802,
+      "observationUs": 5533,
+      "evaluationUs": 9,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 679346,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2881346,
+      "latestAgeAtDispatchUs": 681346,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-high",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 260743,
+      "observationUs": 4,
+      "evaluationUs": 7,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 260755,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2462755,
+      "latestAgeAtDispatchUs": 262755,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 16,
+        "pixelIndexAndEnvelopeValidation": 176460,
+        "coverage": 84255
+      }
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-high",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 1166810,
+      "observationUs": 5009,
+      "evaluationUs": 12,
+      "dispatchGuardUs": 3,
+      "pipelineUs": 1171834,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 3373834,
+      "latestAgeAtDispatchUs": 1173834,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-low",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 332978,
+      "observationUs": 3,
+      "evaluationUs": 7,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 332990,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2534991,
+      "latestAgeAtDispatchUs": 334991,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 26,
+        "pixelIndexAndEnvelopeValidation": 206577,
+        "coverage": 126361
+      }
+    },
+    {
+      "round": 1,
+      "sceneId": "headroom-low",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 635068,
+      "observationUs": 2780,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 637860,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2839860,
+      "latestAgeAtDispatchUs": 639860,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-level",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 269373,
+      "observationUs": 5,
+      "evaluationUs": 9,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 269388,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2471389,
+      "latestAgeAtDispatchUs": 271389,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 17,
+        "pixelIndexAndEnvelopeValidation": 181319,
+        "coverage": 88027
+      }
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-level",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 550063,
+      "observationUs": 3658,
+      "evaluationUs": 10,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 553733,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2755733,
+      "latestAgeAtDispatchUs": 555733,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-drop",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 353988,
+      "observationUs": 4,
+      "evaluationUs": 9,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 354002,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2556003,
+      "latestAgeAtDispatchUs": 356003,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 16,
+        "pixelIndexAndEnvelopeValidation": 202195,
+        "coverage": 151766
+      }
+    },
+    {
+      "round": 1,
+      "sceneId": "floor-drop",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 705199,
+      "observationUs": 3424,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 708635,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2910635,
+      "latestAgeAtDispatchUs": 710635,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 1,
+      "sceneId": "person-side",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 276277,
+      "observationUs": 4,
+      "evaluationUs": 10,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 276293,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2478294,
+      "latestAgeAtDispatchUs": 278294,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 21,
+        "pixelIndexAndEnvelopeValidation": 180294,
+        "coverage": 95948
+      }
+    },
+    {
+      "round": 1,
+      "sceneId": "person-side",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 509103,
+      "observationUs": 5190,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 514306,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2716306,
+      "latestAgeAtDispatchUs": 516306,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 1,
+      "sceneId": "person-approach",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 913019,
+      "observationUs": 7,
+      "evaluationUs": 12,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 913040,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 3115041,
+      "latestAgeAtDispatchUs": 915041,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 18,
+        "pixelIndexAndEnvelopeValidation": 220524,
+        "coverage": 692462
+      }
+    },
+    {
+      "round": 1,
+      "sceneId": "person-approach",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 1007078,
+      "observationUs": 3226,
+      "evaluationUs": 13,
+      "dispatchGuardUs": 3,
+      "pipelineUs": 1010320,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 3212320,
+      "latestAgeAtDispatchUs": 1012320,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-clear",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 263289,
+      "observationUs": 3,
+      "evaluationUs": 6,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 263299,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2465300,
+      "latestAgeAtDispatchUs": 265300,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 30,
+        "pixelIndexAndEnvelopeValidation": 178647,
+        "coverage": 84599
+      }
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-clear",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 576810,
+      "observationUs": 4889,
+      "evaluationUs": 13,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 581714,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2783714,
+      "latestAgeAtDispatchUs": 583714,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-approach",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 357567,
+      "observationUs": 5,
+      "evaluationUs": 9,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 357582,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2559583,
+      "latestAgeAtDispatchUs": 359583,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 25,
+        "pixelIndexAndEnvelopeValidation": 191240,
+        "coverage": 166291
+      }
+    },
+    {
+      "round": 1,
+      "sceneId": "camera-pan-approach",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 794039,
+      "observationUs": 3901,
+      "evaluationUs": 10,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 797952,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2999952,
+      "latestAgeAtDispatchUs": 799952,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 2,
+      "sceneId": "path-clear",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 500065,
+      "observationUs": 2959,
+      "evaluationUs": 10,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 503036,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2705037,
+      "latestAgeAtDispatchUs": 505037,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 2,
+      "sceneId": "path-clear",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 273016,
+      "observationUs": 4,
+      "evaluationUs": 7,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 273029,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2475029,
+      "latestAgeAtDispatchUs": 275029,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 16,
+        "pixelIndexAndEnvelopeValidation": 190874,
+        "coverage": 82115
+      }
+    },
+    {
+      "round": 2,
+      "sceneId": "path-box",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 691378,
+      "observationUs": 3489,
+      "evaluationUs": 8,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 694877,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2896878,
+      "latestAgeAtDispatchUs": 696878,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 2,
+      "sceneId": "path-box",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 712010,
+      "observationUs": 4,
+      "evaluationUs": 7,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 712023,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2914023,
+      "latestAgeAtDispatchUs": 714023,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 46,
+        "pixelIndexAndEnvelopeValidation": 204298,
+        "coverage": 507652
+      }
+    },
+    {
+      "round": 2,
+      "sceneId": "doorway-wide",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 830106,
+      "observationUs": 3295,
+      "evaluationUs": 12,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 833415,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 3035416,
+      "latestAgeAtDispatchUs": 835416,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 2,
+      "sceneId": "doorway-wide",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 303241,
+      "observationUs": 4,
+      "evaluationUs": 9,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 303256,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2505256,
+      "latestAgeAtDispatchUs": 305256,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 15,
+        "pixelIndexAndEnvelopeValidation": 207682,
+        "coverage": 95533
+      }
+    },
+    {
+      "round": 2,
+      "sceneId": "doorway-narrow",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 705790,
+      "observationUs": 3492,
+      "evaluationUs": 10,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 709294,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2911294,
+      "latestAgeAtDispatchUs": 711294,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 2,
+      "sceneId": "doorway-narrow",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 320737,
+      "observationUs": 3,
+      "evaluationUs": 7,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 320748,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2522748,
+      "latestAgeAtDispatchUs": 322748,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 13,
+        "pixelIndexAndEnvelopeValidation": 176798,
+        "coverage": 143915
+      }
+    },
+    {
+      "round": 2,
+      "sceneId": "headroom-high",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 512866,
+      "observationUs": 3204,
+      "evaluationUs": 10,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 516082,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2718082,
+      "latestAgeAtDispatchUs": 518082,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 2,
+      "sceneId": "headroom-high",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 271599,
+      "observationUs": 4,
+      "evaluationUs": 9,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 271613,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2473613,
+      "latestAgeAtDispatchUs": 273613,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 16,
+        "pixelIndexAndEnvelopeValidation": 178757,
+        "coverage": 92814
+      }
+    },
+    {
+      "round": 2,
+      "sceneId": "headroom-low",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 669789,
+      "observationUs": 2843,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 672645,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2874646,
+      "latestAgeAtDispatchUs": 674646,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 2,
+      "sceneId": "headroom-low",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 328712,
+      "observationUs": 5,
+      "evaluationUs": 9,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 328728,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2530728,
+      "latestAgeAtDispatchUs": 330728,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 17,
+        "pixelIndexAndEnvelopeValidation": 201924,
+        "coverage": 126759
+      }
+    },
+    {
+      "round": 2,
+      "sceneId": "floor-level",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 511336,
+      "observationUs": 3250,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 514599,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2716600,
+      "latestAgeAtDispatchUs": 516600,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 2,
+      "sceneId": "floor-level",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 612744,
+      "observationUs": 7,
+      "evaluationUs": 10,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 612762,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2814762,
+      "latestAgeAtDispatchUs": 614762,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 17,
+        "pixelIndexAndEnvelopeValidation": 276457,
+        "coverage": 336258
+      }
+    },
+    {
+      "round": 2,
+      "sceneId": "floor-drop",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 1073047,
+      "observationUs": 2575,
+      "evaluationUs": 12,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 1075636,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 3277637,
+      "latestAgeAtDispatchUs": 1077637,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 2,
+      "sceneId": "floor-drop",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 314247,
+      "observationUs": 4,
+      "evaluationUs": 8,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 314261,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2516261,
+      "latestAgeAtDispatchUs": 316261,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 16,
+        "pixelIndexAndEnvelopeValidation": 187739,
+        "coverage": 126481
+      }
+    },
+    {
+      "round": 2,
+      "sceneId": "person-side",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 499912,
+      "observationUs": 3657,
+      "evaluationUs": 10,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 503580,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2705580,
+      "latestAgeAtDispatchUs": 505580,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 2,
+      "sceneId": "person-side",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 278410,
+      "observationUs": 4,
+      "evaluationUs": 8,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 278423,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2480423,
+      "latestAgeAtDispatchUs": 280423,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 12,
+        "pixelIndexAndEnvelopeValidation": 191575,
+        "coverage": 86814
+      }
+    },
+    {
+      "round": 2,
+      "sceneId": "person-approach",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 833376,
+      "observationUs": 3974,
+      "evaluationUs": 11,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 837363,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 3039364,
+      "latestAgeAtDispatchUs": 839364,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 2,
+      "sceneId": "person-approach",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 380353,
+      "observationUs": 5,
+      "evaluationUs": 9,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 380369,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2582369,
+      "latestAgeAtDispatchUs": 382369,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 14,
+        "pixelIndexAndEnvelopeValidation": 215338,
+        "coverage": 164990
+      }
+    },
+    {
+      "round": 2,
+      "sceneId": "camera-pan-clear",
+      "implementation": "frozen",
+      "physicalHazard": false,
+      "sourceBuildUs": 528765,
+      "observationUs": 3593,
+      "evaluationUs": 13,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 532373,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 2734374,
+      "latestAgeAtDispatchUs": 534374,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 2,
+      "sceneId": "camera-pan-clear",
+      "implementation": "indexed",
+      "physicalHazard": false,
+      "sourceBuildUs": 316047,
+      "observationUs": 5,
+      "evaluationUs": 9,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 316063,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2518063,
+      "latestAgeAtDispatchUs": 318063,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 16,
+        "pixelIndexAndEnvelopeValidation": 220262,
+        "coverage": 95759
+      }
+    },
+    {
+      "round": 2,
+      "sceneId": "camera-pan-approach",
+      "implementation": "frozen",
+      "physicalHazard": true,
+      "sourceBuildUs": 805597,
+      "observationUs": 6789,
+      "evaluationUs": 9,
+      "dispatchGuardUs": 1,
+      "pipelineUs": 812396,
+      "oldestAgeAtStartUs": 2202001,
+      "oldestAgeAtDispatchUs": 3014397,
+      "latestAgeAtDispatchUs": 814397,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": null
+    },
+    {
+      "round": 2,
+      "sceneId": "camera-pan-approach",
+      "implementation": "indexed",
+      "physicalHazard": true,
+      "sourceBuildUs": 717645,
+      "observationUs": 6,
+      "evaluationUs": 9,
+      "dispatchGuardUs": 2,
+      "pipelineUs": 717662,
+      "oldestAgeAtStartUs": 2202000,
+      "oldestAgeAtDispatchUs": 2919662,
+      "latestAgeAtDispatchUs": 719662,
+      "strictStatus": "unavailable",
+      "strictReasons": [
+        "staleObservation",
+        "processingLatency"
+      ],
+      "releaseStatus": "expiredBeforeCompute",
+      "shadowDecision": "stopUnavailable",
+      "unsafeContinue": false,
+      "indexedStagesUs": {
+        "validation": 57,
+        "pixelIndexAndEnvelopeValidation": 175487,
+        "coverage": 542090
+      }
+    }
+  ]
+}

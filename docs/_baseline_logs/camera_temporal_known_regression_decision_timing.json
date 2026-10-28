@@ -1,0 +1,193 @@
+{
+  "scope": "measured desktop wall clock, separate from functional reaction offsets; excludes scan and NN",
+  "frames": [
+    {
+      "layoutId": "test-association-wide-08",
+      "mode": "ncnn-control",
+      "frameId": 1,
+      "captureOffsetUs": 0,
+      "action": "stopNow",
+      "detectorTrackerMs": 12.088,
+      "reconstructionMs": 0.001,
+      "runtimeMs": 1.538,
+      "decisionComputeMs": 13.651
+    },
+    {
+      "layoutId": "test-association-wide-08",
+      "mode": "ncnn-control",
+      "frameId": 11,
+      "captureOffsetUs": 2000000,
+      "action": "holdAndScan",
+      "detectorTrackerMs": 9.792,
+      "reconstructionMs": 0.001,
+      "runtimeMs": 0.667,
+      "decisionComputeMs": 10.475
+    },
+    {
+      "layoutId": "test-association-wide-08",
+      "mode": "ncnn-control",
+      "frameId": 12,
+      "captureOffsetUs": 2200000,
+      "action": "stopNow",
+      "detectorTrackerMs": 10.735,
+      "reconstructionMs": 0.001,
+      "runtimeMs": 1.011,
+      "decisionComputeMs": 11.764
+    },
+    {
+      "layoutId": "test-association-wide-08",
+      "mode": "ncnn-control",
+      "frameId": 13,
+      "captureOffsetUs": 2400000,
+      "action": "stopNow",
+      "detectorTrackerMs": 8.732,
+      "reconstructionMs": 0.001,
+      "runtimeMs": 0.833,
+      "decisionComputeMs": 9.583
+    },
+    {
+      "layoutId": "test-association-wide-08",
+      "mode": "associated-stateful",
+      "frameId": 1,
+      "captureOffsetUs": 0,
+      "action": "stopNow",
+      "detectorTrackerMs": 5.667,
+      "reconstructionMs": 59.981,
+      "runtimeMs": 44.637,
+      "decisionComputeMs": 110.304
+    },
+    {
+      "layoutId": "test-association-wide-08",
+      "mode": "associated-stateful",
+      "frameId": 11,
+      "captureOffsetUs": 2000000,
+      "action": "holdAndScan",
+      "detectorTrackerMs": 7.361,
+      "reconstructionMs": 350.48,
+      "runtimeMs": 6.151,
+      "decisionComputeMs": 364.01
+    },
+    {
+      "layoutId": "test-association-wide-08",
+      "mode": "associated-stateful",
+      "frameId": 12,
+      "captureOffsetUs": 2200000,
+      "action": "stopNow",
+      "detectorTrackerMs": 12.298,
+      "reconstructionMs": 424.556,
+      "runtimeMs": 2.596,
+      "decisionComputeMs": 439.468
+    },
+    {
+      "layoutId": "test-association-wide-08",
+      "mode": "associated-stateful",
+      "frameId": 13,
+      "captureOffsetUs": 2400000,
+      "action": "stopNow",
+      "detectorTrackerMs": 6.173,
+      "reconstructionMs": 332.468,
+      "runtimeMs": 4.673,
+      "decisionComputeMs": 343.332
+    },
+    {
+      "layoutId": "test-association-wide-08",
+      "mode": "associated-stable",
+      "frameId": 1,
+      "captureOffsetUs": 0,
+      "action": "stopNow",
+      "detectorTrackerMs": 7.103,
+      "reconstructionMs": 50.627,
+      "runtimeMs": 42.676,
+      "decisionComputeMs": 100.425
+    },
+    {
+      "layoutId": "test-association-wide-08",
+      "mode": "associated-stable",
+      "frameId": 11,
+      "captureOffsetUs": 2000000,
+      "action": "holdAndScan",
+      "detectorTrackerMs": 6.054,
+      "reconstructionMs": 340.917,
+      "runtimeMs": 40.323,
+      "decisionComputeMs": 387.314
+    },
+    {
+      "layoutId": "test-association-wide-08",
+      "mode": "associated-stable",
+      "frameId": 12,
+      "captureOffsetUs": 2200000,
+      "action": "continueForward",
+      "detectorTrackerMs": 8.394,
+      "reconstructionMs": 331.388,
+      "runtimeMs": 42.254,
+      "decisionComputeMs": 382.056
+    },
+    {
+      "layoutId": "test-association-wide-08",
+      "mode": "associated-stable",
+      "frameId": 13,
+      "captureOffsetUs": 2400000,
+      "action": "continueForward",
+      "detectorTrackerMs": 11.046,
+      "reconstructionMs": 373.366,
+      "runtimeMs": 41.777,
+      "decisionComputeMs": 426.212
+    }
+  ],
+  "summaries": {
+    "ncnn-control": {
+      "detectorTrackerMs": {
+        "p50": 9.792,
+        "p95": 12.088
+      },
+      "reconstructionMs": {
+        "p50": 0.001,
+        "p95": 0.001
+      },
+      "runtimeMs": {
+        "p50": 0.833,
+        "p95": 1.538
+      },
+      "decisionComputeMs": {
+        "p50": 10.475,
+        "p95": 13.651
+      }
+    },
+    "associated-stateful": {
+      "detectorTrackerMs": {
+        "p50": 6.173,
+        "p95": 12.298
+      },
+      "reconstructionMs": {
+        "p50": 332.468,
+        "p95": 424.556
+      },
+      "runtimeMs": {
+        "p50": 4.673,
+        "p95": 44.637
+      },
+      "decisionComputeMs": {
+        "p50": 343.332,
+        "p95": 439.468
+      }
+    },
+    "associated-stable": {
+      "detectorTrackerMs": {
+        "p50": 7.103,
+        "p95": 11.046
+      },
+      "reconstructionMs": {
+        "p50": 331.388,
+        "p95": 373.366
+      },
+      "runtimeMs": {
+        "p50": 41.777,
+        "p95": 42.676
+      },
+      "decisionComputeMs": {
+        "p50": 382.056,
+        "p95": 426.212
+      }
+    }
+  }
+}

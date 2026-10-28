@@ -1,0 +1,22 @@
+{
+  "sceneId": "headroom-low",
+  "pair": "headroom",
+  "physicalHazard": true,
+  "referencePassable": false,
+  "hazardOnsetMs": 0,
+  "userMoving": true,
+  "latestStopOffsetMs": 300,
+  "compatibleCocoClassIds": [],
+  "parameters": {
+    "id": "headroom-low",
+    "pair": "headroom",
+    "hazard": true,
+    "kind": "doorway",
+    "openingWidthM": 1.5,
+    "openingHeightM": 1.3,
+    "planeY": 2.6,
+    "cameraAdvanceM": 0.4,
+    "appearanceSeed": 4103
+  },
+  "labelSource": "predeclared scene geometry, not model output"
+}

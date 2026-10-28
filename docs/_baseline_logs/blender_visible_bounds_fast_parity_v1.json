@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "sources": {
+    "tool/blender/generate_visible_passage_corpus.py": "97d96eb474afdbd9900f11a439e8235039390f04bc8ad9ba334c1d8904d41c82",
+    "tool/blender/visible_bounds_fast.py": "179a93ea117d46e934ef6e26e3b10d230254f09ace7954a3571246f9e5a6d09b",
+    "tool/blender/check_visible_bounds_fast.py": "a7b59408c13aac5dcdf3090026c70bc2b31bcba391b6c6c5f3f6d42651d4bc20"
+  },
+  "cases": [
+    {
+      "sceneId": "path-clear",
+      "frameIndex": 0,
+      "bitExact": true,
+      "frozenRendererMs": 10512.54500000141,
+      "optimizedRendererMs": 4451.722800000425
+    },
+    {
+      "sceneId": "person-approach",
+      "frameIndex": 10,
+      "bitExact": true,
+      "frozenRendererMs": 145078.48250000097,
+      "optimizedRendererMs": 9327.668600002653
+    }
+  ]
+}

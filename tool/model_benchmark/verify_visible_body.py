@@ -1,0 +1,153 @@
+"""Validate optical admission and decisions, preserving both older freezes."""
+import argparse
+import gzip
+import hashlib
+import json
+from pathlib import Path
+
+import numpy as np
+import verify_paired_scene_correction as previous
+import verify_body_preprocess_equivalence as preprocessing
+
+ROOT = Path(__file__).resolve().parents[2]
+BODY = ROOT / "test/fixtures/spatial_safety/blender-paired-visible-body-v1"
+RGB = ROOT / "test/fixtures/spatial_safety/blender-paired-holdout-v1"
+REPORT = ROOT / "docs/_baseline_logs/blender_visible_body_shadow_v2.json"
+RECEIPT = ROOT / "docs/_baseline_logs/blender_visible_body_contract_v2.json"
+FIRST_BODY = ROOT / "docs/_baseline_logs/blender_visible_body_contract_v1.json"
+
+
+def sha(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def read(path):
+    return json.loads(Path(path).read_text(encoding="utf-8"))
+
+
+def asset(value, dtype):
+    path = (BODY / value["path"]).resolve()
+    if not path.is_relative_to(BODY.resolve()) or sha(path) != value["sha256"]:
+        raise ValueError("Invalid body optical asset: " + value["path"])
+    values = np.frombuffer(gzip.decompress(path.read_bytes()), dtype=dtype)
+    if values.size != 320 * 240:
+        raise ValueError("Invalid optical payload size")
+    return values.reshape(240, 320)
+
+
+def validate_assets():
+    manifest = read(BODY / "manifest.json")
+    original = read(RGB / "corpus-manifest.json")
+    assert manifest["promotionAllowed"] is False
+    assert manifest["sourceCorpusSha256"] == sha(RGB / "corpus-manifest.json")
+    assert len(manifest["sequences"]) == 12
+    for path, expected in manifest["sources"].items():
+        assert sha(ROOT / path) == expected, path
+    parity = read(ROOT / "docs/_baseline_logs/blender_visible_bounds_fast_parity_v1.json")
+    assert parity["passed"] is True and len(parity["cases"]) == 2
+    assert all(case["bitExact"] for case in parity["cases"])
+    for path, expected in parity["sources"].items():
+        assert sha(ROOT / path) == expected, path
+    count = 0
+    maximum_rgb_depth_delta = 0.
+    for sequence, reference in zip(manifest["sequences"], original["sequences"]):
+        assert sequence["sceneId"] == reference["sceneId"]
+        assert len(sequence["single"]) == 11 and len(sequence["staticScan"]) == 10
+        for group in ("single", "staticScan"):
+            for index, packet in enumerate(sequence[group]):
+                assert packet["width"] == 320 and packet["height"] == 240
+                r = np.array(packet["cameraToWalkingRotation"]).reshape(3, 3)
+                assert np.allclose(r.T @ r, np.eye(3), atol=1e-5)
+                assert abs(np.linalg.det(r) - 1) < 1e-5
+                depth = asset(packet["depth"], "<f4")
+                lower = asset(packet["freeZLower"], "<f4")
+                upper = asset(packet["surfaceZUpper"], "<f4")
+                validity = asset(packet["validity"], "u1")
+                assert np.isin(validity, [0, 1]).all()
+                valid = validity == 1
+                yy, xx = np.mgrid[:240, :320]
+                axis = depth / np.sqrt(1 + ((xx+.5-packet["cx"])/packet["fx"])**2 + ((yy+.5-packet["cy"])/packet["fy"])**2)
+                assert (np.isfinite(depth[valid]) & (depth[valid] > 0)).all()
+                assert (np.isfinite(lower[valid]) & (lower[valid] >= 0)).all()
+                assert (lower[valid] <= axis[valid] + 2e-5).all()
+                bounded = valid & np.isfinite(upper)
+                assert (upper[bounded] >= lower[bounded]).all()
+                assert (upper[bounded] >= axis[bounded] - 2e-5).all()
+                if group == "single":
+                    frame = reference["frames"][index]
+                    assert packet["frameId"] == index + 1
+                    assert packet["capturedOffsetMs"] == frame["capturedOffsetMs"]
+                    assert packet["rgbSha256"] == frame["rgb"]["sha256"]
+                    raw = (RGB / frame["depth"]["path"]).read_bytes().split(b"\n", 3)[3]
+                    reference_depth = np.frombuffer(raw, ">u2").reshape(240, 320) / 1000
+                    assert (valid == (reference_depth > 0)).all()
+                    delta = float(np.max(np.abs(depth[valid] - reference_depth[valid])))
+                    # PGM quantization is 1mm; allow evaluated mesh/ray rounding.
+                    assert delta <= .003, (sequence["sceneId"], index, delta)
+                    maximum_rgb_depth_delta = max(maximum_rgb_depth_delta, delta)
+                count += 1
+    return {"opticalPackets": count, "maximumOriginalRangeDeltaM": maximum_rgb_depth_delta}
+
+
+def build():
+    assert previous.build() == read(previous.RECEIPT), "Prior correction drift"
+    first_body = read(FIRST_BODY)
+    archive = ROOT / "docs/_baseline_sources/blender_visible_body_v1"
+    for path, expected in first_body["sources"].items():
+        assert sha(archive / (path + ".snapshot")) == expected, path
+    assert sha(ROOT / "docs/_baseline_logs/blender_visible_body_shadow_v1.json") == first_body["reportSha256"]
+    assert preprocessing.build() == read(preprocessing.RECEIPT), "Preprocess equivalence drift"
+    admission = validate_assets()
+    report = read(REPORT)
+    assert report["promotionAllowed"] is False
+    assert report["passed"] is True and report["failures"] == []
+    assert report["preprocessEquivalenceSha256"] == sha(preprocessing.RECEIPT)
+    assert report["visibleManifestSha256"] == sha(BODY / "manifest.json")
+    assert report["priorCorrectionSha256"] == sha(previous.REPORT)
+    assert report["evaluatorSha256"] == sha(ROOT / "test/blender_visible_body_replay_test.dart")
+    for mode in report["modes"]:
+        summary = mode["summary"]
+        assert summary["frames"] == 132 and summary["hazardFrames"] == 66
+        assert summary["unsafeContinues"] == 0 and summary["falseImminentFrames"] == 0
+        assert summary["onTimeStopSequences"] == 6 and summary["hazardFramesWithStop"] == 66
+        assert summary["passableMovingFrames"] == 55
+        assert all(f["delivery"] == "shadow" for s in mode["sequences"] for f in s["frames"])
+        if mode["mode"] == "midas-plus-visible-metric-single":
+            assert summary["compatibleAssociationPixels"] > 0
+            assert summary["associationReasons"].get("incompatible_identity_projection_pose_or_time", 0) == 0
+    assert len(report["staticScans"]) == 12
+    for scan in report["staticScans"]:
+        assert scan["strictFreshness"]["status"] == "unavailable"
+        assert "staleObservation" in scan["strictFreshness"]["reasons"]
+        assert not scan["physicalHazard"] or scan["diagnostic"]["status"] != "measuredClear"
+    sources = dict(read(previous.RECEIPT)["sources"])
+    for path in ("tool/blender/export_paired_visible_body.py",
+                 "tool/blender/visible_bounds_fast.py",
+                 "tool/blender/check_visible_bounds_fast.py",
+                 "test/harness/blender_visible_body_fixture.dart",
+                 "test/blender_visible_body_replay_test.dart",
+                 "tool/model_benchmark/verify_visible_body.py",
+                 "tool/model_benchmark/verify_body_preprocess_equivalence.py",
+                 "docs/blender-visible-body-protocol-2026-10-04.md"):
+        sources[path] = sha(ROOT / path)
+    return {"schemaVersion": 1, "passed": True, "promotionAllowed": False,
+            "deviceRuntime": "not_run", "priorCorrectionReceiptSha256": sha(previous.RECEIPT),
+            "firstBodyReceiptSha256": sha(FIRST_BODY),
+            "preprocessEquivalenceSha256": sha(preprocessing.RECEIPT),
+            "visibleManifestSha256": sha(BODY / "manifest.json"),
+            "reportSha256": sha(REPORT), "sources": sources, "admission": admission,
+            "scope": "known synthetic metric visibility diagnostics; no model or device promotion"}
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--write", action="store_true")
+    args = parser.parse_args()
+    current = build()
+    if args.write:
+        if RECEIPT.exists():
+            raise ValueError("Visible-body receipt is write-once")
+        RECEIPT.write_text(json.dumps(current, indent=2) + "\n", encoding="utf-8")
+    elif current != read(RECEIPT):
+        raise ValueError("Visible-body source/report drift")
+    print(json.dumps({k: v for k, v in current.items() if k != "sources"}, indent=2))

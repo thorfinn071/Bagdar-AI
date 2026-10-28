@@ -1,0 +1,45 @@
+{
+  "scope": "post-hoc RGB/local correspondence diagnostics; no hidden geometry",
+  "plots": [
+    {
+      "layoutId": "test-metric-motion-stationary-07",
+      "path": "docs\\_baseline_logs\\camera_metric_motion_diagnostics\\test-metric-motion-stationary-07.png"
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "path": "docs\\_baseline_logs\\camera_metric_motion_diagnostics\\test-metric-motion-approach-08.png"
+    },
+    {
+      "layoutId": "test-metric-motion-receding-09",
+      "path": "docs\\_baseline_logs\\camera_metric_motion_diagnostics\\test-metric-motion-receding-09.png"
+    },
+    {
+      "layoutId": "test-metric-motion-crossing-10",
+      "path": "docs\\_baseline_logs\\camera_metric_motion_diagnostics\\test-metric-motion-crossing-10.png"
+    },
+    {
+      "layoutId": "test-metric-motion-camera-yaw-11",
+      "path": "docs\\_baseline_logs\\camera_metric_motion_diagnostics\\test-metric-motion-camera-yaw-11.png"
+    },
+    {
+      "layoutId": "test-metric-motion-camera-translation-12",
+      "path": "docs\\_baseline_logs\\camera_metric_motion_diagnostics\\test-metric-motion-camera-translation-12.png"
+    },
+    {
+      "layoutId": "test-metric-motion-mixed-13",
+      "path": "docs\\_baseline_logs\\camera_metric_motion_diagnostics\\test-metric-motion-mixed-13.png"
+    },
+    {
+      "layoutId": "test-metric-motion-occluded-14",
+      "path": "docs\\_baseline_logs\\camera_metric_motion_diagnostics\\test-metric-motion-occluded-14.png"
+    },
+    {
+      "layoutId": "test-metric-motion-textureless-15",
+      "path": "docs\\_baseline_logs\\camera_metric_motion_diagnostics\\test-metric-motion-textureless-15.png"
+    },
+    {
+      "layoutId": "test-metric-motion-wide-16",
+      "path": "docs\\_baseline_logs\\camera_metric_motion_diagnostics\\test-metric-motion-wide-16.png"
+    }
+  ]
+}

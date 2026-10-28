@@ -1,0 +1,1318 @@
+{
+  "schemaVersion": 1,
+  "scope": "scoring only",
+  "layouts": [
+    {
+      "layoutId": "validation-metric-motion-stationary-00",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "stationary"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "stationary"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "stationary"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "stationary"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "stationary"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "stationary"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "stationary"
+        }
+      ]
+    },
+    {
+      "layoutId": "validation-metric-motion-approach-01",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "approach"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "approach"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "approach"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "approach"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.1499989032745361,
+            0.0
+          ],
+          "motionKind": "approach"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "approach"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.1500006914138794,
+            0.0
+          ],
+          "motionKind": "approach"
+        }
+      ]
+    },
+    {
+      "layoutId": "validation-metric-motion-receding-02",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "receding"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "receding"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "receding"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "receding"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "receding"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "receding"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "receding"
+        }
+      ]
+    },
+    {
+      "layoutId": "validation-metric-motion-crossing-03",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 600000,
+      "latestStopOffsetUs": 900000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": false,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "crossing"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": false,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.8000004291534424,
+            0.0,
+            0.0
+          ],
+          "motionKind": "crossing"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": false,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.7999998331069946,
+            0.0,
+            0.0
+          ],
+          "motionKind": "crossing"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.7999998331069946,
+            0.0,
+            0.0
+          ],
+          "motionKind": "crossing"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.8000001311302185,
+            0.0,
+            0.0
+          ],
+          "motionKind": "crossing"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.7999999821186066,
+            0.0,
+            0.0
+          ],
+          "motionKind": "crossing"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.7999999821186066,
+            0.0,
+            0.0
+          ],
+          "motionKind": "crossing"
+        }
+      ]
+    },
+    {
+      "layoutId": "validation-metric-motion-camera-yaw-04",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "camera-yaw"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-yaw"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-yaw"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-yaw"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-yaw"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-yaw"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-yaw"
+        }
+      ]
+    },
+    {
+      "layoutId": "validation-metric-motion-camera-translation-05",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "camera-translation"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-translation"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-translation"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-translation"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-translation"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-translation"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-translation"
+        }
+      ]
+    },
+    {
+      "layoutId": "validation-metric-motion-wide-06",
+      "physicalHazard": false,
+      "criticalOnsetOffsetUs": null,
+      "latestStopOffsetUs": null,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": false,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "wide"
+        },
+        {
+          "frameId": 11,
+          "physicalHazard": false,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0,
+            0,
+            0
+          ],
+          "motionKind": "wide"
+        },
+        {
+          "frameId": 12,
+          "physicalHazard": false,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0,
+            0,
+            0
+          ],
+          "motionKind": "wide"
+        },
+        {
+          "frameId": 13,
+          "physicalHazard": false,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0,
+            0,
+            0
+          ],
+          "motionKind": "wide"
+        }
+      ]
+    },
+    {
+      "layoutId": "test-metric-motion-stationary-07",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "stationary"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "stationary"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "stationary"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "stationary"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "stationary"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "stationary"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "stationary"
+        }
+      ]
+    },
+    {
+      "layoutId": "test-metric-motion-approach-08",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "approach"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "approach"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "approach"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "approach"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "approach"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "approach"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            -1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "approach"
+        }
+      ]
+    },
+    {
+      "layoutId": "test-metric-motion-receding-09",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "receding"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "receding"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "receding"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            1.1499994993209839,
+            0.0
+          ],
+          "motionKind": "receding"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "receding"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "receding"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            1.1500000953674316,
+            0.0
+          ],
+          "motionKind": "receding"
+        }
+      ]
+    },
+    {
+      "layoutId": "test-metric-motion-crossing-10",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 600000,
+      "latestStopOffsetUs": 900000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": false,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "crossing"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": false,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.7999998331069946,
+            0.0,
+            0.0
+          ],
+          "motionKind": "crossing"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": false,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.8000001311302185,
+            0.0,
+            0.0
+          ],
+          "motionKind": "crossing"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.8000001311302185,
+            0.0,
+            0.0
+          ],
+          "motionKind": "crossing"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.7999998331069946,
+            0.0,
+            0.0
+          ],
+          "motionKind": "crossing"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.8000001311302185,
+            0.0,
+            0.0
+          ],
+          "motionKind": "crossing"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.7999999821186066,
+            0.0,
+            0.0
+          ],
+          "motionKind": "crossing"
+        }
+      ]
+    },
+    {
+      "layoutId": "test-metric-motion-camera-yaw-11",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "camera-yaw"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-yaw"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-yaw"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-yaw"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-yaw"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-yaw"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-yaw"
+        }
+      ]
+    },
+    {
+      "layoutId": "test-metric-motion-camera-translation-12",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "camera-translation"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-translation"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-translation"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-translation"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-translation"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-translation"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "camera-translation"
+        }
+      ]
+    },
+    {
+      "layoutId": "test-metric-motion-mixed-13",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 600000,
+      "latestStopOffsetUs": 900000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": false,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "mixed"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": false,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.6999999284744263,
+            -0.7499992847442627,
+            0.0
+          ],
+          "motionKind": "mixed"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": false,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.6999999284744263,
+            -0.7500004768371582,
+            0.0
+          ],
+          "motionKind": "mixed"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.7000002264976501,
+            -0.7499992847442627,
+            0.0
+          ],
+          "motionKind": "mixed"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.6999999284744263,
+            -0.7500004768371582,
+            0.0
+          ],
+          "motionKind": "mixed"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.6999999284744263,
+            -0.7500004768371582,
+            0.0
+          ],
+          "motionKind": "mixed"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.7000000774860382,
+            -0.7499992847442627,
+            0.0
+          ],
+          "motionKind": "mixed"
+        }
+      ]
+    },
+    {
+      "layoutId": "test-metric-motion-occluded-14",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "occluded"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.7000002264976501,
+            0.0,
+            0.0
+          ],
+          "motionKind": "occluded"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.6999999284744263,
+            0.0,
+            0.0
+          ],
+          "motionKind": "occluded"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.6999999284744263,
+            0.0,
+            0.0
+          ],
+          "motionKind": "occluded"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.7000000774860382,
+            0.0,
+            0.0
+          ],
+          "motionKind": "occluded"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.6999999284744263,
+            0.0,
+            0.0
+          ],
+          "motionKind": "occluded"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            -0.7000000309199095,
+            0.0,
+            0.0
+          ],
+          "motionKind": "occluded"
+        }
+      ]
+    },
+    {
+      "layoutId": "test-metric-motion-textureless-15",
+      "physicalHazard": true,
+      "criticalOnsetOffsetUs": 0,
+      "latestStopOffsetUs": 300000,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "textureless"
+        },
+        {
+          "frameId": 2,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "textureless"
+        },
+        {
+          "frameId": 3,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "textureless"
+        },
+        {
+          "frameId": 4,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "textureless"
+        },
+        {
+          "frameId": 5,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "textureless"
+        },
+        {
+          "frameId": 6,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "textureless"
+        },
+        {
+          "frameId": 7,
+          "physicalHazard": true,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "motionKind": "textureless"
+        }
+      ]
+    },
+    {
+      "layoutId": "test-metric-motion-wide-16",
+      "physicalHazard": false,
+      "criticalOnsetOffsetUs": null,
+      "latestStopOffsetUs": null,
+      "frames": [
+        {
+          "frameId": 1,
+          "physicalHazard": false,
+          "observationSufficient": false,
+          "objectVelocityMps": null,
+          "motionKind": "wide"
+        },
+        {
+          "frameId": 11,
+          "physicalHazard": false,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0,
+            0,
+            0
+          ],
+          "motionKind": "wide"
+        },
+        {
+          "frameId": 12,
+          "physicalHazard": false,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0,
+            0,
+            0
+          ],
+          "motionKind": "wide"
+        },
+        {
+          "frameId": 13,
+          "physicalHazard": false,
+          "observationSufficient": false,
+          "objectVelocityMps": [
+            0,
+            0,
+            0
+          ],
+          "motionKind": "wide"
+        }
+      ]
+    }
+  ],
+  "observabilityMethod": "independent FOV witness on upper protected volume; no producer/planner decisions"
+}

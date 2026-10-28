@@ -1,0 +1,5504 @@
+{
+  "scope": "desktop AOT/JIT elapsed independent motion worker; preloaded synthetic RGB/metric depth; no capture or user delivery",
+  "promotionAllowed": false,
+  "newIndependentHoldout": false,
+  "nnAwaitedByFastBranch": false,
+  "neuralBranchLive": true,
+  "captureToCommandMeasured": false,
+  "currentAgeLimitUs": 100000,
+  "runtimeVersion": "3.11.1 (stable) (Tue Feb 24 00:03:07 2026 -0800) on \"windows_x64\"",
+  "executable": "C:\\Users\\Nurik\\Desktop\\bagdar_app\\scratch\\fast-camera-load-verification\\baseline.exe",
+  "fixtureLoadMs": 4836.292,
+  "summary": {
+    "frames": 109,
+    "admitted": 63,
+    "expiredOrRejected": 46,
+    "freshMotionRiskFrames": 0,
+    "approachRiskPairs": 0,
+    "staleReleases": 0,
+    "freeSpaceCertifiedFrames": 0,
+    "fastReleasedBeforeNeuralCompletion": 108,
+    "ownerEventsDuringCompute": 383,
+    "ageAtReleaseMs": {
+      "count": 109,
+      "p50": 30.727,
+      "p95": 115.183
+    },
+    "workerComputeMs": {
+      "count": 71,
+      "p50": 2.192,
+      "p95": 91.77
+    },
+    "workerComputationsNotReturnedBeforeDeadline": 38,
+    "numericPreparationFrames": 108,
+    "numericPreparationTotalMs": 3141.672,
+    "referenceMotionRiskFrames": 54,
+    "referenceRiskFramesLostToTimingOrPairReset": 54
+  },
+  "frames": [
+    {
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 1,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 13756,
+      "workerComputeUs": 2097,
+      "ownerEventsDuringCompute": 0,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 1,
+        "oldestEvidenceTimestampUs": 1790899200000000,
+        "validUntilUs": 1790899200100000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 99776,
+      "nnWaitMs": 97.774,
+      "completionOffsetUs": 13755,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 2,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 101048,
+      "workerComputeUs": 79208,
+      "ownerEventsDuringCompute": 7,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 128127,
+      "nnWaitMs": 115.938,
+      "completionOffsetUs": 101048,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 3,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 26963,
+      "workerComputeUs": 2140,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 3,
+        "oldestEvidenceTimestampUs": 1790899200400000,
+        "validUntilUs": 1790899200500000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 126354,
+      "nnWaitMs": 110.212,
+      "completionOffsetUs": 26962,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 4,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 114304,
+      "workerComputeUs": 93915,
+      "ownerEventsDuringCompute": 6,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 130887,
+      "nnWaitMs": 126.128,
+      "completionOffsetUs": 114304,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 5,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 23006,
+      "workerComputeUs": 2071,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 5,
+        "oldestEvidenceTimestampUs": 1790899200800000,
+        "validUntilUs": 1790899200900000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 119456,
+      "nnWaitMs": 110.344,
+      "completionOffsetUs": 23005,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 6,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 106001,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 7,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 139228,
+      "nnWaitMs": 125.057,
+      "completionOffsetUs": 106000,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "validation-scale-motion-approach-00",
+      "frameId": 7,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 26715,
+      "workerComputeUs": 1648,
+      "ownerEventsDuringCompute": 2,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 7,
+        "oldestEvidenceTimestampUs": 1790899201200000,
+        "validUntilUs": 1790899201300000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 131991,
+      "nnWaitMs": 118.273,
+      "completionOffsetUs": 26714,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 1,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 15810,
+      "workerComputeUs": 1551,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 1,
+        "oldestEvidenceTimestampUs": 1790899200000000,
+        "validUntilUs": 1790899200100000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 114844,
+      "nnWaitMs": 112.843,
+      "completionOffsetUs": 15810,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 2,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 103826,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 6,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 148112,
+      "nnWaitMs": 138.458,
+      "completionOffsetUs": 103825,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 3,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 33608,
+      "workerComputeUs": 1518,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 3,
+        "oldestEvidenceTimestampUs": 1790899200400000,
+        "validUntilUs": 1790899200500000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 150107,
+      "nnWaitMs": 136.698,
+      "completionOffsetUs": 33607,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 4,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 128140,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 6,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 151361,
+      "nnWaitMs": 133.974,
+      "completionOffsetUs": 128139,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 5,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 15688,
+      "workerComputeUs": 1442,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 5,
+        "oldestEvidenceTimestampUs": 1790899200800000,
+        "validUntilUs": 1790899200900000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 160754,
+      "nnWaitMs": 155.21,
+      "completionOffsetUs": 15687,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 6,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 103372,
+      "workerComputeUs": 80564,
+      "ownerEventsDuringCompute": 5,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 132204,
+      "nnWaitMs": 121.535,
+      "completionOffsetUs": 103372,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "validation-scale-motion-approach-fast-01",
+      "frameId": 7,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 29620,
+      "workerComputeUs": 2947,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 7,
+        "oldestEvidenceTimestampUs": 1790899201200000,
+        "validUntilUs": 1790899201300000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 140712,
+      "nnWaitMs": 126.542,
+      "completionOffsetUs": 29619,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 1,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 15550,
+      "workerComputeUs": 1692,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 1,
+        "oldestEvidenceTimestampUs": 1790899200000000,
+        "validUntilUs": 1790899200100000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 120515,
+      "nnWaitMs": 118.514,
+      "completionOffsetUs": 15550,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 2,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 114233,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 7,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 132983,
+      "nnWaitMs": 129.309,
+      "completionOffsetUs": 114232,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 3,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 19700,
+      "workerComputeUs": 2415,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 3,
+        "oldestEvidenceTimestampUs": 1790899200400000,
+        "validUntilUs": 1790899200500000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 123115,
+      "nnWaitMs": 116.134,
+      "completionOffsetUs": 19699,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 4,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 101482,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 6,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 136340,
+      "nnWaitMs": 126.899,
+      "completionOffsetUs": 101482,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 5,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 24974,
+      "workerComputeUs": 2716,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 5,
+        "oldestEvidenceTimestampUs": 1790899200800000,
+        "validUntilUs": 1790899200900000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 130496,
+      "nnWaitMs": 119.958,
+      "completionOffsetUs": 24973,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 6,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 108073,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 7,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 144063,
+      "nnWaitMs": 130.115,
+      "completionOffsetUs": 108072,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "validation-scale-motion-receding-02",
+      "frameId": 7,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 16092,
+      "workerComputeUs": 2464,
+      "ownerEventsDuringCompute": 2,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 7,
+        "oldestEvidenceTimestampUs": 1790899201200000,
+        "validUntilUs": 1790899201300000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 119864,
+      "nnWaitMs": 117.285,
+      "completionOffsetUs": 16091,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 1,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 12786,
+      "workerComputeUs": 1709,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 1,
+        "oldestEvidenceTimestampUs": 1790899200000000,
+        "validUntilUs": 1790899200100000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 119761,
+      "nnWaitMs": 117.76,
+      "completionOffsetUs": 12785,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 2,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 104055,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 6,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 149972,
+      "nnWaitMs": 138.827,
+      "completionOffsetUs": 104055,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 3,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 34750,
+      "workerComputeUs": 2389,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 3,
+        "oldestEvidenceTimestampUs": 1790899200400000,
+        "validUntilUs": 1790899200500000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 151778,
+      "nnWaitMs": 139.12,
+      "completionOffsetUs": 34749,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 4,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 106185,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 6,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 156581,
+      "nnWaitMs": 140.312,
+      "completionOffsetUs": 106185,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 5,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 17018,
+      "workerComputeUs": 1276,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 5,
+        "oldestEvidenceTimestampUs": 1790899200800000,
+        "validUntilUs": 1790899200900000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 151544,
+      "nnWaitMs": 145.853,
+      "completionOffsetUs": 17017,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 6,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 103598,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 7,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 130159,
+      "nnWaitMs": 120.648,
+      "completionOffsetUs": 103597,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "validation-scale-motion-stationary-03",
+      "frameId": 7,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 24832,
+      "workerComputeUs": 2437,
+      "ownerEventsDuringCompute": 2,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 7,
+        "oldestEvidenceTimestampUs": 1790899201200000,
+        "validUntilUs": 1790899201300000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 130672,
+      "nnWaitMs": 119.603,
+      "completionOffsetUs": 24832,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 1,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 13500,
+      "workerComputeUs": 1855,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 1,
+        "oldestEvidenceTimestampUs": 1790899200000000,
+        "validUntilUs": 1790899200100000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 114976,
+      "nnWaitMs": 112.975,
+      "completionOffsetUs": 13499,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 2,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 101197,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 6,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 136801,
+      "nnWaitMs": 128.023,
+      "completionOffsetUs": 101196,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 3,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 22344,
+      "workerComputeUs": 1438,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 3,
+        "oldestEvidenceTimestampUs": 1790899200400000,
+        "validUntilUs": 1790899200500000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 126383,
+      "nnWaitMs": 115.075,
+      "completionOffsetUs": 22344,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 4,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 113554,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 5,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 149595,
+      "nnWaitMs": 133.344,
+      "completionOffsetUs": 113554,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 5,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 14448,
+      "workerComputeUs": 2481,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 5,
+        "oldestEvidenceTimestampUs": 1790899200800000,
+        "validUntilUs": 1790899200900000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 114716,
+      "nnWaitMs": 111.67,
+      "completionOffsetUs": 14447,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 6,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 101115,
+      "workerComputeUs": 83784,
+      "ownerEventsDuringCompute": 6,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 123608,
+      "nnWaitMs": 118.483,
+      "completionOffsetUs": 101115,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "validation-scale-motion-camera-yaw-04",
+      "frameId": 7,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 17134,
+      "workerComputeUs": 2278,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 7,
+        "oldestEvidenceTimestampUs": 1790899201200000,
+        "validUntilUs": 1790899201300000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 126058,
+      "nnWaitMs": 119.391,
+      "completionOffsetUs": 17134,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 1,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 11966,
+      "workerComputeUs": 1298,
+      "ownerEventsDuringCompute": 0,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 1,
+        "oldestEvidenceTimestampUs": 1790899200000000,
+        "validUntilUs": 1790899200100000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 123653,
+      "nnWaitMs": 121.652,
+      "completionOffsetUs": 11965,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 2,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 106199,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 5,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 151076,
+      "nnWaitMs": 140.07,
+      "completionOffsetUs": 106198,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 3,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 35032,
+      "workerComputeUs": 1903,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 3,
+        "oldestEvidenceTimestampUs": 1790899200400000,
+        "validUntilUs": 1790899200500000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 153122,
+      "nnWaitMs": 138.611,
+      "completionOffsetUs": 35032,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 4,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 116281,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 6,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 143414,
+      "nnWaitMs": 138.873,
+      "completionOffsetUs": 116280,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 5,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 23390,
+      "workerComputeUs": 2361,
+      "ownerEventsDuringCompute": 2,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 5,
+        "oldestEvidenceTimestampUs": 1790899200800000,
+        "validUntilUs": 1790899200900000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 157389,
+      "nnWaitMs": 147.789,
+      "completionOffsetUs": 23388,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 6,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 105779,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 6,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 147068,
+      "nnWaitMs": 134.832,
+      "completionOffsetUs": 105779,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "validation-scale-motion-crossing-05",
+      "frameId": 7,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 28739,
+      "workerComputeUs": 1542,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 7,
+        "oldestEvidenceTimestampUs": 1790899201200000,
+        "validUntilUs": 1790899201300000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 136807,
+      "nnWaitMs": 122.504,
+      "completionOffsetUs": 28738,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 1,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 14894,
+      "workerComputeUs": 1789,
+      "ownerEventsDuringCompute": 0,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 1,
+        "oldestEvidenceTimestampUs": 1790899200000000,
+        "validUntilUs": 1790899200100000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 121852,
+      "nnWaitMs": 119.851,
+      "completionOffsetUs": 14894,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 2,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 111730,
+      "workerComputeUs": 91770,
+      "ownerEventsDuringCompute": 7,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 137960,
+      "nnWaitMs": 131.247,
+      "completionOffsetUs": 111729,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 3,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 21403,
+      "workerComputeUs": 1667,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 3,
+        "oldestEvidenceTimestampUs": 1790899200400000,
+        "validUntilUs": 1790899200500000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 122828,
+      "nnWaitMs": 116.136,
+      "completionOffsetUs": 21402,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 4,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 103489,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 7,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 134213,
+      "nnWaitMs": 124.78,
+      "completionOffsetUs": 103488,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 5,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 23521,
+      "workerComputeUs": 1390,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 5,
+        "oldestEvidenceTimestampUs": 1790899200800000,
+        "validUntilUs": 1790899200900000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 145637,
+      "nnWaitMs": 132.059,
+      "completionOffsetUs": 23521,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 6,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 109863,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 8,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 146885,
+      "nnWaitMs": 130.962,
+      "completionOffsetUs": 109862,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-approach-slow-06",
+      "frameId": 7,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 30014,
+      "workerComputeUs": 2058,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 7,
+        "oldestEvidenceTimestampUs": 1790899201200000,
+        "validUntilUs": 1790899201300000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 134162,
+      "nnWaitMs": 116.578,
+      "completionOffsetUs": 30014,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 1,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 16069,
+      "workerComputeUs": 1676,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 1,
+        "oldestEvidenceTimestampUs": 1790899200000000,
+        "validUntilUs": 1790899200100000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 120349,
+      "nnWaitMs": 118.348,
+      "completionOffsetUs": 16068,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 2,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 107070,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 7,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 149343,
+      "nnWaitMs": 136.022,
+      "completionOffsetUs": 107070,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 3,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 40439,
+      "workerComputeUs": 2727,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 3,
+        "oldestEvidenceTimestampUs": 1790899200400000,
+        "validUntilUs": 1790899200500000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 159325,
+      "nnWaitMs": 143.664,
+      "completionOffsetUs": 40439,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 4,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 112692,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 7,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 137244,
+      "nnWaitMs": 133.805,
+      "completionOffsetUs": 112692,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 5,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 19339,
+      "workerComputeUs": 2337,
+      "ownerEventsDuringCompute": 2,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 5,
+        "oldestEvidenceTimestampUs": 1790899200800000,
+        "validUntilUs": 1790899200900000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 154704,
+      "nnWaitMs": 149.235,
+      "completionOffsetUs": 19338,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 6,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 101381,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 8,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 139461,
+      "nnWaitMs": 130.441,
+      "completionOffsetUs": 101380,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-approach-fast-07",
+      "frameId": 7,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 24633,
+      "workerComputeUs": 2364,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 7,
+        "oldestEvidenceTimestampUs": 1790899201200000,
+        "validUntilUs": 1790899201300000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 134985,
+      "nnWaitMs": 124.986,
+      "completionOffsetUs": 24632,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 1,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 13967,
+      "workerComputeUs": 1460,
+      "ownerEventsDuringCompute": 0,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 1,
+        "oldestEvidenceTimestampUs": 1790899200000000,
+        "validUntilUs": 1790899200100000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 117552,
+      "nnWaitMs": 115.551,
+      "completionOffsetUs": 13967,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 2,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 112073,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 7,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 130570,
+      "nnWaitMs": 127.588,
+      "completionOffsetUs": 112050,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 3,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 17993,
+      "workerComputeUs": 1327,
+      "ownerEventsDuringCompute": 2,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 3,
+        "oldestEvidenceTimestampUs": 1790899200400000,
+        "validUntilUs": 1790899200500000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 120684,
+      "nnWaitMs": 115.501,
+      "completionOffsetUs": 17993,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 4,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 112034,
+      "workerComputeUs": 92560,
+      "ownerEventsDuringCompute": 7,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 133468,
+      "nnWaitMs": 125.864,
+      "completionOffsetUs": 112033,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 5,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 25026,
+      "workerComputeUs": 2441,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 5,
+        "oldestEvidenceTimestampUs": 1790899200800000,
+        "validUntilUs": 1790899200900000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 125610,
+      "nnWaitMs": 115.878,
+      "completionOffsetUs": 25025,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 6,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 107659,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 7,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 140369,
+      "nnWaitMs": 126.815,
+      "completionOffsetUs": 107658,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-approach-small-08",
+      "frameId": 7,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 27958,
+      "workerComputeUs": 1275,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 7,
+        "oldestEvidenceTimestampUs": 1790899201200000,
+        "validUntilUs": 1790899201300000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 120239,
+      "nnWaitMs": 117.285,
+      "completionOffsetUs": 27957,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 1,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 11800,
+      "workerComputeUs": 1809,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 1,
+        "oldestEvidenceTimestampUs": 1790899200000000,
+        "validUntilUs": 1790899200100000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 113909,
+      "nnWaitMs": 111.908,
+      "completionOffsetUs": 11800,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 2,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 104320,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 7,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 151844,
+      "nnWaitMs": 140.73,
+      "completionOffsetUs": 104320,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 3,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 33429,
+      "workerComputeUs": 2539,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 3,
+        "oldestEvidenceTimestampUs": 1790899200400000,
+        "validUntilUs": 1790899200500000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 149293,
+      "nnWaitMs": 137.196,
+      "completionOffsetUs": 33428,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 4,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 109302,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 6,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 154532,
+      "nnWaitMs": 137.17,
+      "completionOffsetUs": 109301,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 5,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 30727,
+      "workerComputeUs": 2319,
+      "ownerEventsDuringCompute": 2,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 5,
+        "oldestEvidenceTimestampUs": 1790899200800000,
+        "validUntilUs": 1790899200900000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 153772,
+      "nnWaitMs": 136.939,
+      "completionOffsetUs": 30727,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 6,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 115183,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 6,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 133626,
+      "nnWaitMs": 127.359,
+      "completionOffsetUs": 115183,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-receding-09",
+      "frameId": 7,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 19568,
+      "workerComputeUs": 2310,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 7,
+        "oldestEvidenceTimestampUs": 1790899201200000,
+        "validUntilUs": 1790899201300000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 131134,
+      "nnWaitMs": 123.809,
+      "completionOffsetUs": 19568,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 1,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 15932,
+      "workerComputeUs": 2268,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 1,
+        "oldestEvidenceTimestampUs": 1790899200000000,
+        "validUntilUs": 1790899200100000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 117431,
+      "nnWaitMs": 115.43,
+      "completionOffsetUs": 15931,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 2,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 89652,
+      "workerComputeUs": 74563,
+      "ownerEventsDuringCompute": 6,
+      "result": {
+        "reason": "visible_patch_intervals",
+        "available": true,
+        "frameId": 2,
+        "oldestEvidenceTimestampUs": 1790899200000000,
+        "validUntilUs": 1790899200300000,
+        "candidates": 48,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": [
+          {
+            "previousPixel": [
+              11,
+              83
+            ],
+            "currentPixel": [
+              11,
+              83
+            ],
+            "positionLowerM": [
+              -1.7944104909119327,
+              2.7768020385350773,
+              1.8422580583097075
+            ],
+            "positionUpperM": [
+              -1.7626607007487132,
+              2.7832021068410517,
+              1.8721998479901825
+            ],
+            "velocityLowerMps": [
+              -0.15874895081609774,
+              -0.03200034152987197,
+              -0.14970894840237503
+            ],
+            "velocityUpperMps": [
+              0.15874895081609774,
+              0.03200034152987197,
+              0.14970894840237503
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              65,
+              89
+            ],
+            "currentPixel": [
+              65,
+              89
+            ],
+            "positionLowerM": [
+              -1.2648455887564436,
+              2.776795282585308,
+              1.7840149331447606
+            ],
+            "positionUpperM": [
+              -1.2336191328286048,
+              2.783208873524105,
+              1.8139576518917035
+            ],
+            "velocityLowerMps": [
+              -0.15613227963919396,
+              -0.032067954693986156,
+              -0.14971359373471493
+            ],
+            "velocityUpperMps": [
+              0.15613227963919396,
+              0.032067954693986156,
+              0.14971359373471493
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              287,
+              89
+            ],
+            "currentPixel": [
+              287,
+              89
+            ],
+            "positionLowerM": [
+              0.9495873682450765,
+              2.8424363276689935,
+              1.7895490089083277
+            ],
+            "positionUpperM": [
+              1.0113800783612192,
+              2.9366453354539512,
+              1.828504472156092
+            ],
+            "velocityLowerMps": [
+              -0.3089635505807137,
+              -0.4710450389247889,
+              -0.1947773162388211
+            ],
+            "velocityUpperMps": [
+              0.3089635505807137,
+              0.4710450389247889,
+              0.1947773162388211
+            ],
+            "classification": "uncertain",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              329,
+              95
+            ],
+            "currentPixel": [
+              329,
+              95
+            ],
+            "positionLowerM": [
+              1.3451818250707814,
+              2.776788292514081,
+              1.7255118390708868
+            ],
+            "positionUpperM": [
+              1.3766030772915818,
+              2.783215859373037,
+              1.7554552378325672
+            ],
+            "velocityLowerMps": [
+              -0.15710626110400194,
+              -0.03213783429477868,
+              -0.14971699380840198
+            ],
+            "velocityUpperMps": [
+              0.15710626110400194,
+              0.03213783429477868,
+              0.14971699380840198
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              341,
+              83
+            ],
+            "currentPixel": [
+              341,
+              83
+            ],
+            "positionLowerM": [
+              1.457378121289439,
+              2.7768020385350773,
+              1.8422580583097075
+            ],
+            "positionUpperM": [
+              1.4887861765258343,
+              2.7832021068410517,
+              1.8721998479901825
+            ],
+            "velocityLowerMps": [
+              -0.1570402761819767,
+              -0.03200034152987197,
+              -0.14970894840237503
+            ],
+            "velocityUpperMps": [
+              0.1570402761819767,
+              0.03200034152987197,
+              0.14970894840237503
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              41,
+              113
+            ],
+            "currentPixel": [
+              41,
+              113
+            ],
+            "positionLowerM": [
+              -1.5154973655590163,
+              2.7767674458527623,
+              1.5484236824085715
+            ],
+            "positionUpperM": [
+              -1.483708783947207,
+              2.783236751763594,
+              1.5783689948264943
+            ],
+            "velocityLowerMps": [
+              -0.15894290805904654,
+              -0.032346529554159176,
+              -0.14972656208961377
+            ],
+            "velocityUpperMps": [
+              0.15894290805904654,
+              0.032346529554159176,
+              0.14972656208961377
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              83,
+              125
+            ],
+            "currentPixel": [
+              83,
+              125
+            ],
+            "positionLowerM": [
+              -1.1017246391328415,
+              2.7767534560005487,
+              1.4288981239687961
+            ],
+            "positionUpperM": [
+              -1.0702634477874582,
+              2.7832509103953367,
+              1.4590813238389682
+            ],
+            "velocityLowerMps": [
+              -0.15730595672691638,
+              -0.03248727197393997,
+              -0.1509159993508602
+            ],
+            "velocityUpperMps": [
+              0.15730595672691638,
+              0.03248727197393997,
+              0.1509159993508602
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              185,
+              125
+            ],
+            "currentPixel": [
+              185,
+              125
+            ],
+            "positionLowerM": [
+              -0.0565862603221721,
+              1.9576783190335432,
+              1.464589205960106
+            ],
+            "positionUpperM": [
+              -0.035163713952691994,
+              1.9623242388824713,
+              1.4859286659203639
+            ],
+            "velocityLowerMps": [
+              -0.10711273184740053,
+              -0.023229599244640742,
+              -0.10669729980128939
+            ],
+            "velocityUpperMps": [
+              0.10711273184740053,
+              0.023229599244640742,
+              0.10669729980128939
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": true
+          },
+          {
+            "previousPixel": [
+              227,
+              125
+            ],
+            "currentPixel": [
+              227,
+              125
+            ],
+            "positionLowerM": [
+              0.23969325487830556,
+              1.9576783190335432,
+              1.464589205960106
+            ],
+            "positionUpperM": [
+              0.26134895399004593,
+              1.9623242388824713,
+              1.4859286659203639
+            ],
+            "velocityLowerMps": [
+              -0.10827849555870184,
+              -0.023229599244640742,
+              -0.10669729980128939
+            ],
+            "velocityUpperMps": [
+              0.10827849555870184,
+              0.023229599244640742,
+              0.10669729980128939
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": true
+          },
+          {
+            "previousPixel": [
+              287,
+              125
+            ],
+            "currentPixel": [
+              287,
+              125
+            ],
+            "positionLowerM": [
+              0.9495873682450765,
+              2.8044182918727603,
+              1.4239347172836838
+            ],
+            "positionUpperM": [
+              1.0113800783612192,
+              2.897413684456547,
+              1.458174536074616
+            ],
+            "velocityLowerMps": [
+              -0.3089635505807137,
+              -0.46497696291893265,
+              -0.17119909395466038
+            ],
+            "velocityUpperMps": [
+              0.3089635505807137,
+              0.46497696291893265,
+              0.17119909395466038
+            ],
+            "classification": "uncertain",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              311,
+              131
+            ],
+            "currentPixel": [
+              311,
+              131
+            ],
+            "positionLowerM": [
+              1.1829707787655093,
+              2.776746438444082,
+              1.3687293621893106
+            ],
+            "positionUpperM": [
+              1.2146310880272404,
+              2.783257919499323,
+              1.3990488488377755
+            ],
+            "velocityLowerMps": [
+              -0.15830154630865567,
+              -0.03255740527620565,
+              -0.15159743324232422
+            ],
+            "velocityUpperMps": [
+              0.15830154630865567,
+              0.03255740527620565,
+              0.15159743324232422
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              347,
+              125
+            ],
+            "currentPixel": [
+              347,
+              125
+            ],
+            "positionLowerM": [
+              1.540423093077276,
+              2.7767534560005487,
+              1.4288981239687961
+            ],
+            "positionUpperM": [
+              1.5724188031259647,
+              2.7832509103953367,
+              1.4590813238389682
+            ],
+            "velocityLowerMps": [
+              -0.15997855024344365,
+              -0.03248727197393997,
+              -0.1509159993508602
+            ],
+            "velocityUpperMps": [
+              0.15997855024344365,
+              0.03248727197393997,
+              0.1509159993508602
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              35,
+              149
+            ],
+            "currentPixel": [
+              35,
+              149
+            ],
+            "positionLowerM": [
+              -1.5968639966059464,
+              2.7767248902677837,
+              1.1865768917217343
+            ],
+            "positionUpperM": [
+              -1.5645508049900863,
+              2.7832794469002353,
+              1.2173108667735089
+            ],
+            "velocityLowerMps": [
+              -0.16156595807930052,
+              -0.03277278316225818,
+              -0.15366987525887277
+            ],
+            "velocityUpperMps": [
+              0.16156595807930052,
+              0.03277278316225818,
+              0.15366987525887277
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              83,
+              167
+            ],
+            "currentPixel": [
+              83,
+              167
+            ],
+            "positionLowerM": [
+              -1.1194270298256697,
+              2.77670323136731,
+              1.0019155291081316
+            ],
+            "positionUpperM": [
+              -1.087443951950054,
+              2.783301040810585,
+              1.0330725006535915
+            ],
+            "velocityLowerMps": [
+              -0.15991538937807803,
+              -0.03298904721637408,
+              -0.1557848577272991
+            ],
+            "velocityUpperMps": [
+              0.15991538937807803,
+              0.03298904721637408,
+              0.1557848577272991
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              185,
+              173
+            ],
+            "currentPixel": [
+              185,
+              173
+            ],
+            "positionLowerM": [
+              -0.05762601866586426,
+              1.9576378796030836,
+              1.1197535627615423
+            ],
+            "positionUpperM": [
+              -0.03581208426378478,
+              1.9623648261316158,
+              1.1418813981646196
+            ],
+            "velocityLowerMps": [
+              -0.1090696720103974,
+              -0.023634732642661138,
+              -0.11063917701538695
+            ],
+            "velocityUpperMps": [
+              0.1090696720103974,
+              0.023634732642661138,
+              0.11063917701538695
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": true
+          },
+          {
+            "previousPixel": [
+              239,
+              173
+            ],
+            "currentPixel": [
+              239,
+              173
+            ],
+            "positionLowerM": [
+              0.33029117522681994,
+              1.9576378796030836,
+              1.1197535627615423
+            ],
+            "positionUpperM": [
+              0.35244686432841854,
+              1.9623648261316158,
+              1.1418813981646196
+            ],
+            "velocityLowerMps": [
+              -0.11077844550799298,
+              -0.023634732642661138,
+              -0.11063917701538695
+            ],
+            "velocityUpperMps": [
+              0.11077844550799298,
+              0.023634732642661138,
+              0.11063917701538695
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": true
+          },
+          {
+            "previousPixel": [
+              335,
+              161
+            ],
+            "currentPixel": [
+              335,
+              161
+            ],
+            "positionLowerM": [
+              1.4398807459341698,
+              2.7767105303348165,
+              1.063751278526894
+            ],
+            "positionUpperM": [
+              1.4721971708155077,
+              2.7832937980370764,
+              1.0947662790520196
+            ],
+            "velocityLowerMps": [
+              -0.1615821244066895,
+              -0.0329163385112996,
+              -0.15507500262562757
+            ],
+            "velocityUpperMps": [
+              0.1615821244066895,
+              0.0329163385112996,
+              0.15507500262562757
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              377,
+              161
+            ],
+            "currentPixel": [
+              377,
+              161
+            ],
+            "positionLowerM": [
+              1.865790544027375,
+              2.7767105303348165,
+              1.063751278526894
+            ],
+            "positionUpperM": [
+              1.8985977306379307,
+              2.7832937980370764,
+              1.0947662790520196
+            ],
+            "velocityLowerMps": [
+              -0.16403593305277853,
+              -0.0329163385112996,
+              -0.15507500262562757
+            ],
+            "velocityUpperMps": [
+              0.16403593305277853,
+              0.0329163385112996,
+              0.15507500262562757
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              11,
+              197
+            ],
+            "currentPixel": [
+              11,
+              197
+            ],
+            "positionLowerM": [
+              -1.8735816134843755,
+              2.7766664108733865,
+              0.6884287089338781
+            ],
+            "positionUpperM": [
+              -1.8403501469630488,
+              2.7833380608744753,
+              0.7203104104364408
+            ],
+            "velocityLowerMps": [
+              -0.16615733260663346,
+              -0.03335825000544412,
+              -0.15940850751281377
+            ],
+            "velocityUpperMps": [
+              0.16615733260663346,
+              0.03335825000544412,
+              0.15940850751281377
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              83,
+              239
+            ],
+            "currentPixel": [
+              83,
+              239
+            ],
+            "positionLowerM": [
+              -1.1511352628925262,
+              2.7766134014777437,
+              0.23711460283742136
+            ],
+            "positionUpperM": [
+              -1.1182157579177299,
+              2.7833911829074633,
+              0.2700541408103845
+            ],
+            "velocityLowerMps": [
+              -0.16459752487398172,
+              -0.03388890714859816,
+              -0.1646976898648156
+            ],
+            "velocityUpperMps": [
+              0.16459752487398172,
+              0.03388890714859816,
+              0.1646976898648156
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              101,
+              209
+            ],
+            "currentPixel": [
+              101,
+              209
+            ],
+            "positionLowerM": [
+              -1.0131370250213516,
+              2.863308335962416,
+              0.49697816417293583
+            ],
+            "positionUpperM": [
+              -0.9479402795381782,
+              2.9635003696712117,
+              0.5633006966052527
+            ],
+            "velocityLowerMps": [
+              -0.32598372741586723,
+              -0.500960168543978,
+              -0.33161266216158447
+            ],
+            "velocityUpperMps": [
+              0.32598372741586723,
+              0.500960168543978,
+              0.33161266216158447
+            ],
+            "classification": "uncertain",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              167,
+              209
+            ],
+            "currentPixel": [
+              167,
+              209
+            ],
+            "positionLowerM": [
+              -0.189676748510081,
+              1.9576066551932798,
+              0.852679153977878
+            ],
+            "positionUpperM": [
+              -0.1674054536187732,
+              1.962396195729939,
+              0.8754272544704411
+            ],
+            "velocityLowerMps": [
+              -0.11135647445653901,
+              -0.023947702683295713,
+              -0.11374050246281575
+            ],
+            "velocityUpperMps": [
+              0.11135647445653901,
+              0.023947702683295713,
+              0.11374050246281575
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": true
+          },
+          {
+            "previousPixel": [
+              215,
+              239
+            ],
+            "currentPixel": [
+              215,
+              239
+            ],
+            "positionLowerM": [
+              0.16201154494581857,
+              1.9575797719419687,
+              0.6243377968796211
+            ],
+            "positionUpperM": [
+              0.18453690521326258,
+              1.9624231068423634,
+              0.6476230341165358
+            ],
+            "velocityLowerMps": [
+              -0.11262680133722003,
+              -0.0242166745019734,
+              -0.11642618618457334
+            ],
+            "velocityUpperMps": [
+              0.11262680133722003,
+              0.0242166745019734,
+              0.11642618618457334
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": true
+          },
+          {
+            "previousPixel": [
+              281,
+              227
+            ],
+            "currentPixel": [
+              281,
+              227
+            ],
+            "positionLowerM": [
+              0.9475891517215353,
+              2.874512124797878,
+              0.28565611227482823
+            ],
+            "positionUpperM": [
+              1.0135123675119393,
+              2.9762219865690387,
+              0.3596731061011289
+            ],
+            "velocityLowerMps": [
+              -0.3296160789520197,
+              -0.5085493088558035,
+              -0.37008496913150335
+            ],
+            "velocityUpperMps": [
+              0.3296160789520197,
+              0.5085493088558035,
+              0.37008496913150335
+            ],
+            "classification": "uncertain",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              293,
+              221
+            ],
+            "currentPixel": [
+              293,
+              221
+            ],
+            "positionLowerM": [
+              1.0377137421207014,
+              2.776636341363491,
+              0.4323485046962676
+            ],
+            "positionUpperM": [
+              1.0703083593645162,
+              2.7833681604793603,
+              0.46482831180879347
+            ],
+            "velocityLowerMps": [
+              -0.1629730862190737,
+              -0.03365909557934588,
+              -0.16239903556262925
+            ],
+            "velocityUpperMps": [
+              0.1629730862190737,
+              0.03365909557934588,
+              0.16239903556262925
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              365,
+              239
+            ],
+            "currentPixel": [
+              365,
+              239
+            ],
+            "positionLowerM": [
+              1.7975664519799022,
+              2.7766134014777437,
+              0.23711460283742136
+            ],
+            "positionUpperM": [
+              1.831292463692655,
+              2.7833911829074633,
+              0.2700541408103845
+            ],
+            "velocityLowerMps": [
+              -0.16863005856376456,
+              -0.03388890714859816,
+              -0.1646976898648156
+            ],
+            "velocityUpperMps": [
+              0.16863005856376456,
+              0.03388890714859816,
+              0.1646976898648156
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              5,
+              251
+            ],
+            "currentPixel": [
+              5,
+              251
+            ],
+            "positionLowerM": [
+              -1.9766558593833603,
+              2.7765977723172424,
+              0.10541511656643963
+            ],
+            "positionUpperM": [
+              -1.942597843488782,
+              2.783406698418547,
+              0.1386666610119578
+            ],
+            "velocityLowerMps": [
+              -0.1702900794728912,
+              -0.03404463050652229,
+              -0.16625772222759078
+            ],
+            "velocityUpperMps": [
+              0.1702900794728912,
+              0.03404463050652229,
+              0.16625772222759078
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              89,
+              251
+            ],
+            "currentPixel": [
+              89,
+              251
+            ],
+            "positionLowerM": [
+              -1.0935138796588804,
+              2.7765977723172424,
+              0.10541511656643963
+            ],
+            "positionUpperM": [
+              -1.0605080118506325,
+              2.783406698418547,
+              0.1386666610119578
+            ],
+            "velocityLowerMps": [
+              -0.1650293390412394,
+              -0.03404463050652229,
+              -0.16625772222759078
+            ],
+            "velocityUpperMps": [
+              0.1650293390412394,
+              0.03404463050652229,
+              0.16625772222759078
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              101,
+              245
+            ],
+            "currentPixel": [
+              101,
+              245
+            ],
+            "positionLowerM": [
+              -1.0131370250213516,
+              2.8232240962743673,
+              0.10274393230474209
+            ],
+            "positionUpperM": [
+              -0.9479402795381782,
+              2.9220647003521094,
+              0.18192446440926213
+            ],
+            "velocityLowerMps": [
+              -0.32598372741586723,
+              -0.49420302038871045,
+              -0.3959026605226002
+            ],
+            "velocityUpperMps": [
+              0.32598372741586723,
+              0.49420302038871045,
+              0.3959026605226002
+            ],
+            "classification": "uncertain",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              167,
+              281
+            ],
+            "currentPixel": [
+              167,
+              281
+            ],
+            "positionLowerM": [
+              -0.19513730148145422,
+              1.9575411198218908,
+              0.2954519194718943
+            ],
+            "positionUpperM": [
+              -0.1722245141680335,
+              1.9624618712130202,
+              0.31952173209707424
+            ],
+            "velocityLowerMps": [
+              -0.11456393656710362,
+              -0.02460375695564676,
+              -0.12034906312589966
+            ],
+            "velocityUpperMps": [
+              0.11456393656710362,
+              0.02460375695564676,
+              0.12034906312589966
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": true
+          },
+          {
+            "previousPixel": [
+              239,
+              263
+            ],
+            "currentPixel": [
+              239,
+              263
+            ],
+            "positionLowerM": [
+              0.3420878814410775,
+              1.9575578717109965,
+              0.437746620016328
+            ],
+            "positionUpperM": [
+              0.36504236592957356,
+              1.9624451504116647,
+              0.46147540771456264
+            ],
+            "velocityLowerMps": [
+              -0.11477242244248037,
+              -0.024436393503340925,
+              -0.11864393849117305
+            ],
+            "velocityUpperMps": [
+              0.11477242244248037,
+              0.024436393503340925,
+              0.11864393849117305
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": true
+          },
+          {
+            "previousPixel": [
+              287,
+              251
+            ],
+            "currentPixel": [
+              287,
+              251
+            ],
+            "positionLowerM": [
+              0.9870005258807866,
+              2.7765977723172424,
+              0.10541511656643963
+            ],
+            "positionUpperM": [
+              1.0199187146818403,
+              2.783406698418547,
+              0.1386666610119578
+            ],
+            "velocityLowerMps": [
+              -0.1645909440052684,
+              -0.03404463050652229,
+              -0.16625772222759078
+            ],
+            "velocityUpperMps": [
+              0.1645909440052684,
+              0.03404463050652229,
+              0.16625772222759078
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              335,
+              251
+            ],
+            "currentPixel": [
+              335,
+              251
+            ],
+            "positionLowerM": [
+              1.4910518582454435,
+              2.7765977723172424,
+              0.10541511656643963
+            ],
+            "positionUpperM": [
+              1.5245712745244004,
+              2.783406698418547,
+              0.1386666610119578
+            ],
+            "velocityLowerMps": [
+              -0.16759708139478469,
+              -0.03404463050652229,
+              -0.16625772222759078
+            ],
+            "velocityUpperMps": [
+              0.16759708139478469,
+              0.03404463050652229,
+              0.16625772222759078
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              377,
+              245
+            ],
+            "currentPixel": [
+              377,
+              245
+            ],
+            "positionLowerM": [
+              1.9275300724218454,
+              2.776605507537776,
+              0.17142064100907795
+            ],
+            "positionUpperM": [
+              1.9614901739306667,
+              2.7833989938329617,
+              0.20451571161936344
+            ],
+            "velocityLowerMps": [
+              -0.1698005075441067,
+              -0.03396743147592973,
+              -0.16547535305142747
+            ],
+            "velocityUpperMps": [
+              0.1698005075441067,
+              0.03396743147592973,
+              0.16547535305142747
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              53,
+              143
+            ],
+            "currentPixel": [
+              53,
+              143
+            ],
+            "positionLowerM": [
+              -1.4117357468483216,
+              2.7767321121161657,
+              1.2475706133903417
+            ],
+            "positionUpperM": [
+              -1.3797071444916202,
+              2.783272264014686,
+              1.27816548512834
+            ],
+            "velocityLowerMps": [
+              -0.16014301178350676,
+              -0.032700759492600984,
+              -0.1529743586899912
+            ],
+            "velocityUpperMps": [
+              0.16014301178350676,
+              0.032700759492600984,
+              0.1529743586899912
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              179,
+              137
+            ],
+            "currentPixel": [
+              179,
+              137
+            ],
+            "positionLowerM": [
+              -0.09939965303356195,
+              1.957668361281646,
+              1.3795542458252652
+            ],
+            "positionUpperM": [
+              -0.07783192436134677,
+              1.962334202085337,
+              1.4010867958739395
+            ],
+            "velocityLowerMps": [
+              -0.1078386433610759,
+              -0.023329204018455174,
+              -0.10766275024337135
+            ],
+            "velocityUpperMps": [
+              0.1078386433610759,
+              0.023329204018455174,
+              0.10766275024337135
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": true
+          },
+          {
+            "previousPixel": [
+              209,
+              125
+            ],
+            "currentPixel": [
+              209,
+              125
+            ],
+            "positionLowerM": [
+              0.11274388464861437,
+              1.9576783190335432,
+              1.464589205960106
+            ],
+            "positionUpperM": [
+              0.13425486826515873,
+              1.9623242388824713,
+              1.4859286659203639
+            ],
+            "velocityLowerMps": [
+              -0.10755491808272177,
+              -0.023229599244640742,
+              -0.10669729980128939
+            ],
+            "velocityUpperMps": [
+              0.10755491808272177,
+              0.023229599244640742,
+              0.10669729980128939
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": true
+          },
+          {
+            "previousPixel": [
+              287,
+              113
+            ],
+            "currentPixel": [
+              287,
+              113
+            ],
+            "positionLowerM": [
+              0.9495873682450765,
+              2.8170909704715044,
+              1.548356180321348
+            ],
+            "positionUpperM": [
+              1.0113800783612192,
+              2.910490901455682,
+              1.579661546080764
+            ],
+            "velocityLowerMps": [
+              -0.3089635505807137,
+              -0.4669996549208877,
+              -0.15652682879708002
+            ],
+            "velocityUpperMps": [
+              0.3089635505807137,
+              0.4669996549208877,
+              0.15652682879708002
+            ],
+            "classification": "uncertain",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              377,
+              113
+            ],
+            "currentPixel": [
+              377,
+              113
+            ],
+            "positionLowerM": [
+              1.8322544714515845,
+              2.7767674458527623,
+              1.5484236824085715
+            ],
+            "positionUpperM": [
+              1.8644375484180002,
+              2.783236751763594,
+              1.5783689948264943
+            ],
+            "velocityLowerMps": [
+              -0.1609153848320788,
+              -0.032346529554159176,
+              -0.14972656208961377
+            ],
+            "velocityUpperMps": [
+              0.1609153848320788,
+              0.032346529554159176,
+              0.14972656208961377
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              23,
+              179
+            ],
+            "currentPixel": [
+              23,
+              179
+            ],
+            "positionLowerM": [
+              -1.7379480334758397,
+              2.7766885696045263,
+              0.8773883460014656
+            ],
+            "positionUpperM": [
+              -1.7051017743005528,
+              2.783315830898296,
+              0.9088322402778832
+            ],
+            "velocityLowerMps": [
+              -0.1642312958764347,
+              -0.03313630646884835,
+              -0.15721947138208792
+            ],
+            "velocityUpperMps": [
+              0.1642312958764347,
+              0.03313630646884835,
+              0.15721947138208792
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              71,
+              161
+            ],
+            "currentPixel": [
+              71,
+              161
+            ],
+            "positionLowerM": [
+              -1.2386921023413235,
+              2.7767105303348165,
+              1.063751278526894
+            ],
+            "positionUpperM": [
+              -1.2066444279307482,
+              2.7832937980370764,
+              1.0947662790520196
+            ],
+            "velocityLowerMps": [
+              -0.1602383720528766,
+              -0.0329163385112996,
+              -0.15507500262562757
+            ],
+            "velocityUpperMps": [
+              0.1602383720528766,
+              0.0329163385112996,
+              0.15507500262562757
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              185,
+              161
+            ],
+            "currentPixel": [
+              185,
+              161
+            ],
+            "positionLowerM": [
+              -0.05736250538023629,
+              1.9576481294939885,
+              1.2071471846651753
+            ],
+            "positionUpperM": [
+              -0.03564776672051992,
+              1.9623544866702984,
+              1.2290738692131935
+            ],
+            "velocityLowerMps": [
+              -0.10857369329858184,
+              -0.023531785881549805,
+              -0.1096334227400908
+            ],
+            "velocityUpperMps": [
+              0.10857369329858184,
+              0.023531785881549805,
+              0.1096334227400908
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": true
+          },
+          {
+            "previousPixel": [
+              209,
+              173
+            ],
+            "currentPixel": [
+              209,
+              173
+            ],
+            "positionLowerM": [
+              0.11481866964411129,
+              1.9576378796030836,
+              1.1197535627615423
+            ],
+            "positionUpperM": [
+              0.13672429433142763,
+              1.9623648261316158,
+              1.1418813981646196
+            ],
+            "velocityLowerMps": [
+              -0.1095281234365817,
+              -0.023634732642661138,
+              -0.11063917701538695
+            ],
+            "velocityUpperMps": [
+              0.1095281234365817,
+              0.023634732642661138,
+              0.11063917701538695
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": true
+          },
+          {
+            "previousPixel": [
+              245,
+              149
+            ],
+            "currentPixel": [
+              245,
+              149
+            ],
+            "positionLowerM": [
+              0.3699834506077666,
+              1.9576583497837932,
+              1.2937437956265745
+            ],
+            "positionUpperM": [
+              0.3919845958952188,
+              1.9623442585239272,
+              1.315472059802934
+            ],
+            "velocityLowerMps": [
+              -0.11000572643726086,
+              -0.023429543700670408,
+              -0.10864132088179712
+            ],
+            "velocityUpperMps": [
+              0.11000572643726086,
+              0.023429543700670408,
+              0.10864132088179712
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": true
+          },
+          {
+            "previousPixel": [
+              299,
+              149
+            ],
+            "currentPixel": [
+              299,
+              149
+            ],
+            "positionLowerM": [
+              1.0699192601867686,
+              2.7767248902677837,
+              1.1865768917217343
+            ],
+            "positionUpperM": [
+              1.1016650356332163,
+              2.7832794469002353,
+              1.2173108667735089
+            ],
+            "velocityLowerMps": [
+              -0.15872887723223816,
+              -0.03277278316225818,
+              -0.15366987525887277
+            ],
+            "velocityUpperMps": [
+              0.15872887723223816,
+              0.03277278316225818,
+              0.15366987525887277
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              347,
+              161
+            ],
+            "currentPixel": [
+              347,
+              161
+            ],
+            "positionLowerM": [
+              1.5615692596750856,
+              2.7767105303348165,
+              1.063751278526894
+            ],
+            "positionUpperM": [
+              1.594025902193343,
+              2.7832937980370764,
+              1.0947662790520196
+            ],
+            "velocityLowerMps": [
+              -0.16228321259128653,
+              -0.0329163385112996,
+              -0.15507500262562757
+            ],
+            "velocityUpperMps": [
+              0.16228321259128653,
+              0.0329163385112996,
+              0.15507500262562757
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              35,
+              233
+            ],
+            "currentPixel": [
+              35,
+              233
+            ],
+            "positionLowerM": [
+              -1.649511498228614,
+              2.77662098892957,
+              0.30249909502523864
+            ],
+            "positionUpperM": [
+              -1.6160792778153472,
+              2.783383485622363,
+              0.33528435742571205
+            ],
+            "velocityLowerMps": [
+              -0.1671611020663344,
+              -0.03381248346396415,
+              -0.16392631200236707
+            ],
+            "velocityUpperMps": [
+              0.1671611020663344,
+              0.03381248346396415,
+              0.16392631200236707
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              89,
+              203
+            ],
+            "currentPixel": [
+              89,
+              203
+            ],
+            "positionLowerM": [
+              -1.0731528730255435,
+              2.776658903749753,
+              0.6248556942832691
+            ],
+            "positionUpperM": [
+              -1.0407807080572515,
+              2.7833455908928073,
+              0.6568853973122504
+            ],
+            "velocityLowerMps": [
+              -0.16186082484145992,
+              -0.03343343571527102,
+              -0.16014851514490613
+            ],
+            "velocityUpperMps": [
+              0.16186082484145992,
+              0.03343343571527102,
+              0.16014851514490613
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          }
+        ]
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 129518,
+      "nnWaitMs": 123.377,
+      "completionOffsetUs": 89651,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 3,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 102090,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 6,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 141727,
+      "nnWaitMs": 133.326,
+      "completionOffsetUs": 102089,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 4,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 24595,
+      "workerComputeUs": 1559,
+      "ownerEventsDuringCompute": 2,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 4,
+        "oldestEvidenceTimestampUs": 1790899200600000,
+        "validUntilUs": 1790899200700000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 128514,
+      "nnWaitMs": 117.339,
+      "completionOffsetUs": 24594,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 5,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 110787,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 6,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 148826,
+      "nnWaitMs": 131.53,
+      "completionOffsetUs": 110786,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 6,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 17239,
+      "workerComputeUs": 1663,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 6,
+        "oldestEvidenceTimestampUs": 1790899201000000,
+        "validUntilUs": 1790899201100000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 117376,
+      "nnWaitMs": 113.662,
+      "completionOffsetUs": 17238,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-stationary-10",
+      "frameId": 7,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 102032,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 8,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 139792,
+      "nnWaitMs": 131.866,
+      "completionOffsetUs": 102031,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 1,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 14975,
+      "workerComputeUs": 1292,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 1,
+        "oldestEvidenceTimestampUs": 1790899200000000,
+        "validUntilUs": 1790899200100000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 121348,
+      "nnWaitMs": 119.346,
+      "completionOffsetUs": 14975,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 2,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 107319,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 6,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 147810,
+      "nnWaitMs": 135.385,
+      "completionOffsetUs": 107318,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 3,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 33137,
+      "workerComputeUs": 2533,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 3,
+        "oldestEvidenceTimestampUs": 1790899200400000,
+        "validUntilUs": 1790899200500000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 157459,
+      "nnWaitMs": 140.642,
+      "completionOffsetUs": 33136,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 4,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 180311,
+      "workerComputeUs": 158375,
+      "ownerEventsDuringCompute": 12,
+      "result": null,
+      "nnStillRunningAtFastRelease": false,
+      "nnAgeAtCompletionUs": 143519,
+      "nnWaitMs": 138.913,
+      "completionOffsetUs": 180310,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 5,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 20646,
+      "workerComputeUs": 2367,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 5,
+        "oldestEvidenceTimestampUs": 1790899200800000,
+        "validUntilUs": 1790899200900000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 132912,
+      "nnWaitMs": 123.548,
+      "completionOffsetUs": 20645,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 6,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 105305,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 6,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 133198,
+      "nnWaitMs": 122.25,
+      "completionOffsetUs": 105305,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-camera-yaw-11",
+      "frameId": 7,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 22898,
+      "workerComputeUs": 1485,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 7,
+        "oldestEvidenceTimestampUs": 1790899201200000,
+        "validUntilUs": 1790899201300000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 127229,
+      "nnWaitMs": 114.661,
+      "completionOffsetUs": 22897,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 1,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 15339,
+      "workerComputeUs": 1612,
+      "ownerEventsDuringCompute": 2,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 1,
+        "oldestEvidenceTimestampUs": 1790899200000000,
+        "validUntilUs": 1790899200100000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 121646,
+      "nnWaitMs": 119.645,
+      "completionOffsetUs": 15339,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 2,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 104447,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 7,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 136222,
+      "nnWaitMs": 123.71,
+      "completionOffsetUs": 104446,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 3,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 23606,
+      "workerComputeUs": 1443,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 3,
+        "oldestEvidenceTimestampUs": 1790899200400000,
+        "validUntilUs": 1790899200500000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 132830,
+      "nnWaitMs": 120.431,
+      "completionOffsetUs": 23605,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 4,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 110080,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 7,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 144708,
+      "nnWaitMs": 128.008,
+      "completionOffsetUs": 110080,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 5,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 17379,
+      "workerComputeUs": 2130,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 5,
+        "oldestEvidenceTimestampUs": 1790899200800000,
+        "validUntilUs": 1790899200900000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 121024,
+      "nnWaitMs": 117.859,
+      "completionOffsetUs": 17378,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 6,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 115871,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 8,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 131857,
+      "nnWaitMs": 126.223,
+      "completionOffsetUs": 115870,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-mixed-12",
+      "frameId": 7,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 23589,
+      "workerComputeUs": 2354,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 7,
+        "oldestEvidenceTimestampUs": 1790899201200000,
+        "validUntilUs": 1790899201300000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 137785,
+      "nnWaitMs": 128.744,
+      "completionOffsetUs": 23587,
+      "functionalReferenceAddsMotionRisk": true
+    },
+    {
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 1,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 11898,
+      "workerComputeUs": 1978,
+      "ownerEventsDuringCompute": 0,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 1,
+        "oldestEvidenceTimestampUs": 1790899200000000,
+        "validUntilUs": 1790899200100000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 124495,
+      "nnWaitMs": 122.494,
+      "completionOffsetUs": 11897,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 2,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 111805,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 7,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 146353,
+      "nnWaitMs": 144.097,
+      "completionOffsetUs": 111805,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 3,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 26136,
+      "workerComputeUs": 2589,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 3,
+        "oldestEvidenceTimestampUs": 1790899200400000,
+        "validUntilUs": 1790899200500000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 147634,
+      "nnWaitMs": 142.017,
+      "completionOffsetUs": 26136,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 4,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 139427,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 6,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 146479,
+      "nnWaitMs": 139.675,
+      "completionOffsetUs": 139427,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 5,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 25142,
+      "workerComputeUs": 2342,
+      "ownerEventsDuringCompute": 2,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 5,
+        "oldestEvidenceTimestampUs": 1790899200800000,
+        "validUntilUs": 1790899200900000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 140559,
+      "nnWaitMs": 129.219,
+      "completionOffsetUs": 25141,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 6,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 109812,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 5,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 150023,
+      "nnWaitMs": 135.639,
+      "completionOffsetUs": 109811,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-occluded-13",
+      "frameId": 7,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 13143,
+      "workerComputeUs": 2029,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 7,
+        "oldestEvidenceTimestampUs": 1790899201200000,
+        "validUntilUs": 1790899201300000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 118421,
+      "nnWaitMs": 116.133,
+      "completionOffsetUs": 13142,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 1,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 13044,
+      "workerComputeUs": 2381,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 1,
+        "oldestEvidenceTimestampUs": 1790899200000000,
+        "validUntilUs": 1790899200100000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 116262,
+      "nnWaitMs": 114.261,
+      "completionOffsetUs": 13044,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 2,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 108698,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 6,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 147035,
+      "nnWaitMs": 132.699,
+      "completionOffsetUs": 108698,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 3,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 16934,
+      "workerComputeUs": 2404,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 3,
+        "oldestEvidenceTimestampUs": 1790899200400000,
+        "validUntilUs": 1790899200500000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 123795,
+      "nnWaitMs": 120.92,
+      "completionOffsetUs": 16933,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 4,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 96537,
+      "workerComputeUs": 81041,
+      "ownerEventsDuringCompute": 7,
+      "result": {
+        "reason": "visible_patch_intervals",
+        "available": true,
+        "frameId": 4,
+        "oldestEvidenceTimestampUs": 1790899200400000,
+        "validUntilUs": 1790899200700000,
+        "candidates": 48,
+        "unknownPatches": 2,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": [
+          {
+            "previousPixel": [
+              17,
+              95
+            ],
+            "currentPixel": [
+              17,
+              95
+            ],
+            "positionLowerM": [
+              -1.7906579996211345,
+              2.8527031798043865,
+              1.7303127354576262
+            ],
+            "positionUpperM": [
+              -1.7579607173866625,
+              2.8593005923446984,
+              1.7610692328023427
+            ],
+            "velocityLowerMps": [
+              -0.16348641117235996,
+              -0.03298706270155938,
+              -0.15378248672358263
+            ],
+            "velocityUpperMps": [
+              0.16348641117235996,
+              0.03298706270155938,
+              0.15378248672358263
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              77,
+              95
+            ],
+            "currentPixel": [
+              77,
+              95
+            ],
+            "positionLowerM": [
+              -1.180240499750293,
+              2.8527031798043865,
+              1.7303127354576262
+            ],
+            "positionUpperM": [
+              -1.148228676674525,
+              2.8593005923446984,
+              1.7610692328023427
+            ],
+            "velocityLowerMps": [
+              -0.16005911537884,
+              -0.03298706270155938,
+              -0.15378248672358263
+            ],
+            "velocityUpperMps": [
+              0.16005911537884,
+              0.03298706270155938,
+              0.15378248672358263
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              287,
+              95
+            ],
+            "currentPixel": [
+              287,
+              95
+            ],
+            "positionLowerM": [
+              0.9747832441271863,
+              2.911346374994573,
+              1.7340213611823643
+            ],
+            "positionUpperM": [
+              1.038209883791848,
+              3.0078413843225085,
+              1.7720294770773737
+            ],
+            "velocityLowerMps": [
+              -0.3171331983233089,
+              -0.48247504663967655,
+              -0.19004057947504704
+            ],
+            "velocityUpperMps": [
+              0.3171331983233089,
+              0.48247504663967655,
+              0.19004057947504704
+            ],
+            "classification": "uncertain",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              353,
+              89
+            ],
+            "currentPixel": [
+              353,
+              89
+            ],
+            "positionLowerM": [
+              1.6222318140750998,
+              2.852710458317888,
+              1.7904152019639574
+            ],
+            "positionUpperM": [
+              1.6547042919430235,
+              2.8592934117269135,
+              1.8211709836396768
+            ],
+            "velocityLowerMps": [
+              -0.16236238933961866,
+              -0.03291476704512686,
+              -0.15377890837859676
+            ],
+            "velocityUpperMps": [
+              0.16236238933961866,
+              0.03291476704512686,
+              0.15377890837859676
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              41,
+              107
+            ],
+            "currentPixel": [
+              41,
+              107
+            ],
+            "positionLowerM": [
+              -1.55343149760194,
+              2.852689009178745,
+              1.60929947938321
+            ],
+            "positionUpperM": [
+              -1.520856300583368,
+              2.8593147607987004,
+              1.6400564593005562
+            ],
+            "velocityLowerMps": [
+              -0.16287598509286072,
+              -0.033128758099776334,
+              -0.1537848995867308
+            ],
+            "velocityUpperMps": [
+              0.16287598509286072,
+              0.033128758099776334,
+              0.1537848995867308
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              71,
+              113
+            ],
+            "currentPixel": [
+              71,
+              113
+            ],
+            "positionLowerM": [
+              -1.2496571225800353,
+              2.852681972897875,
+              1.5483833228687127
+            ],
+            "positionUpperM": [
+              -1.2173526042998315,
+              2.8593220868685636,
+              1.5791418120238856
+            ],
+            "velocityLowerMps": [
+              -0.16152259140101877,
+              -0.03320056985344211,
+              -0.15379244577586437
+            ],
+            "velocityUpperMps": [
+              0.16152259140101877,
+              0.03320056985344211,
+              0.15379244577586437
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              287,
+              143
+            ],
+            "currentPixel": [
+              287,
+              143
+            ],
+            "positionLowerM": [
+              0.9747832441271863,
+              2.859310800184497,
+              1.2290091432047452
+            ],
+            "positionUpperM": [
+              1.038209883791848,
+              2.9541447338701756,
+              1.2700785736508264
+            ],
+            "velocityLowerMps": [
+              -0.3171331983233089,
+              -0.4741696684283925,
+              -0.20534715223040623
+            ],
+            "velocityUpperMps": [
+              0.3171331983233089,
+              0.4741696684283925,
+              0.20534715223040623
+            ],
+            "classification": "uncertain",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              299,
+              131
+            ],
+            "currentPixel": [
+              299,
+              131
+            ],
+            "positionLowerM": [
+              1.0917123051168791,
+              2.8526601725256437,
+              1.3637765190066498
+            ],
+            "positionUpperM": [
+              1.1240917318223391,
+              2.8593438950991024,
+              1.39491939581391
+            ],
+            "velocityLowerMps": [
+              -0.16189713352730006,
+              -0.033418612867293085,
+              -0.15571438403630067
+            ],
+            "velocityUpperMps": [
+              0.16189713352730006,
+              0.033418612867293085,
+              0.15571438403630067
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              371,
+              143
+            ],
+            "currentPixel": [
+              371,
+              143
+            ],
+            "positionLowerM": [
+              1.8416523319538252,
+              2.8526454865014617,
+              1.2393055622306717
+            ],
+            "positionUpperM": [
+              1.8750362150052182,
+              2.859358354772232,
+              1.2707313062503074
+            ],
+            "velocityLowerMps": [
+              -0.1669194152569653,
+              -0.03356434135385111,
+              -0.15712872009817858
+            ],
+            "velocityUpperMps": [
+              0.1669194152569653,
+              0.03356434135385111,
+              0.15712872009817858
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              29,
+              185
+            ],
+            "currentPixel": [
+              29,
+              185
+            ],
+            "positionLowerM": [
+              -1.7264259287307067,
+              2.852593383682228,
+              0.7945939307541134
+            ],
+            "positionUpperM": [
+              -1.692678760234278,
+              2.859410860375085,
+              0.8270407026220532
+            ],
+            "velocityLowerMps": [
+              -0.1687358424821428,
+              -0.03408738346428519,
+              -0.1622338593396988
+            ],
+            "velocityUpperMps": [
+              0.1687358424821428,
+              0.03408738346428519,
+              0.1622338593396988
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              59,
+              185
+            ],
+            "currentPixel": [
+              59,
+              185
+            ],
+            "positionLowerM": [
+              -1.410634600304358,
+              2.852593383682228,
+              0.7945939307541134
+            ],
+            "positionUpperM": [
+              -1.3772541465260275,
+              2.859410860375085,
+              0.8270407026220532
+            ],
+            "velocityLowerMps": [
+              -0.16690226889165216,
+              -0.03408738346428519,
+              -0.1622338593396988
+            ],
+            "velocityUpperMps": [
+              0.16690226889165216,
+              0.03408738346428519,
+              0.1622338593396988
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              245,
+              185
+            ],
+            "currentPixel": [
+              245,
+              185
+            ],
+            "positionLowerM": [
+              0.38353350141293274,
+              2.0015767819492223,
+              1.0199156007425283
+            ],
+            "positionUpperM": [
+              0.4063391232983722,
+              2.0064259257790042,
+              1.0427440339459988
+            ],
+            "velocityLowerMps": [
+              -0.11402810942719721,
+              -0.024245719148909828,
+              -0.1141421660173525
+            ],
+            "velocityUpperMps": [
+              0.11402810942719721,
+              0.024245719148909828,
+              0.1141421660173525
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": true
+          },
+          {
+            "previousPixel": [
+              317,
+              161
+            ],
+            "currentPixel": [
+              317,
+              161
+            ],
+            "positionLowerM": [
+              1.2917242223780747,
+              2.852623273199573,
+              1.0504609578782025
+            ],
+            "positionUpperM": [
+              1.3247024006761476,
+              2.859380675096589,
+              1.0823183171553148
+            ],
+            "velocityLowerMps": [
+              -0.16489089149036462,
+              -0.033787009485080066,
+              -0.15928679638556154
+            ],
+            "velocityUpperMps": [
+              0.16489089149036462,
+              0.033787009485080066,
+              0.15928679638556154
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              347,
+              167
+            ],
+            "currentPixel": [
+              347,
+              167
+            ],
+            "positionLowerM": [
+              1.6079412242603526,
+              2.852615905955663,
+              0.9869347505398137
+            ],
+            "positionUpperM": [
+              1.6413596588067763,
+              2.8593880847292485,
+              1.0189379232129754
+            ],
+            "velocityLowerMps": [
+              -0.1670921727321184,
+              -0.033860893867927455,
+              -0.1600158633658083
+            ],
+            "velocityUpperMps": [
+              0.1670921727321184,
+              0.033860893867927455,
+              0.1600158633658083
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              35,
+              203
+            ],
+            "currentPixel": [
+              35,
+              203
+            ],
+            "positionLowerM": [
+              -1.674881655802757,
+              2.8525703938926776,
+              0.5995668909240158
+            ],
+            "positionUpperM": [
+              -1.640960927747505,
+              2.859433784737817,
+              0.6324665500670383
+            ],
+            "velocityLowerMps": [
+              -0.16960364027626018,
+              -0.03431695422569714,
+              -0.16449829571511254
+            ],
+            "velocityUpperMps": [
+              0.16960364027626018,
+              0.03431695422569714,
+              0.16449829571511254
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              65,
+              215
+            ],
+            "currentPixel": [
+              65,
+              215
+            ],
+            "positionLowerM": [
+              -1.3632311079746229,
+              2.8525549171089404,
+              0.4680285109862843
+            ],
+            "positionUpperM": [
+              -1.3295189603598112,
+              2.859449433098525,
+              0.5012354466369284
+            ],
+            "velocityLowerMps": [
+              -0.16856073807405836,
+              -0.034472579947923965,
+              -0.1660346782532207
+            ],
+            "velocityUpperMps": [
+              0.16856073807405836,
+              0.034472579947923965,
+              0.1660346782532207
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              101,
+              209
+            ],
+            "currentPixel": [
+              101,
+              209
+            ],
+            "positionLowerM": [
+              -1.0400134957316012,
+              2.9392767607293804,
+              0.4690435258706569
+            ],
+            "positionUpperM": [
+              -0.9730925170823707,
+              3.042121132062924,
+              0.5371201523571549
+            ],
+            "velocityLowerMps": [
+              -0.3346048932461526,
+              -0.5142218566677181,
+              -0.3403831324324902
+            ],
+            "velocityUpperMps": [
+              0.3346048932461526,
+              0.5142218566677181,
+              0.3403831324324902
+            ],
+            "classification": "uncertain",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              281,
+              227
+            ],
+            "currentPixel": [
+              281,
+              227
+            ],
+            "positionLowerM": [
+              0.9727320350616169,
+              2.9507776778755757,
+              0.2521150291687333
+            ],
+            "positionUpperM": [
+              1.0403987529392196,
+              3.055180133691272,
+              0.3280902136898105
+            ],
+            "velocityLowerMps": [
+              -0.3383335893880135,
+              -0.5220122790784809,
+              -0.37987592260538605
+            ],
+            "velocityUpperMps": [
+              0.3383335893880135,
+              0.5220122790784809,
+              0.37987592260538605
+            ],
+            "classification": "uncertain",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              299,
+              239
+            ],
+            "currentPixel": [
+              299,
+              239
+            ],
+            "positionLowerM": [
+              1.1380511392621102,
+              2.8525235401911573,
+              0.20122568069800018
+            ],
+            "positionUpperM": [
+              1.1718522399334217,
+              2.859480786562868,
+              0.23506008680434198
+            ],
+            "velocityLowerMps": [
+              -0.1690055033565574,
+              -0.03478623185855456,
+              -0.16917203053170904
+            ],
+            "velocityUpperMps": [
+              0.1690055033565574,
+              0.03478623185855456,
+              0.16917203053170904
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              377,
+              221
+            ],
+            "currentPixel": [
+              377,
+              221
+            ],
+            "positionLowerM": [
+              1.9616814712667734,
+              2.85254699493307,
+              0.4017968866052286
+            ],
+            "positionUpperM": [
+              1.996217358812779,
+              2.859457133776116,
+              0.435159062365146
+            ],
+            "velocityLowerMps": [
+              -0.1726794377300278,
+              -0.034550694215229605,
+              -0.166810878799587
+            ],
+            "velocityUpperMps": [
+              0.1726794377300278,
+              0.034550694215229605,
+              0.166810878799587
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              35,
+              245
+            ],
+            "currentPixel": [
+              35,
+              245
+            ],
+            "positionLowerM": [
+              -1.7026223153604418,
+              2.8525155429266302,
+              0.13373582154055863
+            ],
+            "positionUpperM": [
+              -1.6681110388019642,
+              2.8594887222901852,
+              0.16772990532036025
+            ],
+            "velocityLowerMps": [
+              -0.17255638279238816,
+              -0.03486589681777508,
+              -0.1699704188990081
+            ],
+            "velocityUpperMps": [
+              0.17255638279238816,
+              0.03486589681777508,
+              0.1699704188990081
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              65,
+              245
+            ],
+            "currentPixel": [
+              65,
+              245
+            ],
+            "positionLowerM": [
+              -1.379358584595801,
+              2.8525155429266302,
+              0.13373582154055863
+            ],
+            "positionUpperM": [
+              -1.34523148290481,
+              2.8594887222901852,
+              0.16772990532036025
+            ],
+            "velocityLowerMps": [
+              -0.1706355084549549,
+              -0.03486589681777508,
+              -0.1699704188990081
+            ],
+            "velocityUpperMps": [
+              0.1706355084549549,
+              0.03486589681777508,
+              0.1699704188990081
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              335,
+              245
+            ],
+            "currentPixel": [
+              335,
+              245
+            ],
+            "positionLowerM": [
+              1.5281965645798639,
+              2.8525155429266302,
+              0.13373582154055863
+            ],
+            "positionUpperM": [
+              1.562541365362431,
+              2.8594887222901852,
+              0.16772990532036025
+            ],
+            "velocityLowerMps": [
+              -0.17172400391283538,
+              -0.03486589681777508,
+              -0.1699704188990081
+            ],
+            "velocityUpperMps": [
+              0.17172400391283538,
+              0.03486589681777508,
+              0.1699704188990081
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              371,
+              245
+            ],
+            "currentPixel": [
+              371,
+              245
+            ],
+            "positionLowerM": [
+              1.9156520316564494,
+              2.8525155429266302,
+              0.13373582154055863
+            ],
+            "positionUpperM": [
+              1.9504578422799999,
+              2.8594887222901852,
+              0.16772990532036025
+            ],
+            "velocityLowerMps": [
+              -0.1740290531177524,
+              -0.03486589681777508,
+              -0.1699704188990081
+            ],
+            "velocityUpperMps": [
+              0.1740290531177524,
+              0.03486589681777508,
+              0.1699704188990081
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              59,
+              95
+            ],
+            "currentPixel": [
+              59,
+              95
+            ],
+            "positionLowerM": [
+              -1.3633657497115457,
+              2.8527031798043865,
+              1.7303127354576262
+            ],
+            "positionUpperM": [
+              -1.3311482888881663,
+              2.8593005923446984,
+              1.7610692328023427
+            ],
+            "velocityLowerMps": [
+              -0.16108730411689698,
+              -0.03298706270155938,
+              -0.15378248672358263
+            ],
+            "velocityUpperMps": [
+              0.16108730411689698,
+              0.03298706270155938,
+              0.15378248672358263
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              305,
+              95
+            ],
+            "currentPixel": [
+              305,
+              95
+            ],
+            "positionLowerM": [
+              1.1380664759959895,
+              2.8527031798043865,
+              1.7303127354576262
+            ],
+            "positionUpperM": [
+              1.1700668747524459,
+              2.8593005923446984,
+              1.7610692328023427
+            ],
+            "velocityLowerMps": [
+              -0.16000199378228164,
+              -0.03298706270155938,
+              -0.15378248672358263
+            ],
+            "velocityUpperMps": [
+              0.16000199378228164,
+              0.03298706270155938,
+              0.15378248672358263
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              29,
+              113
+            ],
+            "currentPixel": [
+              29,
+              113
+            ],
+            "positionLowerM": [
+              -1.6798325254354574,
+              2.852681972897875,
+              1.5483833228687127
+            ],
+            "positionUpperM": [
+              -1.6470417587585955,
+              2.8593220868685636,
+              1.5791418120238856
+            ],
+            "velocityLowerMps": [
+              -0.16395383338430936,
+              -0.03320056985344211,
+              -0.15379244577586437
+            ],
+            "velocityUpperMps": [
+              0.16395383338430936,
+              0.03320056985344211,
+              0.15379244577586437
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              53,
+              113
+            ],
+            "currentPixel": [
+              53,
+              113
+            ],
+            "positionLowerM": [
+              -1.4340180095180732,
+              2.852681972897875,
+              1.5483833228687127
+            ],
+            "positionUpperM": [
+              -1.4015050990678732,
+              2.8593220868685636,
+              1.5791418120238856
+            ],
+            "velocityLowerMps": [
+              -0.16256455225099997,
+              -0.03320056985344211,
+              -0.15379244577586437
+            ],
+            "velocityUpperMps": [
+              0.16256455225099997,
+              0.03320056985344211,
+              0.15379244577586437
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              335,
+              125
+            ],
+            "currentPixel": [
+              335,
+              125
+            ],
+            "positionLowerM": [
+              1.459215700999878,
+              2.8526675105706234,
+              1.4255901833285358
+            ],
+            "positionUpperM": [
+              1.4919401122316052,
+              2.8593364911023667,
+              1.4565930410186942
+            ],
+            "velocityLowerMps": [
+              -0.16362205615863545,
+              -0.03334490265871626,
+              -0.15501428845079213
+            ],
+            "velocityUpperMps": [
+              0.16362205615863545,
+              0.03334490265871626,
+              0.15501428845079213
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              5,
+              191
+            ],
+            "currentPixel": [
+              5,
+              191
+            ],
+            "positionLowerM": [
+              -1.983643997471956,
+              2.85258558803263,
+              0.7298861737810608
+            ],
+            "positionUpperM": [
+              -1.9495197954896744,
+              2.8594184049381033,
+              0.7624828915111971
+            ],
+            "velocityLowerMps": [
+              -0.17062100991140805,
+              -0.03416408452736608,
+              -0.1629835886506814
+            ],
+            "velocityUpperMps": [
+              0.17062100991140805,
+              0.03416408452736608,
+              0.1629835886506814
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              17,
+              203
+            ],
+            "currentPixel": [
+              17,
+              203
+            ],
+            "positionLowerM": [
+              -1.8656795659575016,
+              2.8525703938926776,
+              0.5995668909240158
+            ],
+            "positionUpperM": [
+              -1.8315357451633445,
+              2.859433784737817,
+              0.6324665500670383
+            ],
+            "velocityLowerMps": [
+              -0.1707191039707856,
+              -0.03431695422569714,
+              -0.16449829571511254
+            ],
+            "velocityUpperMps": [
+              0.1707191039707856,
+              0.03431695422569714,
+              0.16449829571511254
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              89,
+              197
+            ],
+            "currentPixel": [
+              89,
+              197
+            ],
+            "positionLowerM": [
+              -1.0999278461938244,
+              2.852577918729225,
+              0.664877863334556
+            ],
+            "positionUpperM": [
+              -1.0667559754349814,
+              2.8594260402622647,
+              0.697625542634747
+            ],
+            "velocityLowerMps": [
+              -0.16585935379421546,
+              -0.034240607665199096,
+              -0.16373839650095479
+            ],
+            "velocityUpperMps": [
+              0.16585935379421546,
+              0.034240607665199096,
+              0.16373839650095479
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              293,
+              215
+            ],
+            "currentPixel": [
+              293,
+              215
+            ],
+            "positionLowerM": [
+              1.0635951682878488,
+              2.8525549171089404,
+              0.4680285109862843
+            ],
+            "positionUpperM": [
+              1.0969945634483294,
+              2.859449433098525,
+              0.5012354466369284
+            ],
+            "velocityLowerMps": [
+              -0.16699697580240258,
+              -0.034472579947923965,
+              -0.1660346782532207
+            ],
+            "velocityUpperMps": [
+              0.16699697580240258,
+              0.034472579947923965,
+              0.1660346782532207
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              347,
+              197
+            ],
+            "currentPixel": [
+              347,
+              197
+            ],
+            "positionLowerM": [
+              1.6265912892771002,
+              2.852577918729225,
+              0.664877863334556
+            ],
+            "positionUpperM": [
+              1.6604170370426001,
+              2.8594260402622647,
+              0.697625542634747
+            ],
+            "velocityLowerMps": [
+              -0.1691287388274998,
+              -0.034240607665199096,
+              -0.16373839650095479
+            ],
+            "velocityUpperMps": [
+              0.1691287388274998,
+              0.034240607665199096,
+              0.16373839650095479
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              77,
+              245
+            ],
+            "currentPixel": [
+              77,
+              245
+            ],
+            "positionLowerM": [
+              -1.2500530922899447,
+              2.8525155429266302,
+              0.13373582154055863
+            ],
+            "positionUpperM": [
+              -1.216079660545948,
+              2.8594887222901852,
+              0.16772990532036025
+            ],
+            "velocityLowerMps": [
+              -0.16986715871998292,
+              -0.03486589681777508,
+              -0.1699704188990081
+            ],
+            "velocityUpperMps": [
+              0.16986715871998292,
+              0.03486589681777508,
+              0.1699704188990081
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              41,
+              83
+            ],
+            "currentPixel": [
+              41,
+              83
+            ],
+            "positionLowerM": [
+              -1.5396121787972117,
+              2.8527174751184776,
+              1.8502505943542864
+            ],
+            "positionUpperM": [
+              -1.507339961363535,
+              2.8592864213356335,
+              1.881005398484684
+            ],
+            "velocityLowerMps": [
+              -0.1613610871683835,
+              -0.032844731085779344,
+              -0.15377402065198775
+            ],
+            "velocityUpperMps": [
+              0.1613610871683835,
+              0.032844731085779344,
+              0.15377402065198775
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              287,
+              83
+            ],
+            "currentPixel": [
+              287,
+              83
+            ],
+            "positionLowerM": [
+              0.9747832441271863,
+              2.924355268697092,
+              1.8577927711907745
+            ],
+            "positionUpperM": [
+              1.038209883791848,
+              3.0212655469355916,
+              1.8997519085768158
+            ],
+            "velocityLowerMps": [
+              -0.3171331983233089,
+              -0.4845513911924981,
+              -0.20979568693020645
+            ],
+            "velocityUpperMps": [
+              0.3171331983233089,
+              0.4845513911924981,
+              0.20979568693020645
+            ],
+            "classification": "uncertain",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              329,
+              95
+            ],
+            "currentPixel": [
+              329,
+              95
+            ],
+            "positionLowerM": [
+              1.3819592922808444,
+              2.8527031798043865,
+              1.7303127354576262
+            ],
+            "positionUpperM": [
+              1.4142338747007823,
+              2.8593005923446984,
+              1.7610692328023427
+            ],
+            "velocityLowerMps": [
+              -0.16137291209968985,
+              -0.03298706270155938,
+              -0.15378248672358263
+            ],
+            "velocityUpperMps": [
+              0.16137291209968985,
+              0.03298706270155938,
+              0.15378248672358263
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              305,
+              113
+            ],
+            "currentPixel": [
+              305,
+              113
+            ],
+            "positionLowerM": [
+              1.1457377452233708,
+              2.852681972897875,
+              1.5483833228687127
+            ],
+            "positionUpperM": [
+              1.1779612221041316,
+              2.8593220868685636,
+              1.5791418120238856
+            ],
+            "velocityLowerMps": [
+              -0.16111738440380385,
+              -0.03320056985344211,
+              -0.15379244577586437
+            ],
+            "velocityUpperMps": [
+              0.16111738440380385,
+              0.03320056985344211,
+              0.15379244577586437
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              371,
+              131
+            ],
+            "currentPixel": [
+              371,
+              131
+            ],
+            "positionLowerM": [
+              1.8333206633094763,
+              2.8526601725256437,
+              1.3637765190066498
+            ],
+            "positionUpperM": [
+              1.8665449858701226,
+              2.8593438950991024,
+              1.39491939581391
+            ],
+            "velocityLowerMps": [
+              -0.16612161280323168,
+              -0.033418612867293085,
+              -0.15571438403630067
+            ],
+            "velocityUpperMps": [
+              0.16612161280323168,
+              0.033418612867293085,
+              0.15571438403630067
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              17,
+              155
+            ],
+            "currentPixel": [
+              17,
+              155
+            ],
+            "positionLowerM": [
+              -1.831574713756024,
+              2.852630876545609,
+              1.1136968464057955
+            ],
+            "positionUpperM": [
+              -1.7980894139728074,
+              2.8593732319237852,
+              1.1454093309198499
+            ],
+            "velocityLowerMps": [
+              -0.1674264989160834,
+              -0.03371177689088123,
+              -0.15856242257027198
+            ],
+            "velocityUpperMps": [
+              0.1674264989160834,
+              0.03371177689088123,
+              0.15856242257027198
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              89,
+              149
+            ],
+            "currentPixel": [
+              89,
+              149
+            ],
+            "positionLowerM": [
+              -1.07986760460354,
+              2.8526382135836434,
+              1.1766444014970725
+            ],
+            "positionUpperM": [
+              -1.0473191978673604,
+              2.85936572388057,
+              1.2082130193884721
+            ],
+            "velocityLowerMps": [
+              -0.16274203368089823,
+              -0.03363755148463321,
+              -0.1578430894569982
+            ],
+            "velocityUpperMps": [
+              0.16274203368089823,
+              0.03363755148463321,
+              0.1578430894569982
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              335,
+              149
+            ],
+            "currentPixel": [
+              335,
+              149
+            ],
+            "positionLowerM": [
+              1.4725091692788632,
+              2.8526382135836434,
+              1.1766444014970725
+            ],
+            "positionUpperM": [
+              1.505545217956859,
+              2.85936572388057,
+              1.2082130193884721
+            ],
+            "velocityLowerMps": [
+              -0.1651802433899785,
+              -0.03363755148463321,
+              -0.1578430894569982
+            ],
+            "velocityUpperMps": [
+              0.1651802433899785,
+              0.03363755148463321,
+              0.1578430894569982
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              377,
+              167
+            ],
+            "currentPixel": [
+              377,
+              167
+            ],
+            "positionLowerM": [
+              1.9211960082071744,
+              2.852615905955663,
+              0.9869347505398137
+            ],
+            "positionUpperM": [
+              1.9549761541201731,
+              2.8593880847292485,
+              1.0189379232129754
+            ],
+            "velocityLowerMps": [
+              -0.16890072956499358,
+              -0.033860893867927455,
+              -0.1600158633658083
+            ],
+            "velocityUpperMps": [
+              0.16890072956499358,
+              0.033860893867927455,
+              0.1600158633658083
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              101,
+              227
+            ],
+            "currentPixel": [
+              101,
+              227
+            ],
+            "positionLowerM": [
+              -1.0400134957316012,
+              2.9187029080359337,
+              0.2666967764068475
+            ],
+            "positionUpperM": [
+              -0.9730925170823707,
+              3.020853641011105,
+              0.34137293392303536
+            ],
+            "velocityLowerMps": [
+              -0.3346048932461526,
+              -0.5107536648758559,
+              -0.3733807875809392
+            ],
+            "velocityUpperMps": [
+              0.3346048932461526,
+              0.5107536648758559,
+              0.3733807875809392
+            ],
+            "classification": "uncertain",
+            "possibleBodyIntersection": false
+          },
+          {
+            "previousPixel": [
+              89,
+              245
+            ],
+            "currentPixel": [
+              89,
+              245
+            ],
+            "positionLowerM": [
+              -1.1207475999840883,
+              2.8525155429266302,
+              0.13373582154055863
+            ],
+            "positionUpperM": [
+              -1.0869278381870864,
+              2.8594887222901852,
+              0.16772990532036025
+            ],
+            "velocityLowerMps": [
+              -0.16909880898500984,
+              -0.03486589681777508,
+              -0.1699704188990081
+            ],
+            "velocityUpperMps": [
+              0.16909880898500984,
+              0.03486589681777508,
+              0.1699704188990081
+            ],
+            "classification": "consistentWithStationary",
+            "possibleBodyIntersection": false
+          }
+        ]
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 128514,
+      "nnWaitMs": 124.122,
+      "completionOffsetUs": 96536,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 5,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 106179,
+      "workerComputeUs": 81696,
+      "ownerEventsDuringCompute": 6,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 135542,
+      "nnWaitMs": 130.734,
+      "completionOffsetUs": 106178,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 6,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 20469,
+      "workerComputeUs": 2542,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 6,
+        "oldestEvidenceTimestampUs": 1790899201000000,
+        "validUntilUs": 1790899201100000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 123344,
+      "nnWaitMs": 114.69,
+      "completionOffsetUs": 20468,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-textureless-14",
+      "frameId": 7,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 106566,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 8,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 146316,
+      "nnWaitMs": 133.533,
+      "completionOffsetUs": 106565,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 1,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 12567,
+      "workerComputeUs": 2192,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 1,
+        "oldestEvidenceTimestampUs": 1790899200000000,
+        "validUntilUs": 1790899200100000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 130646,
+      "nnWaitMs": 128.644,
+      "completionOffsetUs": 12567,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 11,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 20635,
+      "workerComputeUs": 1456,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "incompatible_pair_or_interval",
+        "available": false,
+        "frameId": 11,
+        "oldestEvidenceTimestampUs": 1790899202000000,
+        "validUntilUs": 1790899202100000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 122139,
+      "nnWaitMs": 111.325,
+      "completionOffsetUs": 20634,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 12,
+      "status": "expiredAfterCompute",
+      "admitted": false,
+      "ageAtReleaseUs": 110268,
+      "workerComputeUs": 0,
+      "ownerEventsDuringCompute": 6,
+      "result": null,
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 141161,
+      "nnWaitMs": 124.074,
+      "completionOffsetUs": 110267,
+      "functionalReferenceAddsMotionRisk": false
+    },
+    {
+      "layoutId": "test-scale-motion-wide-15",
+      "frameId": 13,
+      "status": "admitted",
+      "admitted": true,
+      "ageAtReleaseUs": 16416,
+      "workerComputeUs": 1673,
+      "ownerEventsDuringCompute": 1,
+      "result": {
+        "reason": "new_pair_required",
+        "available": false,
+        "frameId": 13,
+        "oldestEvidenceTimestampUs": 1790899202400000,
+        "validUntilUs": 1790899202500000,
+        "candidates": 0,
+        "unknownPatches": 0,
+        "threateningPatches": 0,
+        "addsMotionRisk": false,
+        "absenceOfMotionCertified": false,
+        "freeSpaceCertified": false,
+        "patches": []
+      },
+      "nnStillRunningAtFastRelease": true,
+      "nnAgeAtCompletionUs": 119483,
+      "nnWaitMs": 116.247,
+      "completionOffsetUs": 16415,
+      "functionalReferenceAddsMotionRisk": false
+    }
+  ]
+}
