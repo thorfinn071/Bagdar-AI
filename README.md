@@ -80,8 +80,12 @@ composer does not confirm delivery.
 
 Core is the default app profile. Build a debug APK and run the developer checks:
 
+The full test suite needs the separately downloaded research fixtures. The
+restore command uses your GitHub credentials for the private research release.
+
 ```powershell
 flutter build apk --debug --flavor core
+python tool/datasets/datasets.py restore
 flutter analyze --no-pub
 flutter test --no-pub --concurrency=1
 ```
@@ -95,8 +99,7 @@ Additional development paths:
 - **Core verification:** [the verifier guide](tool/verify_core.md) describes
   aggregate replay checks and strict `-Rc` fixture requirements.
 - **Research data:** [the dataset guide](tool/datasets/README.md) describes
-  checksum-verified bundles and restoration. Bundles are currently local;
-  dataset tracking remains unchanged until a download source is published.
+  the private, versioned GitHub release and checksum-verified restoration.
 
 Builds currently use the application ID `com.example.bagdar` and debug signing,
 including the release configuration. Android is the development target; other

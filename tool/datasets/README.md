@@ -2,12 +2,13 @@
 
 Python 3.10+; standard library only. Run commands from the repository root.
 
-## Current publication status
+## Published research release
 
-The reviewed manifest and bundles are prepared locally. **No public download source
-has been published.** Dataset payloads remain at their existing paths and their
-Git inclusion has not changed. Do not exclude them from a commit on the assumption
-that an automatic public download already exists.
+The 23 bundles are published in the repository's
+[private research release](https://github.com/thorfinn071/Bagdar-AI/releases/tag/research-data-2026-10-28-v4).
+Repository visibility is unchanged. `source.json` binds that release to the exact
+manifest. Payloads are provisioned at their original paths and excluded from
+ordinary Git; metadata, source and small fixtures remain in the checkout.
 
 The reviewed bundle directory also contains a copy of `manifest-v4.json` and
 `SHA256SUMS.txt` for later publication and independent archive checks.
@@ -41,10 +42,10 @@ regenerate evidence, change thresholds or establish physical-device readiness.
 
 ## Restore into a checkout
 
-For the reviewed local bundles prepared on 28 October 2026:
+From a checkout with Python and Git available:
 
 ```powershell
-python tool/datasets/datasets.py restore --source output/research-data/bagdar-research-2026-10-28-v4-reviewed
+python tool/datasets/datasets.py restore
 ```
 
 Use `--root C:/path/to/checkout` to restore into another checkout. The destination
@@ -52,9 +53,9 @@ directory must already exist. All datasets are selected by default; add
 `--dataset camera-visible-passage-v1` (repeatable) to choose particular bundles.
 The complete developer/replay suites can require the complete corpus.
 
-After publication, `--source` can instead be an HTTPS base URL containing the
-exact archive filenames from the manifest. There is intentionally no invented
-default release URL. Remote downloads are cached by checksum under
+Override the configured source with `--source` and a local bundle directory,
+an HTTPS base URL containing the exact archive filenames, or a GitHub release
+selector described below. Remote downloads are cached by checksum under
 `output/dataset-cache/`. HTTP is supported only on loopback for local testing.
 
 The tool verifies the complete archive and every member before installing any
@@ -94,7 +95,7 @@ Already compressed payloads are stored without recompression.
 Keep published versions immutable. A changed dataset gets a new selection,
 manifest and version; do not update historical checksums to hide a mismatch.
 
-## Complete the Git migration
+## Publish a new dataset version
 
 1. Preserve and review the prepared bundles and their licenses.
 2. Publish the exact archive bytes to a durable, versioned download source.

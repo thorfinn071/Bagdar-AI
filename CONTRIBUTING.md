@@ -32,8 +32,9 @@ manifests can depend on those paths. `docs/_baseline_logs/` and
 `docs/_baseline_sources/` contain deliberate evidence, not disposable caches.
 
 Large research payloads have a [versioned bundle and restore tool](tool/datasets/README.md).
-The bundles are currently local; payload tracking remains unchanged until a
-durable download source and restoration from it are verified. Keep manifests,
+The bundles are published in a private, versioned GitHub research release.
+Run `python tool/datasets/datasets.py restore` before the full suite, using your
+GitHub credentials or a contents-read token held in the environment. Keep manifests,
 small fixtures, licenses and frozen source snapshots in Git. Restore payloads
 to their existing paths and verify their exact hashes before running the full
 replay suite; never replace a missing-corpus failure with a silent skip.
@@ -45,6 +46,7 @@ sources. Line-ending conversion alone can invalidate their frozen hashes.
 
 ```powershell
 flutter pub get
+python tool/datasets/datasets.py restore
 flutter analyze --no-pub
 flutter test --no-pub --concurrency=1
 ```

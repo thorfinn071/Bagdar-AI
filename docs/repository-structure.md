@@ -105,11 +105,34 @@ targeted retests. The aggregate Core verifier, Android build, public hosting and
 physical-device acceptance were not run as part of this preparation.
 
 Nine generated Linux/macOS entries were removed from Git tracking; their local
-files are unchanged. Only these removals are staged. Dataset payload tracking
-is unchanged until a durable download source is published and verified. No
-commit, push, release publication or history rewrite was performed.
+files are unchanged. At the end of that local preparation, only these removals
+were staged and payload tracking was unchanged. No commit, push, release
+publication or history rewrite had yet been performed.
 
 Reviewed bundles and checksums are in ignored
 `output/research-data/bagdar-research-2026-10-28-v4-reviewed/`. Local source,
 restore and test receipts are in ignored
 `scratch/repository-preparation-2026-10-28/`.
+
+## Published source and research assets: 2026-10-28
+
+The source, application workflows, replay tools and dataset provisioning were
+committed separately. Large payloads are hosted in the repository's
+[private research release](https://github.com/thorfinn071/Bagdar-AI/releases/tag/research-data-2026-10-28-v4),
+with all 28 uploaded files checked against GitHub's SHA-256 digests. Repository
+visibility was not changed.
+
+A fresh clone from GitHub restored all 23 bundles through authenticated release
+downloads and verified all 17,383 archived files. The authentication/download
+tool suite passed 26 checks, including credential-helper fallback, pinned asset
+sizes/hashes, and stripping credentials on signed download redirects.
+
+After that verification, 17 narrow ignore files exclude the versioned payloads
+while preserving every source/metadata path. All 17,379 external payload paths
+are covered; no local payload was deleted. `tool/datasets/source.json` binds the
+default release to the exact manifest. Run the restore command before the full
+test suite. Credentials remain outside Git.
+
+Publication and clone-restoration receipts are retained locally under ignored
+`scratch/github-push-2026-10-28/`. The earlier software/device evidence limits
+remain unchanged; this work did not establish physical-camera or walking readiness.

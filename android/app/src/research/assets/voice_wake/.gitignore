@@ -1,0 +1,5 @@
+# Research model payloads; root metadata and licenses stay in Git.
+/am/
+/conf/
+/graph/
+/ivector/

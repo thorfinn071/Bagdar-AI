@@ -1,0 +1,7 @@
+# Frozen research payloads: restore with python tool/datasets/datasets.py restore
+*.gz
+*.png
+*.pgm
+*.gif
+*.f32
+*.blend

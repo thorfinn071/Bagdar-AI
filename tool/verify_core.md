@@ -1,9 +1,9 @@
 # Core software verification
 
 Research payloads must be present at their pinned paths. Use the
-[dataset guide](datasets/README.md) to verify or restore them. Bundles are
-currently local and no public source is configured. The verifier's required
-fixture checks remain unchanged.
+[dataset guide](datasets/README.md) to verify or restore them from the private
+GitHub research release. Authentication uses your existing Git credentials or
+a contents-read token in the environment. Required fixture checks are unchanged.
 
 The 2026-10-04 concurrent-load experiment adds two desktop steps: its separate
 write-once receipt preserving v2, and Windows x64 LLVM native-module compilation,
