@@ -46,3 +46,47 @@ android/app/src/main/cpp/third_party/
 analyze_*.txt
 test_output*.txt
 diff*.txt
+
+# Native and platform build caches (including nested Android/Flutter builds)
+**/.gradle/
+**/.cxx/
+**/.externalNativeBuild/
+**/build/
+**/flutter/ephemeral/
+**/Flutter/ephemeral/
+android/key.properties
+*.jks
+*.keystore
+
+# Other local runtimes and editor/agent state
+**/.venv/
+**/venv/
+**/node_modules/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.devin/
+.env
+.env.*
+!.env.example
+!.env.*.example
+Thumbs.db
+
+# Local map inputs and downloaded model candidates; retain scripts/manifests
+/local_data/
+/model_export/**/*.pt
+/model_export/**/*.onnx
+/model_export/baseline_log.txt
+
+# Creative assets and reference projects, separate from application source
+/bagdar_blend/
+/bagdar_vid/
+/VisionGuide/
+/City/
+/FBX format/
+/presentation/*.pptx
+/presentation/*.docx
+
+# One-off command output belongs under scratch/, not at the repository root
+/err.txt
+/output.txt

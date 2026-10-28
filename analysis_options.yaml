@@ -14,6 +14,9 @@ analyzer:
     # Scratch one-off generators are not application/Core code. They use
     # `print` for CLI output. Do not hide warnings in lib/ or tests.
     - scratch/**
+    # Exported source deposits contain incomplete historical copies, not
+    # application code. Keep current lib/, test/ and tool/ fully analyzed.
+    - output/**
 
 linter:
   # The lint rules applied to this project can be customized in the

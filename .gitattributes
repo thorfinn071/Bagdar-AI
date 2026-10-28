@@ -19,8 +19,16 @@
 # Python / shell scripts
 *.py    text eol=lf
 *.sh    text eol=lf
+*.ps1   text eol=lf
+*.js    text eol=lf
+*.html  text eol=lf
+*.swift text eol=lf
+*.cpp   text eol=lf
+*.h     text eol=lf
 
 # Lock / config files
+.gitignore text eol=lf
+.gitattributes text eol=lf
 *.lock  text eol=lf
 *.toml  text eol=lf
 
@@ -38,3 +46,77 @@
 *.zip    binary
 *.jar    binary
 *.aar    binary
+*.onnx   binary
+*.pt     binary
+*.pdf    binary
+*.pptx   binary
+*.docx   binary
+*.fbx    binary
+*.blend  binary
+*.mp4    binary
+*.mov    binary
+*.MP4    binary
+*.MOV    binary
+
+# Frozen evidence and packaged assets are identified by their exact bytes.
+# Keep text metadata/snapshots unchanged too, including on Windows checkouts.
+/test/fixtures/** -text
+/docs/_baseline_logs/** -text
+/docs/_baseline_sources/** -text
+/assets/** -text
+/android/app/src/research/assets/** -text
+
+# Live sources/documents whose exact bytes are pinned by existing replay receipts.
+# Preserve these identities; do not normalize them and rewrite historical hashes.
+/docs/volume-holdout-evaluation-2026-10-10.md -text
+/lib/camera/depth_pipeline_controller.dart -text
+/lib/safety/perception/camera_cached_scale_metric_motion.dart -text
+/lib/safety/perception/camera_fast_metric_motion.dart -text
+/lib/safety/perception/camera_fast_metric_motion_packed.dart -text
+/lib/safety/perception/camera_fast_motion_bulk_native_match.dart -text
+/lib/safety/perception/camera_fast_motion_types.dart -text
+/lib/safety/perception/camera_indexed_height_envelope_passage_source.dart -text
+/lib/safety/perception/camera_scalar_height_envelope_passage_source.dart -text
+/lib/safety/perception/camera_scale_metric_motion.dart -text
+/lib/safety/perception/camera_synchronized_envelope_source.dart -text
+/lib/safety/runtime/camera_fast_motion_packed_shadow_adapter.dart -text
+/lib/safety/runtime/camera_fast_motion_packed_transport.dart -text
+/lib/safety/runtime/camera_fast_motion_packed_worker.dart -text
+/test/camera_fast_motion_packed_shadow_replay_test.dart -text
+/test/camera_fast_motion_packed_worker_test.dart -text
+/test/camera_metric_motion_shadow_scene_test.dart -text
+/test/camera_metric_motion_test.dart -text
+/test/camera_scale_metric_motion_contract_test.dart -text
+/test/camera_scale_motion_development_test.dart -text
+/test/harness/camera_fast_motion_packed_shadow_benchmark.dart -text
+/test/harness/camera_visible_passage_fixture.dart -text
+/test/independent_replay_feed_test.dart -text
+/tool/blender/generate_scale_motion_corpus.py -text
+/tool/blender/visible_bounds_fast.py -text
+/tool/blender/visible_bounds_union.py -text
+/tool/blender/visible_complete_surface_bounds.py -text
+/tool/blender/visible_height_bounds.py -text
+/tool/model_benchmark/build_fast_motion_simd.ps1 -text
+/tool/model_benchmark/evaluate_metric_motion.dart -text
+/tool/model_benchmark/evaluate_scale_motion.dart -text
+/tool/model_benchmark/freeze_scale_motion_development.py -text
+/tool/model_benchmark/generate_metric_motion_ncnn.py -text
+/tool/model_benchmark/generate_scale_motion_ncnn.py -text
+/tool/model_benchmark/generate_track_passage_ncnn.py -text
+/tool/model_benchmark/infer_volume_holdout.py -text
+/tool/model_benchmark/native/fast_motion_match.c -text
+/tool/model_benchmark/pinned_depth_load_worker.dart -text
+/tool/model_benchmark/profile_fast_camera_motion_packed.dart -text
+/tool/model_benchmark/replay_fast_camera_motion_packed.dart -text
+/tool/model_benchmark/replay_fast_camera_motion_stream.dart -text
+/tool/model_benchmark/verify_scale_motion_assets.py -text
+/tool/model_benchmark/verify_volume_holdout.py -text
+
+# Additional inputs required by history and depth-candidate replay checks.
+/lib/safety/runtime/volume_authority_spatial_runtime.dart -text
+/model_export/depth_anything_v2/export-manifest.json -text
+/model_export/depth_anything_v2/source-manifest.json -text
+/test/harness/volume_authority_regression.dart -text
+/test/volume_authority_runtime_test.dart -text
+/tool/model_benchmark/depth_candidate_common.py -text
+/tool/model_benchmark/run_depth_anything_bakeoff.py -text
