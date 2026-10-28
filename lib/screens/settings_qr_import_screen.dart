@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
+import '../theme/bagdar_theme.dart';
+import '../theme/bagdar_tokens.dart';
+import '../widgets/bagdar_ui.dart';
 import '../models/speech_job.dart';
 import '../models/strings.dart';
 import '../services/haptic_service.dart';
@@ -20,8 +23,13 @@ import '../services/tts_service.dart';
 /// one foreground camera consumer.
 class SettingsQrImportScreen extends StatefulWidget {
   final TtsService tts;
+  final bool Function()? canInteract;
 
-  const SettingsQrImportScreen({super.key, required this.tts});
+  const SettingsQrImportScreen({
+    super.key,
+    required this.tts,
+    this.canInteract,
+  });
 
   @override
   State<SettingsQrImportScreen> createState() => _SettingsQrImportScreenState();
@@ -38,12 +46,13 @@ class _SettingsQrImportScreenState extends State<SettingsQrImportScreen> {
   bool _torchOn = false;
   bool _applying = false;
   bool _announcedReady = false;
+  bool get _canInteract => mounted && (widget.canInteract?.call() ?? true);
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_announcedReady) return;
+      if (!_canInteract || _announcedReady) return;
       _announcedReady = true;
       widget.tts.say(
         S.get('qr_import_aim_camera'),
@@ -60,7 +69,7 @@ class _SettingsQrImportScreenState extends State<SettingsQrImportScreen> {
   }
 
   void _onDetect(BarcodeCapture capture) {
-    if (_preview != null) return;
+    if (!_canInteract || _preview != null) return;
     for (final b in capture.barcodes) {
       final raw = b.rawValue;
       if (raw == null || raw.isEmpty) continue;
@@ -81,6 +90,7 @@ class _SettingsQrImportScreenState extends State<SettingsQrImportScreen> {
     try {
       await _scanner.toggleTorch();
       await Future<void>.delayed(const Duration(milliseconds: 250));
+      if (!_canInteract) return;
       await _scanner.toggleTorch();
     } catch (_) {}
   }
@@ -107,13 +117,13 @@ class _SettingsQrImportScreenState extends State<SettingsQrImportScreen> {
   }
 
   Future<void> _applyImport() async {
-    if (_applying) return;
+    if (!_canInteract || _applying) return;
     final raw = _rawPayload;
     if (raw == null) return;
     setState(() => _applying = true);
     HapticService.vibrate(const [0, 200, 100, 200]);
     final ok = await SettingsCodec.instance.importFromJson(raw);
-    if (!mounted) return;
+    if (!mounted || !_canInteract) return;
     if (ok) {
       widget.tts.say(
         S.get('qr_import_applied'),
@@ -139,6 +149,7 @@ class _SettingsQrImportScreenState extends State<SettingsQrImportScreen> {
   }
 
   Future<void> _retry() async {
+    if (!_canInteract) return;
     setState(() {
       _rawPayload = null;
       _preview = null;
@@ -146,6 +157,7 @@ class _SettingsQrImportScreenState extends State<SettingsQrImportScreen> {
     try {
       await _scanner.start();
     } catch (_) {}
+    if (!_canInteract) return;
     widget.tts.say(
       S.get('qr_import_aim_camera'),
       SpeechPriority.info,
@@ -154,88 +166,73 @@ class _SettingsQrImportScreenState extends State<SettingsQrImportScreen> {
   }
 
   Future<void> _toggleTorch() async {
+    if (!_canInteract) return;
     try {
       await _scanner.toggleTorch();
+      if (!_canInteract) return;
       setState(() => _torchOn = !_torchOn);
     } catch (_) {}
   }
 
   @override
   Widget build(BuildContext context) {
-    final preview = _preview;
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: Text(
-          S.get('qr_import_title'),
-          style: const TextStyle(color: Colors.white),
-        ),
-        iconTheme: const IconThemeData(color: Colors.white),
-        actions: [
-          IconButton(
-            tooltip: S.get('qr_import_torch'),
-            icon: Icon(
-              _torchOn ? Icons.flash_on : Icons.flash_off,
-              color: Colors.white,
-            ),
-            onPressed: _toggleTorch,
-          ),
-        ],
+    final colors = BagdarTheme.colorsOf(context);
+    return BagdarPage(
+      title: S.get('qr_import_title'),
+      subtitle: S.get(
+        _preview == null ? 'qr_import_aim_hint' : 'qr_import_hold_to_apply',
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  MobileScanner(controller: _scanner, onDetect: _onDetect),
-                  Positioned.fill(
-                    child: IgnorePointer(
-                      child: Center(
-                        child: Container(
-                          width: 240,
-                          height: 240,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.cyanAccent,
-                              width: 2,
-                            ),
-                            borderRadius: BorderRadius.circular(16),
+      actions: [
+        IconButton(
+          tooltip: S.get('qr_import_torch'),
+          icon: Icon(
+            _torchOn ? Icons.flash_on_outlined : Icons.flash_off_outlined,
+          ),
+          onPressed: _toggleTorch,
+        ),
+      ],
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(BagdarRadius.card),
+          child: AspectRatio(
+            aspectRatio: 1,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                MobileScanner(controller: _scanner, onDetect: _onDetect),
+                IgnorePointer(
+                  child: Center(
+                    child: FractionallySizedBox(
+                      widthFactor: 0.75,
+                      heightFactor: 0.75,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: BagdarOverlay.signal(colors),
+                            width: 3,
+                          ),
+                          borderRadius: BorderRadius.circular(
+                            BagdarRadius.control,
                           ),
                         ),
                       ),
                     ),
                   ),
-                  if (preview != null)
-                    Positioned(
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      child: _PreviewSheet(
-                        preview: preview,
-                        applying: _applying,
-                        onLongPressApply: _applyImport,
-                        onRetry: _retry,
-                      ),
-                    ),
-                ],
-              ),
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Text(
-                preview == null
-                    ? S.get('qr_import_aim_hint')
-                    : S.get('qr_import_hold_to_apply'),
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.white70, fontSize: 13),
-              ),
-            ),
-          ],
+          ),
         ),
-      ),
+        if (_preview != null) ...[
+          const SizedBox(height: BagdarSpacing.m),
+          _PreviewSheet(
+            preview: _preview!,
+            applying: _applying,
+            onLongPressApply: _applyImport,
+            onRetry: _retry,
+          ),
+        ],
+      ],
     );
   }
 }
@@ -254,65 +251,37 @@ class _PreviewSheet extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-      decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.85),
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-        border: const Border(
-          top: BorderSide(color: Colors.cyanAccent, width: 1),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
+  Widget build(BuildContext context) => BagdarCard(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Semantics(
+          header: true,
+          child: Text(
             '${S.get('qr_import_found')} v${preview['v']}',
-            style: const TextStyle(
-              color: Colors.cyanAccent,
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
-            ),
+            style: Theme.of(context).textTheme.titleMedium,
           ),
-          const SizedBox(height: 8),
-          ..._summaryLines(preview).map(
-            (line) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 2),
-              child: Text(
-                line,
-                style: const TextStyle(color: Colors.white, fontSize: 13),
-              ),
-            ),
+        ),
+        const SizedBox(height: BagdarSpacing.s),
+        ..._summaryLines(preview).map(
+          (line) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Text(line),
           ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: TextButton(
-                  onPressed: applying ? null : onRetry,
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.white70,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                  ),
-                  child: Text(S.get('qr_import_retry')),
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                flex: 2,
-                child: _LongPressApplyButton(
-                  applying: applying,
-                  onConfirmed: onLongPressApply,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+        ),
+        const SizedBox(height: BagdarSpacing.m),
+        _LongPressApplyButton(
+          applying: applying,
+          onConfirmed: onLongPressApply,
+        ),
+        const SizedBox(height: BagdarSpacing.s),
+        OutlinedButton(
+          onPressed: applying ? null : onRetry,
+          child: Text(S.get('qr_import_retry')),
+        ),
+      ],
+    ),
+  );
 
   List<String> _summaryLines(Map<String, dynamic> p) {
     final lines = <String>[];
@@ -409,9 +378,11 @@ class _LongPressApplyButtonState extends State<_LongPressApplyButton> {
   @override
   Widget build(BuildContext context) {
     final disabled = widget.applying;
+    final colors = BagdarTheme.colorsOf(context);
     return Semantics(
       button: true,
       label: S.get('qr_import_hold_to_apply'),
+      enabled: !disabled,
       child: GestureDetector(
         onTapDown: (_) => _onDown(),
         onTapUp: (_) => _onUpOrCancel(),
@@ -419,20 +390,21 @@ class _LongPressApplyButtonState extends State<_LongPressApplyButton> {
         child: Stack(
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 14),
+              constraints: const BoxConstraints(
+                minHeight: BagdarSpacing.tapMinimum,
+              ),
+              padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
-                color: disabled
-                    ? Colors.cyanAccent.withValues(alpha: 0.4)
-                    : Colors.cyanAccent,
-                borderRadius: BorderRadius.circular(8),
+                color: disabled ? colors.disabledFill : colors.accentPrimary,
+                borderRadius: BorderRadius.circular(BagdarRadius.control),
               ),
               child: Center(
                 child: Text(
                   disabled
                       ? S.get('qr_import_applying')
                       : S.get('qr_import_long_press'),
-                  style: const TextStyle(
-                    color: Colors.black,
+                  style: TextStyle(
+                    color: colors.accentOnPrimary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -444,15 +416,15 @@ class _LongPressApplyButtonState extends State<_LongPressApplyButton> {
               bottom: 0,
               child: ClipRRect(
                 borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(8),
-                  bottomRight: Radius.circular(8),
+                  bottomLeft: Radius.circular(BagdarRadius.control),
+                  bottomRight: Radius.circular(BagdarRadius.control),
                 ),
                 child: LinearProgressIndicator(
                   value: _progress,
                   minHeight: 3,
                   backgroundColor: Colors.transparent,
-                  valueColor: const AlwaysStoppedAnimation<Color>(
-                    Colors.black54,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    colors.accentOnPrimary,
                   ),
                 ),
               ),

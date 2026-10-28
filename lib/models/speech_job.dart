@@ -14,6 +14,7 @@ class SpeechJob {
   final DateTime enqueuedAt;
   final DateTime expiresAt;
   final bool skipHaptic;
+  final int? deliverySubmittedAtUs;
 
   SpeechJob(
     this.text,
@@ -26,6 +27,7 @@ class SpeechJob {
     DateTime? enqueuedAt,
     DateTime? expiresAt,
     this.skipHaptic = false,
+    this.deliverySubmittedAtUs,
   }) : enqueuedAt = enqueuedAt ?? DateTime.now(),
        expiresAt =
            expiresAt ??

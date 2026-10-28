@@ -39,52 +39,54 @@ class OrientationService {
     return rad * 180.0 / math.pi;
   }
 
-  Future<void> init() async {
+  Future<void> init({Stream<AccelerometerEvent>? accelerometer}) async {
     _subscription =
-        accelerometerEventStream(
-          samplingPeriod: const Duration(milliseconds: 60),
-        ).listen((event) {
-          final pitchRad = math.atan2(event.y.abs(), event.z);
-          final rawPitch = pitchRad * 180 / math.pi;
-          final rawRoll = computeRoll(event.x, event.z);
+        (accelerometer ??
+                accelerometerEventStream(
+                  samplingPeriod: const Duration(milliseconds: 60),
+                ))
+            .listen((event) {
+              final pitchRad = math.atan2(event.y.abs(), event.z);
+              final rawPitch = pitchRad * 180 / math.pi;
+              final rawRoll = computeRoll(event.x, event.z);
 
-          if (_firstSample) {
-            _pitch = rawPitch;
-            _roll = rawRoll;
-            _firstSample = false;
-          } else {
-            _pitch = _pitch * 0.8 + rawPitch * 0.2;
-            _roll = _roll * 0.85 + rawRoll * 0.15;
-          }
+              if (_firstSample) {
+                _pitch = rawPitch;
+                _roll = rawRoll;
+                _firstSample = false;
+              } else {
+                _pitch = _pitch * 0.8 + rawPitch * 0.2;
+                _roll = _roll * 0.85 + rawRoll * 0.15;
+              }
 
-          DevicePitch newState;
-          if (_pitch > 75) {
-            newState = DevicePitch.tooHigh;
-          } else if (_pitch < 15) {
-            newState = DevicePitch.tooLow;
-          } else if (_pitch > 30 && _pitch < 60) {
-            newState = DevicePitch.optimal;
-          } else {
-            newState = DevicePitch.flat;
-          }
+              DevicePitch newState;
+              if (_pitch > 75) {
+                newState = DevicePitch.tooHigh;
+              } else if (_pitch < 15) {
+                newState = DevicePitch.tooLow;
+              } else if (_pitch > 30 && _pitch < 60) {
+                newState = DevicePitch.optimal;
+              } else {
+                newState = DevicePitch.flat;
+              }
 
-          if (newState != _state) {
-            _state = newState;
-            onPitchChanged?.call(_state);
-          }
+              if (newState != _state) {
+                _state = newState;
+                onPitchChanged?.call(_state);
+              }
 
-          final absRoll = _roll.abs();
-          final bool nowExcessive;
-          if (_rollExcessive) {
-            nowExcessive = absRoll >= kRollExitThreshold;
-          } else {
-            nowExcessive = absRoll >= kRollEnterThreshold;
-          }
-          if (nowExcessive != _rollExcessive) {
-            _rollExcessive = nowExcessive;
-            onRollChanged?.call(_rollExcessive);
-          }
-        });
+              final absRoll = _roll.abs();
+              final bool nowExcessive;
+              if (_rollExcessive) {
+                nowExcessive = absRoll >= kRollExitThreshold;
+              } else {
+                nowExcessive = absRoll >= kRollEnterThreshold;
+              }
+              if (nowExcessive != _rollExcessive) {
+                _rollExcessive = nowExcessive;
+                onRollChanged?.call(_rollExcessive);
+              }
+            });
   }
 
   double get pitch => _pitch;

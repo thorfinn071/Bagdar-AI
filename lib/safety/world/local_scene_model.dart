@@ -19,6 +19,7 @@ class LocalSceneUpdate {
   final List<SpatialEvidence> evidence;
   final List<HazardTrackSnapshot> hazardTracks;
   final List<MovingThreatSnapshot> movingThreats;
+  final bool useIndependentEvidenceClocks;
 
   LocalSceneUpdate({
     required this.coordinateMode,
@@ -29,6 +30,7 @@ class LocalSceneUpdate {
     required List<SpatialEvidence> evidence,
     List<HazardTrackSnapshot> hazardTracks = const <HazardTrackSnapshot>[],
     List<MovingThreatSnapshot> movingThreats = const <MovingThreatSnapshot>[],
+    this.useIndependentEvidenceClocks = false,
   }) : evidence = List.unmodifiable(evidence),
        hazardTracks = List.unmodifiable(hazardTracks),
        movingThreats = List.unmodifiable(movingThreats) {
@@ -45,11 +47,13 @@ class LocalSceneUpdateResult {
   final LocalSceneUpdateStatus status;
   final String reason;
   final LocalSceneSnapshot snapshot;
+  final bool passageClearanceApplied;
 
   const LocalSceneUpdateResult({
     required this.status,
     required this.reason,
     required this.snapshot,
+    this.passageClearanceApplied = false,
   });
 
   bool get accepted => status == LocalSceneUpdateStatus.accepted;
@@ -162,6 +166,7 @@ class LocalSceneModel {
         previous: _elements[elementId],
         evidence: evidenceByElement[elementId] ?? const <SpatialEvidence>[],
         now: update.at,
+        useIndependentEvidenceClocks: update.useIndependentEvidenceClocks,
       );
       if (fused != null) next[elementId] = fused;
     }

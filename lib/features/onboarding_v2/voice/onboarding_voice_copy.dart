@@ -1,0 +1,390 @@
+import '../../../models/strings.dart';
+import 'onboarding_voice_input.dart';
+import 'onboarding_voice_parser.dart';
+
+enum VoiceCopy {
+  title,
+  explanation,
+  enable,
+  disable,
+  resumeButton,
+  ready,
+  preparing,
+  speaking,
+  listening,
+  processing,
+  suspended,
+  off,
+  boundary,
+  timeout,
+  unknown,
+  negative,
+  accepted,
+  nextHint,
+  practiceHint,
+  correctHint,
+  pauseHint,
+  privacy,
+  language,
+  access,
+  handoff,
+  limits,
+  ordinary,
+  stop,
+  haptic,
+  feedbackDone,
+  practiceDone,
+  permissionDenied,
+  unsupported,
+  unavailable,
+  languageUnavailable,
+  speechFailed,
+  camera,
+  cameraGranted,
+  device,
+  deviceDone,
+  standing,
+  alignment,
+  alignmentConfirm,
+  alignmentDone,
+  stationaryCheck,
+  stationaryDone,
+  sessionCheck,
+  summaryBlocked,
+  summaryReady,
+  inspectionUnavailable,
+  inspectionHandoff,
+  checking,
+  systemPermission,
+  settingsUnavailable,
+  permissionIntro,
+  notStanding,
+  alignmentRejected,
+  cancelFailed,
+}
+
+class OnboardingVoiceCopy {
+  final AppLanguage language;
+  const OnboardingVoiceCopy(this.language);
+  String t(VoiceCopy key) => _catalog[key]![language.index];
+
+  String availability(VoiceInputAvailability value) => t(switch (value) {
+    VoiceInputAvailability.ready => VoiceCopy.ready,
+    VoiceInputAvailability.permissionDenied => VoiceCopy.permissionDenied,
+    VoiceInputAvailability.unsupported => VoiceCopy.unsupported,
+    VoiceInputAvailability.unavailable => VoiceCopy.unavailable,
+  });
+
+  String question(OnboardingVoiceQuestion question) => t(switch (question) {
+    OnboardingVoiceQuestion.language => VoiceCopy.language,
+    OnboardingVoiceQuestion.access => VoiceCopy.access,
+    OnboardingVoiceQuestion.handoff => VoiceCopy.handoff,
+    OnboardingVoiceQuestion.information => VoiceCopy.nextHint,
+    OnboardingVoiceQuestion.limits => VoiceCopy.limits,
+    OnboardingVoiceQuestion.ordinaryVoice => VoiceCopy.ordinary,
+    OnboardingVoiceQuestion.stopVoice => VoiceCopy.stop,
+    OnboardingVoiceQuestion.haptic => VoiceCopy.haptic,
+    OnboardingVoiceQuestion.feedbackDone => VoiceCopy.feedbackDone,
+    OnboardingVoiceQuestion.practice => VoiceCopy.practiceHint,
+    OnboardingVoiceQuestion.practiceDone => VoiceCopy.practiceDone,
+    OnboardingVoiceQuestion.paused => VoiceCopy.pauseHint,
+    OnboardingVoiceQuestion.camera => VoiceCopy.camera,
+    OnboardingVoiceQuestion.cameraGranted => VoiceCopy.cameraGranted,
+    OnboardingVoiceQuestion.device => VoiceCopy.device,
+    OnboardingVoiceQuestion.deviceDone => VoiceCopy.deviceDone,
+    OnboardingVoiceQuestion.standing => VoiceCopy.standing,
+    OnboardingVoiceQuestion.alignment => VoiceCopy.alignment,
+    OnboardingVoiceQuestion.alignmentConfirm => VoiceCopy.alignmentConfirm,
+    OnboardingVoiceQuestion.alignmentDone => VoiceCopy.alignmentDone,
+    OnboardingVoiceQuestion.stationaryCheck => VoiceCopy.stationaryCheck,
+    OnboardingVoiceQuestion.stationaryDone => VoiceCopy.stationaryDone,
+    OnboardingVoiceQuestion.sessionCheck => VoiceCopy.sessionCheck,
+    OnboardingVoiceQuestion.summaryBlocked => VoiceCopy.summaryBlocked,
+    OnboardingVoiceQuestion.summaryReady => VoiceCopy.summaryReady,
+  });
+
+  static const _catalog = <VoiceCopy, List<String>>{
+    VoiceCopy.cancelFailed: [
+      'Остановка микрофона не подтверждена. Закройте Bagdar через систему, прежде чем продолжать.',
+      'Микрофонның тоқтауы расталмады. Жалғастырмас бұрын Bagdar қолданбасын жүйе арқылы жабыңыз.',
+      'Microphone shutdown is unconfirmed. Close Bagdar through the system before continuing.',
+    ],
+    VoiceCopy.camera: [
+      'Скажите «Запросить доступ», «Настройки приложения» или «Отложить».',
+      '«Камераға рұқсат сұрау», «Қолданба баптаулары» немесе «Кейінге қалдыру» деңіз.',
+      'Say “request camera access”, “app settings”, or “later”.',
+    ],
+    VoiceCopy.cameraGranted: [
+      'Разрешение камеры получено. Это ещё не проверка готовности. Скажите «Дальше».',
+      'Камера рұқсаты берілді. Дайындық әлі тексерілген жоқ. «Келесі» деңіз.',
+      'Camera permission is granted. Readiness has not been checked yet. Say “next”.',
+    ],
+    VoiceCopy.device: [
+      'Проверка ненадолго откроет камеру. Скажите «Проверить устройство» или «Отложить».',
+      'Тексеру камераны қысқа уақытқа ашады. «Құрылғыны тексеру» немесе «Кейінге қалдыру» деңіз.',
+      'The check briefly opens the camera. Say “check device” or “later”.',
+    ],
+    VoiceCopy.deviceDone: [
+      'Проверка устройства пройдена. Скажите «Дальше» или «Проверить устройство».',
+      'Құрылғы тексерілді. «Келесі» немесе «Құрылғыны тексеру» деңіз.',
+      'The device check passed. Say “next” or “check device”.',
+    ],
+    VoiceCopy.standing: [
+      'Для проверки нужно стоять на месте. Скажите «Стою на месте», «Не стою на месте» или «Отложить».',
+      'Тексеру үшін орныңызда тұру керек. «Орнымда тұрмын», «Орнымда тұрған жоқпын» немесе «Кейінге қалдыру» деңіз.',
+      'Stand still for the check. Say “I am standing still”, “I am not standing still”, or “later”.',
+    ],
+    VoiceCopy.alignment: [
+      'Держите телефон устойчиво перед собой. Скажите «Проверить положение» или «Отложить».',
+      'Телефонды алдыңызда тұрақты ұстаңыз. «Қалыпты тексеру» немесе «Кейінге қалдыру» деңіз.',
+      'Hold the phone steadily in front of you. Say “check position” or “later”.',
+    ],
+    VoiceCopy.alignmentConfirm: [
+      'Датчик подтвердил устойчивое положение. Если вы держите телефон перед собой, скажите «Положение подтверждаю». Иначе — «Положение не подтверждаю».',
+      'Датчик тұрақты қалыпты растады. Телефонды алдыңызда ұстасаңыз, «Қалыпты растаймын» деңіз. Әйтпесе «Қалыпты растамаймын» деңіз.',
+      'The sensor found a stable position. If you are holding the phone in front of you, say “confirm position”. Otherwise say “do not confirm position”.',
+    ],
+    VoiceCopy.alignmentDone: [
+      'Положение подтверждено. Скажите «Дальше» или «Проверить положение».',
+      'Қалып расталды. «Келесі» немесе «Қалыпты тексеру» деңіз.',
+      'Position is confirmed. Say “next” or “check position”.',
+    ],
+    VoiceCopy.stationaryCheck: [
+      'Скажите «Проверить на месте», чтобы открыть камеру для повторной проверки, или «Отложить».',
+      'Камераны қайта тексеру үшін «Орнымда тексеру» немесе «Кейінге қалдыру» деңіз.',
+      'Say “check while stationary” to open the camera for another check, or “later”.',
+    ],
+    VoiceCopy.stationaryDone: [
+      'Неподвижная проверка пройдена. Скажите «Дальше» для итога или «Проверить на месте».',
+      'Орныңызда тексеру аяқталды. Қорытынды үшін «Келесі» немесе «Орнымда тексеру» деңіз.',
+      'The stationary check passed. Say “next” for the summary or “check while stationary”.',
+    ],
+    VoiceCopy.sessionCheck: [
+      'Скажите «Проверить готовность», чтобы открыть камеру и проверить устройство, или «Проверить положение», или «Отложить».',
+      'Камераны ашып, құрылғыны тексеру үшін «Дайындықты тексеру», не «Қалыпты тексеру», не «Кейінге қалдыру» деңіз.',
+      'Say “check readiness” to open the camera and check the device, “check position”, or “later”.',
+    ],
+    VoiceCopy.summaryBlocked: [
+      'Осмотр пока недоступен. Скажите «Продолжить настройку» или «Учебные примеры».',
+      'Шолу әзірге қолжетімсіз. «Баптауды жалғастыру» немесе «Оқу мысалдары» деңіз.',
+      'Inspection is unavailable. Say “continue setup” or “training examples”.',
+    ],
+    VoiceCopy.summaryReady: [
+      'Доступен только неподвижный осмотр. Скажите «Начать осмотр», «Продолжить настройку» для повторной проверки или «Учебные примеры».',
+      'Тек орныңызда тұрып шолуға болады. «Шолуды бастау», қайта тексеру үшін «Баптауды жалғастыру» немесе «Оқу мысалдары» деңіз.',
+      'Only stationary inspection is available. Say “start inspection”, “continue setup” to recheck, or “training examples”.',
+    ],
+    VoiceCopy.inspectionUnavailable: [
+      'Переход к осмотру здесь недоступен. Скажите «Продолжить настройку» или «Учебные примеры».',
+      'Мұнда шолуға өту қолжетімсіз. «Баптауды жалғастыру» немесе «Оқу мысалдары» деңіз.',
+      'This screen cannot open inspection. Say “continue setup” or “training examples”.',
+    ],
+    VoiceCopy.inspectionHandoff: [
+      'Микрофон обучения выключен. Открываю неподвижный осмотр. Голосовой вызов «Багдар» в осмотре пока не добавлен.',
+      'Оқу микрофоны өшірілді. Орныңызда тұрып шолу ашылады. Шолуда «Багдар» дауыстық шақыруы әлі қосылған жоқ.',
+      'The training microphone is off. Opening stationary inspection. The “Bagdar” wake word is not available in inspection yet.',
+    ],
+    VoiceCopy.checking: [
+      'Проверяю устройство. Микрофон закрыт.',
+      'Құрылғы тексерілуде. Микрофон өшірулі.',
+      'Checking the device. The microphone is closed.',
+    ],
+    VoiceCopy.systemPermission: [
+      'Ожидаю системное разрешение. Микрофон закрыт.',
+      'Жүйелік рұқсат күтілуде. Микрофон өшірулі.',
+      'Waiting for system permission. The microphone is closed.',
+    ],
+    VoiceCopy.permissionIntro: [
+      'Сейчас откроется системное окно. Bagdar не может выбрать ответ в нём. После возврата проверю фактическое разрешение.',
+      'Қазір жүйелік терезе ашылады. Bagdar онда жауап таңдай алмайды. Қайтып келгенде нақты рұқсат тексеріледі.',
+      'A system window will open. Bagdar cannot choose its answer. I will check the actual permission when you return.',
+    ],
+    VoiceCopy.settingsUnavailable: [
+      'Не удалось открыть настройки приложения.',
+      'Қолданба баптауларын ашу мүмкін болмады.',
+      'App settings could not be opened.',
+    ],
+    VoiceCopy.notStanding: [
+      'Проверка не запускается. Остановитесь в удобном месте или отложите её.',
+      'Тексеру басталмайды. Ыңғайлы жерде тоқтаңыз немесе кейінге қалдырыңыз.',
+      'The check will not start. Stop somewhere suitable or postpone it.',
+    ],
+    VoiceCopy.alignmentRejected: [
+      'Положение не подтверждено. Можно повторить измерение.',
+      'Қалып расталған жоқ. Өлшеуді қайталауға болады.',
+      'Position is not confirmed. You can repeat the measurement.',
+    ],
+    VoiceCopy.title: ['Голосовые ответы', 'Дауыстық жауаптар', 'Voice answers'],
+    VoiceCopy.explanation: [
+      'Отвечайте после сигнала. Для ответов нужно разрешение микрофона.',
+      'Дыбыстан кейін жауап беріңіз. Жауап беру үшін микрофон рұқсаты керек.',
+      'Answer after the tone. Voice answers need microphone permission.',
+    ],
+    VoiceCopy.enable: [
+      'Отвечать голосом',
+      'Дауыспен жауап беру',
+      'Use voice answers',
+    ],
+    VoiceCopy.disable: [
+      'Выключить микрофон',
+      'Микрофонды өшіру',
+      'Turn off microphone',
+    ],
+    VoiceCopy.resumeButton: [
+      'Возобновить голосовые ответы',
+      'Дауыстық жауаптарды жалғастыру',
+      'Resume voice answers',
+    ],
+    VoiceCopy.ready: [
+      'После сигнала можно отвечать. Скажите «Повтори», чтобы услышать вопрос ещё раз.',
+      'Дыбыстан кейін жауап беріңіз. Сұрақты қайта есту үшін «Қайтала» деңіз.',
+      'Answer after the tone. Say “repeat” to hear the question again.',
+    ],
+    VoiceCopy.preparing: [
+      'Проверяю доступ к микрофону',
+      'Микрофонға рұқсатты тексеріп жатырмын',
+      'Checking microphone access',
+    ],
+    VoiceCopy.speaking: [
+      'Озвучиваю вопрос. Микрофон сейчас не слушает.',
+      'Сұрақты оқып жатырмын. Микрофон қазір тыңдамайды.',
+      'Reading the question. The microphone is not listening yet.',
+    ],
+    VoiceCopy.listening: [
+      'Слушаю ответ',
+      'Жауапты тыңдап жатырмын',
+      'Listening for your answer',
+    ],
+    VoiceCopy.processing: [
+      'Обрабатываю ответ',
+      'Жауапты өңдеп жатырмын',
+      'Processing your answer',
+    ],
+    VoiceCopy.suspended: [
+      'Голосовой сеанс приостановлен',
+      'Дауыстық сеанс кідіртілді',
+      'Voice session suspended',
+    ],
+    VoiceCopy.off: [
+      'Микрофон выключен. Для нового сеанса выберите «Отвечать голосом».',
+      'Микрофон өшірулі. Жаңа сеанс үшін «Дауыспен жауап беру» таңдаңыз.',
+      'The microphone is off. Select “Use voice answers” to start a new session.',
+    ],
+    VoiceCopy.boundary: [
+      'Голосовое обучение завершено. Микрофон выключен. Дальше — разрешение камеры и проверка устройства через доступные элементы экрана.',
+      'Дауыстық оқу аяқталды. Микрофон өшірулі. Әрі қарай камера рұқсаты мен құрылғы тексеруі экранның қолжетімді элементтері арқылы орындалады.',
+      'Voice training is complete. The microphone is off. Continue with camera permission and device checks using the accessible screen controls.',
+    ],
+    VoiceCopy.timeout: [
+      'Ответ не получен. Микрофон выключен. Для продолжения выберите «Возобновить голосовые ответы».',
+      'Жауап алынбады. Микрофон өшірулі. Жалғастыру үшін «Дауыстық жауаптарды жалғастыру» таңдаңыз.',
+      'No answer was received. The microphone is off. Select “Resume voice answers” to continue.',
+    ],
+    VoiceCopy.unknown: [
+      'Не разобрал ответ. Попробуйте одну из названных команд.',
+      'Жауап түсініксіз. Айтылған командалардың бірін қолданыңыз.',
+      'I did not understand. Try one of the listed commands.',
+    ],
+    VoiceCopy.negative: [
+      'Подтверждение не получено. Повторим проверку.',
+      'Растау алынбады. Тексеруді қайталайық.',
+      'Not confirmed. Let us repeat the check.',
+    ],
+    VoiceCopy.accepted: ['Принято.', 'Қабылданды.', 'Accepted.'],
+    VoiceCopy.nextHint: [
+      'Скажите «Дальше» или «Повтори».',
+      '«Келесі» немесе «Қайтала» деңіз.',
+      'Say “next” or “repeat”.',
+    ],
+    VoiceCopy.practiceHint: [
+      'Что вы сделаете? Скажите «Остановлюсь», «Проверю» или «Пауза».',
+      'Не істейсіз? «Тоқтаймын», «Тексеремін» немесе «Үзіліс» деңіз.',
+      'What will you do? Say “I will stop”, “I will check”, or “pause”.',
+    ],
+    VoiceCopy.correctHint: [
+      'Скажите «Дальше» для следующего упражнения.',
+      'Келесі жаттығу үшін «Келесі» деңіз.',
+      'Say “next” for the next exercise.',
+    ],
+    VoiceCopy.pauseHint: [
+      'Пауза. Микрофон ждёт ответ. Скажите «Продолжить» или «Выключить микрофон».',
+      'Үзіліс. Микрофон жауап күтеді. «Жалғастыру» немесе «Микрофонды өшір» деңіз.',
+      'Paused. The microphone is waiting for an answer. Say “continue” or “turn off the microphone”.',
+    ],
+    VoiceCopy.privacy: [
+      'Голосовые ответы обрабатывает локальный распознаватель Android. Bagdar не сохраняет аудио и расшифровку этого сеанса.',
+      'Дауыстық жауаптарды Android жергілікті тануы өңдейді. Bagdar осы сеанстың аудиосы мен мәтінін сақтамайды.',
+      'Voice answers use Android on-device recognition. Bagdar does not save this session’s audio or transcript.',
+    ],
+    VoiceCopy.language: [
+      'Выбран русский. Скажите «Русский», «Казахский», «Английский» или «Дальше».',
+      'Қазақ тілі таңдалды. «Қазақша», «Орысша», «Ағылшынша» немесе «Келесі» деңіз.',
+      'English is selected. Say “English”, “Russian”, “Kazakh”, or “next”.',
+    ],
+    VoiceCopy.access: [
+      'Скажите «Самостоятельно», «Крупный текст» или «С помощником».',
+      '«Өзім», «Ірі мәтін» немесе «Көмекшімен» деңіз.',
+      'Say “myself”, “large text”, or “with a helper”.',
+    ],
+    VoiceCopy.handoff: [
+      'Личные подтверждения даёт пользователь. Когда управление передано вам, скажите «Управление у меня».',
+      'Жеке растауды пайдаланушы береді. Басқару сізге берілгенде «Басқару менде» деңіз.',
+      'Personal confirmations belong to the user. When you have control, say “I have control”.',
+    ],
+    VoiceCopy.limits: [
+      'Если ограничения понятны, скажите «Понимаю ограничения». Иначе скажите «Не понимаю».',
+      'Шектеулер түсінікті болса, «Шектеулерді түсінемін» деңіз. Әйтпесе «Түсінбедім» деңіз.',
+      'Say “I understand the limits”, or “I do not understand”.',
+    ],
+    VoiceCopy.ordinary: [
+      'Вы услышали образец речи? Скажите «Услышал» или «Не услышал».',
+      'Сөйлеу үлгісін естідіңіз бе? «Естідім» немесе «Естімедім» деңіз.',
+      'Did you hear the speech sample? Say “I heard it” or “I did not hear it”.',
+    ],
+    VoiceCopy.stop: [
+      'Вы услышали предупреждение? Скажите «Услышал» или «Не услышал».',
+      'Ескертуді естідіңіз бе? «Естідім» немесе «Естімедім» деңіз.',
+      'Did you hear the warning? Say “I heard it” or “I did not hear it”.',
+    ],
+    VoiceCopy.haptic: [
+      'Вы почувствовали вибрацию? Скажите «Почувствовал» или «Не почувствовал». Если звук уже проверен, можно сказать «Без вибрации».',
+      'Дірілді сездіңіз бе? «Сездім» немесе «Сезбедім» деңіз. Дыбыс тексерілсе, «Дірілсіз» деуге болады.',
+      'Did you feel the vibration? Say “I felt it” or “I did not feel it”. If sound is already verified, you can say “without vibration”.',
+    ],
+    VoiceCopy.feedbackDone: [
+      'Проверка сигналов завершена. Скажите «Дальше».',
+      'Сигналдар тексерілді. «Келесі» деңіз.',
+      'Feedback checks are complete. Say “next”.',
+    ],
+    VoiceCopy.practiceDone: [
+      'Упражнения завершены. Скажите «Дальше».',
+      'Жаттығулар аяқталды. «Келесі» деңіз.',
+      'Practice is complete. Say “next”.',
+    ],
+    VoiceCopy.permissionDenied: [
+      'Нет доступа к микрофону. Разрешите его в настройках Android и включите голосовые ответы снова.',
+      'Микрофонға рұқсат жоқ. Android баптауында рұқсат беріп, дауыстық жауаптарды қайта қосыңыз.',
+      'Microphone permission is missing. Allow it in Android settings, then enable voice answers again.',
+    ],
+    VoiceCopy.unsupported: [
+      'Локальные голосовые ответы доступны на Android 12 или новее. Используйте доступные элементы экрана.',
+      'Жергілікті дауыстық жауаптар Android 12 не жаңарақ жүйесінде қолжетімді. Экранның қолжетімді элементтерін қолданыңыз.',
+      'On-device voice answers need Android 12 or later. Use the accessible screen controls.',
+    ],
+    VoiceCopy.unavailable: [
+      'Локальное распознавание недоступно. Микрофон выключен. Используйте элементы экрана или повторите включение.',
+      'Жергілікті тану қолжетімсіз. Микрофон өшірулі. Экран элементтерін қолданыңыз немесе қайта қосып көріңіз.',
+      'On-device recognition is unavailable. The microphone is off. Use screen controls or try enabling it again.',
+    ],
+    VoiceCopy.languageUnavailable: [
+      'Локальное распознавание выбранного языка недоступно. Микрофон выключен. Выберите другой язык на экране или настройте распознаватель Android.',
+      'Таңдалған тілдің жергілікті тануы қолжетімсіз. Микрофон өшірулі. Экранда басқа тіл таңдаңыз немесе Android тануын баптаңыз.',
+      'On-device recognition for this language is unavailable. The microphone is off. Choose another language on screen or configure Android recognition.',
+    ],
+    VoiceCopy.speechFailed: [
+      'Не удалось озвучить инструкцию. Микрофон выключен. Проверьте настройки речи на экране.',
+      'Нұсқау дыбысталмады. Микрофон өшірулі. Экранда сөйлеу баптауын тексеріңіз.',
+      'The instruction could not be played. The microphone is off. Check the speech settings on screen.',
+    ],
+  };
+}

@@ -30,10 +30,14 @@ class GestureTutorialScreen extends StatefulWidget {
   final VoidCallback? onFinished;
   final bool standalone;
 
+  /// Host can revoke ordinary tutorial actions during an emergency.
+  final bool Function()? canInteract;
+
   const GestureTutorialScreen({
     super.key,
     this.onFinished,
     this.standalone = true,
+    this.canInteract,
   });
 
   @override
@@ -53,6 +57,7 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
   DateTime? _lastPromptAt;
   int _failCount = 0;
   bool _voiceReady = false;
+  bool get _canInteract => mounted && (widget.canInteract?.call() ?? true);
 
   Offset? _twoFingerSwipeStart;
   static const double _kTwoFingerSkipMinDy = 80.0;
@@ -88,7 +93,9 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
     super.initState();
     _earcon.init();
     _tts.init().then((_) async {
+      if (!_canInteract) return;
       await _tts.setLanguage(AppStrings.ttsLang);
+      if (!_canInteract) return;
       await _speakIntro();
       await _speakPrompt(initial: true);
     });
@@ -98,6 +105,7 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
   Future<void> _initVoice() async {
     _voice.onCommand = _onVoiceCommand;
     _voiceReady = await _voice.init(locale: AppStrings.ttsLang);
+    if (!_canInteract) _voice.dispose();
   }
 
   @override
@@ -105,12 +113,15 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
     _twoFingerTimer?.cancel();
     _voiceListenTimer?.cancel();
     _voice.dispose();
-    _tts.stop();
+    // This is shared runtime TTS. Disposing a preempted tutorial must not
+    // cancel an SOS announcement that has already entered the queue.
+    if (widget.canInteract?.call() ?? true) _tts.stop();
     _earcon.dispose();
     super.dispose();
   }
 
   Future<void> _speakIntro() async {
+    if (!_canInteract) return;
     if (mounted && MediaQuery.of(context).accessibleNavigation) return;
     _tts.say(S.get('tut_intro'), SpeechPriority.warning, pan: 0.0);
     await _tts.awaitCurrentSpeech();
@@ -118,6 +129,7 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
   }
 
   Future<void> _speakPrompt({bool initial = false}) async {
+    if (!_canInteract) return;
     if (_step == _TutStep.done) {
       if (mounted && !MediaQuery.of(context).accessibleNavigation) {
         _tts.say(S.get('tut_finished'), SpeechPriority.warning, pan: 0.0);
@@ -135,16 +147,18 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
   }
 
   void _scheduleVoiceListen() {
+    if (!_canInteract) return;
     if (!_voiceReady) return;
     if (mounted && MediaQuery.of(context).accessibleNavigation) return;
     _voiceListenTimer?.cancel();
     _voiceListenTimer = Timer(const Duration(seconds: 5), () {
-      if (!mounted || _step == _TutStep.done) return;
+      if (!_canInteract || _step == _TutStep.done) return;
       unawaited(_voice.startListening());
     });
   }
 
   void _onVoiceCommand(VoiceCommand cmd) {
+    if (!_canInteract) return;
     switch (cmd) {
       case VoiceCommand.tutorialSkip:
         unawaited(_skip());
@@ -164,11 +178,13 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
   }
 
   void _speakDetailedHelp() {
+    if (!_canInteract) return;
     final detailKey = 'tut_detail_${_step.name}';
     _tts.say(S.get(detailKey), SpeechPriority.warning, pan: 0.0);
   }
 
   Future<void> _advance() async {
+    if (!_canInteract) return;
     if (_step == _TutStep.done) return;
     _failCount = 0;
     _voiceListenTimer?.cancel();
@@ -180,7 +196,7 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
     final next = _TutStep.values[_step.index + 1];
     await _tts.awaitCurrentSpeech();
     await Future<void>.delayed(const Duration(milliseconds: 300));
-    if (!mounted) return;
+    if (!_canInteract) return;
     setState(() => _step = next);
     if (next == _TutStep.done) {
       await _finish();
@@ -190,9 +206,10 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
   }
 
   Future<void> _finish() async {
+    if (!_canInteract) return;
     await Settings.instance.setTutorialSeen(true);
     await FeatureUsageTracker.instance.setTutorialCompletedNow();
-    if (!mounted) return;
+    if (!mounted || !_canInteract) return;
     if (widget.onFinished != null) {
       widget.onFinished!.call();
     } else if (widget.standalone && Navigator.canPop(context)) {
@@ -201,9 +218,11 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
   }
 
   Future<void> _skip() async {
+    if (!_canInteract) return;
     _voiceListenTimer?.cancel();
     unawaited(_voice.stopListening());
     await Settings.instance.setTutorialSeen(true);
+    if (!_canInteract) return;
     _tts.say(S.get('tut_finished'), SpeechPriority.warning, pan: 0.0);
     if (!mounted) return;
     if (widget.onFinished != null) {
@@ -318,6 +337,7 @@ class _GestureTutorialScreenState extends State<GestureTutorialScreen> {
   }
 
   void _throttledReprompt() {
+    if (!_canInteract) return;
     HapticService.vibrate(const [0, 50]);
     _earcon.play(Earcon.fail);
     _failCount++;

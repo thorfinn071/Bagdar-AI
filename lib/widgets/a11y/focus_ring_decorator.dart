@@ -5,7 +5,8 @@ import '../../theme/bagdar_tokens.dart';
 
 /// Wraps [child] with a 4 dp solid focus ring (token: `focus.ring`)
 /// that appears whenever the child or any of its descendants holds
-/// focus — including TalkBack accessibility focus. The ring is drawn
+/// keyboard/input focus. This does not observe TalkBack accessibility focus.
+/// The ring is drawn
 /// outside the child's painted bounds so it does not consume layout
 /// space when invisible.
 ///

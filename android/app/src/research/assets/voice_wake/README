@@ -1,0 +1,18 @@
+Kazakh model for Vosk
+
+Thanks to
+
+A Crowdsourced Open-Source Kazakh Speech Corpus and Initial Speech Recognition Baseline
+Yerbolat Khassanov, Saida Mussakhojayeva, Almas Mirzakhmetov, Alen Adiyev, Mukhamet Nurpeiissov, Huseyin Atakan Varol
+https://arxiv.org/abs/2009.10334
+
+The Development of a Kazakh Speech Recognition Model Using a Convolutional Neural Network with Fixed Character Level Filters
+Nurgali Kadyrbek, Madina Mansurova, Adai Shomanov, Gaukhar Makharova
+https://research.nu.edu.kz/en/publications/the-development-of-a-kazakh-speech-recognition-model-using-a-conv
+
+WER:
+
+%WER 30.00 [ 972 / 3240, 137 ins, 63 del, 772 sub ] exp/chain_android/tdnn/decode_test_cv_small/wer_9_0.0
+%WER 21.10 [ 3239 / 15351, 615 ins, 419 del, 2205 sub ] exp/chain_android/tdnn/decode_test_fleurs_small/wer_10_0.0
+%WER 9.70 [ 3464 / 35702, 770 ins, 336 del, 2358 sub ] exp/chain_android/tdnn/decode_test_ksc_crowd_small/wer_11_0.0
+%WER 24.86 [ 17038 / 68542, 1641 ins, 4329 del, 11068 sub ] exp/chain_android/tdnn/decode_test_ksc_other_small/wer_9_0.0

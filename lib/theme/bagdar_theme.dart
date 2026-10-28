@@ -45,134 +45,268 @@ class BagdarTheme extends InheritedWidget {
 
   static BagdarColors colorsOf(BuildContext context) {
     final theme = maybeOf(context);
-    return theme?.colors ?? BagdarColors.dark;
+    return theme?.colors ??
+        BagdarColors.of(
+          Theme.of(context).brightness == Brightness.dark
+              ? BagdarThemeName.dark
+              : BagdarThemeName.light,
+        );
   }
 
   static ThemeData buildMaterialTheme(BagdarThemeName name) {
     final c = BagdarColors.of(name);
-    final isDarkSurface =
+    final dark =
         name == BagdarThemeName.dark || name == BagdarThemeName.highContrast;
-
-    final colorScheme = isDarkSurface
-        ? ColorScheme.dark(
-            primary: c.accentPrimary,
-            onPrimary: c.accentOnPrimary,
-            secondary: c.accentPrimary,
-            onSecondary: c.accentOnPrimary,
-            surface: c.surfaceBg,
-            onSurface: c.textPrimary,
-            error: c.stateDanger,
-            onError: c.accentOnPrimary,
-          )
-        : ColorScheme.light(
-            primary: c.accentPrimary,
-            onPrimary: c.accentOnPrimary,
-            secondary: c.accentPrimary,
-            onSecondary: c.accentOnPrimary,
-            surface: c.surfaceBg,
-            onSurface: c.textPrimary,
-            error: c.stateDanger,
-            onError: c.accentOnPrimary,
-          );
-
-    final base = ThemeData(
+    final highContrast = name == BagdarThemeName.highContrast;
+    final controlShape = RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(BagdarRadius.control),
+    );
+    final cardShape = RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(BagdarRadius.card),
+      side: BorderSide(color: c.divider),
+    );
+    final scheme =
+        ColorScheme.fromSeed(
+          seedColor: c.accentPrimary,
+          brightness: dark ? Brightness.dark : Brightness.light,
+        ).copyWith(
+          primary: c.accentPrimary,
+          onPrimary: c.accentOnPrimary,
+          primaryContainer: c.surfaceSelected,
+          onPrimaryContainer: c.textPrimary,
+          secondary: c.accentPrimary,
+          onSecondary: c.accentOnPrimary,
+          secondaryContainer: c.surfaceSelected,
+          onSecondaryContainer: c.textPrimary,
+          surface: c.surfaceElevated,
+          surfaceContainerLowest: c.surfaceBg,
+          surfaceContainerLow: c.surfaceElevated,
+          surfaceContainer: c.surfaceElevated,
+          surfaceContainerHigh: c.surfaceElevated,
+          surfaceContainerHighest: c.surfaceSelected,
+          onSurface: c.textPrimary,
+          onSurfaceVariant: c.textSecondary,
+          outline: c.controlBorder,
+          outlineVariant: c.divider,
+          error: c.stateDanger,
+          onError: BagdarColors.readableOn(c.stateDanger),
+          surfaceTint: Colors.transparent,
+        );
+    final primaryStyle =
+        FilledButton.styleFrom(
+          backgroundColor: c.accentPrimary,
+          foregroundColor: c.accentOnPrimary,
+          disabledBackgroundColor: highContrast ? c.surfaceBg : c.disabledFill,
+          disabledForegroundColor: c.textSecondary,
+          minimumSize: const Size(
+            BagdarSpacing.tapMinimum,
+            BagdarSpacing.tapMinimum,
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+          textStyle: BagdarTypography.button,
+          shape: controlShape,
+          elevation: 0,
+        ).copyWith(
+          side: WidgetStateProperty.resolveWith(
+            (states) => highContrast
+                ? BorderSide(color: c.controlBorder, width: 2)
+                : null,
+          ),
+        );
+    return ThemeData(
       useMaterial3: true,
-      brightness: isDarkSurface ? Brightness.dark : Brightness.light,
+      brightness: scheme.brightness,
       fontFamily: BagdarTypography.fontFamily,
-      colorScheme: colorScheme,
+      colorScheme: scheme,
       scaffoldBackgroundColor: c.surfaceBg,
       canvasColor: c.surfaceBg,
       cardColor: c.surfaceElevated,
       dividerColor: c.divider,
-      iconTheme: IconThemeData(color: c.textPrimary, size: 28),
-      primaryIconTheme: IconThemeData(color: c.accentOnPrimary, size: 28),
+      disabledColor: c.textSecondary,
+      iconTheme: IconThemeData(color: c.textPrimary, size: 24),
+      primaryIconTheme: IconThemeData(color: c.accentOnPrimary, size: 24),
       textTheme: TextTheme(
         displayLarge: BagdarTypography.display.copyWith(color: c.textPrimary),
         headlineLarge: BagdarTypography.title.copyWith(color: c.textPrimary),
-        titleLarge: BagdarTypography.title.copyWith(color: c.textPrimary),
+        headlineMedium: BagdarTypography.title.copyWith(color: c.textPrimary),
+        headlineSmall: BagdarTypography.section.copyWith(color: c.textPrimary),
+        titleLarge: BagdarTypography.section.copyWith(color: c.textPrimary),
+        titleMedium: BagdarTypography.section.copyWith(color: c.textPrimary),
+        titleSmall: BagdarTypography.button.copyWith(color: c.textPrimary),
         bodyLarge: BagdarTypography.body.copyWith(color: c.textPrimary),
         bodyMedium: BagdarTypography.body.copyWith(color: c.textPrimary),
         bodySmall: BagdarTypography.caption.copyWith(color: c.textSecondary),
-        labelLarge: BagdarTypography.body.copyWith(color: c.textPrimary),
+        labelLarge: BagdarTypography.button.copyWith(color: c.textPrimary),
+        labelMedium: BagdarTypography.caption.copyWith(color: c.textPrimary),
+        labelSmall: BagdarTypography.caption.copyWith(color: c.textSecondary),
       ),
       appBarTheme: AppBarTheme(
         backgroundColor: c.surfaceBg,
         foregroundColor: c.textPrimary,
+        surfaceTintColor: Colors.transparent,
         elevation: 0,
+        scrolledUnderElevation: 0,
         centerTitle: false,
-        titleTextStyle: BagdarTypography.title.copyWith(color: c.textPrimary),
+        toolbarHeight: 72,
+        titleTextStyle: BagdarTypography.section.copyWith(color: c.textPrimary),
+      ),
+      cardTheme: CardThemeData(
+        color: c.surfaceElevated,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        margin: EdgeInsets.zero,
+        shape: cardShape,
+        clipBehavior: Clip.antiAlias,
+      ),
+      dividerTheme: DividerThemeData(color: c.divider, thickness: 1, space: 1),
+      listTileTheme: ListTileThemeData(
+        textColor: c.textPrimary,
+        iconColor: c.accentPrimary,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        minVerticalPadding: 16,
+        titleTextStyle: BagdarTypography.body.copyWith(color: c.textPrimary),
+        subtitleTextStyle: BagdarTypography.caption.copyWith(
+          color: c.textSecondary,
+        ),
       ),
       bottomSheetTheme: BottomSheetThemeData(
         backgroundColor: c.surfaceElevated,
         modalBackgroundColor: c.surfaceElevated,
         surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(BagdarRadius.panel),
+          ),
+          side: BorderSide(color: c.divider),
+        ),
+        clipBehavior: Clip.antiAlias,
       ),
       dialogTheme: DialogThemeData(
         backgroundColor: c.surfaceElevated,
-        titleTextStyle: BagdarTypography.title.copyWith(color: c.textPrimary),
+        surfaceTintColor: Colors.transparent,
+        shape: cardShape,
+        titleTextStyle: BagdarTypography.section.copyWith(color: c.textPrimary),
         contentTextStyle: BagdarTypography.body.copyWith(color: c.textPrimary),
       ),
       snackBarTheme: SnackBarThemeData(
         backgroundColor: c.surfaceElevated,
-        contentTextStyle: BagdarTypography.body.copyWith(color: c.textPrimary),
+        contentTextStyle: BagdarTypography.caption.copyWith(
+          color: c.textPrimary,
+        ),
+        actionTextColor: c.accentPrimary,
+        behavior: SnackBarBehavior.floating,
+        shape: cardShape,
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: c.surfaceElevated,
+        contentPadding: const EdgeInsets.all(20),
+        labelStyle: BagdarTypography.caption.copyWith(color: c.textSecondary),
+        hintStyle: BagdarTypography.caption.copyWith(color: c.textSecondary),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(BagdarRadius.control),
+          borderSide: BorderSide(color: c.controlBorder),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(BagdarRadius.control),
+          borderSide: BorderSide(color: c.controlBorder),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(BagdarRadius.control),
+          borderSide: BorderSide(color: c.focusRing, width: 2),
+        ),
       ),
       switchTheme: SwitchThemeData(
-        thumbColor: WidgetStatePropertyAll(c.accentPrimary),
-        trackColor: WidgetStatePropertyAll(c.surfaceElevated),
+        thumbColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? c.accentOnPrimary
+              : c.textSecondary,
+        ),
+        trackColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? c.accentPrimary
+              : c.surfaceElevated,
+        ),
+        trackOutlineColor: WidgetStatePropertyAll(c.controlBorder),
+      ),
+      checkboxTheme: CheckboxThemeData(
+        side: BorderSide(color: c.controlBorder, width: 2),
+        checkColor: WidgetStatePropertyAll(c.accentOnPrimary),
+        visualDensity: VisualDensity.standard,
+        materialTapTargetSize: MaterialTapTargetSize.padded,
       ),
       sliderTheme: SliderThemeData(
         activeTrackColor: c.accentPrimary,
-        inactiveTrackColor: c.surfaceElevated,
+        inactiveTrackColor: c.divider,
         thumbColor: c.accentPrimary,
         overlayColor: c.accentPrimary.withValues(alpha: 0.2),
       ),
       progressIndicatorTheme: ProgressIndicatorThemeData(
         color: c.accentPrimary,
-        linearTrackColor: c.surfaceElevated,
+        linearTrackColor: c.divider,
+        linearMinHeight: 4,
+        borderRadius: BorderRadius.circular(BagdarRadius.sharp),
       ),
-      filledButtonTheme: FilledButtonThemeData(
-        style: FilledButton.styleFrom(
-          backgroundColor: c.accentPrimary,
-          foregroundColor: c.accentOnPrimary,
+      filledButtonTheme: FilledButtonThemeData(style: primaryStyle),
+      elevatedButtonTheme: ElevatedButtonThemeData(style: primaryStyle),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: c.accentPrimary,
+          disabledForegroundColor: c.textSecondary,
           minimumSize: const Size(
             BagdarSpacing.tapMinimum,
             BagdarSpacing.tapMinimum,
           ),
-          padding: const EdgeInsets.symmetric(
-            horizontal: BagdarSpacing.l,
-            vertical: BagdarSpacing.m,
-          ),
-          textStyle: BagdarTypography.body,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          textStyle: BagdarTypography.button,
+          shape: controlShape,
+          side: BorderSide(color: c.controlBorder, width: highContrast ? 2 : 1),
         ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: c.accentPrimary,
-          minimumSize: const Size(
-            BagdarSpacing.tapMinimum,
-            BagdarSpacing.tapMinimum,
+          disabledForegroundColor: c.textSecondary,
+          minimumSize: const Size(48, 56),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+          textStyle: BagdarTypography.caption.copyWith(
+            fontWeight: FontWeight.w500,
           ),
-          textStyle: BagdarTypography.body,
+          shape: controlShape,
         ),
       ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: c.accentPrimary,
-          foregroundColor: c.accentOnPrimary,
-          minimumSize: const Size(
-            BagdarSpacing.tapMinimum,
-            BagdarSpacing.tapMinimum,
-          ),
-          textStyle: BagdarTypography.body,
-        ),
+      iconButtonTheme: IconButtonThemeData(
+        style: IconButton.styleFrom(minimumSize: const Size(48, 48)),
       ),
-      focusColor: c.focusRing,
+      focusColor: c.focusRing.withValues(alpha: 0.24),
       visualDensity: VisualDensity.standard,
+      materialTapTargetSize: MaterialTapTargetSize.padded,
     );
-
-    return base;
   }
 
   @override
   bool updateShouldNotify(BagdarTheme oldWidget) => name != oldWidget.name;
+}
+
+/// Applies the same palette and Material components in the app, standalone
+/// onboarding, previews and recovery shells. OS high contrast always wins.
+class BagdarThemeScope extends StatelessWidget {
+  final BagdarThemeName? name;
+  final Widget child;
+  const BagdarThemeScope({super.key, this.name, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    final effective = MediaQuery.maybeOf(context)?.highContrast == true
+        ? BagdarThemeName.highContrast
+        : name ?? BagdarTheme.maybeOf(context)?.name ?? BagdarThemeName.light;
+    return BagdarTheme(
+      name: effective,
+      colors: BagdarColors.of(effective),
+      child: Theme(
+        data: BagdarTheme.buildMaterialTheme(effective),
+        child: child,
+      ),
+    );
+  }
 }

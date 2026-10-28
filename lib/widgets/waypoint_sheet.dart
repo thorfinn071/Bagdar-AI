@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme/bagdar_theme.dart';
+
 import '../models/strings.dart';
 import '../services/waypoint_service.dart';
 
@@ -38,6 +40,7 @@ class _WaypointSheetState extends State<WaypointSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BagdarTheme.colorsOf(context);
     return DraggableScrollableSheet(
       expand: false,
       initialChildSize: 0.5,
@@ -50,7 +53,7 @@ class _WaypointSheetState extends State<WaypointSheet> {
             height: 4,
             margin: const EdgeInsets.symmetric(vertical: 12),
             decoration: BoxDecoration(
-              color: Colors.white24,
+              color: colors.divider,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -58,35 +61,37 @@ class _WaypointSheetState extends State<WaypointSheet> {
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
             child: Row(
               children: [
-                const Icon(Icons.place, color: Colors.cyanAccent, size: 20),
+                Icon(Icons.place, color: colors.accentPrimary, size: 20),
                 const SizedBox(width: 8),
-                Text(
-                  S.get('waypoint_name_prompt'),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                Expanded(
+                  child: Text(
+                    S.get('waypoint_name_prompt'),
+                    style: TextStyle(
+                      color: colors.textPrimary,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
-                const Spacer(),
+                const SizedBox(width: 8),
                 Text(
                   '${_waypoints.length}',
-                  style: const TextStyle(color: Colors.white38, fontSize: 14),
+                  style: TextStyle(color: colors.textSecondary, fontSize: 16),
                 ),
               ],
             ),
           ),
 
-          const Divider(color: Colors.white12, height: 1),
+          Divider(color: colors.divider, height: 1),
 
           Expanded(
             child: _waypoints.isEmpty
                 ? Center(
                     child: Text(
                       S.get('waypoint_none'),
-                      style: const TextStyle(
-                        color: Colors.white38,
-                        fontSize: 15,
+                      style: TextStyle(
+                        color: colors.textSecondary,
+                        fontSize: 16,
                       ),
                     ),
                   )
@@ -122,20 +127,17 @@ class _WaypointTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BagdarTheme.colorsOf(context);
     return Semantics(
       label: '${waypoint.name}, ${_formatDate(waypoint.created)}',
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
-        leading: const Icon(
-          Icons.location_on,
-          color: Colors.orangeAccent,
-          size: 22,
-        ),
+        leading: Icon(Icons.location_on, color: colors.stateWarning, size: 22),
         title: Text(
           waypoint.name,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 15,
+          style: TextStyle(
+            color: colors.textPrimary,
+            fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -143,9 +145,9 @@ class _WaypointTile extends StatelessWidget {
           '${_formatDate(waypoint.created)}\n'
           '${waypoint.lat.toStringAsFixed(5)}, '
           '${waypoint.lng.toStringAsFixed(5)}',
-          style: const TextStyle(
-            color: Colors.white38,
-            fontSize: 12,
+          style: TextStyle(
+            color: colors.textSecondary,
+            fontSize: 16,
             height: 1.5,
           ),
         ),
@@ -154,7 +156,7 @@ class _WaypointTile extends StatelessWidget {
           label: '${S.get('waypoint_deleted')} ${waypoint.name}',
           button: true,
           child: IconButton(
-            icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
+            icon: Icon(Icons.delete_outline, color: colors.stateDanger),
             tooltip: S.get('waypoint_deleted'),
             onPressed: () => _confirmDelete(context),
           ),
@@ -164,21 +166,22 @@ class _WaypointTile extends StatelessWidget {
   }
 
   void _confirmDelete(BuildContext context) {
+    final colors = BagdarTheme.colorsOf(context);
     showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        backgroundColor: Colors.grey[900],
-        title: Text(waypoint.name, style: const TextStyle(color: Colors.white)),
+        backgroundColor: colors.surfaceElevated,
+        title: Text(waypoint.name, style: TextStyle(color: colors.textPrimary)),
         content: Text(
           '${S.get('waypoint_deleted')}?',
-          style: const TextStyle(color: Colors.white70),
+          style: TextStyle(color: colors.textSecondary),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
             child: Text(
               S.get('cancel'),
-              style: const TextStyle(color: Colors.white54),
+              style: TextStyle(color: colors.textSecondary),
             ),
           ),
           TextButton(
@@ -188,7 +191,7 @@ class _WaypointTile extends StatelessWidget {
             },
             child: Text(
               S.get('waypoint_deleted'),
-              style: const TextStyle(color: Colors.redAccent),
+              style: TextStyle(color: colors.stateDanger),
             ),
           ),
         ],

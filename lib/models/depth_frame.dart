@@ -280,6 +280,14 @@ class GenericObstacleConfig {
   final int semanticMaxAgeUs;
   final double maxSupportedRollDeg;
   final double minGroundInlierRatio;
+  final double apertureMinSurfaceObservedFraction;
+  final double apertureMinSurfaceContinuity;
+  final double apertureMinFarLowerColumnFraction;
+  final double apertureMaxNearColumnFraction;
+  final double apertureMinWidthFraction;
+  final double apertureCenterToleranceFraction;
+  final double apertureMinFlankNearFraction;
+  final double apertureUnknownProbabilityFloor;
   final GenericObstacleMode defaultMode;
 
   const GenericObstacleConfig({
@@ -325,6 +333,14 @@ class GenericObstacleConfig {
     this.semanticMaxAgeUs = 1500000,
     this.maxSupportedRollDeg = 25.0,
     this.minGroundInlierRatio = 0.20,
+    this.apertureMinSurfaceObservedFraction = 0.75,
+    this.apertureMinSurfaceContinuity = 0.35,
+    this.apertureMinFarLowerColumnFraction = 0.25,
+    this.apertureMaxNearColumnFraction = 0.35,
+    this.apertureMinWidthFraction = 0.16,
+    this.apertureCenterToleranceFraction = 0.08,
+    this.apertureMinFlankNearFraction = 0.45,
+    this.apertureUnknownProbabilityFloor = 0.65,
     this.defaultMode = GenericObstacleMode.shadow,
   });
 

@@ -1,3 +1,4 @@
+import '../core/performance/perception_performance.dart';
 import 'dart:ui';
 
 import 'package:camera/camera.dart';
@@ -110,6 +111,9 @@ class DepthPipelineController {
 
   DateTime _lastRunAt = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _lastYoloAt = DateTime.fromMillisecondsSinceEpoch(0);
+  int _yoloImageWidth = 0;
+  int? _yoloImageHeight, _yoloRotationDegrees;
+  bool? _yoloMirrored;
   Duration interval = const Duration(milliseconds: 800);
   bool _providerReady = false;
   bool _inFlight = false;
@@ -209,10 +213,19 @@ class DepthPipelineController {
   void updateYoloTracks(
     List<Track> tracks, {
     required int imgW,
+    int? imgH,
+    int? rotationDegrees,
+    bool? mirrored,
     DateTime? now,
   }) {
+    _yoloImageWidth = imgW;
+    _yoloImageHeight = imgH;
+    _yoloRotationDegrees = rotationDegrees;
+    _yoloMirrored = mirrored;
     _lastYoloAt = now ?? DateTime.now();
-    _lastYoloTracks = List<Track>.from(tracks);
+    _lastYoloTracks = List<_YoloTrackSample>.unmodifiable(
+      tracks.map(_YoloTrackSample.new),
+    );
     _yoloHazardConfByZone.clear();
     if (imgW <= 0 || tracks.isEmpty) return;
     final zoneWidth = imgW / HazardZone.values.length;
@@ -244,11 +257,56 @@ class DepthPipelineController {
   Map<HazardZone, double> get yoloHazardConfByZoneForTesting =>
       Map<HazardZone, double>.unmodifiable(_yoloHazardConfByZone);
 
+  void Function(DepthPerformanceSample sample)? onPerformanceSample;
+
   Future<List<DepthHazardAlert>> analyze(
     CameraImage image,
+    DateTime now, {
+    CallbackFrameTiming? timing,
+  }) async {
+    final clock = timing ?? CallbackFrameTiming(now.microsecondsSinceEpoch);
+    final measurement = _DepthMeasurement(vm.cameraSession.generation);
+    try {
+      if (clock.callbackTimestampUs != now.microsecondsSinceEpoch ||
+          clock.ageUs < 0) {
+        lastFrameRejectionReason = 'callback_clock_mismatch';
+        measurement.rejectionReason = lastFrameRejectionReason;
+        lastGenericDetection = null;
+        lastGenericTracks = const [];
+        lastGenericDecisions = const [];
+        lastAcceptedPacket = null;
+        lastAcceptedObservationHeader = null;
+        onFrameRejected?.call('callback_clock_mismatch', 0);
+        _setStatus(DepthPipelineStatus.unalignedStale);
+        return const [];
+      }
+      return await _analyze(image, now, clock, measurement);
+    } finally {
+      final sample = DepthPerformanceSample(
+        sessionGeneration: measurement.generation,
+        frameId: measurement.frameId,
+        sourceTimestampUs: now.microsecondsSinceEpoch,
+        providerRoundTripUs: measurement.providerUs,
+        callbackToDecisionUs: clock.ageUs,
+        providerCalled: measurement.providerCalled,
+        accepted: measurement.accepted,
+        rejectionReason: measurement.rejectionReason,
+      );
+      // Diagnostics must never change safety decisions when a sink fails.
+      try {
+        onPerformanceSample?.call(sample);
+      } catch (_) {}
+    }
+  }
+
+  Future<List<DepthHazardAlert>> _analyze(
+    CameraImage image,
     DateTime now,
+    CallbackFrameTiming clock,
+    _DepthMeasurement measurement,
   ) async {
     final packet = _buildPacket(image, now);
+    measurement.frameId = packet.frameId;
     _latestSubmittedFrameId = packet.frameId;
 
     // Never let an early-returning or superseded provider replay decisions
@@ -259,8 +317,10 @@ class DepthPipelineController {
     lastAcceptedPacket = null;
     lastAcceptedObservationHeader = null;
     lastFrameRejectionReason = null;
+    measurement.rejectionReason = lastFrameRejectionReason;
     if (_inFlight) {
       lastFrameRejectionReason = 'provider_busy_latest_frame_wins';
+      measurement.rejectionReason = lastFrameRejectionReason;
       onFrameRejected?.call('provider_busy_latest_frame_wins', 0);
       return const <DepthHazardAlert>[];
     }
@@ -278,6 +338,7 @@ class DepthPipelineController {
       _consecutiveLowConfidenceFrames++;
       _consecutivePlaneFitFailures = 0;
       lastFrameRejectionReason = 'provider_unavailable';
+      measurement.rejectionReason = lastFrameRejectionReason;
       onFrameRejected?.call('provider_unavailable', 0);
       if (_consecutiveLowConfidenceFrames >= _kDegradedFramesToAnnounce) {
         _setStatus(DepthPipelineStatus.lowConfidence);
@@ -286,32 +347,55 @@ class DepthPipelineController {
     }
 
     _consecutiveLowConfidenceFrames = 0;
+    // YOLO and sensor callbacks may advance while background inference runs.
+    // Keep scalar context from submission with this frame, not the next frame.
+    final yoloAligned = _yoloMatchesFrame(
+      at: now,
+      width: image.width,
+      height: image.height,
+      rotationDegrees: packet.sensorRotationDeg,
+      mirrored: packet.mirrored,
+    );
+    final context = _DepthFrameContext(
+      yoloTracks: yoloAligned ? _lastYoloTracks : const [],
+      yoloAt: yoloAligned
+          ? _lastYoloAt
+          : DateTime.fromMillisecondsSinceEpoch(0),
+      yoloHazardConf: yoloAligned
+          ? Map<HazardZone, double>.unmodifiable(_yoloHazardConfByZone)
+          : const {},
+      pitch: vm.orientation.pitch,
+      roll: vm.orientation.roll,
+      rollExcessive: vm.orientation.isRollExcessive,
+      motion: vm.fallDetector.motionState,
+      winterMode: vm.winterMode.active,
+    );
     final inferenceTimer = Stopwatch()..start();
     try {
-      final userStationary =
-          vm.fallDetector.motionState == MotionState.stationary;
+      final userStationary = context.motion == MotionState.stationary;
+      measurement.providerCalled = true;
       final detailed = await provider.analyzeDetailed(
         image,
         cropTopFrac: packet.cropTopFraction,
         userStationary: userStationary,
         weatherDegraded: vm.weatherGate.degraded,
-        winterMode: vm.winterMode.active,
+        winterMode: context.winterMode,
         sourceTimestampUs: packet.cameraTimestampUs,
         rotationDegrees: packet.sensorRotationDeg,
         mirrored: packet.mirrored,
       );
       inferenceTimer.stop();
+      measurement.providerUs = inferenceTimer.elapsedMicroseconds;
 
       final identity = _identityFor(provider, detailed);
-      final observation = PerceptionObservation<DepthAnalysisResult>(
+      var observation = PerceptionObservation<DepthAnalysisResult>(
         header: ObservationHeader.fromPacket(
           packet: packet,
           providerId: identity.providerId,
           modelId: identity.modelId,
           modelHash: identity.modelHash,
           preprocessId: identity.preprocessId,
-          producedAtUs:
-              packet.receivedAtUs + inferenceTimer.elapsedMicroseconds,
+          producedAtUs: clock.producedAtUs,
           confidence: detailed.health.components.combined,
           health: _observationHealth(detailed.health.capability),
         ),
@@ -325,6 +409,7 @@ class DepthPipelineController {
       if (ownershipRejection != null) {
         _inFlight = false;
         lastFrameRejectionReason = ownershipRejection;
+        measurement.rejectionReason = lastFrameRejectionReason;
         onFrameRejected?.call(
           ownershipRejection,
           observation.header.confidence,
@@ -340,6 +425,7 @@ class DepthPipelineController {
       if (alignmentRejection != null) {
         _inFlight = false;
         lastFrameRejectionReason = alignmentRejection;
+        measurement.rejectionReason = lastFrameRejectionReason;
         onFrameRejected?.call(
           alignmentRejection,
           observation.header.confidence,
@@ -348,15 +434,45 @@ class DepthPipelineController {
         return const <DepthHazardAlert>[];
       }
 
-      lastAcceptedPacket = packet;
-      lastAcceptedObservationHeader = observation.header;
-      lastHealth = detailed.health;
       final hazards = detailed.legacyHazards;
       final genericReject = _runGenericStack(
         image: image,
         detailed: detailed,
         now: now,
+        context: context,
       );
+      observation = PerceptionObservation<DepthAnalysisResult>(
+        header: ObservationHeader.fromPacket(
+          packet: packet,
+          providerId: identity.providerId,
+          modelId: identity.modelId,
+          modelHash: identity.modelHash,
+          preprocessId: identity.preprocessId,
+          producedAtUs: clock.producedAtUs,
+          confidence: detailed.health.components.combined,
+          health: _observationHealth(detailed.health.capability),
+        ),
+        payload: detailed,
+      );
+      final releaseRejection = _ownershipRejection(packet, observation.header);
+      if (releaseRejection != null) {
+        _inFlight = false;
+        lastFrameRejectionReason = releaseRejection;
+        measurement.rejectionReason = lastFrameRejectionReason;
+        lastGenericDetection = null;
+        lastGenericTracks = const [];
+        lastGenericDecisions = const [];
+        onFrameRejected?.call(releaseRejection, observation.header.confidence);
+        _setStatus(DepthPipelineStatus.unalignedStale);
+        return const [];
+      }
+      lastAcceptedPacket = packet;
+      lastAcceptedObservationHeader = observation.header;
+      lastHealth = detailed.health;
+      measurement.accepted = detailed.frame != null;
+      if (!measurement.accepted) {
+        measurement.rejectionReason = detailed.health.rejectionReason;
+      }
       _inFlight = false;
 
       // Safety audit 2026-06 fix: analyze() returned without throwing, so the
@@ -373,7 +489,7 @@ class DepthPipelineController {
       );
 
       if (hazards.isEmpty) return const <DepthHazardAlert>[];
-      final rollExcessive = vm.orientation.isRollExcessive;
+      final rollExcessive = context.rollExcessive;
       final filteredHazards = hazards.where((h) {
         if (h.type == DepthHazardType.deadZone && h.midasScore < 0.65) {
           return false;
@@ -383,7 +499,7 @@ class DepthPipelineController {
         }
         return true;
       });
-      final winterMode = vm.winterMode.active;
+      final winterMode = context.winterMode;
       final out = <DepthHazardAlert>[];
       for (final h in filteredHazards) {
         bool isCritical = _isHazardCritical(
@@ -394,8 +510,8 @@ class DepthPipelineController {
         );
 
         if (!isCritical && !rollExcessive) {
-          final yoloConf = _yoloHazardConfByZone[h.zone] ?? 0.0;
-          final yoloAge = now.difference(_lastYoloAt);
+          final yoloConf = context.yoloHazardConf[h.zone] ?? 0.0;
+          final yoloAge = now.difference(context.yoloAt);
           final fused = _fusion.evaluate(
             hazard: h,
             yoloHazardConf: yoloConf,
@@ -412,14 +528,17 @@ class DepthPipelineController {
       return out;
     } catch (e) {
       if (inferenceTimer.isRunning) inferenceTimer.stop();
+      measurement.providerUs = inferenceTimer.elapsedMicroseconds;
       _inFlight = false;
       debugPrint('Depth analysis error: $e');
       if (!_requestIsCurrent(packet)) {
         lastFrameRejectionReason = 'late_error_discarded';
+        measurement.rejectionReason = lastFrameRejectionReason;
         onFrameRejected?.call('late_error_discarded', 0);
         return const <DepthHazardAlert>[];
       }
       lastFrameRejectionReason = 'provider_analyze_exception';
+      measurement.rejectionReason = lastFrameRejectionReason;
       // Safety audit 2026-06 fix: a permanently throwing provider (e.g. a
       // recurring platform/NCNN exception that never reaches the
       // onSessionDisabled path) used to leave the pipeline silently "ok".
@@ -478,6 +597,11 @@ class DepthPipelineController {
     }
     if (header.exceedsLatency(maxObservationLatency)) {
       return 'stale_observation_latency';
+    }
+    if (FrameTransform.normalizeRotation(vm.cameraSensorRotationDeg) !=
+            packet.sensorRotationDeg ||
+        vm.cameraMirrored != packet.mirrored) {
+      return 'active_camera_transform_mismatch';
     }
     return null;
   }
@@ -567,6 +691,12 @@ class DepthPipelineController {
   void resetFusion() {
     _fusion.reset();
     _yoloHazardConfByZone.clear();
+    _lastYoloTracks = const [];
+    _lastYoloAt = DateTime.fromMillisecondsSinceEpoch(0);
+    _yoloImageWidth = 0;
+    _yoloImageHeight = null;
+    _yoloRotationDegrees = null;
+    _yoloMirrored = null;
     _genericTracker.reset();
     lastGenericDecisions = const [];
     lastGenericDetection = null;
@@ -638,6 +768,7 @@ class DepthPipelineController {
     required CameraImage image,
     required DepthAnalysisResult detailed,
     required DateTime now,
+    required _DepthFrameContext context,
   }) {
     lastGenericDecisions = const [];
     final mode = Settings.instance.genericObstacleMode;
@@ -677,9 +808,9 @@ class DepthPipelineController {
 
     final detected = _genericDetector.detect(
       frame: detailed.health.genericObstacleAvailable ? detailed.frame : null,
-      pitchDeg: vm.orientation.pitch,
-      rollDeg: vm.orientation.roll,
-      motion: vm.fallDetector.motionState,
+      pitchDeg: context.pitch,
+      rollDeg: context.roll,
+      motion: context.motion,
       imageTimestampUs: now.microsecondsSinceEpoch,
       lumaMap: detailed.alignedLuma,
     );
@@ -702,22 +833,22 @@ class DepthPipelineController {
       timestampUs: detailed.frame?.timestampUs ?? now.microsecondsSinceEpoch,
       relative: relative,
     );
-    lastGenericTracks = List<GenericObstacleTrack>.unmodifiable(tracks);
 
     final decisions = <CollisionRiskDecision>[];
     for (final track in tracks) {
       if (!track.confirmed) continue;
-      final semantic = _semanticFor(
-        track.last,
-        image.width,
-        image.height,
-        detailed.frame,
-        now,
+      final semantic = _attachSemanticToTrack(
+        track: track,
+        imageWidth: image.width,
+        imageHeight: image.height,
+        frame: detailed.frame,
+        now: now,
+        context: context,
       );
       final decision = _riskEngine.evaluate(
         track: track,
         health: detailed.health,
-        motion: vm.fallDetector.motionState,
+        motion: context.motion,
         mode: mode,
         relative: relative,
         semantic: semantic,
@@ -737,8 +868,36 @@ class DepthPipelineController {
         'reject': detected.rejectReason.name,
       });
     }
+    lastGenericTracks = List<GenericObstacleTrack>.unmodifiable(tracks);
     lastGenericDecisions = decisions;
     return detected.rejectReason;
+  }
+
+  SemanticMatch? _attachSemanticToTrack({
+    required GenericObstacleTrack track,
+    required int imageWidth,
+    required int imageHeight,
+    required DepthFrame? frame,
+    required DateTime now,
+    _DepthFrameContext? context,
+  }) {
+    final semantic = _semanticFor(
+      track.last,
+      imageWidth,
+      imageHeight,
+      frame,
+      now,
+      context: context,
+    );
+    // The scene adapter consumes the track snapshot. Keep the current match
+    // on that same observation, and explicitly clear an older match when the
+    // latest frame no longer has one. Risk evaluation and spatial fusion must
+    // not see different versions of one confirmed track.
+    track.last = track.last.copyWith(
+      semantic: semantic,
+      clearSemantic: semantic == null,
+    );
+    return semantic;
   }
 
   SemanticMatch? _semanticFor(
@@ -746,16 +905,29 @@ class DepthPipelineController {
     int imgW,
     int imgH,
     DepthFrame? frame,
-    DateTime now,
-  ) {
+    DateTime now, {
+    _DepthFrameContext? context,
+  }) {
     if (imgW <= 0 || imgH <= 0 || frame == null) return null;
+    if (context == null &&
+        !_yoloMatchesFrame(
+          at: DateTime.fromMicrosecondsSinceEpoch(frame.timestampUs),
+          width: imgW,
+          height: imgH,
+          rotationDegrees: frame.rotationDegrees,
+          mirrored: frame.mirrored,
+        )) {
+      return null;
+    }
     const config = GenericObstacleConfig.engineeringDefaults;
-    if (_lastYoloAt.millisecondsSinceEpoch == 0 ||
-        now.microsecondsSinceEpoch - _lastYoloAt.microsecondsSinceEpoch >
+    final yoloAt = context?.yoloAt ?? _lastYoloAt;
+    if (yoloAt.millisecondsSinceEpoch == 0 ||
+        now.isBefore(yoloAt) ||
+        now.microsecondsSinceEpoch - yoloAt.microsecondsSinceEpoch >
             config.semanticMaxAgeUs) {
       return null;
     }
-    Track? best;
+    _YoloTrackSample? best;
     var bestIou = 0.0;
     final transform = FrameTransform.forSensor(
       sensorRotationDeg: frame.rotationDegrees,
@@ -763,7 +935,7 @@ class DepthPipelineController {
       sourceSize: FrameSize(imgW, imgH),
       crop: CropTransform(topFraction: frame.cropTopFraction),
     );
-    for (final t in _lastYoloTracks) {
+    for (final t in context?.yoloTracks ?? _lastYoloTracks) {
       if (t.dist != 'very close' && t.dist != 'close') continue;
       if (t.avgConf < config.semanticMinConf) continue;
       final raw = Rect.fromLTRB(
@@ -790,6 +962,25 @@ class DepthPipelineController {
     );
   }
 
+  bool _yoloMatchesFrame({
+    required DateTime at,
+    required int width,
+    required int height,
+    required int rotationDegrees,
+    required bool mirrored,
+  }) {
+    final ageUs =
+        at.microsecondsSinceEpoch - _lastYoloAt.microsecondsSinceEpoch;
+    return _lastYoloAt.millisecondsSinceEpoch != 0 &&
+        ageUs >= 0 &&
+        ageUs <= CameraSession.maxImageDepthDelta.inMicroseconds &&
+        _yoloImageWidth == width &&
+        (_yoloImageHeight == null || _yoloImageHeight == height) &&
+        (_yoloRotationDegrees == null ||
+            _yoloRotationDegrees == rotationDegrees) &&
+        (_yoloMirrored == null || _yoloMirrored == mirrored);
+  }
+
   double _rectIou(Rect a, Rect b) {
     final intersection = a.intersect(b);
     if (intersection.isEmpty) return 0.0;
@@ -807,7 +998,22 @@ class DepthPipelineController {
     required DateTime now,
   }) => _semanticFor(observation, imageWidth, imageHeight, frame, now);
 
-  List<Track> _lastYoloTracks = const [];
+  @visibleForTesting
+  SemanticMatch? debugAttachSemanticToTrack({
+    required GenericObstacleTrack track,
+    required int imageWidth,
+    required int imageHeight,
+    required DepthFrame frame,
+    required DateTime now,
+  }) => _attachSemanticToTrack(
+    track: track,
+    imageWidth: imageWidth,
+    imageHeight: imageHeight,
+    frame: frame,
+    now: now,
+  );
+
+  List<_YoloTrackSample> _lastYoloTracks = const [];
 
   void _setStatus(DepthPipelineStatus next) {
     if (_status == next) return;
@@ -899,4 +1105,52 @@ class DepthPipelineController {
       zone == HazardZone.center ||
       zone == HazardZone.centerLeft ||
       zone == HazardZone.centerRight;
+}
+
+class _DepthMeasurement {
+  final int generation;
+  int frameId = 0;
+  int providerUs = 0;
+  bool providerCalled = false;
+  bool accepted = false;
+  String? rejectionReason;
+  _DepthMeasurement(this.generation);
+}
+
+class _YoloTrackSample {
+  final int id;
+  final String label;
+  final String dist;
+  final double avgConf;
+  final double x1, y1, x2, y2;
+
+  _YoloTrackSample(Track track)
+    : id = track.id,
+      label = track.label,
+      dist = track.dist,
+      avgConf = track.avgConf,
+      x1 = track.x1,
+      y1 = track.y1,
+      x2 = track.x2,
+      y2 = track.y2;
+}
+
+class _DepthFrameContext {
+  final List<_YoloTrackSample> yoloTracks;
+  final DateTime yoloAt;
+  final Map<HazardZone, double> yoloHazardConf;
+  final double pitch, roll;
+  final bool rollExcessive, winterMode;
+  final MotionState motion;
+
+  const _DepthFrameContext({
+    required this.yoloTracks,
+    required this.yoloAt,
+    required this.yoloHazardConf,
+    required this.pitch,
+    required this.roll,
+    required this.rollExcessive,
+    required this.motion,
+    required this.winterMode,
+  });
 }

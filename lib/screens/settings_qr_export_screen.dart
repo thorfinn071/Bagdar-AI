@@ -1,4 +1,8 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
+
+import '../theme/bagdar_tokens.dart';
+import '../widgets/bagdar_ui.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../models/speech_job.dart';
@@ -15,8 +19,13 @@ import '../services/tts_service.dart';
 /// TTS so a blind primary user understands what is on screen.
 class SettingsQrExportScreen extends StatefulWidget {
   final TtsService tts;
+  final bool Function()? canInteract;
 
-  const SettingsQrExportScreen({super.key, required this.tts});
+  const SettingsQrExportScreen({
+    super.key,
+    required this.tts,
+    this.canInteract,
+  });
 
   @override
   State<SettingsQrExportScreen> createState() => _SettingsQrExportScreenState();
@@ -30,80 +39,51 @@ class _SettingsQrExportScreenState extends State<SettingsQrExportScreen> {
     super.initState();
     _payload = SettingsCodec.instance.exportToJson();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !(widget.canInteract?.call() ?? true)) return;
       widget.tts.say(S.get('qr_export_ready'), SpeechPriority.info, pan: 0.0);
       HapticService.vibrate(const [0, 80]);
     });
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: Text(
-          S.get('qr_export_title'),
-          style: const TextStyle(color: Colors.white),
-        ),
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                S.get('qr_export_hint'),
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.white70, fontSize: 14),
+  Widget build(BuildContext context) => BagdarPage(
+    title: S.get('qr_export_title'),
+    subtitle: S.get('qr_export_hint'),
+    children: [
+      Center(
+        child: Semantics(
+          label: S.get('qr_export_semantics'),
+          image: true,
+          child: LayoutBuilder(
+            builder: (context, bounds) => Container(
+              padding: const EdgeInsets.all(BagdarSpacing.m),
+              decoration: BoxDecoration(
+                // QR quiet zone stays white in every theme for scanning.
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(BagdarRadius.card),
               ),
-              const SizedBox(height: 24),
-              Expanded(
-                child: Center(
-                  child: Semantics(
-                    label: S.get('qr_export_semantics'),
-                    image: true,
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: QrImageView(
-                        data: _payload,
-                        version: QrVersions.auto,
-                        size: 280,
-                        gapless: false,
-                        errorCorrectionLevel: QrErrorCorrectLevel.M,
-                      ),
-                    ),
-                  ),
-                ),
+              child: QrImageView(
+                data: _payload,
+                version: QrVersions.auto,
+                size: math.min(280, bounds.maxWidth - 32),
+                backgroundColor: Colors.white,
+                gapless: false,
+                errorCorrectionLevel: QrErrorCorrectLevel.M,
               ),
-              const SizedBox(height: 16),
-              Text(
-                S.get('qr_export_footer'),
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.white38, fontSize: 12),
-              ),
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.cyanAccent,
-                    foregroundColor: Colors.black,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                  ),
-                  onPressed: () => Navigator.of(context).maybePop(),
-                  child: Text(S.get('qr_dismiss')),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),
-    );
-  }
+      const SizedBox(height: BagdarSpacing.l),
+      Text(
+        S.get('qr_export_footer'),
+        style: Theme.of(context).textTheme.bodySmall,
+      ),
+      const SizedBox(height: BagdarSpacing.l),
+      FilledButton(
+        onPressed: () => Navigator.of(context).maybePop(),
+        child: Text(S.get('qr_dismiss')),
+      ),
+    ],
+  );
 }

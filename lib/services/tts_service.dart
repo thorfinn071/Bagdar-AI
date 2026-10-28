@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:audio_session/audio_session.dart';
+import '../core/performance/feedback_delivery_performance.dart';
 import '../../models/constants.dart'
     show kTtsStallTimeout, kHapticTtsStallPattern, kHapticTtsStallIntensities;
 import '../../models/speech_job.dart';
@@ -16,6 +17,49 @@ import 'native_tts_bridge.dart';
 import 'settings_service.dart';
 
 class TtsService {
+  final Map<String, Completer<bool>> _interactionReceipts = {};
+  static int _interactionSequence = 0;
+
+  /// Correlated playback for a normal voice prompt. It cannot barge into an
+  /// alert, and a dropped/cancelled utterance cannot open command input.
+  Future<bool> speakInteraction(String text) async {
+    if (!isReady) return false;
+    final id = 'voice-interaction-${++_interactionSequence}';
+    final receipt = Completer<bool>();
+    _interactionReceipts[id] = receipt;
+    _enqueue(text, SpeechPriority.info, actionId: id,
+        skipHaptic: true, deduplicate: false);
+    try {
+      final played = await receipt.future.timeout(
+        const Duration(seconds: 35), onTimeout: () => false);
+      if (!played) return false;
+      // A native completion can precede the platform acknowledgement/focus
+      // release. Both must settle before microphone input is allowed.
+      final deadline = DateTime.now().add(const Duration(seconds: 3));
+      while (_speaking || _queue.isNotEmpty || _pumpRunning ||
+          _pendingPlatformCalls != 0) {
+        if (DateTime.now().isAfter(deadline) || !isReady) return false;
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+      }
+      return isReady;
+    } finally {
+      _interactionReceipts.remove(id);
+      _queue.removeWhere((job) => job.actionId == id);
+    }
+  }
+
+  void cancelInteractionSpeech() {
+    final ids = _interactionReceipts.keys.toSet();
+    _queue.removeWhere((job) => ids.contains(job.actionId));
+    for (final receipt in _interactionReceipts.values) {
+      if (!receipt.isCompleted) receipt.complete(false);
+    }
+  }
+  final Set<VoidCallback> _speechRequestListeners = {};
+  void addSpeechRequestListener(VoidCallback listener) =>
+      _speechRequestListeners.add(listener);
+  void removeSpeechRequestListener(VoidCallback listener) =>
+      _speechRequestListeners.remove(listener);
   static const Duration _kCriticalStaleAfter = Duration(seconds: 4);
   static const int _kMaxCriticalQueueLength = 4;
 
@@ -28,10 +72,15 @@ class TtsService {
   bool _ready = false;
   bool _speaking = false;
   bool get speaking => _speaking;
-  bool get isReady => _ready;
+  bool get isReady => _ready && !_backendQuarantined;
+  int _playbackErrors = 0;
+  int _playbackStalls = 0;
+  int get playbackErrors => _playbackErrors;
+  int get playbackStalls => _playbackStalls;
   bool _languageAvailable = true;
   bool _usingEnglishFallback = false;
   bool _testMode = false;
+  DateTime Function() _now = DateTime.now;
   String _requestedLang = 'ru-RU';
   final List<SpeechJob> _queue = [];
 
@@ -44,6 +93,27 @@ class TtsService {
   Completer<void>? _initCompleter;
 
   bool _currentIsCritical = false;
+  int _playbackGeneration = 0;
+  bool _pumpRunning = false;
+  bool _releaseFocusAfterPump = false;
+  bool _speechSubmitted = false;
+  bool _useRequestIds =
+      !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
+  static int _requestSequence = 0;
+  String? _currentRequestId;
+  SpeechJob? _deliveryJob;
+  int? _requestAtUs;
+  bool _startObserved = false;
+  String _deliveryBackend = 'unavailable';
+  FeedbackDeliveryPerformance _delivery = FeedbackDeliveryPerformance.instance;
+  Duration _platformOperationTimeout = const Duration(seconds: 2);
+  int _pendingPlatformCalls = 0;
+  bool _backendQuarantined = false;
+  bool _restoringPlayback = false;
+  bool get playbackQuarantined => _backendQuarantined;
+  int get pendingPlatformCalls => _pendingPlatformCalls;
+  Future<void>? _backendStop;
+  Timer? _pumpTimer;
   DateTime _currentSpeakStartedAt = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _lastSpeechEndedAt = DateTime.fromMillisecondsSinceEpoch(0);
   Completer<void>? _currentSpeechCompleter;
@@ -63,6 +133,27 @@ class TtsService {
   TtsService.forTesting() {
     _ready = true;
     _testMode = true;
+  }
+
+  /// Runs the production queue against a platform-channel test double.
+  @visibleForTesting
+  TtsService.forPlaybackTesting({
+    required FlutterTts tts,
+    DateTime Function()? now,
+    AudioSession? audioSession,
+    bool useRequestIds = false,
+    Duration platformOperationTimeout = const Duration(seconds: 2),
+    FeedbackDeliveryPerformance? deliveryPerformance,
+  }) {
+    _ttsImpl = tts;
+    _now = now ?? DateTime.now;
+    _session = audioSession;
+    _useRequestIds = useRequestIds;
+    _platformOperationTimeout = platformOperationTimeout;
+    _delivery = deliveryPerformance ?? FeedbackDeliveryPerformance();
+    _ready = true;
+    _attachPlaybackHandlers();
+    _attachBridgeListeners();
   }
 
   @visibleForTesting
@@ -155,9 +246,9 @@ class TtsService {
     final clamped = volume.clamp(0.0, 1.0);
     if ((clamped - _userVolume).abs() < 0.01) return;
     _userVolume = clamped;
-    if (_ready && !_testMode) {
+    if (isReady && !_testMode) {
       try {
-        await _tts.setVolume(clamped);
+        await _waitPlatform(() => _tts.setVolume(clamped), 'user_volume');
       } catch (_) {}
     }
   }
@@ -178,6 +269,14 @@ class TtsService {
   }
 
   Future<void> init() async {
+    if (_backendQuarantined) {
+      if (_ready) {
+        await retryPlayback();
+        return;
+      }
+      if (_pendingPlatformCalls != 0 || _backendStop != null) return;
+      _backendQuarantined = false;
+    }
     if (_ready) return;
     if (_initStarted && _initCompleter != null) {
       return _initCompleter!.future;
@@ -223,31 +322,7 @@ class TtsService {
       await _tts.setVolume(_userVolume);
       await _tts.setPitch(1.0);
 
-      _tts.setStartHandler(() {
-        _speaking = true;
-        _currentSpeakStartedAt = DateTime.now();
-
-        _armStallTimer(_currentText, _currentPriority);
-      });
-      _tts.setCompletionHandler(() {
-        _speaking = false;
-        _currentIsCritical = false;
-        _lastSpeechEndedAt = DateTime.now();
-        _disarmStallTimer();
-        _completeCurrentSpeech();
-        _pump();
-        if (_queue.isEmpty) _session?.setActive(false);
-      });
-      _tts.setErrorHandler((msg) {
-        debugPrint('TtsService: engine error: $msg');
-        _speaking = false;
-        _currentIsCritical = false;
-        _lastSpeechEndedAt = DateTime.now();
-        _disarmStallTimer();
-        _completeCurrentSpeech();
-        _pump();
-        if (_queue.isEmpty) _session?.setActive(false);
-      });
+      _attachPlaybackHandlers();
 
       _ready = true;
 
@@ -264,10 +339,27 @@ class TtsService {
       }
     } catch (_) {
       _ready = false;
+      _initStarted = false; // Explicit retry after failed initialization.
       if (!(_initCompleter?.isCompleted ?? true)) {
         _initCompleter!.complete();
       }
     }
+  }
+
+  void _attachPlaybackHandlers() {
+    _tts.requestEventHandler = (type, id, reason) =>
+        _handleSpeechEvent(type, id, reason, native: false);
+    _tts.setStartHandler(() {
+      if (!_useRequestIds) _handleNativeSpeechStart();
+    });
+    _tts.setCompletionHandler(() {
+      if (!_useRequestIds) _handleNativeSpeechComplete();
+    });
+    _tts.setErrorHandler((message) {
+      if (!_useRequestIds) {
+        _handleNativeSpeechError(message.toString(), native: false);
+      }
+    });
   }
 
   void _completeCurrentSpeech() {
@@ -298,7 +390,10 @@ class TtsService {
     await stop();
     _requestedLang = bcp47Tag;
     _usingEnglishFallback = false;
-    await _applyLanguage(bcp47Tag);
+    if (_backendQuarantined) return;
+    try {
+      await _waitPlatform(() => _applyLanguage(bcp47Tag), 'user_language');
+    } catch (_) {}
   }
 
   void Function()? onKazakhVoiceMissing;
@@ -310,9 +405,13 @@ class TtsService {
   void Function(KkTtsEngine engine)? onKazakhEngineResolved;
 
   Future<void> preClaimAudioFocus() async {
-    if (!_ready) return;
+    if (_backendQuarantined) await retryPlayback();
+    if (!isReady || _pendingPlatformCalls != 0) return;
     try {
-      await _session?.setActive(true);
+      await _waitPlatform(
+        () async => _session?.setActive(true),
+        'preclaim_audio_focus',
+      );
     } catch (_) {}
   }
 
@@ -334,9 +433,9 @@ class TtsService {
 
   /// Select a specific TTS voice by name and locale.
   Future<void> setVoice(Map<String, String> voice) async {
-    if (_testMode) return;
+    if (_testMode || _backendQuarantined) return;
     try {
-      await _tts.setVoice(voice);
+      await _waitPlatform(() => _tts.setVoice(voice), 'user_voice');
     } catch (_) {}
   }
 
@@ -562,38 +661,76 @@ class TtsService {
   void _attachBridgeListeners() {
     if (_bridgeListenersAttached) return;
     final bridge = NativeTtsBridge.instance;
-    bridge.onSpeechStart = _handleNativeSpeechStart;
-    bridge.onSpeechComplete = _handleNativeSpeechComplete;
-    bridge.onSpeechError = _handleNativeSpeechError;
+    bridge.onSpeechEvent = (type, id, reason) =>
+        _handleSpeechEvent(type, id, reason, native: true);
+    bridge.onSpeechStart = () {
+      if (!_useRequestIds) _handleNativeSpeechStart();
+    };
+    bridge.onSpeechComplete = () {
+      if (!_useRequestIds) _handleNativeSpeechComplete();
+    };
+    bridge.onSpeechError = (reason) {
+      if (!_useRequestIds) _handleNativeSpeechError(reason);
+    };
     _bridgeListenersAttached = true;
   }
 
   void _handleNativeSpeechStart() {
+    if (!isReady || !_speechSubmitted || _backendStop != null) return;
+    if (_startObserved) return;
+    _startObserved = true;
+    _delivery.count('speechStarted');
+    final at = _delivery.nowUs;
+    if (_requestAtUs != null) {
+      _delivery.record('requestToStart', at - _requestAtUs!);
+    }
+    final submittedAt = _deliveryJob?.deliverySubmittedAtUs;
+    if (submittedAt != null) {
+      _delivery.record('enqueueToStart', at - submittedAt);
+    }
+    _logDelivery('start');
     _speaking = true;
-    _currentSpeakStartedAt = DateTime.now();
+    _currentSpeakStartedAt = _now();
     _armStallTimer(_currentText, _currentPriority);
   }
 
   void _handleNativeSpeechComplete() {
+    if (!isReady || !_speechSubmitted || _backendStop != null) return;
+    if (_pumpRunning) _releaseFocusAfterPump = true;
+    _finishDelivery('complete');
+    _speechSubmitted = false;
     _speaking = false;
     _currentIsCritical = false;
-    _lastSpeechEndedAt = DateTime.now();
+    _lastSpeechEndedAt = _now();
     _disarmStallTimer();
     _completeCurrentSpeech();
     _pump();
-    if (_queue.isEmpty) _session?.setActive(false);
+    if (_queue.isEmpty && !_speaking && !_pumpRunning) {
+      unawaited(_changeAudioFocus(false, 'audio_release'));
+    }
   }
 
-  void _handleNativeSpeechError(String reason) {
-    debugPrint('TtsService: native bridge error: $reason');
-    FieldLogger.instance.log('tts_kk_native_error', {'reason': reason});
+  void _handleNativeSpeechError(String reason, {bool native = true}) {
+    if (!isReady || !_speechSubmitted || _backendStop != null) return;
+    if (_pumpRunning) _releaseFocusAfterPump = true;
+    _finishDelivery('error');
+    _speechSubmitted = false;
+    _playbackErrors++;
+    debugPrint(
+      'TtsService: ${native ? 'native bridge' : 'engine'} error: $reason',
+    );
+    if (native) {
+      FieldLogger.instance.log('tts_kk_native_error', {'reason': reason});
+    }
     _speaking = false;
     _currentIsCritical = false;
-    _lastSpeechEndedAt = DateTime.now();
+    _lastSpeechEndedAt = _now();
     _disarmStallTimer();
     _completeCurrentSpeech();
     _pump();
-    if (_queue.isEmpty) _session?.setActive(false);
+    if (_queue.isEmpty && !_speaking && !_pumpRunning) {
+      unawaited(_changeAudioFocus(false, 'audio_release'));
+    }
   }
 
   Future<bool> _trySetLanguage(String tag) async {
@@ -614,7 +751,7 @@ class TtsService {
   }
 
   void _notifyAudioRouteInterrupted() {
-    final now = DateTime.now();
+    final now = _now();
     if (now.difference(_lastAudioRouteAlertAt) < const Duration(seconds: 15)) {
       return;
     }
@@ -623,9 +760,8 @@ class TtsService {
   }
 
   void _recoverFromInterruption() {
-    try {
-      _session?.setActive(true);
-    } catch (_) {}
+    if (!isReady) return;
+    unawaited(_changeAudioFocus(true, 'interruption_audio_focus'));
 
     if (!_speaking && _queue.isNotEmpty) {
       _pump();
@@ -638,16 +774,15 @@ class TtsService {
     final timeout = _computeStallTimeout(text: text, priority: priority);
     _stallTimer = Timer(timeout, () {
       if (!_speaking) return;
+      _playbackStalls++;
       debugPrint(
         'TtsService: stall detected (${timeout.inMilliseconds}ms) '
         '— resetting speaking flag',
       );
-      _speaking = false;
-      try {
-        _tts.stop();
-      } catch (_) {}
+      _finishDelivery('stall');
+      _invalidatePlayback();
+      unawaited(_stopBackends());
       onTtsStall?.call();
-      if (_queue.isNotEmpty) _pump();
     });
   }
 
@@ -698,8 +833,45 @@ class TtsService {
     DateTime? expiresAt,
     bool barge = false,
     bool skipHaptic = false,
+  }) => _enqueue(
+    text,
+    priority,
+    pan: pan,
+    trackId: trackId,
+    actionId: actionId,
+    hazardId: hazardId,
+    expiresAt: expiresAt,
+    barge: barge,
+    skipHaptic: skipHaptic,
+  );
+
+  /// Explicit user-requested instruction replay bypasses the short duplicate
+  /// cooldown. Runtime alerts retain the normal queue policy.
+  void sayInstruction(String text) => _enqueue(
+    text,
+    SpeechPriority.info,
+    barge: true,
+    skipHaptic: true,
+    deduplicate: false,
+  );
+
+  void _enqueue(
+    String text,
+    SpeechPriority priority, {
+    double pan = 0.0,
+    int? trackId,
+    String? actionId,
+    String? hazardId,
+    DateTime? expiresAt,
+    bool barge = false,
+    bool skipHaptic = false,
+    bool deduplicate = true,
   }) {
-    final now = DateTime.now();
+    // Synchronous invalidation only: microphone teardown never delays alerts.
+    for (final listener in List<VoidCallback>.of(_speechRequestListeners)) {
+      try { listener(); } catch (_) {}
+    }
+    final now = _now();
     if (expiresAt != null && now.isAfter(expiresAt)) {
       FieldLogger.instance.log('tts_queue_drop', {
         'reason': 'incoming_job_ttl_expired',
@@ -709,7 +881,8 @@ class TtsService {
       });
       return;
     }
-    if (!_ready) {
+    if (!isReady) {
+      _delivery.count('speechUnavailable');
       if (priority == SpeechPriority.critical && text.isNotEmpty) {
         debugPrint(
           'TtsService: critical alert dropped because engine is not ready '
@@ -742,13 +915,15 @@ class TtsService {
       SpeechPriority.info => _kInfoDedupWindow,
     };
     final lastSameTextAt = _lastSpokenByText[text];
-    if (priority != SpeechPriority.critical &&
+    if (deduplicate &&
+        priority != SpeechPriority.critical &&
         lastSameTextAt != null &&
         now.difference(lastSameTextAt) < dedupWindow) {
       return;
     }
 
-    if (priority != SpeechPriority.critical &&
+    if (deduplicate &&
+        priority != SpeechPriority.critical &&
         text == _lastText &&
         trackId == _lastTrackId &&
         now.difference(_lastTime) < const Duration(seconds: 2)) {
@@ -819,8 +994,10 @@ class TtsService {
           enqueuedAt: now,
           expiresAt: expiresAt,
           skipHaptic: skipHaptic,
+          deliverySubmittedAtUs: _delivery.nowUs,
         ),
       );
+      _delivery.count('speechEnqueued');
       _lastText = text;
       _lastTrackId = trackId;
       _lastTime = now;
@@ -844,9 +1021,9 @@ class TtsService {
 
     if (_queue.length >= 4) {
       int oldestInfoIdx = -1;
-      DateTime oldestInfoTime = DateTime.now();
+      DateTime oldestInfoTime = _now();
       int oldestWarnIdx = -1;
-      DateTime oldestWarnTime = DateTime.now();
+      DateTime oldestWarnTime = _now();
       for (int i = 0; i < _queue.length; i++) {
         final job = _queue[i];
         if (job.priority == SpeechPriority.info &&
@@ -902,8 +1079,10 @@ class TtsService {
         enqueuedAt: now,
         expiresAt: expiresAt,
         skipHaptic: skipHaptic,
+        deliverySubmittedAtUs: _delivery.nowUs,
       ),
     );
+    _delivery.count('speechEnqueued');
     _queue.sort((a, b) => b.priority.index.compareTo(a.priority.index));
     _lastText = text;
     _lastTrackId = trackId;
@@ -924,7 +1103,7 @@ class TtsService {
     required String localizedText,
     DateTime? now,
   }) {
-    final dispatchAt = now ?? DateTime.now();
+    final dispatchAt = now ?? _now();
     if (command.isExpiredAt(dispatchAt) || localizedText.isEmpty) return false;
     final priority = switch (command.priority) {
       SafetyPriority.p0Emergency => SpeechPriority.critical,
@@ -942,7 +1121,7 @@ class TtsService {
       skipHaptic: true,
       pan: command.pan,
     );
-    return _ready;
+    return isReady;
   }
 
   void _gcSpokenTextMap(DateTime now) {
@@ -989,7 +1168,7 @@ class TtsService {
   }
 
   void evictStale({Duration maxAge = const Duration(seconds: 5)}) {
-    final cutoff = DateTime.now().subtract(maxAge);
+    final cutoff = _now().subtract(maxAge);
     final before = _queue.length;
     _queue.removeWhere(
       (j) => j.priority == SpeechPriority.info && j.enqueuedAt.isBefore(cutoff),
@@ -1015,50 +1194,298 @@ class TtsService {
   }
 
   Future<void> stop() async {
-    _disarmStallTimer();
-    try {
-      await _tts.stop();
-    } catch (_) {}
-    if (_useNativeBackend) {
-      try {
-        await NativeTtsBridge.instance.stop();
-      } catch (_) {}
-    }
-    _speaking = false;
-    _currentIsCritical = false;
-    _lastSpeechEndedAt = DateTime.fromMillisecondsSinceEpoch(0);
-    _completeCurrentSpeech();
+    // Cancel synchronously, before a suspended preparation can reach speak().
+    _invalidatePlayback();
     _queue.clear();
     _lastSpokenByText.clear();
+    await _stopBackends();
+    if (_pumpRunning) {
+      _releaseFocusAfterPump = true;
+    } else if (!_speaking &&
+        _queue.isEmpty &&
+        _pendingPlatformCalls == 0 &&
+        isReady) {
+      await _changeAudioFocus(false, 'stop_audio_release');
+    }
   }
 
-  Future<void> _interruptAndSpeak({bool barge = false}) async {
+  void _invalidatePlayback() {
+    _releaseFocusAfterPump = false;
+    _finishDelivery('cancel');
+    _playbackGeneration++;
+    _pumpTimer?.cancel();
+    _pumpTimer = null;
+    _disarmStallTimer();
+    _speechSubmitted = false;
+    _speaking = false;
+    _currentIsCritical = false;
+    _currentRate = -1;
+    _lastSpeechEndedAt = DateTime.fromMillisecondsSinceEpoch(0);
+    _completeCurrentSpeech();
+  }
+
+  Future<void> _stopBackends() {
+    final pending = _backendStop;
+    if (pending != null) return pending;
+    final completion = Completer<void>();
+    _backendStop = completion.future;
+    final stopNative = _useNativeBackend;
+    final raw = Future.wait<Object?>([
+      _trackPlatform(() => _tts.stop()),
+      if (stopNative) _trackPlatform(() => NativeTtsBridge.instance.stop()),
+    ]);
+    unawaited(
+      raw.then(
+        (_) {
+          _backendStop = null;
+          unawaited(_pump());
+        },
+        onError: (Object _, StackTrace __) {
+          _backendStop = null;
+          unawaited(_pump());
+        },
+      ),
+    );
+    unawaited(() async {
+      try {
+        await raw.timeout(
+          _platformOperationTimeout,
+          onTimeout: () {
+            _quarantineBackend('stop');
+            throw TimeoutException('TTS stop');
+          },
+        );
+      } catch (_) {
+        // A timeout keeps the raw stop owned until it actually settles.
+      } finally {
+        completion.complete();
+      }
+    }());
+    return completion.future;
+  }
+
+  void _interruptAndSpeak({bool barge = false}) {
     if (_testMode) return;
     if (!barge && _speaking && _currentIsCritical) {
-      final age = DateTime.now().difference(_currentSpeakStartedAt);
+      final age = _now().difference(_currentSpeakStartedAt);
       if (age < _kCriticalStaleAfter) {
         return;
       }
     }
-    try {
-      await _tts.stop();
-    } catch (_) {}
-    if (_useNativeBackend) {
-      try {
-        await NativeTtsBridge.instance.stop();
-      } catch (_) {}
+    _invalidatePlayback();
+    unawaited(_stopBackends());
+  }
+
+  bool _canPrepare(SpeechJob job, int generation) {
+    if (!isReady || generation != _playbackGeneration) return false;
+    final now = _now();
+    final maxAge = job.priority == SpeechPriority.critical
+        ? _kCriticalStaleAfter
+        : const Duration(seconds: 5);
+    if (!job.isExpiredAt(now) && now.difference(job.enqueuedAt) <= maxAge) {
+      return true;
     }
+    FieldLogger.instance.log('tts_queue_drop', {
+      'reason': 'job_expired_during_preparation',
+      'action_id': job.actionId,
+      'hazard_id': job.hazardId,
+      'priority': job.priority.name,
+    });
+    _finishDelivery('expired');
+    _speechSubmitted = false;
     _speaking = false;
     _currentIsCritical = false;
-    _lastSpeechEndedAt = DateTime.fromMillisecondsSinceEpoch(0);
+    _currentRate = -1;
+    _disarmStallTimer();
     _completeCurrentSpeech();
-    _pump();
+    return false;
+  }
+
+  void _markSpeechSubmitted(SpeechJob job) {
+    _releaseFocusAfterPump = false;
+    _deliveryBackend = _useNativeBackend
+        ? 'native_${_activeKkEngine!.id}'
+        : 'system_tts';
+    _currentRequestId = 'bagdar-${++_requestSequence}';
+    _deliveryJob = job;
+    _requestAtUs = _delivery.nowUs;
+    _startObserved = false;
+    _delivery.count('speechRequested');
+    final submittedAt = job.deliverySubmittedAtUs;
+    if (submittedAt != null) {
+      _delivery.record('enqueueToRequest', _requestAtUs! - submittedAt);
+    }
+    _logDelivery('request');
+    _speaking = true;
+    _currentIsCritical = job.priority == SpeechPriority.critical;
+    _speechSubmitted = true;
+    // Also covers an accepted request whose onStart callback never arrives.
+    _armStallTimer(job.text, job.priority);
+  }
+
+  void _handleSpeechEvent(
+    String type,
+    String id,
+    String? reason, {
+    required bool native,
+  }) {
+    if (!_useRequestIds) return;
+    if (!isReady ||
+        !_speechSubmitted ||
+        _backendStop != null ||
+        id != _currentRequestId) {
+      _delivery.count('ignoredSpeechEvents');
+      return;
+    }
+    switch (type) {
+      case 'start':
+        _handleNativeSpeechStart();
+      case 'complete':
+        _handleNativeSpeechComplete();
+      case 'error':
+        _handleNativeSpeechError(reason ?? 'unknown', native: native);
+      case 'cancel':
+        _handleNativeSpeechError('backend_cancelled', native: native);
+    }
+  }
+
+  void _logDelivery(String milestone) {
+    FieldLogger.instance.log('tts_delivery', {
+      'milestone': milestone,
+      'request_id': _currentRequestId,
+      'action_id': _deliveryJob?.actionId,
+      'hazard_id': _deliveryJob?.hazardId,
+      'at_us': _delivery.nowUs,
+      'clock': 'dart_feedback_elapsed',
+      'request_correlated': _useRequestIds,
+      'backend': _deliveryBackend,
+      'start_milestone': _deliveryBackend == 'system_tts'
+          ? 'tts_onStart'
+          : 'pcm_submitted',
+      'actual_first_sound_measured': false,
+    });
+  }
+
+  void _finishDelivery(String outcome) {
+    if (_currentRequestId == null) return;
+    final receipt = _interactionReceipts[_deliveryJob?.actionId];
+    if (receipt != null && !receipt.isCompleted) {
+      receipt.complete(outcome == 'complete' && _startObserved);
+    }
+    _delivery.count('speech_$outcome');
+    if (!_startObserved) _delivery.count('speechEndedWithoutStart');
+    _logDelivery(outcome);
+    _currentRequestId = null;
+    _deliveryJob = null;
+    _requestAtUs = null;
+    _startObserved = false;
+  }
+
+  Future<T> _trackPlatform<T>(Future<T> Function() operation) {
+    _pendingPlatformCalls++;
+    return Future<T>.sync(operation).whenComplete(() {
+      _pendingPlatformCalls--;
+      if (_pendingPlatformCalls == 0 && !_pumpRunning && !_speaking) {
+        unawaited(_pump());
+      }
+    });
+  }
+
+  Future<T> _waitPlatform<T>(Future<T> Function() operation, String name) =>
+      _trackPlatform(operation).timeout(
+        _platformOperationTimeout,
+        onTimeout: () {
+          _quarantineBackend(name);
+          throw TimeoutException('TTS $name', _platformOperationTimeout);
+        },
+      );
+
+  Future<void> _changeAudioFocus(bool active, String operation) async {
+    if (_backendQuarantined && active) return;
+    try {
+      await _waitPlatform(() async => _session?.setActive(active), operation);
+    } catch (_) {}
+  }
+
+  void _quarantineBackend(String operation) {
+    if (_backendQuarantined) return;
+    _backendQuarantined = true;
+    _playbackStalls++;
+    _delivery.count('platformTimeout');
+    _delivery.count('timeout_$operation');
+    _finishDelivery('timeout');
+    _invalidatePlayback();
+    _queue.clear();
+    FieldLogger.instance.log('tts_backend_quarantined', {
+      'operation': operation,
+    });
+    try {
+      if (onTtsStall != null) {
+        onTtsStall!.call();
+      } else {
+        onTtsUnavailable?.call();
+      }
+    } catch (_) {}
+    // Stop remains owned even if its platform reply never arrives. No new
+    // preparation starts while an earlier call can still mutate this engine.
+    if (_backendStop == null) unawaited(_stopBackends());
+  }
+
+  /// Explicit recovery only after every timed-out operation has settled.
+  /// Future.timeout is not native cancellation, so resetting state earlier
+  /// would permit late configuration/speak side effects on a new request.
+  Future<bool> retryPlayback() async {
+    if (!_backendQuarantined) return isReady;
+    if (!_ready ||
+        _pendingPlatformCalls != 0 ||
+        _backendStop != null ||
+        _restoringPlayback) {
+      return false;
+    }
+    _restoringPlayback = true;
+    try {
+      await _waitPlatform(
+        () => _applyLanguage(_requestedLang),
+        'restore_language',
+      );
+      await _waitPlatform(() => _tts.setSpeechRate(.5), 'restore_rate');
+      await _waitPlatform(() => _tts.setVolume(_userVolume), 'restore_volume');
+      await _waitPlatform(() => _tts.setPitch(1), 'restore_pitch');
+      if (!_ready) return false;
+      _currentRate = .5;
+      _backendQuarantined = false;
+      _delivery.count('backendRecovered');
+      return true;
+    } catch (_) {
+      return false;
+    } finally {
+      _restoringPlayback = false;
+    }
+  }
+
+  Future<void> _speakSystem(String text) async {
+    final result = await _waitPlatform(
+      () => _useRequestIds
+          ? _tts.speakWithRequestId(text, _currentRequestId!)
+          : _tts.speak(text),
+      'system_speak_ack',
+    );
+    if (result == 0 || result == false) {
+      throw StateError('System TTS rejected request');
+    }
   }
 
   Future<void> _pump() async {
-    if (_testMode) return;
+    if (_testMode ||
+        !isReady ||
+        _pumpRunning ||
+        _pendingPlatformCalls != 0 ||
+        _backendStop != null ||
+        _speaking) {
+      return;
+    }
 
-    final now = DateTime.now();
+    final now = _now();
     _purgeExpiredJobs(now);
     _pruneStaleCriticals(now, maxAge: _kCriticalStaleAfter);
     _queue.removeWhere(
@@ -1066,7 +1493,10 @@ class TtsService {
           j.priority != SpeechPriority.critical &&
           now.difference(j.enqueuedAt) > const Duration(seconds: 5),
     );
-    if (_speaking || _queue.isEmpty) return;
+    if (_queue.isEmpty) {
+      _completeCurrentSpeech();
+      return;
+    }
 
     final nextJob = _queue[0];
     if (nextJob.priority != SpeechPriority.critical) {
@@ -1074,56 +1504,80 @@ class TtsService {
       const sentenceDelay = Duration(milliseconds: 1000);
       if (elapsed < sentenceDelay) {
         final remaining = sentenceDelay - elapsed;
-        Timer(remaining, () {
-          if (!_speaking && _queue.isNotEmpty) {
-            _pump();
-          }
+        _pumpTimer ??= Timer(remaining, () {
+          _pumpTimer = null;
+          unawaited(_pump());
         });
         return;
       }
     }
 
     final job = _queue.removeAt(0);
+    _pumpTimer?.cancel();
+    _pumpTimer = null;
+    _pumpRunning = true;
+    final generation = _playbackGeneration;
     try {
       _speaking = true;
       _currentIsCritical = job.priority == SpeechPriority.critical;
-      _currentSpeakStartedAt = DateTime.now();
+      _currentSpeakStartedAt = _now();
 
       _currentText = job.text;
       _currentPriority = job.priority;
       if (_reverseVehicleSuspected && job.priority != SpeechPriority.critical) {
-        try {
-          _session?.setActive(false);
-        } catch (_) {}
+        await _changeAudioFocus(false, 'preparation_audio_release');
       } else {
-        await _session?.setActive(true);
+        await _waitPlatform(
+          () async => _session?.setActive(true),
+          'audio_focus',
+        );
       }
+      if (!_canPrepare(job, generation)) return;
 
       final targetRate = (job.rate * _userRateMultiplier).clamp(0.2, 1.5);
       if ((targetRate - _currentRate).abs() > 0.005) {
-        await _tts.setSpeechRate(targetRate);
+        await _waitPlatform(
+          () => _tts.setSpeechRate(targetRate),
+          'speech_rate',
+        );
+        if (!_canPrepare(job, generation)) return;
         _currentRate = targetRate;
       }
 
       if (job.pan != 0.0) {
         try {
-          await (_tts as dynamic).setPan(job.pan);
+          await _waitPlatform<Object?>(
+            () => (_tts as dynamic).setPan(job.pan),
+            'pan',
+          );
         } catch (_) {}
+        if (!_canPrepare(job, generation)) return;
       }
 
+      if (!_canPrepare(job, generation)) return;
       if (job.priority == SpeechPriority.critical && !job.skipHaptic) {
         unawaited(HapticService.vibrate(const [0, 80]));
       }
 
       if (_useNativeBackend) {
-        final ok = await NativeTtsBridge.instance.speak(
-          text: job.text,
-          priority: job.priority.name,
-          rate: targetRate,
-          volume: _userVolume,
-          pan: job.pan,
+        _markSpeechSubmitted(job);
+        final ok = await _waitPlatform(
+          () => NativeTtsBridge.instance.speak(
+            text: job.text,
+            priority: job.priority.name,
+            requestId: _currentRequestId,
+            rate: targetRate,
+            volume: _userVolume,
+            pan: job.pan,
+          ),
+          'native_speak_ack',
         );
+        if (generation != _playbackGeneration || !_ready) return;
         if (!ok) {
+          if (!_canPrepare(job, generation)) return;
+          _finishDelivery('rejected');
+          _speechSubmitted = false;
+          _disarmStallTimer();
           debugPrint(
             'TtsService: native bridge speak() returned false — '
             'demoting kk to russianFallback for this session',
@@ -1134,28 +1588,54 @@ class TtsService {
           });
           _activeKkEngine = KkTtsEngine.russianFallback;
           try {
-            await _tts.setLanguage('ru-RU');
+            await _waitPlatform(
+              () => _tts.setLanguage('ru-RU'),
+              'fallback_language',
+            );
           } catch (_) {}
-          await _tts.speak(transliterateKkToRu(job.text));
+          if (!_canPrepare(job, generation)) return;
+          _markSpeechSubmitted(job);
+          await _speakSystem(transliterateKkToRu(job.text));
         }
       } else {
         final spokenText = (_activeKkEngine == KkTtsEngine.russianFallback)
             ? transliterateKkToRu(job.text)
             : job.text;
-        await _tts.speak(spokenText);
+        _markSpeechSubmitted(job);
+        await _speakSystem(spokenText);
       }
     } catch (_) {
+      if (generation != _playbackGeneration || !_ready) return;
+      _playbackErrors++;
+      _finishDelivery('error');
+      _speechSubmitted = false;
       _speaking = false;
       _currentIsCritical = false;
+      _currentRate = -1;
+      _disarmStallTimer();
       _completeCurrentSpeech();
-      if (_queue.isEmpty) await _session?.setActive(false);
+      if (_queue.isEmpty) {
+        await _changeAudioFocus(false, 'failed_audio_release');
+      }
+    } finally {
+      _pumpRunning = false;
+      final releaseDeferred = _releaseFocusAfterPump;
+      _releaseFocusAfterPump = false;
+      if (!_speaking) {
+        unawaited(_pump());
+        if (releaseDeferred && _queue.isEmpty && !_pumpRunning && isReady) {
+          unawaited(_changeAudioFocus(false, 'deferred_audio_release'));
+        }
+      }
     }
   }
 
   void dispose() {
+    cancelInteractionSpeech();
     onAudioRouteInterrupted = null;
     onAudioRouteResumed = null;
     onTtsStall = null;
+    onTtsUnavailable = null;
     onKazakhEngineResolved = null;
     _disarmStallTimer();
     _ready = false;
@@ -1166,18 +1646,14 @@ class TtsService {
     _interruptionSub = null;
     unawaited(_noisySub?.cancel());
     _noisySub = null;
-    try {
-      _session?.setActive(false);
-    } catch (_) {}
+    unawaited(_changeAudioFocus(false, 'dispose_audio_release'));
     _session = null;
-    try {
-      _tts.stop();
-    } catch (_) {}
     if (_bridgeListenersAttached) {
       final bridge = NativeTtsBridge.instance;
       bridge.onSpeechStart = null;
       bridge.onSpeechComplete = null;
       bridge.onSpeechError = null;
+      bridge.onSpeechEvent = null;
       _bridgeListenersAttached = false;
     }
   }

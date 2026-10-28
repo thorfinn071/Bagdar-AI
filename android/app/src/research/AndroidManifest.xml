@@ -16,4 +16,14 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
     <uses-feature android:name="android.hardware.bluetooth_le" android:required="false"/>
+    <application>
+        <!-- Explicit diagnostic entry. No Flutter engine is created here. -->
+        <activity
+            android:name=".capture.SingleOwnerCaptureActivity"
+            android:exported="true"
+            android:process=":capture"
+            android:taskAffinity="com.example.bagdar.capture"
+            android:excludeFromRecents="true"
+            android:label="Bagdar Research Capture" />
+    </application>
 </manifest>

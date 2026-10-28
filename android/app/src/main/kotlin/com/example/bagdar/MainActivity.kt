@@ -22,6 +22,7 @@ import android.os.StatFs
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.provider.Telephony
+import android.provider.Settings
 import android.telephony.CellInfo
 import android.telephony.CellInfoCdma
 import android.telephony.CellInfoGsm
@@ -44,6 +45,10 @@ class MainActivity : FlutterActivity() {
 
     private var hardwareDepthSession: HardwareDepthSession? = null
     private var hardwareDepthEventSink: EventChannel.EventSink? = null
+    private var nativeTtsPlugin: NativeTtsPlugin? = null
+    private var onboardingVoicePlugin: OnboardingVoicePlugin? = null
+    private var wakeWordPlugin: VoskWakeWordPlugin? = null
+    private val voiceCaptureGate = VoiceCaptureGate()
 
     private var audioCapturePlugin: AudioCapturePlugin? = null
     private var sonarPlugin: SonarPlugin? = null
@@ -85,14 +90,27 @@ class MainActivity : FlutterActivity() {
         } catch (e: Exception) {}
     }
 
+    override fun onResume() {
+        super.onResume()
+        wakeWordPlugin?.resumeForeground()
+    }
+
     override fun onPause() {
+        wakeWordPlugin?.suspend()
+        onboardingVoicePlugin?.cancel()
         super.onPause()
         watchdogHandler.removeCallbacks(watchdogRunnable)
         lastPingTime = 0L
     }
 
     override fun onDestroy() {
+        wakeWordPlugin?.dispose()
+        wakeWordPlugin = null
+        onboardingVoicePlugin?.dispose()
+        onboardingVoicePlugin = null
         super.onDestroy()
+        nativeTtsPlugin?.dispose()
+        nativeTtsPlugin = null
         watchdogHandler.removeCallbacks(watchdogRunnable)
         unregisterIncomingSmsReceiver()
         try {
@@ -111,11 +129,51 @@ class MainActivity : FlutterActivity() {
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
+        onboardingVoicePlugin?.dispose()
+        onboardingVoicePlugin = OnboardingVoicePlugin(
+            applicationContext,
+            MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "bagdar/onboarding_voice"),
+            voiceCaptureGate,
+        )
+        wakeWordPlugin?.dispose()
+        val wakeChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "bagdar/wake_word")
+        if (isResearchBuild()) {
+            wakeWordPlugin = VoskWakeWordPlugin(applicationContext, wakeChannel, voiceCaptureGate)
+        } else {
+            wakeChannel.setMethodCallHandler { call, result ->
+                when (call.method) {
+                    "availability", "prepare" -> result.success("disabled")
+                    "cancel" -> result.success(null)
+                    else -> result.error("disabled", "Wake candidate is research-only", null)
+                }
+            }
+        }
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "bagdar/onboarding")
+            .setMethodCallHandler { call, result ->
+                if (call.method != "openSpeechSettings") {
+                    result.notImplemented()
+                } else {
+                    var opened = false
+                    // OEMs can omit the TTS page; accessibility settings remain a fallback.
+                    for (action in listOf("com.android.settings.TTS_SETTINGS", Settings.ACTION_ACCESSIBILITY_SETTINGS)) {
+                        try {
+                            startActivity(Intent(action))
+                            opened = true
+                            break
+                        } catch (_: android.content.ActivityNotFoundException) {
+                        } catch (_: SecurityException) {
+                        }
+                    }
+                    result.success(opened)
+                }
+            }
         // Phase 2 — Kazakh-only native TTS bridge (RHVoice + espeak-ng).
         // Registered first so any bridge probe issued from Dart during
         // `NativeTtsBridge.init()` lands on a live channel.
         run {
             val plugin = NativeTtsPlugin(applicationContext)
+            nativeTtsPlugin?.dispose()
+            nativeTtsPlugin = plugin
             val method = MethodChannel(
                 flutterEngine.dartExecutor.binaryMessenger,
                 "bagdar/native_tts",

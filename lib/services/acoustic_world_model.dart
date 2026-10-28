@@ -46,6 +46,8 @@ class AcousticWorldModel {
   StreamSubscription<AudioFrame>? _frameSub;
   bool _enabled = true;
   bool _running = false;
+  bool _componentsCreated = false;
+  bool _disposed = false;
   bool _throttled = false;
   int _frameSkipCounter = 0;
 
@@ -63,11 +65,14 @@ class AcousticWorldModel {
   bool get isStereo => _broker.isStereo;
 
   Future<void> init() async {
+    if (_disposed || _componentsCreated) return;
     _classifier = AmbientClassifier();
     _bearingEstimator = StereoBearingEstimator();
     _reverbClassifier = ReverbClassifier();
+    _componentsCreated = true;
 
     await _classifier.init();
+    if (_disposed) return;
     _bearingEstimator.init();
     _reverbClassifier.init();
 
@@ -77,7 +82,7 @@ class AcousticWorldModel {
   }
 
   Future<void> _startCapture() async {
-    if (_running) return;
+    if (_running || _disposed || !_componentsCreated) return;
     _running = true;
     final ok = await _broker.start();
     if (!ok) {
@@ -251,6 +256,7 @@ class AcousticWorldModel {
   }
 
   void setEnabled(bool enabled) {
+    if (_disposed) return;
     if (_enabled == enabled) return;
     _enabled = enabled;
     if (enabled && !_running) {
@@ -287,14 +293,20 @@ class AcousticWorldModel {
   }
 
   void dispose() {
+    if (_disposed) return;
+    _disposed = true;
     _running = false;
     _enabled = false;
     _frameSub?.cancel();
     _frameSub = null;
     _broker.dispose();
-    _classifier.dispose();
-    _bearingEstimator.dispose();
-    _reverbClassifier.dispose();
+    // Core never initializes this deferred subsystem. Its owner still disposes
+    // every service, so cleanup must also work before init (or during init).
+    if (_componentsCreated) {
+      _classifier.dispose();
+      _bearingEstimator.dispose();
+      _reverbClassifier.dispose();
+    }
     onAcousticEvent = null;
     onReverbEstimate = null;
   }

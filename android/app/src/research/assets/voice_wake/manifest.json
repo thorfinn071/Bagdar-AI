@@ -1,0 +1,99 @@
+{
+  "schema": 1,
+  "modelId": "vosk-model-small-kz-0.42",
+  "archiveUrl": "https://alphacephei.com/vosk/models/vosk-model-small-kz-0.42.zip",
+  "archiveSha256": "b6d6bfe6195c866805bd18b1f56723e4d2ba4866e81df1481006d0c5704fda4f",
+  "license": "Apache-2.0",
+  "grammar": [
+    "бағдар",
+    "[unk]"
+  ],
+  "sampleRate": 16000,
+  "confidenceMin": 0.85,
+  "wordDurationMinSeconds": 0.25,
+  "wordDurationMaxSeconds": 2.0,
+  "chunkSamples": 1600,
+  "verifier": "full_vocabulary_exact_word",
+  "verifierBufferMaxSeconds": 4,
+  "sessionMaxSeconds": 300,
+  "promotionAllowed": false,
+  "deviceAcceptance": "not_run",
+  "provisionalAcceptanceTargets": {
+    "falseActivationsPerHourMax": 0.5,
+    "missRateMax": 0.1,
+    "wakeAfterWordEndP95MsMax": 1500,
+    "scope": "held_out_human_audio_and_named_android_device_required"
+  },
+  "files": [
+    {
+      "path": "am/final.mdl",
+      "bytes": 16742784,
+      "sha256": "e6fb91f33a9b7a958434f36e244a8a546a56bc73293afb4d533ba5de638a0e04"
+    },
+    {
+      "path": "graph/disambig_tid.int",
+      "bytes": 24,
+      "sha256": "32d37c456e7611b95e33c8305f6ae863685608e3a2f0bcf8b6131132863bb722"
+    },
+    {
+      "path": "graph/HCLr.fst",
+      "bytes": 28873674,
+      "sha256": "0ff225370ce0b648e5175b3c9ceaaf87c2a1a53e737ca3210eab8152b8b72123"
+    },
+    {
+      "path": "graph/Gr.fst",
+      "bytes": 51226147,
+      "sha256": "a75e73747dc1ef68e02a535ea54cee4f44b10528201a6b35e1af9da5eb5f63bd"
+    },
+    {
+      "path": "graph/phones/word_boundary.int",
+      "bytes": 1806,
+      "sha256": "27ee15c155e843da2c0f0d1af2cd6425e50d84f8ec8edd2a66ed6792dc08f69f"
+    },
+    {
+      "path": "conf/model.conf",
+      "bytes": 289,
+      "sha256": "0dc8a54d695213538447bfb64d89114c651d9d7dd407bde59c6c68ddd22fca7c"
+    },
+    {
+      "path": "conf/mfcc.conf",
+      "bytes": 128,
+      "sha256": "cdb0d516e5b8886092f1d840c628107703a65b571dc3b16b888a9a3978958b96"
+    },
+    {
+      "path": "ivector/splice.conf",
+      "bytes": 35,
+      "sha256": "9f0c5f7c82d18eaf25d8bce470efa9f7741f88411fe428774bc0a9bb69a24756"
+    },
+    {
+      "path": "ivector/final.dubm",
+      "bytes": 168048,
+      "sha256": "7dffe22bd992d7274fba925632bded4756d82dfd9b962d3c703110251fdf35b8"
+    },
+    {
+      "path": "ivector/global_cmvn.stats",
+      "bytes": 1077,
+      "sha256": "c600cbf4acfbfac99d587040d48dc31129cd635b112ff15bfa2e9d3b0cece1f8"
+    },
+    {
+      "path": "ivector/final.ie",
+      "bytes": 9927287,
+      "sha256": "94f2558d00fe199ac01409281352eb16707ec075baaf9cc0d7b53011583cfa0e"
+    },
+    {
+      "path": "ivector/online_cmvn.conf",
+      "bytes": 95,
+      "sha256": "a2f3571754b64297cb7efb2e7ca3df61995c5a45fcbb97188f90613552bb2dfe"
+    },
+    {
+      "path": "ivector/final.mat",
+      "bytes": 44975,
+      "sha256": "956577d396b636fe359b4321f10df5ed6a76bdfdec366b4a2b7d3242e524f04f"
+    },
+    {
+      "path": "README",
+      "bytes": 1043,
+      "sha256": "fbd3d0a02763566bc7fdda6086101ca9c4baaf7f6038f34c52a560f73c66ffa4"
+    }
+  ]
+}

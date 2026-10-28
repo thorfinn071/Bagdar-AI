@@ -86,6 +86,7 @@ class FieldLogger {
       'frame': frameCount,
       'tracks': trackCount,
       'inferMs': inferenceMs,
+      'timingScope': 'yolo_call_round_trip',
       if (maxConf != null) 'maxConf': (maxConf * 100).round(),
     });
   }
@@ -172,12 +173,15 @@ class FieldLogger {
     String? tier,
     int? preprocessMs,
     int? analyzeMs,
+    int? roundTripMs,
   }) {
     log('midas_inference', {
       'ms': ms,
       if (tier != null) 'tier': tier,
       if (preprocessMs != null) 'preMs': preprocessMs,
       if (analyzeMs != null) 'totalMs': analyzeMs,
+      if (roundTripMs != null) 'providerRoundTripMs': roundTripMs,
+      'inferenceScope': 'native_inference',
     });
   }
 

@@ -32,8 +32,6 @@ class SettingsService {
     _policy = CoreFeaturePolicy.current;
   }
 
-  static const _kOnboardingDone = 'onboarding_done';
-  static const _kOnboardingMode = 'onboarding_mode';
   static const _kLanguage = 'language';
   static const _kUseGpu = 'use_gpu';
   static const _kUseNativeDepthBridge = 'use_native_depth_bridge';
@@ -124,8 +122,6 @@ class SettingsService {
 
   bool _deferredAllowed(CoreFeature feature) => _policy.mayInitialize(feature);
 
-  bool get onboardingDone => _prefs!.getBool(_kOnboardingDone) ?? false;
-  String get onboardingMode => _prefs!.getString(_kOnboardingMode) ?? 'street';
   int get language => _prefs!.getInt(_kLanguage) ?? 0;
   bool get useGpu => _prefs!.getBool(_kUseGpu) ?? false;
   bool get useNativeDepthBridge =>
@@ -196,12 +192,6 @@ class SettingsService {
   Future<void> setTapSensitivity(TapSensitivity v) async =>
       _prefs?.setInt(_kTapSensitivity, v.index) ?? Future<void>.value();
 
-  Future<void> setOnboardingDone(bool v) async =>
-      _prefs!.setBool(_kOnboardingDone, v);
-
-  Future<void> setOnboardingMode(String v) async =>
-      _prefs!.setString(_kOnboardingMode, v);
-
   Future<void> setLanguage(int v) async => _prefs!.setInt(_kLanguage, v);
 
   Future<void> setUseGpu(bool v) async => _prefs!.setBool(_kUseGpu, v);
@@ -240,6 +230,15 @@ class SettingsService {
 
   Future<void> setSpeechRate(double v) async =>
       _prefs!.setDouble(_kSpeechRate, v.clamp(kSpeechRateMin, kSpeechRateMax));
+
+  // Voice confirmations must preserve the persistence acknowledgement rather
+  // than treating a completed Future<void> as proof of a successful write.
+  Future<bool> saveVoiceSpeechRate(double value) async =>
+      _prefs?.setDouble(_kSpeechRate, value.clamp(kSpeechRateMin, kSpeechRateMax)) ?? false;
+  Future<bool> saveVoiceSpeechVolume(double value) async =>
+      _prefs?.setDouble(_kTtsVolume, value.clamp(kTtsVolumeMin, kTtsVolumeMax)) ?? false;
+  Future<bool> saveVoiceTheme(BagdarThemeName value) async =>
+      _prefs?.setString(_kThemeMode, value.id) ?? false;
 
   Future<void> setTtsVolume(double v) async =>
       _prefs!.setDouble(_kTtsVolume, v.clamp(kTtsVolumeMin, kTtsVolumeMax));

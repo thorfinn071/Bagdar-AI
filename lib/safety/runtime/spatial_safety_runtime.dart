@@ -3,12 +3,15 @@ import '../../models/generic_obstacle.dart';
 import '../../tracker/generic_obstacle_tracker.dart';
 import '../alerts/alert_arbiter.dart';
 import '../perception/observation_header.dart';
+import '../perception/camera_track_association.dart';
+import '../perception/passage_clearance.dart';
 import '../planning/guidance_state_machine.dart';
 import '../planning/safety_action.dart';
 import '../world/generic_geometry_scene_adapter.dart';
 import '../world/local_scene_model.dart';
 import '../world/local_scene_snapshot.dart';
 import '../world/relative_polar_grid.dart';
+import 'passage_clearance_shadow.dart';
 
 enum SpatialRuntimeIngestStatus {
   accepted,
@@ -82,6 +85,8 @@ class SpatialRuntimeResult {
   final SafetyAction? submittedAction;
   final AlertArbiterEvent? arbiterEvent;
   final SpatialRuntimeTrace trace;
+  final PassageClearanceResult? passageClearance;
+  final bool passageClearanceApplied;
 
   const SpatialRuntimeResult({
     required this.status,
@@ -91,6 +96,8 @@ class SpatialRuntimeResult {
     required this.submittedAction,
     required this.arbiterEvent,
     required this.trace,
+    this.passageClearance,
+    this.passageClearanceApplied = false,
   });
 
   bool get accepted =>
@@ -113,10 +120,14 @@ class SpatialSafetyRuntime {
   final Duration minimumTickInterval;
   final Duration tickActionCooldown;
   final int maxTraceEntries;
+  final PassageClearanceShadowConfiguration? shadowPassage;
 
   int _activeSessionGeneration = -1;
   int _lastFrameId = 0;
   final List<SpatialRuntimeTrace> _traces = <SpatialRuntimeTrace>[];
+  final Map<int, CameraTrackAssociation> _cameraTrackAssociations = {};
+  Map<int, CameraTrackAssociation> get cameraTrackAssociations =>
+      Map.unmodifiable(_cameraTrackAssociations);
   DateTime? _lastTickAt;
   DateTime? _lastTickAdmissionAt;
   String? _lastTickActionSignature;
@@ -132,6 +143,7 @@ class SpatialSafetyRuntime {
     this.minimumTickInterval = const Duration(milliseconds: 200),
     this.tickActionCooldown = const Duration(seconds: 2),
     this.maxTraceEntries = 128,
+    this.shadowPassage,
   }) : assert(!observationTtl.isNegative && observationTtl > Duration.zero),
        assert(!minimumTickInterval.isNegative),
        assert(!tickActionCooldown.isNegative),
@@ -157,6 +169,7 @@ class SpatialSafetyRuntime {
     _lastProviderId = 'spatial';
     _providerLost = true;
     sceneModel.reset();
+    _cameraTrackAssociations.clear();
     planner.reset();
     arbiter.reset();
     _traces.clear();
@@ -184,6 +197,7 @@ class SpatialSafetyRuntime {
   void endSession({required DateTime now}) {
     final generation = _activeSessionGeneration;
     sceneModel.reset();
+    _cameraTrackAssociations.clear();
     planner.reset();
     arbiter.reset();
     _activeSessionGeneration = -1;
@@ -223,6 +237,8 @@ class SpatialSafetyRuntime {
     required bool orientationValid,
     required bool userMoving,
     required double poseQuality,
+    PassageClearanceObservation? passageObservation,
+    CameraTrackAssociationInput? cameraTrackInput,
   }) {
     if (header.sessionGeneration != _activeSessionGeneration) {
       return _reject(
@@ -241,10 +257,13 @@ class SpatialSafetyRuntime {
       );
     }
 
+    final capturedAt = DateTime.fromMicrosecondsSinceEpoch(
+      header.sourceTimestampUs,
+    );
     final producedAt = DateTime.fromMicrosecondsSinceEpoch(header.producedAtUs);
     final futureSkew = producedAt.difference(now);
     if (futureSkew > const Duration(milliseconds: 100) ||
-        now.difference(producedAt) > observationTtl) {
+        now.difference(capturedAt) > observationTtl) {
       return _reject(
         status: SpatialRuntimeIngestStatus.rejectedStale,
         reason: futureSkew > const Duration(milliseconds: 100)
@@ -255,20 +274,98 @@ class SpatialSafetyRuntime {
       );
     }
 
-    _lastFrameId = header.frameId;
-    _lastProviderId = header.providerId;
-    final recovered = _providerLost;
-    _providerLost = false;
-    final validUntil = producedAt.add(observationTtl);
+    // Inference completion must not renew the original capture's authority.
+    var validUntil = capturedAt.add(observationTtl);
+    PassageClearanceResult? passage;
+    final passageConfiguration = shadowPassage;
+    final aperture = detection.unknownReasons.contains(
+      ObstacleUnknownReason.unverifiedAperture,
+    );
+    final recognizedUnknown = detection.unknownReasons.every(
+      (reason) =>
+          reason == ObstacleUnknownReason.unverifiedAperture ||
+          reason == ObstacleUnknownReason.groundModelDisagreement,
+    );
+    // Negative camera evidence is independent of an opening hypothesis. An
+    // absent/missed aperture must not discard a measured blocker or unknown.
+    // In the camera experiment a complete body/floor volume is independently
+    // useful even when relative segmentation misses the opening hypothesis.
+    if (passageConfiguration != null &&
+        (aperture ||
+            passageObservation != null ||
+            passageConfiguration.requireCameraEvidence) &&
+        passageConfiguration.request.lateralCenterM == 0 &&
+        orientationValid &&
+        header.health == ObservationHealth.healthy &&
+        passageConfiguration.acceptsPose(poseQuality) &&
+        _sensorStateFor(detection.rejectReason) == SceneSensorState.healthy) {
+      final evaluated =
+          PassageClearanceEvaluator(
+            policy: passageConfiguration.policy,
+          ).evaluate(
+            request: passageConfiguration.request,
+            context: PassageEvaluationContext(
+              nowUs: now.microsecondsSinceEpoch,
+              timestampDomain: PassageTimestampDomain.utcEpochMicroseconds,
+              sessionGeneration: header.sessionGeneration,
+              frameId: header.frameId,
+              rgbTimestampUs: header.sourceTimestampUs,
+              transformId: header.transformId,
+            ),
+            calibration: passageConfiguration.calibration,
+            observation: passageObservation,
+          );
+      if (evaluated.status != PassageClearanceStatus.measuredClear ||
+          passageConfiguration.requireCameraEvidence ||
+          (aperture &&
+              recognizedUnknown &&
+              detection.unknownProbabilityFloor <= 0.65)) {
+        passage = evaluated;
+      }
+      final deadlineUs = passage?.validUntilUs;
+      if (deadlineUs != null &&
+          deadlineUs < validUntil.microsecondsSinceEpoch) {
+        validUntil = DateTime.fromMicrosecondsSinceEpoch(deadlineUs);
+      }
+    }
+    final previousAssociations = Map<int, CameraTrackAssociation>.of(
+      _cameraTrackAssociations,
+    );
+    _cameraTrackAssociations.clear();
+    final trackAssociator =
+        passageConfiguration?.requireCameraEvidence == true &&
+            passageConfiguration?.associateCameraTracks == true &&
+            cameraTrackInput != null &&
+            orientationValid &&
+            passageConfiguration!.acceptsPose(poseQuality)
+        ? CameraTrackAssociator(
+            input: cameraTrackInput,
+            header: header,
+            calibration: passageConfiguration.calibration,
+            request: passageConfiguration.request,
+            nowUs: now.microsecondsSinceEpoch,
+            relativeModelHash: passageConfiguration.cameraTrackModelHash ?? '',
+          )
+        : null;
     final sceneUpdate = sceneModel.ingestGenericGeometry(
       header: header,
       detection: detection,
       tracks: tracks,
-      at: producedAt,
+      at: passageConfiguration?.requireCameraEvidence == true
+          ? now
+          : producedAt,
       validUntil: validUntil,
       poseQuality: poseQuality.clamp(0.0, 1.0),
+      verifiedPassage: passage,
+      enablePassageRecovery:
+          passageConfiguration?.requireCameraEvidence == true,
+      cameraTrackAssociator: trackAssociator,
+      cameraTrackDiagnostics: _cameraTrackAssociations,
     );
     if (!sceneUpdate.accepted) {
+      _cameraTrackAssociations
+        ..clear()
+        ..addAll(previousAssociations);
       return _reject(
         status: SpatialRuntimeIngestStatus.rejectedScene,
         reason: sceneUpdate.reason,
@@ -278,10 +375,22 @@ class SpatialSafetyRuntime {
       );
     }
 
+    // Commit runtime admission only after the world model accepts the update.
+    // Rejected frames must not consume IDs or hide a pending provider recovery.
+    _lastFrameId = header.frameId;
+    _lastProviderId = header.providerId;
+    final recovered = _providerLost;
+    _providerLost = false;
     _publishGeometryHealth(
-      state: _sensorStateFor(detection.rejectReason),
-      reason: 'geometry_${detection.rejectReason.name}',
-      quality: detection.detectorQuality,
+      state:
+          sceneUpdate.snapshot.sensorHealth.providers[header.providerId] ??
+          SceneSensorState.unavailable,
+      reason: header.health == ObservationHealth.healthy
+          ? 'geometry_${detection.rejectReason.name}'
+          : 'geometry_observation_${header.health.name}',
+      quality: header.health == ObservationHealth.healthy
+          ? detection.detectorQuality
+          : 0,
       now: now,
     );
     return _planAndAdmit(
@@ -295,6 +404,8 @@ class SpatialSafetyRuntime {
       providerId: header.providerId,
       modelId: header.modelId,
       preprocessId: header.preprocessId,
+      passageClearance: passage,
+      passageClearanceApplied: sceneUpdate.passageClearanceApplied,
     );
   }
 
@@ -405,6 +516,8 @@ class SpatialSafetyRuntime {
     required String modelId,
     required String preprocessId,
     bool throttleDuplicateAdmission = false,
+    PassageClearanceResult? passageClearance,
+    bool passageClearanceApplied = false,
   }) {
     final grid = RelativePolarGrid.fromSnapshot(
       snapshot,
@@ -455,6 +568,8 @@ class SpatialSafetyRuntime {
       submittedAction: duplicateWithinCooldown ? null : submittedAction,
       arbiterEvent: event,
       trace: trace,
+      passageClearance: passageClearance,
+      passageClearanceApplied: passageClearanceApplied,
     );
   }
 

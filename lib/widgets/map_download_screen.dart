@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../theme/bagdar_theme.dart';
+import '../theme/bagdar_tokens.dart';
+import 'bagdar_ui.dart';
+
 import '../models/map_package.dart';
 import '../models/strings.dart';
 import '../services/map_package_manager.dart';
@@ -79,25 +83,14 @@ class _MapDownloadScreenState extends State<MapDownloadScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black87,
-        title: Text(
-          S.get('nav_select_city'),
-          style: const TextStyle(color: Colors.white),
-        ),
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: _cities.length,
-        itemBuilder: (ctx, i) => _buildCityCard(_cities[i]),
-      ),
+    return BagdarPage(
+      title: S.get('nav_select_city'),
+      children: [for (final city in _cities) _buildCityCard(city)],
     );
   }
 
   Widget _buildCityCard(MapPackage pkg) {
+    final colors = BagdarTheme.colorsOf(context);
     final installed = _mgr.isInstalled(pkg.cityId);
     final isDownloading = _downloading[pkg.cityId] == true;
     final progress = _progress[pkg.cityId];
@@ -109,10 +102,10 @@ class _MapDownloadScreenState extends State<MapDownloadScreen> {
           '${pkg.name}. ${installed ? S.get('nav_offline_ready') : S.get('nav_download_map')}',
       button: true,
       child: Card(
-        color: Colors.grey[900],
+        color: colors.surfaceElevated,
         margin: const EdgeInsets.only(bottom: 12),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(BagdarSpacing.m),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -120,7 +113,9 @@ class _MapDownloadScreenState extends State<MapDownloadScreen> {
                 children: [
                   Icon(
                     installed ? Icons.check_circle : Icons.cloud_download,
-                    color: installed ? Colors.green : Colors.white70,
+                    color: installed
+                        ? colors.stateSuccess
+                        : colors.textSecondary,
                     size: 28,
                   ),
                   const SizedBox(width: 12),
@@ -130,8 +125,8 @@ class _MapDownloadScreenState extends State<MapDownloadScreen> {
                       children: [
                         Text(
                           pkg.name,
-                          style: const TextStyle(
-                            color: Colors.white,
+                          style: TextStyle(
+                            color: colors.textPrimary,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -139,87 +134,90 @@ class _MapDownloadScreenState extends State<MapDownloadScreen> {
                         if (pkg.sizeBytes > 0)
                           Text(
                             '${pkg.sizeMb} MB',
-                            style: const TextStyle(
-                              color: Colors.white54,
-                              fontSize: 14,
+                            style: TextStyle(
+                              color: colors.textSecondary,
+                              fontSize: 16,
                             ),
                           ),
                       ],
                     ),
                   ),
                   if (hasUpdate)
-                    const Icon(Icons.update, color: Colors.orange, size: 24),
+                    Icon(Icons.update, color: colors.stateWarning, size: 24),
                 ],
               ),
               if (isDownloading && progress != null) ...[
                 const SizedBox(height: 12),
                 LinearProgressIndicator(
                   value: progress,
-                  backgroundColor: Colors.grey[800],
-                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+                  backgroundColor: colors.divider,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    colors.accentPrimary,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   '${S.get('nav_download_progress')}: ${(progress * 100).toStringAsFixed(0)}%',
-                  style: const TextStyle(color: Colors.white54, fontSize: 12),
+                  style: TextStyle(color: colors.textSecondary, fontSize: 16),
                 ),
               ],
               const SizedBox(height: 12),
-              Row(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   if (!installed && !isDownloading)
-                    Expanded(
+                    SizedBox(
                       child: ElevatedButton.icon(
                         onPressed: () => _download(pkg),
                         icon: const Icon(Icons.download),
                         label: Text(S.get('nav_download_map')),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          foregroundColor: Colors.white,
+                          backgroundColor: colors.accentPrimary,
+                          foregroundColor: colors.accentOnPrimary,
                         ),
                       ),
                     ),
                   if (installed && !isDownloading) ...[
                     if (hasUpdate)
-                      Expanded(
+                      SizedBox(
                         child: ElevatedButton.icon(
                           onPressed: () => _download(pkg),
                           icon: const Icon(Icons.update),
                           label: Text(S.get('nav_map_update')),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.orange,
-                            foregroundColor: Colors.white,
+                            backgroundColor: colors.accentPrimary,
+                            foregroundColor: colors.accentOnPrimary,
                           ),
                         ),
                       ),
-                    if (hasUpdate) const SizedBox(width: 8),
-                    Expanded(
+                    if (hasUpdate) const SizedBox(height: 8),
+                    SizedBox(
                       child: OutlinedButton.icon(
                         onPressed: () => _delete(pkg),
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.delete_outline,
-                          color: Colors.red,
+                          color: colors.stateDanger,
                         ),
                         label: Text(
                           S.get('nav_delete_map'),
-                          style: const TextStyle(color: Colors.red),
+                          style: TextStyle(color: colors.stateDanger),
                         ),
                         style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: Colors.red),
+                          side: BorderSide(color: colors.stateDanger),
                         ),
                       ),
                     ),
                   ],
                   if (isDownloading)
-                    Expanded(
+                    SizedBox(
                       child: ElevatedButton.icon(
                         onPressed: null,
-                        icon: const SizedBox(
+                        icon: SizedBox(
                           width: 16,
                           height: 16,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            color: Colors.white54,
+                            color: colors.textSecondary,
                           ),
                         ),
                         label: Text(S.get('nav_downloading_map')),

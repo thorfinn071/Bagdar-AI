@@ -6,121 +6,116 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:path_provider/path_provider.dart';
 
-import '../models/ncnn_depth_contract.dart';
 import '../utils/depth_hazard.dart';
-import '../utils/depth_map_ops.dart';
-import '../utils/ground_plane_analyzer.dart';
+import '../core/simulation_build.dart';
 import '../utils/ncnn_depth_debug_dump.dart';
-import '../utils/ncnn_depth_preprocess.dart';
 import 'depth_provider.dart';
 import 'device_capability.dart';
-import 'ncnn_depth_bridge.dart';
+import 'ncnn_depth_worker.dart';
 import 'settings_service.dart';
 
+/// Camera-facing facade; all native lifecycle and depth computation belong
+/// to the persistent worker, never the Flutter UI isolate.
 class NcnnDepthProvider implements DepthProvider {
-  static const int _inputSize = NcnnDepthBridge.inputSize;
   static const String _paramAsset = 'assets/midas_small.ncnn.param';
   static const String _binAsset = 'assets/midas_small.ncnn.bin';
-
   static const int _kMaxFailuresInWindow = 3;
   static const Duration _kFailureWindow = Duration(minutes: 5);
-
-  final NcnnDepthBridge _bridge;
-  final GroundPlaneAnalyzer _analyzer = GroundPlaneAnalyzer();
-
+  NcnnDepthWorker? _worker;
+  Future<bool>? _initializing;
+  Future<void>? _shutdown;
   bool _ready = false;
-  bool _busy = false;
-  double _lastOutputConfidence = 0;
+  bool _disposed = false;
   bool _permanentlyDisabled = false;
+  int _generation = 0;
+  int _requestId = 0;
   final List<DateTime> _recentFailures = [];
-
-  void Function()? onSessionDisabled;
-
-  late final Uint8List _lumaBuffer = Uint8List(_inputSize * _inputSize);
-  late final Float32List _frameValues = Float32List(_inputSize * _inputSize);
-  late final Float32List _frameRelative = Float32List(_inputSize * _inputSize);
-  late final Float32List _frameConf = Float32List(_inputSize * _inputSize);
-  double _prevMean = double.nan;
-
+  double _lastOutputConfidence = 0;
   double _lastPreprocessMs = 0;
   double _lastInferenceMs = 0;
   double _lastAnalyzeMs = 0;
+  double lastRoundTripMs = 0;
+  int? lastCompletedSourceTimestampUs;
+  bool _lastPlaneFitOk = false;
+  bool _isVulkan = false;
+  void Function()? onSessionDisabled;
 
-  NcnnDepthProvider({required NcnnDepthBridge bridge}) : _bridge = bridge;
+  NcnnDepthProvider._();
 
-  static Future<NcnnDepthProvider?> tryCreate() async {
-    final bridge = NcnnDepthBridge.tryCreate();
-    if (bridge == null) return null;
-    return NcnnDepthProvider(bridge: bridge);
-  }
+  @visibleForTesting
+  NcnnDepthProvider.withWorker(NcnnDepthWorker worker)
+    : _worker = worker,
+      _ready = true,
+      _isVulkan = worker.isVulkan;
+
+  static Future<NcnnDepthProvider?> tryCreate() async =>
+      Platform.isAndroid ? NcnnDepthProvider._() : null;
 
   @override
-  DepthTier get tier =>
-      _bridge.isVulkan ? DepthTier.ncnnVulkan : DepthTier.ncnnCpu;
-
+  DepthTier get tier => _isVulkan ? DepthTier.ncnnVulkan : DepthTier.ncnnCpu;
   @override
-  bool get isReady => _ready && !_permanentlyDisabled;
-
+  bool get isReady => _ready && !_disposed && !_permanentlyDisabled;
   @override
   bool get nativeBridgeEnabled => true;
-
   @override
   bool get nativeBridgeAvailable => true;
-
   @override
   bool get lowConfidenceFallbackActive => false;
-
   @override
   double get lastConfidenceScore => _lastOutputConfidence;
-
   @override
   double get lastPreprocessMs => _lastPreprocessMs;
-
   @override
   double get lastInferenceMs => _lastInferenceMs;
-
   @override
   double get lastAnalyzeMs => _lastAnalyzeMs;
-
   @override
   bool get lastUsedNativeBridge => true;
-
   @override
-  bool get lastPlaneFitOk => _analyzer.lastPlaneFitOk;
-
+  bool get lastPlaneFitOk => _lastPlaneFitOk;
+  int get queuedInputs => _worker?.queuedInputs ?? 0;
   @override
   void setNativeBridgeEnabled(bool enabled) {}
 
   @override
-  Future<bool> init({int threads = 2}) async {
-    if (Settings.instance.isReady && Settings.instance.ncnnDisabled) {
-      debugPrint(
-        'NcnnDepthProvider: ncnnDisabled flag present in prefs — '
-        'clearing (transient failures from a previous session are not '
-        'persisted; only structural load failures should persist).',
-      );
+  Future<bool> init({int threads = 2}) {
+    if (_disposed || _permanentlyDisabled) return Future.value(false);
+    if (_ready) return Future.value(true);
+    return _initializing ??= _initialize(threads);
+  }
 
+  Future<bool> _initialize(int threads) async {
+    final generation = _generation;
+    if (Settings.instance.isReady && Settings.instance.ncnnDisabled) {
       Settings.instance.setNcnnDisabled(false).ignore();
     }
     final paths = await _extractAssets();
-    if (paths == null) {
-      debugPrint(
-        'NcnnDepthProvider: NCNN assets missing — provider unavailable',
+    if (paths == null || _disposed || generation != _generation) return false;
+    try {
+      final worker = await NcnnDepthWorker.start(
+        NcnnDepthWorkerConfig(
+          paramPath: paths.$1,
+          binPath: paths.$2,
+          threads: threads.clamp(1, 4),
+          // Software Vulkan on an emulator can spend seconds compiling shaders.
+          // This opt-in uses the same native NCNN CPU path available on phones.
+          useVulkan:
+              !(simulationBuild &&
+                  const bool.fromEnvironment('BAGDAR_SIMULATION_CPU')),
+        ),
       );
-
+      if (_disposed || generation != _generation) {
+        await worker.close();
+        return false;
+      }
+      _worker = worker;
+      _isVulkan = worker.isVulkan;
+      _ready = true;
+      return true;
+    } catch (error) {
+      debugPrint('NcnnDepthProvider: worker init failed ($error)');
       return false;
     }
-    final ok = _bridge.init(
-      paramPath: paths.$1,
-      binPath: paths.$2,
-      useVulkan: true,
-      numThreads: threads.clamp(1, 4),
-    );
-    _ready = ok;
-    if (!ok) {
-      debugPrint('NcnnDepthProvider: bridge init failed');
-    }
-    return ok;
   }
 
   static Future<(String, String)?> _extractAssets() async {
@@ -169,16 +164,13 @@ class NcnnDepthProvider implements DepthProvider {
     bool userStationary = false,
     bool weatherDegraded = false,
     bool winterMode = false,
-  }) async {
-    final result = await analyzeDetailed(
-      image,
-      cropTopFrac: cropTopFrac,
-      userStationary: userStationary,
-      weatherDegraded: weatherDegraded,
-      winterMode: winterMode,
-    );
-    return result.legacyHazards;
-  }
+  }) async => (await analyzeDetailed(
+    image,
+    cropTopFrac: cropTopFrac,
+    userStationary: userStationary,
+    weatherDegraded: weatherDegraded,
+    winterMode: winterMode,
+  )).legacyHazards;
 
   @override
   Future<DepthAnalysisResult> analyzeDetailed(
@@ -191,296 +183,59 @@ class NcnnDepthProvider implements DepthProvider {
     int rotationDegrees = 0,
     bool mirrored = false,
   }) async {
-    if (_permanentlyDisabled || !_ready || _busy) {
-      return DepthAnalysisResult(
-        frame: null,
-        legacyHazards: const <DepthHazard>[],
-        health: DepthHealth.unavailable(
-          provider: DepthProviderKind.ncnnRelative,
-          reason: _permanentlyDisabled ? 'session_disabled' : 'not_ready',
-        ),
-      );
+    final worker = _worker;
+    if (!isReady || worker == null) {
+      return NcnnDepthReply.unavailable(
+        _permanentlyDisabled ? 'session_disabled' : 'not_ready',
+      ).result;
     }
-    _busy = true;
-    final totalSw = Stopwatch()..start();
-    _lastPreprocessMs = 0;
-    _lastInferenceMs = 0;
-    _lastAnalyzeMs = 0;
+    final generation = _generation;
+    final requestId = ++_requestId;
+    final roundTrip = Stopwatch()..start();
+    NcnnDepthReply reply;
     try {
-      if (image.planes.length < 3) {
-        debugPrint('NcnnDepthProvider: YUV420 requires 3 planes');
-        _recordFailure();
-        return DepthAnalysisResult(
-          frame: null,
-          legacyHazards: const <DepthHazard>[],
-          health: DepthHealth.unavailable(
-            provider: DepthProviderKind.ncnnRelative,
-            reason: 'yuv_planes_missing',
-          ),
-        );
-      }
-      final yPlane = image.planes[0];
-      final uPlane = image.planes[1];
-      final vPlane = image.planes[2];
-      final clampedCrop = cropTopFrac.clamp(0.0, 0.9);
-
-      final preSw = Stopwatch()..start();
-      _lumaBuffer.setAll(
-        0,
-        NcnnDepthPreprocess.alignedLuma(
-          y: yPlane.bytes,
-          width: image.width,
-          height: image.height,
-          rowStride: yPlane.bytesPerRow,
-          pixelStride: yPlane.bytesPerPixel ?? 1,
-          rotationDegrees: rotationDegrees,
-          mirrored: mirrored,
-          cropTopFrac: clampedCrop,
-        ),
-      );
-      preSw.stop();
-      _lastPreprocessMs = preSw.elapsedMicroseconds / 1000.0;
-
-      final infSw = Stopwatch()..start();
-      final flat = _bridge.inferYuv420(
-        yBytes: yPlane.bytes,
-        uBytes: uPlane.bytes,
-        vBytes: vPlane.bytes,
-        srcWidth: image.width,
-        srcHeight: image.height,
-        yRowStride: yPlane.bytesPerRow,
-        uRowStride: uPlane.bytesPerRow,
-        vRowStride: vPlane.bytesPerRow,
-        yPixelStride: yPlane.bytesPerPixel ?? 1,
-        uPixelStride: uPlane.bytesPerPixel ?? 1,
-        vPixelStride: vPlane.bytesPerPixel ?? 1,
-        rotationDegrees: rotationDegrees,
-        mirrored: mirrored,
-        cropTopFrac: clampedCrop,
-      );
-      infSw.stop();
-      _lastInferenceMs = infSw.elapsedMicroseconds / 1000.0;
-
-      if (flat == null) {
-        _recordFailure();
-        return DepthAnalysisResult(
-          frame: null,
-          legacyHazards: const <DepthHazard>[],
-          health: DepthHealth.unavailable(
-            provider: DepthProviderKind.ncnnRelative,
-            reason: 'infer_failed',
-          ),
-        );
-      }
-
-      _frameValues.setAll(0, flat);
-      DepthMapOps.sanitizeInPlace(_frameValues);
-
-      final outputClass = _classifyOutput(_frameValues);
-      if (outputClass == _OutputClass.invalid) {
-        debugPrint(
-          'NcnnDepthProvider: invalid output (NaN/Inf) — recording failure',
-        );
-        _lastOutputConfidence = 0;
-        _recordFailure();
-        return DepthAnalysisResult(
-          frame: null,
-          legacyHazards: const <DepthHazard>[],
-          health: DepthHealth.unavailable(
-            provider: DepthProviderKind.ncnnRelative,
-            reason: 'nan_inf',
-          ),
-        );
-      }
-      if (outputClass == _OutputClass.degenerate) {
-        _lastOutputConfidence = 0;
-        _recordFailure();
-        return DepthAnalysisResult(
-          frame: null,
-          legacyHazards: const <DepthHazard>[],
-          health: DepthHealth.unavailable(
-            provider: DepthProviderKind.ncnnRelative,
-            reason: 'degenerate',
-          ),
-        );
-      }
-
-      final relative = DepthMapOps.normalizeRelativeProximity(_frameValues);
-      _frameRelative.setAll(0, relative);
-      final valid = DepthMapOps.countValid(_frameRelative);
-      final coverage = valid / _frameRelative.length;
-      for (int i = 0; i < _frameConf.length; i++) {
-        _frameConf[i] = DepthMapOps.isValid(_frameRelative[i]) ? 1.0 : 0.0;
-      }
-      final minV = DepthMapOps.minValid(_frameValues);
-      final maxV = DepthMapOps.maxValid(_frameValues);
-      final rawRange = (minV != null && maxV != null) ? (maxV - minV) : 0.0;
-      final rangeQuality = (rawRange / 0.5).clamp(0.0, 1.0);
-      var mean = 0.0;
-      var meanN = 0;
-      for (final v in _frameRelative) {
-        if (DepthMapOps.isValid(v)) {
-          mean += v;
-          meanN++;
-        }
-      }
-      if (meanN > 0) mean /= meanN;
-      final temporal = (!_prevMean.isFinite || meanN == 0)
-          ? 0.5
-          : (1.0 - (mean - _prevMean).abs()).clamp(0.0, 1.0);
-      _prevMean = mean;
-
-      final components = DepthHealthComponents(
-        validCoverage: coverage.clamp(0.0, 1.0),
-        dynamicRange: rangeQuality,
-        temporalStability: temporal,
-        blurLightGate: _computeOutputConfidence(_frameValues),
-        providerState: 1.0,
-      );
-      _lastOutputConfidence = components.combined;
-      final ts = sourceTimestampUs > 0
-          ? sourceTimestampUs
-          : DateTime.now().microsecondsSinceEpoch;
-      final normalizedRotation = NcnnDepthPreprocess.normalizeRotation(
-        rotationDegrees,
-      );
-      final frame = DepthFrame(
-        values: _frameRelative,
-        confidence01: _frameConf,
-        width: NcnnDepthContract.mapSize,
-        height: NcnnDepthContract.mapSize,
-        timestampUs: ts,
-        provider: DepthProviderKind.ncnnRelative,
-        semantics: DepthValueSemantics.relativeProximity,
-        modelId: NcnnDepthContract.modelId,
-        modelHash: NcnnDepthContract.modelHash,
-        preprocessId: NcnnDepthContract.preprocessId,
-        cropTopFraction: clampedCrop,
-        frameQuality: components.combined,
-        alignedToImage: true,
-        rotationDegrees: normalizedRotation,
-        mirrored: mirrored,
-        nativeOutputWidth: _bridge.lastNativeOutWidth,
-        nativeOutputHeight: _bridge.lastNativeOutHeight,
-      );
-      NcnnDepthDebugDump.dump(
-        depth: _frameValues,
-        width: frame.width,
-        height: frame.height,
-        provider: 'ncnnRelative',
-        timestampUs: ts,
-        nativeOutW: frame.nativeOutputWidth,
-        nativeOutH: frame.nativeOutputHeight,
-        frameQuality: frame.frameQuality,
-      );
-      final hazards = _analyzer.analyze(
-        _frameValues,
-        lumaMap: _lumaBuffer,
+      final planes = image.planes;
+      if (planes.length < 3) throw ArgumentError('YUV420 needs three planes');
+      final input = NcnnDepthInput(
+        planes: [for (final p in planes.take(3)) p.bytes],
+        rowStrides: [for (final p in planes.take(3)) p.bytesPerRow],
+        pixelStrides: [for (final p in planes.take(3)) p.bytesPerPixel ?? 1],
+        width: image.width,
+        height: image.height,
+        cropTopFrac: cropTopFrac,
         userStationary: userStationary,
         weatherDegraded: weatherDegraded,
         winterMode: winterMode,
+        sourceTimestampUs: sourceTimestampUs,
+        rotationDegrees: rotationDegrees,
+        mirrored: mirrored,
+        debugDumpDirectory: NcnnDepthDebugDump.enabled
+            ? NcnnDepthDebugDump.outputDir
+            : null,
       );
-      final planeFitQuality = _analyzer.lastPlaneFitQuality;
-      final healthy =
-          components.combined >=
-              GenericObstacleConfig
-                  .engineeringDefaults
-                  .minHealthyFrameQuality &&
-          planeFitQuality.accepted;
-      return DepthAnalysisResult(
-        frame: frame,
-        alignedLuma: _lumaBuffer,
-        legacyHazards: hazards,
-        planeFitQuality: planeFitQuality,
-        health: DepthHealth(
-          capability: healthy
-              ? DepthCapability.healthyRelative
-              : DepthCapability.temporarilyLowConfidence,
-          components: components,
-          genericObstacleAvailable: healthy,
-          provider: DepthProviderKind.ncnnRelative,
-          rejectionReason: healthy
-              ? null
-              : !planeFitQuality.accepted
-              ? 'plane_unreliable:${planeFitQuality.rejectionReason.name}'
-              : 'ncnn_frame_quality',
-        ),
-      );
-    } catch (e) {
-      debugPrint('NcnnDepthProvider: analyze failed ($e)');
+      reply = await worker.analyze(input.freeze());
+    } catch (_) {
+      reply = NcnnDepthReply.unavailable('exception');
+    }
+    if (_disposed || generation != _generation) {
+      return NcnnDepthReply.unavailable('worker_closed').result;
+    }
+    final reason = reply.result.health.rejectionReason;
+    if (reply.result.health.capability == DepthCapability.providerUnavailable &&
+        reason != 'worker_superseded' &&
+        reason != 'worker_closed') {
       _recordFailure();
-      return DepthAnalysisResult(
-        frame: null,
-        legacyHazards: const <DepthHazard>[],
-        health: DepthHealth.unavailable(
-          provider: DepthProviderKind.ncnnRelative,
-          reason: 'exception',
-        ),
-      );
-    } finally {
-      totalSw.stop();
-      _lastAnalyzeMs = totalSw.elapsedMicroseconds / 1000.0;
-      _busy = false;
     }
-  }
-
-  _OutputClass _classifyOutput(Float32List flat) {
-    if (flat.isEmpty) return _OutputClass.invalid;
-    double minV = double.infinity;
-    double maxV = double.negativeInfinity;
-    int badCount = 0;
-    for (int i = 0; i < flat.length; i++) {
-      final v = flat[i];
-      if (v.isNaN || v.isInfinite) {
-        badCount++;
-        continue;
-      }
-      if (v < minV) minV = v;
-      if (v > maxV) maxV = v;
+    if (requestId == _requestId) {
+      lastCompletedSourceTimestampUs = sourceTimestampUs;
+      _lastPreprocessMs = reply.preprocessMs;
+      _lastInferenceMs = reply.inferenceMs;
+      _lastAnalyzeMs = reply.totalMs;
+      lastRoundTripMs = roundTrip.elapsedMicroseconds / 1000;
+      _lastOutputConfidence = reply.result.frame?.frameQuality ?? 0;
+      _lastPlaneFitOk = reply.result.frame != null && reply.planeFitOk;
     }
-
-    if (badCount > flat.length ~/ 20) return _OutputClass.invalid;
-    if (!minV.isFinite || !maxV.isFinite) return _OutputClass.invalid;
-
-    if ((maxV - minV).abs() < 1e-3) return _OutputClass.degenerate;
-    return _OutputClass.ok;
-  }
-
-  /// Compute a pseudo-confidence score [0..1] from depth map statistics.
-  /// Low range, many near-zero pixels, or low variance indicate poor output.
-  double _computeOutputConfidence(Float32List flat) {
-    if (flat.isEmpty) return 0;
-    final n = flat.length;
-    double sum = 0;
-    double sqSum = 0;
-    int nearZeroCount = 0;
-    double minV = double.infinity;
-    double maxV = double.negativeInfinity;
-    for (int i = 0; i < n; i++) {
-      final v = flat[i];
-      if (!v.isFinite) continue;
-      sum += v;
-      sqSum += v * v;
-      if (v < 0.02) nearZeroCount++;
-      if (v < minV) minV = v;
-      if (v > maxV) maxV = v;
-    }
-    if (!minV.isFinite || !maxV.isFinite) return 0;
-
-    final range = maxV - minV;
-    final mean = sum / n;
-    final variance = (sqSum / n) - mean * mean;
-    final nearZeroRatio = nearZeroCount / n;
-
-    // Score components:
-    // 1. Range should be > 0.1 for good depth maps (max 0.3 contribution)
-    final rangeScore = (range / 0.5).clamp(0.0, 1.0) * 0.3;
-    // 2. Low near-zero ratio (max 0.4 contribution)
-    final validScore = (1.0 - nearZeroRatio * 2).clamp(0.0, 1.0) * 0.4;
-    // 3. Reasonable variance (max 0.3 contribution)
-    final varScore = (variance / 0.01).clamp(0.0, 1.0) * 0.3;
-
-    return (rangeScore + validScore + varScore).clamp(0.0, 1.0);
+    return reply.result;
   }
 
   void _recordFailure() {
@@ -506,12 +261,29 @@ class NcnnDepthProvider implements DepthProvider {
 
   @override
   void dispose() {
+    if (_disposed) return;
+    _disposed = true;
     _ready = false;
-    _bridge.dispose();
+    _generation++;
+    unawaited(shutdown());
+  }
+
+  /// Allows lifecycle owners to await acknowledged native cleanup.
+  Future<void> shutdown() => _shutdown ??= _closeWorker();
+
+  Future<void> _closeWorker() async {
+    if (!_disposed) {
+      _disposed = true;
+      _ready = false;
+      _generation++;
+    }
+    final worker = _worker;
+    _worker = null;
+    if (worker != null) await worker.close();
+    final initializing = _initializing;
+    if (initializing != null) await initializing;
   }
 
   @visibleForTesting
   bool get debugIsPermanentlyDisabled => _permanentlyDisabled;
 }
-
-enum _OutputClass { ok, degenerate, invalid }

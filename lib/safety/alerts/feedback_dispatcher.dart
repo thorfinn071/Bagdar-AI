@@ -1,4 +1,6 @@
 import '../../core/core_health_coordinator.dart';
+import '../../core/performance/feedback_delivery_performance.dart';
+import '../../services/field_logger.dart';
 import '../planning/safety_action.dart';
 import 'feedback_command.dart';
 import 'haptic_policy.dart';
@@ -41,11 +43,14 @@ class FeedbackDispatchResult {
 class FeedbackDispatcher {
   final CoreHealthCoordinator healthCoordinator;
   final HapticPolicy hapticPolicy;
+  final FeedbackDeliveryPerformance _delivery;
 
   FeedbackDispatcher({
     required this.healthCoordinator,
     HapticPolicy? hapticPolicy,
-  }) : hapticPolicy = hapticPolicy ?? HapticPolicy();
+    FeedbackDeliveryPerformance? deliveryPerformance,
+  }) : hapticPolicy = hapticPolicy ?? HapticPolicy(),
+       _delivery = deliveryPerformance ?? FeedbackDeliveryPerformance.instance;
 
   Future<FeedbackDispatchResult> dispatch(
     FeedbackCommand command, {
@@ -66,6 +71,9 @@ class FeedbackDispatcher {
     }
 
     var speechDelivered = false;
+    final delivery = _delivery;
+    final dispatchAtUs = delivery.nowUs;
+    delivery.count('feedbackCommands');
     if (output.ttsAvailable) {
       speechDelivered = await output.speak(command);
     }
@@ -93,17 +101,43 @@ class FeedbackDispatcher {
       riskIncreased: riskIncreased,
     );
     var hapticDelivered = false;
-    if (output.hapticAvailable && hapticDecision.cue != null) {
+    final hapticAttempted =
+        output.hapticAvailable && hapticDecision.cue != null;
+    if (hapticAttempted) {
+      delivery.count('hapticRequested');
+      delivery.record('dispatchToHapticRequest', delivery.nowUs - dispatchAtUs);
+      FieldLogger.instance.log('feedback_haptic_request', {
+        'action_id': command.actionId,
+        'at_us': delivery.nowUs,
+        'clock': 'dart_feedback_elapsed',
+        'actual_vibration_measured': false,
+      });
       hapticDelivered = await output.vibrate(hapticDecision.cue!);
+      delivery.count(
+        hapticDelivered ? 'hapticReplyAccepted' : 'hapticReplyUnavailable',
+      );
+      delivery.record('dispatchToHapticReply', delivery.nowUs - dispatchAtUs);
     }
     if (effectiveHaptic != FeedbackHapticPattern.none) {
+      final previous = healthCoordinator
+          .snapshot(now)
+          .components[CoreComponent.haptics];
+      final failed = hapticAttempted && !hapticDelivered;
+      final retainFailure =
+          output.hapticAvailable &&
+          !hapticAttempted &&
+          previous?.state == ComponentState.unavailable;
       healthCoordinator.note(
         component: CoreComponent.haptics,
-        state: output.hapticAvailable
+        state: output.hapticAvailable && !failed && !retainFailure
             ? ComponentState.available
             : ComponentState.unavailable,
         reasonCode: hapticDelivered
             ? 'feedback_haptic_delivered'
+            : failed
+            ? 'haptic_platform_failed'
+            : retainFailure
+            ? previous!.reasonCode
             : output.hapticAvailable
             ? 'haptic_policy_suppressed'
             : 'haptic_fallback_unavailable',

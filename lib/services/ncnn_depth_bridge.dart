@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:ffi/ffi.dart' as ffi;
 import 'package:flutter/foundation.dart';
 
+import 'ncnn_depth_worker_types.dart';
+
 typedef _InitNative =
     Int32 Function(Pointer<ffi.Utf8>, Pointer<ffi.Utf8>, Int32, Int32);
 typedef _InitDart =
@@ -67,7 +69,7 @@ typedef _DisposeDart = void Function();
 /// by `libbagdar_native.so`. The native side is optional — when the library
 /// was built without NCNN (third_party libs absent), [tryCreate] returns null
 /// and callers should fall back to TFLite or focal-length depth.
-class NcnnDepthBridge {
+class NcnnDepthBridge implements NcnnDepthBackend {
   static const int inputSize = 256;
   static const int outputLength = inputSize * inputSize;
 
@@ -109,26 +111,30 @@ class NcnnDepthBridge {
   final _DisposeDart _disposeNative;
 
   bool _initialized = false;
+  bool _initAttempted = false;
   bool _vulkanActive = false;
 
   Pointer<Uint8>? _scratch;
   int _scratchCapacity = 0;
 
-  late final Pointer<Float> _outputPtr = ffi.calloc<Float>(outputLength);
-  late final Float32List _outputBuffer = _outputPtr.asTypedList(outputLength);
+  Pointer<Float>? _outputPtr;
+  bool _disposed = false;
 
   bool get isInitialized => _initialized;
+  @override
   bool get isVulkan => _vulkanActive;
 
-  bool init({
+  bool initPaths({
     required String paramPath,
     required String binPath,
     required bool useVulkan,
     required int numThreads,
   }) {
+    if (_disposed) return false;
     final paramP = paramPath.toNativeUtf8();
     final binP = binPath.toNativeUtf8();
     try {
+      _initAttempted = true;
       final ret = _init(paramP, binP, useVulkan ? 1 : 0, numThreads);
       if (ret != 0) {
         debugPrint('NcnnDepthBridge: init failed (ret=$ret)');
@@ -147,6 +153,38 @@ class NcnnDepthBridge {
 
   int get lastNativeOutWidth => _lastOutW();
   int get lastNativeOutHeight => _lastOutH();
+
+  @override
+  bool init(NcnnDepthWorkerConfig config) => initPaths(
+    paramPath: config.paramPath,
+    binPath: config.binPath,
+    useVulkan: config.useVulkan,
+    numThreads: config.threads.clamp(1, 4),
+  );
+
+  @override
+  int get outputWidth => lastNativeOutWidth;
+
+  @override
+  int get outputHeight => lastNativeOutHeight;
+
+  @override
+  Float32List? infer(NcnnDepthInput input) => inferYuv420(
+    yBytes: input.planes[0],
+    uBytes: input.planes[1],
+    vBytes: input.planes[2],
+    srcWidth: input.width,
+    srcHeight: input.height,
+    yRowStride: input.rowStrides[0],
+    uRowStride: input.rowStrides[1],
+    vRowStride: input.rowStrides[2],
+    yPixelStride: input.pixelStrides[0],
+    uPixelStride: input.pixelStrides[1],
+    vPixelStride: input.pixelStrides[2],
+    rotationDegrees: input.rotationDegrees,
+    mirrored: input.mirrored,
+    cropTopFrac: input.cropTopFrac.clamp(0.0, 0.9),
+  );
 
   /// Runs MiDaS on a YUV_420_888 frame (RGB, not grayscale). Returns the
   /// 256x256 inverse-depth map (view into native memory; valid until next
@@ -167,7 +205,8 @@ class NcnnDepthBridge {
     bool mirrored = false,
     required double cropTopFrac,
   }) {
-    if (!_initialized) return null;
+    if (!_initialized || _disposed) return null;
+    _outputPtr ??= ffi.calloc<Float>(outputLength);
     final need = yBytes.length + uBytes.length + vBytes.length;
     if (!_ensureScratch(need)) return null;
     final view = _scratch!.asTypedList(need);
@@ -196,14 +235,14 @@ class NcnnDepthBridge {
       rotationDegrees,
       mirrored ? 1 : 0,
       cropTopFrac,
-      _outputPtr,
+      _outputPtr!,
       outputLength,
     );
     if (ret != 0) {
       debugPrint('NcnnDepthBridge: infer_yuv420 failed (ret=$ret)');
       return null;
     }
-    return _outputBuffer;
+    return _outputPtr!.asTypedList(outputLength);
   }
 
   bool _ensureScratch(int requiredLength) {
@@ -223,12 +262,15 @@ class NcnnDepthBridge {
     }
   }
 
+  @override
   void dispose() {
-    if (_initialized) {
-      try {
-        _disposeNative();
-      } catch (_) {}
+    if (_disposed) return;
+    _disposed = true;
+    if (_initAttempted) {
+      // Cleanup failure must prevent a successful worker disposal ack.
+      _disposeNative();
       _initialized = false;
+      _initAttempted = false;
       _vulkanActive = false;
     }
     if (_scratch != null) {
@@ -236,8 +278,9 @@ class NcnnDepthBridge {
       _scratch = null;
       _scratchCapacity = 0;
     }
-    try {
-      ffi.calloc.free(_outputPtr);
-    } catch (_) {}
+    if (_outputPtr != null) {
+      ffi.calloc.free(_outputPtr!);
+      _outputPtr = null;
+    }
   }
 }

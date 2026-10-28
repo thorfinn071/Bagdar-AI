@@ -3,6 +3,8 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import '../camera/camera_session.dart';
 import '../core/core_feature_policy.dart';
+import '../core/simulation_build.dart';
+import 'package:sensors_plus/sensors_plus.dart';
 import '../core/core_health_coordinator.dart';
 import '../models/a11y_prefs.dart';
 import '../models/app_mode.dart';
@@ -45,6 +47,7 @@ import '../services/object_memory_service.dart';
 import '../services/acoustic_world_model.dart';
 import '../camera/object_finder_session.dart';
 import '../safety/runtime/spatial_safety_runtime.dart';
+import '../safety/runtime/confidence_authority_spatial_runtime.dart';
 import '../safety/runtime/safety_feedback_runtime.dart';
 import '../safety/alerts/bagdar_feedback_output.dart';
 import '../safety/alerts/feedback_command.dart';
@@ -182,7 +185,7 @@ class CameraViewModel extends ChangeNotifier {
       dispatcher: FeedbackDispatcher(healthCoordinator: health),
       output: feedbackOutput,
     );
-    spatialSafety = SpatialSafetyRuntime(
+    spatialSafety = ConfidenceAuthoritySpatialRuntime(
       healthCoordinator: health,
       arbiter: alertMgr.spatialArbiter,
     );
@@ -342,7 +345,29 @@ class CameraViewModel extends ChangeNotifier {
     HapticService.setStrengthMultiplier(s.hapticStrength.multiplier);
   }
 
-  Future<void> init() async {
+  /// Same perception/output objects, with no GPS, microphone or SMS boot.
+  Future<void> initSimulation({
+    required Stream<AccelerometerEvent> accelerometer,
+    required Stream<GyroscopeEvent> gyroscope,
+    AppMode? initialMode,
+  }) async {
+    requireSimulationBuild();
+    await Future.wait([
+      tts.init(),
+      earcon.init(),
+      HapticService.init(),
+      orientation.init(accelerometer: accelerometer),
+      fallDetector.init(accelerometer: accelerometer, gyroscope: gyroscope),
+    ]);
+    await feedbackOutput.refreshCapabilities();
+    alertMgr.attachSafetyFeedback(safetyFeedback);
+    tracker.ttsService = tts;
+    fallDetector.onMotionStateChanged = throttler.setMotionState;
+    if (initialMode != null) mode = initialMode;
+    notifyListeners();
+  }
+
+  Future<void> init({AppMode? initialMode}) async {
     const policy = CoreFeaturePolicy.current;
     debugBootServiceNames = CoreBootServices.namesFor(policy);
     final List<Future<void>> services = [
@@ -543,9 +568,7 @@ class CameraViewModel extends ChangeNotifier {
       notifyListeners();
     };
 
-    final modeName = Settings.instance.onboardingMode;
-    final saved = AppMode.values.where((m) => m.name == modeName).firstOrNull;
-    if (saved != null) mode = saved;
+    if (initialMode != null) mode = initialMode;
 
     if (Settings.instance.isReady) {
       guideDogMode = Settings.instance.guideDogMode;

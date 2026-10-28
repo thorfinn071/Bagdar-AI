@@ -12,6 +12,7 @@ import '../services/haptic_service.dart';
 import '../services/sos_service.dart';
 import '../services/tts_service.dart';
 import '../services/voice_command_service.dart';
+import 'sos_ui_state.dart';
 
 typedef FallSafetyFeedback =
     void Function(String speechKey, String replaceKey, DateTime now);
@@ -27,6 +28,9 @@ class FallCountdownController extends ChangeNotifier {
   final TtsService tts;
   final SosService sos;
   final VoiceCommandService voice;
+  /// Release ordinary input before the emergency listener starts. This never
+  /// holds up countdown output, corroboration sensors or SOS delivery.
+  final Future<bool> Function()? prepareVoiceInput;
   final VoidCallback? onCancelled;
   final VoidCallback? onSosSent;
   final FallSafetyFeedback? onSafetyFeedback;
@@ -67,7 +71,11 @@ class FallCountdownController extends ChangeNotifier {
   Duration _currentDuration = kInitialDuration;
   bool _active = false;
   bool _cancelListenerActive = false;
+  int _voiceGeneration = 0;
+  bool _voicePreparing = false;
+  bool _voiceAllowed = true;
   bool _disposed = false;
+  SosUiState _deliveryState = const SosUiState.idle();
 
   bool _voiceConfirmPending = false;
   bool _dazedCheckPending = false;
@@ -83,6 +91,7 @@ class FallCountdownController extends ChangeNotifier {
     required this.tts,
     required this.sos,
     required this.voice,
+    this.prepareVoiceInput,
     this.onCancelled,
     this.onSosSent,
     this.onSafetyFeedback,
@@ -93,6 +102,19 @@ class FallCountdownController extends ChangeNotifier {
 
   int get secondsLeft => _secondsLeft;
   bool get active => _active;
+
+  SosUiState get uiState => _active
+      ? SosUiState.countdown(
+          _secondsLeft,
+          cancelConfirmationPending: _lastCancelTapAt != null,
+        )
+      : _deliveryState;
+
+  void dismissStatus() {
+    if (_active || _deliveryState.phase == SosUiPhase.sending || _disposed) return;
+    _deliveryState = const SosUiState.idle();
+    notifyListeners();
+  }
 
   @visibleForTesting
   bool get dazedCheckPendingForTesting => _dazedCheckPending;
@@ -106,13 +128,15 @@ class FallCountdownController extends ChangeNotifier {
     Duration duration = kInitialDuration,
   }) {
     _active = true;
+    _deliveryState = const SosUiState.idle();
     _currentDuration = duration;
     _secondsLeft = secondsLeft;
   }
 
   void start({FallClass fallClass = FallClass.tumble}) {
-    if (_active) return;
+    if (_active || _deliveryState.phase == SosUiPhase.sending || _disposed) return;
     _active = true;
+    _deliveryState = const SosUiState.idle();
     _lastCancelTapAt = null;
     _cancelConfirmTimer?.cancel();
     _cancelConfirmTimer = null;
@@ -152,10 +176,11 @@ class FallCountdownController extends ChangeNotifier {
   }
 
   void cancel() {
-    if (!_active) return;
+    if (!_active || _disposed) return;
     _dazedCheckPending = false;
     _timer?.cancel();
     _active = false;
+    _deliveryState = const SosUiState.cancelled();
     _secondsLeft = 0;
     _stopFallCancelListener();
     _stopCorroborationSensor();
@@ -170,6 +195,7 @@ class FallCountdownController extends ChangeNotifier {
   }
 
   void notifyTouch() {
+    if (_disposed) return;
     final now = DateTime.now();
     _lastTouchAt = now;
     if (!_active) return;
@@ -195,7 +221,9 @@ class FallCountdownController extends ChangeNotifier {
     _cancelConfirmTimer = Timer(kCancelConfirmWindow, () {
       _lastCancelTapAt = null;
       _cancelConfirmTimer = null;
+      if (!_disposed) notifyListeners();
     });
+    notifyListeners();
   }
 
   void requestVoiceCancel() {
@@ -248,16 +276,10 @@ class FallCountdownController extends ChangeNotifier {
   void processTickForTesting() => _processTick();
 
   void _processTick() {
+    if (!_active || _disposed) return;
     _secondsLeft--;
     if (_secondsLeft <= 0) {
-      _timer?.cancel();
-      _active = false;
-      _dazedCheckPending = false;
-      _stopFallCancelListener();
-      _stopCorroborationSensor();
-      _resetVoiceConfirm();
-      notifyListeners();
-      unawaited(_sendFallSos());
+      sendNow();
       return;
     }
 
@@ -319,30 +341,70 @@ class FallCountdownController extends ChangeNotifier {
         'outcome': 'stationary_early_sos',
         'secondsLeft': _secondsLeft,
       });
-      _timer?.cancel();
-      _active = false;
-      _stopFallCancelListener();
-      _stopCorroborationSensor();
-      _resetVoiceConfirm();
-      notifyListeners();
-      unawaited(_sendFallSos());
+      sendNow();
     }
   }
 
-  Future<void> _sendFallSos() async {
+  /// Escalate an existing countdown, including an explicit manual SOS request.
+  /// All expiry paths enter the same single in-flight attempt.
+  void sendNow() {
+    if (!_active || _disposed) return;
+    _timer?.cancel();
+    _active = false;
+    _dazedCheckPending = false;
+    _stopFallCancelListener();
+    _stopCorroborationSensor();
+    _resetVoiceConfirm();
+    unawaited(_sendFallSos());
+  }
+
+  /// Share one attempt with fall escalation. A manual request during an
+  /// existing countdown sends immediately without announcing a cancellation.
+  Future<SosResult?> sendManually() {
+    if (_disposed || _deliveryState.phase == SosUiPhase.sending) {
+      return Future.value();
+    }
+    final afterFall = _active;
+    if (_active) {
+      _timer?.cancel();
+      _active = false;
+      _dazedCheckPending = false;
+      _stopFallCancelListener();
+      _stopCorroborationSensor();
+      _resetVoiceConfirm();
+    }
+    return _sendFallSos(afterFall: afterFall);
+  }
+
+  Future<SosResult?> _sendFallSos({bool afterFall = true}) async {
+    if (_disposed || _deliveryState.phase == SosUiPhase.sending) return null;
+    _deliveryState = const SosUiState.sending();
+    _lastCancelTapAt = null;
+    _cancelConfirmTimer?.cancel();
+    _cancelConfirmTimer = null;
+    notifyListeners();
     final hasContact = (sos.contactNumber ?? '').isNotEmpty;
     if (!hasContact) {
       tts.say(S.get('sos_112_fallback'), SpeechPriority.critical, pan: 0.0);
     }
     final sendingAt = DateTime.now();
     final safetyFeedback = onSafetyFeedback;
+    final replaceKey = afterFall ? 'fall_sos_delivery' : 'manual_sos_delivery';
     if (safetyFeedback != null) {
-      safetyFeedback('sos_sending', 'fall_sos_delivery', sendingAt);
+      safetyFeedback('sos_sending', replaceKey, sendingAt);
     } else {
       tts.say(S.get('sos_sending'), SpeechPriority.critical, pan: 0.0);
     }
-    final result = await sos.sendSos();
-    if (_disposed) return;
+    SosResult result;
+    try {
+      result = await sos.sendSos();
+    } catch (_) {
+      result = SosResult.error;
+    }
+    if (_disposed) return null;
+    final resultState = SosUiState.result(result, afterFall: afterFall);
+    _deliveryState = resultState;
+    notifyListeners();
 
     final delivered =
         result == SosResult.sent ||
@@ -350,47 +412,47 @@ class FallCountdownController extends ChangeNotifier {
         result == SosResult.sentWithoutLocation;
     // E-2: composerOpened / dialerOpened mean the user still has to take
     // manual action — do NOT mark the SOS as sent or start the lockout.
-    if (delivered) onSosSent?.call();
+    if (delivered && afterFall) onSosSent?.call();
     // E-2: guide the user to complete the send / call manually.
     if (result == SosResult.composerOpened ||
         result == SosResult.dialerOpened) {
       HapticService.vibrate(const [0, 200, 100, 200]);
     }
-    final resultKey = switch (result) {
-      SosResult.sent => 'sos_fall_sent',
-      SosResult.sentFallback => 'sos_sent',
-      // E-1: native SMS unconfirmed; sms:// fallback was launched.
-      SosResult.pendingEnqueued => 'sos_queued',
-      SosResult.sentWithoutLocation => 'sos_sent_no_location',
-      SosResult.noLocation => 'sos_no_location',
-      SosResult.launchFailed => 'sos_launch_failed',
-      SosResult.noContact => 'sos_no_contact',
-      SosResult.error => 'sos_error',
-      SosResult.composerOpened => 'sos_composer_opened',
-      SosResult.dialerOpened => 'sos_dialer_opened',
-    };
+    final resultKey = resultState.messageKey;
     final resultAt = DateTime.now();
     if (safetyFeedback != null) {
-      safetyFeedback(resultKey, 'fall_sos_delivery', resultAt);
+      safetyFeedback(resultKey, replaceKey, resultAt);
     } else {
       tts.say(S.get(resultKey), SpeechPriority.critical, pan: 0.0);
     }
+    return result;
   }
 
   void _startFallCancelListener() {
     if (_cancelListenerActive) return;
     _cancelListenerActive = true;
-    unawaited(
-      voice.startContinuousListening(
+    _voiceAllowed = false;
+    _voicePreparing = true;
+    final generation = ++_voiceGeneration;
+    unawaited(() async {
+      var allowed = false;
+      try {
+        allowed = await (prepareVoiceInput?.call() ?? Future.value(true));
+      } catch (_) {}
+      if (generation != _voiceGeneration || !_active || _disposed) return;
+      _voicePreparing = false;
+      _voiceAllowed = allowed;
+      if (!allowed) return;
+      await voice.startContinuousListening(
         sessionDuration: _currentDuration,
         listenFor: const Duration(seconds: 30),
         pauseFor: const Duration(seconds: 5),
-      ),
-    );
+      );
+    }());
   }
 
   void _restartFallCancelListener() {
-    if (!_cancelListenerActive) return;
+    if (!_cancelListenerActive || _voicePreparing || !_voiceAllowed) return;
 
     voice.extendContinuousDeadline(Duration(seconds: _secondsLeft + 1));
     if (voice.isListening) return;
@@ -404,6 +466,9 @@ class FallCountdownController extends ChangeNotifier {
   }
 
   void _stopFallCancelListener() {
+    ++_voiceGeneration;
+    _voicePreparing = false;
+    _voiceAllowed = false;
     _cancelListenerActive = false;
     unawaited(voice.stopListening());
   }

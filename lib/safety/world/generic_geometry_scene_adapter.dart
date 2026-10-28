@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import '../../models/generic_obstacle.dart';
 import '../../tracker/generic_obstacle_tracker.dart';
 import '../../utils/depth_hazard.dart';
 import '../perception/observation_header.dart';
+import '../perception/camera_track_association.dart';
+import '../perception/passage_clearance.dart';
 import 'local_scene_model.dart';
 import 'local_scene_snapshot.dart';
 import 'scene_fusion_policy.dart';
@@ -18,6 +22,10 @@ extension GenericGeometrySceneAdapter on LocalSceneModel {
     required DateTime at,
     required DateTime validUntil,
     required double poseQuality,
+    PassageClearanceResult? verifiedPassage,
+    bool enablePassageRecovery = false,
+    CameraTrackAssociator? cameraTrackAssociator,
+    Map<int, CameraTrackAssociation>? cameraTrackDiagnostics,
   }) {
     if (coordinateMode != SceneCoordinateMode.relative) {
       return LocalSceneUpdateResult(
@@ -27,24 +35,200 @@ extension GenericGeometrySceneAdapter on LocalSceneModel {
       );
     }
 
-    final sensorState = _sensorStateFor(detection.rejectReason);
+    final detectionState = _sensorStateFor(detection.rejectReason);
+    // A plausible detector payload cannot upgrade an unhealthy provider. Keep
+    // its physical threats, but withhold positive observability and surface
+    // evidence until both the provider and detector are healthy.
+    final sensorState = switch (header.health) {
+      ObservationHealth.healthy => detectionState,
+      ObservationHealth.degraded =>
+        detectionState == SceneSensorState.healthy
+            ? SceneSensorState.degraded
+            : detectionState,
+      ObservationHealth.unavailable ||
+      ObservationHealth.rejected => SceneSensorState.unavailable,
+    };
     final usable = sensorState == SceneSensorState.healthy;
     final observedFraction = usable
         ? detection.detectorQuality.clamp(0.0, 1.0)
         : 0.0;
+    final forwardObservedFraction = detection.corridorCoverage == null
+        ? observedFraction
+        : _min(
+            observedFraction,
+            detection.corridorCoverage!.minimumObservedFraction,
+          );
+    final associations = <int, CameraTrackAssociation>{};
+    if (enablePassageRecovery && usable && cameraTrackAssociator != null) {
+      for (final track in tracks) {
+        final o = track.last, b = o.normalizedBounds;
+        associations[track.id] = cameraTrackAssociator.associate(
+          normalizedBounds: [b.left, b.top, b.right, b.bottom],
+          trackTimestampUs: track.timestampUsHist.isEmpty
+              ? -1
+              : track.timestampUsHist.last,
+          currentlyObserved: track.misses == 0,
+          motionOrSemanticRisk:
+              _movingRisk(track, o) > 0 ||
+              o.semantic != null ||
+              o.timeToCollisionS != null ||
+              (track.metricVelocityMps() ?? 0) > 0,
+          support: o.cameraSupport,
+          expectedPixelCount: o.pixelCount,
+        );
+      }
+    }
+    cameraTrackDiagnostics?.addAll(associations);
+    bool outside(GenericObstacleTrack track) =>
+        associations[track.id]?.relation == CameraTrackRelation.outsidePassage;
+    // A close central component can be visible before its track is confirmed.
+    // Preserve that uncertainty in the forward corridor without promoting it
+    // to a confirmed obstacle or using relative proximity as metres.
+    final unresolvedCloseForward =
+        usable &&
+        tracks.any(
+          (track) =>
+              !track.confirmed &&
+              track.misses == 0 &&
+              !outside(track) &&
+              _isUnresolvedCloseForward(track.last),
+        );
+    final evidenceAt = enablePassageRecovery
+        ? DateTime.fromMicrosecondsSinceEpoch(header.sourceTimestampUs)
+        : at;
+    final recognizedUnknown = detection.unknownReasons.every(
+      (reason) =>
+          reason == ObstacleUnknownReason.unverifiedAperture ||
+          reason == ObstacleUnknownReason.groundModelDisagreement,
+    );
+    final coverageOnly =
+        verifiedPassage != null &&
+        (verifiedPassage.status == PassageClearanceStatus.measuredClear ||
+            (verifiedPassage.reasons.isNotEmpty &&
+                verifiedPassage.reasons.every(
+                  (reason) => const {
+                    PassageClearanceReason.unobservedBody,
+                    PassageClearanceReason.unobservedFloor,
+                    PassageClearanceReason.missingMeasurements,
+                    PassageClearanceReason.coverageGap,
+                  }.contains(reason),
+                )));
+    final scope =
+        enablePassageRecovery &&
+            usable &&
+            coverageOnly &&
+            recognizedUnknown &&
+            !unresolvedCloseForward &&
+            detection.unknownProbabilityFloor <= .65
+        ? _passageScope(header, verifiedPassage)
+        : null;
+    // Only the opt-in runtime supplies a freshly evaluated, frame-bound result.
+    // Resolve only aperture/coverage hypotheses. Full certificates may retire
+    // earlier coverage in the opt-in experiment; physical risk is retained.
+    final clearanceConfirmed =
+        usable &&
+        !unresolvedCloseForward &&
+        (enablePassageRecovery
+            ? recognizedUnknown &&
+                  verifiedPassage?.coversCameraRecoveryVolume == true
+            : detection.unknownReasons.contains(
+                ObstacleUnknownReason.unverifiedAperture,
+              )) &&
+        detection.unknownProbabilityFloor <= 0.65 &&
+        verifiedPassage != null &&
+        verifiedPassage.validUntilUs != null &&
+        verifiedPassage.validUntilUs! >= at.microsecondsSinceEpoch &&
+        verifiedPassage.appliesTo(
+          request: verifiedPassage.request,
+          context: PassageEvaluationContext(
+            nowUs: verifiedPassage.context.nowUs,
+            timestampDomain: PassageTimestampDomain.utcEpochMicroseconds,
+            sessionGeneration: header.sessionGeneration,
+            frameId: header.frameId,
+            rgbTimestampUs: header.sourceTimestampUs,
+            transformId: header.transformId,
+          ),
+        );
     final evidence = <SpatialEvidence>[];
     for (final elementId in const <String>['left', 'forward', 'right']) {
+      final elementObservedFraction = elementId == 'forward'
+          ? clearanceConfirmed
+                ? 1.0
+                : forwardObservedFraction
+          : observedFraction;
       evidence.add(
         SpatialEvidence(
           elementId: elementId,
           coordinateMode: SceneCoordinateMode.relative,
           sourceId: 'geometry:${header.providerId}',
           source: SpatialEvidenceSource.geometry,
-          observedAt: at,
+          observedAt: evidenceAt,
           validUntil: validUntil,
-          observedFraction: observedFraction,
+          observedFraction: elementObservedFraction,
           confidence: usable ? detection.detectorQuality : 0,
-          unknownProbability: 1 - observedFraction,
+          unknownScopeId: elementId == 'forward' ? scope : null,
+          unknownProbability: _max(
+            1 - elementObservedFraction,
+            _max(
+              clearanceConfirmed && elementId == 'forward'
+                  ? 0
+                  : detection.unknownProbabilityFloor,
+              elementId == 'forward' && unresolvedCloseForward ? 0.65 : 0,
+            ),
+          ),
+        ),
+      );
+    }
+    if (usable && verifiedPassage != null) {
+      evidence.add(
+        SpatialEvidence(
+          elementId: 'forward',
+          coordinateMode: SceneCoordinateMode.relative,
+          sourceId:
+              'metric-passage:${verifiedPassage.request.referenceFrameId}',
+          source: SpatialEvidenceSource.depth,
+          observedAt: evidenceAt,
+          validUntil: validUntil,
+          observedFraction: clearanceConfirmed ? 1 : 0,
+          confidence: verifiedPassage.minimumEvidenceConfidence ?? 0,
+          traversabilityProbability: clearanceConfirmed ? 1 : null,
+          occupancyProbability:
+              verifiedPassage.status == PassageClearanceStatus.blocked
+              ? 1
+              : null,
+          unknownProbability: clearanceConfirmed ? 0 : 1,
+          unknownScopeId: scope,
+          coverageResolution: clearanceConfirmed && enablePassageRecovery
+              ? verifiedPassage
+              : null,
+          passageContext: clearanceConfirmed && enablePassageRecovery
+              ? PassageEvaluationContext(
+                  nowUs: at.microsecondsSinceEpoch,
+                  timestampDomain: PassageTimestampDomain.utcEpochMicroseconds,
+                  sessionGeneration: header.sessionGeneration,
+                  frameId: header.frameId,
+                  rgbTimestampUs: header.sourceTimestampUs,
+                  transformId: header.transformId,
+                )
+              : null,
+        ),
+      );
+    }
+    final surface = detection.surfaceEvidence;
+    if (usable && surface.isAvailable && !clearanceConfirmed) {
+      evidence.add(
+        SpatialEvidence(
+          elementId: 'forward',
+          coordinateMode: SceneCoordinateMode.relative,
+          sourceId: 'surface:${header.providerId}',
+          source: SpatialEvidenceSource.traversability,
+          observedAt: evidenceAt,
+          validUntil: validUntil,
+          observedFraction: surface.observedFraction,
+          confidence: surface.confidence,
+          traversabilityProbability: surface.continuity,
+          unknownProbability: 1 - surface.observedFraction,
+          unknownScopeId: scope,
         ),
       );
     }
@@ -53,8 +237,19 @@ extension GenericGeometrySceneAdapter on LocalSceneModel {
     final movingThreats = <MovingThreatSnapshot>[];
     for (final track in tracks) {
       final observation = track.last;
+      final trackObservedAt =
+          enablePassageRecovery && track.timestampUsHist.isNotEmpty
+          ? DateTime.fromMicrosecondsSinceEpoch(track.timestampUsHist.last)
+          : at;
       final imminent = _isImminentUnconfirmed(observation);
       if (!track.confirmed && !imminent) continue;
+      // Do not assign a floor/frame/far surface to the protected forward
+      // corridor by the centre of its 2D bounding rectangle. Existing physical
+      // history is untouched and expires by its own clock. No passage proof
+      // can cancel a track whose first-surface footprints intersect or are unknown.
+      if (outside(track) && _elementForZone(observation.zone) == 'forward') {
+        continue;
+      }
       final elementId = _elementForZone(observation.zone);
       final occupancy = _max(
         observation.relativeProximity,
@@ -68,13 +263,15 @@ extension GenericGeometrySceneAdapter on LocalSceneModel {
           coordinateMode: SceneCoordinateMode.relative,
           sourceId: 'geometry:${header.providerId}',
           source: SpatialEvidenceSource.geometry,
-          observedAt: at,
+          observedAt: trackObservedAt,
           validUntil: validUntil,
           observedFraction: _max(observedFraction, observation.corridorOverlap),
           confidence: observation.confidence,
           occupancyProbability: occupancy,
           movingThreatRisk: movingRisk,
-          unknownProbability: 1 - observation.confidence,
+          // Component confidence is proximity-weighted, not sector coverage.
+          // Frame evidence owns unknown risk; this track only adds threats.
+          // Leaving unknownProbability unset cannot subtract existing unknown.
           hazardIds: <String>[hazardId],
           motionVector: SceneMotionVector(
             lateral: _lateralForZone(observation.zone),
@@ -91,7 +288,7 @@ extension GenericGeometrySceneAdapter on LocalSceneModel {
             coordinateMode: SceneCoordinateMode.relative,
             sourceId: 'semantic:${semantic.yoloTrackId}',
             source: SpatialEvidenceSource.semantic,
-            observedAt: at,
+            observedAt: trackObservedAt,
             validUntil: validUntil,
             observedFraction: observation.corridorOverlap,
             confidence: semantic.confidence,
@@ -106,7 +303,7 @@ extension GenericGeometrySceneAdapter on LocalSceneModel {
           elementId: elementId,
           risk: _max(occupancy, movingRisk),
           sourceMask: <String>{'geometry:${header.providerId}'},
-          lastObservedAt: at,
+          lastObservedAt: trackObservedAt,
         ),
       );
       if (movingRisk >= 0.20) {
@@ -115,13 +312,13 @@ extension GenericGeometrySceneAdapter on LocalSceneModel {
             id: 'moving:${track.id}',
             elementId: elementId,
             intersectionRisk: movingRisk,
-            lastObservedAt: at,
+            lastObservedAt: trackObservedAt,
           ),
         );
       }
     }
 
-    return update(
+    final result = update(
       LocalSceneUpdate(
         coordinateMode: SceneCoordinateMode.relative,
         at: at,
@@ -133,7 +330,14 @@ extension GenericGeometrySceneAdapter on LocalSceneModel {
         evidence: evidence,
         hazardTracks: hazards,
         movingThreats: movingThreats,
+        useIndependentEvidenceClocks: enablePassageRecovery,
       ),
+    );
+    return LocalSceneUpdateResult(
+      status: result.status,
+      reason: result.reason,
+      snapshot: result.snapshot,
+      passageClearanceApplied: result.accepted && clearanceConfirmed,
     );
   }
 }
@@ -149,11 +353,23 @@ SceneSensorState _sensorStateFor(ObstacleRejectReason reason) =>
       _ => SceneSensorState.degraded,
     };
 
+// A very close central surface may need a stop on its first sighting even
+// when segmentation confidence is only moderate; ordinary observations still
+// wait for tracker confirmation.
 bool _isImminentUnconfirmed(GenericObstacleObservation observation) =>
     _elementForZone(observation.zone) == 'forward' &&
-    observation.relativeProximity >= 0.85 &&
-    observation.confidence >= 0.80 &&
-    observation.corridorOverlap >= 0.50;
+    observation.corridorOverlap >= 0.50 &&
+    ((observation.relativeProximity >= 0.85 &&
+            observation.confidence >= 0.80) ||
+        (observation.relativeProximity >= 0.95 &&
+            observation.confidence >= 0.55));
+
+bool _isUnresolvedCloseForward(GenericObstacleObservation observation) =>
+    _elementForZone(observation.zone) == 'forward' &&
+    observation.corridorOverlap >= 0.50 &&
+    observation.relativeProximity >= 0.95 &&
+    observation.confidence >= 0.25 &&
+    !_isImminentUnconfirmed(observation);
 
 double _movingRisk(
   GenericObstacleTrack track,
@@ -182,3 +398,25 @@ double _lateralForZone(HazardZone zone) => switch (zone) {
 };
 
 double _max(double a, double b) => a > b ? a : b;
+
+double _min(double a, double b) => a < b ? a : b;
+
+String _passageScope(ObservationHeader header, PassageClearanceResult result) {
+  final r = result.request;
+  return jsonEncode([
+    header.providerId,
+    header.modelId,
+    header.modelHash,
+    header.preprocessId,
+    header.sessionGeneration,
+    header.transformId,
+    r.referenceFrameId,
+    r.lateralCenterM,
+    r.widthM,
+    r.headroomM,
+    r.forwardStartM,
+    r.forwardEndM,
+    r.maximumFloorRiseM,
+    r.maximumFloorDropM,
+  ]);
+}

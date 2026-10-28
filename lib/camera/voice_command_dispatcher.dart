@@ -58,7 +58,6 @@ class VoiceCommandDispatcher {
           fallCountdown.requestVoiceCancel();
           return;
         }
-        fallCountdown.cancel();
         onSosRequested();
         return;
       }

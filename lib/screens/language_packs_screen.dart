@@ -2,6 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../theme/bagdar_theme.dart';
+import '../theme/bagdar_tokens.dart';
+import '../widgets/bagdar_ui.dart';
+
 import '../core/core_feature_policy.dart';
 import '../models/language_pack.dart';
 import '../models/speech_job.dart';
@@ -25,8 +29,16 @@ import '../services/tts_service.dart';
 /// onboarding via the kk-language download prompt's "later" path.
 class LanguagePacksScreen extends StatefulWidget {
   final TtsService tts;
+  final bool Function()? canInteract;
+  final Future<bool?> Function(BuildContext, WidgetBuilder)?
+  showDeleteConfirmation;
 
-  const LanguagePacksScreen({super.key, required this.tts});
+  const LanguagePacksScreen({
+    super.key,
+    required this.tts,
+    this.showDeleteConfirmation,
+    this.canInteract,
+  });
 
   @override
   State<LanguagePacksScreen> createState() => _LanguagePacksScreenState();
@@ -41,6 +53,7 @@ class _LanguagePacksScreenState extends State<LanguagePacksScreen> {
   double _downloadProgress = 0.0;
 
   late bool _v2Enabled;
+  bool get _canInteract => mounted && (widget.canInteract?.call() ?? true);
 
   @override
   void initState() {
@@ -48,12 +61,12 @@ class _LanguagePacksScreenState extends State<LanguagePacksScreen> {
     _v2Enabled = Settings.instance.enableKazakhStackV2;
 
     _pm.onDownloadProgress = (packId, progress) {
-      if (!mounted) return;
+      if (!_canInteract) return;
       if (packId != _downloadingPackId) return;
       setState(() => _downloadProgress = progress);
     };
     _pm.onDownloadComplete = (packId) {
-      if (!mounted) return;
+      if (!_canInteract) return;
       setState(() {
         _downloadingPackId = null;
         _downloadProgress = 0.0;
@@ -66,7 +79,7 @@ class _LanguagePacksScreenState extends State<LanguagePacksScreen> {
       HapticService.vibrate(const [0, 80, 60, 80]);
     };
     _pm.onDownloadError = (packId, error) {
-      if (!mounted) return;
+      if (!_canInteract) return;
       setState(() {
         _downloadingPackId = null;
         _downloadProgress = 0.0;
@@ -79,6 +92,7 @@ class _LanguagePacksScreenState extends State<LanguagePacksScreen> {
     };
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_canInteract) return;
       widget.tts.say(
         S.get('lang_packs_screen_intro'),
         SpeechPriority.info,
@@ -100,11 +114,12 @@ class _LanguagePacksScreenState extends State<LanguagePacksScreen> {
   }
 
   Future<void> _toggleV2(bool next) async {
+    if (!_canInteract) return;
     if (!CoreFeaturePolicy.current.mayInitialize(CoreFeature.kazakhStackV2)) {
       return;
     }
     await Settings.instance.setEnableKazakhStackV2(next);
-    if (!mounted) return;
+    if (!_canInteract) return;
     setState(() => _v2Enabled = next);
     widget.tts.say(
       next ? S.get('lang_packs_v2_enabled') : S.get('lang_packs_v2_disabled'),
@@ -115,10 +130,10 @@ class _LanguagePacksScreenState extends State<LanguagePacksScreen> {
   }
 
   Future<void> _refreshManifest({bool announceSuccess = true}) async {
-    if (_refreshing) return;
+    if (!_canInteract || _refreshing) return;
     setState(() => _refreshing = true);
     final ok = await _pm.fetchManifest();
-    if (!mounted) return;
+    if (!_canInteract) return;
     setState(() => _refreshing = false);
     if (ok && announceSuccess) {
       widget.tts.say(
@@ -136,7 +151,7 @@ class _LanguagePacksScreenState extends State<LanguagePacksScreen> {
   }
 
   Future<void> _installPack(LanguagePack pack) async {
-    if (_busy || _downloadingPackId != null) return;
+    if (!_canInteract || _busy || _downloadingPackId != null) return;
     setState(() {
       _busy = true;
       _downloadingPackId = pack.packId;
@@ -148,21 +163,32 @@ class _LanguagePacksScreenState extends State<LanguagePacksScreen> {
       pan: 0.0,
     );
     final ok = await _pm.downloadPack(pack.packId);
-    if (!mounted) return;
+    if (!_canInteract) return;
     setState(() => _busy = false);
     if (!ok) {}
   }
 
   Future<void> _deletePack(LanguagePack pack) async {
-    if (_busy) return;
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => _DeleteConfirmDialog(packName: _packDisplayName(pack)),
-    );
-    if (confirmed != true) return;
+    if (!_canInteract || _busy) return;
+    Widget confirmation(BuildContext ctx) =>
+        _DeleteConfirmDialog(packName: _packDisplayName(pack));
+    final Future<bool?> pendingConfirmation;
+    if (widget.showDeleteConfirmation != null) {
+      pendingConfirmation = widget.showDeleteConfirmation!(
+        context,
+        confirmation,
+      );
+    } else {
+      pendingConfirmation = showDialog<bool>(
+        context: context,
+        builder: confirmation,
+      );
+    }
+    final confirmed = await pendingConfirmation;
+    if (!_canInteract || confirmed != true) return;
     setState(() => _busy = true);
     await _pm.deletePack(pack.packId);
-    if (!mounted) return;
+    if (!_canInteract) return;
     setState(() => _busy = false);
     widget.tts.say(S.get('lang_packs_delete'), SpeechPriority.info, pan: 0.0);
   }
@@ -180,6 +206,7 @@ class _LanguagePacksScreenState extends State<LanguagePacksScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BagdarTheme.colorsOf(context);
     final available = _pm.available;
     final installedIds = {
       for (final p in _pm.installed)
@@ -193,80 +220,62 @@ class _LanguagePacksScreenState extends State<LanguagePacksScreen> {
       ),
     ];
 
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: Text(
-          S.get('lang_packs_screen_title'),
-          style: const TextStyle(color: Colors.white),
+    return BagdarPage(
+      title: S.get('lang_packs_screen_title'),
+      actions: [
+        IconButton(
+          tooltip: S.get('lang_packs_refresh'),
+          icon: _refreshing
+              ? SizedBox(
+                  width: 18,
+                  height: 18,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: colors.accentPrimary,
+                  ),
+                )
+              : Icon(Icons.refresh, color: colors.accentPrimary),
+          onPressed: _refreshing ? null : _refreshManifest,
         ),
-        iconTheme: const IconThemeData(color: Colors.white),
-        actions: [
-          IconButton(
-            tooltip: S.get('lang_packs_refresh'),
-            icon: _refreshing
-                ? const SizedBox(
-                    width: 18,
-                    height: 18,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.cyanAccent,
-                    ),
-                  )
-                : const Icon(Icons.refresh, color: Colors.cyanAccent),
-            onPressed: _refreshing ? null : _refreshManifest,
-          ),
+      ],
+      children: [
+        if (CoreFeaturePolicy.current.mayShowInUi(
+          CoreFeature.kazakhStackV2,
+        )) ...[
+          _V2ToggleCard(enabled: _v2Enabled, onChanged: _toggleV2),
+          const SizedBox(height: 16),
         ],
-      ),
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            if (CoreFeaturePolicy.current.mayShowInUi(
-              CoreFeature.kazakhStackV2,
-            )) ...[
-              _V2ToggleCard(enabled: _v2Enabled, onChanged: _toggleV2),
-              const SizedBox(height: 16),
-            ],
-            if (merged.isEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 24),
-                child: Text(
-                  S.get('lang_packs_no_packs'),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.white60, fontSize: 14),
-                ),
-              )
-            else
-              ...merged.map(
-                (p) => _PackTile(
-                  pack: p,
-                  installed: installedIds.contains(p.packId),
-                  displayName: _packDisplayName(p),
-                  downloading: _downloadingPackId == p.packId,
-                  downloadProgress: _downloadProgress,
-                  busy: _busy,
-                  onInstall: () => _installPack(p),
-                  onDelete: () => _deletePack(p),
-                ),
-              ),
-            const SizedBox(height: 24),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey[850],
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                ),
-                onPressed: () => Navigator.of(context).maybePop(),
-                child: Text(S.get('lang_packs_close')),
-              ),
+        if (merged.isEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 24),
+            child: Text(
+              S.get('lang_packs_no_packs'),
+              textAlign: TextAlign.center,
+              style: TextStyle(color: colors.textSecondary, fontSize: 16),
             ),
-          ],
+          )
+        else
+          ...merged.map(
+            (p) => _PackTile(
+              pack: p,
+              installed: installedIds.contains(p.packId),
+              displayName: _packDisplayName(p),
+              downloading: _downloadingPackId == p.packId,
+              downloadProgress: _downloadProgress,
+              busy: _busy,
+              onInstall: () => _installPack(p),
+              onDelete: () => _deletePack(p),
+            ),
+          ),
+        const SizedBox(height: 24),
+        SizedBox(
+          width: double.infinity,
+          child: OutlinedButton(
+            onPressed: () => Navigator.of(context).maybePop(),
+            child: Text(S.get('lang_packs_close')),
+          ),
         ),
-      ),
+      ],
     );
   }
 }
@@ -279,6 +288,7 @@ class _V2ToggleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BagdarTheme.colorsOf(context);
     return Semantics(
       toggled: enabled,
       label: S.get('lang_packs_v2_toggle_label'),
@@ -286,8 +296,9 @@ class _V2ToggleCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.grey[900],
-          borderRadius: BorderRadius.circular(12),
+          color: colors.surfaceElevated,
+          borderRadius: BorderRadius.circular(BagdarRadius.card),
+          border: Border.all(color: colors.divider),
         ),
         child: Row(
           children: [
@@ -297,18 +308,18 @@ class _V2ToggleCard extends StatelessWidget {
                 children: [
                   Text(
                     S.get('lang_packs_v2_toggle_label'),
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: colors.textPrimary,
                       fontSize: 16,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     S.get('lang_packs_v2_toggle_desc'),
-                    style: const TextStyle(
-                      color: Colors.white60,
-                      fontSize: 12,
+                    style: TextStyle(
+                      color: colors.textSecondary,
+                      fontSize: 16,
                       height: 1.4,
                     ),
                   ),
@@ -319,7 +330,7 @@ class _V2ToggleCard extends StatelessWidget {
             Switch(
               value: enabled,
               onChanged: onChanged,
-              activeThumbColor: Colors.cyanAccent,
+              activeThumbColor: colors.accentPrimary,
             ),
           ],
         ),
@@ -351,6 +362,7 @@ class _PackTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BagdarTheme.colorsOf(context);
     final installedPack = LanguagePackManager.instance.getInstalled(
       pack.packId,
     );
@@ -367,72 +379,74 @@ class _PackTile extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(BagdarSpacing.m),
       decoration: BoxDecoration(
-        color: Colors.grey[900],
-        borderRadius: BorderRadius.circular(10),
+        color: colors.surfaceElevated,
+        borderRadius: BorderRadius.circular(BagdarRadius.card),
+        border: Border.all(color: colors.divider),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             displayName,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
+            style: TextStyle(
+              color: colors.textPrimary,
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             '$stateLabel • $sizeLabel',
-            style: const TextStyle(color: Colors.white60, fontSize: 12),
+            style: TextStyle(color: colors.textSecondary, fontSize: 16),
           ),
           if (downloading) ...[
             const SizedBox(height: 10),
             LinearProgressIndicator(
               value: downloadProgress > 0 ? downloadProgress : null,
-              backgroundColor: Colors.white12,
-              valueColor: const AlwaysStoppedAnimation(Colors.cyanAccent),
+              backgroundColor: colors.divider,
+              valueColor: AlwaysStoppedAnimation(colors.accentPrimary),
             ),
             const SizedBox(height: 4),
             Text(
               '${(downloadProgress * 100).round()}%',
-              style: const TextStyle(color: Colors.white54, fontSize: 11),
+              style: TextStyle(color: colors.textSecondary, fontSize: 16),
             ),
           ] else ...[
             const SizedBox(height: 10),
-            Row(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 if (!installed)
-                  Expanded(
+                  SizedBox(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.cyanAccent,
-                        foregroundColor: Colors.black,
+                        backgroundColor: colors.accentPrimary,
+                        foregroundColor: colors.accentOnPrimary,
                       ),
                       onPressed: busy ? null : onInstall,
                       child: Text(S.get('lang_packs_install')),
                     ),
                   ),
                 if (installed && hasUpdate)
-                  Expanded(
+                  SizedBox(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.amber,
-                        foregroundColor: Colors.black,
+                        backgroundColor: colors.accentPrimary,
+                        foregroundColor: colors.accentOnPrimary,
                       ),
                       onPressed: busy ? null : onInstall,
                       child: Text(S.get('lang_packs_update')),
                     ),
                   ),
                 if (installed) ...[
-                  if (hasUpdate) const SizedBox(width: 8),
-                  Expanded(
+                  if (hasUpdate) const SizedBox(height: 8),
+                  SizedBox(
                     child: OutlinedButton(
                       style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: Colors.redAccent),
-                        foregroundColor: Colors.redAccent,
+                        side: BorderSide(color: colors.stateDanger),
+                        foregroundColor: colors.stateDanger,
                       ),
                       onPressed: busy ? null : onDelete,
                       child: Text(S.get('lang_packs_delete')),
@@ -455,32 +469,33 @@ class _DeleteConfirmDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BagdarTheme.colorsOf(context);
     final body = S
         .get('lang_packs_delete_confirm')
         .replaceFirst('{name}', packName);
     return AlertDialog(
-      backgroundColor: Colors.grey[900],
+      backgroundColor: colors.surfaceElevated,
       title: Text(
         S.get('lang_packs_delete'),
-        style: const TextStyle(color: Colors.white),
+        style: TextStyle(color: colors.textPrimary),
       ),
       content: Text(
         body,
-        style: const TextStyle(color: Colors.white70, height: 1.5),
+        style: TextStyle(color: colors.textSecondary, height: 1.5),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context, false),
           child: Text(
             S.get('lang_packs_close'),
-            style: const TextStyle(color: Colors.white60),
+            style: TextStyle(color: colors.textSecondary),
           ),
         ),
         TextButton(
           onPressed: () => Navigator.pop(context, true),
           child: Text(
             S.get('lang_packs_delete'),
-            style: const TextStyle(color: Colors.redAccent),
+            style: TextStyle(color: colors.stateDanger),
           ),
         ),
       ],

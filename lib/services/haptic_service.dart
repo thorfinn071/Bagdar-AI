@@ -45,12 +45,11 @@ class HapticService {
   static Future<bool> emitSafetyCue(HapticCue cue) async {
     if (_hasVibrator == null) await init();
     if (!(_hasVibrator ?? false)) return false;
-    await vibrate(
+    return _vibrateWithReply(
       cue.pattern,
       intensities: cue.intensities,
       isCritical: cue.critical,
     );
-    return true;
   }
 
   static Future<void> vibrate(
@@ -58,8 +57,21 @@ class HapticService {
     List<int>? intensities,
     bool isCritical = false,
   }) async {
+    await _vibrateWithReply(
+      pattern,
+      intensities: intensities,
+      isCritical: isCritical,
+    );
+  }
+
+  /// Success means a software platform reply, not measured physical vibration.
+  static Future<bool> _vibrateWithReply(
+    List<int> pattern, {
+    List<int>? intensities,
+    bool isCritical = false,
+  }) async {
     if (_hasVibrator == null) await init();
-    if (!(_hasVibrator ?? false)) return;
+    if (!(_hasVibrator ?? false)) return false;
 
     final isCriticalPattern =
         isCritical ||
@@ -71,7 +83,7 @@ class HapticService {
               ? _kCriticalFloorMultiplier
               : _strengthMultiplier)
         : _strengthMultiplier;
-    if (!isCriticalPattern && effectiveMultiplier <= 0.05) return;
+    if (!isCriticalPattern && effectiveMultiplier <= 0.05) return false;
     try {
       final scaledPattern = effectiveMultiplier == 1.0
           ? pattern
@@ -95,7 +107,10 @@ class HapticService {
       } else {
         await Vibration.vibrate(pattern: scaledPattern);
       }
-    } catch (_) {}
+      return true;
+    } catch (_) {
+      return false;
+    }
   }
 
   static Future<void> cancel() async {

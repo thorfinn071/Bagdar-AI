@@ -99,6 +99,8 @@ class NativeTtsBridge {
   /// rendering the utterance (engine load failure, AudioTrack init
   /// failure, etc.). The `reason` string is short and stable for logging.
   void Function(String reason)? onSpeechError;
+  void Function(String type, String requestId, String? reason)? onSpeechEvent;
+  static int _requestSequence = 0;
 
   /// True once [init] has completed at least once (regardless of which
   /// engines are available).
@@ -205,12 +207,12 @@ class NativeTtsBridge {
   /// queued playback; *not* when playback finishes. Listen for
   /// [onSpeechComplete] / [onSpeechError] for the lifecycle.
   ///
-  /// `priority` is forwarded so the native side can apply per-priority
-  /// AudioTrack policy (critical alerts are routed through a separate,
-  /// preemptable track with sub-50 ms cancellation latency).
+  /// Priority is metadata; ordering/preemption belongs to TtsService. Native
+  /// playback is serialized. Cancellation latency requires device measurement.
   Future<bool> speak({
     required String text,
     required String priority,
+    String? requestId,
     double rate = 0.5,
     double volume = 1.0,
     double pitch = 1.0,
@@ -219,10 +221,12 @@ class NativeTtsBridge {
     if (_activeEngine == null || !_activeEngine!.usesNativeBridge) {
       return false;
     }
+    final id = requestId ?? 'kk-bridge-${++_requestSequence}';
     try {
       final result = await _method.invokeMethod<bool>('speak', {
         'text': text,
         'priority': priority,
+        'requestId': id,
         'rate': rate,
         'volume': volume,
         'pitch': pitch,
@@ -231,18 +235,19 @@ class NativeTtsBridge {
       return result == true;
     } on PlatformException catch (e) {
       debugPrint('NativeTtsBridge.speak failed: $e');
+      onSpeechEvent?.call('error', id, e.code);
       onSpeechError?.call(e.code);
       return false;
     } catch (e) {
       debugPrint('NativeTtsBridge.speak failed: $e');
+      onSpeechEvent?.call('error', id, 'exception');
       onSpeechError?.call('exception');
       return false;
     }
   }
 
-  /// Drop the current utterance and any pending PCM. Must return within
-  /// the 50 ms critical-alert preemption budget (enforced by the native
-  /// side draining its AudioTrack immediately).
+  /// Request cancellation of the current utterance and pending PCM. A method
+  /// reply does not establish physical cancellation latency.
   Future<void> stop() async {
     if (_activeEngine == null && !_initialized) return;
     try {
@@ -282,6 +287,7 @@ class NativeTtsBridge {
     onSpeechStart = null;
     onSpeechComplete = null;
     onSpeechError = null;
+    onSpeechEvent = null;
   }
 
   Future<void> _attachEvents() async {
@@ -302,6 +308,10 @@ class NativeTtsBridge {
   void _handleEvent(dynamic raw) {
     if (raw is! Map) return;
     final type = raw['type']?.toString();
+    final id = raw['requestId'];
+    if (id is String && id.isNotEmpty && type != null) {
+      onSpeechEvent?.call(type, id, raw['reason']?.toString());
+    }
     switch (type) {
       case 'start':
         onSpeechStart?.call();

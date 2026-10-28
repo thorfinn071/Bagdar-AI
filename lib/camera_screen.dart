@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui' show FrameTiming;
 
 import 'dart:math' as math;
 
@@ -22,7 +23,6 @@ import 'services/foreground_service.dart';
 import 'services/thermal_monitor.dart';
 import 'services/haptic_service.dart';
 import 'services/earcon_service.dart';
-import 'services/sos_service.dart';
 import 'services/navigation_service.dart' show NavState;
 import 'models/nav_models.dart';
 import 'tracker/appearance.dart';
@@ -33,6 +33,21 @@ import 'widgets/status_panel.dart';
 import 'widgets/track_painter.dart';
 import 'widgets/camera_controls_sheet.dart';
 import 'widgets/quick_shelf.dart';
+import 'widgets/inspection_surface.dart';
+import 'widgets/inspection_voice_panel.dart';
+import 'widgets/voice_settings_dialog.dart';
+import 'services/voice/voice_settings_coordinator.dart';
+import 'services/voice/native_voice_settings_gateway.dart';
+import 'services/voice/inspection_voice_coordinator.dart';
+import 'services/voice/vosk_wake_word_input.dart';
+import 'services/voice/wake_word_probe.dart';
+import 'widgets/wake_word_probe_panel.dart';
+import 'services/voice/inspection_voice_commands.dart';
+import 'services/voice/on_device_voice_input.dart';
+import 'services/voice_command_service.dart' show VoiceCommand;
+import 'widgets/sos_contact_dialog.dart';
+import 'widgets/inspection_utility_routes.dart';
+import 'camera/inspection_system_status.dart';
 import 'widgets/a11y/voice_layer.dart';
 import 'viewmodels/camera_view_model.dart';
 import 'services/model_service.dart';
@@ -55,8 +70,10 @@ import 'services/misalignment_watchdog.dart';
 import 'services/phone_abandoned_detector.dart';
 import 'camera/frame_quality_guard.dart';
 import 'camera/depth_pipeline_controller.dart';
+import 'camera/inspection_scene_status.dart';
 import 'camera/stall_watchdog.dart';
 import 'camera/fall_countdown_controller.dart';
+import 'camera/sos_ui_state.dart';
 import 'camera/voice_command_dispatcher.dart';
 import 'camera/camera_lifecycle_controller.dart';
 import 'safety/world/local_scene_snapshot.dart';
@@ -72,9 +89,25 @@ import 'services/language_pack_manager.dart';
 import 'theme/bagdar_theme.dart';
 import 'theme/bagdar_tokens.dart';
 
+import 'core/performance/perception_performance.dart';
+import 'core/performance/perception_scheduler.dart';
+import 'core/performance/feedback_delivery_performance.dart';
+import 'services/ncnn_depth_provider.dart';
+import 'core/simulation_build.dart';
+import 'simulation/simulation_bundle.dart';
+import 'simulation/simulation_session.dart';
+import 'package:crypto/crypto.dart';
+
 class AiCameraScreen extends StatefulWidget {
   final AppMode? initialMode;
-  const AiCameraScreen({super.key, this.initialMode});
+  final SimulationSession? simulation;
+  final bool simulationAutoClose;
+  const AiCameraScreen({
+    super.key,
+    this.initialMode,
+    this.simulation,
+    this.simulationAutoClose = false,
+  });
 
   @override
   State<AiCameraScreen> createState() => _AiCameraScreenState();
@@ -86,7 +119,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   late final CameraViewModel _vm;
   CameraController? _controller;
   bool _isCameraReady = false;
-  bool _isDetecting = false;
+  final PerceptionScheduler _perceptionScheduler = PerceptionScheduler();
+  bool get _isDetecting => _perceptionScheduler.isBusy(PerceptionLane.yolo);
 
   final ModelService _models = ModelService.instance;
   final FieldLogger _fieldLog = FieldLogger.instance;
@@ -111,14 +145,47 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
   ShelfTask _shelfTask = ShelfTask.camera;
   bool _isVoiceListening = false;
+  bool _exitingInspection = false;
+  bool _scannerNeedsRetry = false;
+  bool _scannerRetryBusy = false;
+  bool get _canOpenInspectionUtility =>
+      mounted &&
+      !_exitingInspection &&
+      _fallCountdown.uiState.phase == SosUiPhase.idle;
+  late final InspectionUtilityRoutes _inspectionUtilities =
+      InspectionUtilityRoutes(
+        canOpen: () => _canOpenInspectionUtility,
+        releaseVoiceInput: _interruptVoiceInputs,
+      );
+  bool _voiceEnqueue = false;
+  VoiceSettingsCoordinator? _settingsVoice;
+  WakeWordProbe? _wakeProbe;
+  late final InspectionVoiceCoordinator _inspectionVoice =
+      InspectionVoiceCoordinator(
+        input: OnDeviceVoiceInput(),
+        language: () => S.current,
+        canInteract: () =>
+            _canOpenInspectionUtility &&
+            WidgetsBinding.instance.lifecycleState ==
+                AppLifecycleState.resumed &&
+            ModalRoute.of(context)?.isCurrent == true,
+        speak: _speakInspectionVoice,
+        execute: _executeInspectionVoice,
+        prepareInput: () => _vm.voice.releaseMicrophone(),
+        isAllowed: (command) =>
+            command != InspectionVoiceCommand.finish ||
+            Navigator.of(context).canPop(),
+      );
 
   Timer? _pitchBlackHeartbeatTimer;
   static const Duration _kPitchBlackHeartbeatInterval = Duration(seconds: 30);
 
   Timer? _heartbeatTimer;
-  int _detectionCompletions = 0;
+  final PerceptionPerformance _performance = PerceptionPerformance();
+  late final EventLoopLagProbe _eventLoopLag = EventLoopLagProbe(
+    (us) => _performance.record(PerceptionStage.eventLoopLag, us),
+  );
   int _lowFpsStreak = 0;
-  DateTime _fpsWindowStart = DateTime.now();
   Timer? _resourceLogTimer;
   Timer? _spatialSafetyTickTimer;
   static const Duration _kSpatialSafetyTickPeriod = Duration(milliseconds: 250);
@@ -156,6 +223,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   int _frameCount = 0;
   late final FrameQualityGuard _qualityGuard;
   late final DepthPipelineController _depthController;
+  final _inspectionScene = ValueNotifier<InspectionSceneStatus>(
+    const InspectionSceneStatus.notChecked(),
+  );
   late final StallWatchdog _stallWatchdog;
 
   Timer? _indoorPollTimer;
@@ -238,6 +308,18 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _vm = CameraViewModel();
     _qualityGuard = FrameQualityGuard(weatherGate: _vm.weatherGate);
     _depthController = DepthPipelineController(vm: _vm, models: _models);
+    _depthController.onPerformanceSample = (sample) {
+      _performance.recordDepth(sample);
+      widget.simulation?.record('depth_result', {
+        'sourceTimestampUs': sample.sourceTimestampUs,
+        'providerCalled': sample.providerCalled,
+        'accepted': sample.accepted,
+        'rejectionReason': sample.rejectionReason,
+        'providerRoundTripUs': sample.providerRoundTripUs,
+        'captureToDecisionUs': sample.callbackToDecisionUs,
+      });
+    };
+    WidgetsBinding.instance.addTimingsCallback(_onUiFrameTimings);
 
     _depthController.onStatusChanged = _onDepthStatusChanged;
     // Safety audit 2026-06 fix A-1: subscribe to YOLO unavailability
@@ -292,6 +374,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       tts: _vm.tts,
       sos: _vm.sos,
       voice: _vm.voice,
+      prepareVoiceInput: _interruptVoiceInputs,
       onCancelled: () {
         _vm.fallDetector.notifyCancelled();
         _vm.sos.cancelQueuedFollowUp();
@@ -309,6 +392,26 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       deliberateTapThresholdProvider: () =>
           Settings.instance.tapSensitivity.accelThresholdMps2,
     );
+    _inspectionVoice.addListener(_onInspectionVoiceChanged);
+    if (wakeWordProbeEnabled(
+      BuildProfile.current,
+      const bool.fromEnvironment('BAGDAR_WAKE_PROBE'),
+    )) {
+      _wakeProbe = WakeWordProbe(
+        input: VoskWakeWordInput(),
+        language: () => S.current,
+        canInteract: () =>
+            _canOpenInspectionUtility &&
+            WidgetsBinding.instance.lifecycleState ==
+                AppLifecycleState.resumed &&
+            ModalRoute.of(context)?.isCurrent == true,
+        releaseOtherInputs: () async =>
+            await _releaseOrdinaryVoiceInputs() &&
+            await _vm.voice.releaseMicrophone(),
+        speak: _speakInspectionVoice,
+      )..addListener(_onInspectionVoiceChanged);
+    }
+    _vm.tts.addSpeechRequestListener(_onRuntimeSpeechRequested);
     _voiceDispatcher = VoiceCommandDispatcher(
       vm: _vm,
       fallCountdown: _fallCountdown,
@@ -359,7 +462,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
             _initCompletedAt.millisecondsSinceEpoch != 0 &&
             Settings.instance.disclaimerNeedsReprompt) {
           _vm.tts.say(
-            S.get('onb_secondary_aid_tts'),
+            S.get('secondary_aid_disclaimer'),
             SpeechPriority.warning,
             pan: 0.0,
           );
@@ -370,6 +473,11 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       }
     });
     _fallCountdown.addListener(() {
+      if (_fallCountdown.uiState.phase != SosUiPhase.idle) {
+        // Retire the research capture even if emergency output is haptic-only.
+        unawaited(_wakeProbe?.interrupt());
+        _inspectionUtilities.close();
+      }
       if (mounted) setState(() {});
     });
     _vm.tracksNotifier.addListener(_onTracksUpdatedForWatchdog);
@@ -378,9 +486,99 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       (_) => _misalignmentTick(),
     );
     WidgetsBinding.instance.addObserver(this);
-    _initAll();
-    _applySosTriggerListener();
-    _startConnectivityKkPromptListener();
+    if (widget.simulation != null) {
+      requireSimulationBuild();
+      widget.simulation!.addListener(_onSimulationChanged);
+      unawaited(_initSimulation());
+    } else {
+      _initAll();
+      _applySosTriggerListener();
+      _startConnectivityKkPromptListener();
+    }
+  }
+
+  void _onSimulationChanged() {
+    if (mounted) setState(() {});
+  }
+
+  Future<void> _initSimulation() async {
+    final session = widget.simulation!;
+    session.runtimeSnapshot = () => {
+      'activeModelLanes': _perceptionScheduler.activeCount,
+      'queuedCameraFrames': _perceptionScheduler.queuedFrames,
+      'yoloBusy': _perceptionScheduler.isBusy(PerceptionLane.yolo),
+      'depthBusy': _perceptionScheduler.isBusy(PerceptionLane.depth),
+      'nativeInferenceQueue': 'not_instrumented',
+    };
+    try {
+      _vm.setStatus('Симуляция: проверка кадров и загрузка штатных моделей');
+      await session.prepare();
+      await _vm.initSimulation(
+        accelerometer: session.accelerometer,
+        gyroscope: session.gyroscope,
+        initialMode: widget.initialMode,
+      );
+      AppStrings.setLanguage(AppLanguage.values[Settings.instance.language]);
+      _numThreads = Settings.instance.numThreads;
+      final depthReady = await _models.loadMidas(numThreads: _numThreads);
+      if (!depthReady) {
+        throw StateError(
+          'Live NCNN unavailable; simulation cannot substitute a model',
+        );
+      }
+      await _models.loadYolo(useGpu: false, numThreads: _numThreads);
+      final hashes = <String, String>{};
+      for (final asset in [
+        'assets/yolov8n_int8.tflite',
+        'assets/midas_small.ncnn.param',
+        'assets/midas_small.ncnn.bin',
+      ]) {
+        final bytes = await rootBundle.load(asset);
+        hashes[asset] = sha256
+            .convert(
+              bytes.buffer.asUint8List(
+                bytes.offsetInBytes,
+                bytes.lengthInBytes,
+              ),
+            )
+            .toString();
+      }
+      session.record('models_loaded', {
+        'modelHashes': hashes,
+        'liveYolo': _models.yoloLoaded,
+        'liveDepth': depthReady,
+        'depthTier': _models.depthProvider!.tier.name,
+      });
+      if (!mounted || _exitingInspection) return;
+      _depthController.setProviderReady(true);
+      _vm.cameraSensorRotationDeg = session.sequence.rotation;
+      _vm.cameraMirrored = session.sequence.mirrored;
+      _initCompletedAt = DateTime.now();
+      await _initCamera();
+      unawaited(
+        session.finished.then((_) async {
+          await Future<void>.delayed(const Duration(seconds: 3));
+          if (!mounted) return;
+          await session.writeReport(
+            extra: {
+              'liveModels': true,
+              'physicalDeviceValidation': 'not_run',
+              'controlledWalking': 'not_run',
+              'genericObstacleMode': Settings.instance.genericObstacleMode.name,
+            },
+          );
+          if (mounted) {
+            _vm.setStatus('Симуляция завершена · отчёт сохранён');
+            if (widget.simulationAutoClose) Navigator.of(context).pop();
+          }
+        }),
+      );
+    } catch (error) {
+      session.record('startup_error', {'error': error.toString()});
+      await session.writeReport(extra: {'liveModels': false});
+      if (mounted) _vm.setStatus('Ошибка симуляции: $error');
+      if (mounted && widget.simulationAutoClose) Navigator.of(context).pop();
+    }
   }
 
   @override
@@ -505,6 +703,20 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
   @override
   void dispose() {
+    widget.simulation?.noteHostDisposal('entered');
+    widget.simulation?.removeListener(_onSimulationChanged);
+    widget.simulation?.dispose();
+    _settingsVoice?.dispose();
+    _vm.tts.removeSpeechRequestListener(_onRuntimeSpeechRequested);
+    _inspectionVoice.removeListener(_onInspectionVoiceChanged);
+    _wakeProbe?.removeListener(_onInspectionVoiceChanged);
+    _wakeProbe?.dispose();
+    _inspectionVoice.dispose();
+    _inspectionUtilities.dispose();
+    widget.simulation?.noteHostDisposal('voice_and_utilities_disposed');
+    _perceptionScheduler.suspend();
+    _eventLoopLag.stop();
+    WidgetsBinding.instance.removeTimingsCallback(_onUiFrameTimings);
     _stopNativeWatchdog();
     WidgetsBinding.instance.removeObserver(this);
     _cameraPermissionTimer?.cancel();
@@ -526,17 +738,41 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _vm.tracksNotifier.removeListener(_onTracksUpdatedForWatchdog);
     _vm.sos.cancelQueuedFollowUp();
     _lifecycle.dispose();
+    widget.simulation?.noteHostDisposal('timers_and_lifecycle_disposed');
     _controller?.dispose();
     _controller = null;
     VisionForegroundService.stop();
     unawaited(_fieldLog.stopSession());
     unawaited(FeatureUsageTracker.instance.flush());
+    widget.simulation?.noteHostDisposal('before_view_model_dispose');
     _vm.dispose();
+    widget.simulation?.noteHostDisposal('view_model_disposed');
+    _inspectionScene.dispose();
     super.dispose();
+    widget.simulation?.acknowledgeHostDisposal();
+    widget.simulation?.noteHostDisposal('completed');
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    final simulation = widget.simulation;
+    if (simulation != null) {
+      simulation.record('lifecycle_state', {'state': state.name});
+      if (state == AppLifecycleState.resumed) {
+        if (_isCameraReady && !simulation.completed) {
+          onCameraSessionStarting();
+          simulation.start(_onFrame);
+          _startSpatialSafetyCadence();
+        }
+      } else {
+        simulation.pause();
+        onBackgroundEntered();
+      }
+      return;
+    }
+    if (state != AppLifecycleState.resumed) {
+      unawaited(_interruptVoiceInputs());
+    }
     _lifecycle.handleStateChange(state);
   }
 
@@ -556,6 +792,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     if (_isCameraReady == value) return;
     if (mounted) {
       setState(() => _isCameraReady = value);
+      _refreshInspectionScene(DateTime.now());
     } else {
       _isCameraReady = value;
     }
@@ -569,8 +806,13 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
   @override
   void onBackgroundEntered() {
+    unawaited(_interruptVoiceInputs());
+    _perceptionScheduler.suspend();
+    _lastDepthHazards = [];
+    _eventLoopLag.stop();
     _stopSpatialSafetyCadence();
     _vm.endCameraSession(DateTime.now());
+    _refreshInspectionScene(DateTime.now());
     _stallWatchdog.stop();
     _stopNativeWatchdog();
     _indoorPollTimer?.cancel();
@@ -579,12 +821,18 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
   @override
   void onCameraSessionStarting() {
+    _eventLoopLag.start();
     final sessionGeneration = _vm.beginCameraSession(DateTime.now());
+    _perceptionScheduler.beginSession(sessionGeneration);
+    _lastDepthHazards = [];
+    _lastDetectAt = DateTime.fromMillisecondsSinceEpoch(0);
     _depthController.beginSession(sessionGeneration);
+    _refreshInspectionScene(DateTime.now());
   }
 
   @override
   void onForegroundResumed() {
+    if (_isCameraReady) _eventLoopLag.start();
     _stallWatchdog.start();
     if (_isCameraReady) {
       _startNativeWatchdog();
@@ -632,7 +880,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
       // V1.2: Announce when the user starts running to prompt them to slow down.
       _vm.onMotionStateChanged = (state) {
-        if (!mounted) return;
+        if (!mounted || _exitingInspection) return;
         if (state == MotionState.running) {
           _vm.tts.say(
             S.get('running_detected'),
@@ -643,9 +891,11 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       };
 
       _vm.setStatus('Инициализация...');
-      await _vm.init();
+      await _vm.init(initialMode: widget.initialMode);
+      if (!mounted || _exitingInspection) return;
 
       final granted = await _requestCameraPermission();
+      if (!mounted || _exitingInspection) return;
       if (!granted) {
         if (mounted) {
           setState(() {
@@ -668,6 +918,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           !_sosContactPromptedThisSession) {
         _sosContactPromptedThisSession = true;
         await Settings.instance.setSosContactPrompted(true);
+        if (!mounted || _exitingInspection) return;
         _vm.tts.say(
           S.get('sos_setup_prompt_tts'),
           SpeechPriority.info,
@@ -683,6 +934,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
       if (Settings.instance.fieldLogging) {
         await DeviceCapabilityProbe.probe();
+        if (!mounted || _exitingInspection) return;
         final caps = DeviceCapabilityProbe.cached;
         await _fieldLog.startSession(
           deviceModel: caps.deviceInfo.model,
@@ -690,6 +942,10 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           depthTier: caps.bestDepthTier.name,
           batteryPct: _vm.battery.batteryLevel,
         );
+        if (!mounted || _exitingInspection) {
+          await _fieldLog.stopSession();
+          return;
+        }
         _resourceLogTimer?.cancel();
         _resourceLogTimer = Timer.periodic(
           const Duration(seconds: 30),
@@ -720,7 +976,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         );
         rethrow;
       }
-      if (!mounted) return;
+      if (!mounted || _exitingInspection) return;
 
       final hasDepthAi =
           ok &&
@@ -755,10 +1011,16 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         rethrow;
       }
 
+      if (!mounted || _exitingInspection) return;
       _vm.setStatus('Запуск камеры...');
       await _initCamera();
+      if (!mounted || _exitingInspection) return;
 
       await VisionForegroundService.start();
+      if (!mounted || _exitingInspection) {
+        await VisionForegroundService.stop();
+        return;
+      }
 
       _vm.fallDetector.onFallDetected = (fallClass) =>
           _fallCountdown.start(fallClass: fallClass);
@@ -778,6 +1040,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       };
       _vm.fallDetector.onGyroUnavailable = _announceGyroDegraded;
       await _vm.fallDetector.init();
+      if (!mounted || _exitingInspection) return;
       _vm.health.note(
         component: CoreComponent.accelerometer,
         state: _vm.fallDetector.isReady
@@ -834,7 +1097,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         // route change.  The "audio resumed" confirmation comes last so it
         // doesn't bury the hazard.
         Future<void>.delayed(const Duration(milliseconds: 50)).then((_) {
-          if (!mounted) return;
+          if (!mounted || _exitingInspection) return;
           final interrupted = _routeChangeAt;
           final lastCritical = _vm.alertMgr.lastCriticalAt;
           if (interrupted != null &&
@@ -873,8 +1136,16 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         (_) => _heartbeatTick(),
       );
 
-      _vm.voice.onCommand = _voiceDispatcher.handleCommand;
-      _vm.voice.onNavCommand = _voiceDispatcher.handleNavCommand;
+      // Legacy ASR belongs only to the unchanged fall cancellation/escalation
+      // contract. Late ordinary/navigation results cannot execute in Core.
+      _vm.voice.onCommand = (command) {
+        if (_fallCountdown.active &&
+            (command == VoiceCommand.cancelFall ||
+                command == VoiceCommand.sos)) {
+          _voiceDispatcher.handleCommand(command);
+        }
+      };
+      _vm.voice.onNavCommand = null;
       _vm.voice.onListeningStateChanged = (listening) {
         if (mounted) {
           setState(() => _isVoiceListening = listening);
@@ -972,6 +1243,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       _vm.publishHealth(healthNow);
       _initCompletedAt = healthNow;
     } catch (e) {
+      if (!mounted || _exitingInspection) return;
       _fieldLog.logError('initAll', e.toString());
       _vm.setStatus('Сбой: $e');
 
@@ -1022,13 +1294,19 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       const MethodChannel('bagdar/watchdog').invokeMethod('ping');
     } catch (_) {}
 
-    final windowSec = now.difference(_fpsWindowStart).inMilliseconds / 1000.0;
-    final effFps = windowSec > 0 ? _detectionCompletions / windowSec : 0.0;
+    final performanceWindow = _performance.takeWindow();
+    final effFps = performanceWindow['yoloCompletionFps'] as double? ?? 0.0;
+    _fieldLog.log('perception_performance_window', performanceWindow);
+    _fieldLog.log(
+      'feedback_delivery_window',
+      FeedbackDeliveryPerformance.instance.takeWindow(),
+    );
     _fieldLog.log('effective_fps', {
       'fps': (effFps * 10).round() / 10.0,
+      'scope': 'completed_yolo_calls',
       'mode': _vm.mode.name,
       'thermal': _vm.thermal.severity.name,
-      'completions': _detectionCompletions,
+      'completions': (performanceWindow['counts'] as Map)['yoloCompleted'],
     });
 
     final isSafetyMode = _vm.mode == AppMode.street || _vm.mode == AppMode.cane;
@@ -1042,8 +1320,6 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     } else {
       _lowFpsStreak = 0;
     }
-    _detectionCompletions = 0;
-    _fpsWindowStart = now;
 
     final desired = _currentHeartbeatInterval();
     if (_heartbeatTimer == null || _heartbeatTimer!.tick == 0) return;
@@ -1088,6 +1364,9 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   }
 
   void _announceQuickStatus() {
+    if (_exitingInspection || _fallCountdown.uiState.phase != SosUiPhase.idle) {
+      return;
+    }
     final mode = _vm.mode.label;
     final battery = _vm.battery.batteryLevel;
     final msg = Settings.instance.batteryAnnounce
@@ -1096,7 +1375,11 @@ class _AiCameraScreenState extends State<AiCameraScreen>
               .replaceFirst('{mode}', mode)
               .replaceFirst('{battery}', battery.toString())
         : S.get('status_quick_mode_only').replaceFirst('{mode}', mode);
-    _vm.tts.say(msg, SpeechPriority.info, pan: 0.0);
+    _vm.tts.say(
+      '${_inspectionStatus.spokenText}. $msg',
+      SpeechPriority.info,
+      pan: 0.0,
+    );
     HapticService.vibrate(const [0, 30]);
   }
 
@@ -1126,17 +1409,19 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   }
 
   void _triggerSos({String source = 'manual'}) async {
+    if (widget.simulation != null) {
+      widget.simulation!.record('external_action_blocked', {
+        'action': 'sos',
+        'source': source,
+      });
+      return;
+    }
+    if (!mounted) return;
+    if (_fallCountdown.uiState.phase == SosUiPhase.sending) {
+      return;
+    }
     FeatureUsageTracker.instance.increment(FeatureUsageKeys.sosTriggered);
     _fieldLog.logSosTrigger(source);
-    _vm.submitEmergencySafety(
-      speechKey: 'sos_sending',
-      replaceKey: 'manual_sos_delivery',
-      now: DateTime.now(),
-    );
-    final hasContact = (_vm.sos.contactNumber ?? '').isNotEmpty;
-    if (!hasContact) {
-      _vm.tts.say(S.get('sos_112_fallback'), SpeechPriority.critical, pan: 0.0);
-    }
     if (_vm.isIndoor) {
       _vm.tts.say(
         S.get('sos_indoor_warning'),
@@ -1145,53 +1430,133 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       );
     }
 
-    final result = await _vm.sos.sendSos();
+    final result = await _fallCountdown.sendManually();
     if (!mounted) return;
-
-    final resultKey = switch (result) {
-      SosResult.sent => 'sos_sent',
-      SosResult.sentFallback => 'sos_sent',
-      // E-1: native SMS unconfirmed; sms:// fallback was launched.
-      SosResult.pendingEnqueued => 'sos_queued',
-      SosResult.sentWithoutLocation => 'sos_sent_no_location',
-      SosResult.noContact => 'sos_no_contact',
-      SosResult.noLocation => 'sos_no_location',
-      SosResult.launchFailed => 'sos_launch_failed',
-      SosResult.error => 'sos_error',
-      // E-2: guide the user to complete the action manually; no lockout.
-      SosResult.composerOpened => 'sos_composer_opened',
-      SosResult.dialerOpened => 'sos_dialer_opened',
-    };
-    _fieldLog.logSosTrigger(source, result: result.name);
-    _vm.submitEmergencySafety(
-      speechKey: resultKey,
-      replaceKey: 'manual_sos_delivery',
-      now: DateTime.now(),
-    );
-    // E-2: additional haptic cue to draw attention to the manual step.
-    if (result == SosResult.composerOpened ||
-        result == SosResult.dialerOpened) {
-      HapticService.vibrate(const [0, 200, 100, 200]);
-    }
+    if (result != null) _fieldLog.logSosTrigger(source, result: result.name);
   }
 
   Future<void> _startVoiceCommand() async {
     FeatureUsageTracker.instance.increment(
       FeatureUsageKeys.gesture('long_press'),
     );
-    HapticService.vibrate([0, 100, 50, 100]);
+    final wake = _wakeProbe;
+    if (wake != null && !await wake.interrupt()) return;
+    await _inspectionVoice.start();
+  }
 
-    _vm.tts.say(S.get('voice_listening'), SpeechPriority.info, pan: 0.0);
+  void _onInspectionVoiceChanged() {
+    if (mounted) setState(() {});
+  }
+
+  void _onRuntimeSpeechRequested() {
+    if (!_voiceEnqueue &&
+        (_inspectionVoice.active ||
+            (_settingsVoice?.active ?? false) ||
+            (_wakeProbe?.active ?? false))) {
+      unawaited(_interruptVoiceInputs());
+      _vm.tts.cancelInteractionSpeech();
+    }
+  }
+
+  Future<bool> _interruptVoiceInputs() async {
+    final wake = _wakeProbe?.interrupt();
+    final ordinaryClosed = await _releaseOrdinaryVoiceInputs();
+    final wakeClosed = wake == null ? true : await wake;
+    return ordinaryClosed && wakeClosed;
+  }
+
+  Future<bool> _releaseOrdinaryVoiceInputs() async {
+    // Invalidate both synchronously, then await teardown. Emergency output
+    // and countdown deadlines never wait on this Future.
+    final ordinary = _inspectionVoice.interrupt();
+    final settings = _settingsVoice?.interrupt();
+    final ordinaryClosed = await ordinary;
+    final settingsClosed = settings == null ? true : await settings;
+    return ordinaryClosed && settingsClosed;
+  }
+
+  void _openVoiceSettings({bool autoStart = false}) {
+    unawaited(
+      _inspectionUtilities.open(
+        context,
+        builder: (_) => VoiceSettingsDialog(
+          autoStart: autoStart,
+          screenCurtain: _vm.isPitchBlack,
+          createController: (routeCanInteract) {
+            final controller = VoiceSettingsCoordinator(
+              input: OnDeviceVoiceInput(),
+              gateway: NativeVoiceSettingsGateway(
+                settings: Settings.instance,
+                tts: _vm.tts,
+                earconEnabled: () => _vm.earcon.isEnabled,
+              ),
+              language: () => S.current,
+              canInteract: () =>
+                  _canOpenInspectionUtility && routeCanInteract(),
+              speak: _speakInspectionVoice,
+              prepareInput: () => _vm.voice.releaseMicrophone(),
+            );
+            _settingsVoice = controller;
+            return controller;
+          },
+          onDisposed: (controller) {
+            if (identical(_settingsVoice, controller)) _settingsVoice = null;
+          },
+        ),
+      ),
+    );
+  }
+
+  Future<bool> _speakInspectionVoice(String text) async {
+    bool voiceReady() =>
+        _vm.tts.isReady &&
+        _vm.tts.languageAvailable &&
+        !_vm.tts.usingEnglishFallback &&
+        !(S.current == AppLanguage.kk &&
+            _vm.tts.activeKkEngine == KkTtsEngine.russianFallback);
+    if (!voiceReady()) return false;
+    // Ordinary interaction never barges into the safety queue.
+    late final Future<bool> playback;
+    _voiceEnqueue = true;
     try {
-      await _vm.voice.startListening();
-    } catch (e) {
-      _fieldLog.logError('startVoiceCommand', e.toString());
-      _vm.earcon.play(Earcon.fail);
-      _vm.tts.say(
-        S.get('voice_not_available'),
-        SpeechPriority.warning,
-        pan: 0.0,
-      );
+      playback = _vm.tts.speakInteraction(text);
+    } finally {
+      _voiceEnqueue = false;
+    }
+    return await playback && mounted && voiceReady();
+  }
+
+  Future<String?> _executeInspectionVoice(
+    InspectionVoiceCommand command,
+  ) async {
+    switch (command) {
+      case InspectionVoiceCommand.status:
+        return _inspectionStatus.spokenText;
+      case InspectionVoiceCommand.slower:
+      case InspectionVoiceCommand.faster:
+        final delta = command == InspectionVoiceCommand.slower ? -.1 : .1;
+        final rate = (Settings.instance.speechRate + delta).clamp(
+          kSpeechRateMin,
+          kSpeechRateMax,
+        );
+        await Settings.instance.setSpeechRate(rate);
+        await _vm.tts.setUserRate(Settings.instance.speechRate);
+        return inspectionVoiceText(
+          command == InspectionVoiceCommand.slower
+              ? InspectionVoiceCopy.slower
+              : InspectionVoiceCopy.faster,
+          S.current,
+        );
+      case InspectionVoiceCommand.settings:
+        _openVoiceSettings(autoStart: true);
+        return null;
+      case InspectionVoiceCommand.finish:
+        await _finishInspection();
+        return null;
+      case InspectionVoiceCommand.help:
+      case InspectionVoiceCommand.repeat:
+      case InspectionVoiceCommand.micOff:
+        return null;
     }
   }
 
@@ -1248,7 +1613,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           pan: 0.0,
           barge: true,
         );
-        unawaited(_vm.voice.startListening());
+        unawaited(_startVoiceCommand());
         break;
     }
   }
@@ -1445,9 +1810,51 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   }
 
   Future<void> _initCamera() async {
+    if (!mounted || _exitingInspection) return;
+    final simulation = widget.simulation;
+    if (simulation != null) {
+      onCameraSessionStarting();
+      setState(() => _isCameraReady = true);
+      _vm.setStatus('Симуляция · ${simulation.sequence.id}');
+      final at = DateTime.now();
+      for (final component in [
+        CoreComponent.cameraPermission,
+        CoreComponent.cameraSession,
+        CoreComponent.imageStream,
+        CoreComponent.orientation,
+        CoreComponent.accelerometer,
+        CoreComponent.gyroscope,
+      ]) {
+        _vm.health.note(
+          component: component,
+          state: ComponentState.available,
+          reasonCode: 'synthetic_input_${component.name}',
+          now: at,
+          announce: false,
+        );
+      }
+      _vm.health.note(
+        component: CoreComponent.semanticObjects,
+        state: ComponentState.available,
+        reasonCode: 'live_yolo_simulation_input',
+        now: at,
+        announce: false,
+      );
+      _vm.health.note(
+        component: CoreComponent.emergencySms,
+        state: ComponentState.unavailable,
+        reasonCode: 'disabled_in_simulation',
+        now: at,
+        announce: false,
+      );
+      _startSpatialSafetyCadence();
+      simulation.start(_onFrame);
+      return;
+    }
     final initSw = Stopwatch()..start();
     try {
       final cameras = await availableCameras();
+      if (!mounted || _exitingInspection) return;
       if (cameras.isEmpty) {
         initSw.stop();
         _fieldLog.logCameraInit(
@@ -1497,6 +1904,10 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         imageFormatGroup: ImageFormatGroup.yuv420,
       );
       await ctrl.initialize();
+      if (!mounted || _exitingInspection) {
+        await ctrl.dispose();
+        return;
+      }
       _controller = ctrl;
 
       _vm.ocr.sensorOrientationDeg = back.sensorOrientation;
@@ -1507,6 +1918,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       // rejected before they can reach fusion or alerts.
       onCameraSessionStarting();
       await ctrl.startImageStream(_onFrame);
+      if (!mounted || _exitingInspection) return;
 
       unawaited(_vm.tts.preClaimAudioFocus());
 
@@ -1529,6 +1941,7 @@ class _AiCameraScreenState extends State<AiCameraScreen>
             : null,
       );
     } catch (e) {
+      if (!mounted || _exitingInspection) return;
       initSw.stop();
       _fieldLog.logCameraInit(
         initMs: initSw.elapsedMilliseconds,
@@ -1562,9 +1975,21 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   }
 
   Future<void> _onFrame(CameraImage image) async {
-    if (!mounted || _exclusiveDepthTransition) return;
+    if (!mounted ||
+        _exclusiveDepthTransition ||
+        !_perceptionScheduler.acceptsFrames(_vm.cameraSession.generation)) {
+      return;
+    }
 
-    final now = DateTime.now();
+    final receivedAt = DateTime.now();
+    final now = image is SimulationImage ? image.capturedAt : receivedAt;
+    final timing = image is SimulationImage
+        ? CallbackFrameTiming.withInitialAge(
+            now.microsecondsSinceEpoch,
+            receivedAt.difference(now).inMicroseconds,
+          )
+        : CallbackFrameTiming(now.microsecondsSinceEpoch);
+    _performance.increment(PerceptionCounter.cameraCallbacks);
     _stallWatchdog.notifyFrameArrived(now: now);
     if (_stallWatchdog.isWarned) {
       _stallWatchdog.clearWarning();
@@ -1603,6 +2028,11 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     _vm.tracker.weatherDegraded = qualityReport.weatherDegraded;
 
     if (qualityReport.aePipelineFrozen) {
+      widget.simulation?.record('quality_skip', {
+        'reason': 'exposure_transition',
+        if (image is SimulationImage) 'frameId': image.sourceFrameId,
+      });
+      _performance.increment(PerceptionCounter.skippedQuality);
       // D-1: MotionPreAlert.feed() short-circuits to null the instant
       // aeTransitioning is true (motion_prealert.dart), so calling it here
       // was dead code that gave the false impression of a motion-intrusion
@@ -1622,6 +2052,12 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       stride: 8,
     );
     if (BlurDetector.isBlurry(sharpness)) {
+      widget.simulation?.record('quality_skip', {
+        'reason': 'blur',
+        'sharpness': sharpness,
+        if (image is SimulationImage) 'frameId': image.sourceFrameId,
+      });
+      _performance.increment(PerceptionCounter.skippedQuality);
       _blurryStreak++;
       if (_blurryStreak >= _kShakeWarnStreak &&
           now.difference(_lastShakeWarnAt) >= _kShakeWarnCooldown) {
@@ -1669,7 +2105,47 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     final shouldRunDetect =
         now.difference(_lastDetectAt) >= currentDetectInterval;
 
-    if (!shouldRunDetect || _isDetecting || !_models.yoloLoaded) {
+    final normalDepthDue = _depthController.shouldRun(now);
+    final groundDepthDue = _vm.throttler.isGroundSafetyMidasDue(now);
+    final ticket = _perceptionScheduler.tryStart(
+      frame: PerceptionFrameIdentity(
+        generation: _vm.cameraSession.generation,
+        frameNumber: _frameCount,
+        width: image.width,
+        height: image.height,
+        rotationDegrees: _vm.cameraSensorRotationDeg,
+        mirrored: _vm.cameraMirrored,
+        timing: timing,
+      ),
+      yoloDue: shouldRunDetect && _models.yoloLoaded,
+      depthDue:
+          !_stallWatchdog.isWarned &&
+          (normalDepthDue ||
+              (_depthController.providerReady && groundDepthDue)),
+    );
+    _performance.record(
+      PerceptionStage.callbackPreDispatch,
+      frameSw.elapsedMicroseconds,
+    );
+    if (ticket?.lane == PerceptionLane.depth) {
+      if (!normalDepthDue && groundDepthDue) {
+        _vm.throttler.markGroundSafetyMidasDone(now);
+      }
+      unawaited(
+        _processDepthAnalysis(image, now, ticket: ticket!, timing: timing),
+      );
+    }
+
+    if (ticket?.lane != PerceptionLane.yolo) {
+      _performance.increment(
+        !_models.yoloLoaded
+            ? PerceptionCounter.skippedUnavailable
+            : _isDetecting
+            ? PerceptionCounter.skippedBusy
+            : shouldRunDetect && ticket?.lane == PerceptionLane.depth
+            ? PerceptionCounter.skippedStaggered
+            : PerceptionCounter.skippedCadence,
+      );
       // Safety audit 2026-06 fix A-1: warn if YOLO is down in street/cane mode
       if (!_models.yoloLoaded &&
           (_vm.mode == AppMode.street || _vm.mode == AppMode.cane)) {
@@ -1700,13 +2176,15 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       return;
     }
 
-    _isDetecting = true;
+    final yoloTicket = ticket!;
     _lastDetectAt = now;
     // Safety audit 2026-06 fix A-1: YOLO is running — reset downtime tracker
     if (_yoloDownSince.millisecondsSinceEpoch != 0) {
       _yoloDownSince = DateTime.fromMillisecondsSinceEpoch(0);
     }
 
+    Stopwatch? yoloTimer;
+    var yoloCompleted = false;
     try {
       if (_wantOcr) {
         if (now.difference(_ocrStartedAt) > const Duration(seconds: 10)) {
@@ -1722,8 +2200,12 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         }
       }
 
+      if (!_acceptPerceptionResult(yoloTicket, beforeDispatch: true)) return;
       final planeBytes = _reusePlaneBytes(image);
 
+      yoloTimer = Stopwatch()..start();
+      _performance.increment(PerceptionCounter.yoloStarted);
+      _performance.record(PerceptionStage.callbackToYoloDispatch, timing.ageUs);
       final raw = await _models.vision.yoloOnFrame(
         bytesList: planeBytes,
         imageHeight: image.height,
@@ -1732,16 +2214,29 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         confThreshold: kDetConfThreshold,
         classThreshold: kDetConfThreshold,
       );
+      widget.simulation?.record('yolo_result', {
+        if (image is SimulationImage) 'frameId': image.sourceFrameId,
+        'sourceTimestampUs': now.microsecondsSinceEpoch,
+        'detections': raw,
+        'captureToResultUs': timing.ageUs,
+      });
+      yoloTimer.stop();
+      yoloCompleted = true;
+      _performance.increment(PerceptionCounter.yoloCompleted);
+      _performance.record(
+        PerceptionStage.yoloRoundTrip,
+        yoloTimer.elapsedMicroseconds,
+      );
+      if (!_acceptPerceptionResult(yoloTicket)) return;
+      _vm.throttler.update(
+        yoloTimer.elapsedMicroseconds / 1000,
+        DateTime.now(),
+      );
 
-      if (!mounted) return;
-
-      // V4.4: Yield to the event loop after blocking YOLO inference so that
-      // any TTS completion callbacks, haptic timing events, or audio-route
-      // change notifications queued during inference can execute before we
-      // proceed to alert generation.  45 ms of inference on a Dart-blocked
-      // isolate can otherwise delay barge-interrupt delivery.
+      // Give queued feedback callbacks a turn after the native executor
+      // replies. YOLO inference itself already runs off the Dart UI isolate.
       await Future<void>.delayed(Duration.zero);
-      if (!mounted) return;
+      if (!_acceptPerceptionResult(yoloTicket)) return;
 
       final yPlaneBytes = planeBytes.isNotEmpty ? planeBytes[0] : null;
       final yStride = image.planes.isNotEmpty
@@ -1749,12 +2244,14 @@ class _AiCameraScreenState extends State<AiCameraScreen>
           : null;
       final dets = _buildRawDets(
         raw,
-        _imgW,
-        _imgH,
+        image.width,
+        image.height,
         yPlane: yPlaneBytes,
         yRowStride: yStride,
       );
-      final inferenceMs = frameSw.elapsedMilliseconds;
+      final inferenceMs = yoloTimer.elapsedMilliseconds;
+      if (!_acceptPerceptionResult(yoloTicket)) return;
+      _performance.increment(PerceptionCounter.yoloAccepted);
       if (_isCalibrating) {
         final personDet = dets.cast<RawDet?>().firstWhere(
           (d) => d != null && d.label == 'person',
@@ -1772,10 +2269,22 @@ class _AiCameraScreenState extends State<AiCameraScreen>
               personDet.y2,
               2.0,
             ).then((_) async {
+              if (!mounted ||
+                  !_vm.cameraSession.accepts(yoloTicket.frame.generation)) {
+                return;
+              }
               await Settings.instance.setIsCalibrated(true);
+              if (!mounted ||
+                  !_vm.cameraSession.accepts(yoloTicket.frame.generation)) {
+                return;
+              }
               _isCalibrated = true;
               _vm.tracker.isCalibrated = true;
               await _vm.earcon.play(Earcon.success);
+              if (!mounted ||
+                  !_vm.cameraSession.accepts(yoloTicket.frame.generation)) {
+                return;
+              }
               _vm.tts.say(
                 S.get('calib_saved'),
                 SpeechPriority.warning,
@@ -1794,9 +2303,10 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       _vm.tracker.isCalibrated = _isCalibrated;
       _vm.tracker.depthProviderAvailable =
           _models.depthProvider?.isReady ?? false;
-      final tracks = _vm.tracker.update(dets, _imgW, _imgH, now);
+      final tracks = _vm.tracker.update(dets, image.width, image.height, now);
+      _performance.record(PerceptionStage.callbackToYoloTracks, timing.ageUs);
       _fieldLog.logDetection(
-        frameCount: _frameCount,
+        frameCount: yoloTicket.frame.frameNumber,
         trackCount: tracks.length,
         inferenceMs: inferenceMs,
         maxConf: dets.isEmpty
@@ -1807,19 +2317,19 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       final uiNow = DateTime.now();
       if (uiNow.difference(_lastUiAt) >= _vm.throttler.uiInterval()) {
         _lastUiAt = uiNow;
-        _vm.updateTracks(tracks, imgW: _imgW, imgH: _imgH);
+        _vm.updateTracks(tracks, imgW: image.width, imgH: image.height);
       }
 
       final criticalAtBefore = _vm.alertMgr.lastCriticalAt;
       final signTrack = _vm.alertMgr.processFrame(
         tracks: tracks,
-        imgW: _imgW,
-        imgH: _imgH,
+        imgW: image.width,
+        imgH: image.height,
         viewportAspect: _viewportAspect,
         now: now,
         mode: _vm.mode,
         isCalibrated: _isCalibrated,
-        frameCount: _frameCount,
+        frameCount: yoloTicket.frame.frameNumber,
       );
 
       final criticalAtAfter = _vm.alertMgr.lastCriticalAt;
@@ -1829,8 +2339,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
 
       _vm.tts.reverseVehicleSuspected = _detectReverseVehicle(
         tracks,
-        _imgW,
-        _imgH,
+        image.width,
+        image.height,
       );
 
       if (signTrack != null) {
@@ -1884,64 +2394,128 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         _lastAnnouncedLight = null;
       }
 
-      _depthController.updateYoloTracks(tracks, imgW: _imgW);
-
-      if (_depthController.shouldRun(now) && !_stallWatchdog.isWarned) {
-        unawaited(_processDepthAnalysis(image, now));
-      } else if (_vm.throttler.isGroundSafetyMidasDue(now) &&
-          !_stallWatchdog.isWarned) {
-        // V2.1: Ground-safety MiDaS burst at critical thermal.  Even when the
-        // full MiDaS pipeline is paused by thermal throttling, run one pass
-        // focused on the ground zone to preserve curb / step-down detection.
-        _vm.throttler.markGroundSafetyMidasDone(now);
-        unawaited(_processDepthAnalysis(image, now));
-      }
+      _depthController.updateYoloTracks(
+        tracks,
+        imgW: image.width,
+        imgH: image.height,
+        now: now,
+        rotationDegrees: yoloTicket.frame.rotationDegrees,
+        mirrored: yoloTicket.frame.mirrored,
+      );
     } finally {
+      if (yoloTimer != null && !yoloCompleted) {
+        yoloTimer.stop();
+        _performance.increment(PerceptionCounter.yoloFailed);
+        _performance.record(
+          PerceptionStage.yoloRoundTrip,
+          yoloTimer.elapsedMicroseconds,
+        );
+      }
       _finalizeFramePerf(now: now, frameSw: frameSw);
-      _isDetecting = false;
+      _perceptionScheduler.finish(yoloTicket);
     }
   }
 
-  Future<void> _processDepthAnalysis(CameraImage image, DateTime now) async {
-    final alerts = await _depthController.analyze(image, now);
-    if (mounted) {
-      _lastDepthHazards = alerts.map((a) => a.hazard).toList();
-    }
-    final provider = _models.depthProvider;
-    if (provider != null && provider.lastInferenceMs > 0) {
-      _fieldLog.logMidasInference(
-        ms: provider.lastInferenceMs.round(),
-        tier: provider.tier.name,
-        preprocessMs: provider.lastPreprocessMs.round(),
-        analyzeMs: provider.lastAnalyzeMs.round(),
+  bool _acceptPerceptionResult(
+    PerceptionTicket ticket, {
+    bool beforeDispatch = false,
+  }) {
+    final reason = !mounted
+        ? 'screen_disposed'
+        : _perceptionScheduler.rejectionFor(
+            ticket,
+            generation: _vm.cameraSession.generation,
+            width: _imgW,
+            height: _imgH,
+            rotationDegrees: _vm.cameraSensorRotationDeg,
+            mirrored: _vm.cameraMirrored,
+          );
+    if (reason == null) return true;
+    if (ticket.lane == PerceptionLane.yolo) {
+      _performance.increment(
+        beforeDispatch
+            ? PerceptionCounter.yoloDiscardedBeforeCall
+            : PerceptionCounter.yoloRejected,
       );
     }
-    _runSpatialSafetyRuntime(DateTime.now());
-    if (!mounted || alerts.isEmpty) return;
-    for (final alert in alerts) {
-      final hazard = alert.hazard;
-      if (hazard.type == DepthHazardType.escalatorRiding) {
-        HapticService.vibrate(const [0, 50, 120, 50]);
-        continue;
-      }
-      final hazardKey = DepthPipelineController.hazardKeyFor(hazard.type);
-      final priority = alert.isCritical
-          ? SpeechPriority.critical
-          : SpeechPriority.warning;
+    _fieldLog.log('perception_result_rejected', {
+      'lane': ticket.lane.name,
+      'reason': reason,
+      'generation': ticket.frame.generation,
+      'frame': ticket.frame.frameNumber,
+      'ageUs': ticket.frame.timing.ageUs,
+    });
+    return false;
+  }
 
-      _vm.alertMgr.handleDepthHazard(
-        text: S.alert(hazardKey),
-        speechKey: hazardKey,
-        priority: priority,
-        pan: hazard.pan,
-        category: AlertCategory.obstacleClose,
-        now: now,
+  Future<void> _processDepthAnalysis(
+    CameraImage image,
+    DateTime now, {
+    required PerceptionTicket ticket,
+    CallbackFrameTiming? timing,
+  }) async {
+    try {
+      _performance.record(
+        PerceptionStage.callbackToDepthDispatch,
+        ticket.frame.timing.ageUs,
       );
-      _fieldLog.logDepthHazard(
-        type: hazard.type.name,
-        score: hazard.midasScore,
-        coverage: hazard.coverage,
-      );
+      final alerts = await _depthController.analyze(image, now, timing: timing);
+      if (!_acceptPerceptionResult(ticket)) return;
+      if (mounted) {
+        _lastDepthHazards = alerts.map((a) => a.hazard).toList();
+      }
+      final provider = _models.depthProvider;
+      final currentTiming =
+          provider is! NcnnDepthProvider ||
+          provider.lastCompletedSourceTimestampUs == now.microsecondsSinceEpoch;
+      if (provider is NcnnDepthProvider &&
+          currentTiming &&
+          provider.lastAnalyzeMs > 0) {
+        _performance.record(
+          PerceptionStage.depthWorkerProcessing,
+          (provider.lastAnalyzeMs * 1000).round(),
+        );
+      }
+      if (provider != null && currentTiming && provider.lastInferenceMs > 0) {
+        _fieldLog.logMidasInference(
+          ms: provider.lastInferenceMs.round(),
+          tier: provider.tier.name,
+          preprocessMs: provider.lastPreprocessMs.round(),
+          analyzeMs: provider.lastAnalyzeMs.round(),
+          roundTripMs: provider is NcnnDepthProvider
+              ? provider.lastRoundTripMs.round()
+              : null,
+        );
+      }
+      _runSpatialSafetyRuntime(DateTime.now());
+      if (!mounted || alerts.isEmpty) return;
+      for (final alert in alerts) {
+        final hazard = alert.hazard;
+        if (hazard.type == DepthHazardType.escalatorRiding) {
+          HapticService.vibrate(const [0, 50, 120, 50]);
+          continue;
+        }
+        final hazardKey = DepthPipelineController.hazardKeyFor(hazard.type);
+        final priority = alert.isCritical
+            ? SpeechPriority.critical
+            : SpeechPriority.warning;
+
+        _vm.alertMgr.handleDepthHazard(
+          text: S.alert(hazardKey),
+          speechKey: hazardKey,
+          priority: priority,
+          pan: hazard.pan,
+          category: AlertCategory.obstacleClose,
+          now: now,
+        );
+        _fieldLog.logDepthHazard(
+          type: hazard.type.name,
+          score: hazard.midasScore,
+          coverage: hazard.coverage,
+        );
+      }
+    } finally {
+      _perceptionScheduler.finish(ticket);
     }
   }
 
@@ -1986,6 +2560,12 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       'scene': result.snapshot.toDiagnosticMap(),
       'shadowCorrection': result.decision?.shadowCorrection?.name,
     });
+    widget.simulation?.record('spatial_result', {
+      ...result.trace.toDiagnosticMap(),
+      'sourceTimestampUs': header?.sourceTimestampUs,
+      'shadowCorrection': result.decision?.shadowCorrection?.name,
+    });
+    _refreshInspectionScene(now);
   }
 
   void _startSpatialSafetyCadence() {
@@ -2007,11 +2587,12 @@ class _AiCameraScreenState extends State<AiCameraScreen>
         _vm.spatialSafety.activeSessionGeneration < 0) {
       return;
     }
+    final now = DateTime.now();
     final orientationValid =
         !_vm.orientation.isRollExcessive &&
         _vm.orientation.state == DevicePitch.optimal;
     final result = _vm.spatialSafety.tick(
-      now: DateTime.now(),
+      now: now,
       userMoving: _vm.fallDetector.motionState != MotionState.stationary,
       orientationValid: orientationValid,
     );
@@ -2020,6 +2601,8 @@ class _AiCameraScreenState extends State<AiCameraScreen>
       'scene': result.snapshot.toDiagnosticMap(),
       'cadence': true,
     });
+    widget.simulation?.record('spatial_tick', result.trace.toDiagnosticMap());
+    _refreshInspectionScene(now);
   }
 
   void _onDepthStatusChanged(DepthPipelineStatus from, DepthPipelineStatus to) {
@@ -2399,166 +2982,188 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     return _planeBytesBuffer;
   }
 
+  void _onUiFrameTimings(List<FrameTiming> timings) {
+    if (!_isCameraReady) return;
+    for (final timing in timings) {
+      _performance.record(
+        PerceptionStage.uiBuild,
+        timing.buildDuration.inMicroseconds,
+      );
+      _performance.record(
+        PerceptionStage.uiRaster,
+        timing.rasterDuration.inMicroseconds,
+      );
+    }
+  }
+
   void _finalizeFramePerf({required DateTime now, required Stopwatch frameSw}) {
-    _vm.throttler.update(frameSw.elapsedMilliseconds.toDouble(), now);
-    _detectionCompletions++;
+    _performance.record(
+      PerceptionStage.callbackWork,
+      frameSw.elapsedMicroseconds,
+    );
   }
 
   void _openGestureTutorial() {
-    if (!mounted) return;
-    Navigator.of(context).push<void>(
-      MaterialPageRoute(
-        builder: (_) => const GestureTutorialScreen(standalone: true),
+    unawaited(
+      _inspectionUtilities.openPage<void>(
+        context,
+        builder: (_) => GestureTutorialScreen(
+          standalone: true,
+          canInteract: () => _canOpenInspectionUtility,
+        ),
       ),
     );
   }
 
   void _openSettings() {
     FeatureUsageTracker.instance.increment(FeatureUsageKeys.settingsOpened);
-    final colors = BagdarTheme.colorsOf(context);
-    showModalBottomSheet<void>(
-      context: context,
-      backgroundColor: colors.surfaceElevated,
-      isScrollControlled: true,
-      builder: (_) => SingleChildScrollView(
-        child: CameraSettingsSheet(
-          currentLanguage: AppStrings.current,
-          useGpu: _useGpu,
-          useNativeDepthBridge:
-              _models.depthProvider?.nativeBridgeEnabled ?? false,
-          useHardwareDepthMode: _useHardwareDepthMode,
-          showIndependentHardwareDepth: BuildProfile.current.isResearch,
-          numThreads: _numThreads,
-          showDebugHud: _vm.showDebugHud,
-          earconEnabled: _vm.earcon.isEnabled,
-          pitchBlackUiEnabled: _vm.isPitchBlack,
-          classicGestures: Settings.instance.classicGestures,
-          speechRate: Settings.instance.speechRate,
-          ttsVolume: Settings.instance.ttsVolume,
-          earconVolume: Settings.instance.earconVolume,
-          verbosity: Settings.instance.verbosity,
-          alertFrequency: Settings.instance.alertFrequency,
-          hapticStrength: Settings.instance.hapticStrength,
-          sosTrigger: Settings.instance.sosTrigger,
-          dominantHand: Settings.instance.dominantHand,
-          depthTier: _models.depthProvider?.tier,
-          midasReady: _depthController.providerReady,
-          sosContactNumber: _vm.sos.contactNumber,
-          onLanguageChanged: (lang) async {
-            AppStrings.setLanguage(lang);
-            await Settings.instance.setLanguage(lang.index);
-            await _vm.tts.setLanguage(AppStrings.ttsLang);
-            _vm.voice.setLocale(AppStrings.ttsLang);
-            if (mounted) setState(() {});
-          },
-          onUseGpuChanged: (v) {
-            _useGpu = v;
-            Settings.instance.setUseGpu(v);
-          },
-          onNativeDepthBridgeChanged: (v) {
-            _models.depthProvider?.setNativeBridgeEnabled(v);
-          },
-          onHardwareDepthModeChanged: (v) {
-            _useHardwareDepthMode = v;
-            Settings.instance.setUseHardwareDepthMode(v);
-          },
-          onNumThreadsChanged: (v) {
-            _numThreads = v;
-            Settings.instance.setNumThreads(v);
-          },
-          onDebugHudChanged: (v) => _vm.toggleDebugHud(),
-          onEarconEnabledChanged: (v) => _vm.earcon.setEnabled(v),
-          onPitchBlackUiChanged: (v) {
-            Settings.instance.setPitchBlackUi(v);
-            if (_vm.isPitchBlack != v) {
-              _vm.togglePitchBlack();
-            }
-            if (mounted) setState(() {});
-          },
-          onClassicGesturesChanged: (v) {
-            Settings.instance.setClassicGestures(v);
-            if (mounted) setState(() {});
-          },
-          onSpeechRateChanged: (v) {
-            Settings.instance.setSpeechRate(v);
-            _vm.applyA11yPrefs();
-          },
-          onTtsVolumeChanged: (v) {
-            Settings.instance.setTtsVolume(v);
-            _vm.applyA11yPrefs();
-          },
-          onEarconVolumeChanged: (v) {
-            Settings.instance.setEarconVolume(v);
-            _vm.applyA11yPrefs();
-          },
-          onVerbosityChanged: (v) {
-            Settings.instance.setVerbosity(v);
-          },
-          onAlertFrequencyChanged: (v) {
-            Settings.instance.setAlertFrequency(v);
-          },
-          onHapticStrengthChanged: (v) {
-            Settings.instance.setHapticStrength(v);
-            _vm.applyA11yPrefs();
-          },
-          onSosTriggerChanged: (v) {
-            Settings.instance.setSosTrigger(v);
-            _applySosTriggerListener();
-            if (mounted) setState(() {});
-          },
-          onDominantHandChanged: (v) {
-            Settings.instance.setDominantHand(v);
-            if (mounted) setState(() {});
-          },
-          onReplayTutorial: _openGestureTutorial,
-          onReadText: () {
-            if (!_isCameraReady) {
-              _vm.tts.say(
-                S.get('ocr_camera_not_ready'),
-                SpeechPriority.warning,
-                pan: 0.0,
-              );
-              _vm.earcon.play(Earcon.fail);
-              HapticService.vibrate(const [0, 100, 50, 100]);
-              return;
-            }
-            _wantOcr = true;
-            _ocrStartedAt = DateTime.now();
-            _vm.tts.say(S.get('ocr_reading'), SpeechPriority.info, pan: 0.0);
-          },
-          onCalibrationTap: () {
-            _startCalibration();
-          },
-          onEditSosContact: () => _showSosContactDialog(),
-          onScanLeft: () =>
-              _vm.tts.say(S.get('scan_left'), SpeechPriority.info, pan: -1.0),
-          onScanCenter: () =>
-              _vm.tts.say(S.get('scan_forward'), SpeechPriority.info, pan: 0.0),
-          onScanRight: () =>
-              _vm.tts.say(S.get('scan_right'), SpeechPriority.info, pan: 1.0),
-          onVoiceWarningTest: () => _vm.tts.say(
-            S.get('test_alert_warning'),
-            SpeechPriority.warning,
-            pan: -1.0,
+    unawaited(
+      _inspectionUtilities.open(
+        context,
+        bottomSheet: true,
+        builder: (_) => SingleChildScrollView(
+          child: CameraSettingsSheet(
+            currentLanguage: AppStrings.current,
+            useGpu: _useGpu,
+            useNativeDepthBridge:
+                _models.depthProvider?.nativeBridgeEnabled ?? false,
+            useHardwareDepthMode: _useHardwareDepthMode,
+            showIndependentHardwareDepth: BuildProfile.current.isResearch,
+            numThreads: _numThreads,
+            showDebugHud: _vm.showDebugHud,
+            earconEnabled: _vm.earcon.isEnabled,
+            pitchBlackUiEnabled: _vm.isPitchBlack,
+            classicGestures: Settings.instance.classicGestures,
+            speechRate: Settings.instance.speechRate,
+            ttsVolume: Settings.instance.ttsVolume,
+            earconVolume: Settings.instance.earconVolume,
+            verbosity: Settings.instance.verbosity,
+            alertFrequency: Settings.instance.alertFrequency,
+            hapticStrength: Settings.instance.hapticStrength,
+            sosTrigger: Settings.instance.sosTrigger,
+            dominantHand: Settings.instance.dominantHand,
+            depthTier: _models.depthProvider?.tier,
+            midasReady: _depthController.providerReady,
+            sosContactNumber: _vm.sos.contactNumber,
+            onLanguageChanged: (lang) async {
+              AppStrings.setLanguage(lang);
+              await Settings.instance.setLanguage(lang.index);
+              await _vm.tts.setLanguage(AppStrings.ttsLang);
+              _vm.voice.setLocale(AppStrings.ttsLang);
+              if (mounted) setState(() {});
+            },
+            onUseGpuChanged: (v) {
+              _useGpu = v;
+              Settings.instance.setUseGpu(v);
+            },
+            onNativeDepthBridgeChanged: (v) {
+              _models.depthProvider?.setNativeBridgeEnabled(v);
+            },
+            onHardwareDepthModeChanged: (v) {
+              _useHardwareDepthMode = v;
+              Settings.instance.setUseHardwareDepthMode(v);
+            },
+            onNumThreadsChanged: (v) {
+              _numThreads = v;
+              Settings.instance.setNumThreads(v);
+            },
+            onDebugHudChanged: (v) => _vm.toggleDebugHud(),
+            onEarconEnabledChanged: (v) => _vm.earcon.setEnabled(v),
+            onPitchBlackUiChanged: (v) {
+              Settings.instance.setPitchBlackUi(v);
+              if (_vm.isPitchBlack != v) {
+                _vm.togglePitchBlack();
+              }
+              if (mounted) setState(() {});
+            },
+            onClassicGesturesChanged: (v) {
+              Settings.instance.setClassicGestures(v);
+              if (mounted) setState(() {});
+            },
+            onSpeechRateChanged: (v) {
+              Settings.instance.setSpeechRate(v);
+              _vm.applyA11yPrefs();
+            },
+            onTtsVolumeChanged: (v) {
+              Settings.instance.setTtsVolume(v);
+              _vm.applyA11yPrefs();
+            },
+            onEarconVolumeChanged: (v) {
+              Settings.instance.setEarconVolume(v);
+              _vm.applyA11yPrefs();
+            },
+            onVerbosityChanged: (v) {
+              Settings.instance.setVerbosity(v);
+            },
+            onAlertFrequencyChanged: (v) {
+              Settings.instance.setAlertFrequency(v);
+            },
+            onHapticStrengthChanged: (v) {
+              Settings.instance.setHapticStrength(v);
+              _vm.applyA11yPrefs();
+            },
+            onSosTriggerChanged: (v) {
+              Settings.instance.setSosTrigger(v);
+              _applySosTriggerListener();
+              if (mounted) setState(() {});
+            },
+            onDominantHandChanged: (v) {
+              Settings.instance.setDominantHand(v);
+              if (mounted) setState(() {});
+            },
+            onReplayTutorial: _openGestureTutorial,
+            onReadText: () {
+              if (!_isCameraReady) {
+                _vm.tts.say(
+                  S.get('ocr_camera_not_ready'),
+                  SpeechPriority.warning,
+                  pan: 0.0,
+                );
+                _vm.earcon.play(Earcon.fail);
+                HapticService.vibrate(const [0, 100, 50, 100]);
+                return;
+              }
+              _wantOcr = true;
+              _ocrStartedAt = DateTime.now();
+              _vm.tts.say(S.get('ocr_reading'), SpeechPriority.info, pan: 0.0);
+            },
+            onCalibrationTap: () {
+              _startCalibration();
+            },
+            onEditSosContact: () => _showSosContactDialog(),
+            onScanLeft: () =>
+                _vm.tts.say(S.get('scan_left'), SpeechPriority.info, pan: -1.0),
+            onScanCenter: () => _vm.tts.say(
+              S.get('scan_forward'),
+              SpeechPriority.info,
+              pan: 0.0,
+            ),
+            onScanRight: () =>
+                _vm.tts.say(S.get('scan_right'), SpeechPriority.info, pan: 1.0),
+            onVoiceWarningTest: () => _vm.tts.say(
+              S.get('test_alert_warning'),
+              SpeechPriority.warning,
+              pan: -1.0,
+            ),
+            onVoiceCriticalTest: () => _vm.tts.say(
+              S.get('test_alert_critical'),
+              SpeechPriority.critical,
+              pan: 0.0,
+            ),
+            onPlayEarcon: (earcon) => _vm.earcon.play(earcon),
+            patternFn: (dist, pos) => [
+              0,
+              dist == 'very close' ? 200 : 120,
+              80,
+              dist == 'very close' ? 200 : 120,
+            ],
+            intensFn: (dist, len) =>
+                List.filled(len, dist == 'very close' ? 255 : 180),
+            vibrateFn: (pattern, {intensities}) =>
+                HapticService.vibrate(pattern, intensities: intensities),
+            onShowSettingsQr: _openSettingsQrExport,
+            onScanSettingsQr: _openSettingsQrImport,
           ),
-          onVoiceCriticalTest: () => _vm.tts.say(
-            S.get('test_alert_critical'),
-            SpeechPriority.critical,
-            pan: 0.0,
-          ),
-          onPlayEarcon: (earcon) => _vm.earcon.play(earcon),
-          patternFn: (dist, pos) => [
-            0,
-            dist == 'very close' ? 200 : 120,
-            80,
-            dist == 'very close' ? 200 : 120,
-          ],
-          intensFn: (dist, len) =>
-              List.filled(len, dist == 'very close' ? 255 : 180),
-          vibrateFn: (pattern, {intensities}) =>
-              HapticService.vibrate(pattern, intensities: intensities),
-          onShowSettingsQr: _openSettingsQrExport,
-          onScanSettingsQr: _openSettingsQrImport,
         ),
       ),
     );
@@ -2582,16 +3187,31 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   }
 
   void _openSettingsQrExport() {
-    if (!mounted) return;
-    Navigator.of(context).push<void>(
-      MaterialPageRoute(builder: (_) => SettingsQrExportScreen(tts: _vm.tts)),
+    unawaited(
+      _inspectionUtilities.openPage<void>(
+        context,
+        builder: (_) => SettingsQrExportScreen(
+          tts: _vm.tts,
+          canInteract: () => _canOpenInspectionUtility,
+        ),
+      ),
     );
   }
 
   void _openLanguagePacks() {
-    if (!mounted) return;
-    Navigator.of(context).push<void>(
-      MaterialPageRoute(builder: (_) => LanguagePacksScreen(tts: _vm.tts)),
+    unawaited(
+      _inspectionUtilities.openPage<void>(
+        context,
+        builder: (_) => LanguagePacksScreen(
+          tts: _vm.tts,
+          canInteract: () => _canOpenInspectionUtility,
+          showDeleteConfirmation: (context, builder) async =>
+              (await _inspectionUtilities.openChildDialog<bool>(
+                context,
+                builder: builder,
+              )).value,
+        ),
+      ),
     );
   }
 
@@ -2636,26 +3256,57 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   }
 
   Future<void> _openSettingsQrImport() async {
-    if (!mounted) return;
-
-    await _releaseCameraForExternalScanner();
-    if (!mounted) {
-      unawaited(_initCamera());
-      return;
-    }
-    final applied = await Navigator.of(context).push<bool>(
-      MaterialPageRoute(builder: (_) => SettingsQrImportScreen(tts: _vm.tts)),
+    if (!_canOpenInspectionUtility) return;
+    final result = await _inspectionUtilities.openPage<bool>(
+      context,
+      beforeOpen: _releaseCameraForExternalScanner,
+      builder: (_) => SettingsQrImportScreen(
+        tts: _vm.tts,
+        canInteract: () => _canOpenInspectionUtility,
+      ),
     );
     if (!mounted) return;
-
-    if (applied == true) {
+    if (result.interrupted) {
+      setState(() => _scannerNeedsRetry = true);
+      return;
+    }
+    if (!result.opened) return;
+    if (result.value == true && _canOpenInspectionUtility) {
       _vm.applyA11yPrefs();
       AppStrings.setLanguage(AppLanguage.values[Settings.instance.language]);
       await _vm.tts.setLanguage(AppStrings.ttsLang);
+      if (!_canOpenInspectionUtility) {
+        if (mounted) setState(() => _scannerNeedsRetry = true);
+        return;
+      }
       _vm.voice.setLocale(AppStrings.ttsLang);
       if (mounted) setState(() {});
     }
+    if (!_canOpenInspectionUtility || _lifecycle.backgroundWarned) {
+      if (mounted) setState(() => _scannerNeedsRetry = true);
+      return;
+    }
     await _initCamera();
+    if (mounted) setState(() => _scannerNeedsRetry = !_isCameraReady);
+  }
+
+  Future<void> _retryScannerCamera() async {
+    if (!_canOpenInspectionUtility ||
+        _lifecycle.backgroundWarned ||
+        _scannerRetryBusy) {
+      return;
+    }
+    setState(() => _scannerRetryBusy = true);
+    try {
+      await _initCamera();
+    } finally {
+      if (mounted) {
+        setState(() {
+          _scannerRetryBusy = false;
+          _scannerNeedsRetry = !_isCameraReady;
+        });
+      }
+    }
   }
 
   Future<void> _releaseCameraForExternalScanner() async {
@@ -2704,91 +3355,20 @@ class _AiCameraScreenState extends State<AiCameraScreen>
   }
 
   void _showSosContactDialog() {
-    final controller = TextEditingController(text: _vm.sos.contactNumber ?? '');
-    final colors = BagdarTheme.colorsOf(context);
-    showDialog<void>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: colors.surfaceElevated,
-        title: Text(
-          S.get('sos_settings'),
-          style: BagdarTypography.title.copyWith(color: colors.textPrimary),
+    unawaited(
+      _inspectionUtilities.openDialog<bool>(
+        context,
+        builder: (_) => SosContactDialog(
+          canInteract: () => _canOpenInspectionUtility,
+          initialNumber: _vm.sos.contactNumber ?? '',
+          pickNumber: () async {
+            final contact = await FlutterNativeContactPicker().selectContact();
+            if (contact == null) return null;
+            final numbers = contact.phoneNumbers;
+            return numbers == null || numbers.isEmpty ? '' : numbers.first;
+          },
+          saveNumber: _vm.sos.setContact,
         ),
-        content: Row(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: controller,
-                keyboardType: TextInputType.phone,
-                style: BagdarTypography.body.copyWith(
-                  color: colors.textPrimary,
-                ),
-                decoration: InputDecoration(
-                  hintText: '+7 XXX XXX XX XX',
-                  hintStyle: BagdarTypography.body.copyWith(
-                    color: colors.textSecondary.withValues(alpha: 0.6),
-                  ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: colors.divider),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: colors.accentPrimary,
-                      width: BagdarBorders.thin,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            IconButton(
-              icon: Icon(Icons.contact_phone, color: colors.accentPrimary),
-              onPressed: () async {
-                try {
-                  final picker = FlutterNativeContactPicker();
-                  final contact = await picker.selectContact();
-                  if (contact != null &&
-                      contact.phoneNumbers != null &&
-                      contact.phoneNumbers!.isNotEmpty) {
-                    controller.text = contact.phoneNumbers!.first;
-                  }
-                } catch (e) {
-                  debugPrint('Error picking contact: $e');
-                }
-              },
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text(
-              S.get('cancel'),
-              style: BagdarTypography.body.copyWith(
-                color: colors.textSecondary,
-              ),
-            ),
-          ),
-          TextButton(
-            onPressed: () async {
-              final ok = await _vm.sos.setContact(controller.text);
-              if (ctx.mounted) {
-                Navigator.pop(ctx);
-                _vm.tts.say(
-                  ok ? S.get('save') : S.get('sos_invalid_number'),
-                  SpeechPriority.info,
-                  pan: 0.0,
-                );
-              }
-            },
-            child: Text(
-              S.get('save'),
-              style: BagdarTypography.body.copyWith(
-                color: colors.accentPrimary,
-                fontWeight: BagdarTypography.weightBold,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -2864,158 +3444,217 @@ class _AiCameraScreenState extends State<AiCameraScreen>
     });
   }
 
-  Widget _buildPermissionDeniedView() {
-    final colors = BagdarTheme.colorsOf(context);
-    return Scaffold(
-      backgroundColor: colors.surfaceBg,
-      body: SafeArea(
-        child: Semantics(
-          liveRegion: true,
-          label: S.get('camera_perm_recovery_tts'),
-          child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: _retryCameraPermission,
-            onDoubleTap: openAppSettings,
-            child: Padding(
-              padding: const EdgeInsets.all(32),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(
-                    Icons.no_photography,
-                    color: colors.stateDanger,
-                    size: 56,
-                  ),
-                  const SizedBox(height: BagdarSpacing.l),
-                  Text(
-                    S.get('camera_perm_title'),
-                    style: BagdarTypography.title.copyWith(
-                      color: colors.textPrimary,
-                    ),
-                  ),
-                  const SizedBox(height: BagdarSpacing.m),
-                  Text(
-                    S.get('camera_perm_recovery_tts'),
-                    style: BagdarTypography.body.copyWith(
-                      color: colors.textSecondary,
-                    ),
-                  ),
-                  const Spacer(),
-                  ElevatedButton(
-                    onPressed: openAppSettings,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: colors.accentPrimary,
-                      foregroundColor: colors.accentOnPrimary,
-                      minimumSize: const Size.fromHeight(
-                        BagdarSpacing.tapMinimum,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(BagdarRadius.card),
-                      ),
-                    ),
-                    child: Text(
-                      S.get('settings'),
-                      style: BagdarTypography.body.copyWith(
-                        fontWeight: BagdarTypography.weightHeavy,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  TextButton(
-                    onPressed: _retryCameraPermission,
-                    style: TextButton.styleFrom(
-                      foregroundColor: colors.textSecondary,
-                      minimumSize: const Size.fromHeight(
-                        BagdarSpacing.tapMinimum,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(BagdarRadius.card),
-                        side: BorderSide(
-                          color: colors.divider,
-                          width: BagdarBorders.hairline,
-                        ),
-                      ),
-                    ),
-                    child: Text(
-                      S.get('onb_btn_continue'),
-                      style: BagdarTypography.caption,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+  InspectionSceneStatus _readInspectionScene(DateTime now) =>
+      InspectionSceneStatus.fromCamera(
+        runtime: _vm.spatialSafety,
+        header: _depthController.lastAcceptedObservationHeader,
+        detection: _depthController.lastGenericDetection,
+        now: now,
+        cameraReady:
+            !_cameraPermissionDenied &&
+            _isCameraReady &&
+            (widget.simulation != null ||
+                (_controller?.value.isInitialized ?? false)),
+        orientationValid:
+            !_vm.orientation.isRollExcessive &&
+            _vm.orientation.state == DevicePitch.optimal,
+      );
+
+  void _refreshInspectionScene(DateTime now) {
+    _inspectionScene.value = _readInspectionScene(now);
+  }
+
+  InspectionSystemStatus get _inspectionStatus {
+    final now = DateTime.now();
+    return InspectionSystemStatus.fromHealth(
+      _vm.health.snapshot(now),
+      cameraReady:
+          _isCameraReady &&
+          (widget.simulation != null ||
+              (_controller?.value.isInitialized ?? false)),
+      permissionDenied: _cameraPermissionDenied,
+      scene: _readInspectionScene(now),
+    );
+  }
+
+  void _openInspectionStatus() {
+    unawaited(
+      _inspectionUtilities.open(
+        context,
+        builder: (_) => ListenableBuilder(
+          listenable: Listenable.merge([_vm, _inspectionScene]),
+          builder: (_, __) => InspectionStatusDialog(
+            status: _inspectionStatus,
+            onRepeat: _announceQuickStatus,
           ),
         ),
       ),
     );
   }
 
+  void _openInspectionHelp() {
+    unawaited(
+      _inspectionUtilities.open(
+        context,
+        builder: (_) => const InspectionHelpDialog(),
+      ),
+    );
+  }
+
+  Future<void> _finishInspection() async {
+    if (!await _interruptVoiceInputs()) return;
+    if (!mounted ||
+        _exitingInspection ||
+        _fallCountdown.uiState.phase != SosUiPhase.idle ||
+        ModalRoute.of(context)?.isCurrent != true ||
+        !Navigator.of(context).canPop()) {
+      return;
+    }
+    _exitingInspection = true;
+    _cameraPermissionTimer?.cancel();
+    _cameraInitRetryTimer?.cancel();
+    _yoloRetryTimer?.cancel();
+    // Retire the camera generation before the route's closing animation.
+    // The existing dispose path closes native services and the controller.
+    onBackgroundEntered();
+    _isCameraReady = false;
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (_cameraPermissionDenied) {
-      return _buildPermissionDeniedView();
-    }
     final ctrl = _controller;
     final ready = _isCameraReady && ctrl != null && ctrl.value.isInitialized;
     final colors = BagdarTheme.colorsOf(context);
-
-    return Listener(
-      onPointerDown: _handlePointerDown,
-      onPointerUp: _handlePointerUp,
-      onPointerCancel: (_) => _disarmTwoFingerSos(),
-      child: GestureDetector(
-        onTap: _handleTap,
-        onDoubleTap: _openSettings,
-        onLongPress: _startVoiceCommand,
-        onHorizontalDragEnd: (details) {
-          final v = details.primaryVelocity;
-          if (v == null) return;
-          final leftHanded =
-              Settings.instance.dominantHand == DominantHand.left;
-          final sign = leftHanded ? -1 : 1;
-          if (v > kSwipeStrongVelocity) {
-            FeatureUsageTracker.instance.increment(
-              FeatureUsageKeys.gesture('swipe_right'),
-            );
-            _vm.cycleMode(1 * sign);
-          } else if (v < -kSwipeStrongVelocity) {
-            FeatureUsageTracker.instance.increment(
-              FeatureUsageKeys.gesture('swipe_left'),
-            );
-            _vm.cycleMode(-1 * sign);
-          } else if (v.abs() > kSwipeWeakVelocity) {
-            _notifyWeakGesture();
-          }
-        },
-        onVerticalDragEnd: (details) {
-          final v = details.primaryVelocity;
-          if (v == null) return;
-          final classic = Settings.instance.classicGestures;
-          if (v < -kSwipeStrongVelocity) {
-            FeatureUsageTracker.instance.increment(
-              FeatureUsageKeys.gesture('swipe_up'),
-            );
-            classic ? _vm.togglePitchBlack() : _vm.showHelp();
-          } else if (v > kSwipeStrongVelocity) {
-            FeatureUsageTracker.instance.increment(
-              FeatureUsageKeys.gesture('swipe_down'),
-            );
-            classic ? _vm.showHelp() : _vm.togglePitchBlack();
-          } else if (v.abs() > kSwipeWeakVelocity) {
-            _notifyWeakGesture();
-          }
-        },
-        child: Scaffold(
-          backgroundColor: Colors.black,
-          body: Stack(
-            fit: StackFit.expand,
+    final gesturesEnabled =
+        !_cameraPermissionDenied &&
+        !_exitingInspection &&
+        _fallCountdown.uiState.phase == SosUiPhase.idle;
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: ListenableBuilder(
+        listenable: _inspectionScene,
+        builder: (_, __) => InspectionSurface(
+          screenCurtain: _vm.isPitchBlack,
+          sosState: _fallCountdown.uiState,
+          status: _inspectionStatus,
+          onStatus: _openInspectionStatus,
+          onSettings: _openSettings,
+          onHelp: _openInspectionHelp,
+          onFinish: Navigator.of(context).canPop() ? _finishInspection : null,
+          onSos: () => _triggerSos(source: 'accessible_button'),
+          onCancelSos: _fallCountdown.notifyTouch,
+          onDismissSos: _fallCountdown.dismissStatus,
+          voiceControls: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              ExcludeSemantics(
+              InspectionVoicePanel(
+                phase: _inspectionVoice.phase,
+                active: _inspectionVoice.active,
+                canStart: _inspectionVoice.canStart,
+                message: _inspectionVoice.message,
+                onStart: () => unawaited(_startVoiceCommand()),
+                onStop: () => unawaited(_inspectionVoice.stop()),
+                onVoiceSettings: () => _openVoiceSettings(),
+              ),
+              if (_wakeProbe != null) WakeWordProbePanel(probe: _wakeProbe!),
+            ],
+          ),
+          recovery: _cameraPermissionDenied
+              ? InspectionPermissionRecovery(
+                  onRetry: _retryCameraPermission,
+                  onSystemSettings: () {
+                    unawaited(openAppSettings());
+                  },
+                )
+              : _scannerNeedsRetry
+              ? InspectionCameraRecovery(
+                  onRetry: _scannerRetryBusy ? null : _retryScannerCamera,
+                )
+              : null,
+          researchControls: BuildProfile.current.isResearch
+              ? Column(
+                  children: [
+                    ExcludeSemantics(
+                      child: StatusPanel(
+                        statusLine: _vm.statusLine,
+                        tracksNotifier: _vm.tracksNotifier,
+                        imgW: _imgW,
+                        imgH: _imgH,
+                        viewportAspect: MediaQuery.sizeOf(context).aspectRatio,
+                        mode: _vm.mode,
+                      ),
+                    ),
+                    if (_shouldShowShelf())
+                      QuickShelf(
+                        activeTask: _shelfTask,
+                        onTaskSelected: _onShelfTaskSelected,
+                      ),
+                  ],
+                )
+              : null,
+          background: Listener(
+            onPointerDown: gesturesEnabled ? _handlePointerDown : null,
+            onPointerUp: _handlePointerUp,
+            onPointerCancel: (_) => _disarmTwoFingerSos(),
+            child: GestureDetector(
+              excludeFromSemantics: true,
+              onTap: gesturesEnabled ? _handleTap : null,
+              onDoubleTap: gesturesEnabled ? _openSettings : null,
+              onLongPress: gesturesEnabled ? _startVoiceCommand : null,
+              onHorizontalDragEnd: gesturesEnabled
+                  ? (details) {
+                      final v = details.primaryVelocity;
+                      if (v == null) return;
+                      final leftHanded =
+                          Settings.instance.dominantHand == DominantHand.left;
+                      final sign = leftHanded ? -1 : 1;
+                      if (v > kSwipeStrongVelocity) {
+                        FeatureUsageTracker.instance.increment(
+                          FeatureUsageKeys.gesture('swipe_right'),
+                        );
+                        _vm.cycleMode(1 * sign);
+                      } else if (v < -kSwipeStrongVelocity) {
+                        FeatureUsageTracker.instance.increment(
+                          FeatureUsageKeys.gesture('swipe_left'),
+                        );
+                        _vm.cycleMode(-1 * sign);
+                      } else if (v.abs() > kSwipeWeakVelocity) {
+                        _notifyWeakGesture();
+                      }
+                    }
+                  : null,
+              onVerticalDragEnd: gesturesEnabled
+                  ? (details) {
+                      final v = details.primaryVelocity;
+                      if (v == null) return;
+                      final classic = Settings.instance.classicGestures;
+                      if (v < -kSwipeStrongVelocity) {
+                        FeatureUsageTracker.instance.increment(
+                          FeatureUsageKeys.gesture('swipe_up'),
+                        );
+                        classic ? _vm.togglePitchBlack() : _vm.showHelp();
+                      } else if (v > kSwipeStrongVelocity) {
+                        FeatureUsageTracker.instance.increment(
+                          FeatureUsageKeys.gesture('swipe_down'),
+                        );
+                        classic ? _vm.showHelp() : _vm.togglePitchBlack();
+                      } else if (v.abs() > kSwipeWeakVelocity) {
+                        _notifyWeakGesture();
+                      }
+                    }
+                  : null,
+              child: ExcludeSemantics(
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
                     if (ready) CameraPreview(ctrl),
+                    if (widget.simulation?.preview case final preview?)
+                      Image.memory(
+                        preview,
+                        fit: BoxFit.contain,
+                        gaplessPlayback: true,
+                      ),
                     Positioned.fill(
                       child: ValueListenableBuilder<List<Track>>(
                         valueListenable: _vm.tracksNotifier,
@@ -3032,147 +3671,72 @@ class _AiCameraScreenState extends State<AiCameraScreen>
                   ],
                 ),
               ),
-
-              if (_vm.isPitchBlack)
-                Positioned.fill(child: Container(color: Colors.black)),
-
-              if (_vm.isPitchBlack)
-                Positioned(
-                  top: 48,
-                  right: 16,
-                  child: Container(
-                    width: 4,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: Colors.green.withValues(alpha: 0.3),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
-
-              if (_fallCountdown.active)
-                Positioned.fill(
-                  child: Container(
-                    color: BagdarOverlay.statusFill(
-                      BagdarStatusLevel.danger,
-                      colors,
-                    ).withValues(alpha: 0.3),
-                    child: Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            Icons.warning_amber,
-                            size: 60,
-                            color: BagdarOverlay.foreground,
-                          ),
-                          const SizedBox(height: BagdarSpacing.m),
-                          Text(
-                            '${S.get('sos_fall_countdown')} ${_fallCountdown.secondsLeft} ${S.get('sos_fall_seconds')}',
-                            style: BagdarTypography.title.copyWith(
-                              color: BagdarOverlay.foreground,
-                              shadows: BagdarOverlay.textShadows,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: BagdarSpacing.s),
-                          Text(
-                            S.get('sos_fall_cancelled'),
-                            style: BagdarTypography.caption.copyWith(
-                              color: BagdarOverlay.foregroundMuted,
-                              shadows: BagdarOverlay.textShadows,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-
-              Positioned.fill(
-                child: Semantics(
-                  label: S.get(
-                    Settings.instance.classicGestures
-                        ? 'camera_screen_semantics_classic'
-                        : 'camera_screen_semantics',
-                  ),
-                  child: const SizedBox.expand(),
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: SafeArea(
-                  top: false,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      ExcludeSemantics(
-                        child: StatusPanel(
-                          statusLine: _vm.statusLine,
-                          tracksNotifier: _vm.tracksNotifier,
-                          imgW: _imgW,
-                          imgH: _imgH,
-                          viewportAspect: MediaQuery.sizeOf(
-                            context,
-                          ).aspectRatio,
-                          mode: _vm.mode,
-                        ),
-                      ),
-                      if (_shouldShowShelf())
-                        QuickShelf(
-                          activeTask: _shelfTask,
-                          onTaskSelected: _onShelfTaskSelected,
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-
-              if (_fieldLog.active)
-                Positioned(
-                  top: 48,
-                  left: 16,
-                  child: Row(
-                    children: [
-                      _FieldMarkerButton(
-                        color: BagdarOverlay.statusFill(
-                          BagdarStatusLevel.danger,
-                          colors,
-                        ),
-                        icon: Icons.cancel,
-                        label: 'FP',
-                        onActivate: () {
-                          _fieldLog.logFpMarker();
-                          HapticService.vibrate(const [0, 60, 40, 60]);
-                        },
-                      ),
-                      const SizedBox(width: 12),
-                      _FieldMarkerButton(
-                        color: BagdarOverlay.statusFill(
-                          BagdarStatusLevel.caution,
-                          colors,
-                        ),
-                        icon: Icons.warning,
-                        label: 'FN',
-                        onActivate: () {
-                          _fieldLog.logFnMarker();
-                          HapticService.vibrate(const [0, 60, 40, 60]);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-
-              if (_isVoiceListening)
-                VoiceLayer(
-                  onCancel: () {
-                    unawaited(_vm.voice.stopListening());
-                  },
-                ),
-            ],
+            ),
           ),
+          overlays: [
+            if (widget.simulation != null)
+              Positioned(
+                top: 4,
+                left: 4,
+                right: 4,
+                child: SafeArea(
+                  child: ColoredBox(
+                    color: Colors.black87,
+                    child: Padding(
+                      padding: const EdgeInsets.all(6),
+                      child: Text(
+                        'СИМУЛЯЦИЯ · ${widget.simulation!.sequence.id}\n${_vm.statusLine}',
+                        style: const TextStyle(
+                          color: Colors.amber,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            if (_fieldLog.active)
+              Positioned(
+                top: 48,
+                left: 16,
+                child: Row(
+                  children: [
+                    _FieldMarkerButton(
+                      color: BagdarOverlay.statusFill(
+                        BagdarStatusLevel.danger,
+                        colors,
+                      ),
+                      icon: Icons.cancel,
+                      label: 'FP',
+                      onActivate: () {
+                        _fieldLog.logFpMarker();
+                        HapticService.vibrate(const [0, 60, 40, 60]);
+                      },
+                    ),
+                    const SizedBox(width: 12),
+                    _FieldMarkerButton(
+                      color: BagdarOverlay.statusFill(
+                        BagdarStatusLevel.caution,
+                        colors,
+                      ),
+                      icon: Icons.warning,
+                      label: 'FN',
+                      onActivate: () {
+                        _fieldLog.logFnMarker();
+                        HapticService.vibrate(const [0, 60, 40, 60]);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+
+            if (_isVoiceListening)
+              VoiceLayer(
+                onCancel: () {
+                  unawaited(_vm.voice.stopListening());
+                },
+              ),
+          ],
         ),
       ),
     );

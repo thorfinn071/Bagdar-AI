@@ -74,17 +74,17 @@ class BagdarColors {
   );
 
   static const light = BagdarColors(
-    surfaceBg: Color(0xFFFFFFFF),
-    surfaceElevated: Color(0xFFF2F4F7),
-    textPrimary: Color(0xFF0A1628),
-    textSecondary: Color(0xFF1F2A3D),
-    accentPrimary: Color(0xFF0A1628),
+    surfaceBg: Color(0xFFF6F6F3),
+    surfaceElevated: Color(0xFFFFFFFF),
+    textPrimary: Color(0xFF25252A),
+    textSecondary: Color(0xFF626462),
+    accentPrimary: Color(0xFF273C37),
     accentOnPrimary: Color(0xFFFFFFFF),
     stateSuccess: Color(0xFF0F5132),
     stateWarning: Color(0xFF7A4F00),
     stateDanger: Color(0xFF7A0E1A),
-    focusRing: Color(0xFF0A1628),
-    divider: Color(0xFF0A1628),
+    focusRing: Color(0xFF273C37),
+    divider: Color(0xFFE0E2DF),
   );
 
   static const highContrast = BagdarColors(
@@ -127,6 +127,20 @@ class BagdarColors {
         return warm;
     }
   }
+
+  /// Decorative group separators and accessible control outlines have
+  /// different contrast requirements. Never use [divider] for an input edge.
+  Color get controlBorder => textSecondary;
+  bool get _monochrome => accentPrimary == const Color(0xFFFFFFFF);
+  Color get surfaceSelected => _monochrome
+      ? surfaceElevated
+      : Color.alphaBlend(
+          accentPrimary.withValues(alpha: 0.08),
+          surfaceElevated,
+        );
+  Color get disabledFill => _monochrome
+      ? surfaceElevated
+      : Color.alphaBlend(textPrimary.withValues(alpha: 0.12), surfaceElevated);
 
   /// Returns pure black or pure white — whichever yields the higher WCAG
   /// contrast against [bg]. Used by signage fills (status badges, accent
@@ -181,24 +195,37 @@ class BagdarTypography {
 
   static const TextStyle title = TextStyle(
     fontFamily: fontFamily,
-    fontSize: 30,
-    fontWeight: weightHeavy,
-    height: 38 / 30,
-    letterSpacing: 0.15,
+    fontSize: 32,
+    fontWeight: weightBold,
+    height: 1.2,
   );
 
   static const TextStyle body = TextStyle(
     fontFamily: fontFamily,
-    fontSize: 20,
-    fontWeight: weightMedium,
-    height: 28 / 20,
+    fontSize: 18,
+    fontWeight: weightRegular,
+    height: 1.5,
   );
 
   static const TextStyle caption = TextStyle(
     fontFamily: fontFamily,
+    fontSize: 16,
+    fontWeight: weightRegular,
+    height: 1.5,
+  );
+
+  static const TextStyle section = TextStyle(
+    fontFamily: fontFamily,
+    fontSize: 20,
+    fontWeight: weightBold,
+    height: 1.4,
+  );
+
+  static const TextStyle button = TextStyle(
+    fontFamily: fontFamily,
     fontSize: 18,
-    fontWeight: weightMedium,
-    height: 24 / 18,
+    fontWeight: weightBold,
+    height: 1.4,
   );
 
   /// All-caps signage label (mode badges, status words). Wide tracking
@@ -221,6 +248,7 @@ class BagdarSpacing {
   static const double m = 16.0;
   static const double l = 24.0;
   static const double xl = 32.0;
+  static const double contentMaxWidth = 560.0;
 
   static const double tapMinimum = 64.0;
   static const double tapPrimary = 88.0;
@@ -232,15 +260,15 @@ class BagdarSpacing {
   static const double offlineBannerHeight = 32.0;
 }
 
-/// Corner radii. The Hi-Vis Wayfinding language favours near-sharp,
-/// signage-like corners over soft rounding.
+/// Shared form, card and sheet geometry across onboarding and inspection.
 @immutable
 class BagdarRadius {
   const BagdarRadius._();
 
   static const double sharp = 2.0;
-  static const double card = 6.0;
-  static const double panel = 10.0;
+  static const double control = 12.0;
+  static const double card = 16.0;
+  static const double panel = 20.0;
   static const double pill = 999.0;
 }
 

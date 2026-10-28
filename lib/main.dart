@@ -2,14 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'core/core_feature_policy.dart';
-import 'onboarding_screen.dart';
-import 'services/feature_usage_tracker.dart';
+import 'features/onboarding_v2/onboarding_boot_screen.dart';
 import 'services/field_logger.dart';
-import 'services/language_pack_manager.dart';
-import 'services/native_tts_bridge.dart';
-import 'services/paddle_ocr_bridge.dart';
-import 'services/settings_service.dart';
 import 'theme/bagdar_theme.dart';
 import 'theme/bagdar_tokens.dart';
 
@@ -26,22 +20,9 @@ void main() {
         );
       };
 
-      await Settings.instance.init();
-      await FeatureUsageTracker.instance.init();
-
-      await LanguagePackManager.instance.init();
-      unawaited(LanguagePackManager.instance.fetchManifest());
-
-      unawaited(NativeTtsBridge.instance.init());
-
-      if (CoreFeaturePolicy.current.mayInitialize(CoreFeature.paddleOcr)) {
-        unawaited(PaddleOcrBridge.instance.init());
-      }
-
-      bagdarThemeNotifier.value = Settings.instance.themeMode;
-
-      final startScreen = await resolveStartScreen();
-      runApp(BagdarApp(home: startScreen));
+      // Every launch enters v2. Runtime services start only after admission.
+      // Paint an accessible shell before awaiting preferences or device probes.
+      runApp(const BagdarApp(home: OnboardingBootScreen()));
     },
     (error, stack) {
       FieldLogger.instance.logError('uncaught_zone', error.toString());
@@ -58,12 +39,13 @@ class BagdarApp extends StatelessWidget {
     return ValueListenableBuilder<BagdarThemeName>(
       valueListenable: bagdarThemeNotifier,
       builder: (context, themeName, _) {
-        final colors = BagdarColors.of(themeName);
         return MaterialApp(
           title: 'Bagdar AI',
           debugShowCheckedModeBanner: false,
           theme: BagdarTheme.buildMaterialTheme(themeName),
-          home: BagdarTheme(name: themeName, colors: colors, child: home),
+          builder: (context, child) =>
+              BagdarThemeScope(name: themeName, child: child!),
+          home: home,
         );
       },
     );

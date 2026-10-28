@@ -114,6 +114,61 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Вибрация недоступна. Голосовые предупреждения остаются.',
     'core_health_recovered': 'Система восстановилась.',
     'core_health_status': 'Состояние системы',
+    'inspection_title': 'Осмотр на месте',
+    'inspection_help': 'Как пользоваться',
+    'inspection_finish': 'Завершить осмотр',
+    'inspection_close': 'Закрыть',
+    'inspection_repeat_status': 'Повторить состояние вслух',
+    'inspection_status_limits':
+        'Состояние служб не подтверждает точность распознавания или безопасность пути. Оставайтесь на месте.',
+    'inspection_help_body':
+        'Оставайтесь на месте. Bagdar пока не подтверждает безопасность самостоятельной ходьбы.\n\nСостояние системы: откройте сведения о камере, обработке, звуке и вибрации. Повтор вслух запускается отдельной кнопкой.\n\nНастройки: измените язык, речь и экранную шторку. Шторка скрывает изображение; кнопки остаются доступны экранному диктору.\n\nSOS — нужна помощь: откройте подтверждение ручного запроса. Во время отсчёта после падения отмена требует двух действий за три секунды.\n\nЗавершить осмотр: закрывает камеру и возвращает к проверке сеанса. Для нового осмотра потребуется обновить проверки. Обычных кнопок достаточно; собственные жесты Bagdar и микрофон не обязательны.',
+    'inspection_permission_recovery':
+        'Разрешение камеры не получено. Разрешите доступ в системных настройках или повторите запрос. Справка, настройки Bagdar, SOS и завершение остаются доступны.',
+    'inspection_retry_permission': 'Повторить запрос камеры',
+    'inspection_camera_paused': 'Камера осмотра остановлена',
+    'inspection_camera_recovery':
+        'Камера была освобождена для сканера QR. Осмотр пока не возобновлён. Оставайтесь на месте: повторите запуск камеры или завершите осмотр.',
+    'inspection_retry_camera': 'Запустить камеру осмотра',
+    'inspection_system_settings': 'Системные настройки камеры',
+    'inspection_permission_denied': 'нет разрешения',
+    'inspection_camera_waiting': 'поток камеры недоступен',
+    'inspection_camera': 'Камера',
+    'inspection_objects': 'Распознавание объектов',
+    'inspection_geometry': 'Анализ пространства',
+    'inspection_audio': 'Звук',
+    'inspection_haptics': 'Вибрация',
+    'inspection_state_unchecked': 'не проверено',
+    'inspection_state_initializing': 'запускается',
+    'inspection_state_available': 'доступно',
+    'inspection_state_degraded': 'работает с ограничениями',
+    'inspection_state_unavailable': 'недоступно',
+    'inspection_state_recovering': 'восстанавливается',
+    'inspection_state_stopped': 'остановлено',
+    'inspection_run_starting': 'Службы запускаются',
+    'inspection_run_operational': 'Службы запущены',
+    'inspection_run_degraded': 'Есть ограничения служб',
+    'inspection_run_unavailable': 'Часть служб недоступна',
+    'inspection_run_recovering': 'Службы восстанавливаются',
+    'inspection_run_stopped': 'Службы остановлены',
+    'inspection_run_camera_unavailable': 'Осмотр камерой недоступен',
+    'inspection_observation_notChecked': 'Результатов анализа камеры пока нет',
+    'inspection_observation_unavailable':
+        'Результаты анализа камеры недоступны',
+    'inspection_observation_stale':
+        'Данные камеры устарели. Ожидается новый кадр',
+    'inspection_observation_adjustPhone':
+        'Поправьте положение телефона для осмотра',
+    'inspection_observation_noObstacleReported':
+        'В последнем анализе камеры препятствия не отмечены. Это не подтверждает свободный путь',
+    'inspection_observation_possibleObstacle':
+        'В кадре возможны препятствия. Их расстояние и возможность прохода не подтверждены',
+    'inspection_clearance_notAvailable':
+        'Этот режим камеры не проверяет всё пространство, необходимое для прохода',
+    'inspection_clearance_experimentalOnly':
+        'Измерения пространства экспериментальные. Возможность прохода не подтверждена',
+    'inspection_movement_stationary_only':
+        'Осматривайтесь стоя на месте. Помощь при ходьбе недоступна',
     'generic_obstacle_ahead': 'Препятствие впереди.',
     'generic_obstacle_stop': 'Стоп. Препятствие впереди.',
     'generic_obstacle_left': 'Препятствие слева.',
@@ -161,101 +216,11 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'calib_recommend':
         'Для точного определения расстояния рекомендуем калибровку в настройках.',
 
-    'onb_welcome_tts':
-        'Добро пожаловать в Bagdar. Выберите режим. '
-        'Свайп вверх или вниз — режим, двойной тап — выбрать.',
-    'onb_welcome_intro_tts':
-        'Здравствуйте. Багдар — это голосовой помощник для незрячих, помогающий ориентироваться в пространстве и избегать препятствий. Начнем настройку. Выберите язык. Свайп вверх или вниз — изменить язык. Двойной тап — выбрать. Или назовите язык вслух: Русский, Казахский или Английский.',
-    'onb_dominant_hand_tts':
-        'Шаг первый. Выберите ведущую руку. Это влияет на расположение жестов на экране. Свайп вверх или вниз — изменить выбор. Двойной тап — подтвердить. Или скажите вслух: Правая, или Левая.',
-    'onb_mode_tts':
-        'Шаг второй. Выберите режим работы по умолчанию. Свайп вверх или вниз — изменить режим. Двойной тап — подтвердить. Или скажите: Улица, Трость, или Сканирование.',
-    'onb_perm_tts':
-        'Разрешение камеры. Двойной тап — открыть запрос системы. Найдите кнопку Разрешить. Или скажите вслух: Разрешить.',
-    'onb_calib_tts':
-        'Калибровка расстояния. Для повышения точности рекомендуется калибровка. Вы сможете выполнить её в настройках, наведя камеру на человека в двух метрах от вас. Двойной тап, чтобы продолжить.',
-    'onb_ready_tts': 'Всё готово. Двойной тап — начать.',
-    'onb_hand_right': 'Правая рука',
-    'onb_hand_left': 'Левая рука',
-    'onb_hand_changed': 'Ведущая рука изменена на {hand}',
-    'onb_secondary_aid_tts':
+    'secondary_aid_disclaimer':
         'Bagdar предупреждает о препятствиях, но может их пропустить. '
         'Продолжайте использовать белую трость или собаку-поводыря. '
         'Bagdar — дополнительное средство.',
-    'onb_secondary_aid_check':
-        'Bagdar — дополнительное средство, не замена трости',
-    'onb_blind_intro':
-        'Bagdar для незрячих. Управление жестами. '
-        'Один тап — повторить. Двойной тап — продолжить. '
-        'Свайп вправо — следующий шаг, влево — назад. '
-        'Долгое нажатие — смена языка. '
-        'Если рядом есть близкий человек, рекомендуется передать ему телефон для первоначальной настройки.',
-    'onb_gesture_help':
-        'Жесты онбординга. Один тап — повторить инструкцию. '
-        'Двойной тап — основное действие. Свайп вправо или влево — навигация. '
-        'Долгое нажатие — смена языка. Свайп вниз — пропустить онбординг. '
-        'Два пальца на две секунды — экстренный выход.',
-    'onb_mode_select_announce': 'Режим: {mode}. Двойной тап — выбрать.',
-    'onb_skip_confirm':
-        'Пропустить всю настройку приложения? Двойной тап подтвердит. Один тап отменит.',
-    'onb_skip_cancelled': 'Отменено.',
-    'onb_lang_switched': 'Язык: русский.',
-    'onb_calib_saved_tts': 'Отлично! Калибровка сохранена. Нажмите Продолжить.',
-    'onb_calib_skip_tts':
-        'Калибровка пропущена. Вы сможете выполнить её позже в настройках.',
-    'onb_welcome_title': 'Добро пожаловать\nв Bagdar',
-    'onb_welcome_sub':
-        'Выберите режим по умолчанию.\nЕго можно изменить в любой момент.',
-    'onb_perm_title': 'Нужен доступ',
-    'onb_perm_sub': 'Только камера обязательна.\nОстальное — по желанию.',
-    'onb_calib_title': 'Точность расстояния',
-    'onb_calib_sub':
-        'Без калибровки погрешность ~40%.\nПосле — ~10%. Займёт 10 секунд.',
-    'onb_calib_app_note':
-        'Калибровку можно выполнить в Настройках после запуска приложения.',
-    'onb_ready_title': 'Всё готово!',
-    'onb_ready_sub': 'Bagdar настроен. Вот что умеет приложение:',
-    'onb_btn_continue': 'Продолжить',
-    'onb_btn_allow_camera': 'Разрешить камеру',
-    'onb_btn_skip': 'Пропустить остальное',
-    'onb_btn_calibrate': 'Я стою в 2 метрах — откалибровать',
-    'onb_btn_skip_calib': 'Пропустить — настрою позже',
-    'onb_btn_calib_later': 'Откалибрую в настройках',
-    'onb_btn_start': 'Начать',
-    'onb_btn_back_calib': 'Вернуться к калибровке',
-    'onb_calib_done': 'Калибровка выполнена — точность улучшена!',
-    'onb_calib_hint': 'Попросите кого-нибудь встать в 2 м от вас',
-    'onb_check_alerts': 'Голосовые предупреждения об объектах',
-    'onb_check_mode': 'выбран по умолчанию',
-    'onb_check_calib': 'Калибровка камеры',
-    'onb_check_calib_skip': 'Доступна в Настройках → Калибровка камеры',
-    'onb_feat_scan': 'Кнопка «Что вокруг?» — описание сцены',
-    'onb_feat_mode': 'Иконка режима — переключение Улица / Трость / Скан',
-    'onb_feat_settings': 'Настройки — калибровка, GPU, Debug HUD',
-    'onb_lang_title': 'Выберите язык',
-    'onb_lang_sub': 'Язык можно изменить в настройках',
-    'onb_mic_exhausted':
-        'Я не слышу вашего ответа. Используйте жесты: '
-        'проведите вверх или вниз для выбора, дважды коснитесь для подтверждения. '
-        'Коснитесь экрана один раз, чтобы я повторил.',
-    'onb_mode_choose_first':
-        'Сначала выберите режим. Скажите: улица, трость или сканирование.',
-    'onb_perm_talkback_guide':
-        'Сейчас появятся системные диалоги разрешений. '
-        'Их будет три: камера, микрофон и геолокация. '
-        'Используйте TalkBack — проведите вправо до кнопки Разрешить и дважды коснитесь. '
-        'Я подожду.',
-    'onb_perm_tap_guide':
-        'Сейчас появятся системные диалоги. '
-        'В каждом нажмите кнопку Разрешить в нижней части экрана. '
-        'Если рядом есть зрячий помощник, попросите его помочь. Я подожду.',
-    'onb_perm_camera_ok': 'Камера разрешена.',
-    'onb_perm_mic_ok': 'Микрофон разрешён.',
-    'onb_perm_all_granted':
-        'Все разрешения получены. Отлично! Переходим дальше.',
-    'onb_perm_denied_retry':
-        'Камера не разрешена. Без камеры приложение не видит препятствий. '
-        'Скажите «разрешить» для повторной попытки, или «пропустить».',
+    'continue_action': 'Продолжить',
 
     'tut_title': 'Обучение жестам',
     'tut_intro':
@@ -499,26 +464,46 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sos_no_location': 'Не удалось определить местоположение.',
     'sos_no_gps': 'местоположение недоступно',
     'sos_settings': 'SOS контакт',
+    'sos_contact_pick': 'Выбрать из контактов',
+    'sos_contact_number': 'Номер SOS-контакта',
+    'sos_contact_no_number':
+        'У контакта нет номера. Введите номер вручную или выберите другой контакт.',
+    'sos_contact_pick_failed':
+        'Не удалось открыть контакты. Введите номер вручную или повторите выбор.',
+    'sos_contact_save_failed':
+        'Не удалось сохранить номер. Проверьте номер и повторите.',
+    'sos_contact_wait': 'Подождите, выполняем действие.',
     'sos_message': 'Мне нужна помощь! Моё местоположение:',
     'sos_invalid_number': 'Некорректный номер телефона.',
     'sos_launch_failed': 'Не удалось открыть приложение для SMS.',
     'sos_error': 'Не удалось отправить SOS.',
-    'sos_fall_detected':
-        'Обнаружено падение. SOS будет отправлен через 15 секунд. Нажмите на экран для отмены.',
-    'sos_fall_classb_detected':
-        'Вы в порядке? Нажмите на экран для отмены. SOS будет отправлен через 30 секунд.',
+    'sos_fall_detected': 'Обнаружено падение. Начат отсчёт SOS.',
+    'sos_fall_classb_detected': 'Вы в порядке? Начат отсчёт SOS.',
     'sos_fall_countdown': 'SOS через',
     'sos_fall_seconds': 'секунд.',
     'sos_fall_cancelled': 'Отправка SOS отменена.',
     'sos_fall_sent': 'SOS отправлен после падения.',
     'sos_user_fallen_again': 'Внимание: пользователь упал снова.',
     'sos_fall_cancel_hint':
-        'Скажите "я в порядке" или "ложная тревога". Прикоснитесь к экрану для отмены.',
+        'Для отмены нажмите «Отменить SOS» и подтвердите за три секунды.',
     'sos_fall_voice_confirm_prompt': 'Подтвердите: скажите "я в порядке".',
     'sos_fall_voice_cancel_rejected':
         'Отмена не подтверждена. Продолжаю отсчёт.',
     'sos_fall_are_you_ok': 'Вы в порядке? Нажмите для подтверждения.',
-    'sos_cancel_confirm': 'Коснитесь ещё раз для отмены SOS.',
+    'sos_cancel_confirm': 'Подтвердите отмену за три секунды.',
+    'sos_action': 'SOS — нужна помощь',
+    'sos_manual_title': 'Отправить SOS?',
+    'sos_manual_body':
+        'Bagdar попробует отправить сообщение о помощи. Если откроется SMS-приложение или набиратель, завершите действие там.',
+    'sos_keep_using': 'Вернуться без отправки',
+    'sos_send_action': 'Отправить SOS',
+    'sos_cancel_action': 'Отменить SOS',
+    'sos_confirm_cancel_action': 'Подтвердить отмену',
+    'sos_cancel_action_hint':
+        'Для отмены нажмите «Отменить SOS», затем подтвердите в течение 3 секунд.',
+    'sos_cancel_pending_hint':
+        'Нажмите «Подтвердить отмену» в течение 3 секунд. Отсчёт продолжается.',
+    'sos_dismiss_action': 'Закрыть сообщение',
     'sos_112_fallback':
         'Контакт не задан. SOS будет отправлен на экстренный номер 112.',
     'sos_position_stale': 'Местоположение устарело на',
@@ -789,17 +774,6 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Проведите вверх для справки.',
     'audio_tour_done': 'Удачного пользования!',
 
-    'onb_sos_title': 'Экстренный контакт',
-    'onb_sos_sub':
-        'Укажите номер близкого человека.\\nBagdar отправит SMS с вашим местоположением при экстренном вызове.',
-    'onb_sos_tts':
-        'Укажите номер для экстренных ситуаций. '
-        'Bagdar отправит SMS с вашей локацией. '
-        'Можно пропустить и настроить позже.',
-    'onb_sos_placeholder': '+7 (___) ___-__-__',
-    'onb_sos_save': 'Сохранить контакт',
-    'onb_sos_skip': 'Настрою позже',
-
     'settings_calibration': 'Калибровка камеры',
     'settings_calibration_desc': 'Встаньте точно на 2 м от человека и нажмите',
     'settings_read_text': 'Прочитать текст',
@@ -887,8 +861,15 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Карта района не загружена. Скажите "загрузи карту".',
     'settings_save_failed':
         'Не удалось сохранить настройку. Попробуйте ещё раз.',
+    'ui_back': 'Назад',
+    'appearance_title': 'Оформление',
+    'settings_diagnostics': 'Диагностика и обработка',
+    'theme_light': 'Светлая',
+    'theme_dark': 'Тёмная',
+    'theme_high_contrast': 'Высокий контраст',
+    'theme_warm': 'Тёплая',
     'theme_selected_dark': 'Тёмная тема, чёрный экран и жёлтый акцент.',
-    'theme_selected_light': 'Светлая тема, белый экран и тёмно-синий акцент.',
+    'theme_selected_light': 'Светлая тема, светлый фон и тёмно-зелёный акцент.',
     'theme_selected_high_contrast': 'Высокий контраст, только белое на чёрном.',
     'theme_selected_warm':
         'Тёплая тема, кремовый экран и тёмно-коричневый текст.',
@@ -927,12 +908,6 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'voice_kk_v2_pack_missing':
         'Пакет не установлен. Откройте языковые пакеты для установки.',
     'voice_manage_lang_packs_announce': 'Открываю языковые пакеты.',
-    'onb_kk_pack_prompt_title': 'Казахское распознавание',
-    'onb_kk_pack_prompt_body':
-        'Скачать пакет казахского распознавания сейчас? Около 50 МБ.',
-    'onb_kk_pack_yes': 'Скачать',
-    'onb_kk_pack_skip': 'Пропустить',
-    'onb_kk_pack_later': 'Напомнить в сети',
     'lang_pack_online_ready':
         'Сеть восстановлена. Пакет казахского распознавания готов к установке. Скажите «языковые пакеты».',
 
@@ -948,12 +923,6 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Казахский голос недоступен. Читаю казахский текст русским голосом.',
     'tts_kk_engine_load_failed':
         'Не удалось загрузить казахский голос. Перехожу на запасной вариант.',
-    'onb_rhvoice_pack_prompt_title': 'Лучший казахский голос',
-    'onb_rhvoice_pack_prompt_body':
-        'Скачать высококачественный казахский голос сейчас? Около 30 МБ. Голос работает без интернета.',
-    'onb_rhvoice_pack_yes': 'Скачать',
-    'onb_rhvoice_pack_skip': 'Пропустить',
-    'onb_rhvoice_pack_later': 'Напомнить в сети',
     'lang_pack_rhvoice_online_ready':
         'Сеть восстановлена. Пакет казахского голоса готов к установке. Скажите «языковые пакеты».',
 
@@ -1023,27 +992,10 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sonar_stopped': 'Эхолот выключен.',
     'sonar_calibrating': 'Калибрую эхолот.',
     'sonar_no_48k': 'Микрофон не поддерживает эхолот.',
-    'onb_mic_prime_tts':
-        'Для голосового управления мне нужен доступ к микрофону. Сейчас появится системный диалог.',
-    'onb_mic_denied_fallback_tts':
-        'Доступ к микрофону отклонён. Голосовое управление отключено. Пожалуйста, используйте жесты для настройки.',
-    'onb_mode_confirm_prompt':
-        'Режим выбран. Скажите да для продолжения или назовите другой режим.',
     'sos_setup_prompt_tts':
         'Пожалуйста, укажите телефон близкого человека для экстренной помощи SOS.',
     'camera_perm_recovery_tts':
         'Доступ к камере заблокирован. Пожалуйста, разрешите доступ в настройках телефона. Дважды коснитесь для настроек, один раз для повтора.',
-    'onb_help_prompt_lang':
-        'Выберите язык. Произнесите: Русский, Казахский или Английский.',
-    'onb_help_prompt_hand': 'Выберите ведущую руку. Скажите: Правая или Левая.',
-    'onb_help_prompt_mode':
-        'Выберите режим по умолчанию. Скажите: Улица, Трость или Сканирование.',
-    'onb_help_prompt_perm': 'Разрешите доступ к камере. Скажите: Разрешить.',
-    'onb_help_prompt_calib':
-        'Калибровка расстояния. Скажите: Да для продолжения.',
-    'onb_help_prompt_ready': 'Все готово. Скажите: Да чтобы начать.',
-    'onb_emergency_skip_confirm':
-        'Вы хотите пропустить всю настройку приложения? Двойной тап подтвердит. Один тап отменит.',
   },
 
   AppLanguage.kk: {
@@ -1106,6 +1058,61 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Діріл қолжетімсіз. Дауыстық ескертулер қалады.',
     'core_health_recovered': 'Жүйе қалпына келді.',
     'core_health_status': 'Жүйе күйі',
+    'inspection_title': 'Орныңызда тұрып шолу',
+    'inspection_help': 'Қалай пайдалану керек',
+    'inspection_finish': 'Шолуды аяқтау',
+    'inspection_close': 'Жабу',
+    'inspection_repeat_status': 'Күйді дауыстап қайталау',
+    'inspection_status_limits':
+        'Қызметтердің күйі тану дәлдігін немесе жол қауіпсіздігін растамайды. Орныңызда қалыңыз.',
+    'inspection_help_body':
+        'Орныңызда қалыңыз. Bagdar әзірге өздігінен жүру қауіпсіздігін растамайды.\n\nЖүйе күйі: камера, өңдеу, дыбыс және діріл туралы мәліметті ашыңыз. Дауыстап оқу бөлек түймемен іске қосылады.\n\nБаптаулар: тілді, сөйлеуді және экран пердесін өзгертіңіз. Перде кескінді жасырады; түймелер экран оқу бағдарламасына қолжетімді болып қалады.\n\nSOS — көмек керек: қолмен сұрауды растауды ашыңыз. Құлағаннан кейінгі кері санақты тоқтату үшін үш секунд ішінде екі әрекет қажет.\n\nШолуды аяқтау: камераны жауып, сеанс тексеруіне қайтарады. Жаңа шолу үшін тексерулерді жаңарту қажет. Қалыпты түймелер жеткілікті; Bagdar қимылдары мен микрофон міндетті емес.',
+    'inspection_permission_recovery':
+        'Камераға рұқсат берілмеген. Жүйе баптауларында рұқсат беріңіз немесе сұрауды қайталаңыз. Анықтама, Bagdar баптаулары, SOS және аяқтау қолжетімді.',
+    'inspection_retry_permission': 'Камера рұқсатын қайта сұрау',
+    'inspection_camera_paused': 'Шолу камерасы тоқтатылды',
+    'inspection_camera_recovery':
+        'Камера QR сканері үшін босатылды. Шолу әлі жалғасқан жоқ. Орныңызда қалыңыз: камераны қайта іске қосыңыз немесе шолуды аяқтаңыз.',
+    'inspection_retry_camera': 'Шолу камерасын іске қосу',
+    'inspection_system_settings': 'Камераның жүйе баптаулары',
+    'inspection_permission_denied': 'рұқсат жоқ',
+    'inspection_camera_waiting': 'камера ағыны қолжетімсіз',
+    'inspection_camera': 'Камера',
+    'inspection_objects': 'Нысандарды тану',
+    'inspection_geometry': 'Кеңістікті талдау',
+    'inspection_audio': 'Дыбыс',
+    'inspection_haptics': 'Діріл',
+    'inspection_state_unchecked': 'тексерілмеген',
+    'inspection_state_initializing': 'іске қосылуда',
+    'inspection_state_available': 'қолжетімді',
+    'inspection_state_degraded': 'шектеулермен жұмыс істейді',
+    'inspection_state_unavailable': 'қолжетімсіз',
+    'inspection_state_recovering': 'қалпына келуде',
+    'inspection_state_stopped': 'тоқтатылған',
+    'inspection_run_starting': 'Қызметтер іске қосылуда',
+    'inspection_run_operational': 'Қызметтер іске қосылған',
+    'inspection_run_degraded': 'Қызметтерде шектеулер бар',
+    'inspection_run_unavailable': 'Кейбір қызметтер қолжетімсіз',
+    'inspection_run_recovering': 'Қызметтер қалпына келуде',
+    'inspection_run_stopped': 'Қызметтер тоқтатылған',
+    'inspection_run_camera_unavailable': 'Камерамен шолу қолжетімсіз',
+    'inspection_observation_notChecked': 'Камера талдауының нәтижесі әлі жоқ',
+    'inspection_observation_unavailable':
+        'Камера талдауының нәтижесі қолжетімсіз',
+    'inspection_observation_stale':
+        'Камера деректері ескірді. Жаңа кадр күтілуде',
+    'inspection_observation_adjustPhone':
+        'Шолу үшін телефонның қалпын түзетіңіз',
+    'inspection_observation_noObstacleReported':
+        'Соңғы камера талдауында кедергі байқалмады. Бұл жолдың ашық екенін растамайды',
+    'inspection_observation_possibleObstacle':
+        'Кадрда кедергі болуы мүмкін. Қашықтық пен өтуге жеткілікті орын расталмаған',
+    'inspection_clearance_notAvailable':
+        'Камераның бұл режимі өтуге қажет кеңістікті толық тексермейді',
+    'inspection_clearance_experimentalOnly':
+        'Кеңістік өлшемдері тәжірибе үшін алынған. Өту мүмкіндігі расталмаған',
+    'inspection_movement_stationary_only':
+        'Орныңызда тұрып шолыңыз. Жүру кезіндегі көмек қолжетімсіз',
     'generic_obstacle_ahead': 'Алда кедергі.',
     'generic_obstacle_stop': 'Тоқтаңыз. Алда кедергі.',
     'generic_obstacle_left': 'Солда кедергі.',
@@ -1153,101 +1160,11 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'calib_recommend':
         'Дәл қашықтықты анықтау үшін баптауларда калибрлеуді ұсынамыз.',
 
-    'onb_welcome_tts':
-        'Bagdar-ға қош келдіңіз. Режимді таңдаңыз. '
-        'Жоғары немесе төмен сипау — режим, қос тию — таңдау.',
-    'onb_welcome_intro_tts':
-        'Сәлеметсіз бе. Бағдар — бұл көру қабілеті шектелген жандарға арналған, кеңістікте бағдарлауға және кедергілерді айналып өтуге көмектесетін дауыстық көмекші. Баптауды бастайық. Тілді таңдаңыз. Солға немесе оңға свайп арқылы тілді ауыстырыңыз, ал қосарлы тартумен таңдаңыз. Немесе дауыстап айтыңыз: Қазақша, Орысша немесе Ағылшынша.',
-    'onb_dominant_hand_tts':
-        'Бірінші қадам. Ведущая қолды таңдаңыз. Бұл экрандағы қимылдардың орналасуына әсер етеді. Таңдау үшін жоғары немесе төмен свайп жасаңыз. Растау үшін екі рет басыңыз. Немесе дауыстап айтыңыз: Оң қол, немесе Сол қол.',
-    'onb_mode_tts':
-        'Екінші қадам. Әдепкі жұмыс режимін таңдаңыз. Режимді өзгерту үшін жоғары немесе төмен свайп жасаңыз. Растау үшін екі рет басыңыз. Немесе дауыстап айтыңыз: Көше, Таяқ, немесе Сканерлеу.',
-    'onb_perm_tts':
-        'Камераға рұқсат. Қос тию — жүйелік сұрауды ашу. Рұқсат беру түймесін табыңыз. Немесе дауыстап айтыңыз: Рұқсат ету.',
-    'onb_calib_tts':
-        'Қашықтықты калибрлеу. Дәлдікті арттыру үшін калибрлеу ұсынылады. Оны баптаулар мәзірінде сізден екі метр қашықтықта тұрған адамға камераны бағыттау арқылы орындай аласыз. Жалғастыру үшін екі рет басыңыз.',
-    'onb_ready_tts': 'Бәрі дайын. Қос тию — бастау.',
-    'onb_hand_right': 'Оң қол',
-    'onb_hand_left': 'Сол қол',
-    'onb_hand_changed': 'Жетекші қол {hand} болып өзгертілді',
-    'onb_secondary_aid_tts':
+    'secondary_aid_disclaimer':
         'Bagdar кедергілер туралы ескертеді, бірақ оларды жіберіп алуы мүмкін. '
         'Ақ таяқты немесе жолбасшы итті пайдалануды жалғастырыңыз. '
         'Bagdar — қосымша құрал.',
-    'onb_secondary_aid_check': 'Bagdar — қосымша құрал, таяқтың орнына емес',
-    'onb_blind_intro':
-        'Bagdar — көрмейтіндерге арналған. Қимылдармен басқару. '
-        'Бір тию — қайталау. Қос тию — жалғастыру. '
-        'Оңға сипау — келесі қадам, солға — артқа. '
-        'Ұзақ басу — тілді ауыстыру. '
-        'Егер жаныңызда жақын адамыңыз болса, оған телефонды алғашқы баптау үшін беру ұсынылады.',
-    'onb_gesture_help':
-        'Онбординг қимылдары. Бір тию — нұсқауды қайталау. '
-        'Қос тию — негізгі әрекет. Оңға немесе солға сипау — навигация. '
-        'Ұзақ басу — тілді ауыстыру. Төмен сипау — онбордингті өткізу. '
-        'Екі саусақпен екі секунд — шұғыл шығу.',
-    'onb_mode_select_announce': 'Режим: {mode}. Қос тию — таңдау.',
-    'onb_skip_confirm':
-        'Барлық қолданба реттеулерін өткізіп жіберу керек пе? Қос түртіңіз растайды. Бір түрту болдырмайды.',
-    'onb_skip_cancelled': 'Болдырылмады.',
-    'onb_lang_switched': 'Тіл: қазақша.',
-    'onb_calib_saved_tts':
-        'Тамаша! Калибрлеу сақталды. Жалғастыру түймесін басыңыз.',
-    'onb_calib_skip_tts':
-        'Калибрлеу өткізілді. Оны кейін баптауларда орындай аласыз.',
-    'onb_welcome_title': 'Bagdar\nқосымшасына қош келдіңіз',
-    'onb_welcome_sub':
-        'Әдепкі режимді таңдаңыз.\nОны кез келген уақытта өзгертуге болады.',
-    'onb_perm_title': 'Рұқсат қажет',
-    'onb_perm_sub': 'Тек камера міндетті.\nҚалғандары — қалауыңыз бойынша.',
-    'onb_calib_title': 'Қашықтық дәлдігі',
-    'onb_calib_sub':
-        'Калибрлеусіз қателік ~40%.\nКалибрлеуден кейін — ~10%. 10 секунд кетеді.',
-    'onb_calib_app_note':
-        'Калибрлеуді іске қосқаннан кейін Баптауларда орындауға болады.',
-    'onb_ready_title': 'Бәрі дайын!',
-    'onb_ready_sub': 'Bagdar дайын. Қосымшаның мүмкіндіктері:',
-    'onb_btn_continue': 'Жалғастыру',
-    'onb_btn_allow_camera': 'Камераға рұқсат беру',
-    'onb_btn_skip': 'Қалғанын өткізу',
-    'onb_btn_calibrate': 'Мен 2 метрде тұрмын — калибрлеу',
-    'onb_btn_skip_calib': 'Өткізу — кейін баптаймын',
-    'onb_btn_calib_later': 'Баптауларда калибрлеймін',
-    'onb_btn_start': 'Бастау',
-    'onb_btn_back_calib': 'Калибрлеуге оралу',
-    'onb_calib_done': 'Калибрлеу орындалды — дәлдік жақсарды!',
-    'onb_calib_hint': 'Біреуден сізден 2 м қашықтықта тұруды сұраңыз',
-    'onb_check_alerts': 'Нысандар туралы дауыстық ескертулер',
-    'onb_check_mode': 'әдепкі ретінде таңдалды',
-    'onb_check_calib': 'Камераны калибрлеу',
-    'onb_check_calib_skip': 'Баптаулар → Камераны калибрлеу',
-    'onb_feat_scan': '«Айналада не бар?» түймесі — көріністі сипаттау',
-    'onb_feat_mode': 'Режим белгішесі — ауыстыру Көше / Таяқ / Скан',
-    'onb_feat_settings': 'Баптаулар — калибрлеу, GPU, Debug HUD',
-    'onb_lang_title': 'Тілді таңдаңыз',
-    'onb_lang_sub': 'Тілді баптауларда өзгертуге болады',
-    'onb_mic_exhausted':
-        'Жауабыңызды естімей тұрмын. Қимылдарды қолданыңыз: '
-        'таңдау үшін жоғары не төмен сырғытыңыз, растау үшін екі рет түртіңіз. '
-        'Қайталау үшін экранды бір рет түртіңіз.',
-    'onb_mode_choose_first':
-        'Алдымен режимді таңдаңыз. Айтыңыз: көше, таяқ немесе шолу.',
-    'onb_perm_talkback_guide':
-        'Қазір рұқсат сұрайтын жүйелік диалогтар пайда болады. '
-        'Олар үшеу: камера, микрофон және геолокация. '
-        'TalkBack қолданыңыз — Рұқсат ету батырмасына оңға сырғытып, екі рет түртіңіз. '
-        'Мен күтемін.',
-    'onb_perm_tap_guide':
-        'Қазір жүйелік диалогтар пайда болады. '
-        'Әрбірінде экранның төменгі жағындағы Рұқсат ету батырмасын басыңыз. '
-        'Маңайыңызда көмекші болса, көмек сұраңыз. Мен күтемін.',
-    'onb_perm_camera_ok': 'Камераға рұқсат берілді.',
-    'onb_perm_mic_ok': 'Микрофонға рұқсат берілді.',
-    'onb_perm_all_granted':
-        'Барлық рұқсаттар алынды. Тамаша! Келесі қадамға өтеміз.',
-    'onb_perm_denied_retry':
-        'Камераға рұқсат берілмеді. Камерасыз қолданба кедергілерді көрмейді. '
-        'Қайталау үшін «рұқсат» деңіз, немесе «өткізіп жіберу» деңіз.',
+    'continue_action': 'Жалғастыру',
 
     'tut_title': 'Қимылдарға үйрету',
     'tut_intro':
@@ -1484,22 +1401,33 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Сіз ғимарат ішіндесіз. Координаттар дәл болмауы мүмкін.',
     'sos_launch_failed': 'SMS қолданбасын ашу мүмкін болмады.',
     'sos_error': 'SOS жіберу мүмкін болмады.',
-    'sos_fall_detected':
-        'Құлау анықталды. SOS 15 секундтан кейін жіберіледі. Болдырмау үшін экранды басыңыз.',
-    'sos_fall_classb_detected':
-        'Сіз жақсысыз ба? Болдырмау үшін экранды басыңыз. SOS 30 секундтан кейін жіберіледі.',
+    'sos_fall_detected': 'Құлау анықталды. SOS кері санағы басталды.',
+    'sos_fall_classb_detected': 'Сіз жақсысыз ба? SOS кері санағы басталды.',
     'sos_fall_countdown': 'SOS',
     'sos_fall_seconds': 'секундтан кейін.',
     'sos_fall_cancelled': 'SOS жіберу болдырылмады.',
     'sos_fall_sent': 'Құлаудан кейін SOS жіберілді.',
     'sos_user_fallen_again': 'Назар аударыңыз: пайдаланушы қайта құлады.',
     'sos_fall_cancel_hint':
-        '"Мен жақсымын" немесе "жалған дабыл" деп айтыңыз. Болдырмау үшін экранды басыңыз.',
+        'Болдырмау үшін «SOS-ты болдырмау» түймесін басып, үш секунд ішінде растаңыз.',
     'sos_fall_voice_confirm_prompt': 'Растаңыз: "мен жақсымын" деп айтыңыз.',
     'sos_fall_voice_cancel_rejected':
         'Болдырмау расталмады. Кері санақ жалғасуда.',
     'sos_fall_are_you_ok': 'Жайсыз ба? Растау үшін басыңыз.',
-    'sos_cancel_confirm': 'SOS-ты болдырмау үшін тағы бір рет түртіңіз.',
+    'sos_cancel_confirm': 'Үш секунд ішінде болдырмауды растаңыз.',
+    'sos_action': 'SOS — көмек керек',
+    'sos_manual_title': 'SOS жіберілсін бе?',
+    'sos_manual_body':
+        'Bagdar көмек сұрау хабарламасын жіберуге тырысады. SMS қолданбасы немесе нөмір тергіш ашылса, әрекетті сол жерде аяқтаңыз.',
+    'sos_keep_using': 'Жібермей оралу',
+    'sos_send_action': 'SOS жіберу',
+    'sos_cancel_action': 'SOS-ты болдырмау',
+    'sos_confirm_cancel_action': 'Болдырмауды растау',
+    'sos_cancel_action_hint':
+        '«SOS-ты болдырмау» түймесін басып, 3 секунд ішінде растаңыз.',
+    'sos_cancel_pending_hint':
+        '3 секунд ішінде «Болдырмауды растау» түймесін басыңыз. Кері санақ жалғасуда.',
+    'sos_dismiss_action': 'Хабарламаны жабу',
     'sos_112_fallback': 'Байланыс нөмірі жоқ. SOS 112 нөміріне жіберіледі.',
     'sos_position_stale': 'Орналасу ескі, жасы',
     'sos_position_unit_min': 'минут',
@@ -1590,6 +1518,15 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sos_no_location': 'Орналасуды анықтау мүмкін болмады.',
     'sos_no_gps': 'орналасу қолжетімсіз',
     'sos_settings': 'SOS контактісі',
+    'sos_contact_pick': 'Контактілерден таңдау',
+    'sos_contact_number': 'SOS контактісінің нөмірі',
+    'sos_contact_no_number':
+        'Контактіде нөмір жоқ. Нөмірді қолмен енгізіңіз немесе басқа контактіні таңдаңыз.',
+    'sos_contact_pick_failed':
+        'Контактілер ашылмады. Нөмірді қолмен енгізіңіз немесе қайта таңдаңыз.',
+    'sos_contact_save_failed':
+        'Нөмір сақталмады. Нөмірді тексеріп, қайталаңыз.',
+    'sos_contact_wait': 'Күтіңіз, әрекет орындалып жатыр.',
     'sos_message': 'Маған көмек керек! Менің орналасуым:',
     'sos_invalid_number': 'Телефон нөмірі қате.',
 
@@ -1776,17 +1713,6 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Анықтама үшін жоғары сырғытыңыз.',
     'audio_tour_done': 'Сәтті пайдаланыңыз!',
 
-    'onb_sos_title': 'Шұғыл байланыс',
-    'onb_sos_sub':
-        'Жақын адамыңыздың нөмірін енгізіңіз.\\nBagdar шұғыл жағдайда орныңызды SMS арқылы жібереді.',
-    'onb_sos_tts':
-        'Шұғыл жағдай үшін нөмір енгізіңіз. '
-        'Bagdar сіздің орныңызды SMS-пен жібереді. '
-        'Өткізіп жіберіп, кейін баптауға болады.',
-    'onb_sos_placeholder': '+7 (___) ___-__-__',
-    'onb_sos_save': 'Контактіні сақтау',
-    'onb_sos_skip': 'Кейін баптаймын',
-
     'settings_calibration': 'Камераны калибрлеу',
     'settings_calibration_desc': 'Адамнан дәл 2 м қашықтықта тұрып басыңыз',
     'settings_read_text': 'Мәтінді оқу',
@@ -1873,8 +1799,15 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'offline_banner_no_map':
         'Аймақ картасы жүктелмеген. "Картаны жүкте" деп айтыңыз.',
     'settings_save_failed': 'Параметр сақталмады. Қайталап көріңіз.',
+    'ui_back': 'Артқа',
+    'appearance_title': 'Сыртқы көрініс',
+    'settings_diagnostics': 'Диагностика және өңдеу',
+    'theme_light': 'Ашық',
+    'theme_dark': 'Қара',
+    'theme_high_contrast': 'Жоғары контраст',
+    'theme_warm': 'Жылы',
     'theme_selected_dark': 'Қара тақырып, қара экран мен сары акцент.',
-    'theme_selected_light': 'Ашық тақырып, ақ экран мен қара-көк акцент.',
+    'theme_selected_light': 'Ашық тақырып, ашық фон мен қою жасыл акцент.',
     'theme_selected_high_contrast': 'Жоғары контраст, тек қара үстіндегі ақ.',
     'theme_selected_warm':
         'Жылы тақырып, кілегейлі экран мен қара-қоңыр мәтін.',
@@ -1915,12 +1848,6 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'voice_kk_v2_pack_missing':
         'Пакет орнатылмаған. Орнату үшін тіл пакеттерін ашыңыз.',
     'voice_manage_lang_packs_announce': 'Тіл пакеттерін ашамын.',
-    'onb_kk_pack_prompt_title': 'Қазақша тану',
-    'onb_kk_pack_prompt_body':
-        'Қазақша тану пакетін қазір жүктеп алу керек пе? Шамамен 50 МБ.',
-    'onb_kk_pack_yes': 'Жүктеп алу',
-    'onb_kk_pack_skip': 'Өткізіп жіберу',
-    'onb_kk_pack_later': 'Желі болғанда еске салу',
     'lang_pack_online_ready':
         'Желі қалпына келді. Қазақша тану пакетін орнатуға дайын. «Тіл пакеттері» деп айтыңыз.',
 
@@ -1936,12 +1863,6 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Қазақша дауыс жоқ. Қазақ мәтінін орысша оқимын.',
     'tts_kk_engine_load_failed':
         'Қазақша дауысты жүктеу мүмкін болмады. Қосалқы нұсқаға көшемін.',
-    'onb_rhvoice_pack_prompt_title': 'Жақсы қазақша дауыс',
-    'onb_rhvoice_pack_prompt_body':
-        'Жоғары сапалы қазақша дауысты қазір жүктеп алу керек пе? Шамамен 30 МБ. Дауыс интернетсіз жұмыс істейді.',
-    'onb_rhvoice_pack_yes': 'Жүктеп алу',
-    'onb_rhvoice_pack_skip': 'Өткізіп жіберу',
-    'onb_rhvoice_pack_later': 'Желі болғанда еске салу',
     'lang_pack_rhvoice_online_ready':
         'Желі қалпына келді. Қазақша дауыс пакетін орнатуға дайын. «Тіл пакеттері» деп айтыңыз.',
 
@@ -2015,28 +1936,10 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sonar_stopped': 'Эхолот өшірілді.',
     'sonar_calibrating': 'Эхолотты калибрлеу.',
     'sonar_no_48k': 'Микрофон эхолотты қолдамайды.',
-    'onb_mic_prime_tts':
-        'Дауыспен басқару үшін маған микрофонға рұқсат қажет. Қазір жүйелік сұрау терезесі пайда болады.',
-    'onb_mic_denied_fallback_tts':
-        'Микрофонға рұқсат берілмеді. Дауыспен басқару өшірілген. Параметрлерді реттеу үшін қимылдарды пайдаланыңыз.',
-    'onb_mode_confirm_prompt':
-        'Режим таңдалды. Жалғастыру үшін иә деп айтыңыз немесе басқа режимді атаңыз.',
     'sos_setup_prompt_tts':
         'Шұғыл SOS көмегі үшін жақын адамыңыздың телефон нөмірін көрсетіңіз.',
     'camera_perm_recovery_tts':
         'Камераға рұқсат блокталған. Телефон баптауларында рұқсат беріңіз. Баптаулар үшін қос түртіңіз, қайталау үшін бір рет түртіңіз.',
-    'onb_help_prompt_lang':
-        'Тілді таңдаңыз. Орыс, Қазақ немесе Ағылшын деп айтыңыз.',
-    'onb_help_prompt_hand':
-        'Ведущий қолды таңдаңыз. Оң немесе Сол деп айтыңыз.',
-    'onb_help_prompt_mode':
-        'Әдепкі режимді таңдаңыз. Көше, Таяқ немесе Сканерлеу деп айтыңыз.',
-    'onb_help_prompt_perm': 'Камераға рұқсат беріңіз. Рұқсат деп айтыңыз.',
-    'onb_help_prompt_calib':
-        'Қашықтықты калибрлеу. Жалғастыру үшін Иә деп айтыңыз.',
-    'onb_help_prompt_ready': 'Бәрі дайын. Бастау үшін Иә деп айтыңыз.',
-    'onb_emergency_skip_confirm':
-        'Барлық қолданба реттеулерін өткізіп жіберу керек пе? Қос түртіңіз растайды. Бір түрту болдырмайды.',
     'yolo_unavailable': 'Нысан тануы қолжетімсіз. Қауіп анықтау өшірілді.',
     'yolo_detector_not_responding': 'Нысан детекторы жауап бермейді.',
   },
@@ -2091,14 +1994,68 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'status_no_obstacle': 'Analysis active',
     'status_analysis_active': 'Analysis active',
     'spatial_analysis_limited': 'Spatial analysis is limited. Use your cane.',
-    'spatial_stop_sensing_unavailable':
-        'Stop. Spatial sensing is unavailable.',
+    'spatial_stop_sensing_unavailable': 'Stop. Spatial sensing is unavailable.',
     'core_health_sound_unavailable':
         'Sound unavailable. Vibration warnings remain active.',
     'core_health_haptic_unavailable':
         'Vibration unavailable. Spoken warnings remain active.',
     'core_health_recovered': 'System recovered.',
     'core_health_status': 'System status',
+    'inspection_title': 'Stationary inspection',
+    'inspection_help': 'How to use',
+    'inspection_finish': 'Finish inspection',
+    'inspection_close': 'Close',
+    'inspection_repeat_status': 'Read status aloud',
+    'inspection_status_limits':
+        'Service status does not establish recognition accuracy or a safe path. Stay stationary.',
+    'inspection_help_body':
+        'Stay stationary. Bagdar does not yet establish safety for independent walking.\n\nSystem status: open camera, processing, audio and vibration details. A separate button reads the status aloud.\n\nSettings: change language, speech and the screen curtain. The curtain hides the image; buttons remain available to the screen reader.\n\nSOS — I need help: open confirmation for a manual request. Cancelling a fall countdown requires two actions within three seconds.\n\nFinish inspection: closes the camera and returns to session checks. Refresh the checks before another inspection. Standard buttons are sufficient; custom Bagdar gestures and the microphone are optional.',
+    'inspection_permission_recovery':
+        'Camera permission is missing. Allow access in system settings or retry the request. Help, Bagdar settings, SOS and finish remain available.',
+    'inspection_retry_permission': 'Retry camera permission',
+    'inspection_camera_paused': 'Inspection camera stopped',
+    'inspection_camera_recovery':
+        'The camera was released for the QR scanner. Inspection has not resumed. Stay stationary: restart the camera or finish inspection.',
+    'inspection_retry_camera': 'Start inspection camera',
+    'inspection_system_settings': 'Camera system settings',
+    'inspection_permission_denied': 'permission denied',
+    'inspection_camera_waiting': 'camera stream unavailable',
+    'inspection_camera': 'Camera',
+    'inspection_objects': 'Object recognition',
+    'inspection_geometry': 'Spatial analysis',
+    'inspection_audio': 'Audio',
+    'inspection_haptics': 'Vibration',
+    'inspection_state_unchecked': 'not checked',
+    'inspection_state_initializing': 'starting',
+    'inspection_state_available': 'available',
+    'inspection_state_degraded': 'limited',
+    'inspection_state_unavailable': 'unavailable',
+    'inspection_state_recovering': 'recovering',
+    'inspection_state_stopped': 'stopped',
+    'inspection_run_starting': 'Services are starting',
+    'inspection_run_operational': 'Services are running',
+    'inspection_run_degraded': 'Services have limitations',
+    'inspection_run_unavailable': 'Some services are unavailable',
+    'inspection_run_recovering': 'Services are recovering',
+    'inspection_run_stopped': 'Services are stopped',
+    'inspection_run_camera_unavailable': 'Camera inspection is unavailable',
+    'inspection_observation_notChecked': 'No camera analysis results yet',
+    'inspection_observation_unavailable':
+        'Camera analysis results are unavailable',
+    'inspection_observation_stale':
+        'Camera data is out of date. Waiting for a new frame',
+    'inspection_observation_adjustPhone':
+        'Adjust the phone position for inspection',
+    'inspection_observation_noObstacleReported':
+        'No obstacles were reported in the latest camera analysis. This does not confirm a clear path',
+    'inspection_observation_possibleObstacle':
+        'Possible obstacles in the camera view. Distance and passage clearance are unconfirmed',
+    'inspection_clearance_notAvailable':
+        'This camera mode does not check the full space needed for walking',
+    'inspection_clearance_experimentalOnly':
+        'Clearance measurements are experimental. Passage clearance is unconfirmed',
+    'inspection_movement_stationary_only':
+        'Inspect while standing still. Walking guidance is unavailable',
     'generic_obstacle_ahead': 'Obstacle ahead.',
     'generic_obstacle_stop': 'Stop. Obstacle ahead.',
     'generic_obstacle_left': 'Obstacle on the left.',
@@ -2146,99 +2103,11 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'calib_recommend':
         'For accurate distance detection, we recommend calibration in Settings.',
 
-    'onb_welcome_tts':
-        'Welcome to Bagdar. Choose your mode. '
-        'Swipe up or down to change mode, double tap to select.',
-    'onb_welcome_intro_tts':
-        'Hello. Bagdar is a voice assistant for the blind, helping to orient in space and avoid obstacles. Let\'s begin the setup. Choose language. Swipe up or down to change. Double tap to select. Or say out loud: Russian, Kazakh, or English.',
-    'onb_dominant_hand_tts':
-        'Step one. Select dominant hand. This affects gesture placement on the screen. Swipe up or down to change. Double tap to select. Or say out loud: Right, or Left.',
-    'onb_mode_tts':
-        'Step two. Select default operation mode. Swipe up or down to change. Double tap to select. Or say: Street, Cane, or Scan.',
-    'onb_perm_tts':
-        'Camera permission. Double tap to open the system request. Find the Allow button. Or say out loud: Allow.',
-    'onb_calib_tts':
-        'Distance calibration. Calibration is recommended for better accuracy. You can perform it later in settings by aiming the camera at a person 2 meters away. Double tap to continue.',
-    'onb_ready_tts': 'All set. Double tap to start.',
-    'onb_hand_right': 'Right hand',
-    'onb_hand_left': 'Left hand',
-    'onb_hand_changed': 'Dominant hand changed to {hand}',
-    'onb_secondary_aid_tts':
+    'secondary_aid_disclaimer':
         'Bagdar warns about hazards but can miss them. '
         'Continue using your white cane or guide dog. '
         'Bagdar is a secondary aid.',
-    'onb_secondary_aid_check':
-        'Bagdar is a secondary aid, not a cane replacement',
-    'onb_blind_intro':
-        'Bagdar for blind users. Gesture-based control. '
-        'Single tap to repeat. Double tap to continue. '
-        'Swipe right for next step, left to go back. '
-        'Long press to change language. '
-        'If a loved one is nearby, it is recommended to hand them the phone for initial setup.',
-    'onb_gesture_help':
-        'Onboarding gestures. Single tap repeats the prompt. '
-        'Double tap is the main action. Swipe right or left to navigate. '
-        'Long press changes language. Swipe down to skip onboarding. '
-        'Two fingers for two seconds for emergency exit.',
-    'onb_mode_select_announce': 'Mode: {mode}. Double tap to select.',
-    'onb_skip_confirm':
-        'Skip all setup? Double tap confirms. Single tap cancels.',
-    'onb_skip_cancelled': 'Cancelled.',
-    'onb_lang_switched': 'Language: English.',
-    'onb_calib_saved_tts': 'Great! Calibration saved. Tap Continue.',
-    'onb_calib_skip_tts':
-        'Calibration skipped. You can do it later in settings.',
-    'onb_welcome_title': 'Welcome\nto Bagdar',
-    'onb_welcome_sub': 'Choose your default mode.\nYou can change it anytime.',
-    'onb_perm_title': 'Access needed',
-    'onb_perm_sub': 'Only camera is required.\nThe rest is optional.',
-    'onb_calib_title': 'Distance accuracy',
-    'onb_calib_sub':
-        'Without calibration, error ~40%.\nAfter — ~10%. Takes 10 seconds.',
-    'onb_calib_app_note':
-        'Calibration can be done in Settings after starting the app.',
-    'onb_ready_title': 'All set!',
-    'onb_ready_sub': 'Bagdar is ready. Here is what the app can do:',
-    'onb_btn_continue': 'Continue',
-    'onb_btn_allow_camera': 'Allow camera',
-    'onb_btn_skip': 'Skip the rest',
-    'onb_btn_calibrate': 'I stand 2 meters away — calibrate',
-    'onb_btn_skip_calib': 'Skip — set up later',
-    'onb_btn_calib_later': 'Calibrate in settings',
-    'onb_btn_start': 'Start',
-    'onb_btn_back_calib': 'Back to calibration',
-    'onb_calib_done': 'Calibration done — accuracy improved!',
-    'onb_calib_hint': 'Ask someone to stand 2m away from you',
-    'onb_check_alerts': 'Voice alerts for objects',
-    'onb_check_mode': 'selected by default',
-    'onb_check_calib': 'Camera calibration',
-    'onb_check_calib_skip': 'Available in Settings → Camera calibration',
-    'onb_feat_scan': '«What is around?» button — scene description',
-    'onb_feat_mode': 'Mode icon — toggle Street / Cane / Scan',
-    'onb_feat_settings': 'Settings — calibration, GPU, Debug HUD',
-    'onb_lang_title': 'Choose a language',
-    'onb_lang_sub': 'Language can be changed in settings',
-    'onb_mic_exhausted':
-        'I cannot hear your response. Use gestures: '
-        'swipe up or down to select, double-tap to confirm. '
-        'Tap once to have me repeat.',
-    'onb_mode_choose_first':
-        'Please choose a mode first. Say: street, cane, or scan.',
-    'onb_perm_talkback_guide':
-        'System permission dialogs will now appear. '
-        'There will be three: camera, microphone, and location. '
-        'Use TalkBack — swipe right to the Allow button and double-tap. '
-        'I will wait.',
-    'onb_perm_tap_guide':
-        'System dialogs will now appear. '
-        'In each one, tap the Allow button at the bottom of the screen. '
-        'If a sighted helper is nearby, ask them for assistance. I will wait.',
-    'onb_perm_camera_ok': 'Camera access granted.',
-    'onb_perm_mic_ok': 'Microphone access granted.',
-    'onb_perm_all_granted': 'All permissions granted. Excellent! Moving on.',
-    'onb_perm_denied_retry':
-        'Camera was not allowed. Without the camera, the app cannot detect obstacles. '
-        'Say allow to try again, or skip to continue.',
+    'continue_action': 'Continue',
 
     'tut_title': 'Gesture Tutorial',
     'tut_intro':
@@ -2475,26 +2344,45 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sos_no_location': 'Could not determine location.',
     'sos_no_gps': 'location unavailable',
     'sos_settings': 'SOS contact',
+    'sos_contact_pick': 'Choose from contacts',
+    'sos_contact_number': 'SOS contact number',
+    'sos_contact_no_number':
+        'This contact has no number. Enter a number or choose another contact.',
+    'sos_contact_pick_failed':
+        'Could not open contacts. Enter a number or try choosing again.',
+    'sos_contact_save_failed': 'Could not save the number. Check it and retry.',
+    'sos_contact_wait': 'Please wait, working on your request.',
     'sos_message': 'I need help! My location:',
     'sos_invalid_number': 'Invalid phone number.',
     'sos_launch_failed': 'Could not launch SMS app.',
     'sos_error': 'Failed to send SOS.',
-    'sos_fall_detected':
-        'Fall detected. SOS will be sent in 15 seconds. Tap screen to cancel.',
-    'sos_fall_classb_detected':
-        'Are you OK? Tap screen to cancel. SOS will be sent in 30 seconds.',
+    'sos_fall_detected': 'Fall detected. SOS countdown started.',
+    'sos_fall_classb_detected': 'Are you OK? SOS countdown started.',
     'sos_fall_countdown': 'SOS in',
     'sos_fall_seconds': 'seconds.',
     'sos_fall_cancelled': 'SOS cancelled.',
     'sos_fall_sent': 'SOS sent after fall.',
     'sos_user_fallen_again': 'Alert: user has fallen again.',
     'sos_fall_cancel_hint':
-        'Say "I am fine" or "false alarm". Tap screen to cancel.',
+        'To cancel, press Cancel SOS and confirm within three seconds.',
     'sos_fall_voice_confirm_prompt': 'Confirm: say "I am fine".',
     'sos_fall_voice_cancel_rejected':
         'Cancel not confirmed. Countdown continues.',
     'sos_fall_are_you_ok': 'Are you ok? Tap to confirm.',
-    'sos_cancel_confirm': 'Tap again to cancel SOS.',
+    'sos_cancel_confirm': 'Confirm cancellation within three seconds.',
+    'sos_action': 'SOS — I need help',
+    'sos_manual_title': 'Send SOS?',
+    'sos_manual_body':
+        'Bagdar will try to send a request for help. If a message composer or dialer opens, complete the action there.',
+    'sos_keep_using': 'Return without sending',
+    'sos_send_action': 'Send SOS',
+    'sos_cancel_action': 'Cancel SOS',
+    'sos_confirm_cancel_action': 'Confirm cancellation',
+    'sos_cancel_action_hint':
+        'Press Cancel SOS, then confirm within 3 seconds.',
+    'sos_cancel_pending_hint':
+        'Press Confirm cancellation within 3 seconds. The countdown continues.',
+    'sos_dismiss_action': 'Close message',
     'sos_112_fallback':
         'No contact specified. SOS will be sent to emergency 112.',
     'sos_position_stale': 'Location is stale by',
@@ -2756,17 +2644,6 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Swipe up for help.',
     'audio_tour_done': 'Enjoy using the app!',
 
-    'onb_sos_title': 'Emergency contact',
-    'onb_sos_sub':
-        'Enter the number of a trusted person.\\nBagdar will send an SMS with your location in an emergency.',
-    'onb_sos_tts':
-        'Enter a number for emergencies. '
-        'Bagdar will send an SMS with your location. '
-        'You can skip this and set it up later.',
-    'onb_sos_placeholder': '+1 (___) ___-____',
-    'onb_sos_save': 'Save contact',
-    'onb_sos_skip': 'Set up later',
-
     'settings_calibration': 'Camera calibration',
     'settings_calibration_desc': 'Stand exactly 2m from a person and tap',
     'settings_read_text': 'Read text',
@@ -2852,8 +2729,16 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'offline_banner_no_gps': 'No GPS. Position approximate.',
     'offline_banner_no_map': 'Area map not loaded. Say "download map".',
     'settings_save_failed': 'Could not save setting. Try again.',
+    'ui_back': 'Back',
+    'appearance_title': 'Appearance',
+    'settings_diagnostics': 'Diagnostics and processing',
+    'theme_light': 'Light',
+    'theme_dark': 'Dark',
+    'theme_high_contrast': 'High contrast',
+    'theme_warm': 'Warm',
     'theme_selected_dark': 'Dark theme, black screen with yellow accent.',
-    'theme_selected_light': 'Light theme, white screen with deep navy accent.',
+    'theme_selected_light':
+        'Light theme, off-white screen with dark green accent.',
     'theme_selected_high_contrast': 'High contrast, white on black only.',
     'theme_selected_warm': 'Warm theme, cream screen with dark brown text.',
     'voice_layer_listening': 'Listening for a command.',
@@ -2890,12 +2775,6 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'voice_kk_v2_pack_missing':
         'Pack not installed. Open language packs to install.',
     'voice_manage_lang_packs_announce': 'Opening language packs.',
-    'onb_kk_pack_prompt_title': 'Kazakh recognition',
-    'onb_kk_pack_prompt_body':
-        'Download the Kazakh recognition pack now? About 50 MB.',
-    'onb_kk_pack_yes': 'Download',
-    'onb_kk_pack_skip': 'Skip',
-    'onb_kk_pack_later': 'Remind me online',
     'lang_pack_online_ready':
         'You are online. The Kazakh recognition pack is ready to install. '
         'Say "language packs".',
@@ -2912,12 +2791,6 @@ const Map<AppLanguage, Map<String, String>> _ui = {
         'Kazakh voice is unavailable. Reading Kazakh text with the Russian voice.',
     'tts_kk_engine_load_failed':
         'Failed to load the Kazakh voice. Falling back.',
-    'onb_rhvoice_pack_prompt_title': 'Better Kazakh voice',
-    'onb_rhvoice_pack_prompt_body':
-        'Download a high-quality Kazakh voice now? About 30 MB. The voice works offline.',
-    'onb_rhvoice_pack_yes': 'Download',
-    'onb_rhvoice_pack_skip': 'Skip',
-    'onb_rhvoice_pack_later': 'Remind me online',
     'lang_pack_rhvoice_online_ready':
         'You are online. The Kazakh voice pack is ready to install. '
         'Say "language packs".',
@@ -2986,25 +2859,10 @@ const Map<AppLanguage, Map<String, String>> _ui = {
     'sonar_stopped': 'Sonar disabled.',
     'sonar_calibrating': 'Calibrating sonar.',
     'sonar_no_48k': 'Microphone does not support sonar.',
-    'onb_mic_prime_tts':
-        'For voice control, I need access to your microphone. A system dialog will appear now.',
-    'onb_mic_denied_fallback_tts':
-        'Microphone access denied. Voice control is disabled. Please use gestures to configure.',
-    'onb_mode_confirm_prompt':
-        'Mode selected. Say yes to continue, or choose another mode.',
     'sos_setup_prompt_tts':
         'Please set a contact number for emergency SOS help.',
     'camera_perm_recovery_tts':
         'Camera permission is blocked. Please allow access in phone settings. Double tap for settings, single tap to retry.',
-    'onb_help_prompt_lang':
-        'Choose language. Say: Russian, Kazakh, or English.',
-    'onb_help_prompt_hand': 'Choose dominant hand. Say: Right or Left.',
-    'onb_help_prompt_mode': 'Choose default mode. Say: Street, Cane, or Scan.',
-    'onb_help_prompt_perm': 'Grant camera permission. Say: Allow.',
-    'onb_help_prompt_calib': 'Distance calibration. Say: Yes to continue.',
-    'onb_help_prompt_ready': 'Ready to start. Say: Yes to start.',
-    'onb_emergency_skip_confirm':
-        'Skip all setup? Double tap to confirm. Single tap to cancel.',
   },
 };
 

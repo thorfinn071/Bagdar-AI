@@ -920,6 +920,27 @@ class VoiceCommandService {
   };
 
   bool _continuous = false;
+  int _inputGeneration = 0;
+  Future<void>? _pendingListen;
+
+  /// Explicit, acknowledged transfer to the local ordinary-command input.
+  /// Legacy stopListening remains the emergency path's existing contract.
+  Future<bool> releaseMicrophone() async {
+    ++_inputGeneration;
+    _continuous = false;
+    _continuousDeadline = DateTime.fromMillisecondsSinceEpoch(0);
+    try {
+      await _pendingListen?.timeout(const Duration(seconds: 2));
+      if (_useVoskForKk && _vosk.isListening) {
+        await _vosk.stop().timeout(const Duration(seconds: 2));
+      }
+      if (_available) await _stt.cancel().timeout(const Duration(seconds: 2));
+      _setListening(false);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
   DateTime _continuousDeadline = DateTime.fromMillisecondsSinceEpoch(0);
 
   Future<bool> init({String locale = 'ru-RU'}) async {
@@ -1059,7 +1080,6 @@ class VoiceCommandService {
 
   void _onVoskResult(String text) {
     final cleaned = text.trim();
-    debugPrint('VoiceCommandService(vosk-kk) recognized: "$cleaned"');
 
     _processResult(cleaned);
 
@@ -1081,6 +1101,7 @@ class VoiceCommandService {
     Duration listenFor = const Duration(seconds: 6),
     Duration pauseFor = const Duration(seconds: 2),
   }) async {
+    final generation = _inputGeneration;
     if (!_available) return false;
     if (_listening) return true;
 
@@ -1090,6 +1111,7 @@ class VoiceCommandService {
       if (!granted) return false;
     }
 
+    if (generation != _inputGeneration) return false;
     return _listenInternal(listenFor: listenFor, pauseFor: pauseFor);
   }
 
@@ -1097,10 +1119,13 @@ class VoiceCommandService {
     Duration listenFor = const Duration(seconds: 6),
     Duration pauseFor = const Duration(seconds: 2),
   }) async {
+    final generation = _inputGeneration;
     _hadResult = false;
     if (_useVoskForKk) {
       return _listenWithVosk(listenFor: listenFor);
     }
+    final acknowledgement = Completer<void>();
+    _pendingListen = acknowledgement.future;
     try {
       await _stt.listen(
         localeId: _locale,
@@ -1111,17 +1136,23 @@ class VoiceCommandService {
           cancelOnError: true,
         ),
         onResult: (result) {
-          if (result.finalResult) {
+          if (generation == _inputGeneration && result.finalResult) {
             _hadResult = true;
             _processResult(result.recognizedWords);
           }
         },
       );
+      if (generation != _inputGeneration) return false;
       _setListening(true);
       return true;
     } catch (e) {
       _setListening(false);
       return false;
+    } finally {
+      acknowledgement.complete();
+      if (identical(_pendingListen, acknowledgement.future)) {
+        _pendingListen = null;
+      }
     }
   }
 
@@ -1212,7 +1243,6 @@ class VoiceCommandService {
     }
 
     final lower = words.toLowerCase().trim();
-    debugPrint('VoiceCommandService recognized: "$lower"');
 
     final isKk = _locale.startsWith('kk');
     final isEn = _locale.startsWith('en');

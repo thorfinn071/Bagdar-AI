@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../models/constants.dart';
+import '../core/simulation_build.dart';
 import '../../models/strings.dart';
 
 enum SosResult {
@@ -150,14 +151,15 @@ class SosService {
       debugPrint('SosService: invalid phone number "$phoneNumber"');
       return false;
     }
-    _contactNumber = cleaned;
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_prefsKey, cleaned);
+    if (!await prefs.setString(_prefsKey, cleaned)) return false;
+    _contactNumber = cleaned;
     debugPrint('SosService: contact set to $cleaned');
     return true;
   }
 
   Future<SosResult> sendSos({int retries = kSosRetries}) async {
+    if (simulationBuild) return SosResult.launchFailed;
     final attemptTargets = <String>[];
     final contact = _contactNumber;
     final hasUserContact = contact != null && contact.isNotEmpty;
@@ -223,6 +225,7 @@ class SosService {
     String message, {
     required bool isFallback,
   }) async {
+    if (simulationBuild) return SosResult.launchFailed;
     try {
       final directSent = await _sendSmsDirect(target, message);
       if (directSent) {
@@ -435,6 +438,7 @@ class SosService {
   /// counter; a single SMS goes out summarising the count. Used by the H7
   /// second-fall-during-SOS-lockout flow in `FallDetector`.
   void queueFollowUpFall() {
+    if (simulationBuild) return;
     _pendingFollowUpCount++;
     if (_followUpTimer?.isActive == true) return;
     _followUpTimer = Timer(kFollowUpDelay, _flushFollowUp);

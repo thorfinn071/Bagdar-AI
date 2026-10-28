@@ -8,6 +8,7 @@ import '../core/build_profile.dart';
 import '../models/model_bakeoff_contract.dart';
 import 'settings_service.dart';
 import 'depth_provider.dart';
+import 'ncnn_depth_provider.dart';
 import 'device_capability.dart';
 import 'thermal_monitor.dart';
 
@@ -22,6 +23,8 @@ class ModelService {
 
   FlutterVision? _visionImpl;
   DepthProvider? _depthProvider;
+  Future<bool>? _depthLoading;
+  int _depthGeneration = 0;
 
   FlutterVision get _vision => _visionImpl ??= FlutterVision();
 
@@ -219,7 +222,17 @@ class ModelService {
     return desired;
   }
 
-  Future<bool> loadMidas({int? numThreads}) async {
+  Future<bool> loadMidas({int? numThreads}) => _depthLoading ??= _loadMidas(
+    numThreads: numThreads,
+  ).whenComplete(() => _depthLoading = null);
+
+  Future<bool> _loadMidas({int? numThreads}) async {
+    final generation = ++_depthGeneration;
+    final previous = _depthProvider;
+    _depthProvider = null;
+    _midasLoaded = false;
+    previous?.dispose();
+    if (previous is NcnnDepthProvider) await previous.shutdown();
     final threads = numThreads ?? Settings.instance.numThreads;
     final caps = await DeviceCapabilityProbe.probe();
 
@@ -231,18 +244,27 @@ class ModelService {
         userRequested: Settings.instance.useHardwareDepthMode,
       ),
     );
+    if (generation != _depthGeneration) {
+      provider.dispose();
+      if (provider is NcnnDepthProvider) await provider.shutdown();
+      return false;
+    }
     _depthProvider = provider;
     _midasLoaded = provider.isReady;
     return provider.isReady;
   }
 
   Future<void> dispose() async {
+    _depthGeneration++;
+    final provider = _depthProvider;
+    _depthProvider = null;
+    provider?.dispose();
     if (_visionImpl != null) {
       try {
         await _visionImpl!.closeYoloModel();
       } catch (_) {}
     }
-    _depthProvider?.dispose();
+    if (provider is NcnnDepthProvider) await provider.shutdown();
     _yoloLoaded = false;
     _midasLoaded = false;
   }

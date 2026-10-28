@@ -1,3 +1,4 @@
+import '../perception/passage_clearance.dart';
 import 'local_scene_snapshot.dart';
 
 enum SpatialEvidenceSource {
@@ -32,6 +33,12 @@ class SpatialEvidence {
   final SceneMotionVector? motionVector;
   final double? closingRate;
 
+  /// Coverage uncertainty in the same provider/session/transform and volume.
+  /// Unclassified uncertainty and physical risks cannot be resolved this way.
+  final String? unknownScopeId;
+  final PassageClearanceResult? coverageResolution;
+  final PassageEvaluationContext? passageContext;
+
   SpatialEvidence({
     required this.elementId,
     required this.coordinateMode,
@@ -49,6 +56,9 @@ class SpatialEvidence {
     List<String> hazardIds = const <String>[],
     this.motionVector,
     this.closingRate,
+    this.unknownScopeId,
+    this.coverageResolution,
+    this.passageContext,
   }) : hazardIds = List.unmodifiable(hazardIds) {
     if (elementId.isEmpty || sourceId.isEmpty) {
       throw ArgumentError('Spatial evidence IDs must be non-empty.');
@@ -106,12 +116,19 @@ class FusedSceneElement {
   final DateTime validUntil;
   final List<String> hazardIds;
 
+  /// Opt-in camera experiment: immutable contributions retain capture clocks.
+  final List<SpatialEvidence>? contributions;
+
   FusedSceneElement({
     required this.element,
     required this.observedFraction,
     required this.validUntil,
     required List<String> hazardIds,
-  }) : hazardIds = List.unmodifiable(hazardIds);
+    List<SpatialEvidence>? contributions,
+  }) : hazardIds = List.unmodifiable(hazardIds),
+       contributions = contributions == null
+           ? null
+           : List.unmodifiable(contributions);
 }
 
 class SceneFusionPolicy {
@@ -120,6 +137,7 @@ class SceneFusionPolicy {
   final double reliableConfidence;
   final double conflictUnknownFloor;
   final double confirmationBoost;
+  final int maximumContributions;
 
   const SceneFusionPolicy({
     this.freshFor = const Duration(milliseconds: 400),
@@ -127,19 +145,31 @@ class SceneFusionPolicy {
     this.reliableConfidence = 0.60,
     this.conflictUnknownFloor = 0.65,
     this.confirmationBoost = 0.08,
+    this.maximumContributions = 256,
   }) : assert(reliableConfidence >= 0 && reliableConfidence <= 1),
        assert(conflictUnknownFloor >= 0 && conflictUnknownFloor <= 1),
-       assert(confirmationBoost >= 0 && confirmationBoost <= 1);
+       assert(confirmationBoost >= 0 && confirmationBoost <= 1),
+       assert(maximumContributions > 0);
 
-  /// Fuses live evidence without allowing any source to subtract risk.
-  /// Threats lose authority only through bounded time decay.
+  /// Threats lose authority only through bounded time decay. The opt-in camera
+  /// path may resolve classified coverage gaps with a full typed certificate.
   FusedSceneElement? fuse({
     required String elementId,
     required SceneCoordinateMode coordinateMode,
     required FusedSceneElement? previous,
     required List<SpatialEvidence> evidence,
     required DateTime now,
+    bool useIndependentEvidenceClocks = false,
   }) {
+    if (useIndependentEvidenceClocks || previous?.contributions != null) {
+      return _fuseIndependent(
+        elementId,
+        coordinateMode,
+        previous,
+        evidence,
+        now,
+      );
+    }
     final current = decay(previous, now);
     final live = evidence
         .where(
@@ -246,6 +276,13 @@ class SceneFusionPolicy {
   /// evidence decays while unknown grows, so an old cell cannot stay free.
   FusedSceneElement? decay(FusedSceneElement? previous, DateTime now) {
     if (previous == null) return null;
+    if (previous.contributions != null) {
+      return _aggregateIndependent(
+        previous.element.id,
+        previous.contributions!,
+        now,
+      );
+    }
     if (freshFor.isNegative || stateTtl <= freshFor) {
       throw StateError('Scene fusion decay durations are invalid.');
     }
@@ -290,4 +327,186 @@ class SceneFusionPolicy {
   }
 
   double _max(double a, double b) => a > b ? a : b;
+
+  FusedSceneElement? _fuseIndependent(
+    String id,
+    SceneCoordinateMode mode,
+    FusedSceneElement? previous,
+    List<SpatialEvidence> incoming,
+    DateTime now,
+  ) {
+    final records = <SpatialEvidence>[
+      ...?previous?.contributions,
+      // Switching a populated legacy element into this mode preserves risk.
+      if (previous != null && previous.contributions == null)
+        SpatialEvidence(
+          elementId: id,
+          coordinateMode: mode,
+          sourceId: 'legacy-history',
+          source: SpatialEvidenceSource.replay,
+          observedAt: previous.element.lastObservedAt,
+          validUntil: previous.validUntil,
+          observedFraction: previous.observedFraction,
+          confidence: previous.element.confidence,
+          occupancyProbability: previous.element.occupancyProbability,
+          traversabilityProbability: previous.element.traversabilityProbability,
+          dropProbability: previous.element.dropProbability,
+          movingThreatRisk: previous.element.movingThreatRisk,
+          unknownProbability: previous.element.unknownProbability,
+          hazardIds: previous.hazardIds,
+        ),
+    ].where((e) => now.difference(e.observedAt) < stateTtl).toList();
+    final live = incoming
+        .where(
+          (e) =>
+              e.elementId == id && e.coordinateMode == mode && e.isLiveAt(now),
+        )
+        .toList();
+    for (final proof in live.where((e) => _canResolveCoverage(e, now))) {
+      // A later full measurement resolves only its own earlier coverage gap.
+      // Physical risks, unclassified unknown, and same-frame conflicts survive.
+      records.removeWhere(
+        (old) =>
+            old.unknownScopeId == proof.unknownScopeId &&
+            old.observedAt.isBefore(proof.observedAt) &&
+            (old.occupancyProbability ?? 0) == 0 &&
+            (old.dropProbability ?? 0) == 0 &&
+            (old.movingThreatRisk ?? 0) == 0 &&
+            old.hazardIds.isEmpty,
+      );
+    }
+    records.addAll(live);
+    if (records.length > maximumContributions) {
+      // Never evict an obstacle to satisfy the memory bound. Overflow is an
+      // explicit, bounded, unresolvable stop rather than optimistic truncation.
+      records.clear();
+      records.add(
+        SpatialEvidence(
+          elementId: id,
+          coordinateMode: mode,
+          sourceId: 'fusion-budget-exceeded',
+          source: SpatialEvidenceSource.replay,
+          observedAt: now,
+          validUntil: now.add(stateTtl),
+          observedFraction: 0,
+          confidence: 1,
+          occupancyProbability: 1,
+          dropProbability: 1,
+          movingThreatRisk: 1,
+          unknownProbability: 1,
+        ),
+      );
+    }
+    return _aggregateIndependent(id, records, now);
+  }
+
+  bool _canResolveCoverage(SpatialEvidence e, DateTime now) {
+    final proof = e.coverageResolution, context = e.passageContext;
+    if (proof == null ||
+        context == null ||
+        e.unknownScopeId == null ||
+        e.coordinateMode != SceneCoordinateMode.relative ||
+        e.elementId != 'forward' ||
+        e.source != SpatialEvidenceSource.depth ||
+        e.observedFraction != 1 ||
+        e.confidence < .99 ||
+        e.traversabilityProbability != 1 ||
+        e.unknownProbability != 0 ||
+        (e.occupancyProbability ?? 0) != 0 ||
+        context.nowUs != now.microsecondsSinceEpoch ||
+        context.rgbTimestampUs != e.observedAt.microsecondsSinceEpoch ||
+        !proof.appliesTo(request: proof.request, context: context)) {
+      return false;
+    }
+    return proof.coversCameraRecoveryVolume;
+  }
+
+  FusedSceneElement? _aggregateIndependent(
+    String id,
+    List<SpatialEvidence> records,
+    DateTime now,
+  ) {
+    if (freshFor.isNegative || stateTtl <= freshFor) {
+      throw StateError('Scene fusion decay durations are invalid.');
+    }
+    final retained = records
+        .where(
+          (e) =>
+              !e.observedAt.isAfter(now) &&
+              now.difference(e.observedAt) < stateTtl,
+        )
+        .toList();
+    if (retained.isEmpty) return null;
+    final aged = <SpatialEvidence>[];
+    for (final e in retained) {
+      final age = now.difference(e.observedAt);
+      final authority = age <= freshFor
+          ? 1.0
+          : (1 -
+                    (age - freshFor).inMicroseconds /
+                        (stateTtl - freshFor).inMicroseconds)
+                .clamp(0.0, 1.0);
+      // Expiry removes positive authority even when a different source is fresh.
+      final positive = e.isLiveAt(now) ? authority : 0.0;
+      aged.add(
+        SpatialEvidence(
+          elementId: id,
+          coordinateMode: e.coordinateMode,
+          sourceId: e.sourceId,
+          source: e.source,
+          observedAt: now,
+          validUntil: now,
+          observedFraction: e.observedFraction * positive,
+          confidence: e.confidence * authority,
+          occupancyProbability: e.occupancyProbability == null
+              ? null
+              : e.occupancyProbability! * authority,
+          traversabilityProbability: e.traversabilityProbability == null
+              ? null
+              : e.traversabilityProbability! * positive,
+          dropProbability: e.dropProbability == null
+              ? null
+              : e.dropProbability! * authority,
+          movingThreatRisk: e.movingThreatRisk == null
+              ? null
+              : e.movingThreatRisk! * authority,
+          unknownProbability: e.unknownProbability,
+          hazardIds: e.hazardIds,
+          motionVector: authority >= .5 ? e.motionVector : null,
+          closingRate: authority >= .5 ? e.closingRate : null,
+        ),
+      );
+    }
+    // Recompute conflicts from separately aged risks; no shared clock refresh.
+    final fused = fuse(
+      elementId: id,
+      coordinateMode: retained.first.coordinateMode,
+      previous: null,
+      evidence: aged,
+      now: now,
+    )!;
+    return FusedSceneElement(
+      element: SceneSpatialElement(
+        id: id,
+        occupancyProbability: fused.element.occupancyProbability,
+        traversabilityProbability: fused.element.traversabilityProbability,
+        dropProbability: fused.element.dropProbability,
+        movingThreatRisk: fused.element.movingThreatRisk,
+        unknownProbability: fused.element.unknownProbability,
+        confidence: fused.element.confidence,
+        sourceMask: fused.element.sourceMask,
+        lastObservedAt: retained
+            .map((e) => e.observedAt)
+            .reduce((a, b) => a.isAfter(b) ? a : b),
+        motionVector: fused.element.motionVector,
+        closingRate: fused.element.closingRate,
+      ),
+      observedFraction: fused.observedFraction,
+      validUntil: retained
+          .map((e) => e.validUntil)
+          .reduce((a, b) => a.isAfter(b) ? a : b),
+      hazardIds: fused.hazardIds,
+      contributions: retained,
+    );
+  }
 }

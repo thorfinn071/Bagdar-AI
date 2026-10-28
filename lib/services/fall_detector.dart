@@ -89,18 +89,23 @@ class FallDetector {
   DateTime? _postCancelGraceUntil;
   DateTime? _sosLockoutEndAt;
 
-  Future<void> init() async {
+  Future<void> init({
+    Stream<AccelerometerEvent>? accelerometer,
+    Stream<GyroscopeEvent>? gyroscope,
+  }) async {
     _ready = false;
     try {
       _sub =
-          accelerometerEventStream(
-            samplingPeriod: const Duration(milliseconds: 50),
-          ).listen(
-            _onAccel,
-            onError: (e) {
-              debugPrint('FallDetector: accelerometer error $e');
-            },
-          );
+          (accelerometer ??
+                  accelerometerEventStream(
+                    samplingPeriod: const Duration(milliseconds: 50),
+                  ))
+              .listen(
+                _onAccel,
+                onError: (e) {
+                  debugPrint('FallDetector: accelerometer error $e');
+                },
+              );
       _ready = true;
     } catch (e) {
       debugPrint('FallDetector: accelerometer init failed: $e');
@@ -108,15 +113,17 @@ class FallDetector {
 
     try {
       _gyroSub =
-          gyroscopeEventStream(
-            samplingPeriod: const Duration(milliseconds: 50),
-          ).listen(
-            _onGyro,
-            onError: (e) {
-              debugPrint('FallDetector: gyroscope error $e');
-              _markGyroUnavailable();
-            },
-          );
+          (gyroscope ??
+                  gyroscopeEventStream(
+                    samplingPeriod: const Duration(milliseconds: 50),
+                  ))
+              .listen(
+                _onGyro,
+                onError: (e) {
+                  debugPrint('FallDetector: gyroscope error $e');
+                  _markGyroUnavailable();
+                },
+              );
       _gyroAvailable = true;
       _lastGyroEventAt = DateTime.now();
     } catch (e) {

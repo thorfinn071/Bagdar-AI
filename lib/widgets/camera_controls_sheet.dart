@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../theme/bagdar_theme.dart';
+import '../theme/bagdar_tokens.dart';
+
 import '../models/a11y_prefs.dart';
 import '../models/strings.dart';
 import '../services/earcon_service.dart';
@@ -7,6 +10,7 @@ import '../services/device_capability.dart';
 import '../services/settings_service.dart';
 import '../services/field_logger.dart';
 import 'a11y/stepper_field.dart';
+import 'bagdar_ui.dart';
 
 class CameraSettingsSheet extends StatefulWidget {
   final AppLanguage currentLanguage;
@@ -209,808 +213,913 @@ class _CameraSettingsSheetState extends State<CameraSettingsSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BagdarTheme.colorsOf(context);
     return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 18),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              S.get('settings'),
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Semantics(
-              label: S.get('settings_lang_label'),
-              child: Row(
-                children: [
-                  Text(
-                    S.get('settings_lang_label'),
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  const Spacer(),
-                  ToggleButtons(
-                    borderRadius: BorderRadius.circular(8),
-                    borderColor: Colors.white24,
-                    selectedBorderColor: Colors.cyanAccent,
-                    selectedColor: Colors.black,
-                    fillColor: Colors.cyanAccent,
-                    color: Colors.white70,
-                    textStyle: const TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    isSelected: [
-                      _language == AppLanguage.ru,
-                      _language == AppLanguage.kk,
-                      _language == AppLanguage.en,
-                    ],
-                    onPressed: (i) {
-                      final lang = AppLanguage.values[i];
-                      if (_language == lang) return;
-                      setState(() => _language = lang);
-                      widget.onLanguageChanged(lang);
-                    },
-                    children: const [
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 14),
-                        child: Text('RU'),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 14),
-                        child: Text('ҚЗ'),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 14),
-                        child: Text('EN'),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 8),
-            Semantics(
-              label: 'GPU: ${_useGpu ? S.get('sem_on') : S.get('sem_off')}',
-              child: SwitchListTile(
-                title: const Text('GPU', style: TextStyle(color: Colors.white)),
-                value: _useGpu,
-                onChanged: (v) {
-                  setState(() => _useGpu = v);
-                  widget.onUseGpuChanged(v);
-                },
-              ),
-            ),
-            Semantics(
-              label:
-                  'Native depth bridge: ${_useNativeDepthBridge ? S.get('sem_on') : S.get('sem_off')}',
-              child: SwitchListTile(
-                title: const Text(
-                  'Native depth bridge',
-                  style: TextStyle(color: Colors.white),
-                ),
-                subtitle: const Text(
-                  'libyuv preprocessing before TFLite',
-                  style: TextStyle(color: Colors.white38, fontSize: 11),
-                ),
-                value: _useNativeDepthBridge,
-                onChanged: (v) {
-                  setState(() => _useNativeDepthBridge = v);
-                  widget.onNativeDepthBridgeChanged(v);
-                },
-              ),
-            ),
-            if (widget.showIndependentHardwareDepth)
-              Semantics(
-                label:
-                    'Hardware depth research mode: ${_useHardwareDepthMode ? S.get('sem_on') : S.get('sem_off')}',
-                child: SwitchListTile(
-                  title: const Text(
-                    'Hardware depth (research)',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  subtitle: const Text(
-                    'Uses an independent ARCore camera; not a Core path',
-                    style: TextStyle(color: Colors.white38, fontSize: 11),
-                  ),
-                  value: _useHardwareDepthMode,
-                  onChanged: (v) {
-                    setState(() => _useHardwareDepthMode = v);
-                    widget.onHardwareDepthModeChanged(v);
-                  },
-                ),
-              ),
-            Semantics(
-              label:
-                  '${_depthTierText(widget.depthTier)}. ${_depthTierSubtitle(widget.depthTier)}',
-              child: ListTile(
-                textColor: Colors.white,
-                iconColor: Colors.cyanAccent,
-                leading: const Icon(Icons.sensors, color: Colors.cyanAccent),
-                title: Text(
-                  'Источник глубины: ${_depthTierText(widget.depthTier)}',
-                  style: const TextStyle(color: Colors.white),
-                ),
-                subtitle: Text(
-                  _depthTierSubtitle(widget.depthTier),
-                  style: const TextStyle(color: Colors.white38, fontSize: 11),
-                ),
-              ),
-            ),
-            Row(
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxWidth: BagdarSpacing.contentMaxWidth,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  S.get('settings_cpu_threads'),
-                  style: const TextStyle(color: Colors.white),
+                  S.get('settings'),
+                  style: Theme.of(context).textTheme.headlineLarge,
                 ),
-                const Spacer(),
-                DropdownButton<int>(
-                  dropdownColor: Colors.grey[850],
-                  value: _numThreads,
-                  style: const TextStyle(color: Colors.white),
-                  items: [1, 2, 3, 4]
-                      .map((n) => DropdownMenuItem(value: n, child: Text('$n')))
-                      .toList(),
+                const SizedBox(height: BagdarSpacing.m),
+                _EnumDropdownRow<BagdarThemeName>(
+                  label: S.get('appearance_title'),
+                  value:
+                      BagdarTheme.maybeOf(context)?.name ??
+                      bagdarThemeNotifier.value,
+                  values: BagdarThemeName.values,
+                  labelFor: (name) => S.get('theme_${name.id}'),
+                  onChanged: (name) async {
+                    if (name == null) return;
+                    await setBagdarTheme(name);
+                    if (mounted) setState(() {});
+                  },
+                ),
+                const SizedBox(height: 12),
+                Semantics(
+                  label: S.get('settings_lang_label'),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        S.get('settings_lang_label'),
+                        style: TextStyle(color: colors.textPrimary),
+                      ),
+                      const SizedBox(height: 8),
+                      ToggleButtons(
+                        constraints: const BoxConstraints(
+                          minWidth: 64,
+                          minHeight: 64,
+                        ),
+                        borderRadius: BorderRadius.circular(
+                          BagdarRadius.control,
+                        ),
+                        borderColor: colors.divider,
+                        selectedBorderColor: colors.accentPrimary,
+                        selectedColor: colors.accentOnPrimary,
+                        fillColor: colors.accentPrimary,
+                        color: colors.textSecondary,
+                        textStyle: BagdarTypography.caption.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
+                        isSelected: [
+                          _language == AppLanguage.ru,
+                          _language == AppLanguage.kk,
+                          _language == AppLanguage.en,
+                        ],
+                        onPressed: (i) {
+                          final lang = AppLanguage.values[i];
+                          if (_language == lang) return;
+                          setState(() => _language = lang);
+                          widget.onLanguageChanged(lang);
+                        },
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 14),
+                            child: Text('RU'),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 14),
+                            child: Text('ҚЗ'),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 14),
+                            child: Text('EN'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Semantics(
+                  label:
+                      '${S.get('settings_earcon_title')}: ${_earconEnabled ? S.get('sem_on') : S.get('sem_off')}',
+                  child: SwitchListTile(
+                    title: Text(
+                      S.get('settings_earcon_title'),
+                      style: TextStyle(color: colors.textPrimary),
+                    ),
+                    subtitle: Text(
+                      S.get('settings_earcon_desc'),
+                      style: TextStyle(
+                        color: colors.textSecondary,
+                        fontSize: 16,
+                      ),
+                    ),
+                    value: _earconEnabled,
+                    onChanged: (v) {
+                      setState(() => _earconEnabled = v);
+                      widget.onEarconEnabledChanged(v);
+                      if (v) widget.onPlayEarcon(Earcon.success);
+                    },
+                  ),
+                ),
+                Semantics(
+                  label:
+                      '${S.get('pitch_black_ui')}: ${_pitchBlackUiEnabled ? S.get('pitch_black_on') : S.get('pitch_black_off')}',
+                  child: SwitchListTile(
+                    title: Text(
+                      S.get('pitch_black_ui'),
+                      style: TextStyle(color: colors.textPrimary),
+                    ),
+                    subtitle: Text(
+                      S.get('pitch_black_ui_desc'),
+                      style: TextStyle(
+                        color: colors.textSecondary,
+                        fontSize: 16,
+                      ),
+                    ),
+                    value: _pitchBlackUiEnabled,
+                    onChanged: (v) {
+                      setState(() => _pitchBlackUiEnabled = v);
+                      widget.onPitchBlackUiChanged(v);
+                    },
+                  ),
+                ),
+                Divider(color: colors.divider, height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 4,
+                    horizontal: 16,
+                  ),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      S.get('settings_a11y_title'),
+                      style: TextStyle(
+                        color: colors.textSecondary,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+                Semantics(
+                  label:
+                      '${S.get('settings_classic_gestures')}: ${_classicGestures ? S.get('sem_on') : S.get('sem_off')}',
+                  child: SwitchListTile(
+                    title: Text(
+                      S.get('settings_classic_gestures'),
+                      style: TextStyle(color: colors.textPrimary),
+                    ),
+                    subtitle: Text(
+                      S.get('settings_classic_gestures_desc'),
+                      style: TextStyle(
+                        color: colors.textSecondary,
+                        fontSize: 16,
+                      ),
+                    ),
+                    value: _classicGestures,
+                    onChanged: (v) {
+                      setState(() => _classicGestures = v);
+                      widget.onClassicGesturesChanged(v);
+                    },
+                  ),
+                ),
+                Semantics(
+                  label: S.get('pref_clear_path_announce'),
+                  child: SwitchListTile(
+                    title: Text(
+                      S.get('pref_clear_path_announce'),
+                      style: TextStyle(color: colors.textPrimary),
+                    ),
+                    value: _clearPathAnnounce,
+                    onChanged: (v) {
+                      setState(() => _clearPathAnnounce = v);
+                      Settings.instance.setClearPathAnnounce(v);
+                    },
+                  ),
+                ),
+                Semantics(
+                  label: S.get('pref_battery_announce'),
+                  child: SwitchListTile(
+                    title: Text(
+                      S.get('pref_battery_announce'),
+                      style: TextStyle(color: colors.textPrimary),
+                    ),
+                    value: _batteryAnnounce,
+                    onChanged: (v) {
+                      setState(() => _batteryAnnounce = v);
+                      Settings.instance.setBatteryAnnounce(v);
+                    },
+                  ),
+                ),
+                Semantics(
+                  label: S.get('pref_mode_announce'),
+                  child: SwitchListTile(
+                    title: Text(
+                      S.get('pref_mode_announce'),
+                      style: TextStyle(color: colors.textPrimary),
+                    ),
+                    value: _modeAnnounce,
+                    onChanged: (v) {
+                      setState(() => _modeAnnounce = v);
+                      Settings.instance.setModeAnnounce(v);
+                    },
+                  ),
+                ),
+                Semantics(
+                  label: S.get('tut_replay'),
+                  button: true,
+                  child: ListTile(
+                    textColor: colors.textPrimary,
+                    iconColor: colors.accentPrimary,
+                    leading: Icon(Icons.replay, color: colors.accentPrimary),
+                    title: Text(S.get('tut_replay')),
+                    onTap: () {
+                      Navigator.pop(context);
+                      widget.onReplayTutorial();
+                    },
+                  ),
+                ),
+                _SliderRow(
+                  label: S.get('settings_speech_rate'),
+                  value: _speechRate,
+                  min: kSpeechRateMin,
+                  max: kSpeechRateMax,
+                  divisions: 9,
+                  suffix: 'x',
+                  onChanged: (v) {
+                    setState(() => _speechRate = v);
+                    widget.onSpeechRateChanged(v);
+                  },
+                ),
+                _SliderRow(
+                  label: S.get('settings_tts_volume'),
+                  value: _ttsVolume,
+                  min: kTtsVolumeMin,
+                  max: kTtsVolumeMax,
+                  divisions: 10,
+                  asPercent: true,
+                  onChanged: (v) {
+                    setState(() => _ttsVolume = v);
+                    widget.onTtsVolumeChanged(v);
+                  },
+                ),
+                _SliderRow(
+                  label: S.get('settings_earcon_volume'),
+                  value: _earconVolume,
+                  min: kEarconVolumeMin,
+                  max: kEarconVolumeMax,
+                  divisions: 10,
+                  asPercent: true,
+                  onChanged: (v) {
+                    setState(() => _earconVolume = v);
+                    widget.onEarconVolumeChanged(v);
+                  },
+                ),
+                _EnumDropdownRow<Verbosity>(
+                  label: S.get('settings_verbosity'),
+                  value: _verbosity,
+                  values: Verbosity.values,
+                  labelFor: (v) => S.get('verbosity_${v.name.toLowerCase()}'),
                   onChanged: (v) {
                     if (v == null) return;
-                    setState(() => _numThreads = v);
-                    widget.onNumThreadsChanged(v);
+                    setState(() => _verbosity = v);
+                    widget.onVerbosityChanged(v);
                   },
                 ),
-              ],
-            ),
-            Semantics(
-              label:
-                  'Debug HUD: ${_showDebugHud ? S.get('sem_on') : S.get('sem_off')}',
-              child: SwitchListTile(
-                title: const Text(
-                  'Debug HUD',
-                  style: TextStyle(color: Colors.white),
+                _EnumDropdownRow<AlertFrequency>(
+                  label: S.get('settings_alert_frequency'),
+                  value: _alertFrequency,
+                  values: AlertFrequency.values,
+                  labelFor: (v) => S.get('freq_${v.name}'),
+                  onChanged: (v) {
+                    if (v == null) return;
+                    setState(() => _alertFrequency = v);
+                    widget.onAlertFrequencyChanged(v);
+                  },
                 ),
-                value: _showDebugHud,
-                onChanged: (v) {
-                  setState(() => _showDebugHud = v);
-                  widget.onDebugHudChanged(v);
-                },
-              ),
-            ),
-            SwitchListTile(
-              title: const Text(
-                'Field Logging',
-                style: TextStyle(color: Colors.white),
-              ),
-              subtitle: Text(
-                FieldLogger.instance.active
-                    ? 'Recording... (${FieldLogger.instance.eventCount} events)'
-                    : 'Record pipeline events for analysis',
-                style: const TextStyle(color: Colors.white38, fontSize: 11),
-              ),
-              value: FieldLogger.instance.active,
-              activeThumbColor: Colors.greenAccent,
-              onChanged: (v) async {
-                if (v) {
-                  await Settings.instance.setFieldLogging(true);
-                  final caps = DeviceCapabilityProbe.cached;
-                  await FieldLogger.instance.startSession(
-                    deviceModel: caps.deviceInfo.model,
-                    androidSdk: caps.androidSdkInt,
-                    depthTier: caps.bestDepthTier.name,
-                  );
-                } else {
-                  await Settings.instance.setFieldLogging(false);
-                  await FieldLogger.instance.stopSession();
-                }
-                if (context.mounted) setState(() {});
-              },
-            ),
-            Semantics(
-              label:
-                  '${S.get('settings_earcon_title')}: ${_earconEnabled ? S.get('sem_on') : S.get('sem_off')}',
-              child: SwitchListTile(
-                title: Text(
-                  S.get('settings_earcon_title'),
-                  style: const TextStyle(color: Colors.white),
+                _EnumDropdownRow<HapticStrength>(
+                  label: S.get('settings_haptic_strength'),
+                  value: _hapticStrength,
+                  values: HapticStrength.values,
+                  labelFor: (v) => S.get('haptic_${v.name}'),
+                  onChanged: (v) {
+                    if (v == null) return;
+                    setState(() => _hapticStrength = v);
+                    widget.onHapticStrengthChanged(v);
+                  },
                 ),
-                subtitle: Text(
-                  S.get('settings_earcon_desc'),
-                  style: const TextStyle(color: Colors.white38, fontSize: 11),
+                _EnumDropdownRow<SosTrigger>(
+                  label: S.get('settings_sos_trigger'),
+                  value: _sosTrigger,
+                  values: SosTrigger.values,
+                  labelFor: (v) {
+                    switch (v) {
+                      case SosTrigger.twoFingerHold:
+                        return S.get('sos_trigger_two_finger');
+                      case SosTrigger.tripleTap:
+                        return S.get('sos_trigger_triple_tap');
+                      case SosTrigger.shake:
+                        return S.get('sos_trigger_shake');
+                    }
+                  },
+                  onChanged: (v) {
+                    if (v == null) return;
+                    setState(() => _sosTrigger = v);
+                    widget.onSosTriggerChanged(v);
+                  },
                 ),
-                value: _earconEnabled,
-                onChanged: (v) {
-                  setState(() => _earconEnabled = v);
-                  widget.onEarconEnabledChanged(v);
-                  if (v) widget.onPlayEarcon(Earcon.success);
-                },
-              ),
-            ),
-            Semantics(
-              label:
-                  '${S.get('pitch_black_ui')}: ${_pitchBlackUiEnabled ? S.get('pitch_black_on') : S.get('pitch_black_off')}',
-              child: SwitchListTile(
-                title: Text(
-                  S.get('pitch_black_ui'),
-                  style: const TextStyle(color: Colors.white),
+                _EnumDropdownRow<DominantHand>(
+                  label: S.get('settings_dominant_hand'),
+                  value: _dominantHand,
+                  values: DominantHand.values,
+                  labelFor: (v) => S.get('hand_${v.name}'),
+                  onChanged: (v) {
+                    if (v == null) return;
+                    setState(() => _dominantHand = v);
+                    widget.onDominantHandChanged(v);
+                  },
                 ),
-                subtitle: Text(
-                  S.get('pitch_black_ui_desc'),
-                  style: const TextStyle(color: Colors.white38, fontSize: 11),
-                ),
-                value: _pitchBlackUiEnabled,
-                onChanged: (v) {
-                  setState(() => _pitchBlackUiEnabled = v);
-                  widget.onPitchBlackUiChanged(v);
-                },
-              ),
-            ),
-            const Divider(color: Colors.white24, height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  S.get('settings_a11y_title'),
-                  style: const TextStyle(color: Colors.white54, fontSize: 12),
-                ),
-              ),
-            ),
-            Semantics(
-              label:
-                  '${S.get('settings_classic_gestures')}: ${_classicGestures ? S.get('sem_on') : S.get('sem_off')}',
-              child: SwitchListTile(
-                title: Text(
-                  S.get('settings_classic_gestures'),
-                  style: const TextStyle(color: Colors.white),
-                ),
-                subtitle: Text(
-                  S.get('settings_classic_gestures_desc'),
-                  style: const TextStyle(color: Colors.white38, fontSize: 11),
-                ),
-                value: _classicGestures,
-                onChanged: (v) {
-                  setState(() => _classicGestures = v);
-                  widget.onClassicGesturesChanged(v);
-                },
-              ),
-            ),
-            Semantics(
-              label: S.get('pref_clear_path_announce'),
-              child: SwitchListTile(
-                title: Text(
-                  S.get('pref_clear_path_announce'),
-                  style: const TextStyle(color: Colors.white),
-                ),
-                value: _clearPathAnnounce,
-                onChanged: (v) {
-                  setState(() => _clearPathAnnounce = v);
-                  Settings.instance.setClearPathAnnounce(v);
-                },
-              ),
-            ),
-            Semantics(
-              label: S.get('pref_battery_announce'),
-              child: SwitchListTile(
-                title: Text(
-                  S.get('pref_battery_announce'),
-                  style: const TextStyle(color: Colors.white),
-                ),
-                value: _batteryAnnounce,
-                onChanged: (v) {
-                  setState(() => _batteryAnnounce = v);
-                  Settings.instance.setBatteryAnnounce(v);
-                },
-              ),
-            ),
-            Semantics(
-              label: S.get('pref_mode_announce'),
-              child: SwitchListTile(
-                title: Text(
-                  S.get('pref_mode_announce'),
-                  style: const TextStyle(color: Colors.white),
-                ),
-                value: _modeAnnounce,
-                onChanged: (v) {
-                  setState(() => _modeAnnounce = v);
-                  Settings.instance.setModeAnnounce(v);
-                },
-              ),
-            ),
-            Semantics(
-              label: S.get('tut_replay'),
-              button: true,
-              child: ListTile(
-                textColor: Colors.white,
-                iconColor: Colors.cyanAccent,
-                leading: const Icon(Icons.replay, color: Colors.cyanAccent),
-                title: Text(S.get('tut_replay')),
-                onTap: () {
-                  Navigator.pop(context);
-                  widget.onReplayTutorial();
-                },
-              ),
-            ),
-            _SliderRow(
-              label: S.get('settings_speech_rate'),
-              value: _speechRate,
-              min: kSpeechRateMin,
-              max: kSpeechRateMax,
-              divisions: 9,
-              suffix: 'x',
-              onChanged: (v) {
-                setState(() => _speechRate = v);
-                widget.onSpeechRateChanged(v);
-              },
-            ),
-            _SliderRow(
-              label: S.get('settings_tts_volume'),
-              value: _ttsVolume,
-              min: kTtsVolumeMin,
-              max: kTtsVolumeMax,
-              divisions: 10,
-              asPercent: true,
-              onChanged: (v) {
-                setState(() => _ttsVolume = v);
-                widget.onTtsVolumeChanged(v);
-              },
-            ),
-            _SliderRow(
-              label: S.get('settings_earcon_volume'),
-              value: _earconVolume,
-              min: kEarconVolumeMin,
-              max: kEarconVolumeMax,
-              divisions: 10,
-              asPercent: true,
-              onChanged: (v) {
-                setState(() => _earconVolume = v);
-                widget.onEarconVolumeChanged(v);
-              },
-            ),
-            _EnumDropdownRow<Verbosity>(
-              label: S.get('settings_verbosity'),
-              value: _verbosity,
-              values: Verbosity.values,
-              labelFor: (v) => S.get('verbosity_${v.name.toLowerCase()}'),
-              onChanged: (v) {
-                if (v == null) return;
-                setState(() => _verbosity = v);
-                widget.onVerbosityChanged(v);
-              },
-            ),
-            _EnumDropdownRow<AlertFrequency>(
-              label: S.get('settings_alert_frequency'),
-              value: _alertFrequency,
-              values: AlertFrequency.values,
-              labelFor: (v) => S.get('freq_${v.name}'),
-              onChanged: (v) {
-                if (v == null) return;
-                setState(() => _alertFrequency = v);
-                widget.onAlertFrequencyChanged(v);
-              },
-            ),
-            _EnumDropdownRow<HapticStrength>(
-              label: S.get('settings_haptic_strength'),
-              value: _hapticStrength,
-              values: HapticStrength.values,
-              labelFor: (v) => S.get('haptic_${v.name}'),
-              onChanged: (v) {
-                if (v == null) return;
-                setState(() => _hapticStrength = v);
-                widget.onHapticStrengthChanged(v);
-              },
-            ),
-            _EnumDropdownRow<SosTrigger>(
-              label: S.get('settings_sos_trigger'),
-              value: _sosTrigger,
-              values: SosTrigger.values,
-              labelFor: (v) {
-                switch (v) {
-                  case SosTrigger.twoFingerHold:
-                    return S.get('sos_trigger_two_finger');
-                  case SosTrigger.tripleTap:
-                    return S.get('sos_trigger_triple_tap');
-                  case SosTrigger.shake:
-                    return S.get('sos_trigger_shake');
-                }
-              },
-              onChanged: (v) {
-                if (v == null) return;
-                setState(() => _sosTrigger = v);
-                widget.onSosTriggerChanged(v);
-              },
-            ),
-            _EnumDropdownRow<DominantHand>(
-              label: S.get('settings_dominant_hand'),
-              value: _dominantHand,
-              values: DominantHand.values,
-              labelFor: (v) => S.get('hand_${v.name}'),
-              onChanged: (v) {
-                if (v == null) return;
-                setState(() => _dominantHand = v);
-                widget.onDominantHandChanged(v);
-              },
-            ),
-            Semantics(
-              label: widget.midasReady
-                  ? S.get('settings_depth_active')
-                  : S.get('settings_depth_not_ready'),
-              child: ListTile(
-                textColor: Colors.white,
-                iconColor: widget.midasReady
-                    ? Colors.cyanAccent
-                    : Colors.white38,
-                leading: Icon(
-                  widget.midasReady ? Icons.layers : Icons.layers_outlined,
-                  color: widget.midasReady ? Colors.cyanAccent : Colors.white38,
-                ),
-                title: Text(
-                  widget.midasReady
+                Semantics(
+                  label: widget.midasReady
                       ? S.get('settings_depth_active')
                       : S.get('settings_depth_not_ready'),
-                  style: TextStyle(
-                    color: widget.midasReady ? Colors.white : Colors.white38,
+                  child: ListTile(
+                    textColor: colors.textPrimary,
+                    iconColor: widget.midasReady
+                        ? colors.accentPrimary
+                        : colors.textSecondary,
+                    leading: Icon(
+                      widget.midasReady ? Icons.layers : Icons.layers_outlined,
+                      color: widget.midasReady
+                          ? colors.accentPrimary
+                          : colors.textSecondary,
+                    ),
+                    title: Text(
+                      widget.midasReady
+                          ? S.get('settings_depth_active')
+                          : S.get('settings_depth_not_ready'),
+                      style: TextStyle(
+                        color: widget.midasReady
+                            ? colors.textPrimary
+                            : colors.textSecondary,
+                      ),
+                    ),
+                    subtitle: Text(
+                      _depthTierSubtitle(widget.depthTier),
+                      style: TextStyle(
+                        color: colors.textSecondary,
+                        fontSize: 16,
+                      ),
+                    ),
                   ),
                 ),
-                subtitle: Text(
-                  _depthTierSubtitle(widget.depthTier),
-                  style: const TextStyle(color: Colors.white38, fontSize: 11),
+                Divider(color: colors.divider, height: 20),
+                Semantics(
+                  label: S.get('settings_read_text'),
+                  button: true,
+                  child: ListTile(
+                    textColor: colors.textPrimary,
+                    iconColor: colors.accentPrimary,
+                    leading: Icon(
+                      Icons.text_fields,
+                      color: colors.accentPrimary,
+                    ),
+                    title: Text(S.get('settings_read_text')),
+                    subtitle: Text(
+                      S.get('settings_read_text_desc'),
+                      style: TextStyle(
+                        color: colors.textSecondary,
+                        fontSize: 16,
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                      widget.onReadText();
+                    },
+                  ),
                 ),
-              ),
-            ),
-            const Divider(color: Colors.white24, height: 20),
-            Semantics(
-              label: S.get('settings_read_text'),
-              button: true,
-              child: ListTile(
-                textColor: Colors.white,
-                iconColor: Colors.cyanAccent,
-                leading: const Icon(
-                  Icons.text_fields,
-                  color: Colors.cyanAccent,
+                Divider(color: colors.divider, height: 20),
+                Semantics(
+                  label: S.get('settings_calibration'),
+                  button: true,
+                  child: ListTile(
+                    textColor: colors.textPrimary,
+                    iconColor: colors.accentPrimary,
+                    leading: Icon(
+                      Icons.straighten,
+                      color: colors.accentPrimary,
+                    ),
+                    title: Text(S.get('settings_calibration')),
+                    subtitle: Text(
+                      S.get('settings_calibration_desc'),
+                      style: TextStyle(
+                        color: colors.textSecondary,
+                        fontSize: 16,
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                      widget.onCalibrationTap();
+                    },
+                  ),
                 ),
-                title: Text(S.get('settings_read_text')),
-                subtitle: Text(
-                  S.get('settings_read_text_desc'),
-                  style: const TextStyle(color: Colors.white38, fontSize: 11),
+                Divider(color: colors.divider, height: 20),
+                Semantics(
+                  label: S.get('sos_settings'),
+                  button: true,
+                  child: ListTile(
+                    textColor: colors.textPrimary,
+                    iconColor: colors.stateDanger,
+                    leading: Icon(Icons.sos, color: colors.stateDanger),
+                    title: Text(S.get('sos_settings')),
+                    subtitle: Text(
+                      widget.sosContactNumber ?? S.get('settings_sos_not_set'),
+                      style: TextStyle(
+                        color: colors.textSecondary,
+                        fontSize: 16,
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                      widget.onEditSosContact();
+                    },
+                  ),
                 ),
-                onTap: () {
-                  Navigator.pop(context);
-                  widget.onReadText();
-                },
-              ),
-            ),
-            const Divider(color: Colors.white24, height: 20),
-            Semantics(
-              label: S.get('settings_calibration'),
-              button: true,
-              child: ListTile(
-                textColor: Colors.white,
-                iconColor: Colors.lightBlueAccent,
-                leading: const Icon(
-                  Icons.straighten,
-                  color: Colors.lightBlueAccent,
+                if (widget.onShowSettingsQr != null ||
+                    widget.onScanSettingsQr != null) ...[
+                  Divider(color: colors.divider, height: 20),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 4,
+                      horizontal: 16,
+                    ),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        S.get('backup_section_title'),
+                        style: TextStyle(
+                          color: colors.textSecondary,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                  if (widget.onShowSettingsQr != null)
+                    Semantics(
+                      label: S.get('backup_show_qr'),
+                      button: true,
+                      child: ListTile(
+                        textColor: colors.textPrimary,
+                        iconColor: colors.accentPrimary,
+                        leading: Icon(
+                          Icons.qr_code_2,
+                          color: colors.accentPrimary,
+                        ),
+                        title: Text(S.get('backup_show_qr')),
+                        subtitle: Text(
+                          S.get('backup_show_qr_subtitle'),
+                          style: TextStyle(
+                            color: colors.textSecondary,
+                            fontSize: 16,
+                          ),
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
+                          widget.onShowSettingsQr!();
+                        },
+                      ),
+                    ),
+                  if (widget.onScanSettingsQr != null)
+                    Semantics(
+                      label: S.get('backup_scan_qr'),
+                      button: true,
+                      child: ListTile(
+                        textColor: colors.textPrimary,
+                        iconColor: colors.accentPrimary,
+                        leading: Icon(
+                          Icons.qr_code_scanner,
+                          color: colors.accentPrimary,
+                        ),
+                        title: Text(S.get('backup_scan_qr')),
+                        subtitle: Text(
+                          S.get('backup_scan_qr_subtitle'),
+                          style: TextStyle(
+                            color: colors.textSecondary,
+                            fontSize: 16,
+                          ),
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
+                          widget.onScanSettingsQr!();
+                        },
+                      ),
+                    ),
+                ],
+                Divider(color: colors.divider, height: 20),
+                Semantics(
+                  label: S.get('settings_scan_left'),
+                  button: true,
+                  child: ListTile(
+                    textColor: colors.textPrimary,
+                    iconColor: colors.textSecondary,
+                    title: Text(S.get('settings_scan_left')),
+                    trailing: const Icon(Icons.arrow_back),
+                    onTap: () {
+                      Navigator.pop(context);
+                      widget.onScanLeft();
+                    },
+                  ),
                 ),
-                title: Text(S.get('settings_calibration')),
-                subtitle: Text(
-                  S.get('settings_calibration_desc'),
-                  style: const TextStyle(color: Colors.white38, fontSize: 11),
+                Semantics(
+                  label: S.get('settings_scan_forward'),
+                  button: true,
+                  child: ListTile(
+                    textColor: colors.textPrimary,
+                    iconColor: colors.textSecondary,
+                    title: Text(S.get('settings_scan_forward')),
+                    trailing: const Icon(Icons.arrow_upward),
+                    onTap: () {
+                      Navigator.pop(context);
+                      widget.onScanCenter();
+                    },
+                  ),
                 ),
-                onTap: () {
-                  Navigator.pop(context);
-                  widget.onCalibrationTap();
-                },
-              ),
-            ),
-            const Divider(color: Colors.white24, height: 20),
-            Semantics(
-              label: S.get('sos_settings'),
-              button: true,
-              child: ListTile(
-                textColor: Colors.white,
-                iconColor: Colors.redAccent,
-                leading: const Icon(Icons.sos, color: Colors.redAccent),
-                title: Text(S.get('sos_settings')),
-                subtitle: Text(
-                  widget.sosContactNumber ?? S.get('settings_sos_not_set'),
-                  style: const TextStyle(color: Colors.white38, fontSize: 11),
+                Semantics(
+                  label: S.get('settings_scan_right'),
+                  button: true,
+                  child: ListTile(
+                    textColor: colors.textPrimary,
+                    iconColor: colors.textSecondary,
+                    title: Text(S.get('settings_scan_right')),
+                    trailing: const Icon(Icons.arrow_forward),
+                    onTap: () {
+                      Navigator.pop(context);
+                      widget.onScanRight();
+                    },
+                  ),
                 ),
-                onTap: () {
-                  Navigator.pop(context);
-                  widget.onEditSosContact();
-                },
-              ),
-            ),
-            if (widget.onShowSettingsQr != null ||
-                widget.onScanSettingsQr != null) ...[
-              const Divider(color: Colors.white24, height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 4,
-                  horizontal: 16,
-                ),
-                child: Align(
-                  alignment: Alignment.centerLeft,
+                Divider(color: colors.divider, height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 4,
+                    horizontal: 16,
+                  ),
                   child: Text(
-                    S.get('backup_section_title'),
-                    style: const TextStyle(color: Colors.white54, fontSize: 12),
+                    S.get('settings_haptic_test'),
+                    style: TextStyle(color: colors.textSecondary, fontSize: 16),
                   ),
                 ),
-              ),
-              if (widget.onShowSettingsQr != null)
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    _HapticTestButton(
+                      label: '← ${S.get('nav_left')}',
+                      dist: 'close',
+                      pos: 'left',
+                      patternFn: widget.patternFn,
+                      intensFn: widget.intensFn,
+                      vibrateFn: widget.vibrateFn,
+                    ),
+                    _HapticTestButton(
+                      label: '↑ ${S.get('straight')}',
+                      dist: 'close',
+                      pos: 'center',
+                      patternFn: widget.patternFn,
+                      intensFn: widget.intensFn,
+                      vibrateFn: widget.vibrateFn,
+                    ),
+                    _HapticTestButton(
+                      label: '${S.get('nav_right')} →',
+                      dist: 'close',
+                      pos: 'right',
+                      patternFn: widget.patternFn,
+                      intensFn: widget.intensFn,
+                      vibrateFn: widget.vibrateFn,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 6),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    _HapticTestButton(
+                      label: '! ${S.get('nav_left')}',
+                      dist: 'very close',
+                      pos: 'left',
+                      patternFn: widget.patternFn,
+                      intensFn: widget.intensFn,
+                      vibrateFn: widget.vibrateFn,
+                      danger: true,
+                    ),
+                    _HapticTestButton(
+                      label: '! ${S.get('straight')}',
+                      dist: 'very close',
+                      pos: 'center',
+                      patternFn: widget.patternFn,
+                      intensFn: widget.intensFn,
+                      vibrateFn: widget.vibrateFn,
+                      danger: true,
+                    ),
+                    _HapticTestButton(
+                      label: '${S.get('nav_right')} !',
+                      dist: 'very close',
+                      pos: 'right',
+                      patternFn: widget.patternFn,
+                      intensFn: widget.intensFn,
+                      vibrateFn: widget.vibrateFn,
+                      danger: true,
+                    ),
+                  ],
+                ),
+                Divider(color: colors.divider, height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 4,
+                    horizontal: 16,
+                  ),
+                  child: Text(
+                    S.get('settings_earcon_test'),
+                    style: TextStyle(color: colors.textSecondary, fontSize: 16),
+                  ),
+                ),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 6,
+                  children: [
+                    _EarconTestButton(
+                      label: 'Появился',
+                      earcon: Earcon.objectAppeared,
+                      onPlay: widget.onPlayEarcon,
+                    ),
+                    _EarconTestButton(
+                      label: 'Ушёл',
+                      earcon: Earcon.objectLeft,
+                      onPlay: widget.onPlayEarcon,
+                    ),
+                    _EarconTestButton(
+                      label: 'Анализ активен',
+                      earcon: Earcon.pathClear,
+                      onPlay: widget.onPlayEarcon,
+                    ),
+                    _EarconTestButton(
+                      label: 'Приближается',
+                      earcon: Earcon.approaching,
+                      onPlay: widget.onPlayEarcon,
+                    ),
+                    _EarconTestButton(
+                      label: 'Улица',
+                      earcon: Earcon.modeStreet,
+                      onPlay: widget.onPlayEarcon,
+                    ),
+                    _EarconTestButton(
+                      label: 'Трость',
+                      earcon: Earcon.modeCane,
+                      onPlay: widget.onPlayEarcon,
+                    ),
+                    _EarconTestButton(
+                      label: 'Скан',
+                      earcon: Earcon.modeScan,
+                      onPlay: widget.onPlayEarcon,
+                    ),
+                    _EarconTestButton(
+                      label: 'Успех',
+                      earcon: Earcon.success,
+                      onPlay: widget.onPlayEarcon,
+                    ),
+                    _EarconTestButton(
+                      label: 'Ошибка',
+                      earcon: Earcon.fail,
+                      onPlay: widget.onPlayEarcon,
+                    ),
+                  ],
+                ),
+                Divider(color: colors.divider, height: 20),
+                if (widget.onViewWaypoints != null)
+                  Semantics(
+                    label: S.get('waypoint_name_prompt'),
+                    button: true,
+                    child: ListTile(
+                      textColor: colors.textPrimary,
+                      iconColor: colors.stateWarning,
+                      leading: const Icon(Icons.place),
+                      title: Text(S.get('waypoint_name_prompt')),
+                      trailing: Icon(
+                        Icons.chevron_right,
+                        color: colors.textSecondary,
+                      ),
+                      onTap: () {
+                        Navigator.pop(context);
+                        widget.onViewWaypoints!();
+                      },
+                    ),
+                  ),
+                Divider(color: colors.divider, height: 20),
                 Semantics(
-                  label: S.get('backup_show_qr'),
+                  label: 'Тест: Внимание (Слева)',
                   button: true,
                   child: ListTile(
-                    textColor: Colors.white,
-                    iconColor: Colors.cyanAccent,
-                    leading: const Icon(
-                      Icons.qr_code_2,
-                      color: Colors.cyanAccent,
-                    ),
-                    title: Text(S.get('backup_show_qr')),
-                    subtitle: Text(
-                      S.get('backup_show_qr_subtitle'),
-                      style: const TextStyle(
-                        color: Colors.white38,
-                        fontSize: 11,
-                      ),
-                    ),
+                    textColor: colors.textPrimary,
+                    iconColor: colors.textSecondary,
+                    title: const Text('Тест: Внимание (Слева)'),
+                    trailing: const Icon(Icons.volume_up),
                     onTap: () {
                       Navigator.pop(context);
-                      widget.onShowSettingsQr!();
+                      widget.onVoiceWarningTest();
                     },
                   ),
                 ),
-              if (widget.onScanSettingsQr != null)
                 Semantics(
-                  label: S.get('backup_scan_qr'),
+                  label: 'Тест: Критично (По центру)',
                   button: true,
                   child: ListTile(
-                    textColor: Colors.white,
-                    iconColor: Colors.cyanAccent,
-                    leading: const Icon(
-                      Icons.qr_code_scanner,
-                      color: Colors.cyanAccent,
-                    ),
-                    title: Text(S.get('backup_scan_qr')),
-                    subtitle: Text(
-                      S.get('backup_scan_qr_subtitle'),
-                      style: const TextStyle(
-                        color: Colors.white38,
-                        fontSize: 11,
-                      ),
-                    ),
+                    textColor: colors.textPrimary,
+                    iconColor: colors.stateWarning,
+                    title: const Text('Тест: Критично (По центру)'),
+                    trailing: const Icon(Icons.warning_amber),
                     onTap: () {
                       Navigator.pop(context);
-                      widget.onScanSettingsQr!();
+                      widget.onVoiceCriticalTest();
                     },
                   ),
                 ),
-            ],
-            const Divider(color: Colors.white24, height: 20),
-            Semantics(
-              label: S.get('settings_scan_left'),
-              button: true,
-              child: ListTile(
-                textColor: Colors.white,
-                iconColor: Colors.white70,
-                title: Text(S.get('settings_scan_left')),
-                trailing: const Icon(Icons.arrow_back),
-                onTap: () {
-                  Navigator.pop(context);
-                  widget.onScanLeft();
-                },
-              ),
-            ),
-            Semantics(
-              label: S.get('settings_scan_forward'),
-              button: true,
-              child: ListTile(
-                textColor: Colors.white,
-                iconColor: Colors.white70,
-                title: Text(S.get('settings_scan_forward')),
-                trailing: const Icon(Icons.arrow_upward),
-                onTap: () {
-                  Navigator.pop(context);
-                  widget.onScanCenter();
-                },
-              ),
-            ),
-            Semantics(
-              label: S.get('settings_scan_right'),
-              button: true,
-              child: ListTile(
-                textColor: Colors.white,
-                iconColor: Colors.white70,
-                title: Text(S.get('settings_scan_right')),
-                trailing: const Icon(Icons.arrow_forward),
-                onTap: () {
-                  Navigator.pop(context);
-                  widget.onScanRight();
-                },
-              ),
-            ),
-            const Divider(color: Colors.white24, height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-              child: Text(
-                S.get('settings_haptic_test'),
-                style: const TextStyle(color: Colors.white54, fontSize: 12),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _HapticTestButton(
-                  label: '← ${S.get('nav_left')}',
-                  dist: 'close',
-                  pos: 'left',
-                  patternFn: widget.patternFn,
-                  intensFn: widget.intensFn,
-                  vibrateFn: widget.vibrateFn,
-                ),
-                _HapticTestButton(
-                  label: '↑ ${S.get('straight')}',
-                  dist: 'close',
-                  pos: 'center',
-                  patternFn: widget.patternFn,
-                  intensFn: widget.intensFn,
-                  vibrateFn: widget.vibrateFn,
-                ),
-                _HapticTestButton(
-                  label: '${S.get('nav_right')} →',
-                  dist: 'close',
-                  pos: 'right',
-                  patternFn: widget.patternFn,
-                  intensFn: widget.intensFn,
-                  vibrateFn: widget.vibrateFn,
-                ),
-              ],
-            ),
-            const SizedBox(height: 6),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _HapticTestButton(
-                  label: '! ${S.get('nav_left')}',
-                  dist: 'very close',
-                  pos: 'left',
-                  patternFn: widget.patternFn,
-                  intensFn: widget.intensFn,
-                  vibrateFn: widget.vibrateFn,
-                  danger: true,
-                ),
-                _HapticTestButton(
-                  label: '! ${S.get('straight')}',
-                  dist: 'very close',
-                  pos: 'center',
-                  patternFn: widget.patternFn,
-                  intensFn: widget.intensFn,
-                  vibrateFn: widget.vibrateFn,
-                  danger: true,
-                ),
-                _HapticTestButton(
-                  label: '${S.get('nav_right')} !',
-                  dist: 'very close',
-                  pos: 'right',
-                  patternFn: widget.patternFn,
-                  intensFn: widget.intensFn,
-                  vibrateFn: widget.vibrateFn,
-                  danger: true,
-                ),
-              ],
-            ),
-            const Divider(color: Colors.white24, height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-              child: Text(
-                S.get('settings_earcon_test'),
-                style: const TextStyle(color: Colors.white54, fontSize: 12),
-              ),
-            ),
-            Wrap(
-              spacing: 8,
-              runSpacing: 6,
-              children: [
-                _EarconTestButton(
-                  label: 'Появился',
-                  earcon: Earcon.objectAppeared,
-                  onPlay: widget.onPlayEarcon,
-                ),
-                _EarconTestButton(
-                  label: 'Ушёл',
-                  earcon: Earcon.objectLeft,
-                  onPlay: widget.onPlayEarcon,
-                ),
-                _EarconTestButton(
-                  label: 'Анализ активен',
-                  earcon: Earcon.pathClear,
-                  onPlay: widget.onPlayEarcon,
-                ),
-                _EarconTestButton(
-                  label: 'Приближается',
-                  earcon: Earcon.approaching,
-                  onPlay: widget.onPlayEarcon,
-                ),
-                _EarconTestButton(
-                  label: 'Улица',
-                  earcon: Earcon.modeStreet,
-                  onPlay: widget.onPlayEarcon,
-                ),
-                _EarconTestButton(
-                  label: 'Трость',
-                  earcon: Earcon.modeCane,
-                  onPlay: widget.onPlayEarcon,
-                ),
-                _EarconTestButton(
-                  label: 'Скан',
-                  earcon: Earcon.modeScan,
-                  onPlay: widget.onPlayEarcon,
-                ),
-                _EarconTestButton(
-                  label: 'Успех',
-                  earcon: Earcon.success,
-                  onPlay: widget.onPlayEarcon,
-                ),
-                _EarconTestButton(
-                  label: 'Ошибка',
-                  earcon: Earcon.fail,
-                  onPlay: widget.onPlayEarcon,
-                ),
-              ],
-            ),
-            const Divider(color: Colors.white24, height: 20),
-            if (widget.onViewWaypoints != null)
-              Semantics(
-                label: S.get('waypoint_name_prompt'),
-                button: true,
-                child: ListTile(
-                  textColor: Colors.white,
-                  iconColor: Colors.orangeAccent,
-                  leading: const Icon(Icons.place),
-                  title: Text(S.get('waypoint_name_prompt')),
-                  trailing: const Icon(
-                    Icons.chevron_right,
-                    color: Colors.white38,
+                const SizedBox(height: BagdarSpacing.m),
+                BagdarCard(
+                  padding: EdgeInsets.zero,
+                  child: ExpansionTile(
+                    title: Text(S.get('settings_diagnostics')),
+                    children: [
+                      Semantics(
+                        label:
+                            'GPU: ${_useGpu ? S.get('sem_on') : S.get('sem_off')}',
+                        child: SwitchListTile(
+                          title: Text(
+                            'GPU',
+                            style: TextStyle(color: colors.textPrimary),
+                          ),
+                          value: _useGpu,
+                          onChanged: (v) {
+                            setState(() => _useGpu = v);
+                            widget.onUseGpuChanged(v);
+                          },
+                        ),
+                      ),
+                      Semantics(
+                        label:
+                            'Native depth bridge: ${_useNativeDepthBridge ? S.get('sem_on') : S.get('sem_off')}',
+                        child: SwitchListTile(
+                          title: Text(
+                            'Native depth bridge',
+                            style: TextStyle(color: colors.textPrimary),
+                          ),
+                          subtitle: Text(
+                            'libyuv preprocessing before TFLite',
+                            style: TextStyle(
+                              color: colors.textSecondary,
+                              fontSize: 16,
+                            ),
+                          ),
+                          value: _useNativeDepthBridge,
+                          onChanged: (v) {
+                            setState(() => _useNativeDepthBridge = v);
+                            widget.onNativeDepthBridgeChanged(v);
+                          },
+                        ),
+                      ),
+                      if (widget.showIndependentHardwareDepth)
+                        Semantics(
+                          label:
+                              'Hardware depth research mode: ${_useHardwareDepthMode ? S.get('sem_on') : S.get('sem_off')}',
+                          child: SwitchListTile(
+                            title: Text(
+                              'Hardware depth (research)',
+                              style: TextStyle(color: colors.textPrimary),
+                            ),
+                            subtitle: Text(
+                              'Uses an independent ARCore camera; not a Core path',
+                              style: TextStyle(
+                                color: colors.textSecondary,
+                                fontSize: 16,
+                              ),
+                            ),
+                            value: _useHardwareDepthMode,
+                            onChanged: (v) {
+                              setState(() => _useHardwareDepthMode = v);
+                              widget.onHardwareDepthModeChanged(v);
+                            },
+                          ),
+                        ),
+                      Semantics(
+                        label:
+                            '${_depthTierText(widget.depthTier)}. ${_depthTierSubtitle(widget.depthTier)}',
+                        child: ListTile(
+                          textColor: colors.textPrimary,
+                          iconColor: colors.accentPrimary,
+                          leading: Icon(
+                            Icons.sensors,
+                            color: colors.accentPrimary,
+                          ),
+                          title: Text(
+                            'Источник глубины: ${_depthTierText(widget.depthTier)}',
+                            style: TextStyle(color: colors.textPrimary),
+                          ),
+                          subtitle: Text(
+                            _depthTierSubtitle(widget.depthTier),
+                            style: TextStyle(
+                              color: colors.textSecondary,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            S.get('settings_cpu_threads'),
+                            style: TextStyle(color: colors.textPrimary),
+                          ),
+                          const SizedBox(height: 8),
+                          DropdownButton<int>(
+                            isExpanded: true,
+                            itemHeight: null,
+                            dropdownColor: colors.surfaceElevated,
+                            value: _numThreads,
+                            style: BagdarTypography.body.copyWith(
+                              color: colors.textPrimary,
+                            ),
+                            items: [1, 2, 3, 4]
+                                .map(
+                                  (n) => DropdownMenuItem(
+                                    value: n,
+                                    child: Text('$n'),
+                                  ),
+                                )
+                                .toList(),
+                            onChanged: (v) {
+                              if (v == null) return;
+                              setState(() => _numThreads = v);
+                              widget.onNumThreadsChanged(v);
+                            },
+                          ),
+                        ],
+                      ),
+                      Semantics(
+                        label:
+                            'Debug HUD: ${_showDebugHud ? S.get('sem_on') : S.get('sem_off')}',
+                        child: SwitchListTile(
+                          title: Text(
+                            'Debug HUD',
+                            style: TextStyle(color: colors.textPrimary),
+                          ),
+                          value: _showDebugHud,
+                          onChanged: (v) {
+                            setState(() => _showDebugHud = v);
+                            widget.onDebugHudChanged(v);
+                          },
+                        ),
+                      ),
+                      SwitchListTile(
+                        title: Text(
+                          'Field Logging',
+                          style: TextStyle(color: colors.textPrimary),
+                        ),
+                        subtitle: Text(
+                          FieldLogger.instance.active
+                              ? 'Recording... (${FieldLogger.instance.eventCount} events)'
+                              : 'Record pipeline events for analysis',
+                          style: TextStyle(
+                            color: colors.textSecondary,
+                            fontSize: 16,
+                          ),
+                        ),
+                        value: FieldLogger.instance.active,
+                        activeThumbColor: colors.stateSuccess,
+                        onChanged: (v) async {
+                          if (v) {
+                            await Settings.instance.setFieldLogging(true);
+                            final caps = DeviceCapabilityProbe.cached;
+                            await FieldLogger.instance.startSession(
+                              deviceModel: caps.deviceInfo.model,
+                              androidSdk: caps.androidSdkInt,
+                              depthTier: caps.bestDepthTier.name,
+                            );
+                          } else {
+                            await Settings.instance.setFieldLogging(false);
+                            await FieldLogger.instance.stopSession();
+                          }
+                          if (context.mounted) setState(() {});
+                        },
+                      ),
+                    ],
                   ),
-                  onTap: () {
-                    Navigator.pop(context);
-                    widget.onViewWaypoints!();
-                  },
                 ),
-              ),
-            const Divider(color: Colors.white24, height: 20),
-            Semantics(
-              label: 'Тест: Внимание (Слева)',
-              button: true,
-              child: ListTile(
-                textColor: Colors.white,
-                iconColor: Colors.white54,
-                title: const Text('Тест: Внимание (Слева)'),
-                trailing: const Icon(Icons.volume_up),
-                onTap: () {
-                  Navigator.pop(context);
-                  widget.onVoiceWarningTest();
-                },
-              ),
+              ],
             ),
-            Semantics(
-              label: 'Тест: Критично (По центру)',
-              button: true,
-              child: ListTile(
-                textColor: Colors.white,
-                iconColor: Colors.orange,
-                title: const Text('Тест: Критично (По центру)'),
-                trailing: const Icon(Icons.warning_amber),
-                onTap: () {
-                  Navigator.pop(context);
-                  widget.onVoiceCriticalTest();
-                },
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -1088,32 +1197,33 @@ class _CameraCalibrationDialogState extends State<CameraCalibrationDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BagdarTheme.colorsOf(context);
     return AlertDialog(
-      backgroundColor: Colors.grey[900],
-      title: Text(widget.title, style: const TextStyle(color: Colors.white)),
+      backgroundColor: colors.surfaceElevated,
+      title: Text(widget.title, style: TextStyle(color: colors.textPrimary)),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             widget.description,
-            style: const TextStyle(color: Colors.white70, fontSize: 13),
+            style: TextStyle(color: colors.textSecondary, fontSize: 16),
           ),
           const SizedBox(height: 12),
           TextField(
             controller: _controller,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            style: const TextStyle(color: Colors.white),
+            style: TextStyle(color: colors.textPrimary),
             decoration: InputDecoration(
               labelText: widget.labelText,
-              labelStyle: const TextStyle(color: Colors.white54),
+              labelStyle: TextStyle(color: colors.textSecondary),
               suffixText: 'м',
-              suffixStyle: const TextStyle(color: Colors.white54),
-              enabledBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.white30),
+              suffixStyle: TextStyle(color: colors.textSecondary),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: colors.controlBorder),
               ),
-              focusedBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.cyanAccent),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: colors.accentPrimary),
               ),
             ),
           ),
@@ -1124,14 +1234,14 @@ class _CameraCalibrationDialogState extends State<CameraCalibrationDialog> {
           onPressed: () => Navigator.pop(context),
           child: Text(
             widget.cancelLabel,
-            style: const TextStyle(color: Colors.white54),
+            style: TextStyle(color: colors.textSecondary),
           ),
         ),
         TextButton(
           onPressed: () => Navigator.pop(context, _controller.text.trim()),
           child: Text(
             widget.saveLabel,
-            style: const TextStyle(color: Colors.cyanAccent),
+            style: TextStyle(color: colors.accentPrimary),
           ),
         ),
       ],
@@ -1152,31 +1262,10 @@ class _EarconTestButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Semantics(
-      button: true,
-      label: 'Тест earcon: $label',
-      child: GestureDetector(
-        onTap: () => onPlay(earcon),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.white24, width: 0.5),
-            borderRadius: BorderRadius.circular(8),
-            color: Colors.white.withValues(alpha: 0.05),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.music_note, color: Colors.white54, size: 14),
-              const SizedBox(width: 6),
-              Text(
-                label,
-                style: const TextStyle(color: Colors.white70, fontSize: 12),
-              ),
-            ],
-          ),
-        ),
-      ),
+    return OutlinedButton.icon(
+      onPressed: () => onPlay(earcon),
+      icon: const Icon(Icons.music_note_outlined, size: 24),
+      label: Text(label),
     );
   }
 }
@@ -1245,23 +1334,23 @@ class _EnumDropdownRow<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BagdarTheme.colorsOf(context);
     return Semantics(
       label: '$label: ${labelFor(value)}',
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Expanded(
-              child: Text(
-                label,
-                style: const TextStyle(color: Colors.white, fontSize: 13),
-              ),
-            ),
+            Text(label, style: Theme.of(context).textTheme.bodySmall),
             DropdownButton<T>(
-              dropdownColor: Colors.grey[850],
+              isExpanded: true,
+              itemHeight: null,
+              borderRadius: BorderRadius.circular(BagdarRadius.control),
+              dropdownColor: colors.surfaceElevated,
               value: value,
-              style: const TextStyle(color: Colors.white),
-              underline: Container(height: 1, color: Colors.white24),
+              style: BagdarTypography.body.copyWith(color: colors.textPrimary),
+              underline: Container(height: 1, color: colors.divider),
               items: values
                   .map(
                     (v) =>
@@ -1298,33 +1387,19 @@ class _HapticTestButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = danger ? Colors.orangeAccent : Colors.cyanAccent;
-    return Semantics(
-      button: true,
-      label: 'Тест вибрации: $label',
-      child: GestureDetector(
-        onTap: () {
-          final pattern = patternFn(dist, pos);
-          final intensities = intensFn(dist, pattern.length);
-          vibrateFn(pattern, intensities: intensities);
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-          decoration: BoxDecoration(
-            border: Border.all(color: color.withValues(alpha: 0.4), width: 0.5),
-            borderRadius: BorderRadius.circular(8),
-            color: color.withValues(alpha: 0.06),
-          ),
-          child: Text(
-            label,
-            style: TextStyle(
-              color: color,
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
+    final colors = BagdarTheme.colorsOf(context);
+    final color = danger ? colors.stateWarning : colors.accentPrimary;
+    return OutlinedButton(
+      style: OutlinedButton.styleFrom(
+        foregroundColor: color,
+        side: BorderSide(color: color),
       ),
+      onPressed: () {
+        final pattern = patternFn(dist, pos);
+        final intensities = intensFn(dist, pattern.length);
+        vibrateFn(pattern, intensities: intensities);
+      },
+      child: Text(label),
     );
   }
 }
