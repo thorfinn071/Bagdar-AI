@@ -4,6 +4,8 @@ Bagdar is an Android project exploring how on-device computer vision, speech
 and vibration can help people with visual impairments understand their immediate
 surroundings. It is built with Flutter and native Android components.
 
+**[Read the engineering case study](docs/portfolio-case-study.md)** — a concise portfolio overview of the problem, architecture, test evidence, failure modes and next steps.
+
 **Status:** development prototype. The current app focuses on guided training
 and stationary camera inspection. Walking assistance is a longer-term goal.
 
